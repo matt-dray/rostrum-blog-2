@@ -1,0 +1,39 @@
+# More at: https://quarto.org/docs/reference/projects/websites.html
+
+project:
+  type: website
+
+website:
+  title: "rostrum.blog"
+  site-url: "https://rostrum-blog-2.netlify.com"
+  description: "Japes with R"
+  navbar:
+    background: black
+    foreground: "#00FF00"
+    logo: "images/rostrum-logo.png"
+    right:
+      - about.qmd
+      - icon: rss
+        href: index.xml
+      - icon: github
+        href: https://github.com/matt-dray/rostrum-blog-2
+        aria-label: GitHub
+      - icon: mastodon
+        href: https://fosstodon.org/@mattdray
+        aria-label: Mastodon
+      - icon: twitter
+        href: https://twitter.com/mattdray
+        aria-label: Twitter
+    search: true
+  search:
+    location: navbar
+    type: overlay
+  page-footer:
+    center: 
+      - text: "CC BY-NC-SA 4.0"
+        href: https://creativecommons.org/licenses/by-nc-sa/4.0
+
+format:
+  html:
+    theme: styles.scss
+    css: styles.css

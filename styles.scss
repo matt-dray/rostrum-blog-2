@@ -1,0 +1,61 @@
+/* With help from https://blog.djnavarro.net/posts/2022-04-20_porting-to-quarto/
+and https://quarto.org/docs/output-formats/html-themes.html */
+
+/*-- scss:defaults --*/
+
+// Use default Bootswatch as the base
+$theme: "default" !default;
+
+// Set theme colours
+$theme-primary: rgb(0, 255, 0);
+$theme-secondary: rgb(0, 0, 0);
+$theme-tertiary: rgb(100, 100, 100);
+
+// Import Google Fonts
+@import 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&display=swap';
+@import 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300&display=swap';
+
+//@import 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap';
+//@import 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap';
+
+
+// Set font preferences
+$font-family-sans-serif: "IBM Plex Sans", sans;
+$font-family-monospace: "IBM Plex Mono", mono;
+
+// Navbar highlight colour
+$navbar-hl: $theme-tertiary;
+
+// Footer 
+$footer-bg: $theme-secondary;
+$footer-fg: $theme-primary;
+
+/*-- scss:rules --*/
+
+.navbar, .footer {
+  font-family: $font-family-monospace, monospace;
+  color: $theme-primary;
+}
+
+h1, h2, h3, h4, h5, h6  {
+  font-family: $font-family-monospace, monospace;
+}
+
+.caption {
+   font-style: italic;
+   font-size: 80%;
+}
+
+kbd {
+  background-color: #eee;
+  border-radius: 3px;
+  border: 1px solid #b4b4b4;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .2), 0 2px 0 0 rgba(255, 255, 255, .7) inset;
+  color: #222;
+  display: inline-block;
+  font-size: .85em;
+  font-weight: 700;
+  line-height: 1;
+  padding: 2px 4px;
+  white-space: nowrap;
+}
