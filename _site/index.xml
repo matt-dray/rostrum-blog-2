@@ -5,30 +5,30 @@
       xmlns:dc="http://purl.org/dc/elements/1.1/" 
       version="2.0">
 <channel>
-<title>rostrum.blog</title>
-<link>https://rostrum-blog-2.netlify.com/index.html</link>
-<atom:link href="https://rostrum-blog-2.netlify.com/index.xml" rel="self" type="application/rss+xml"/>
+<title>rostrum.blog (test)</title>
+<link>https://whimsical-wisp-30974e.netlify.app/index.html</link>
+<atom:link href="https://whimsical-wisp-30974e.netlify.app/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.2.269</generator>
 <lastBuildDate>Sat, 01 Apr 2023 23:00:00 GMT</lastBuildDate>
 <item>
   <title>R is a game engine, fight me</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://rostrum-blog-2.netlify.com/posts/2023/04/03/splendid-r-games/index.html</link>
+  <link>https://whimsical-wisp-30974e.netlify.app/posts/2023-04-03_splendid-r-games/index.html</link>
   <description><![CDATA[ 
 
 
 
 
 <div class="figure">
-<p><img src="https://rostrum-blog-2.netlify.com/posts/2023/04/03/splendid-r-games/images/snes-r.png" alt="A crudely drawn image of the buttons from a Nintendo SNES controller, but the A, B, X and Y labels have all been changed to R." width="100%"></p>
+<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2023-04-03_splendid-r-games/images/snes-r.png" alt="A crudely drawn image of the buttons from a Nintendo SNES controller, but the A, B, X and Y labels have all been changed to R." width="100%"></p>
 </div>
-<section id="tldr" class="level1">
-<h1>tl;dr</h1>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
 <p>R is ‘<a href="https://www.r-project.org/">a free software environment for statistical computing and graphics</a>’. Ahahaha, no it’s not, it’s a game engine. I’ve created <a href="https://github.com/matt-dray/awesome-r-games">a ‘splendid’ list of games</a> you can play—written in R—to prove it. <a href="https://github.com/matt-dray/splendid-r-games/issues">Help expand it</a>.</p>
 </section>
-<section id="stats-only" class="level1">
-<h1>Stats only!</h1>
+<section id="stats-only" class="level2">
+<h2 class="anchored" data-anchor-id="stats-only">Stats only!</h2>
 <p>The <kbd>Esc</kbd> key.</p>
 <blockquote class="blockquote">
 <p>I am a quote.</p>
@@ -77,15 +77,15 @@ Volvo 142E            4 109</code></pre>
 <p>R is not a general, multi-purpose programming language. It was written to do statistical analysis and make charts. You are literally not allowed to do anything else with it. You should use &lt;LANGUAGE&gt; instead, which is much more suited to your specific use case. R is a joke language for nerds.</p>
 <p>You should not read beyond this point if you think, quite rightly, that mirth and frivolity are unsuited to an R session.</p>
 </section>
-<section id="stats-only-1" class="level1">
-<h1>Stats only?</h1>
+<section id="stats-only-1" class="level2">
+<h2 class="anchored" data-anchor-id="stats-only-1">Stats only?</h2>
 <p>Unity. Unreal. GameMaker. Godot. All of these videogame engines are now obsolete.</p>
 <p>It is R—humble R!—that represents the future of gaming.</p>
 <p>To prove it, I’ve created <a href="https://github.com/matt-dray/awesome-r-games">a list of ‘splendid R games’ in a GitHub repo</a><sup>1</sup> that you are welcome to contribute to.<sup>2</sup></p>
 <p>Yes, R can be used for fun. Do not tell R Core.</p>
 </section>
-<section id="wait-hes-serious" class="level1">
-<h1>Wait, he’s serious?</h1>
+<section id="wait-hes-serious" class="level2">
+<h2 class="anchored" data-anchor-id="wait-hes-serious">Wait, he’s serious?</h2>
 <p>I think there’s three kinds of ‘platform’ for games written in R:</p>
 <ol type="1">
 <li>For the console</li>
@@ -94,29 +94,29 @@ Volvo 142E            4 109</code></pre>
 </ol>
 <p>Games played in the console are pretty straightforward and probably most common. You can run some code, or a function from a package, to launch some code in the R console that you can interact with. A simple option for this might involve use of <code>readline()</code> to receive user input, for example, like <a href="https://www.giorasimchoni.com/">Giora Simchoni</a>’s excellent text-based puzzler, <a href="https://github.com/gsimchoni/CastleOfR">Castle of R</a>.</p>
 <div class="figure">
-<img src="https://rostrum-blog-2.netlify.com/posts/2023/04/03/splendid-r-games/images/castle.png" alt="Screenshot of R running in the terminal. A text interface asks the user to identify their skill in R. The user has typed option '4', which corresponds to the text 'what is R?'. The resulting text says 'welcome to the Castle of R' and explains its purpose." width="100%">
+<img src="https://whimsical-wisp-30974e.netlify.app/posts/2023-04-03_splendid-r-games/images/castle.png" alt="Screenshot of R running in the terminal. A text interface asks the user to identify their skill in R. The user has typed option '4', which corresponds to the text 'what is R?'. The resulting text says 'welcome to the Castle of R' and explains its purpose." width="100%">
 <p class="caption">
 Giora’s Castle of R running in the terminal.
 </p>
 </div>
 <p>Shiny can give you a little more flexibility when it comes to graphics and user input, at the expense of needing to host the app and maybe some extra JavaScript skills. A great example of this is <a href="https://www.pedrocsilva.com/">Pedro Silva</a>’s winning entry (<a href="https://sparktuga.shinyapps.io/ShinyDecisions/">app</a>, <a href="https://github.com/pedrocoutinhosilva/shiny.decisions">source</a>) to <a href="https://posit.co/blog/winners-of-the-2nd-shiny-contest/">the Posit Shiny contest in 2020</a>.</p>
 <div class="figure">
-<img src="https://rostrum-blog-2.netlify.com/posts/2023/04/03/splendid-r-games/images/decisions.png" alt="A screenshot of a game that shows a world map with face, building and tree emojis on it. There are meters labelled 'wealth', 'opinion' and 'environment' and another with a halo on one end and devil horns the other. Text at the bottom says 'swipe left or right on the card to start'." width="100%">
+<img src="https://whimsical-wisp-30974e.netlify.app/posts/2023-04-03_splendid-r-games/images/decisions.png" alt="A screenshot of a game that shows a world map with face, building and tree emojis on it. There are meters labelled 'wealth', 'opinion' and 'environment' and another with a halo on one end and devil horns the other. Text at the bottom says 'swipe left or right on the card to start'." width="100%">
 <p class="caption">
 A still from Pedro’s Shiny Decisions app.
 </p>
 </div>
 <p>The third category is a little more boundary-pushing. Imagine if R was powerful enough to let you port existing games. Well, surprise, ya boi <a href="https://coolbutuseless.github.io/">Mike Cheng</a> (aka coolbutuseless) has pushed hard on expanding the capabilities of R to run fast enough and with realtime user input,<sup>3</sup> porting the classic <a href="https://en.wikipedia.org/wiki/Another_World_(video_game)"><em>Another World</em></a> (1991) to R, which was showcased at 2022’s Posit conference (<a href="https://github.com/coolbutuseless/anotherworld">source</a>, <a href="https://www.youtube.com/watch?v=LPotWAJnE_s">video</a>, <a href="https://coolbutuseless.github.io/2022/07/29/anotherworld-game-written-playable-in-r-with-nara-and-eventloop/">blog</a>).</p>
 <div class="figure">
-<img src="https://rostrum-blog-2.netlify.com/posts/2023/04/03/splendid-r-games/images/another-world.png" alt="A screenshot of the game with the main character apparently waving to a shadowy silhouette in the foreground. The overalid title says 'moonshot' and text at the bottom is a quote by Mike Cheng saying 'i will commit myself to achieving the goal, before the year is out, of writing and playing a videogame in R'." width="100%">
+<img src="https://whimsical-wisp-30974e.netlify.app/posts/2023-04-03_splendid-r-games/images/another-world.png" alt="A screenshot of the game with the main character apparently waving to a shadowy silhouette in the foreground. The overalid title says 'moonshot' and text at the bottom is a quote by Mike Cheng saying 'i will commit myself to achieving the goal, before the year is out, of writing and playing a videogame in R'." width="100%">
 <p class="caption">
 A still from Mike’s rstudio::conf(2022) presentation, featuring Another World.
 </p>
 </div>
 <p>Of course, within these ‘platforms’ are genres like word games, arcade games, puzzle games, etc. Will you be the first to create an MMORPG (a massively-multiplayer online R-powered game)?</p>
 </section>
-<section id="i-am-an-indie-game-dev-now" class="level1">
-<h1>I am an indie game dev now</h1>
+<section id="i-am-an-indie-game-dev-now" class="level2">
+<h2 class="anchored" data-anchor-id="i-am-an-indie-game-dev-now">I am an indie game dev now</h2>
 <p>I’ve always been interested in how videogames are coded,<sup>4</sup> wishing that I could do the same myself. Of course I could simply learn ‘real’ programming languages.</p>
 <p>Except that’s blasphemy. Of course I’d rather break my own mind and spirit in an attempt to make R achieve 0.1% of what might be possible in P*thon.</p>
 <p>Case in point, I’ve made a few R packages containing some little toys (in order of gooddest to baddest):</p>
@@ -128,19 +128,209 @@ A still from Mike’s rstudio::conf(2022) presentation, featuring Another World.
 <li>{hokey} (<a href="https://github.com/matt-dray/hokey">source</a>, <a href="https://www.rostrum.blog/2022/01/19/keypress/">blog</a>) for minigames that use <a href="https://github.com/gaborcsardi/keypress">direct keypress inputs with {keypress}</a></li>
 </ul>
 <div class="figure">
-<img src="https://rostrum-blog-2.netlify.com/posts/2023/04/03/splendid-r-games/images/kevin.png" alt="Screenshot of R running in the terminal. The get_stats and see_pet functions from the tamRgo package have been run. The first prints some output showing characteristics and status of a cyber pet. The latter prints an image of the pet to the browser. The pet is called Kevin and is 139 in age. It appears to be unalive." width="100%">
+<img src="https://whimsical-wisp-30974e.netlify.app/posts/2023-04-03_splendid-r-games/images/kevin.png" alt="Screenshot of R running in the terminal. The get_stats and see_pet functions from the tamRgo package have been run. The first prints some output showing characteristics and status of a cyber pet. The latter prints an image of the pet to the browser. The pet is called Kevin and is 139 in age. It appears to be unalive." width="100%">
 <p class="caption">
 Hint when playing {tamRgo}: do not forget about your pet for 138 days. RIP Kevin XVIII.
 </p>
 </div>
 <p>I’ve got something in the pipeline that involves extremely rudimentary physics in the R console. Wow! For release in 2023 (because game launches never go wrong).</p>
 </section>
-<section id="ready-player-2" class="level1">
-<h1>Ready Player 2</h1>
+<section id="ready-player-2" class="level2">
+<h2 class="anchored" data-anchor-id="ready-player-2">Ready Player 2</h2>
 <p>The splendid list must be missing a bunch of games. Please leave an issue or pull request <a href="https://github.com/matt-dray/splendid-r-games">in the splendid-r-games repo</a> to add more examples.</p>
 <p>Next stop: letting people run R games in the browser without an installed copy of R. This is already possible with a service like <a href="https://mybinder.org/">Binder</a>, which can spin up an instance of RStudio with packages pre-installed <a href="https://github.com/matt-dray/play-r.oguelike">I did this for {r.oguelike}</a>).</p>
 <div class="figure">
-<img src="https://rostrum-blog-2.netlify.com/posts/2023/04/03/splendid-r-games/images/mobile-r.oguelike.png" alt="RStudio running a browser on a mobile phone playing the tile-based game from the r.oguelike package." width="100%">
+<img src="https://whimsical-wisp-30974e.netlify.app/posts/2023-04-03_splendid-r-games/images/mobile-r.oguelike.png" alt="RStudio running a browser on a mobile phone playing the tile-based game from the r.oguelike package." width="100%">
+<p class="caption">
+Just like <a href="https://en.wikipedia.org/wiki/N-Gage_(device)">the Nokia N-Gage</a>, amirite?
+</p>
+</div>
+<p>But soon you might be able to <a href="https://github.com/r-wasm/webr">use WebR to play games in the browser</a> without even spinning up RStudio, ooh. So look out for an R version of <a href="https://itch.io/">itch.io</a> in future, lol.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="session-details" class="level2 appendix"><h2 class="quarto-appendix-heading">Session details</h2><div class="quarto-appendix-contents">
+
+<details>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last generated:  2023-04-09 23:39:50</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.2.0 (2022-04-22)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Big Sur/Monterey 10.16
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] dplyr_1.1.0
+
+loaded via a namespace (and not attached):
+ [1] fansi_1.0.3       withr_2.5.0       utf8_1.2.2        digest_0.6.31    
+ [5] R6_2.5.1          lifecycle_1.0.3   jsonlite_1.8.4    magrittr_2.0.3   
+ [9] evaluate_0.20     pillar_1.8.1      rlang_1.0.6       cli_3.6.0        
+[13] rstudioapi_0.14   generics_0.1.3    vctrs_0.5.2       rmarkdown_2.14   
+[17] tools_4.2.0       glue_1.6.2        htmlwidgets_1.5.4 xfun_0.37        
+[21] yaml_2.3.7        fastmap_1.1.0     compiler_4.2.0    pkgconfig_2.0.3  
+[25] htmltools_0.5.2   tidyselect_1.2.0  knitr_1.42        tibble_3.1.8     </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>I originally labelled the GitHub repo as <a href="https://github.com/sindresorhus/awesome">an ‘awesome’ repo</a>, which I later learned has <a href="https://github.com/matt-dray/splendid-r-games/issues/4#issuecomment-1205015274">a very specific meaning</a>. You might have seen awesome lists before, like the <a href="https://github.com/mcanouil/awesome-quarto">awesome-quarto repo</a> by <a href="https://github.com/mcanouil">Mickaël</a>, or the new <a href="https://github.com/nanxstats/awesome-webr">awesome-webr list</a> by <a href="https://nanx.me/">Nan Xiao</a>. ‘Splendid’ is much more of a Bri’ish word than ‘awesome’, so it feels more natural anyway.↩︎</p></li>
+<li id="fn2"><p>Note that I have carefully released this post just after April fool’s day, which means I am super, super serious. As usual.↩︎</p></li>
+<li id="fn3"><p>See the <a href="https://coolbutuseless.github.io/package/nara/index.html">{nara}</a> and <a href="https://coolbutuseless.github.io/package/eventloop/index.html">{eventloop}</a> packages in particular.↩︎</p></li>
+<li id="fn4"><p>I like YouTube devlogs by folks like <a href="https://www.youtube.com/c/SebastianLague">Seb Lague</a>, <a href="https://www.youtube.com/@ThinMatrix">ThinMatrix</a>, <a href="https://www.youtube.com/@SquidGodDev">SquidGod</a>, <a href="https://www.youtube.com/c/jonastyroller">Jonas</a>, <a href="https://www.youtube.com/@Tantandev">TanTan</a> and others. R can never achieve what they’re up to, but I like listening through the logic of what they’re doing.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>r</category>
+  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-04-03_splendid-r-games/index.html</guid>
+  <pubDate>Sat, 01 Apr 2023 23:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>R is a game engine, fight me (2) now i’m adding extra words to the title to see how it affects cards on the homepage</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://whimsical-wisp-30974e.netlify.app/posts/2022-04-03_splendid-r-games-copy/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="figure">
+<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-04-03_splendid-r-games-copy/images/snes-r.png" alt="A crudely drawn image of the buttons from a Nintendo SNES controller, but the A, B, X and Y labels have all been changed to R." width="100%"></p>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>R is ‘<a href="https://www.r-project.org/">a free software environment for statistical computing and graphics</a>’. Ahahaha, no it’s not, it’s a game engine. I’ve created <a href="https://github.com/matt-dray/awesome-r-games">a ‘splendid’ list of games</a> you can play—written in R—to prove it. <a href="https://github.com/matt-dray/splendid-r-games/issues">Help expand it</a>.</p>
+</section>
+<section id="stats-only" class="level2">
+<h2 class="anchored" data-anchor-id="stats-only">Stats only!</h2>
+<p>The <kbd>Esc</kbd> key.</p>
+<blockquote class="blockquote">
+<p>I am a quote.</p>
+</blockquote>
+<p>asdjklhald .</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;"># This is a test</span></span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;">library</span>(dplyr, <span class="at" style="color: #657422;">warn.conflicts =</span> <span class="cn" style="color: #8f5902;">FALSE</span>)</span>
+<span id="cb1-3">mtcars <span class="sc" style="color: #5E5E5E;">|&gt;</span> <span class="fu" style="color: #4758AB;">select</span>(cyl, hp)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                    cyl  hp
+Mazda RX4             6 110
+Mazda RX4 Wag         6 110
+Datsun 710            4  93
+Hornet 4 Drive        6 110
+Hornet Sportabout     8 175
+Valiant               6 105
+Duster 360            8 245
+Merc 240D             4  62
+Merc 230              4  95
+Merc 280              6 123
+Merc 280C             6 123
+Merc 450SE            8 180
+Merc 450SL            8 180
+Merc 450SLC           8 180
+Cadillac Fleetwood    8 205
+Lincoln Continental   8 215
+Chrysler Imperial     8 230
+Fiat 128              4  66
+Honda Civic           4  52
+Toyota Corolla        4  65
+Toyota Corona         4  97
+Dodge Challenger      8 150
+AMC Javelin           8 150
+Camaro Z28            8 245
+Pontiac Firebird      8 175
+Fiat X1-9             4  66
+Porsche 914-2         4  91
+Lotus Europa          4 113
+Ford Pantera L        8 264
+Ferrari Dino          6 175
+Maserati Bora         8 335
+Volvo 142E            4 109</code></pre>
+</div>
+</div>
+<p>R is not a general, multi-purpose programming language. It was written to do statistical analysis and make charts. You are literally not allowed to do anything else with it. You should use &lt;LANGUAGE&gt; instead, which is much more suited to your specific use case. R is a joke language for nerds.</p>
+<p>You should not read beyond this point if you think, quite rightly, that mirth and frivolity are unsuited to an R session.</p>
+</section>
+<section id="stats-only-1" class="level2">
+<h2 class="anchored" data-anchor-id="stats-only-1">Stats only?</h2>
+<p>Unity. Unreal. GameMaker. Godot. All of these videogame engines are now obsolete.</p>
+<p>It is R—humble R!—that represents the future of gaming.</p>
+<p>To prove it, I’ve created <a href="https://github.com/matt-dray/awesome-r-games">a list of ‘splendid R games’ in a GitHub repo</a><sup>1</sup> that you are welcome to contribute to.<sup>2</sup></p>
+<p>Yes, R can be used for fun. Do not tell R Core.</p>
+</section>
+<section id="wait-hes-serious" class="level2">
+<h2 class="anchored" data-anchor-id="wait-hes-serious">Wait, he’s serious?</h2>
+<p>I think there’s three kinds of ‘platform’ for games written in R:</p>
+<ol type="1">
+<li>For the console</li>
+<li>In Shiny</li>
+<li>Ported</li>
+</ol>
+<p>Games played in the console are pretty straightforward and probably most common. You can run some code, or a function from a package, to launch some code in the R console that you can interact with. A simple option for this might involve use of <code>readline()</code> to receive user input, for example, like <a href="https://www.giorasimchoni.com/">Giora Simchoni</a>’s excellent text-based puzzler, <a href="https://github.com/gsimchoni/CastleOfR">Castle of R</a>.</p>
+<div class="figure">
+<img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-04-03_splendid-r-games-copy/images/castle.png" alt="Screenshot of R running in the terminal. A text interface asks the user to identify their skill in R. The user has typed option '4', which corresponds to the text 'what is R?'. The resulting text says 'welcome to the Castle of R' and explains its purpose." width="100%">
+<p class="caption">
+Giora’s Castle of R running in the terminal.
+</p>
+</div>
+<p>Shiny can give you a little more flexibility when it comes to graphics and user input, at the expense of needing to host the app and maybe some extra JavaScript skills. A great example of this is <a href="https://www.pedrocsilva.com/">Pedro Silva</a>’s winning entry (<a href="https://sparktuga.shinyapps.io/ShinyDecisions/">app</a>, <a href="https://github.com/pedrocoutinhosilva/shiny.decisions">source</a>) to <a href="https://posit.co/blog/winners-of-the-2nd-shiny-contest/">the Posit Shiny contest in 2020</a>.</p>
+<div class="figure">
+<img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-04-03_splendid-r-games-copy/images/decisions.png" alt="A screenshot of a game that shows a world map with face, building and tree emojis on it. There are meters labelled 'wealth', 'opinion' and 'environment' and another with a halo on one end and devil horns the other. Text at the bottom says 'swipe left or right on the card to start'." width="100%">
+<p class="caption">
+A still from Pedro’s Shiny Decisions app.
+</p>
+</div>
+<p>The third category is a little more boundary-pushing. Imagine if R was powerful enough to let you port existing games. Well, surprise, ya boi <a href="https://coolbutuseless.github.io/">Mike Cheng</a> (aka coolbutuseless) has pushed hard on expanding the capabilities of R to run fast enough and with realtime user input,<sup>3</sup> porting the classic <a href="https://en.wikipedia.org/wiki/Another_World_(video_game)"><em>Another World</em></a> (1991) to R, which was showcased at 2022’s Posit conference (<a href="https://github.com/coolbutuseless/anotherworld">source</a>, <a href="https://www.youtube.com/watch?v=LPotWAJnE_s">video</a>, <a href="https://coolbutuseless.github.io/2022/07/29/anotherworld-game-written-playable-in-r-with-nara-and-eventloop/">blog</a>).</p>
+<div class="figure">
+<img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-04-03_splendid-r-games-copy/images/another-world.png" alt="A screenshot of the game with the main character apparently waving to a shadowy silhouette in the foreground. The overalid title says 'moonshot' and text at the bottom is a quote by Mike Cheng saying 'i will commit myself to achieving the goal, before the year is out, of writing and playing a videogame in R'." width="100%">
+<p class="caption">
+A still from Mike’s rstudio::conf(2022) presentation, featuring Another World.
+</p>
+</div>
+<p>Of course, within these ‘platforms’ are genres like word games, arcade games, puzzle games, etc. Will you be the first to create an MMORPG (a massively-multiplayer online R-powered game)?</p>
+</section>
+<section id="i-am-an-indie-game-dev-now" class="level2">
+<h2 class="anchored" data-anchor-id="i-am-an-indie-game-dev-now">I am an indie game dev now</h2>
+<p>I’ve always been interested in how videogames are coded,<sup>4</sup> wishing that I could do the same myself. Of course I could simply learn ‘real’ programming languages.</p>
+<p>Except that’s blasphemy. Of course I’d rather break my own mind and spirit in an attempt to make R achieve 0.1% of what might be possible in P*thon.</p>
+<p>Case in point, I’ve made a few R packages containing some little toys (in order of gooddest to baddest):</p>
+<ul>
+<li>{r.oguelike} (<a href="https://github.com/matt-dray/r.oguelike">source</a>, <a href="https://www.rostrum.blog/tags/r.oguelike/">blogs</a>) for a procedural-dungeon explorer with enemy pathfinding and inventory</li>
+<li>{tamRgo} (<a href="https://github.com/matt-dray/tamRgo">source</a>, <a href="https://github.com/matt-dray/tamRgo">blog</a>) for a cyber pet in your R console that persists between sessions</li>
+<li>{safar6} (<a href="https://github.com/matt-dray/safar6">source</a>, <a href="https://github.com/matt-dray/safar6">blog</a>) for a text-based re-make of the Safari Zone from the first generation of Pokémon games</li>
+<li>{ActionSquirrel} (<a href="https://www.rostrum.blog/2021/10/03/squirrel/">source</a>, <a href="https://github.com/matt-dray/ActionSquirrel">blog</a>) for a tile-based, turn-based minigame in the R console</li>
+<li>{hokey} (<a href="https://github.com/matt-dray/hokey">source</a>, <a href="https://www.rostrum.blog/2022/01/19/keypress/">blog</a>) for minigames that use <a href="https://github.com/gaborcsardi/keypress">direct keypress inputs with {keypress}</a></li>
+</ul>
+<div class="figure">
+<img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-04-03_splendid-r-games-copy/images/kevin.png" alt="Screenshot of R running in the terminal. The get_stats and see_pet functions from the tamRgo package have been run. The first prints some output showing characteristics and status of a cyber pet. The latter prints an image of the pet to the browser. The pet is called Kevin and is 139 in age. It appears to be unalive." width="100%">
+<p class="caption">
+Hint when playing {tamRgo}: do not forget about your pet for 138 days. RIP Kevin XVIII.
+</p>
+</div>
+<p>I’ve got something in the pipeline that involves extremely rudimentary physics in the R console. Wow! For release in 2023 (because game launches never go wrong).</p>
+</section>
+<section id="ready-player-2" class="level2">
+<h2 class="anchored" data-anchor-id="ready-player-2">Ready Player 2</h2>
+<p>The splendid list must be missing a bunch of games. Please leave an issue or pull request <a href="https://github.com/matt-dray/splendid-r-games">in the splendid-r-games repo</a> to add more examples.</p>
+<p>Next stop: letting people run R games in the browser without an installed copy of R. This is already possible with a service like <a href="https://mybinder.org/">Binder</a>, which can spin up an instance of RStudio with packages pre-installed <a href="https://github.com/matt-dray/play-r.oguelike">I did this for {r.oguelike}</a>).</p>
+<div class="figure">
+<img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-04-03_splendid-r-games-copy/images/mobile-r.oguelike.png" alt="RStudio running a browser on a mobile phone playing the tile-based game from the r.oguelike package." width="100%">
 <p class="caption">
 Just like <a href="https://en.wikipedia.org/wiki/N-Gage_(device)">the Nokia N-Gage</a>, amirite?
 </p>
@@ -163,7 +353,7 @@ Session info
  collate  en_US.UTF-8
  ctype    en_US.UTF-8
  tz       Europe/London
- date     2023-04-08
+ date     2023-04-09
  pandoc   2.19.2 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)
 
 ─ Packages ───────────────────────────────────────────────────────────────────
@@ -218,8 +408,8 @@ Session info
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>r</category>
-  <guid>https://rostrum-blog-2.netlify.com/posts/2023/04/03/splendid-r-games/index.html</guid>
-  <pubDate>Sat, 01 Apr 2023 23:00:00 GMT</pubDate>
+  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2022-04-03_splendid-r-games-copy/index.html</guid>
+  <pubDate>Fri, 01 Apr 2022 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

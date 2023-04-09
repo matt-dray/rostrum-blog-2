@@ -7,9 +7,9 @@ and https://quarto.org/docs/output-formats/html-themes.html */
 $theme: "default" !default;
 
 // Set theme colours
-$theme-primary: rgb(0, 255, 0);
-$theme-secondary: rgb(0, 0, 0);
-$theme-tertiary: rgb(100, 100, 100);
+$theme-primary: #00FF00;
+$theme-secondary: #000;
+$theme-tertiary: #BEBEBE;
 
 // Import Google Fonts
 @import 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&display=swap';
@@ -43,28 +43,18 @@ h1, h2, h3, h4, h5, h6  {
   font-family: $font-family-monospace, monospace;
 }
 
-// Links
-a {
+// Links in body text
+.content a {
   text-decoration: none;
   color: $theme-secondary;
   border-bottom: 1px solid $theme-primary;
 }
 
-// Links on hover
-a:hover, a:focus {
-  color: $theme-primary;
+// Links in body text on hover
+.content a:hover, .content a:focus {
+  // color: $theme-primary;
+  background: $theme-primary;
 }
-
-// Simplify links in header and footer
-.navbar a, 
-.navbar a:hover,
-.footer a, 
-.footer a:hover {
-  text-decoration: none;
-  border-bottom: none;
-}
-
-
 
 // Image captions
 .caption {
@@ -85,4 +75,21 @@ kbd {
   line-height: 1;
   padding: 2px 4px;
   white-space: nowrap;
+}
+
+// Tables
+table{
+  width: 100%;
+}
+
+// Table header
+th {
+  //color: $theme-tertiary;
+  
+}
+
+td, th {
+  font-weight: normal;
+  border-bottom: none;
+  padding: 5px;
 }
