@@ -1,4 +1,5 @@
 # More at: https://quarto.org/docs/reference/projects/websites.html
+# Dropdown menu idea borrowed from jhelvy.com
 
 project:
   type: website
@@ -6,19 +7,24 @@ project:
 website:
   title: rostrum.blog (test)
   site-url: https://whimsical-wisp-30974e.netlify.app/
-  favicon: images/logo.png
+  favicon: images/logo-green-trans.png
   description: Japes with R
   navbar:
     background: black
-    foreground: '#00FF00'
-    logo: images/logo.png
+    foreground: "#00FF00"
+    logo: images/logo-green-trans.png
     right:
-      - about.qmd
-      - icon: rss
-        href: index.xml
-      - icon: github
-        href: https://github.com/matt-dray/rostrum-blog-2
-        aria-label: GitHub
+      - menu:
+        - icon: question-circle-fill
+          href: about.qmd
+        - icon: rss-fill
+          aria-label: RSS feed
+          text: RSS
+          href: index.xml
+        - icon: github
+          aria-label: GitHub source code
+          text: Source
+          href: https://github.com/matt-dray/rostrum-blog-2
   search:
     location: navbar
     type: overlay
