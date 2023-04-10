@@ -385,5 +385,1756 @@ Session info
   <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-03-11-in-a-dungeon/index.html</guid>
   <pubDate>Wed, 15 Mar 2023 00:00:00 GMT</pubDate>
 </item>
+<item>
+  <title>I can’t be parsed, mate</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://whimsical-wisp-30974e.netlify.app/posts/2023-02-28-getparsedata/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="figure">
+<img src="https://whimsical-wisp-30974e.netlify.app/post/2023-02-28-getparsedata_files/handegg.png" alt="An American football quarterback about to pass the ball. He has the R logo on his shirt. Text above says 'pass the ball', text below is R code reading 'parse(text = 'the('ball')')'. The format is a 'deep-fried', highly pixellated meme where the centre of the iumage bloats out. A wide-eyed, smiling and crying emoji is in the corner." width="100%">
+<p class="caption">
+Image by <a href="https://pixabay.com/users/keithjj-2328014/">Keith Johnston</a> from <a href="https://pixabay.com">Pixabay</a>. Deep fried by Matt Dray.<sup>1</sup>
+</p>
+</div>
+<section id="tldr" class="level1">
+<h1>tl;dr</h1>
+<p>R is capable of reading R code. Obviously. You can use <code>getParseData(parse())</code> to see what’s going on. A very naive intro.</p>
+</section>
+<section id="at-an-imparse" class="level1">
+<h1>At an imparse</h1>
+<p>There’s many things that delight me about R coding.<sup>2</sup> One meta thing I like is the idea that R has to recognise the code that you give it as… R code.</p>
+<p>For example, does <code>x&lt;-1</code> mean ‘x is less than minus-one’? Hm, actually R recognises <code>&lt;-</code> as a ‘left-assignment operator’—a special ‘token’—that gives the name <code>x</code> the value of <code>1</code>. Subtle, but important.</p>
+<p>Another example: the tokens <code>&lt;-</code> and <code>=</code> have an equivalent role in <code>x &lt;- 1</code> and <code>x = 1</code>. For style reasons, you’ll probably want to replace <code>=</code> with <code>&lt;-</code>.<sup>3</sup> But don’t just ‘find and replace’ because <code>=</code> is context dependent. Consider:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">x <span class="ot" style="color: #003B4F;">=</span> <span class="fu" style="color: #4758AB;">subset</span>(mtcars, <span class="at" style="color: #657422;">subset =</span> carb <span class="sc" style="color: #5E5E5E;">==</span> <span class="dv" style="color: #AD0000;">8</span>)</span></code></pre></div>
+</div>
+<p>Here, <code>=</code> is used to assign (<code>=</code>), to set a function argument (<code>=</code>) and as part of the equivalence operator (<code>==</code>). Oof.</p>
+<p>How can a mere human understand this better?</p>
+</section>
+<section id="parsed-tense" class="level1">
+<h1>Parsed tense</h1>
+<p>The cool (‘cool’) thing is that R gives you tools to be able to see the world as R sees it.</p>
+<p>This is sometimes called ‘static code analysis’, in that you can interrogate the code for syntax errors <em>before</em> it executes. Packages like <a href="https://lintr.r-lib.org/">{lintr}</a> can even help tidy up (‘lint’) your code by adjusting or replacing the tokens.<sup>4</sup></p>
+<p>I’ve used this approach before to:</p>
+<ul>
+<li><a href="https://www.rostrum.blog/2020/11/14/hello-r2eng/">create the {r2eng} package</a>, which matches tokens against words so an expression can be translated to English (e.g.&nbsp;<code>&lt;-</code> is matched to the word ‘gets’)</li>
+<li><a href="https://www.rostrum.blog/2021/08/31/add-biscuits/">write an RStudio addin that auto-labels closing parentheses</a> with the name of the function they belong to (known cutely as a ‘biscuit’)</li>
+<li><a href="https://www.rostrum.blog/2021/03/13/assign/">identify and destroy files that contain equals assignment</a> (<code>x = 1</code>), rather than the superior assignment arrow (<code>x &lt;- 1</code>)</li>
+</ul>
+<p>How might you tinker about with this yourself? Read on for a quickstart.</p>
+</section>
+<section id="parse-the-parcel" class="level1">
+<h1>Parse the parcel</h1>
+<p>I’ll talk about two main functions: <code>parse()</code> and <code>getParseData()</code>, which are both part of base R.</p>
+<p>You can pass a string of R code to <code>parse()</code> for it to be recognised as an ‘expression’. Let’s use the equals-rich <code>subset()</code> example from above.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">code_str <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="st" style="color: #20794D;">"x = subset(mtcars, subset = carb == 8)"</span></span>
+<span id="cb2-2">code_expr <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">parse</span>(<span class="at" style="color: #657422;">text =</span> code_str)</span>
+<span id="cb2-3">code_expr</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>expression(x = subset(mtcars, subset = carb == 8))</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;">class</span>(code_expr)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "expression"</code></pre>
+</div>
+</div>
+<p>So the string is recognised as R code at this point, which will allow us to break it down into its individual tokens. You could jump ahead here and just <code>eval()</code>uate this expression object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="fu" style="color: #4758AB;">eval</span>(code_expr)</span>
+<span id="cb6-2">x</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              mpg cyl disp  hp drat   wt qsec vs am gear carb
+Maserati Bora  15   8  301 335 3.54 3.57 14.6  0  1    5    8</code></pre>
+</div>
+</div>
+<p>As a result, the dataframe <code>x</code> is now in our environment and, as expected, contains only rows of the <code>mtcars</code> that have 8 <code>carb</code>uretors.<sup>5</sup></p>
+<p>So we have the power to delay code execution, like some kind of wizard. Jeepers! That’s great, but now lets pick apart the frozen expression into its constituent tokens. This is where <code>getParseData()</code> comes in.</p>
+<p>The function takes an expression object as the input and returns a dataframe with one token per row and several columns of handy information related to positioning and the relatedness between the tokens.</p>
+<p>For now I’m going to simplify the output to show only the units of <code>text</code> that have been recognised as tokens, along with the name that R gives to each <code>token</code> under the hood (e.g.&nbsp;<code>&lt;-</code> is recognised as <code>LEFT_ASSIGN</code>).<sup>6</sup></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">code_parsed <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">getParseData</span>(<span class="fu" style="color: #4758AB;">parse</span>(<span class="at" style="color: #657422;">text =</span> code_str, <span class="at" style="color: #657422;">keep.source =</span> <span class="cn" style="color: #8f5902;">TRUE</span>))</span>
+<span id="cb8-2">code_parsed[code_parsed<span class="sc" style="color: #5E5E5E;">$</span>text <span class="sc" style="color: #5E5E5E;">!=</span> <span class="st" style="color: #20794D;">""</span>, <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"text"</span>, <span class="st" style="color: #20794D;">"token"</span>)]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     text                token
+1       x               SYMBOL
+2       =            EQ_ASSIGN
+5  subset SYMBOL_FUNCTION_CALL
+6       (                  '('
+8  mtcars               SYMBOL
+9       ,                  ','
+14 subset           SYMBOL_SUB
+15      =               EQ_SUB
+16   carb               SYMBOL
+17     ==                   EQ
+19      8            NUM_CONST
+21      )                  ')'</code></pre>
+</div>
+</div>
+<p>Oh neato, so you can see <code>=</code> is indeed recognised as the token <code>EQ_ASSIGN</code> (‘equals assign’), <code>=</code> as <code>EQ_SUB</code> (equals in the context of supplying function arguments) and <code>==</code> as in <code>EQ</code> (the equivalence operator).</p>
+<p>If you’re wondering, the <code>keep.source = TRUE</code> bit was needed to encourage <code>parse()</code> to return its output, which is a necessary step within this non-interactive blog post.</p>
+</section>
+<section id="parseltongue" class="level1">
+<h1>Parseltongue</h1>
+<p>Want to take a look at the tokens in a given string of R code yourself? You can use this little function that contains <code>parse()</code> and <code>getParseData()</code> and returns you the simplified dataframe I showed above if <code>simplify = TRUE</code>, otherwise it gives the full read out.<sup>7</sup></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">parse_out <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="cf" style="color: #003B4F;">function</span>(string, <span class="at" style="color: #657422;">simplify =</span> <span class="cn" style="color: #8f5902;">TRUE</span>) {</span>
+<span id="cb10-2">  p <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">parse</span>(<span class="at" style="color: #657422;">text =</span> string, <span class="at" style="color: #657422;">keep.source =</span> <span class="cn" style="color: #8f5902;">TRUE</span>)</span>
+<span id="cb10-3">  pd <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">getParseData</span>(p)</span>
+<span id="cb10-4">  <span class="cf" style="color: #003B4F;">if</span> (simplify) {</span>
+<span id="cb10-5">    keep_cols <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="st" style="color: #20794D;">"token"</span>, <span class="st" style="color: #20794D;">"text"</span>)</span>
+<span id="cb10-6">    pd <span class="ot" style="color: #003B4F;">&lt;-</span> pd[pd<span class="sc" style="color: #5E5E5E;">$</span>text <span class="sc" style="color: #5E5E5E;">!=</span> <span class="st" style="color: #20794D;">""</span>, keep_cols]</span>
+<span id="cb10-7">  }</span>
+<span id="cb10-8">  pd</span>
+<span id="cb10-9">}</span></code></pre></div>
+</div>
+<p>So you could use it like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;">parse_out</span>(</span>
+<span id="cb11-2">  <span class="st" style="color: #20794D;">"mean(CO2[CO2$Plant == 'Qn1', CO2$uptake]) -&gt; mean_uptake"</span></span>
+<span id="cb11-3">)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  token        text
+1  SYMBOL_FUNCTION_CALL        mean
+2                   '('           (
+4                SYMBOL         CO2
+5                   '['           [
+7                SYMBOL         CO2
+8                   '$'           $
+10               SYMBOL       Plant
+12                   EQ          ==
+13            STR_CONST       'Qn1'
+14                  ','           ,
+20               SYMBOL         CO2
+21                  '$'           $
+23               SYMBOL      uptake
+25                  ']'           ]
+30                  ')'           )
+35         RIGHT_ASSIGN          -&gt;
+36               SYMBOL mean_uptake</code></pre>
+</div>
+</div>
+<div class="tip">
+<p> <b>Update</b></p>
+<p>Since I wrote this post, it’s become possible to <a href="https://github.com/coatless/quarto-webr">include editable R blocks in a rendered Quarto document</a>, which can be run in the browser thanks to <a href="https://docs.r-wasm.org/webr/latest/">WebR</a>(!). <a href="https://webr-parse-test.netlify.app/">I’ve made a quick demo</a> and <a href="https://www.rostrum.blog/2023/03/16/webr-quarto/">post</a> so you can play around with a simplified version of the parsing function above.</p>
+</div>
+</section>
+<section id="lateral-parse" class="level1">
+<h1>Lateral parse</h1>
+<p>I’ll leave you with another interesting thing that shows you the inner workings of R, which you might not realise as you run your code. We can look at how the code is actually executed, not just the tokens that it’s composed of.</p>
+<p>Consider how the {magrittr} pipe <code>%&gt;%</code> is used. Here I’ve slightly adjusted the input to filter for 6 and 8 <code>carb</code>uretors; you’ll see why in a second.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;">parse_out</span>(<span class="st" style="color: #20794D;">"mtcars %&gt;% subset(carb %in% c(6, 8))"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  token   text
+1                SYMBOL mtcars
+2               SPECIAL    %&gt;%
+4  SYMBOL_FUNCTION_CALL subset
+5                   '('      (
+7                SYMBOL   carb
+8               SPECIAL   %in%
+10 SYMBOL_FUNCTION_CALL      c
+11                  '('      (
+13            NUM_CONST      6
+15                  ','      ,
+19            NUM_CONST      8
+21                  ')'      )
+26                  ')'      )</code></pre>
+</div>
+</div>
+<p>Okay yeah, <code>%&gt;%</code> is recognised as a token called <code>SPECIAL</code> between the left-hand side of <code>mtcars</code> and the right-hand side of <code>subset(carb %in% c(6, 8))</code>. Notice also that <code>%in%</code> is also recognised as <code>SPECIAL</code>.</p>
+<p>In fact, this is how R recognises <a href="https://adv-r.hadley.nz/functions.html?q=infix%20operator#infix-functions">‘infix operators’</a> that are bound by percent symbols. This is some special syntactical magic that lets you put the function name <em>between</em> two arguments. So <code>x %&gt;% head</code> is equivalent to <code>`%&gt;%`(mtcars, head)</code>. Perhaps <code>SPECIAL</code> instead of a more specific name because infix operators can be created on the fly?</p>
+<p>If <code>%&gt;%</code> is <code>SPECIAL</code>, how do you think the base pipe is recognised in this simpler example?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="fu" style="color: #4758AB;">parse_out</span>(<span class="st" style="color: #20794D;">"mtcars |&gt; head()"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                 token   text
+1               SYMBOL mtcars
+2                 PIPE     |&gt;
+4 SYMBOL_FUNCTION_CALL   head
+5                  '('      (
+7                  ')'      )</code></pre>
+</div>
+</div>
+<p>Not that surprising: it’s recognised as <code>PIPE</code> and not a <code>SPECIAL</code>, since it’s a proper base R token in its own right (<a href="https://www.rostrum.blog/2022/06/01/try-r/">as of R v4.1</a>) .</p>
+<p>Okay, so we’ve seen how R parses these tokens, what about how it actually executes the code? One way to see this is to look at an ‘abstract syntax tree’ with <a href="https://lobstr.r-lib.org/">the {lobstr} package</a>.<sup>8</sup> A ‘tree’ to show the nested structure of code and variables and so on.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><span class="fu" style="color: #4758AB;">library</span>(lobstr)    <span class="co" style="color: #5E5E5E;"># install from CRAN</span></span>
+<span id="cb17-2"><span class="fu" style="color: #4758AB;">library</span>(magrittr)  <span class="co" style="color: #5E5E5E;"># install from CRAN</span></span>
+<span id="cb17-3"><span class="fu" style="color: #4758AB;">ast</span>(mtcars <span class="sc" style="color: #5E5E5E;">%&gt;%</span> <span class="fu" style="color: #4758AB;">head</span>())</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>█─`%&gt;%` 
+├─mtcars 
+└─█─head </code></pre>
+</div>
+</div>
+<p>Yeah, like I said: <code>x %&gt;% head()</code> is ultimately executed by R like a normal function (block symbol in the output from <code>ast()</code> above), in the form <code>`%&gt;%`(mtcars, head)</code>. You can see how the <code>`%&gt;%`</code> is a parent to <code>mtcars</code> and <code>head()</code> below it.</p>
+<p>So the same happens for the base pipe, right?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="fu" style="color: #4758AB;">ast</span>(mtcars <span class="sc" style="color: #5E5E5E;">|&gt;</span> <span class="fu" style="color: #4758AB;">head</span>())</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>█─head 
+└─mtcars </code></pre>
+</div>
+</div>
+<p>Surprise! <code>mtcars |&gt; head</code> is not executed like <code>`|&gt;`(mtcars, head)</code>. It’s literally executed like <code>head(mtcars)</code>. The base pipe is so special because it’s baked right into the R source code as a separate type of token that is recognised to have a job distinct from a basic <code>SPECIAL</code>. This should make it a little faster to run compared to <code>%&gt;%</code> as well.</p>
+</section>
+<section id="parse-away" class="level1">
+<h1>Parse away</h1>
+<p>Well, ‘cool’ I guess. Now it’s up to you: you can either parse on this knowledge, or leave it in the parsed.<sup>9</sup></p>
+<hr>
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>─ Session info ───────────────────────────────────────────────────────────────
+ setting  value
+ version  R version 4.2.0 (2022-04-22)
+ os       macOS Big Sur/Monterey 10.16
+ system   x86_64, darwin17.0
+ ui       X11
+ language (EN)
+ collate  en_US.UTF-8
+ ctype    en_US.UTF-8
+ tz       Europe/London
+ date     2023-04-10
+ pandoc   2.19.2 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)
+
+─ Packages ───────────────────────────────────────────────────────────────────
+ package     * version date (UTC) lib source
+ cli           3.6.0   2023-01-09 [1] CRAN (R 4.2.0)
+ crayon        1.5.2   2022-09-29 [1] CRAN (R 4.2.0)
+ digest        0.6.31  2022-12-11 [1] CRAN (R 4.2.0)
+ evaluate      0.20    2023-01-17 [1] CRAN (R 4.2.0)
+ fastmap       1.1.0   2021-01-25 [1] CRAN (R 4.2.0)
+ fontawesome   0.2.2   2021-07-02 [1] CRAN (R 4.2.0)
+ htmltools     0.5.2   2021-08-25 [1] CRAN (R 4.2.0)
+ htmlwidgets   1.5.4   2021-09-08 [1] CRAN (R 4.2.0)
+ jsonlite      1.8.4   2022-12-06 [1] CRAN (R 4.2.0)
+ knitr         1.42    2023-01-25 [1] CRAN (R 4.2.0)
+ lobstr      * 1.1.2   2022-06-22 [1] CRAN (R 4.2.0)
+ magrittr    * 2.0.3   2022-03-30 [1] CRAN (R 4.2.0)
+ rlang         1.0.6   2022-09-24 [1] CRAN (R 4.2.0)
+ rmarkdown     2.14    2022-04-25 [1] CRAN (R 4.2.0)
+ rstudioapi    0.14    2022-08-22 [1] CRAN (R 4.2.0)
+ sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.2.0)
+ xfun          0.37    2023-01-31 [1] CRAN (R 4.2.0)
+ yaml          2.3.7   2023-01-23 [1] CRAN (R 4.2.0)
+
+ [1] /Library/Frameworks/R.framework/Versions/4.2/Resources/library
+
+──────────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+</details>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>You too <a href="https://www.rostrum.blog/2021/11/07/deepfry/">can use R to deep fry a meme</a>.↩︎</p></li>
+<li id="fn2"><p>Things that I’m sure are quite trivial to gatekeepers. I learnt minimal amounts of R to help me wrangle ecological data and ‘do statistics’. I’m not a computer scientist, nor was I trained as a programmer.↩︎</p></li>
+<li id="fn3"><p>Of course, I’m not mentioning right assignment (<code>-&gt;</code>) here, nor the plucky upstart of <a href="https://www.rostrum.blog/2022/06/07/assign-down/">down-asignment</a>, which is certain to be the future for assignment in R.↩︎</p></li>
+<li id="fn4"><p>You may also enjoy <a href="https://renkun.me/2020/11/08/using-parse-data-to-analyze-r-code/">a post by Kun Ren</a> about how this approach is useful for static analysis in <a href="https://github.com/REditorSupport/languageserver">the {languageserver} package</a>, which is a handy download for using R in VS Code.↩︎</p></li>
+<li id="fn5"><p>Not <code>carb</code>ohydrates. ‘Non-car people’ should take a look at the ‘Format’ section of <code>?mtcars</code>. I mean, <code>drat</code> means ‘rear axle ratio’, what?↩︎</p></li>
+<li id="fn6"><p>You can <a href="https://github.com/wch/r-source/blob/0ee550ff68f22b8a1807377e728f99f2775cc43c/src/main/gram.y#L2312-L2350">see a list of these with English translations</a> in Winston Chang’s GitHub copy of R’s source code. So <code>NUM_CONST</code> is ‘numeric constant’, for example.↩︎</p></li>
+<li id="fn7"><p>An exercise for the reader is to alter this function to accept an R script file rather than a string (hint: <code>parse()</code> takes a <code>file</code> argument).↩︎</p></li>
+<li id="fn8"><p>A package with one of my favourite names and <a href="https://lobstr.r-lib.org/logo.png">hex logos</a>. The ‘str’ is from ‘structure’, as in ‘the structure of code’. The logo is a lobster snipping apart the ‘lob’ from ‘str’ text. I mean, *(lobster) chef’s kiss* on that one. 🦞↩︎</p></li>
+<li id="fn9"><p>Yeah, I’m hoping you didn’t read this far. Obviously I didn’t know how to end the post, sorry.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>code</category>
+  <category>tutorial</category>
+  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-02-28-getparsedata/index.html</guid>
+  <pubDate>Fri, 03 Mar 2023 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Repaying Tom Nook with {S7}</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://whimsical-wisp-30974e.netlify.app/posts/2023-02-23-nook-s7/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="figure">
+<p><img src="https://whimsical-wisp-30974e.netlify.app/post/2023-02-23-nook-s7_files/acnh-s7-knit.jpg" alt="Fish-eye lens selfie of the player-character from the game Animal Crossing New Horizons. The character is wearing a knitted black hoodie with bright green letters that say 'S7'. The picture is taken in the Resident Services building. Tom Nook, a raccoon-dog character, is in the background staring ominously at the player." width="100%"></p>
+</div>
+<section id="tldr" class="level1">
+<h1>tl;dr</h1>
+<p>The <del>R7</del> <a href="https://rconsortium.github.io/OOP-WG/">S7 object-oriented system</a> is coming to R. I’ve done a little R6-to-S7 translation on <a href="https://www.rostrum.blog/2020/04/04/repaying-tom-nook-with-r6/">an old project</a> to get a very cursory feel for it, featuring <a href="https://www.animal-crossing.com/new-horizons/">Animal Crossing New Horizons</a>.</p>
+<div class="tip">
+<p> <b>Update</b></p>
+<p>The S7 system and package are under development and could change at any time, rendering everything in this post useless.<sup>1</sup> Heck, last time I checked, the system was called ‘R7’. There’s also a chance that S7 elements may have been integrated into base R itself by the time you read this.</p>
+</div>
+</section>
+<section id="again-oh-no" class="level1">
+<h1>2020 again, oh no</h1>
+<p>Animal Crossing New Horizons (ACNH) was the perfect pandemic game. And the pandemic was the perfect time to <a href="https://www.rostrum.blog/2020/04/04/repaying-tom-nook-with-r6/">build an ersatz version of the ACNH in-game banking system</a> to solve <a href="https://adv-r.hadley.nz/r6.html#exercises-44">an exercise in the Advanced R book</a> using <a href="https://r6.r-lib.org/">the {R6} package for object-oriented programming (OOP)</a> in R.</p>
+<p>The exercise helped me fantasize about defeating the game’s main boss, the predatory loanshark (loanraccoon?) <a href="https://animalcrossing.fandom.com/wiki/Tom_Nook">Tom Nook</a>, via endless wire transfers of hard-earned in-game currency, called ‘Bells’.</p>
+<p>Of course, a lot has changed since 2020. Most importantly, <a href="https://github.com/RConsortium/OOP-WG">a new OOP system for R is being developed</a>. Conversely, Tom Nook has not changed. He is still a scourge.</p>
+<p>Anyway, maybe this is a chance to twitch my OOP muscles with this new system.</p>
+</section>
+<section id="oop-they-did-it-again" class="level1">
+<h1>OOP they did it again</h1>
+<p>The <a href="https://www.r-consortium.org/">R Consortium</a>’s OOP working group has been beavering (raccooning?) away to develop a new OOP system from the ground up: S7<sup>2</sup> (<a href="https://github.com/RConsortium/OOP-WG/issues/262">S3 + S4</a>, geddit?).</p>
+<p>The idea is to take the best elements of <a href="https://adv-r.hadley.nz/oo.html">the existing and in-built S3 and S4 systems</a>, interface with them and improve on them.</p>
+<p>You can <a href="https://rconsortium.github.io/OOP-WG/">read various design docs and meeting minutes on their documentation site</a>, which is housed in their <a href="https://github.com/RConsortium/OOP-WG/">‘OOP-WG’ GitHub repo</a>, and try out the current iteration of the associated package, fittingly called {S7}.</p>
+<p>You should refer to their docs in the first instance, or a useful third party review. For example, <a href="https://www.jumpingrivers.com/">Jumping Rivers</a> have… jumped the river on this one and produced <a href="https://www.jumpingrivers.com/blog/r7-oop-object-oriented-programming-r/">a handy intro</a>.</p>
+</section>
+<section id="a-new-horizon-for-oop" class="level1">
+<h1>A new horizon for OOP</h1>
+<p>Naturally, I should revisit my post on <a href="https://www.rostrum.blog/2020/04/04/repaying-tom-nook-with-r6/">Repaying Tom Nook with {R6}</a> by replicating it with {S7}. Naturally.</p>
+<p>Aha, but actually the {S7} package is more like a development of S3 and S4 objects, and is not a ‘new version’ of {R6}! Ah well. I’m noodling around with {S7} for my own devices and thought I’d post it here so I can refer back to it later.</p>
+<p>Basically I’m recycling content from a previous post to get a feel for the new system. But only in the most superficial, basic way. I spent about 15 minutes on this. Look elsewhere for actually-usefully material. You have been warned.</p>
+</section>
+<section id="install" class="level1">
+<h1>Install</h1>
+<p>For now, the {S7} package is in <a href="https://github.com/RConsortium/OOP-WG/">the R Consortium’s OOP-WG GitHub repo</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">install.packages</span>(<span class="st" style="color: #20794D;">"remotes"</span>)  <span class="co" style="color: #5E5E5E;"># if not yet installed</span></span>
+<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">install_github</span>(<span class="st" style="color: #20794D;">"RConsortium/OOP-WG"</span>)</span></code></pre></div>
+</div>
+<p>And for some glamour we’ll also use the quintessential <a href="https://emilhvitfeldt.github.io/emoji/">{emoji} package</a><sup>3</sup></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">install.packages</span>(<span class="st" style="color: #20794D;">"emoji"</span>)  <span class="co" style="color: #5E5E5E;"># if not yet installed</span></span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;">library</span>(emoji)</span></code></pre></div>
+</div>
+</section>
+<section id="that-is-class" class="level1">
+<h1>That is class</h1>
+<p>A new class is constructed with… <code>new_class()</code></p>
+<p>We can give it a name. We can also give it properties: fields that contain data and can be provided a type check and default value. It’s possible to build validators for these as well, which ensure that certain conditions are met when the properties are adjusted. I’ll keep this simple for now: I just want the values to remain equal or greater than zero.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">ABD <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">new_class</span>(</span>
+<span id="cb3-2">  <span class="at" style="color: #657422;">name =</span> <span class="st" style="color: #20794D;">"ABD"</span>,</span>
+<span id="cb3-3">  <span class="at" style="color: #657422;">properties =</span> <span class="fu" style="color: #4758AB;">list</span>(</span>
+<span id="cb3-4">    <span class="at" style="color: #657422;">savings =</span> <span class="fu" style="color: #4758AB;">new_property</span>(class_integer, <span class="at" style="color: #657422;">default =</span> 0L),</span>
+<span id="cb3-5">    <span class="at" style="color: #657422;">loan =</span> <span class="fu" style="color: #4758AB;">new_property</span>(class_integer, <span class="at" style="color: #657422;">default =</span> 2498000L)</span>
+<span id="cb3-6">  ),</span>
+<span id="cb3-7">  <span class="at" style="color: #657422;">validator =</span> <span class="cf" style="color: #003B4F;">function</span>(self) {</span>
+<span id="cb3-8">    <span class="cf" style="color: #003B4F;">if</span> (self<span class="sc" style="color: #5E5E5E;">@</span>savings <span class="sc" style="color: #5E5E5E;">&lt;</span> 0L) {</span>
+<span id="cb3-9">      <span class="st" style="color: #20794D;">"@savings must be zero or more"</span></span>
+<span id="cb3-10">    } <span class="cf" style="color: #003B4F;">else</span> <span class="cf" style="color: #003B4F;">if</span> (self<span class="sc" style="color: #5E5E5E;">@</span>loan <span class="sc" style="color: #5E5E5E;">&lt;</span> 0L) {</span>
+<span id="cb3-11">      <span class="st" style="color: #20794D;">"@loan must be zero or more"</span></span>
+<span id="cb3-12">    }</span>
+<span id="cb3-13">  }</span>
+<span id="cb3-14">)</span></code></pre></div>
+</div>
+<p>For new methods, you can create a new ‘generic’ and define a function for it. For example, the ‘deposit’ method is pretty straightforward: it just adds an amount to the current savings value.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">deposit <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">new_generic</span>(<span class="st" style="color: #20794D;">"deposit"</span>, <span class="st" style="color: #20794D;">"x"</span>)</span>
+<span id="cb4-2"></span>
+<span id="cb4-3"><span class="fu" style="color: #4758AB;">method</span>(deposit, ABD) <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="cf" style="color: #003B4F;">function</span>(x, amount) {</span>
+<span id="cb4-4">  x<span class="sc" style="color: #5E5E5E;">@</span>savings <span class="ot" style="color: #003B4F;">&lt;-</span> x<span class="sc" style="color: #5E5E5E;">@</span>savings <span class="sc" style="color: #5E5E5E;">+</span> amount</span>
+<span id="cb4-5">  x</span>
+<span id="cb4-6">}</span></code></pre></div>
+</div>
+<p>I specified some other methods, but I hid them because they’re not much more complicated.</p>
+<details>
+<summary>
+Click for more methods
+</summary>
+<p>The ‘withdraw’ method subtracts a specified amount from the savings property. You’re warned if you specify an amount greater than the amount available.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">withdraw <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">new_generic</span>(<span class="st" style="color: #20794D;">"withdraw"</span>, <span class="st" style="color: #20794D;">"x"</span>)</span>
+<span id="cb5-2"></span>
+<span id="cb5-3"><span class="fu" style="color: #4758AB;">method</span>(withdraw, ABD) <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="cf" style="color: #003B4F;">function</span>(x, amount) {</span>
+<span id="cb5-4">  </span>
+<span id="cb5-5">  <span class="cf" style="color: #003B4F;">if</span> (x<span class="sc" style="color: #5E5E5E;">@</span>savings <span class="sc" style="color: #5E5E5E;">-</span> amount <span class="sc" style="color: #5E5E5E;">&lt;</span> 0L) {</span>
+<span id="cb5-6">    <span class="fu" style="color: #4758AB;">warning</span>(</span>
+<span id="cb5-7">      <span class="st" style="color: #20794D;">"Withdrew all savings: "</span>, x<span class="sc" style="color: #5E5E5E;">@</span>savings, <span class="st" style="color: #20794D;">" Bells.</span><span class="sc" style="color: #5E5E5E;">\n</span><span class="st" style="color: #20794D;">"</span>, </span>
+<span id="cb5-8">      <span class="at" style="color: #657422;">call. =</span> <span class="cn" style="color: #8f5902;">FALSE</span></span>
+<span id="cb5-9">    )</span>
+<span id="cb5-10">    x<span class="sc" style="color: #5E5E5E;">@</span>savings <span class="ot" style="color: #003B4F;">&lt;-</span> 0L</span>
+<span id="cb5-11">  } <span class="cf" style="color: #003B4F;">else</span> {</span>
+<span id="cb5-12">    x<span class="sc" style="color: #5E5E5E;">@</span>savings <span class="ot" style="color: #003B4F;">&lt;-</span> x<span class="sc" style="color: #5E5E5E;">@</span>savings <span class="sc" style="color: #5E5E5E;">-</span> amount</span>
+<span id="cb5-13">  }</span>
+<span id="cb5-14">  </span>
+<span id="cb5-15">  x</span>
+<span id="cb5-16">  </span>
+<span id="cb5-17">}</span></code></pre></div>
+</div>
+<p>The ‘pay’ method moves funds from savings to loan. You’re warned if the loan is already paid, if you specify a greater amount than there are savings, or if you pay a greater amount than the loan remaining. You’ll get a victory message if you pay off the whole loan.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">pay <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">new_generic</span>(<span class="st" style="color: #20794D;">"pay"</span>, <span class="st" style="color: #20794D;">"x"</span>)</span>
+<span id="cb6-2"></span>
+<span id="cb6-3"><span class="fu" style="color: #4758AB;">method</span>(pay, ABD) <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="cf" style="color: #003B4F;">function</span>(x, amount) {</span>
+<span id="cb6-4">  </span>
+<span id="cb6-5">  <span class="cf" style="color: #003B4F;">if</span> (x<span class="sc" style="color: #5E5E5E;">@</span>loan <span class="sc" style="color: #5E5E5E;">==</span> 0L) {</span>
+<span id="cb6-6">    <span class="fu" style="color: #4758AB;">stop</span>(<span class="st" style="color: #20794D;">"You already finished paying your loan!</span><span class="sc" style="color: #5E5E5E;">\n</span><span class="st" style="color: #20794D;">"</span>, <span class="at" style="color: #657422;">call. =</span> <span class="cn" style="color: #8f5902;">FALSE</span>)</span>
+<span id="cb6-7">  }</span>
+<span id="cb6-8">  </span>
+<span id="cb6-9">  <span class="cf" style="color: #003B4F;">if</span> (x<span class="sc" style="color: #5E5E5E;">@</span>savings <span class="sc" style="color: #5E5E5E;">-</span> amount <span class="sc" style="color: #5E5E5E;">&lt;</span> 0L) {</span>
+<span id="cb6-10">    <span class="fu" style="color: #4758AB;">warning</span>(</span>
+<span id="cb6-11">      <span class="st" style="color: #20794D;">"Paid total amount from savings instead: "</span>, x<span class="sc" style="color: #5E5E5E;">@</span>savings, <span class="st" style="color: #20794D;">" Bells.</span><span class="sc" style="color: #5E5E5E;">\n</span><span class="st" style="color: #20794D;">"</span>,</span>
+<span id="cb6-12">      <span class="at" style="color: #657422;">call. =</span> <span class="cn" style="color: #8f5902;">FALSE</span></span>
+<span id="cb6-13">    )</span>
+<span id="cb6-14">    x<span class="sc" style="color: #5E5E5E;">@</span>loan <span class="ot" style="color: #003B4F;">&lt;-</span> x<span class="sc" style="color: #5E5E5E;">@</span>loan <span class="sc" style="color: #5E5E5E;">-</span> x<span class="sc" style="color: #5E5E5E;">@</span>savings</span>
+<span id="cb6-15">    x<span class="sc" style="color: #5E5E5E;">@</span>savings <span class="ot" style="color: #003B4F;">&lt;-</span> 0L</span>
+<span id="cb6-16">  } <span class="cf" style="color: #003B4F;">else</span> <span class="cf" style="color: #003B4F;">if</span> (x<span class="sc" style="color: #5E5E5E;">@</span>loan <span class="sc" style="color: #5E5E5E;">-</span> amount <span class="sc" style="color: #5E5E5E;">&lt;</span> 0L) {</span>
+<span id="cb6-17">    <span class="fu" style="color: #4758AB;">warning</span>(</span>
+<span id="cb6-18">      <span class="st" style="color: #20794D;">"Paid total remaining loan instead: "</span>, x<span class="sc" style="color: #5E5E5E;">@</span>loan, <span class="st" style="color: #20794D;">" Bells.</span><span class="sc" style="color: #5E5E5E;">\n</span><span class="st" style="color: #20794D;">"</span>,</span>
+<span id="cb6-19">      <span class="at" style="color: #657422;">call. =</span> <span class="cn" style="color: #8f5902;">FALSE</span></span>
+<span id="cb6-20">    )</span>
+<span id="cb6-21">    x<span class="sc" style="color: #5E5E5E;">@</span>savings <span class="ot" style="color: #003B4F;">&lt;-</span> x<span class="sc" style="color: #5E5E5E;">@</span>savings <span class="sc" style="color: #5E5E5E;">-</span> x<span class="sc" style="color: #5E5E5E;">@</span>loan </span>
+<span id="cb6-22">    x<span class="sc" style="color: #5E5E5E;">@</span>loan <span class="ot" style="color: #003B4F;">&lt;-</span> 0L</span>
+<span id="cb6-23">  } <span class="cf" style="color: #003B4F;">else</span> {</span>
+<span id="cb6-24">    x<span class="sc" style="color: #5E5E5E;">@</span>savings <span class="ot" style="color: #003B4F;">&lt;-</span> x<span class="sc" style="color: #5E5E5E;">@</span>savings <span class="sc" style="color: #5E5E5E;">-</span> amount</span>
+<span id="cb6-25">    x<span class="sc" style="color: #5E5E5E;">@</span>loan <span class="ot" style="color: #003B4F;">&lt;-</span> x<span class="sc" style="color: #5E5E5E;">@</span>loan <span class="sc" style="color: #5E5E5E;">-</span> amount</span>
+<span id="cb6-26">  }</span>
+<span id="cb6-27">  </span>
+<span id="cb6-28">  <span class="cf" style="color: #003B4F;">if</span> (x<span class="sc" style="color: #5E5E5E;">@</span>loan <span class="sc" style="color: #5E5E5E;">==</span> 0L) {</span>
+<span id="cb6-29">    <span class="fu" style="color: #4758AB;">cat</span>(</span>
+<span id="cb6-30">      <span class="fu" style="color: #4758AB;">emoji</span>(<span class="st" style="color: #20794D;">"smiley"</span>),</span>
+<span id="cb6-31">      <span class="st" style="color: #20794D;">"Sweet! I finally finished paying off my very last home loan!"</span>,</span>
+<span id="cb6-32">      <span class="fu" style="color: #4758AB;">emoji</span>(<span class="st" style="color: #20794D;">"tada"</span>), <span class="st" style="color: #20794D;">"</span><span class="sc" style="color: #5E5E5E;">\n\n</span><span class="st" style="color: #20794D;">"</span></span>
+<span id="cb6-33">    )</span>
+<span id="cb6-34">  }</span>
+<span id="cb6-35">  </span>
+<span id="cb6-36">  x</span>
+<span id="cb6-37">  </span>
+<span id="cb6-38">}</span></code></pre></div>
+</div>
+<p>The check method is basically a print method. It reports the loan and savings amounts currently stored in the bank.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">check <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">new_generic</span>(<span class="st" style="color: #20794D;">"check"</span>, <span class="st" style="color: #20794D;">"x"</span>)</span>
+<span id="cb7-2"></span>
+<span id="cb7-3"><span class="fu" style="color: #4758AB;">method</span>(check, ABD) <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="cf" style="color: #003B4F;">function</span>(x) {</span>
+<span id="cb7-4"></span>
+<span id="cb7-5">  loan_formatted <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">format</span>(x<span class="sc" style="color: #5E5E5E;">@</span>loan, <span class="at" style="color: #657422;">big.mark =</span> <span class="st" style="color: #20794D;">","</span>, <span class="at" style="color: #657422;">scientific =</span> <span class="cn" style="color: #8f5902;">FALSE</span>)</span>
+<span id="cb7-6"></span>
+<span id="cb7-7">  savings_formatted <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">format</span>(x<span class="sc" style="color: #5E5E5E;">@</span>savings, <span class="at" style="color: #657422;">big.mark =</span> <span class="st" style="color: #20794D;">","</span>, <span class="at" style="color: #657422;">scientific =</span> <span class="cn" style="color: #8f5902;">FALSE</span>)</span>
+<span id="cb7-8"></span>
+<span id="cb7-9">  <span class="fu" style="color: #4758AB;">cat</span>(<span class="st" style="color: #20794D;">"Automatic Bell Dispenser (ABD)</span><span class="sc" style="color: #5E5E5E;">\n\n</span><span class="st" style="color: #20794D;">"</span>)</span>
+<span id="cb7-10">  <span class="fu" style="color: #4758AB;">cat</span>(<span class="fu" style="color: #4758AB;">emoji</span>(<span class="st" style="color: #20794D;">"bell"</span>), <span class="st" style="color: #20794D;">"Loan Balance:"</span>, loan_formatted, <span class="st" style="color: #20794D;">"Bells</span><span class="sc" style="color: #5E5E5E;">\n</span><span class="st" style="color: #20794D;">"</span>)</span>
+<span id="cb7-11">  <span class="fu" style="color: #4758AB;">cat</span>(<span class="fu" style="color: #4758AB;">emoji</span>(<span class="st" style="color: #20794D;">"pig2"</span>), <span class="st" style="color: #20794D;">"Savings Balance:"</span>, savings_formatted, <span class="st" style="color: #20794D;">"Bells</span><span class="sc" style="color: #5E5E5E;">\n\n</span><span class="st" style="color: #20794D;">"</span>)</span>
+<span id="cb7-12">  <span class="fu" style="color: #4758AB;">cat</span>(</span>
+<span id="cb7-13">    <span class="st" style="color: #20794D;">"Please make a selection from the menu below</span><span class="sc" style="color: #5E5E5E;">\n\n</span><span class="st" style="color: #20794D;">"</span>,</span>
+<span id="cb7-14">    <span class="fu" style="color: #4758AB;">emoji</span>(<span class="st" style="color: #20794D;">"house"</span>), <span class="st" style="color: #20794D;">"pay()</span><span class="sc" style="color: #5E5E5E;">\n</span><span class="st" style="color: #20794D;">"</span>,</span>
+<span id="cb7-15">    <span class="fu" style="color: #4758AB;">emoji</span>(<span class="st" style="color: #20794D;">"arrow_up"</span>), <span class="st" style="color: #20794D;">"deposit()</span><span class="sc" style="color: #5E5E5E;">\n</span><span class="st" style="color: #20794D;">"</span>,</span>
+<span id="cb7-16">    <span class="fu" style="color: #4758AB;">emoji</span>(<span class="st" style="color: #20794D;">"arrow_down"</span>), <span class="st" style="color: #20794D;">"withdraw()"</span></span>
+<span id="cb7-17">  )</span>
+<span id="cb7-18"></span>
+<span id="cb7-19">}</span></code></pre></div>
+</div>
+</details>
+<p>You can start a new instance of the ABD class by, y’know, calling it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">bank <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">ABD</span>()</span></code></pre></div>
+</div>
+<p>When you check the class of this object, you’ll see both the custom class name and a reminder that it has the ‘S7’ class.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;">class</span>(bank)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "ABD"       "S7_object"</code></pre>
+</div>
+</div>
+<p>The vanilla print method exposes the properties and their startup values:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">bank</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;ABD&gt;
+ @ savings: int 0
+ @ loan   : int 2498000</code></pre>
+</div>
+</div>
+<p>Note that the properties are prepended with <code>@</code>. This indicates that we can use the ‘at’ symbol to access these ‘slots’ (like S4) from the object, like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">bank<span class="sc" style="color: #5E5E5E;">@</span>loan</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2498000</code></pre>
+</div>
+</div>
+<p>While we’re printing stuff, we can use the <code>check()</code> method (that I’ve pre-specified) to see the properties in a manner that more closely resembles the game.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="fu" style="color: #4758AB;">check</span>(bank)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Automatic Bell Dispenser (ABD)
+
+🔔 Loan Balance: 2,498,000 Bells
+🐖 Savings Balance: 0 Bells
+
+Please make a selection from the menu below
+
+ 🏠 pay()
+ ⬆️ deposit()
+ ⬇️ withdraw()</code></pre>
+</div>
+</div>
+<p>You can easily and directly change the properties. To add 10 Bells:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">bank<span class="sc" style="color: #5E5E5E;">@</span>savings <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fl" style="color: #AD0000;">9.99</span></span></code></pre></div>
+</div>
+<pre><code>Error: &lt;ABD&gt;@savings must be &lt;integer&gt;, not &lt;double&gt;</code></pre>
+<p>Haha, whoops. Remember I specified that the property can only be an integer, so we need to provide an integer value instead of a double value. In other words, we can only provide whole numbers of Bells. Remember that the <code>L</code> suffix is used in R to signify an integer.<sup>4</sup></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1">bank<span class="sc" style="color: #5E5E5E;">@</span>savings <span class="ot" style="color: #003B4F;">&lt;-</span> 10L</span></code></pre></div>
+</div>
+<p>Is there an overdraft? Tom Nook would probably love that and would ask for massive overdraft fees, but it’s not programmed into the game. This is where our validator comes in handy. We specified that you can’t have a negative amount of savings, so this causes an error:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1">bank<span class="sc" style="color: #5E5E5E;">@</span>savings <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="sc" style="color: #5E5E5E;">-</span>11L</span></code></pre></div>
+</div>
+<pre><code>Error: &lt;ABD&gt; object is invalid:
+- @savings must be zero or more</code></pre>
+<p>That’s fine, but I have sometimes I have extra logic I want to evaluate when I adjust the properties. That’s why I created new methods earlier on. It means I can use a function to add to the savings property instead, for example.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1">bank <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">deposit</span>(bank, 10L)</span>
+<span id="cb22-2">bank<span class="sc" style="color: #5E5E5E;">@</span>savings</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10</code></pre>
+</div>
+</div>
+<p>We can retrieve Bells in this fashion too:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1">bank <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">withdraw</span>(bank, 10L)</span>
+<span id="cb24-2">bank<span class="sc" style="color: #5E5E5E;">@</span>savings</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+</div>
+<p>What if we deposit enough Bells to pay the loan?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1">bank <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">deposit</span>(bank, 2500000L)</span>
+<span id="cb26-2">bank <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">pay</span>(bank, 2500000L)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Paid total remaining loan instead: 2498000 Bells.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>😃 Sweet! I finally finished paying off my very last home loan! 🎉 </code></pre>
+</div>
+</div>
+<p>The method warns us when we try to pay off a value greater than the remaining loan and prints a nice congratulatory message if we’ve cleared the whole debt.</p>
+<p>And so we end up with this view:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><span class="fu" style="color: #4758AB;">check</span>(bank)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Automatic Bell Dispenser (ABD)
+
+🔔 Loan Balance: 0 Bells
+🐖 Savings Balance: 2,000 Bells
+
+Please make a selection from the menu below
+
+ 🏠 pay()
+ ⬆️ deposit()
+ ⬇️ withdraw()</code></pre>
+</div>
+</div>
+<p>Huzzah. Get rekt, raccoon dog. More like Tom <em>Crook</em> amirite.</p>
+<div class="figure">
+<p><img src="https://whimsical-wisp-30974e.netlify.app/post/2023-02-23-nook-s7_files/acnh-s7-knit-2.jpg" alt="Fish-eye lens selfie of the player-character from the game Animal Crossing New Horizons. The character is wearing a knitted black hoodie with bright green letters that say 'S7'. The picture is taken in the Resident Services building." width="100%"></p>
+</div>
+<hr>
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>─ Session info ───────────────────────────────────────────────────────────────
+ setting  value
+ version  R version 4.2.0 (2022-04-22)
+ os       macOS Big Sur/Monterey 10.16
+ system   x86_64, darwin17.0
+ ui       X11
+ language (EN)
+ collate  en_US.UTF-8
+ ctype    en_US.UTF-8
+ tz       Europe/London
+ date     2023-04-10
+ pandoc   2.19.2 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)
+
+─ Packages ───────────────────────────────────────────────────────────────────
+ package     * version    date (UTC) lib source
+ cli           3.6.0      2023-01-09 [1] CRAN (R 4.2.0)
+ digest        0.6.31     2022-12-11 [1] CRAN (R 4.2.0)
+ emoji       * 15.0       2022-11-03 [1] CRAN (R 4.2.0)
+ evaluate      0.20       2023-01-17 [1] CRAN (R 4.2.0)
+ fastmap       1.1.0      2021-01-25 [1] CRAN (R 4.2.0)
+ fontawesome   0.2.2      2021-07-02 [1] CRAN (R 4.2.0)
+ glue          1.6.2      2022-02-24 [1] CRAN (R 4.2.0)
+ htmltools     0.5.2      2021-08-25 [1] CRAN (R 4.2.0)
+ htmlwidgets   1.5.4      2021-09-08 [1] CRAN (R 4.2.0)
+ jsonlite      1.8.4      2022-12-06 [1] CRAN (R 4.2.0)
+ knitr         1.42       2023-01-25 [1] CRAN (R 4.2.0)
+ lifecycle     1.0.3      2022-10-07 [1] CRAN (R 4.2.0)
+ magrittr      2.0.3      2022-03-30 [1] CRAN (R 4.2.0)
+ rlang         1.0.6      2022-09-24 [1] CRAN (R 4.2.0)
+ rmarkdown     2.14       2022-04-25 [1] CRAN (R 4.2.0)
+ rstudioapi    0.14       2022-08-22 [1] CRAN (R 4.2.0)
+ S7          * 0.0.0.9000 2023-02-23 [1] Github (RConsortium/OOP-WG@f2db260)
+ sessioninfo   1.2.2      2021-12-06 [1] CRAN (R 4.2.0)
+ stringi       1.7.8      2022-07-11 [1] CRAN (R 4.2.0)
+ stringr       1.5.0      2022-12-02 [1] CRAN (R 4.2.0)
+ xfun          0.37       2023-01-31 [1] CRAN (R 4.2.0)
+ yaml          2.3.7      2023-01-23 [1] CRAN (R 4.2.0)
+
+ [1] /Library/Frameworks/R.framework/Versions/4.2/Resources/library
+
+──────────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+</details>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>‘Useless’ is an extremely relative term with regard to this blog.↩︎</p></li>
+<li id="fn2"><p>95% certain that ‘S7’ is pronounced how a snake might say ‘seven’: like ‘sseven’.↩︎</p></li>
+<li id="fn3"><p><a href="https://github.com/hadley/emo">{emo}</a> is dead, long live <a href="https://emilhvitfeldt.github.io/emoji/">{emoji}</a>. Haha, joke’s on you, emo will never die. I know this because ‘emo’ was in my top 5 genres on Spotify Wrapped 2022, lololol.↩︎</p></li>
+<li id="fn4"><p>Why <code>L</code>? <a href="https://stackoverflow.com/questions/22191324/clarification-of-l-in-r/22192378#22192378">Shrug</a>. Just take the L.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>code</category>
+  <category>tutorial</category>
+  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-02-23-nook-s7/index.html</guid>
+  <pubDate>Sun, 26 Feb 2023 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>London from space via botsin.space</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://whimsical-wisp-30974e.netlify.app/posts/2023-02-09-londmapbotstodon/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="figure">
+<p><img src="https://whimsical-wisp-30974e.netlify.app/post/2023-02-09-londmapbotstodon_files/toot-hyde.jpg" alt="Aerial image of Hyde Park, London, with three emoji mammoths overlaid, each one tooting on an emoji trumpet, with the word 'toot' coming out the end of the trumpet." width="100%"></p>
+</div>
+<section id="tldr" class="level1">
+<h1>tl;dr</h1>
+<p>I’ve (finally) ported the <a href="https://github.com/matt-dray/londonmapbot">londonmapbot</a> <a href="https://twitter.com/londonmapbot">Twitter</a> bot to <a href="https://botsin.space/@londonmapbot">Mastodon</a>. Like a mammoth rising from the ashes.</p>
+</section>
+<section id="tooooooot" class="level1">
+<h1>TOOOOOOOT</h1>
+<p>Twitter is burning to the ground, yada yada.</p>
+<p>For example, it appears that the free API tier will disappear soon. Soon like… <a href="https://twitter.com/TwitterDev/status/1621026986784337922">today</a>. Oh wait, <a href="https://twitter.com/TwitterDev/status/1623467615539859456">maybe not yet</a>?<sup>1</sup> Cool customer communication, brah.</p>
+<p>Anyway, this news will obviously devastate contributors and fans of <a href="https://mobile.twitter.com/i/lists/1492559073287581707">the mapbotverse Twitter list</a>.</p>
+<p>You don’t know what the mapbotverse is? Oof. It’s a collection of 25 bot accounts that take some inspiration from <a href="https://twitter.com/londonmapbot">my londonmapbot account</a>, which uses <a href="https://github.com/features/actions">GitHub Actions</a> and <a href="https://docs.ropensci.org/rtweet/">the {rtweet} package</a> to tweet on schedule a picture of a random spot in Greater London via <a href="https://www.mapbox.com/">MapBox</a>.</p>
+<p>And so it’s time to update <a href="https://github.com/matt-dray/londonmapbot">the code behind londonmapbot</a> so that it continues to <a href="https://twitter.com/londonmapbot">post to Twitter</a> for as long as it survives. But also so that it lives on by <a href="https://botsin.space/@londonmapbot">posting to Mastodon</a> via <a href="https://schochastics.github.io/rtoot/">the {rtoot} package</a> as well.</p>
+<p>Mastowhat? Something something <a href="https://en.wikipedia.org/wiki/Mastodon_(social_network)">federated Twitter-replacement</a> sort of thing. Tooooooot tooooooot.</p>
+</section>
+<section id="masto-do-or-masto-do-not" class="level1">
+<h1>Masto-do or masto-do-not</h1>
+<p>I’m slightly behind the curve on this: <a href="https://lapsedgeographer.london/">Matt Kerlogue</a> has already ported his <a href="https://t.co/gP6YeqHzAL">narrowbotR</a> (‘narrow boater’) bot from <a href="https://twitter.com/narrowbotR">Twitter</a> to <a href="https://fosstodon.org/@narrowbotr@botsin.space">Mastodon</a> and <a href="https://lapsedgeographer.london/2022-11/mastodon-switch/">written about it</a>.</p>
+<p>The fix was fairly rudimentary in the end, thanks to standing on the shoulder of mammoths. Particularly the creators of <a href="https://schochastics.github.io/rtoot/">the {rtoot} R package</a>.</p>
+<p>{rtoot} lets you interact with the <a href="https://docs.joinmastodon.org/api/">Mastodon API</a>. It’s a sort-of analogue to <a href="https://docs.ropensci.org/rtweet/">the {rtweet} package</a> for <a href="https://developer.twitter.com/en/docs/twitter-api">the Twitter API</a>. {rtoot} was stood up very quickly by <a href="https://www.mr.schochastics.net/">David Schoch</a> (with co-author <a href="http://www.chainsawriot.com/">Chung-hong Chan</a> and contributor <a href="https://www.johannesbgruber.eu/">Johannes Gruber</a>) when it became clear that Mastodon was becoming the platform-du-jour for nerds.</p>
+<section id="set-up-mastodon" class="level2">
+<h2 class="anchored" data-anchor-id="set-up-mastodon">Set up Mastodon</h2>
+<p>It’s easier to set yourself up with API access for Mastodon compared to Twitter:</p>
+<ol type="1">
+<li>Set up a Mastodon account on the dedicated bot server <a href="https://botsin.space/">botsin.space</a> (londonmapbot is <a href="https://botsin.space/@londonmapbot"><span class="citation" data-cites="londonmapbot">@londonmapbot</span><span class="citation" data-cites="botsin.space">@botsin.space</span></a>).<sup>2</sup></li>
+<li>Install the {rtoot} package.</li>
+<li>Authorise yourself with Mastodon and get an API token.</li>
+<li>???</li>
+<li>Absolutely do not profit whatsoever.</li>
+</ol>
+<p>Steps 2 and 3 look like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">install.packages</span>(<span class="st" style="color: #20794D;">"rtoot"</span>)  <span class="co" style="color: #5E5E5E;"># on CRAN</span></span>
+<span id="cb1-2"></span>
+<span id="cb1-3">rtoot<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">auth_setup</span>(</span>
+<span id="cb1-4">  <span class="at" style="color: #657422;">instance  =</span> <span class="st" style="color: #20794D;">"botsin.space"</span>,  <span class="co" style="color: #5E5E5E;"># the Mastodon server the account is on</span></span>
+<span id="cb1-5">  <span class="at" style="color: #657422;">type      =</span> <span class="st" style="color: #20794D;">"user"</span>,          <span class="co" style="color: #5E5E5E;"># i.e. for posting from R</span></span>
+<span id="cb1-6">  <span class="at" style="color: #657422;">name      =</span> <span class="st" style="color: #20794D;">"londonmapbot"</span>,  <span class="co" style="color: #5E5E5E;"># name the token file</span></span>
+<span id="cb1-7">  <span class="at" style="color: #657422;">clipboard =</span> <span class="cn" style="color: #8f5902;">TRUE</span>             <span class="co" style="color: #5E5E5E;"># copy to clipboard</span></span>
+<span id="cb1-8">)</span></code></pre></div>
+</div>
+<p>This process interrupts you to interactively authorise the {rtoot} package in a browser window and copy a big long code to a dialogiue box that appears in your R session.</p>
+<div class="figure">
+<p><img src="https://whimsical-wisp-30974e.netlify.app/post/2023-02-09-londmapbotstodon_files/rtoot-permission.png" alt="A prompt on the Mastodon website that asks the user to provide authorisation for the rtoot package to have permission for read and write access. There's a big blue button that says 'authorise' and a big red one that says 'deny'." width="100%"></p>
+</div>
+<p>It’ll then return:</p>
+<pre><code>## Token of type "user" for instance botsin.space is valid
+## Token (in environment variable format) has been copied to clipboard.
+## &lt;mastodon bearer token&gt; for instance: botsin.space of type: user </code></pre>
+<p>I pasted this API token to a safe place and also stored it as <a href="https://docs.github.com/en/rest/actions/secrets">a GitHub repo secret</a> in the londonmapbot GitHub repo so it could be referred to while the GitHub Action was running.</p>
+</section>
+<section id="post-to-mastodon" class="level2">
+<h2 class="anchored" data-anchor-id="post-to-mastodon">Post to Mastodon</h2>
+<p>Now we can use the <code>post_toot()</code> function to… toot a post. Publish a toot? Entoot a noote. It requires a <code>token</code> argument that takes a special ‘bearer token’ with a particular structure that’s not too dissimilar from what the rtweet package expects of the object passed to its own <code>token</code> function.</p>
+<p>Aside: token setup is made easy in {rtweet} thanks to the <code>rtweet_bot()</code> function, to which you can pass your API keys and secrets. It’s a little less obvious in {rtoot}, which was initially built with the intention of running API calls from your personal machine, so you could just store your keys in your .Renviron file or whatever.</p>
+<p>But actually you can just mimic how {rtweet} accepts the token. To do this, I did not use my brain at all and simply ripped-off <a href="https://lapsedgeographer.london/">Matt Kerlogue’s post</a>.<sup>3</sup> <a href="https://github.com/matt-dray/londonmapbot/blob/main/post-image.R">My updated R script</a> now contains this:<sup>4</sup></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">mastodon_token <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">structure</span>(</span>
+<span id="cb3-2">  <span class="fu" style="color: #4758AB;">list</span>(  <span class="co" style="color: #5E5E5E;"># it's just a list</span></span>
+<span id="cb3-3">    <span class="at" style="color: #657422;">bearer   =</span> <span class="fu" style="color: #4758AB;">Sys.getenv</span>(<span class="st" style="color: #20794D;">"RTOOT_DEFAULT_TOKEN"</span>),</span>
+<span id="cb3-4">    <span class="at" style="color: #657422;">type     =</span> <span class="st" style="color: #20794D;">"user"</span>,  <span class="co" style="color: #5E5E5E;"># i.e. to post from R</span></span>
+<span id="cb3-5">    <span class="at" style="color: #657422;">instance =</span> <span class="st" style="color: #20794D;">"botsin.space"</span>  <span class="co" style="color: #5E5E5E;"># the server</span></span>
+<span id="cb3-6">  ),</span>
+<span id="cb3-7">  <span class="at" style="color: #657422;">class =</span> <span class="st" style="color: #20794D;">"rtoot_bearer"</span>  <span class="co" style="color: #5E5E5E;"># special token class</span></span>
+<span id="cb3-8">)</span></code></pre></div>
+</div>
+<p>Where <code>RTOOT_DEFAULT_TOKEN</code> is that API token from earlier, which is required for accessing Mastodon. As mentioned, it’s stored as <a href="https://docs.github.com/en/rest/actions/secrets">a GitHub repo secret</a> and called into the GitHub Action environment thanks to the <code>env: RTOOT_DEFAULT_TOKEN: ${{ secrets.RTOOT_DEFAULT_TOKEN }}</code> call in <a href="https://github.com/matt-dray/londonmapbot/blob/main/.github/workflows/post-image.yml">the YAML file</a>.</p>
+<p>This object can be passed quite happily to the <code>post_toot()</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">rtoot<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">post_toot</span>(</span>
+<span id="cb4-2">  <span class="at" style="color: #657422;">status   =</span> latlon_details,</span>
+<span id="cb4-3">  <span class="at" style="color: #657422;">media    =</span> temp_file,</span>
+<span id="cb4-4">  <span class="at" style="color: #657422;">alt_text =</span> alt_text,</span>
+<span id="cb4-5">  <span class="at" style="color: #657422;">token    =</span> mastodon_token</span>
+<span id="cb4-6">)</span></code></pre></div>
+</div>
+<p>Where the <code>status</code> (body text), <code>media</code> (image file) and <code>alt_text</code> (alternative text for the image) objects have been generated already (<a href="https://github.com/matt-dray/londonmapbot/blob/main/post-image.R">see the R script</a> for details).</p>
+<p>This is then executed on schedule according to the <a href="https://en.wikipedia.org/wiki/Cron">cron string</a><sup>5</sup> specified in <a href="https://github.com/matt-dray/londonmapbot/blob/main/.github/workflows/post-image.yml">the YAML file</a> (currently twice a day at 0914 and 1714) to publish stuff like this:</p>
+<div class="figure">
+<p><img src="https://whimsical-wisp-30974e.netlify.app/post/2023-02-09-londmapbotstodon_files/londonmapbot-mastodon.png" alt="Example of a toot on Mastodon from the londonmapbot account. The image is an aerial image of London. The text provides the latitude and longitude of the centre of the image and also an OpenStreetMap link." width="100%"></p>
+</div>
+</section>
+<section id="await-twitter-implosion" class="level2">
+<h2 class="anchored" data-anchor-id="await-twitter-implosion">Await Twitter implosion</h2>
+<p>I want the bot to keep posting to Twitter for as long as I’m allowed to. In other words, we should <em>try</em> to post a tweet and <em>catch</em> any error silently, without disrupting the GitHub Action. So naturally I wrapped <code>post_tweet()</code> in a <code>tryCatch()</code> statement, yes? No, actually I used <code>purrr::possibly()</code> instead.</p>
+<p>Why? Basically because the syntax is easy to remember, lol. And what difference does it make to have one extra dependency for this task? To use it, you wrap your function of interest in <code>possibly()</code> and then it can fail without erroring-out the whole function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">possibly_post_tweet <span class="ot" style="color: #003B4F;">&lt;-</span> purrr<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">possibly</span>(rtweet<span class="sc" style="color: #5E5E5E;">::</span>post_tweet)</span>
+<span id="cb5-2"></span>
+<span id="cb5-3"><span class="fu" style="color: #4758AB;">possibly_post_tweet</span>(</span>
+<span id="cb5-4">  <span class="at" style="color: #657422;">status         =</span> latlon_details,</span>
+<span id="cb5-5">  <span class="at" style="color: #657422;">media          =</span> temp_file,</span>
+<span id="cb5-6">  <span class="at" style="color: #657422;">media_alt_text =</span> alt_text,</span>
+<span id="cb5-7">  <span class="at" style="color: #657422;">token          =</span> twitter_token</span>
+<span id="cb5-8">)</span></code></pre></div>
+</div>
+</section>
+<section id="fiddle-while-frisco-burns" class="level2">
+<h2 class="anchored" data-anchor-id="fiddle-while-frisco-burns">Fiddle while Frisco burns</h2>
+<p>While I was messing about with the londonmapbot code, I made a few things in the repo a bit more generic. For example, I altered the name of the GitHub Actions YAML file and the R script to be called ‘post-image’. This is more descriptive and it removes the need for someone forking the repo to have to manually change the name away from ‘londonmapbot’. You are so welcome.</p>
+</section>
+</section>
+<section id="parp" class="level1">
+<h1>Parp</h1>
+<p>Farewell, until the next time we have to port londonmapot to another API-enabled microblogging site. We’ve had bird- and mammal-themed sites; my prediction is that the next site will be called ‘Seacucumber’ and we won’t ‘tweet’ or ‘toot’, we’ll ‘eviscerate’.<sup>6</sup></p>
+<p>I mean, inverting one’s stomach is a daily reaction on Twitter anyway, amirite?</p>
+<hr>
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>─ Session info ───────────────────────────────────────────────────────────────
+ setting  value
+ version  R version 4.2.0 (2022-04-22)
+ os       macOS Big Sur/Monterey 10.16
+ system   x86_64, darwin17.0
+ ui       X11
+ language (EN)
+ collate  en_US.UTF-8
+ ctype    en_US.UTF-8
+ tz       Europe/London
+ date     2023-04-10
+ pandoc   2.19.2 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)
+
+─ Packages ───────────────────────────────────────────────────────────────────
+ package     * version date (UTC) lib source
+ cli           3.6.0   2023-01-09 [1] CRAN (R 4.2.0)
+ digest        0.6.31  2022-12-11 [1] CRAN (R 4.2.0)
+ evaluate      0.20    2023-01-17 [1] CRAN (R 4.2.0)
+ fastmap       1.1.0   2021-01-25 [1] CRAN (R 4.2.0)
+ htmltools     0.5.2   2021-08-25 [1] CRAN (R 4.2.0)
+ htmlwidgets   1.5.4   2021-09-08 [1] CRAN (R 4.2.0)
+ jsonlite      1.8.4   2022-12-06 [1] CRAN (R 4.2.0)
+ knitr         1.42    2023-01-25 [1] CRAN (R 4.2.0)
+ rlang         1.0.6   2022-09-24 [1] CRAN (R 4.2.0)
+ rmarkdown     2.14    2022-04-25 [1] CRAN (R 4.2.0)
+ rstudioapi    0.14    2022-08-22 [1] CRAN (R 4.2.0)
+ sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.2.0)
+ xfun          0.37    2023-01-31 [1] CRAN (R 4.2.0)
+ yaml          2.3.7   2023-01-23 [1] CRAN (R 4.2.0)
+
+ [1] /Library/Frameworks/R.framework/Versions/4.2/Resources/library
+
+──────────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+</details>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Happy Valentine’s to all my fellow monetisable users.↩︎</p></li>
+<li id="fn2"><p>During this process you have to explain why you want to set up the account. Don’t forget to say the magic word in your application, wink wink.↩︎</p></li>
+<li id="fn3"><p>‘Matt hivemind prerogative’, this is called.↩︎</p></li>
+<li id="fn4"><p>Kerlogue influenced the {rtoot} team to <a href="https://github.com/schochastics/rtoot/issues/68">update the package</a> to handle environmental variables, but I could not get this to work, alas.↩︎</p></li>
+<li id="fn5"><p>Did I mention I made <a href="https://github.com/matt-dray/dialga">the R package {dialga}</a> to convert R to cron to English, lol?↩︎</p></li>
+<li id="fn6"><p>I <a href="https://en.wikipedia.org/wiki/Evisceration_(autotomy)">fact-checked myself on Wikipedia</a> and read this brand new sentence: ‘[evisceration] causes the wall of the cloaca to tear and the anus to gape.’↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>code</category>
+  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-02-09-londmapbotstodon/index.html</guid>
+  <pubDate>Thu, 09 Feb 2023 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Wrapping PokéAPI with {trapinch}</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://whimsical-wisp-30974e.netlify.app/posts/2023-01-30-trapinch-begin/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="figure">
+<p><img src="https://whimsical-wisp-30974e.netlify.app/post/2023-01-30-trapinch-begin_files/trapinch_hex.png" alt="Hex sticker design for the 'trapinch' R package. An orange background and grey border are sampled from the official art of the Pokémon trapinch. A pixellated black zig-zag goes left-to-right above centre to represent the Pokémon trapinch's distinctive mouth. A pixellated font says 'trapinch' in the font used for the original Pokémon Game Boy games and underneath it says 'R interface to PokéAPI'." width="40%"></p>
+</div>
+<section id="tldr" class="level1">
+<h1>tl;dr</h1>
+<p>I’ve used <a href="https://httr2.r-lib.org/">the {httr2} R package</a> to create <a href="https://github.com/matt-dray/trapinch">{trapinch}</a>, a package that wraps <a href="https://pokeapi.co/">PokéAPI</a> for fetching Pokémon data.</p>
+<div class="tip">
+<p> <b>Update</b></p>
+<p>I had found a couple of older, non-{httr2} PokéAPI wrappers for R (see footnotes), but had <a href="https://fosstodon.org/@ashbaldry/109806406291422128">somehow missed one</a> that already uses {httr2}: see <a href="https://ashbaldry.github.io/">Ash Baldry</a>’s <a href="https://github.com/ashbaldry/pokeapi">{pokeapi} package</a>, which he wrote months ago!</p>
+</div>
+</section>
+<section id="httr-me-baby-one-more-time" class="level1">
+<h1>{httr} me baby one more time</h1>
+<p><a href="https://httr2.r-lib.org/">The {httr2} package</a> lets you talk to the internet. Or, if you’re fancy, it ‘helps you deal programmatically with HTTP requests and responses’ so you can use it to fetch data from <a href="https://en.wikipedia.org/wiki/API">Application Programming Interfaces</a> (APIs).</p>
+<p>{httr2} has functions that are prefixed consistently (<code>req_*()</code>, <code>resp_()*</code>, etc), are narrow in scope, pipeable (<code>|&gt;</code>) and which return nice errors and messages. These are neat improvements on <a href="https://httr.r-lib.org/">the original {httr} package</a>.</p>
+<p>I’ve used {httr} before to <a href="https://www.rostrum.blog/2021/08/27/zzz/">explore R package startup messages</a> and <a href="https://www.rostrum.blog/2021/07/10/linkrot/">detect linkrot</a>. It’s time to try out {httr2}. What simple API can I wrap into an R package?<sup>1</sup></p>
+</section>
+<section id="poke-an-api" class="level1">
+<h1>Poke an API</h1>
+<p>Regular readers will be unsurprised that I’ve chosen <a href="https://pokeapi.co/">the PokéAPI API</a> for fetching all sorts of information related to <a href="https://en.wikipedia.org/wiki/Pok%C3%A9mon">the Pokémon game franchise</a>.<sup>2</sup></p>
+<p>PokéAPI provides a <a href="https://pokeapi.co/docs/v2">relatively simple API</a>. You don’t need to sign-up or use API tokens, you can only read (‘GET’) data from it’s not <a href="https://en.wikipedia.org/wiki/Rate_limiting">rate-limited</a>.</p>
+<p>URL paths for fetching data are also straightforward: you append an endpoint and a resource of interest to the base URL in the form <code>https://pokeapi.co/api/v2/{endpoint}/{resource}</code>.<sup>3</sup></p>
+<p>In other words, you could type <a href="https://pokeapi.co/api/v2/pokemon/lotad"><code>https://pokeapi.co/api/v2/pokemon/lotad</code></a> in your browser and the API would respond with a JSON file containing data about <a href="https://archives.bulbagarden.net/media/upload/2/2c/Lotad_PMRS.png">Lotad, the best Pokémon</a>.</p>
+<p>{httr2} lets us do this programmatically and can return a more R-friendly list object.</p>
+</section>
+<section id="its-a-trapinch" class="level1">
+<h1>It’s a trapinch</h1>
+<p>So, I’ve created <a href="https://github.com/matt-dray/trapinch">the {trapinch} package</a>.</p>
+<p>It’s a proof of concept; a work in progress. There’s probably <a href="https://bulbapedia.bulbagarden.net/wiki/Bug_(type)">bugs</a>. I’m sharing it in case I don’t take it any further, or if you want to contribute <a href="https://github.com/matt-dray/trapinch/issues">an issue</a> or pull request.</p>
+<p>You can download it from GitHub. It depends on {httr2} (obviously), <a href="https://CRAN.R-project.org/package=RCurl">{rcurl}</a> and R version 4.1 or higher<sup>4</sup> and can be downloaded from GitHub:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">install.packages</span>(<span class="st" style="color: #20794D;">"remotes"</span>)  <span class="co" style="color: #5E5E5E;"># if not yet installed</span></span>
+<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">install_github</span>(<span class="st" style="color: #20794D;">"matt-dray/trapinch"</span>)  <span class="co" style="color: #5E5E5E;"># v0.0.1 in this post</span></span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;">library</span>(trapinch)</span></code></pre></div>
+</div>
+<p>Don’t be surprised if function names or general functionality change in future. In particular, I’d like to look at <a href="https://github.com/matt-dray/trapinch/issues/13">throttling</a> (limiting the number of API calls to prevent misuse) and to provide sensible errors for <a href="https://github.com/matt-dray/trapinch/issues/12">timeouts</a> or if <a href="https://github.com/matt-dray/trapinch/issues/10">the service is down</a>.</p>
+<section id="gotta-get-em-all" class="level2">
+<h2 class="anchored" data-anchor-id="gotta-get-em-all">Gotta GET ’em all</h2>
+<p>There’s a generic low-level function, <code>get_pokeapi()</code>, to which you pass the <code>endpoint</code> and <code>resource</code> ID (numeric) or name (character) of interest. Each endpoint also has its own dedicated function, like <code>get_item()</code> or <code>get_move()</code> that calls <code>get_pokeapi()</code> under the hood.</p>
+<p>You can look at the inbuilt <code>resource_lookups</code> list to get a dataframe of resource IDs and names for each endpoint, as well as the full URL needed to query the API. Here’s the first few:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">head</span>(<span class="fu" style="color: #4758AB;">names</span>(resource_lookups))</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## [1] "ability"        "berry"          "berry-firmness" "berry-flavor"  </span></span>
+<span id="cb3-2"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## [5] "characteristic" "contest-effect"</span></span></code></pre></div>
+</div>
+<p>So here’s the first few rows of the resource dataframe for the ‘pokemon’ endpoint:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;">head</span>(resource_lookups[[<span class="st" style="color: #20794D;">"pokemon"</span>]])</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##   id       name                                  url</span></span>
+<span id="cb5-2"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## 1  1  bulbasaur https://pokeapi.co/api/v2/pokemon/1/</span></span>
+<span id="cb5-3"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## 2  2    ivysaur https://pokeapi.co/api/v2/pokemon/2/</span></span>
+<span id="cb5-4"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## 3  3   venusaur https://pokeapi.co/api/v2/pokemon/3/</span></span>
+<span id="cb5-5"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## 4  4 charmander https://pokeapi.co/api/v2/pokemon/4/</span></span>
+<span id="cb5-6"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## 5  5 charmeleon https://pokeapi.co/api/v2/pokemon/5/</span></span>
+<span id="cb5-7"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## 6  6  charizard https://pokeapi.co/api/v2/pokemon/6/</span></span></code></pre></div>
+</div>
+<p>One of these resource names is ‘mew’, <a href="https://bulbapedia.bulbagarden.net/wiki/Mew_(Pok%C3%A9mon)">the legendary first-generation Pokémon</a>.<sup>5</sup> You could use <code>get_pokeapi("pokemon", "mew")</code> to retrieve its data, or more simply:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">mew <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">get_pokemon</span>(<span class="st" style="color: #20794D;">"mew"</span>)</span></code></pre></div>
+</div>
+<p>The function returns a list of lists, which is parsed from the JSON response returned by the API. So for the ‘pokemon’ endpoint we get 18 different elements of various classes:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;">str</span>(mew, <span class="at" style="color: #657422;">max.level =</span> <span class="dv" style="color: #AD0000;">1</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## List of 18</span></span>
+<span id="cb8-2"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ abilities               :List of 1</span></span>
+<span id="cb8-3"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ base_experience         : int 300</span></span>
+<span id="cb8-4"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ forms                   :List of 1</span></span>
+<span id="cb8-5"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ game_indices            :List of 20</span></span>
+<span id="cb8-6"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ height                  : int 4</span></span>
+<span id="cb8-7"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ held_items              :List of 1</span></span>
+<span id="cb8-8"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ id                      : int 151</span></span>
+<span id="cb8-9"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ is_default              : logi TRUE</span></span>
+<span id="cb8-10"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ location_area_encounters: chr "https://pokeapi.co/api/v2/pokemon/151/encounters"</span></span>
+<span id="cb8-11"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ moves                   :List of 363</span></span>
+<span id="cb8-12"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ name                    : chr "mew"</span></span>
+<span id="cb8-13"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ order                   : int 248</span></span>
+<span id="cb8-14"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ past_types              : list()</span></span>
+<span id="cb8-15"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ species                 :List of 2</span></span>
+<span id="cb8-16"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ sprites                 :List of 10</span></span>
+<span id="cb8-17"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ stats                   :List of 6</span></span>
+<span id="cb8-18"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ types                   :List of 1</span></span>
+<span id="cb8-19"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ weight                  : int 40</span></span></code></pre></div>
+</div>
+<p>I’ve shown only the top level <code>str</code>ucture to hide some of the complexity. For example, the ‘moves’ item contains all the moves a Pokémon can learn, at what level it can learn them, in which game it learns them, and so on. Grabbing the first of the 363 ‘moves’ items (!) listed for Mew looks like this (oof):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">mew[[<span class="st" style="color: #20794D;">"moves"</span>]][[<span class="dv" style="color: #AD0000;">1</span>]][[<span class="st" style="color: #20794D;">"move"</span>]][[<span class="st" style="color: #20794D;">"name"</span>]]</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## [1] "pound"</span></span></code></pre></div>
+</div>
+<p>A future task might be to simplify some of this complexity by collapsing deep lists into dataframes where possible.</p>
+</section>
+<section id="thumbing-the-pokédex" class="level2">
+<h2 class="anchored" data-anchor-id="thumbing-the-pokédex">Thumbing the Pokédex</h2>
+<p>The API responses are ‘paged’, meaning that you must make successive requests of a set size to retrieve all the data for a given endpoint. The <code>get_*()</code> functions automatically expand the request to ask for all the items in one go.</p>
+<p>We know the maximum number of items to be returned from an endpoint because the stored in the <code>resource_lookups</code> object, so this can be appended automatically to the request string.</p>
+</section>
+<section id="bills-pc" class="level2">
+<h2 class="anchored" data-anchor-id="bills-pc">BILL’s PC</h2>
+<p>Responses are cached, which means that the data is saved on your computer. If you make the same request, the data will be retrieved first from the cache rather than calling the API again. That means there’s one less request for the API to deal with.</p>
+<p>The cache is the path resolved by <code>R_user_dir("trapinch", "cache")</code>. This function was introduced in R v4.0 for platform-independent storage of package-related data on a user’s machine.<sup>6</sup> You can delete everything from the cache with <code>clear_cache()</code>.</p>
+</section>
+<section id="substitute" class="level2">
+<h2 class="anchored" data-anchor-id="substitute">Substitute</h2>
+<p><a href="https://enpiar.com/httptest2/">{httptest2}</a> is a handy package that lets you test code written with {httr2}, specifically.</p>
+<p>Why would you need special testing for API calls? The idea is that you should be able to test your package without the need for an active internet connection. {httptest2} ‘records’ the calls you make when you run your tests, then chooses when testing between this ‘mock’ response and a ‘live’ response.</p>
+<p>The approach is pretty simple if you’ve tested before with {testthat}: you wrap your normal <code>test_that()</code> call with <code>httr2::with_mock_dir()</code>. Here’s an example of a test that make sure we get a list back from the API when we use <code>get_pokeapi()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;">with_mock_dir</span>(<span class="st" style="color: #20794D;">"endpoint"</span>, {</span>
+<span id="cb11-2">  <span class="fu" style="color: #4758AB;">test_that</span>(<span class="st" style="color: #20794D;">"a list is returned"</span>, {</span>
+<span id="cb11-3">    <span class="fu" style="color: #4758AB;">expect_type</span>(<span class="fu" style="color: #4758AB;">get_pokeapi</span>(<span class="st" style="color: #20794D;">"move-battle-style"</span>), <span class="st" style="color: #20794D;">"list"</span>)</span>
+<span id="cb11-4">  })</span>
+<span id="cb11-5">})</span></code></pre></div>
+</div>
+<p>By wrapping the test in <code>with_mock_dir()</code>, {httptest2} creates the directory <code>tests/endpoint/</code> that stores a copy of the JSON returned for this call when an internet connection was live.</p>
+<p>As an aside, I learnt about <code>curl::has_internet()</code> in <a href="https://colinfay.me/build-api-wrapper-package-r/">Colin’s blogpost</a>, which can <code>stop()</code> the <code>get_*()</code> functions if there’s no internet connection. But <code>has_internet()</code> will trigger if you’re offline when you test, defeating the purpose of {httptest2}! Luckily, I saw <a href="https://blog.r-hub.io/2023/01/23/code-switch-escape-hatch-test/">a timely post by Maëlle</a> about integrating this type of check into an ‘escape hatch’ so your unit tests can be run successfully in this scenario.</p>
+<p>The <a href="https://books.ropensci.org/http-testing/">rOpenSci HTTP Testing book</a> is a good general port of call as well.</p>
+</section>
+</section>
+<section id="inside-the-poké-ball" class="level1">
+<h1>Inside the Poké Ball</h1>
+<p>The user-facing functions of {trapinch} are therefore pretty simple. I could leave it at that.</p>
+<p>But how daunting does the underlying {httr2} code look in the back-end? Turns out that it’s not that scary, thanks to those friendly and modular functions of {httr2}.</p>
+<p>We can walk through that earlier <code>get_pokemon("mew")</code> call using bare {httr2} functions by:</p>
+<ol type="1">
+<li>Starting with the base API URL</li>
+<li>Appending the endpoint and resource as extensions (i.e.&nbsp;in the form <code>/pokemon/mew</code>)</li>
+<li>Adding a query for the maximum number of items in this endpoint-resource combo (i.e.&nbsp;<code>?limit=1279</code>)</li>
+<li>Announcing to the API, as courtesy, who has made the call (i.e.&nbsp;who is the ‘user agent’)</li>
+<li>Specifying the cache location for results to be saved</li>
+</ol>
+<p>First some variables:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">endpoint <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="st" style="color: #20794D;">"pokemon"</span></span>
+<span id="cb12-2">resource <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="st" style="color: #20794D;">"mew"</span></span>
+<span id="cb12-3">base_url <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="st" style="color: #20794D;">"https://pokeapi.co/api/v2/"</span></span>
+<span id="cb12-4">user_agent <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="st" style="color: #20794D;">"trapinch (http://github.com/matt-dray/trapinch)"</span></span>
+<span id="cb12-5">resource_count <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">nrow</span>(trapinch<span class="sc" style="color: #5E5E5E;">::</span>resource_lookups[[endpoint]])</span>
+<span id="cb12-6">cache_dir <span class="ot" style="color: #003B4F;">&lt;-</span> tools<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">R_user_dir</span>(<span class="st" style="color: #20794D;">"trapinch"</span>, <span class="at" style="color: #657422;">which =</span> <span class="st" style="color: #20794D;">"cache"</span>)</span></code></pre></div>
+</div>
+<p>And now we can build our request with {httr2} functions prefixed with <code>req</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;">library</span>(httr2)</span>
+<span id="cb13-2"></span>
+<span id="cb13-3">mew_request <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">request</span>(base_url) <span class="sc" style="color: #5E5E5E;">|&gt;</span></span>
+<span id="cb13-4">  <span class="fu" style="color: #4758AB;">req_url_path_append</span>(endpoint, resource) <span class="sc" style="color: #5E5E5E;">|&gt;</span></span>
+<span id="cb13-5">  <span class="fu" style="color: #4758AB;">req_url_query</span>(<span class="at" style="color: #657422;">limit =</span> resource_count) <span class="sc" style="color: #5E5E5E;">|&gt;</span></span>
+<span id="cb13-6">  <span class="fu" style="color: #4758AB;">req_user_agent</span>(user_agent) <span class="sc" style="color: #5E5E5E;">|&gt;</span></span>
+<span id="cb13-7">  <span class="fu" style="color: #4758AB;">req_cache</span>(cache_dir)</span></code></pre></div>
+</div>
+<p>Printing the object summarises the request:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">mew_request</span></code></pre></div>
+</div>
+<pre><code>## &lt;httr2_request&gt;
+## GET https://pokeapi.co/api/v2/pokemon/mew?limit=1279
+## Body: empty
+## Options:
+## • useragent: 'trapinch (http://github.com/matt-dray/trapinch)'
+## Policies:
+## • cache_path: '/Users/mattdray/Library/Caches/org.R-project.R/R/trapinch'
+## • cache_use_on_error: FALSE
+## • cache_debug: FALSE</code></pre>
+<p>Then we can actually execute the request:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">mew_perform <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">req_perform</span>(mew_request)</span></code></pre></div>
+</div>
+<p>Again, we can peek at the object to get some extra information about the processing of the request:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">mew_perform</span></code></pre></div>
+</div>
+<pre><code>## &lt;httr2_response&gt;
+## GET https://pokeapi.co/api/v2/pokemon/mew?limit=1279
+## Status: 200 OK
+## Content-Type: application/json
+## Body: In memory (561317 bytes)</code></pre>
+<p>We can see the request was successful, since the HTTP status was <code>200 OK</code>. Other <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">status values</a> are possible and may require us to try again later, for example.</p>
+<p>A couple of functions to mention here are <code>last_request()</code> and <code>last_response()</code>, which will also (surprise!) spit out info about the last request you made and the response received.</p>
+<p>Finally we can parse the JSON returned by the API. Again, I’m presenting the top-level <code>str</code>ucture only, given its complexity:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1">mew_response <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">resp_body_json</span>(mew_perform)</span>
+<span id="cb19-2"><span class="fu" style="color: #4758AB;">str</span>(mew_response, <span class="at" style="color: #657422;">max.level =</span> <span class="dv" style="color: #AD0000;">1</span>)</span></code></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## List of 18</span></span>
+<span id="cb20-2"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ abilities               :List of 1</span></span>
+<span id="cb20-3"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ base_experience         : int 300</span></span>
+<span id="cb20-4"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ forms                   :List of 1</span></span>
+<span id="cb20-5"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ game_indices            :List of 20</span></span>
+<span id="cb20-6"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ height                  : int 4</span></span>
+<span id="cb20-7"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ held_items              :List of 1</span></span>
+<span id="cb20-8"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ id                      : int 151</span></span>
+<span id="cb20-9"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ is_default              : logi TRUE</span></span>
+<span id="cb20-10"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ location_area_encounters: chr "https://pokeapi.co/api/v2/pokemon/151/encounters"</span></span>
+<span id="cb20-11"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ moves                   :List of 363</span></span>
+<span id="cb20-12"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ name                    : chr "mew"</span></span>
+<span id="cb20-13"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ order                   : int 248</span></span>
+<span id="cb20-14"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ past_types              : list()</span></span>
+<span id="cb20-15"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ species                 :List of 2</span></span>
+<span id="cb20-16"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ sprites                 :List of 10</span></span>
+<span id="cb20-17"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ stats                   :List of 6</span></span>
+<span id="cb20-18"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ types                   :List of 1</span></span>
+<span id="cb20-19"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##  $ weight                  : int 40</span></span></code></pre></div>
+</div>
+<p>Boom: this matches the information we retrieved earlier with <code>get_pokemon("mew")</code>.</p>
+</section>
+<section id="whos-that-pokémon" class="level1">
+<h1>Who’s that Pokémon?</h1>
+<p>I know you’re thinking ‘why trapinch?’ In short, <a href="https://bulbapedia.bulbagarden.net/wiki/Trapinch_(Pok%C3%A9mon)">it’s the name of a Pokémon</a> that contains the letters ‘R API’, which is cute. It also makes for an easy hex sticker with the Pokémon’s characteristic zigzag mouth and colour palette of orange and grey.</p>
+<p>So why not ‘rapidash’, which starts with ‘R API’? Easy, lol: trapinch isn’t taken yet on <a href="https://cheeaun.github.io/repokemon/">Repokémon</a>, a page by <a href="https://github.com/cheeaun">Chee Aun</a> that lists GitHub repositories that are named after Pokémon.<sup>7</sup></p>
+<div class="figure">
+<p><img src="https://whimsical-wisp-30974e.netlify.app/post/2023-01-30-trapinch-begin_files/trapinch-repokemon.png" alt="A screenshot of a portion of the Repokémon webpage. It's an image of the Pokémon called trapinch. Underneath is its name and then the blurb, fork- and star-count for the matt-dray/trapinch GitHub repository." width="40%"></p>
+</div>
+<p>Join me next time as I continue my quest to write (sometimes) useful R packages that help me squat all the remaining spots on Repokémon (I call this ‘RDD’).<sup>8</sup></p>
+<hr>
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>─ Session info ───────────────────────────────────────────────────────────────
+ setting  value
+ version  R version 4.2.0 (2022-04-22)
+ os       macOS Big Sur/Monterey 10.16
+ system   x86_64, darwin17.0
+ ui       X11
+ language (EN)
+ collate  en_US.UTF-8
+ ctype    en_US.UTF-8
+ tz       Europe/London
+ date     2023-04-10
+ pandoc   2.19.2 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)
+
+─ Packages ───────────────────────────────────────────────────────────────────
+ package     * version date (UTC) lib source
+ cli           3.6.0   2023-01-09 [1] CRAN (R 4.2.0)
+ digest        0.6.31  2022-12-11 [1] CRAN (R 4.2.0)
+ evaluate      0.20    2023-01-17 [1] CRAN (R 4.2.0)
+ fastmap       1.1.0   2021-01-25 [1] CRAN (R 4.2.0)
+ fontawesome   0.2.2   2021-07-02 [1] CRAN (R 4.2.0)
+ htmltools     0.5.2   2021-08-25 [1] CRAN (R 4.2.0)
+ htmlwidgets   1.5.4   2021-09-08 [1] CRAN (R 4.2.0)
+ jsonlite      1.8.4   2022-12-06 [1] CRAN (R 4.2.0)
+ knitr         1.42    2023-01-25 [1] CRAN (R 4.2.0)
+ rlang         1.0.6   2022-09-24 [1] CRAN (R 4.2.0)
+ rmarkdown     2.14    2022-04-25 [1] CRAN (R 4.2.0)
+ rstudioapi    0.14    2022-08-22 [1] CRAN (R 4.2.0)
+ sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.2.0)
+ xfun          0.37    2023-01-31 [1] CRAN (R 4.2.0)
+ yaml          2.3.7   2023-01-23 [1] CRAN (R 4.2.0)
+
+ [1] /Library/Frameworks/R.framework/Versions/4.2/Resources/library
+
+──────────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+</details>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>There’s <a href="https://github.com/public-apis/public-apis">a GitHub repo with a big long list of free APIs</a> that you can try out.↩︎</p></li>
+<li id="fn2"><p><a href="https://pokeapi.co/docs/v2#wrap">The PokéAPI website</a> notes several wrappers in various languages. There exist R wrappers like <a href="https://github.com/UBC-MDS/pokedex">UBC-MDS’s {pokedex}</a> and <a href="https://nguyeneva.github.io/2020-02-06-rwrapper/">Eva Nguyen’s {pokeWrapper}</a>, but these appear smaller in scope and haven’t been updated for a while. (Edit: as noted at the top of this post, see also <a href="https://ashbaldry.github.io/">Ash Baldry</a>’s {httr2}-powered <a href="https://github.com/ashbaldry/pokeapi">{pokeapi} package</a>, which I had somehow missed!)↩︎</p></li>
+<li id="fn3"><p>There’s one exception: for Pokémon encounters you need the form <code>/pokemon/{resource}/encounters</code>. The <code>get_pokeapi()</code> function handles this extension with a third argument, <code>ext</code>, which is pre-filled with the string <code>"encounters"</code> in the <code>get_pokemon_location_areas()</code> function, so you don’t have to think about it.↩︎</p></li>
+<li id="fn4"><p>This is entirely because I wanted to use <code>tools::R_user_dir()</code> for caching, which was introduced in v4.0. And if we’re depending on v4.0, why not bump to v4.1 and use the base pipe, <code>|&gt;</code>?↩︎</p></li>
+<li id="fn5"><p>I’ll say it: <a href="https://bulbapedia.bulbagarden.net/wiki/Mew_(Pok%C3%A9mon)#Sprites">the original Japanese Red/Green Mew sprite</a> was baller. Battle me.↩︎</p></li>
+<li id="fn6"><p>I made a mockery of <code>R_user_dir</code>’s functionality in <a href="https://www.rostrum.blog/2022/11/13/tamrgo/">my toy package {tamRgo}</a>, which uses the location to store data for a persistent cyberpet (like a <a href="https://en.wikipedia.org/wiki/Tamagotchi">Tamagotchi</a>) that you can interact with in the R console.↩︎</p></li>
+<li id="fn7"><p>I have history with this: <a href="https://www.rostrum.blog/2021/04/10/dialga/">my {dialga} package</a> is named for <a href="https://bulbapedia.bulbagarden.net/wiki/Dialga_(Pok%C3%A9mon)">the legendary ‘temporal’ Pokémon</a> from the <em>Diamond</em> and <em>Pearl</em> games, which is fitting because the package converts between R code, <a href="https://en.wikipedia.org/wiki/Cron">cron strings</a> and English.↩︎</p></li>
+<li id="fn8"><p>Repokémon-Driven Development.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>code</category>
+  <category>package</category>
+  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-01-30-trapinch-begin/index.html</guid>
+  <pubDate>Thu, 02 Feb 2023 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Stiliyan Petrov: Jesus?</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://whimsical-wisp-30974e.netlify.app/posts/2023-01-07-petrov/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="figure">
+<p><img src="https://whimsical-wisp-30974e.netlify.app/post/2023-01-07-petrov_files/petrov.jpg" alt="Close up of former footballer Stiliyan Petrov playing for Bulgaria. Text around his head says 'Stan Petrov', 'am jebus?', 'nativity' and 'get rekt opta' in Comic Sans font." width="100%"></p>
+</div>
+<section id="tldr" class="level1">
+<h1>tl;dr</h1>
+<p>In which I prove wrong a tweeted <a href="https://en.wikipedia.org/wiki/Opta_Sports">Opta</a> football statistic, using R and Transfermarkt data. Oh wait, actually Opta were right. Ah, heck.</p>
+</section>
+<section id="petrov-rescue" class="level1">
+<h1>Petrov Rescue</h1>
+<p>Basically, for little reason, I dislike the style of the tweets on <a href="https://twitter.com/OptaJoe/">the Twitter feed for Opta</a><sup>1</sup> (the company who do all the football stats).</p>
+<p>What is so outrageous? Each tweet always ends in a single, summary word that makes me cringe.</p>
+<p>Wait, what? Let’s take a look at <a href="https://twitter.com/OptaJoe/status/1611735498233622534?s=20">their most recent tweet</a> at time of writing:</p>
+<blockquote class="blockquote">
+<p>14 - Harry Kane has scored 14 goals in his last 14 appearances in the FA Cup, averaging a goal every 63 minutes in the competition in this period. Guarantee.</p>
+</blockquote>
+<p>‘Guarantee’. Gah.</p>
+<p>Or <a href="https://twitter.com/OptaJoe/status/1611722890298404866?s=20">this tweet</a>:</p>
+<blockquote class="blockquote">
+<p>16 - Since his first appearance in the competition in January 2016, Leicester’s Kelechi Iheanacho has scored more FA Cup goals than any other player (16). Specialist.</p>
+</blockquote>
+<p>‘Specialist’. Sigh.</p>
+<p>A completely small and pointless thing to be annoyed by, right?</p>
+<p>But here’s the scenario. Over the yuletide period (on Christmas day!) they ran <a href="https://twitter.com/OptaJoe/status/1607028528289030144?s=20">this tweet</a>:</p>
+<blockquote class="blockquote">
+<p>1 - Stiliyan Petrov (<span class="citation" data-cites="StanPetrov19">@StanPetrov19</span>) is the only player to have played in the Premier League whose name contains all the letters in the word ‘Nativity’. Star.</p>
+</blockquote>
+<p>Obviously, I have absolutely nothing against <a href="https://en.wikipedia.org/wiki/Stiliyan_Petrov">‘Big Stan’</a>. He’s a legend; a ‘star’, if you will. Captain of Aston Villa! Bulgaria! Battled leukaemia and still made it to nearly 600 games. One of the best Bulgarian/Premier League ‘Petrovs’, along with cult legend <a href="https://en.wikipedia.org/wiki/Martin_Petrov">Martin</a>.</p>
+<p>But could this stat possibly be true? Surely there’s at least one other player. Perhaps a window of opportunity for me to avenge my feelings of cringe?</p>
+<p>Oh, and obviously you can ignore the candid dismissals in the tweet’s replies, <a href="https://twitter.com/duke_smyles/status/1607052807680524289?s=20">for example</a>:</p>
+<blockquote class="blockquote">
+<p>What are we supposed to do with this information? [Picture of wryly-smiling duck.]</p>
+</blockquote>
+<p>No, this is more important than any Opta tweet ever: what if it’s… <em>wrong</em>?</p>
+</section>
+<section id="stan-in-r-but-not-rstan" class="level1">
+<h1>Stan in R, but not {rstan}</h1>
+<p>So I looked into it using R, of course.</p>
+<p>Turns out it’s pretty straightforward with <a href="https://jaseziv.github.io/worldfootballR/">the excellent {worldfootballR} package by Jason Zivkovic</a>, which helps fetch player data from <a href="https://www.transfermarkt.com/">Transfermarkt</a> (among other suppliers).</p>
+<p>Basically, we can fetch data about footballers from every team in a given league’s season since its inception. So, aha, you cannot escape, Opta!</p>
+<p>My little <a href="https://github.com/matt-dray/soccercolleagues">{soccercolleagues} package</a> that <a href="https://www.rostrum.blog/2022/02/04/soccercolleagues/">I wrote about in early 2022</a> is built heavily (heavily!) around {worldfootballR} and has a convenience function we can use.</p>
+<p>The niche<sup>2</sup> primary objective of {soccercolleagues} is to let you <a href="https://www.rostrum.blog/2022/02/04/soccercolleagues/">find pairs of football players that were colleagues at some point</a>. Like: ‘which current Premier League footballer has been team mates with each of the following: Kevin Phillips, Mark Viduka, Dejan Lovren, Danny Ings and Nicky Butt?’<sup>3</sup></p>
+<p>Follow along. As ever, you can install the {soccercolleagues} package from GitHub:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="cf" style="color: #003B4F;">if</span>(<span class="sc" style="color: #5E5E5E;">!</span><span class="fu" style="color: #4758AB;">require</span>(remotes)) <span class="fu" style="color: #4758AB;">install.packages</span>(<span class="st" style="color: #20794D;">"remotes"</span>)</span>
+<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">install_github</span>(<span class="st" style="color: #20794D;">"matt-dray/soccercolleagues"</span>)</span></code></pre></div>
+</div>
+<p>We’ll also use the {tidyverse} for wrangling.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">library</span>(soccercolleagues)</span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;">library</span>(tidyverse)</span></code></pre></div>
+</div>
+<p>So we can ask Transfermarkt for all the years of the English Premier League, which began in 1992:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;"># This will take quite a long time...</span></span>
+<span id="cb3-2">epl_players <span class="ot" style="color: #003B4F;">&lt;-</span> soccercolleagues<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">get_players</span>(</span>
+<span id="cb3-3">  <span class="at" style="color: #657422;">seasons =</span> <span class="dv" style="color: #AD0000;">1992</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">2022</span>,</span>
+<span id="cb3-4">  <span class="at" style="color: #657422;">country =</span> <span class="st" style="color: #20794D;">"England"</span></span>
+<span id="cb3-5">)</span></code></pre></div>
+</div>
+<p>And now we can look for the players whose names contain the letters in ‘nativity’:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">epl_players <span class="sc" style="color: #5E5E5E;">|&gt;</span></span>
+<span id="cb4-2">  <span class="fu" style="color: #4758AB;">distinct</span>(player_name) <span class="sc" style="color: #5E5E5E;">|&gt;</span></span>
+<span id="cb4-3">  <span class="fu" style="color: #4758AB;">mutate</span>(</span>
+<span id="cb4-4">    <span class="at" style="color: #657422;">player_name =</span> <span class="fu" style="color: #4758AB;">str_remove_all</span>(<span class="fu" style="color: #4758AB;">tolower</span>(player_name), <span class="st" style="color: #20794D;">" "</span>),</span>
+<span id="cb4-5">    <span class="at" style="color: #657422;">n_count =</span> <span class="fu" style="color: #4758AB;">str_count</span>(player_name, <span class="st" style="color: #20794D;">"n"</span>),</span>
+<span id="cb4-6">    <span class="at" style="color: #657422;">a_count =</span> <span class="fu" style="color: #4758AB;">str_count</span>(player_name, <span class="st" style="color: #20794D;">"a"</span>),</span>
+<span id="cb4-7">    <span class="at" style="color: #657422;">t_count =</span> <span class="fu" style="color: #4758AB;">str_count</span>(player_name, <span class="st" style="color: #20794D;">"t"</span>),</span>
+<span id="cb4-8">    <span class="at" style="color: #657422;">i_count =</span> <span class="fu" style="color: #4758AB;">str_count</span>(player_name, <span class="st" style="color: #20794D;">"i"</span>),</span>
+<span id="cb4-9">    <span class="at" style="color: #657422;">v_count =</span> <span class="fu" style="color: #4758AB;">str_count</span>(player_name, <span class="st" style="color: #20794D;">"v"</span>),</span>
+<span id="cb4-10">    <span class="at" style="color: #657422;">y_count =</span> <span class="fu" style="color: #4758AB;">str_count</span>(player_name, <span class="st" style="color: #20794D;">"y"</span>)</span>
+<span id="cb4-11">  ) <span class="sc" style="color: #5E5E5E;">|&gt;</span></span>
+<span id="cb4-12">  <span class="fu" style="color: #4758AB;">filter</span>(</span>
+<span id="cb4-13">    n_count <span class="sc" style="color: #5E5E5E;">&gt;=</span> <span class="dv" style="color: #AD0000;">1</span> <span class="sc" style="color: #5E5E5E;">&amp;</span></span>
+<span id="cb4-14">      a_count <span class="sc" style="color: #5E5E5E;">&gt;=</span> <span class="dv" style="color: #AD0000;">1</span> <span class="sc" style="color: #5E5E5E;">&amp;</span></span>
+<span id="cb4-15">      t_count <span class="sc" style="color: #5E5E5E;">&gt;=</span> <span class="dv" style="color: #AD0000;">2</span> <span class="sc" style="color: #5E5E5E;">&amp;</span></span>
+<span id="cb4-16">      i_count <span class="sc" style="color: #5E5E5E;">&gt;=</span> <span class="dv" style="color: #AD0000;">2</span> <span class="sc" style="color: #5E5E5E;">&amp;</span></span>
+<span id="cb4-17">      v_count <span class="sc" style="color: #5E5E5E;">&gt;=</span> <span class="dv" style="color: #AD0000;">1</span> <span class="sc" style="color: #5E5E5E;">&amp;</span></span>
+<span id="cb4-18">      y_count <span class="sc" style="color: #5E5E5E;">&gt;=</span> <span class="dv" style="color: #AD0000;">1</span></span>
+<span id="cb4-19">  )</span>
+<span id="cb4-20"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## # A tibble: 1 × 7</span></span>
+<span id="cb4-21"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##   player_name    n_count a_count t_count i_count v_count y_count</span></span>
+<span id="cb4-22"><span class="do" style="color: #5E5E5E;
+font-style: italic;">##   &lt;chr&gt;            &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;</span></span>
+<span id="cb4-23"><span class="do" style="color: #5E5E5E;
+font-style: italic;">## 1 stiliyanpetrov       1       1       2       2       1       1</span></span></code></pre></div>
+</div>
+<p>Oof… they were right. He is the only one.</p>
+<p>Wow, this humble pie is so delicious, thank you so much Opta for unintentionally spoonfeeding it to me.</p>
+<p>To be clear: Opta’s data analysts have a good track record, as far as I know. But I’ve got my eye on you! You’ll slip up one day!</p>
+<p>…But wait. Opta were misnaming Stan as ‘Stylian Petrov’ <a href="https://twitter.com/OptaJoe/status/169439820584714240?s=20">in tweets as late as 2012</a>. Get rekt! You missed the extra ‘i’ you need in ‘nativity’, fools! Put respect on Stiliyan’s name!</p>
+<p>‘Result’.<sup>4</sup></p>
+<hr>
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>─ Session info ───────────────────────────────────────────────────────────────
+ setting  value
+ version  R version 4.2.0 (2022-04-22)
+ os       macOS Big Sur/Monterey 10.16
+ system   x86_64, darwin17.0
+ ui       X11
+ language (EN)
+ collate  en_US.UTF-8
+ ctype    en_US.UTF-8
+ tz       Europe/London
+ date     2023-04-10
+ pandoc   2.19.2 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)
+
+─ Packages ───────────────────────────────────────────────────────────────────
+ package     * version date (UTC) lib source
+ cli           3.6.0   2023-01-09 [1] CRAN (R 4.2.0)
+ digest        0.6.31  2022-12-11 [1] CRAN (R 4.2.0)
+ evaluate      0.20    2023-01-17 [1] CRAN (R 4.2.0)
+ fastmap       1.1.0   2021-01-25 [1] CRAN (R 4.2.0)
+ htmltools     0.5.2   2021-08-25 [1] CRAN (R 4.2.0)
+ htmlwidgets   1.5.4   2021-09-08 [1] CRAN (R 4.2.0)
+ jsonlite      1.8.4   2022-12-06 [1] CRAN (R 4.2.0)
+ knitr         1.42    2023-01-25 [1] CRAN (R 4.2.0)
+ rlang         1.0.6   2022-09-24 [1] CRAN (R 4.2.0)
+ rmarkdown     2.14    2022-04-25 [1] CRAN (R 4.2.0)
+ rstudioapi    0.14    2022-08-22 [1] CRAN (R 4.2.0)
+ sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.2.0)
+ xfun          0.37    2023-01-31 [1] CRAN (R 4.2.0)
+ yaml          2.3.7   2023-01-23 [1] CRAN (R 4.2.0)
+
+ [1] /Library/Frameworks/R.framework/Versions/4.2/Resources/library
+
+──────────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+</details>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>This post is not guerilla marketing for Opta. It would be <em>extremely</em> guerilla if they wanted to advertise on <em>this</em> blog.↩︎</p></li>
+<li id="fn2"><p>There is definitely a burgeoning crossover of football stats and R users, see <a href="https://ryo-n7.github.io/">Ryo</a>, <a href="https://torvaney.github.io/">Ben</a> and <a href="https://tonyelhabr.rbind.io/">Tony</a>, for example.↩︎</p></li>
+<li id="fn3"><p>Hint: it’s a very ‘boring’ footballer, lol.↩︎</p></li>
+<li id="fn4"><p>By which I mean I lost 1-0.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>code</category>
+  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-01-07-petrov/index.html</guid>
+  <pubDate>Sun, 08 Jan 2023 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>.-././–/—/.-./…/.</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://whimsical-wisp-30974e.netlify.app/posts/2023-01-06-remorse/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="figure">
+<img src="https://whimsical-wisp-30974e.netlify.app/post/2023-01-06-remorse_files/morse.png" alt="Crudely drawn lineart of a Morse Code tapping machine with text saying 'dit' and 'dah' above it." width="100%">
+<p class="caption">
+You may not believe it, but I am releasing this art under CC0.
+</p>
+<section id="tldr" class="level1">
+<h1>tl;dr</h1>
+<p><a href="https://github.com/matt-dray/remorse">{remorse}</a> is a tiny R package that converts text to <a href="https://en.wikipedia.org/wiki/Morse_code">Morse Code</a> to audio.</p>
+</section>
+<section id="beat-a-dead-morse" class="level1">
+<h1>Beat a dead morse</h1>
+<p>In <a href="https://www.rostrum.blog/2023/01/04/rogue-sfx/">the last post</a> I mentioned <a href="https://cran.r-project.org/package=sonify">{sonify}</a> for making R do little audible beeps and boops.</p>
+<p>It reminded me of one (of many) unwritten micro-projects I’ve got kicking around in my brain: obviously you could use {sonify} to communicate Morse Code. And why not translate from text to Morse (and back) while you’re at it?<sup>1</sup></p>
+<p>To be honest this was a classic case of name-driven development (NDD): I thought {remorse} was a funny name for a package and worked backwards from there.</p>
+<p>Obviously it says ‘Morse’ in the name, but also ‘remorse’ is usually what I feel after putting together a small pointless package; pointless-package existentialism (PPE) is something I have <a href="https://matt-dray.github.io/projects/">a track history</a> with.</p>
+<p>But of course, the true remorse is that I didn’t find the better package-name pun: {morseinspector}. But maybe that’s too long of a name and maybe non-Brits wouldn’t understand <a href="https://en.wikipedia.org/wiki/Inspector_Morse_(TV_series)">the reference</a>. Maybe I’m thinking too hard.<sup>2</sup></p>
+</section>
+<section id="oh-dit-dit-dahling" class="level1">
+<h1>Oh dit-dit-dahling</h1>
+<p>Consider this highly plausible scenario: it’s 20XX, the apocalypse has come, and the remaining humans on planet Earth communicate by Morse Code. For some reason.<sup>3</sup></p>
+<p>Wow, wouldn’t it be handy to have a text-to-Morse translator?</p>
+<p>Well friend, if you’ve managed to find an electronic thinking box in the apocalyptic barren wastelands (assuming electricity is still available (and the machine has R installed (and the {remorse} package was downloaded before the world’s internet cut out (and you know how to use R (and you don’t own a simpler, more portable Morse Code translation pamphlet))))), then you will have this incredible power at your fingertips.</p>
+<p>Or maybe you’d rather risk it? Pfft.</p>
+</section>
+<section id="use-the-morse" class="level1">
+<h1>Use the Morse…</h1>
+<p>That’s an awful lot of build-up for a very simple package. Let’s take a look at what little it does.</p>
+<p>As usual, {remorse} lives on GitHub<sup>4</sup>, so it can be downloaded with a little help from the typographically-adjacent {remotes} package:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;">install.github</span>(<span class="st" style="color: #20794D;">"remotes"</span>)</span>
+<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">install_github</span>(<span class="st" style="color: #20794D;">"matt-dray/remorse"</span>)  <span class="co" style="color: #5E5E5E;"># v0.1.1 here</span></span></code></pre></div>
+</div>
+<p>That’ll install {sonify} as well, which is needed for the audio.</p>
+<p>Right so: text to Morse Code.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">text_in <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="st" style="color: #20794D;">"Ahoy pal!"</span></span>
+<span id="cb2-2">morse <span class="ot" style="color: #003B4F;">&lt;-</span> remorse<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">txt2morse</span>(text_in)</span>
+<span id="cb2-3">morse</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] ".-/..../---/-.-- .--./.-/.-../-.-.--"</code></pre>
+</div>
+</div>
+<p>So each letter has been translated to the relevant string of ‘dits and dahs’ (‘dots’ and ‘dashes’) that make up Morse Code. I’ve used a period (<code>.</code>) and hyphen (<code>-</code>) to represent these in {remorse}, with forward slashes (<code>/</code>) between Morse groups that represent individual characters, and a space for the spaces between words.</p>
+<p>Note that not all characters can be converted to Morse Code. I did some research (Wikipedia) to discover the mappings from letters, numbers and punctuation to Morse Code. This information is used internally as a lookup, but is also exported in <code>morse_lookup</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">remorse<span class="sc" style="color: #5E5E5E;">::</span>morse_lookup</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       A        B        C        D        E        F        G        H 
+    ".-"   "-..."   "-.-."    "-.."      "."   "..-."    "--."   "...." 
+       I        J        K        L        M        N        O        P 
+    ".."   ".---"    "-.-"   ".-.."     "--"     "-."    "---"   ".--." 
+       Q        R        S        T        U        V        W        X 
+  "--.-"    ".-."    "..."      "-"    "..-"   "...-"    ".--"   "-..-" 
+       Y        Z        0        1        2        3        4        5 
+  "-.--"   "--.."  "-----"  ".----"  "..---"  "...--"  "....-"  "....." 
+       6        7        8        9        &amp;        '        @        ) 
+ "-...."  "--..."  "---.."  "----."  ".-..." ".----." ".--.-." "-.--.-" 
+       (        :        ,        =        !        .        -        * 
+ "-.--." "---..." "--..--"  "-...-" "-.-.--" ".-.-.-" "-....-"   "-..-" 
+       +        "        ?        /          
+ ".-.-." ".-..-." "..--.."  "-..-."      " " </code></pre>
+</div>
+</div>
+<p>Of course, this means we can map backwards from Morse Code to letters, numbers and punctuation:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">text_out <span class="ot" style="color: #003B4F;">&lt;-</span> remorse<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">morse2txt</span>(morse)</span>
+<span id="cb6-2">text_out</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "AHOY PAL!"</code></pre>
+</div>
+</div>
+<p>Morse Code has no sense of case, so it just converts it all to uppercase. Like you’re shouting; the most clear form of communication.</p>
+<p>So, you can argue justifiably that <code>txt2morse("yo") |&gt; morse2txt()</code> is just a worse version of <code>toupper()</code> that strips out certain unmappable characters.</p>
+<p>But of course it does so much more. Well, one thing more. Let’s go from Morse to audio.</p>
+<p>First a reminder of the code from earlier:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">morse</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] ".-/..../---/-.-- .--./.-/.-../-.-.--"</code></pre>
+</div>
+</div>
+<p>And to generate audio you just:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">remorse<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">morse2sfx</span>(morse)</span></code></pre></div>
+</div>
+<p>The output sounds like this:</p>
+
+<audio controls="">
+<source src="/output/remorse/remorse.wav" type="audio/wav">
+</audio>
+
+<p>Wow. It plays audible dits (one ‘time unit’, default is <code>dit_length = 0.05</code> in seconds), dahs (three), spaces between dits and dahs (one), spaces between Morse character groupings (three) and spaces between words (seven). Tell all your friends.</p>
+<p>So, do I still feel remorse for writing {remorse}, even after demonstrating its incredible power? Yes. All I ask is that you think of me in those apocalyptic wastelands.</p>
+<div class="tip">
+<p> <b>Update</b></p>
+<p>I just realised you can turn Morse Code into… Morse Code. Mind blown.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">remorse<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">txt2morse</span>(<span class="st" style="color: #20794D;">"hi"</span>) <span class="sc" style="color: #5E5E5E;">|&gt;</span></span>
+<span id="cb11-2">  remorse<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">txt2morse</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] ".-.-.-/.-.-.-/.-.-.-/.-.-.-/-..-./.-.-.-/.-.-.-"</code></pre>
+</div>
+</div>
+<p>‘Morsest Code’. Why? Absolutely.</p>
+<p>Maybe I’ve been watching <a href="https://www.youtube.com/watch?v=HLRdruqQfRk">too much Tom7</a> recently.</p>
+</div>
+<hr>
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>─ Session info ───────────────────────────────────────────────────────────────
+ setting  value
+ version  R version 4.2.0 (2022-04-22)
+ os       macOS Big Sur/Monterey 10.16
+ system   x86_64, darwin17.0
+ ui       X11
+ language (EN)
+ collate  en_US.UTF-8
+ ctype    en_US.UTF-8
+ tz       Europe/London
+ date     2023-04-10
+ pandoc   2.19.2 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)
+
+─ Packages ───────────────────────────────────────────────────────────────────
+ package     * version date (UTC) lib source
+ cli           3.6.0   2023-01-09 [1] CRAN (R 4.2.0)
+ digest        0.6.31  2022-12-11 [1] CRAN (R 4.2.0)
+ evaluate      0.20    2023-01-17 [1] CRAN (R 4.2.0)
+ fastmap       1.1.0   2021-01-25 [1] CRAN (R 4.2.0)
+ fontawesome   0.2.2   2021-07-02 [1] CRAN (R 4.2.0)
+ htmltools     0.5.2   2021-08-25 [1] CRAN (R 4.2.0)
+ htmlwidgets   1.5.4   2021-09-08 [1] CRAN (R 4.2.0)
+ jsonlite      1.8.4   2022-12-06 [1] CRAN (R 4.2.0)
+ knitr         1.42    2023-01-25 [1] CRAN (R 4.2.0)
+ remorse       0.1.1   2023-01-06 [1] Github (matt-dray/remorse@4540098)
+ rlang         1.0.6   2022-09-24 [1] CRAN (R 4.2.0)
+ rmarkdown     2.14    2022-04-25 [1] CRAN (R 4.2.0)
+ rstudioapi    0.14    2022-08-22 [1] CRAN (R 4.2.0)
+ sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.2.0)
+ xfun          0.37    2023-01-31 [1] CRAN (R 4.2.0)
+ yaml          2.3.7   2023-01-23 [1] CRAN (R 4.2.0)
+
+ [1] /Library/Frameworks/R.framework/Versions/4.2/Resources/library
+
+──────────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+</details>
+
+
+</section>
+
+
+</div><div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Which completes my hattrick of ‘R translation’ packages, I suppose. <a href="https://www.rostrum.blog/2020/11/14/hello-r2eng/">The {r2eng} package</a> attempts to <a href="https://www.rostrum.blog/2020/11/14/hello-r2eng/">translate R code to spoken English and have your computer speak it out loud</a>. <a href="https://www.github.com/matt-dray/dialga/">The {dialga} package</a> takes R code and <a href="https://www.rostrum.blog/2021/04/10/dialga/">translates it to cron strings and those cron strings to English</a>.↩︎</p></li>
+<li id="fn2"><p>Not to mention that it’s a bad pun: the package doesn’t ‘inspect’ Morse; it translates it. Yep, definitely I’m thinking too hard about this.↩︎</p></li>
+<li id="fn3"><p>Personally I’d rather see <a href="https://en.wikipedia.org/wiki/Telegraphy">telegraphy</a> make a comeback.↩︎</p></li>
+<li id="fn4"><p>Wow, how edgy, maybe he’s had a bad run in with the CRAN maintainers, or perhaps he’s read the bit of <a href="https://cran.r-project.org/web/packages/policies.html">the CRAN repository policy</a> that says ‘a package’s contribution has to be non-trivial’ (<a href="https://fosstodon.org/@mattdray/109644645694966586">whatever that means</a>). Or he’s just lazy.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>code</category>
+  <category>package</category>
+  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-01-06-remorse/index.html</guid>
+  <pubDate>Fri, 06 Jan 2023 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Ding! Sound effects in {r.oguelike}</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://whimsical-wisp-30974e.netlify.app/posts/2023-01-03-r.oguelike-sfx/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/HD1cPWcQUc4" title="Demo of {r.oguelike} for R" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="">
+</iframe>
+<p class="caption">
+new wr — r.oguelike any% tenkeyless noglitch
+</p>
+<section id="tldr" class="level1">
+<h1>tl;dr</h1>
+<p><a href="https://github.com/matt-dray/r.oguelike">The {r.oguelike} package</a>—a toy roguelike microadventure for the R console—now has little sound effects <a href="https://cran.r-project.org/package=sonify">thanks to {sonify}</a>. Pew pew!</p>
+</section>
+<section id="the-adventure-continues" class="level1">
+<h1>The adventure continues?</h1>
+<p>Apparently this is part 5 of the {r.oguelike} <a href="https://en.wiktionary.org/wiki/devlog">devlog</a>. You can read earlier posts about:</p>
+<ul>
+<li><a href="https://www.rostrum.blog/2022/04/25/r.oguelike-dev/">its inception</a></li>
+<li><a href="https://www.rostrum.blog/2022/05/01/dungeon/">creating simple procedural dungeons</a></li>
+<li><a href="https://www.rostrum.blog/2022/06/10/basic-search/">making an enemy chase the player</a></li>
+<li><a href="https://www.rostrum.blog/2022/06/28/isometric-dungeon/">3D dungeons and continuous keypress inputs</a></li>
+</ul>
+<p>Alas, this is also probably the last installment.</p>
+<p>Yes, the dungeons have been dank (cool, edgy), but also <em>dank</em> (cool, damp, claustrophobic). Time to unspelunk myself.</p>
+<p>There may be time for a {r.oguelike2} in future. I’d like to try a class-based approach to help limit code spaghetti and make it more extensible. Perhaps it will even have a proper game loop! Call me when you’re ready, Kojima.</p>
+<p>Until then, one more little feature to tie things up. Beeeeeeep. BOOOOOOOP.</p>
+</section>
+<section id="hi-sonifi" class="level1">
+<h1>Hi-Sonifi</h1>
+<p>So, yes: {r.oguelike} now has sound effects with quality as high as its graphics and gameplay. See all these in concert in the video embedded at the top of this page.</p>
+<p>I used <a href="https://cran.r-project.org/package=sonify">the {sonify} package</a> to create a few little beeps and toots that I think fit the game’s retro aesthetic.<sup>1</sup> These are fired when the player moves and interacts with things in the dungeon.</p>
+<p>I’ve written about {sonify} before when I sonified data about <a href="https://www.rostrum.blog/2021/02/02/sonify-covid/">COVID-19 infections</a> and <a href="https://www.rostrum.blog/2021/02/21/skyphone/">GitHub activity</a> (incredible juxtaposition), which can offer a more interesting and accessible way of presenting data.</p>
+<p>You can also demean {sonify} by making funny little honks and parps, which is what I’ve done for {r.oguelike}.</p>
+<p>How did I arrive at the soundscape for {r.oguelike}? I did the bare minimum of fiddling around with the arguments in <code>sonify::sonify()</code> until the noises amused me.</p>
+</section>
+<section id="demo-cassette" class="level1">
+<h1>Demo cassette</h1>
+<p>Sounds are played in the code of the package via functions after each triggering event. The user can prevent these sounds from playing with the logical <code>has_sfx</code> argument in the <code>start_game()</code> function.</p>
+<p>For example, here’s the function for the simplest sound effect:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">.sfx_move <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="cf" style="color: #003B4F;">function</span>(has_sfx) {</span>
+<span id="cb1-2">  <span class="cf" style="color: #003B4F;">if</span> (has_sfx) sonify<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">1</span>, <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.001</span>)</span>
+<span id="cb1-3">}</span></code></pre></div>
+</div>
+<p>The <code>sonify()</code> outputs are <a href="https://CRAN.R-project.org/package=tuneR">{tuneR}</a> objects. I’ve saved these as wav files with <code>tuneR::writeWav()</code> so they can be embedded in this post.</p>
+<details>
+<summary>
+Click for illustrative code to create the wav files.
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;">library</span>(sonify)</span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;">library</span>(tuneR)</span>
+<span id="cb2-3"><span class="fu" style="color: #4758AB;">library</span>(purrr)</span>
+<span id="cb2-4"></span>
+<span id="cb2-5">sfx <span class="ot" style="color: #003B4F;">&lt;-</span> <span class="fu" style="color: #4758AB;">list</span>(</span>
+<span id="cb2-6">  </span>
+<span id="cb2-7">  <span class="at" style="color: #657422;">move =</span> <span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">1</span>, <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.001</span>),</span>
+<span id="cb2-8">  </span>
+<span id="cb2-9">  <span class="at" style="color: #657422;">bump =</span> <span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">1</span>, <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.01</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">100</span>, <span class="dv" style="color: #AD0000;">110</span>)),</span>
+<span id="cb2-10">  </span>
+<span id="cb2-11">  <span class="at" style="color: #657422;">gold =</span> <span class="fu" style="color: #4758AB;">bind</span>(</span>
+<span id="cb2-12">    <span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">1</span>, <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.05</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">800</span>, <span class="dv" style="color: #AD0000;">800</span>)),</span>
+<span id="cb2-13">    <span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">1</span>, <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.05</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">1000</span>, <span class="dv" style="color: #AD0000;">1000</span>))</span>
+<span id="cb2-14">  ),</span>
+<span id="cb2-15">  </span>
+<span id="cb2-16">  <span class="at" style="color: #657422;">apple =</span> <span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">0</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">1</span>, <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">1</span>), <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.05</span>),</span>
+<span id="cb2-17">  </span>
+<span id="cb2-18">  <span class="at" style="color: #657422;">eat =</span> <span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">0</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">1</span>, <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">0</span>), <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.05</span>),</span>
+<span id="cb2-19">  </span>
+<span id="cb2-20">  <span class="at" style="color: #657422;">win =</span> <span class="fu" style="color: #4758AB;">bind</span>(</span>
+<span id="cb2-21">    <span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">0</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">1</span>, <span class="fu" style="color: #4758AB;">rep</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">2</span>), <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.1</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">600</span>, <span class="dv" style="color: #AD0000;">600</span>)),</span>
+<span id="cb2-22">    <span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">0</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">1</span>, <span class="fu" style="color: #4758AB;">rep</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">2</span>), <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.1</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">600</span>, <span class="dv" style="color: #AD0000;">600</span>)),</span>
+<span id="cb2-23">    <span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">0</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">1</span>, <span class="fu" style="color: #4758AB;">rep</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">2</span>), <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.1</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">800</span>, <span class="dv" style="color: #AD0000;">800</span>))</span>
+<span id="cb2-24">  ),</span>
+<span id="cb2-25">  </span>
+<span id="cb2-26">  <span class="at" style="color: #657422;">lose =</span> <span class="fu" style="color: #4758AB;">bind</span>(</span>
+<span id="cb2-27">    <span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">0</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">1</span>, <span class="fu" style="color: #4758AB;">rep</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">2</span>), <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.1</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">600</span>, <span class="dv" style="color: #AD0000;">600</span>)),</span>
+<span id="cb2-28">    <span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">0</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">1</span>, <span class="fu" style="color: #4758AB;">rep</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">2</span>), <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.1</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">600</span>, <span class="dv" style="color: #AD0000;">600</span>)),</span>
+<span id="cb2-29">    <span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">0</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">1</span>, <span class="fu" style="color: #4758AB;">rep</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">2</span>), <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.1</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">400</span>, <span class="dv" style="color: #AD0000;">400</span>))</span>
+<span id="cb2-30">  )</span>
+<span id="cb2-31">  </span>
+<span id="cb2-32">)</span>
+<span id="cb2-33"></span>
+<span id="cb2-34"><span class="fu" style="color: #4758AB;">walk2</span>(</span>
+<span id="cb2-35">  <span class="at" style="color: #657422;">.x =</span> sfx,</span>
+<span id="cb2-36">  <span class="at" style="color: #657422;">.y =</span> <span class="fu" style="color: #4758AB;">names</span>(sfx), </span>
+<span id="cb2-37">  <span class="sc" style="color: #5E5E5E;">~</span><span class="fu" style="color: #4758AB;">writeWave</span>(.x, <span class="fu" style="color: #4758AB;">paste0</span>(.y, <span class="st" style="color: #20794D;">".wav"</span>))</span>
+<span id="cb2-38">)</span></code></pre></div>
+</div>
+</details>
+<p>In reality, the sounds play a little slower in the game itself, but it was a bit fiddly to reproduce it for these clips. You’ll get the idea.</p>
+<section id="move" class="level2">
+<h2 class="anchored" data-anchor-id="move">Move</h2>
+<p>Step onto unoccupied floor tile (<code>.</code>) and you’ll hear the very quick tap of your boot.</p>
+<p>Click to play the sound:</p>
+
+<audio controls="">
+<source src="/output/rogue-sfx/move.wav" type="audio/wav">
+</audio>
+
+<p>And here’s the corresponding code to reproduce it:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">1</span>, <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.001</span>)</span></code></pre></div>
+</div>
+<p>But bump into the dungeon wall (<code>#</code>) and you’ll get a dull thud, you absolute clod.</p>
+
+<audio controls="">
+<source src="/output/rogue-sfx/bump.wav" type="audio/wav">
+</audio>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">1</span>, <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.01</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">100</span>, <span class="dv" style="color: #AD0000;">110</span>))</span></code></pre></div>
+</div>
+<p>Yes, <code>flim</code>, as in: ‘this post is absolute flimflam’.</p>
+</section>
+<section id="food" class="level2">
+<h2 class="anchored" data-anchor-id="food">Food</h2>
+<p>Would you pick up an apple (<code>a</code>) you found on the floor of a cave? Here’s what it might sound like as it pops into your inventory.</p>
+
+<audio controls="">
+<source src="/output/rogue-sfx/apple.wav" type="audio/wav">
+</audio>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">0</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">1</span>, <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">0</span>, <span class="dv" style="color: #AD0000;">1</span>), <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.05</span>),</span></code></pre></div>
+</div>
+<p>More importantly, would you eat an apple (<code>a</code>) you found on the floor of a cave? Here’s how it would sound as it rolls down your gullet.</p>
+
+<audio controls="">
+<source src="/output/rogue-sfx/eat.wav" type="audio/wav">
+</audio>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">0</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">1</span>, <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">0</span>), <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.05</span>)</span></code></pre></div>
+</div>
+</section>
+<section id="gold" class="level2">
+<h2 class="anchored" data-anchor-id="gold">Gold</h2>
+<p>Collecting gold (<code>$</code>) grants you a celebratory chirp of excitement. Although there’s not actually anything in the dungeon to spend it on, sorry.</p>
+
+<audio controls="">
+<source src="/output/rogue-sfx/gold.wav" type="audio/wav">
+</audio>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">1</span>, <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.05</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">800</span>, <span class="dv" style="color: #AD0000;">800</span>))</span>
+<span id="cb7-2"><span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">1</span>, <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.05</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">1000</span>, <span class="dv" style="color: #AD0000;">1000</span>))</span></code></pre></div>
+</div>
+</section>
+<section id="defeat-enemy" class="level2">
+<h2 class="anchored" data-anchor-id="defeat-enemy">Defeat enemy</h2>
+<p>A powerful victory ditty after you crush your enemies (<code>E</code>).</p>
+
+<audio controls="">
+<source src="/output/rogue-sfx/win.wav" type="audio/wav">
+</audio>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">0</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">1</span>, <span class="fu" style="color: #4758AB;">rep</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">2</span>), <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.1</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">600</span>, <span class="dv" style="color: #AD0000;">600</span>))</span>
+<span id="cb8-2"><span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">0</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">1</span>, <span class="fu" style="color: #4758AB;">rep</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">2</span>), <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.1</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">600</span>, <span class="dv" style="color: #AD0000;">600</span>))</span>
+<span id="cb8-3"><span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">0</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">1</span>, <span class="fu" style="color: #4758AB;">rep</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">2</span>), <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.1</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">800</span>, <span class="dv" style="color: #AD0000;">800</span>))</span></code></pre></div>
+</div>
+</section>
+<section id="lose" class="level2">
+<h2 class="anchored" data-anchor-id="lose">Lose</h2>
+<p>Conversely, a sad lament for being crushed by your enemies (<code>E</code>) or running out of turns (<code>T</code>).</p>
+
+<audio controls="">
+<source src="/output/rogue-sfx/lose.wav" type="audio/wav">
+</audio>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">0</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">1</span>, <span class="fu" style="color: #4758AB;">rep</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">2</span>), <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.1</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">600</span>, <span class="dv" style="color: #AD0000;">600</span>))</span>
+<span id="cb9-2"><span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">0</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">1</span>, <span class="fu" style="color: #4758AB;">rep</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">2</span>), <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.1</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">600</span>, <span class="dv" style="color: #AD0000;">600</span>))</span>
+<span id="cb9-3"><span class="fu" style="color: #4758AB;">sonify</span>(<span class="dv" style="color: #AD0000;">0</span><span class="sc" style="color: #5E5E5E;">:</span><span class="dv" style="color: #AD0000;">1</span>, <span class="fu" style="color: #4758AB;">rep</span>(<span class="dv" style="color: #AD0000;">1</span>, <span class="dv" style="color: #AD0000;">2</span>), <span class="at" style="color: #657422;">duration =</span> <span class="fl" style="color: #AD0000;">0.1</span>, <span class="at" style="color: #657422;">flim =</span> <span class="fu" style="color: #4758AB;">c</span>(<span class="dv" style="color: #AD0000;">400</span>, <span class="dv" style="color: #AD0000;">400</span>))</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="echo-echo-echo" class="level1">
+<h1>Echo echo echo</h1>
+<p>If you want to try out {r.oguelike}, you can install it from GitHub:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;">install.github</span>(<span class="st" style="color: #20794D;">"remotes"</span>)  <span class="co" style="color: #5E5E5E;"># if not yet installed</span></span>
+<span id="cb10-2">remotes<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">install_github</span>(<span class="st" style="color: #20794D;">"matt-dray/r.oguelike"</span>)  <span class="co" style="color: #5E5E5E;"># v0.1 currently</span></span>
+<span id="cb10-3">r.oguelike<span class="sc" style="color: #5E5E5E;">::</span><span class="fu" style="color: #4758AB;">start_game</span>()</span></code></pre></div>
+</div>
+<p>You can also <a href="https://mybinder.org/v2/gh/matt-dray/play-r.oguelike/main?urlpath=rstudio">run {r.oguelike} in an RStudio instance in your browser</a> (!), thanks to <a href="https://mybinder.org/">the Binder project</a>.</p>
+<p>Free feel to highlight any bugs via <a href="https://github.com/matt-dray/rostrum-blog/issues">the issues</a>, or create a pull request that adds all the things that stop me from calling {r.oguelike} a proper ‘game’.<sup>2</sup></p>
+<a href="https://github.com/matt-dray/r.oguelike">
+<div class="figure">
+<p><img src="https://whimsical-wisp-30974e.netlify.app/post/2022-04-30-dungeon_files/r.oguelike-hex.png" alt="Hex sticker design for the 'r.oguelike' R package. Black background with bright green font, reminiscent of old computer terminal output. In the centre, a three-by-ten arrangement of hashmarks and periods, along with a single at symbol and dollar sign, which looks like a classic ACII tile-based roguelike game. The text 'r.oguelike' is underneath." width="25%"></p>
+</div>
+</a><p><a href="https://github.com/matt-dray/r.oguelike"></a></p>
+<p>Most importantly, don’t forget to wishlist me on Steam and remember that pre-order bonuses will include an apple that’s been left on a dungeon floor for a few months.</p>
+<hr>
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>─ Session info ───────────────────────────────────────────────────────────────
+ setting  value
+ version  R version 4.2.0 (2022-04-22)
+ os       macOS Big Sur/Monterey 10.16
+ system   x86_64, darwin17.0
+ ui       X11
+ language (EN)
+ collate  en_US.UTF-8
+ ctype    en_US.UTF-8
+ tz       Europe/London
+ date     2023-04-10
+ pandoc   2.19.2 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)
+
+─ Packages ───────────────────────────────────────────────────────────────────
+ package     * version date (UTC) lib source
+ cli           3.6.0   2023-01-09 [1] CRAN (R 4.2.0)
+ digest        0.6.31  2022-12-11 [1] CRAN (R 4.2.0)
+ evaluate      0.20    2023-01-17 [1] CRAN (R 4.2.0)
+ fastmap       1.1.0   2021-01-25 [1] CRAN (R 4.2.0)
+ htmltools     0.5.2   2021-08-25 [1] CRAN (R 4.2.0)
+ htmlwidgets   1.5.4   2021-09-08 [1] CRAN (R 4.2.0)
+ jsonlite      1.8.4   2022-12-06 [1] CRAN (R 4.2.0)
+ knitr         1.42    2023-01-25 [1] CRAN (R 4.2.0)
+ rlang         1.0.6   2022-09-24 [1] CRAN (R 4.2.0)
+ rmarkdown     2.14    2022-04-25 [1] CRAN (R 4.2.0)
+ rstudioapi    0.14    2022-08-22 [1] CRAN (R 4.2.0)
+ sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.2.0)
+ xfun          0.37    2023-01-31 [1] CRAN (R 4.2.0)
+ yaml          2.3.7   2023-01-23 [1] CRAN (R 4.2.0)
+
+ [1] /Library/Frameworks/R.framework/Versions/4.2/Resources/library
+
+──────────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+</details>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Meanwhile, I’m looking forward to what <a href="https://twitter.com/coolbutuseless/status/1561664096860524545">Mike (coolbutuseless) is up to with audio for games in R</a>.↩︎</p></li>
+<li id="fn2"><p>Find some actual real R games in <a href="https://github.com/matt-dray/awesome-r-games">this list I’ve put together</a>.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>code</category>
+  <category>package</category>
+  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-01-03-r.oguelike-sfx/index.html</guid>
+  <pubDate>Wed, 04 Jan 2023 00:00:00 GMT</pubDate>
+</item>
 </channel>
 </rss>
