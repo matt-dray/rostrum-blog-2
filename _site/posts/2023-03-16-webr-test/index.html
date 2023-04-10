@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2023-03-16">
+
+<title>rostrum.blog (test) - Playgrounds with WebR and Quarto</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-black-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog (test)</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text"></span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-">    
+        <li>
+    <a class="dropdown-item" href="../../about.html"><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="dropdown-text">About</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../index.xml"><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="dropdown-text">RSS</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="https://github.com/matt-dray/rostrum-blog-2"><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="dropdown-text">Source</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Playgrounds with WebR and Quarto</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">code</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Matt Dray </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 16, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="figure">
+<p><img src="../../post/2023-03-16-webr-test_files/webr-quarto-test.png" alt="A screenshot of a webpage that has an embedded R code block. Some text asks the user to adjust the code and then click a button that says 'run code'. A shocked Pikachu appears in the corner." width="100%"></p>
+</div>
+<section id="tldr" class="level1">
+<h1>tl;dr</h1>
+<p><a href="https://docs.r-wasm.org/webr/latest/">WebR</a> lets you run R in the browser(!). Now you can <a href="https://github.com/coatless/quarto-webr">make WebR chunks in Quarto</a> that render to editable, executable blocks(!).</p>
+</section>
+<section id="sliding-into-tedium" class="level1">
+<h1>Sliding into tedium</h1>
+<p>I wrote recently <a href="https://www.rostrum.blog/2023/03/03/getparsedata/">a simple introduction to how R parses code</a>. I provided a function that I said the reader could go away and run themselves.</p>
+<p>As in… copy-paste it into an instance of R running on their machine. Gross.</p>
+<p>Wouldn’t it be better if people could just tinker with the code right there in the post? This kind of ‘playground’ could be great for explaining concepts and teaching.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+</section>
+<section id="i-seesaw-a-solution" class="level1">
+<h1>I seesaw a solution</h1>
+<p>WebR lets you run R in the browser. Read that again! This is a landmark piece of work from George Stagg and Lionel Henry.</p>
+<p>I won’t go into technicals and limitations here. For more information, see:</p>
+<ul>
+<li><a href="https://docs.r-wasm.org/webr/latest/">the docs</a></li>
+<li><a href="https://www.tidyverse.org/blog/2023/03/webr-0-1-0/">the v0.1 launch post</a></li>
+<li><a href="https://github.com/nanxstats/awesome-webr">an ‘awesome’ list of resources</a></li>
+</ul>
+<p>Crucially for my needs, you can now <a href="https://github.com/coatless/quarto-webr">run WebR chunks in a Quarto document</a>, thanks to James J Balamuta. This renders interactive blocks of R code that the reader can adjust and execute with button-click:</p>
+<div class="figure">
+<img src="../../post/2023-03-16-webr-test_files/webr-demo.gif" alt="Animated gif showing a code block with R code inside that sets the value of 'x' to 'world' then pastes it together with the string 'hello'. A 'run code' button is clicked and the string 'hello world' is printed. The word 'hello' is then changed to 'ahoy' and the code is re-run and the printout changes to 'ahoy world'." width="40%">
+<p class="caption">
+Beware: this is a gif, not an embedded demo!
+</p>
+</div>
+<p>Check out James’s <a href="https://github.com/coatless/quarto-webr">coatless/quarto-webr</a> GitHub repo for the source. There’s also <a href="https://rd.thecoatlessprofessor.com/webR-quarto-demos/webr-quarto-html-demo.html">a live demo</a> and <a href="https://github.com/coatless-r-n-d/webR-quarto-demos/blob/main/webr-quarto-html-demo.qmd">its source</a>.</p>
+</section>
+<section id="swinging-into-action" class="level1">
+<h1>Swinging into action</h1>
+<p>To have a go yourself, do follow <a href="https://github.com/coatless/quarto-webr">the setup steps</a> in James’s quarto-webr README and look at <a href="https://github.com/coatless-r-n-d/webR-quarto-demos/blob/main/webr-quarto-html-demo.qmd">the source of his demo</a>.</p>
+<p>Ultimately you can:</p>
+<ol type="1">
+<li>Install the extension to your project folder by running <code>quarto add coatless/quarto-webr</code> in the terminal</li>
+<li>Set <code>filter: webr</code> in the YAML of your qmd file<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
+<li>Write code chunks in the qmd using the <code>{webr}</code> engine</li>
+</ol>
+<p>This made it straightforward to prepare a little Quarto doc with chunks powered by the ‘webr’ engine, which I deployed to the web via <a href="https://www.netlify.com/">Netlify</a>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>You can <a href="https://webr-parse-test.netlify.app/">visit that live page</a> or see the underlying <a href="https://github.com/matt-dray/webr-parse-test">source on GitHub</a>.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>So now you <em>can</em> tinker with the example I gave in the original blogpost about parsing R code. Unfortunately I can’t add this directly to the post, since this blog is not made with Quarto.</p>
+</section>
+<section id="a-blog-platform-merry-go-round" class="level1">
+<h1>A blog-platform merry-go-round</h1>
+<p>I’ve written this quick demo and post because I was excited about what George &amp; Lionel and James have put together. There’s so many system-independent applications of this approach that could help with teaching and learning, or explaining simple ideas in a blog post.</p>
+<p>In fact, this blog may eventually switch from {blogdown} to Quarto to take advantage of WebR. It’ll be a pain to convert old posts, but luckily I already missed the earlier {blogdown}-to-{distill} bandwagon, lol.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<hr>
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>─ Session info ───────────────────────────────────────────────────────────────
+ setting  value
+ version  R version 4.2.0 (2022-04-22)
+ os       macOS Big Sur/Monterey 10.16
+ system   x86_64, darwin17.0
+ ui       X11
+ language (EN)
+ collate  en_US.UTF-8
+ ctype    en_US.UTF-8
+ tz       Europe/London
+ date     2023-04-10
+ pandoc   2.19.2 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)
+
+─ Packages ───────────────────────────────────────────────────────────────────
+ package     * version date (UTC) lib source
+ cli           3.6.0   2023-01-09 [1] CRAN (R 4.2.0)
+ digest        0.6.31  2022-12-11 [1] CRAN (R 4.2.0)
+ evaluate      0.20    2023-01-17 [1] CRAN (R 4.2.0)
+ fastmap       1.1.0   2021-01-25 [1] CRAN (R 4.2.0)
+ htmltools     0.5.2   2021-08-25 [1] CRAN (R 4.2.0)
+ htmlwidgets   1.5.4   2021-09-08 [1] CRAN (R 4.2.0)
+ jsonlite      1.8.4   2022-12-06 [1] CRAN (R 4.2.0)
+ knitr         1.42    2023-01-25 [1] CRAN (R 4.2.0)
+ rlang         1.0.6   2022-09-24 [1] CRAN (R 4.2.0)
+ rmarkdown     2.14    2022-04-25 [1] CRAN (R 4.2.0)
+ rstudioapi    0.14    2022-08-22 [1] CRAN (R 4.2.0)
+ sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.2.0)
+ xfun          0.37    2023-01-31 [1] CRAN (R 4.2.0)
+ yaml          2.3.7   2023-01-23 [1] CRAN (R 4.2.0)
+
+ [1] /Library/Frameworks/R.framework/Versions/4.2/Resources/library
+
+──────────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+</details>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>A nice example of this in a teaching context is W3 Schools, who have a <a href="https://www.w3schools.com/html/tryit.asp?filename=tryhtml_intro">‘Try It Yourself’</a> space that lets you take code from the lessons and tinker with it yourself in the browser.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Set also <code>engine: knitr</code> in the YAML to use {knitr} instead of Jupyter to handle the conversion. You can add <code>format: html</code> to ensure that the output is rendered to HTML.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Self-deployment and Netlify are viable for now, GitHub Pages is coming later. Netlify is how this blog is deployed.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Originally I tried to embed the Quarto demo in an iframe, but WebR failed to load inside it when the blog was rendered. That’s interesting.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>But came close when I thought I’d found <a href="https://www.rostrum.blog/2022/03/15/renv-profiles/">a system for making individual posts reproducible</a>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
