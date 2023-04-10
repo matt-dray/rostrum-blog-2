@@ -22,7 +22,7 @@ knitr::opts_chunk$set(eval = FALSE)
 ```
 
 <div class="figure">
-<img src="/post/2023-02-09-londmapbotstodon_files/toot-hyde.jpg" alt="Aerial image of Hyde Park, London, with three emoji mammoths overlaid, each one tooting on an emoji trumpet, with the word 'toot' coming out the end of the trumpet." width="100%"/>
+<img src="resources/toot-hyde.jpg" alt="Aerial image of Hyde Park, London, with three emoji mammoths overlaid, each one tooting on an emoji trumpet, with the word 'toot' coming out the end of the trumpet." width="100%"/>
 </div>
 
 # tl;dr
@@ -77,7 +77,7 @@ rtoot::auth_setup(
 This process interrupts you to interactively authorise the {rtoot} package in a browser window and copy a big long code to a dialogiue box that appears in your R session.
 
 <div class="figure">
-<img src="/post/2023-02-09-londmapbotstodon_files/rtoot-permission.png" alt="A prompt on the Mastodon website that asks the user to provide authorisation for the rtoot package to have permission for read and write access. There's a big blue button that says 'authorise' and a big red one that says 'deny'." width="100%"/>
+<img src="resources/rtoot-permission.png" alt="A prompt on the Mastodon website that asks the user to provide authorisation for the rtoot package to have permission for read and write access. There's a big blue button that says 'authorise' and a big red one that says 'deny'." width="100%"/>
 </div>
 
 It'll then return:
@@ -127,7 +127,7 @@ Where the `status` (body text), `media` (image file) and `alt_text` (alternative
 This is then executed on schedule according to the [cron string](https://en.wikipedia.org/wiki/Cron)[^dialga] specified in [the YAML file](https://github.com/matt-dray/londonmapbot/blob/main/.github/workflows/post-image.yml) (currently twice a day at 0914 and 1714) to publish stuff like this:
 
 <div class="figure">
-<img src="/post/2023-02-09-londmapbotstodon_files/londonmapbot-mastodon.png" alt="Example of a toot on Mastodon from the londonmapbot account. The image is an aerial image of London. The text provides the latitude and longitude of the centre of the image and also an OpenStreetMap link." width="100%"/>
+<img src="resources/londonmapbot-mastodon.png" alt="Example of a toot on Mastodon from the londonmapbot account. The image is an aerial image of London. The text provides the latitude and longitude of the centre of the image and also an OpenStreetMap link." width="100%"/>
 </div>
 
 ## Await Twitter implosion
