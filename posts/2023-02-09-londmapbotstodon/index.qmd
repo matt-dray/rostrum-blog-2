@@ -4,7 +4,7 @@ date: 2023-02-09
 slug: londonmapbotstodon
 categories:
   - api
-  - github
+  - github-actions
   - londonmapbot
   - social-media
   - r
@@ -12,7 +12,7 @@ categories:
   - rtweet
 ---
 
-```{r, setup, include=FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
@@ -56,7 +56,7 @@ It's easier to set yourself up with API access for Mastodon compared to Twitter:
 
 Steps 2 and 3 look like this:
 
-```{r}
+```{r auth}
 install.packages("rtoot")  # on CRAN
 
 rtoot::auth_setup(
@@ -89,7 +89,7 @@ Aside: token setup is made easy in {rtweet} thanks to the `rtweet_bot()` functio
 
 But actually you can just mimic how {rtweet} accepts the token. To do this, I did not use my brain at all and simply ripped-off [Matt Kerlogue's post](https://lapsedgeographer.london/).[^matt] [My updated R script](https://github.com/matt-dray/londonmapbot/blob/main/post-image.R) now contains this:[^envvar]
 
-```{r}
+```{r structure}
 mastodon_token <- structure(
   list(  # it's just a list
     bearer   = Sys.getenv("RTOOT_DEFAULT_TOKEN"),
@@ -104,7 +104,7 @@ Where `RTOOT_DEFAULT_TOKEN` is that API token from earlier, which is required fo
 
 This object can be passed quite happily to the `post_toot()` function.
 
-```{r}
+```{r post-toot}
 rtoot::post_toot(
   status   = latlon_details,
   media    = temp_file,
@@ -125,7 +125,7 @@ I want the bot to keep posting to Twitter for as long as I'm allowed to. In othe
 
 Why? Basically because the syntax is easy to remember, lol. And what difference does it make to have one extra dependency for this task? To use it, you wrap your function of interest in `possibly()` and then it can fail without erroring-out the whole function.
 
-```{r}
+```{r possibly-post}
 possibly_post_tweet <- purrr::possibly(rtweet::post_tweet)
 
 possibly_post_tweet(

@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Matt Dray">
-<meta name="dcterms.date" content="2023-02-09">
+<meta name="dcterms.date" content="2022-09-07">
 
-<title>rostrum.blog (test) - London from space via botsin.space</title>
+<title>rostrum.blog (test) - EARL 22: {a11ytables} for better spreadsheets</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -99,6 +99,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="../../site_libs/fitvids-2.1.1/fitvids.min.js"></script>
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -150,15 +151,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">London from space via botsin.space</h1>
+      <h1 class="title">EARL 22: {a11ytables} for better spreadsheets</h1>
                                 <div class="quarto-categories">
-                <div class="quarto-category">api</div>
-                <div class="quarto-category">github-actions</div>
-                <div class="quarto-category">londonmapbot</div>
-                <div class="quarto-category">social-media</div>
+                <div class="quarto-category">a11ytables</div>
+                <div class="quarto-category">event</div>
+                <div class="quarto-category">ms-office</div>
+                <div class="quarto-category">public-sector</div>
+                <div class="quarto-category">quarto</div>
                 <div class="quarto-category">r</div>
-                <div class="quarto-category">rtoot</div>
-                <div class="quarto-category">rtweet</div>
+                <div class="quarto-category">talk</div>
               </div>
                   </div>
   </div>
@@ -176,7 +177,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">February 9, 2023</p>
+        <p class="date">September 7, 2022</p>
       </div>
     </div>
     
@@ -192,15 +193,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
-  <li><a href="#tooooooot" id="toc-tooooooot" class="nav-link" data-scroll-target="#tooooooot">TOOOOOOOT</a></li>
-  <li><a href="#masto-do-or-masto-do-not" id="toc-masto-do-or-masto-do-not" class="nav-link" data-scroll-target="#masto-do-or-masto-do-not">Masto-do or masto-do-not</a>
-  <ul class="collapse">
-  <li><a href="#set-up-mastodon" id="toc-set-up-mastodon" class="nav-link" data-scroll-target="#set-up-mastodon">Set up Mastodon</a></li>
-  <li><a href="#post-to-mastodon" id="toc-post-to-mastodon" class="nav-link" data-scroll-target="#post-to-mastodon">Post to Mastodon</a></li>
-  <li><a href="#await-twitter-implosion" id="toc-await-twitter-implosion" class="nav-link" data-scroll-target="#await-twitter-implosion">Await Twitter implosion</a></li>
-  <li><a href="#fiddle-while-frisco-burns" id="toc-fiddle-while-frisco-burns" class="nav-link" data-scroll-target="#fiddle-while-frisco-burns">Fiddle while Frisco burns</a></li>
-  </ul></li>
-  <li><a href="#parp" id="toc-parp" class="nav-link" data-scroll-target="#parp">Parp</a></li>
+  <li><a href="#counting-sheets" id="toc-counting-sheets" class="nav-link" data-scroll-target="#counting-sheets">Counting sheets</a></li>
+  <li><a href="#spreadsheet-socialism" id="toc-spreadsheet-socialism" class="nav-link" data-scroll-target="#spreadsheet-socialism">Spreadsheet socialism</a></li>
+  <li><a href="#easy-does-it" id="toc-easy-does-it" class="nav-link" data-scroll-target="#easy-does-it">Easy does it</a></li>
+  <li><a href="#over-easy-does-it" id="toc-over-easy-does-it" class="nav-link" data-scroll-target="#over-easy-does-it">Over-easy does it</a></li>
   
   </ul>
 </nav>
@@ -215,107 +211,78 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p><img src="resources/toot-hyde.jpg" class="img-fluid" style="width:100.0%" alt="Aerial image of Hyde Park, London, with three emoji mammoths overlaid, each one tooting on an emoji trumpet, with the word 'toot' coming out the end of the trumpet."></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/clippy.gif" class="img-fluid figure-img" style="width:100.0%" alt="A gif that starts with a background of a government webpage for releasing egg statistics. The MS Office mascot Clippy eases in from the lower right with a speech bubble saying 'it looks like you're trying to improve a spreadsheet'. The background switches to a spreadsheet and Clippy moves to the top of the screen and then finally moves offscreen."></p>
+<figcaption class="figure-caption">Please don’t sue me for my fan art, Microsoft.</figcaption>
+</figure>
+</div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I’ve (finally) ported the <a href="https://github.com/matt-dray/londonmapbot">londonmapbot</a> <a href="https://twitter.com/londonmapbot">Twitter</a> bot to <a href="https://botsin.space/@londonmapbot">Mastodon</a>. Like a mammoth rising from the ashes.</p>
+<p>I <a href="https://matt-dray.github.io/earl22-presentation/">presented some slides</a> at <a href="https://www.ascent.io/earl">the EARL 2022 conference</a> about <a href="https://co-analysis.github.io/a11ytables/">{a11ytables}</a>: an R package that helps automate the production of reproducible and accessible spreadsheets, with a focus on publication of government statistics.</p>
 </section>
-<section id="tooooooot" class="level2">
-<h2 class="anchored" data-anchor-id="tooooooot">TOOOOOOOT</h2>
-<p>Twitter is burning to the ground, yada yada.</p>
-<p>For example, it appears that the free API tier will disappear soon. Soon like… <a href="https://twitter.com/TwitterDev/status/1621026986784337922">today</a>. Oh wait, <a href="https://twitter.com/TwitterDev/status/1623467615539859456">maybe not yet</a>?<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Cool customer communication, brah.</p>
-<p>Anyway, this news will obviously devastate contributors and fans of <a href="https://mobile.twitter.com/i/lists/1492559073287581707">the mapbotverse Twitter list</a>.</p>
-<p>You don’t know what the mapbotverse is? Oof. It’s a collection of 25 bot accounts that take some inspiration from <a href="https://twitter.com/londonmapbot">my londonmapbot account</a>, which uses <a href="https://github.com/features/actions">GitHub Actions</a> and <a href="https://docs.ropensci.org/rtweet/">the {rtweet} package</a> to tweet on schedule a picture of a random spot in Greater London via <a href="https://www.mapbox.com/">MapBox</a>.</p>
-<p>And so it’s time to update <a href="https://github.com/matt-dray/londonmapbot">the code behind londonmapbot</a> so that it continues to <a href="https://twitter.com/londonmapbot">post to Twitter</a> for as long as it survives. But also so that it lives on by <a href="https://botsin.space/@londonmapbot">posting to Mastodon</a> via <a href="https://schochastics.github.io/rtoot/">the {rtoot} package</a> as well.</p>
-<p>Mastowhat? Something something <a href="https://en.wikipedia.org/wiki/Mastodon_(social_network)">federated Twitter-replacement</a> sort of thing. Tooooooot tooooooot.</p>
+<section id="counting-sheets" class="level2">
+<h2 class="anchored" data-anchor-id="counting-sheets">Counting sheets</h2>
+<p>The UK government <a href="https://www.gov.uk/search/research-and-statistics?content_store_document_type=statistics_published&amp;order=updated-newest">publishes a lot of spreadsheets</a> that contain statistical tables. Compared to each other—and to themselves over time—these files are often:</p>
+<ul>
+<li>inconsistent in structure (e.g.&nbsp;cover or contents sheets are missing)</li>
+<li>inconsistent in style (e.g.&nbsp;different fonts, different shorthand codes for suppressed values)</li>
+<li>inaccessible to users of assistive technology (e.g.&nbsp;they contain blank columns or unannounced footnotes)</li>
+</ul>
+<p>Luckily, the government’s <a href="https://analysisfunction.civilservice.gov.uk/">Analysis Function</a> released some excellent <a href="https://analysisfunction.civilservice.gov.uk/policy-store/releasing-statistics-in-spreadsheets/">guidance for releasing statistics in spreadsheets</a>, with particular attention to accessibility.</p>
+<p>The government’s grassroots <a href="https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/">Reproducible Analytical Pipelines (RAP)</a> movement is also growing at pace. RAP’s purpose is to overcome a legacy of fragmented point-and-click processes into code-driven end-to-end pipelines that improve speed, accuracy and reproducibility; including workflows that generate statistical spreadsheets for publication.</p>
+<p>It will take time for these approaches to become 100% embedded across government, due to factors like the inevitable inertia that comes with trying to leave legacy processes behind.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>How can we grease the wheels?</p>
 </section>
-<section id="masto-do-or-masto-do-not" class="level2">
-<h2 class="anchored" data-anchor-id="masto-do-or-masto-do-not">Masto-do or masto-do-not</h2>
-<p>I’m slightly behind the curve on this: <a href="https://lapsedgeographer.london/">Matt Kerlogue</a> has already ported his <a href="https://t.co/gP6YeqHzAL">narrowbotR</a> (‘narrow boater’) bot from <a href="https://twitter.com/narrowbotR">Twitter</a> to <a href="https://fosstodon.org/@narrowbotr@botsin.space">Mastodon</a> and <a href="https://lapsedgeographer.london/2022-11/mastodon-switch/">written about it</a>.</p>
-<p>The fix was fairly rudimentary in the end, thanks to standing on the shoulder of mammoths. Particularly the creators of <a href="https://schochastics.github.io/rtoot/">the {rtoot} R package</a>.</p>
-<p>{rtoot} lets you interact with the <a href="https://docs.joinmastodon.org/api/">Mastodon API</a>. It’s a sort-of analogue to <a href="https://docs.ropensci.org/rtweet/">the {rtweet} package</a> for <a href="https://developer.twitter.com/en/docs/twitter-api">the Twitter API</a>. {rtoot} was stood up very quickly by <a href="https://www.mr.schochastics.net/">David Schoch</a> (with co-author <a href="http://www.chainsawriot.com/">Chung-hong Chan</a> and contributor <a href="https://www.johannesbgruber.eu/">Johannes Gruber</a>) when it became clear that Mastodon was becoming the platform-du-jour for nerds.</p>
-<section id="set-up-mastodon" class="level3">
-<h3 class="anchored" data-anchor-id="set-up-mastodon">Set up Mastodon</h3>
-<p>It’s easier to set yourself up with API access for Mastodon compared to Twitter:</p>
+<section id="spreadsheet-socialism" class="level2">
+<h2 class="anchored" data-anchor-id="spreadsheet-socialism">Spreadsheet socialism</h2>
+<p>I work in a government team that publishes data<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and I wanted to make it easier for us to:</p>
+<ul>
+<li>generate spreadsheets via R (the most commonly used language here)</li>
+<li>be able to reproduce outputs in future (i.e.&nbsp;we produce files monthly, quarterly, annually)</li>
+<li>apply accessible styles and structure (so we don’t have to spend ages with checklists and point-and-click interfaces)</li>
+</ul>
+<p>First I looked for existing code-based solutions and found <a href="https://gptables.readthedocs.io/en/latest/">the Python package gptables</a>, written by the Analysis Function Core Team. At the time, the package created spreadsheets in accordance with an older version of the best-practice guidance. There was no R-native solution either, though gptables could be accessed in R via <a href="https://rstudio.github.io/reticulate/">{reticulate}</a>.</p>
+<p>As a result, I created <a href="https://co-analysis.github.io/a11ytables/">{a11ytables}</a>: an R package to generate spreadsheets that meet the latest best-practice guidance for releasing statistics in spreadsheets.</p>
+<p><img src="resources/a11ytables-hex.png" class="img-fluid" style="width:25.0%" alt="Hex logo for the a11ytables R package. Four rows of light green cells, mimicking a spreadsheet. The second row down has the letters of 'a11y' in adjacent cells. The third row has the letters of 'tables' in adjacent cells."></p>
+<p>It can be <a href="https://github.com/co-analysis/a11ytables/">downloaded from GitHub</a> (currently v0.1), which also installs <a href="https://ycphs.github.io/openxlsx/">{openxlsx}</a> (which does all the hard work of building a workbook) and <a href="https://github.com/r-lib/pillar">{pillar}</a> (for prettier printing).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)  <span class="co"># if not yet installed</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"co-analysis/a11ytables"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(a11ytables)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Do <a href="https://github.com/co-analysis/a11ytables/">submit issues or pull requests to the repo</a> if you have ideas or solutions.</p>
+</section>
+<section id="easy-does-it" class="level2">
+<h2 class="anchored" data-anchor-id="easy-does-it">Easy does it</h2>
+<p>A major aim of {a11ytables} is to make it easy for stats producers to more easily complete the last mile of their ‘data-in to spreadsheet-out’ pipeline. As such, the workflow is relatively simple and is composed of only three functions (arguments ignored for brevity):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">create_a11ytable</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">generate_workbook</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  openxlsx<span class="sc">::</span><span class="fu">saveWorkbook</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Basically:</p>
 <ol type="1">
-<li>Set up a Mastodon account on the dedicated bot server <a href="https://botsin.space/">botsin.space</a> (londonmapbot is <a href="https://botsin.space/@londonmapbot"><span class="citation" data-cites="londonmapbot">@londonmapbot</span><span class="citation" data-cites="botsin.space">@botsin.space</span></a>).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
-<li>Install the {rtoot} package.</li>
-<li>Authorise yourself with Mastodon and get an API token.</li>
-<li>???</li>
-<li>Absolutely do not profit whatsoever.</li>
+<li>Pass information and data as arguments to <code>create_a11ytable()</code>, which creates a special a11ytables-class dataframe representation of your spreadsheet content</li>
+<li>Pass that object to <code>generate_workbook()</code> to convert it to a Workbook-class object that applies the required structure and styling</li>
+<li>Use <code>saveWorkbook()</code> from the {openxlsx} package to write the spreadsheet output to an xlsx file</li>
 </ol>
-<p>Steps 2 and 3 look like this:</p>
+<p>I recommend that you read the vignettes and function documentation <a href="https://co-analysis.github.io/a11ytables/">on the package website</a> to better understand how to use {a11ytables} and to learn about its caveats<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>; I won’t go into depth in this post.</p>
+</section>
+<section id="over-easy-does-it" class="level2">
+<h2 class="anchored" data-anchor-id="over-easy-does-it">Over-easy does it</h2>
+<p>I wrote some slides about the package and presented it at the EARL 2022 conference<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> in London. Yes, to expose the package, but also to make a wider point about the general importance of reproducibility, accessibility and the power of reusable tools.</p>
+<p>You can <a href="https://matt-dray.github.io/earl22-presentation/">access the slides for my talk on the web</a>, or <a href="https://github.com/matt-dray/earl22-presentation">find the source on GitHub</a>.</p>
+<p>The slides show an example of some tables published by the UK government—<a href="https://www.gov.uk/government/statistics/egg-statistics">the latest UK egg statistics</a><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>—and walks through how they might be developed using {a11ytables}.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rtoot"</span>)  <span class="co"># on CRAN</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>rtoot<span class="sc">::</span><span class="fu">auth_setup</span>(</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">instance  =</span> <span class="st">"botsin.space"</span>,  <span class="co"># the Mastodon server the account is on</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type      =</span> <span class="st">"user"</span>,          <span class="co"># i.e. for posting from R</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">name      =</span> <span class="st">"londonmapbot"</span>,  <span class="co"># name the token file</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">clipboard =</span> <span class="cn">TRUE</span>             <span class="co"># copy to clipboard</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="shareagain" style="min-width:300px;margin:1em auto;" data-exeternal="1">
+<iframe src="https://matt-dray.github.io/earl22-presentation" width="1600" height="900" style="border:none;" loading="lazy" allowfullscreen=""></iframe>
+<script>fitvids('.shareagain', {players: 'iframe'});</script>
 </div>
-<p>This process interrupts you to interactively authorise the {rtoot} package in a browser window and copy a big long code to a dialogue box that appears in your R session.</p>
-<p><img src="resources/rtoot-permission.png" class="img-fluid" style="width:75.0%" alt="A prompt on the Mastodon website that asks the user to provide authorisation for the rtoot package to have permission for read and write access. There's a big blue button that says 'authorise' and a big red one that says 'deny'."></p>
-<p>It’ll then return:</p>
-<pre><code>Token of type "user" for instance botsin.space is valid
-Token (in environment variable format) has been copied to clipboard.
-&lt;mastodon bearer token&gt; for instance: botsin.space of type: user </code></pre>
-<p>I pasted this API token to a safe place and also stored it as <a href="https://docs.github.com/en/rest/actions/secrets">a GitHub repo secret</a> in the londonmapbot GitHub repo so it could be referred to while the GitHub Action was running.</p>
-</section>
-<section id="post-to-mastodon" class="level3">
-<h3 class="anchored" data-anchor-id="post-to-mastodon">Post to Mastodon</h3>
-<p>Now we can use the <code>post_toot()</code> function to… toot a post. Publish a toot? Entoot a noote. It requires a <code>token</code> argument that takes a special ‘bearer token’ with a particular structure that’s not too dissimilar from what the rtweet package expects of the object passed to its own <code>token</code> function.</p>
-<p>Aside: token setup is made easy in {rtweet} thanks to the <code>rtweet_bot()</code> function, to which you can pass your API keys and secrets. It’s a little less obvious in {rtoot}, which was initially built with the intention of running API calls from your personal machine, so you could just store your keys in your .Renviron file or whatever.</p>
-<p>But actually you can just mimic how {rtweet} accepts the token. To do this, I did not use my brain at all and simply ripped-off <a href="https://lapsedgeographer.london/">Matt Kerlogue’s post</a>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> <a href="https://github.com/matt-dray/londonmapbot/blob/main/post-image.R">My updated R script</a> now contains this:<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mastodon_token <span class="ot">&lt;-</span> <span class="fu">structure</span>(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(  <span class="co"># it's just a list</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">bearer   =</span> <span class="fu">Sys.getenv</span>(<span class="st">"RTOOT_DEFAULT_TOKEN"</span>),</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">type     =</span> <span class="st">"user"</span>,  <span class="co"># i.e. to post from R</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">instance =</span> <span class="st">"botsin.space"</span>  <span class="co"># the server</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">class =</span> <span class="st">"rtoot_bearer"</span>  <span class="co"># special token class</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Where <code>RTOOT_DEFAULT_TOKEN</code> is that API token from earlier, which is required for accessing Mastodon. As mentioned, it’s stored as <a href="https://docs.github.com/en/rest/actions/secrets">a GitHub repo secret</a> and called into the GitHub Action environment thanks to the <code>env: RTOOT_DEFAULT_TOKEN: ${{ secrets.RTOOT_DEFAULT_TOKEN }}</code> call in <a href="https://github.com/matt-dray/londonmapbot/blob/main/.github/workflows/post-image.yml">the YAML file</a>.</p>
-<p>This object can be passed quite happily to the <code>post_toot()</code> function.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rtoot<span class="sc">::</span><span class="fu">post_toot</span>(</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">status   =</span> latlon_details,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">media    =</span> temp_file,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">alt_text =</span> alt_text,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">token    =</span> mastodon_token</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Where the <code>status</code> (body text), <code>media</code> (image file) and <code>alt_text</code> (alternative text for the image) objects have been generated already (<a href="https://github.com/matt-dray/londonmapbot/blob/main/post-image.R">see the R script</a> for details).</p>
-<p>This is then executed on schedule according to the <a href="https://en.wikipedia.org/wiki/Cron">cron string</a><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> specified in <a href="https://github.com/matt-dray/londonmapbot/blob/main/.github/workflows/post-image.yml">the YAML file</a> (currently twice a day at 0914 and 1714) to publish stuff like this:</p>
-<p><img src="resources/londonmapbot-mastodon.png" class="img-fluid" style="width:100.0%" alt="Example of a toot on Mastodon from the londonmapbot account. The image is an aerial image of London. The text provides the latitude and longitude of the centre of the image and also an OpenStreetMap link."></p>
-</section>
-<section id="await-twitter-implosion" class="level3">
-<h3 class="anchored" data-anchor-id="await-twitter-implosion">Await Twitter implosion</h3>
-<p>I want the bot to keep posting to Twitter for as long as I’m allowed to. In other words, we should <em>try</em> to post a tweet and <em>catch</em> any error silently, without disrupting the GitHub Action. So naturally I wrapped <code>post_tweet()</code> in a <code>tryCatch()</code> statement, yes? No, actually I used <code>purrr::possibly()</code> instead.</p>
-<p>Why? Basically because the syntax is easy to remember, lol. And what difference does it make to have one extra dependency for this task? To use it, you wrap your function of interest in <code>possibly()</code> and then it can fail without erroring-out the whole function.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>possibly_post_tweet <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">possibly</span>(rtweet<span class="sc">::</span>post_tweet)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">possibly_post_tweet</span>(</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">status         =</span> latlon_details,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">media          =</span> temp_file,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">media_alt_text =</span> alt_text,</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">token          =</span> twitter_token</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="fiddle-while-frisco-burns" class="level3">
-<h3 class="anchored" data-anchor-id="fiddle-while-frisco-burns">Fiddle while Frisco burns</h3>
-<p>While I was messing about with the londonmapbot code, I made a few things in the repo a bit more generic. For example, I altered the name of the GitHub Actions YAML file and the R script to be called ‘post-image’. This is more descriptive and it removes the need for someone forking the repo to have to manually change the name away from ‘londonmapbot’. You are so welcome.</p>
-</section>
-</section>
-<section id="parp" class="level2">
-<h2 class="anchored" data-anchor-id="parp">Parp</h2>
-<p>Farewell, until the next time we have to port londonmapot to another API-enabled microblogging site. We’ve had bird- and mammal-themed sites; my prediction is that the next site will be called ‘Seacucumber’ and we won’t ‘tweet’ or ‘toot’, we’ll ‘eviscerate’.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
-<p>I mean, inverting one’s stomach is a daily reaction on Twitter anyway, amirite?</p>
+<p>I wrote the slides in <a href="https://quarto.org/">Quarto</a> and made heavy use of <a href="https://matt-dray.github.io/quartostamp/">{quartostamp}</a>—my package of Quarto helpers exposed as an RStudio Addin—which I <a href="https://www.rostrum.blog/2022/08/11/quartostamp-snorkel/">wrote about recently</a>. Click ‘settings’ in the hamburger menu (lower left) to go fullscreen, see presenter notes, or get a slide overview.</p>
 </section>
 
 
@@ -328,7 +295,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-06-29 23:27:45 CEST</code></pre>
+<pre><code>Last rendered: 2023-06-29 22:58:20 CEST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -349,10 +316,12 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.14   yaml_2.3.7       
- [9] rmarkdown_2.22    knitr_1.43.1      jsonlite_1.8.5    xfun_0.39        
-[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
+ [1] htmlwidgets_1.6.2   compiler_4.3.1      fastmap_1.1.1      
+ [4] cli_3.6.1           tools_4.3.1         htmltools_0.5.5    
+ [7] xaringanExtra_0.7.0 rstudioapi_0.14     yaml_2.3.7         
+[10] rmarkdown_2.22      knitr_1.43.1        jsonlite_1.8.5     
+[13] xfun_0.39           digest_0.6.31       rlang_1.1.1        
+[16] evaluate_0.21      </code></pre>
 </div>
 </div>
 </details>
@@ -361,12 +330,11 @@ loaded via a namespace (and not attached):
 </div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>Happy Valentine’s to all my fellow monetisable users.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>During this process you have to explain why you want to set up the account. Don’t forget to say the magic word in your application, wink wink.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>‘Matt hivemind prerogative’, this is called.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Kerlogue influenced the {rtoot} team to <a href="https://github.com/schochastics/rtoot/issues/68">update the package</a> to handle environmental variables, but I could not get this to work, alas.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Did I mention I made <a href="https://github.com/matt-dray/dialga">the R package {dialga}</a> to convert R to cron to English, lol?<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>I <a href="https://en.wikipedia.org/wiki/Evisceration_(autotomy)">fact-checked myself on Wikipedia</a> and read this brand new sentence: ‘[evisceration] causes the wall of the cloaca to tear and the anus to gape.’<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Check out the excellent <a href="https://analysisfunction.civilservice.gov.uk/policy-store/reproducible-analytical-pipelines-strategy/">RAP strategy</a> and <a href="https://www.gov.uk/government/publications/better-broader-safer-using-health-data-for-research-and-analysis">Goldacre Review</a> for how this might be achieved.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>This blog and everything on it is personal and doesn’t represent government policy in any possible shape or form. Unless <a href="https://www.gov.uk/government/organisations/geospatial-commission">the Geospatial Commission</a> needs me for <a href="https://www.rostrum.blog/2022/05/01/dungeon/">drawing procedural dungeon maps</a>, or whatever.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Note that the package is not intended for creating perfectly accessible spreadsheets but will help with the bulk of the work needed. Users of the package should refer back to <a href="https://analysisfunction.civilservice.gov.uk/policy-store/releasing-statistics-in-spreadsheets/">the main spreadsheet guidance</a> or the <a href="https://analysisfunction.civilservice.gov.uk/policy-store/making-spreadsheets-accessible-a-brief-checklist-of-the-basics/">spreadsheet accessibility checklist</a> after using it to make sure nothing has been missed. Please email <a href="mailto:analysis.function@ons.gov.uk">analysis.function@ons.gov.uk</a> if you use the package so they can monitor its use and the outputs produced.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>‘Enterprise Applications of the R Language’. Long-time readers may remember that <a href="https://www.rostrum.blog/2018/09/12/crosstalk-memes/">I spoke at EARL in 2018 about the {crosstalk} package</a>, largely through the medium of memes.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Long-time readers may remember that <a href="https://www.rostrum.blog/2019/07/23/can-drake-rap/">I’ve used this publication before to demonstrate the {drake} package</a> for workflow reproducibility.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

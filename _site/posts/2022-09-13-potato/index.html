@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Matt Dray">
-<meta name="dcterms.date" content="2023-02-09">
+<meta name="dcterms.date" content="2022-09-13">
 
-<title>rostrum.blog (test) - London from space via botsin.space</title>
+<title>rostrum.blog (test) - You are a halfling, trying to harvest {potato}</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -150,17 +150,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">London from space via botsin.space</h1>
-                                <div class="quarto-categories">
-                <div class="quarto-category">api</div>
-                <div class="quarto-category">github-actions</div>
-                <div class="quarto-category">londonmapbot</div>
-                <div class="quarto-category">social-media</div>
-                <div class="quarto-category">r</div>
-                <div class="quarto-category">rtoot</div>
-                <div class="quarto-category">rtweet</div>
-              </div>
-                  </div>
+      <h1 class="title">You are a halfling, trying to harvest {potato}</h1>
+                      </div>
   </div>
     
   
@@ -176,7 +167,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">February 9, 2023</p>
+        <p class="date">September 13, 2022</p>
       </div>
     </div>
     
@@ -192,15 +183,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
-  <li><a href="#tooooooot" id="toc-tooooooot" class="nav-link" data-scroll-target="#tooooooot">TOOOOOOOT</a></li>
-  <li><a href="#masto-do-or-masto-do-not" id="toc-masto-do-or-masto-do-not" class="nav-link" data-scroll-target="#masto-do-or-masto-do-not">Masto-do or masto-do-not</a>
-  <ul class="collapse">
-  <li><a href="#set-up-mastodon" id="toc-set-up-mastodon" class="nav-link" data-scroll-target="#set-up-mastodon">Set up Mastodon</a></li>
-  <li><a href="#post-to-mastodon" id="toc-post-to-mastodon" class="nav-link" data-scroll-target="#post-to-mastodon">Post to Mastodon</a></li>
-  <li><a href="#await-twitter-implosion" id="toc-await-twitter-implosion" class="nav-link" data-scroll-target="#await-twitter-implosion">Await Twitter implosion</a></li>
-  <li><a href="#fiddle-while-frisco-burns" id="toc-fiddle-while-frisco-burns" class="nav-link" data-scroll-target="#fiddle-while-frisco-burns">Fiddle while Frisco burns</a></li>
-  </ul></li>
-  <li><a href="#parp" id="toc-parp" class="nav-link" data-scroll-target="#parp">Parp</a></li>
+  <li><a href="#potato" id="toc-potato" class="nav-link" data-scroll-target="#potato">Potato?</a></li>
+  <li><a href="#potato-1" id="toc-potato-1" class="nav-link" data-scroll-target="#potato-1">Potato!</a></li>
+  <li><a href="#potato-2" id="toc-potato-2" class="nav-link" data-scroll-target="#potato-2">Potato…</a></li>
+  <li><a href="#potato." id="toc-potato." class="nav-link" data-scroll-target="#potato.">Potato.</a></li>
   
   </ul>
 </nav>
@@ -215,107 +201,133 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p><img src="resources/toot-hyde.jpg" class="img-fluid" style="width:100.0%" alt="Aerial image of Hyde Park, London, with three emoji mammoths overlaid, each one tooting on an emoji trumpet, with the word 'toot' coming out the end of the trumpet."></p>
+<p><img src="resources/potato.png" class="img-fluid" style="width:50.0%" alt="A low-quality cartoon drawing of a potato with a little cute face."></p>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I’ve (finally) ported the <a href="https://github.com/matt-dray/londonmapbot">londonmapbot</a> <a href="https://twitter.com/londonmapbot">Twitter</a> bot to <a href="https://botsin.space/@londonmapbot">Mastodon</a>. Like a mammoth rising from the ashes.</p>
+<p>Play an interactive version of <a href="https://twitter.com/deathbybadger/status/1567425842526945280">‘Potato’</a>—a one-page halfling-themed role-playing game (RPG) by Oliver Darkshire (<a href="https://www.twitter.com/deathbybadger">Twitter</a>, <a href="https://www.patreon.com/deathbybadger">Patreon</a>)—in your R console with <a href="https://github.com/matt-dray/potato">the {potato} package</a>.</p>
 </section>
-<section id="tooooooot" class="level2">
-<h2 class="anchored" data-anchor-id="tooooooot">TOOOOOOOT</h2>
-<p>Twitter is burning to the ground, yada yada.</p>
-<p>For example, it appears that the free API tier will disappear soon. Soon like… <a href="https://twitter.com/TwitterDev/status/1621026986784337922">today</a>. Oh wait, <a href="https://twitter.com/TwitterDev/status/1623467615539859456">maybe not yet</a>?<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Cool customer communication, brah.</p>
-<p>Anyway, this news will obviously devastate contributors and fans of <a href="https://mobile.twitter.com/i/lists/1492559073287581707">the mapbotverse Twitter list</a>.</p>
-<p>You don’t know what the mapbotverse is? Oof. It’s a collection of 25 bot accounts that take some inspiration from <a href="https://twitter.com/londonmapbot">my londonmapbot account</a>, which uses <a href="https://github.com/features/actions">GitHub Actions</a> and <a href="https://docs.ropensci.org/rtweet/">the {rtweet} package</a> to tweet on schedule a picture of a random spot in Greater London via <a href="https://www.mapbox.com/">MapBox</a>.</p>
-<p>And so it’s time to update <a href="https://github.com/matt-dray/londonmapbot">the code behind londonmapbot</a> so that it continues to <a href="https://twitter.com/londonmapbot">post to Twitter</a> for as long as it survives. But also so that it lives on by <a href="https://botsin.space/@londonmapbot">posting to Mastodon</a> via <a href="https://schochastics.github.io/rtoot/">the {rtoot} package</a> as well.</p>
-<p>Mastowhat? Something something <a href="https://en.wikipedia.org/wiki/Mastodon_(social_network)">federated Twitter-replacement</a> sort of thing. Tooooooot tooooooot.</p>
+<section id="potato" class="level2">
+<h2 class="anchored" data-anchor-id="potato">Potato?</h2>
+<p>I’ve recently put together <a href="https://github.com/matt-dray/splendid-r-games">a GitHub repo</a> to collect together a bunch of neat games that you can play. The twist? They were built using R.</p>
+<p>Yes, R: <a href="https://twitter.com/mattdray/status/1539371338250522624?s=20&amp;t=rr2J9k0hDbTcDagYMv1TFQ">‘a FrEe SoFtWaRe EnViRoNmEnT fOr StAtIsTiCaL cOmPuTiNg AnD gRaPhIcS’</a>.</p>
+<p>I think R is best suited to either text-based user-input games on the R console, or via a more dedicated interface, like Shiny.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>In this vein, <a href="https://www.twitter.com/deathbybadger">Oliver Darkshire</a> wrote an excellent ‘one-page role-playing game’ called <a href="https://twitter.com/deathbybadger/status/1567425842526945280">Potato</a> that seems ripe for plucking (well, I guess you ‘pull’ potatoes?) into an R implementation. A simple text interface; updating and tracking variables; clear win conditions. The basic desire to avoid action and simply tend to vegetables.</p>
+<p>So… {potato}.</p>
 </section>
-<section id="masto-do-or-masto-do-not" class="level2">
-<h2 class="anchored" data-anchor-id="masto-do-or-masto-do-not">Masto-do or masto-do-not</h2>
-<p>I’m slightly behind the curve on this: <a href="https://lapsedgeographer.london/">Matt Kerlogue</a> has already ported his <a href="https://t.co/gP6YeqHzAL">narrowbotR</a> (‘narrow boater’) bot from <a href="https://twitter.com/narrowbotR">Twitter</a> to <a href="https://fosstodon.org/@narrowbotr@botsin.space">Mastodon</a> and <a href="https://lapsedgeographer.london/2022-11/mastodon-switch/">written about it</a>.</p>
-<p>The fix was fairly rudimentary in the end, thanks to standing on the shoulder of mammoths. Particularly the creators of <a href="https://schochastics.github.io/rtoot/">the {rtoot} R package</a>.</p>
-<p>{rtoot} lets you interact with the <a href="https://docs.joinmastodon.org/api/">Mastodon API</a>. It’s a sort-of analogue to <a href="https://docs.ropensci.org/rtweet/">the {rtweet} package</a> for <a href="https://developer.twitter.com/en/docs/twitter-api">the Twitter API</a>. {rtoot} was stood up very quickly by <a href="https://www.mr.schochastics.net/">David Schoch</a> (with co-author <a href="http://www.chainsawriot.com/">Chung-hong Chan</a> and contributor <a href="https://www.johannesbgruber.eu/">Johannes Gruber</a>) when it became clear that Mastodon was becoming the platform-du-jour for nerds.</p>
-<section id="set-up-mastodon" class="level3">
-<h3 class="anchored" data-anchor-id="set-up-mastodon">Set up Mastodon</h3>
-<p>It’s easier to set yourself up with API access for Mastodon compared to Twitter:</p>
-<ol type="1">
-<li>Set up a Mastodon account on the dedicated bot server <a href="https://botsin.space/">botsin.space</a> (londonmapbot is <a href="https://botsin.space/@londonmapbot"><span class="citation" data-cites="londonmapbot">@londonmapbot</span><span class="citation" data-cites="botsin.space">@botsin.space</span></a>).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
-<li>Install the {rtoot} package.</li>
-<li>Authorise yourself with Mastodon and get an API token.</li>
-<li>???</li>
-<li>Absolutely do not profit whatsoever.</li>
-</ol>
-<p>Steps 2 and 3 look like this:</p>
+<section id="potato-1" class="level2">
+<h2 class="anchored" data-anchor-id="potato-1">Potato!</h2>
+<p>You can install <a href="https://github.com/matt-dray/potato">the {potato} package from GitHub</a> thanks to {remotes}:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rtoot"</span>)  <span class="co"># on CRAN</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>rtoot<span class="sc">::</span><span class="fu">auth_setup</span>(</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">instance  =</span> <span class="st">"botsin.space"</span>,  <span class="co"># the Mastodon server the account is on</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">type      =</span> <span class="st">"user"</span>,          <span class="co"># i.e. for posting from R</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">name      =</span> <span class="st">"londonmapbot"</span>,  <span class="co"># name the token file</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">clipboard =</span> <span class="cn">TRUE</span>             <span class="co"># copy to clipboard</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)  <span class="co"># if not yet installed</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"matt-dray/potato"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This process interrupts you to interactively authorise the {rtoot} package in a browser window and copy a big long code to a dialogue box that appears in your R session.</p>
-<p><img src="resources/rtoot-permission.png" class="img-fluid" style="width:75.0%" alt="A prompt on the Mastodon website that asks the user to provide authorisation for the rtoot package to have permission for read and write access. There's a big blue button that says 'authorise' and a big red one that says 'deny'."></p>
-<p>It’ll then return:</p>
-<pre><code>Token of type "user" for instance botsin.space is valid
-Token (in environment variable format) has been copied to clipboard.
-&lt;mastodon bearer token&gt; for instance: botsin.space of type: user </code></pre>
-<p>I pasted this API token to a safe place and also stored it as <a href="https://docs.github.com/en/rest/actions/secrets">a GitHub repo secret</a> in the londonmapbot GitHub repo so it could be referred to while the GitHub Action was running.</p>
-</section>
-<section id="post-to-mastodon" class="level3">
-<h3 class="anchored" data-anchor-id="post-to-mastodon">Post to Mastodon</h3>
-<p>Now we can use the <code>post_toot()</code> function to… toot a post. Publish a toot? Entoot a noote. It requires a <code>token</code> argument that takes a special ‘bearer token’ with a particular structure that’s not too dissimilar from what the rtweet package expects of the object passed to its own <code>token</code> function.</p>
-<p>Aside: token setup is made easy in {rtweet} thanks to the <code>rtweet_bot()</code> function, to which you can pass your API keys and secrets. It’s a little less obvious in {rtoot}, which was initially built with the intention of running API calls from your personal machine, so you could just store your keys in your .Renviron file or whatever.</p>
-<p>But actually you can just mimic how {rtweet} accepts the token. To do this, I did not use my brain at all and simply ripped-off <a href="https://lapsedgeographer.london/">Matt Kerlogue’s post</a>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> <a href="https://github.com/matt-dray/londonmapbot/blob/main/post-image.R">My updated R script</a> now contains this:<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>You start a game with:<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mastodon_token <span class="ot">&lt;-</span> <span class="fu">structure</span>(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(  <span class="co"># it's just a list</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">bearer   =</span> <span class="fu">Sys.getenv</span>(<span class="st">"RTOOT_DEFAULT_TOKEN"</span>),</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">type     =</span> <span class="st">"user"</span>,  <span class="co"># i.e. to post from R</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">instance =</span> <span class="st">"botsin.space"</span>  <span class="co"># the server</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  ),</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">class =</span> <span class="st">"rtoot_bearer"</span>  <span class="co"># special token class</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>potato<span class="sc">::</span><span class="fu">potato</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Where <code>RTOOT_DEFAULT_TOKEN</code> is that API token from earlier, which is required for accessing Mastodon. As mentioned, it’s stored as <a href="https://docs.github.com/en/rest/actions/secrets">a GitHub repo secret</a> and called into the GitHub Action environment thanks to the <code>env: RTOOT_DEFAULT_TOKEN: ${{ secrets.RTOOT_DEFAULT_TOKEN }}</code> call in <a href="https://github.com/matt-dray/londonmapbot/blob/main/.github/workflows/post-image.yml">the YAML file</a>.</p>
-<p>This object can be passed quite happily to the <code>post_toot()</code> function.</p>
+<pre><code>--- POTATO ---
+
+A (one-page) RPG by Oliver Darkshire (@deathbybadger)
+These and more at https://www.patreon.com/deathbybadger
+
+You are a halfling, just trying to exist.
+Meanwhile, the dark lord rampages across the world.
+You do not care about this. You are trying to farm potatoes.
+Because what could a halfling possibly do about it anyway?
+
+Keep rolling until DESTINY, POTATO or ORC reach 10/10.
+
+- DESTINY: 0/10
+- POTATO:  0/10
+- ORC:     0/10
+- PAY:     1 POTATO to remove 1 ORC
+
+Press [ENTER] to roll... </code></pre>
+<p>The console will prompt you for input as you play. It’s basically luck-based die rolls, though you will have the chance to intervene with an option to hurl a certain number of precious potatoes at an orc to make it clear off.</p>
+<p>You win when <code>POTATO</code> reaches <code>10</code>. You lose when <code>ORC</code> reaches <code>10</code>. You also… ‘don’t lose’… if <code>DESTINY</code> reaches <code>10</code>.</p>
+<p>Please see <a href="https://twitter.com/deathbybadger/status/1567425842526945280">the one-page RPG that David put together</a> and/or <a href="https://www.patreon.com/deathbybadger">support him on Patreon</a> if you like it or any of the other hilarious one-page RPGs that he’s made.</p>
+<p>I cannot stress enough that this is his work and all I’ve done is put it into an obscure format that literally three people might look at for a laugh.</p>
+</section>
+<section id="potato-2" class="level2">
+<h2 class="anchored" data-anchor-id="potato-2">Potato…</h2>
+<p>I could just leave it there, but I think the interesting thing for R users are the various little methods required to make the ‘game’ function.</p>
+<p>To display text to the user in the console, we can use <code>cat()</code> or <code>message()</code>. I kinda prefer <code>message()</code> because the user has more control over it in general, like <code>suppressMessages()</code> (which does what you think it does).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rtoot<span class="sc">::</span><span class="fu">post_toot</span>(</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">status   =</span> latlon_details,</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">media    =</span> temp_file,</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">alt_text =</span> alt_text,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">token    =</span> mastodon_token</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">message</span>(<span class="st">"Hello world!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Where the <code>status</code> (body text), <code>media</code> (image file) and <code>alt_text</code> (alternative text for the image) objects have been generated already (<a href="https://github.com/matt-dray/londonmapbot/blob/main/post-image.R">see the R script</a> for details).</p>
-<p>This is then executed on schedule according to the <a href="https://en.wikipedia.org/wiki/Cron">cron string</a><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> specified in <a href="https://github.com/matt-dray/londonmapbot/blob/main/.github/workflows/post-image.yml">the YAML file</a> (currently twice a day at 0914 and 1714) to publish stuff like this:</p>
-<p><img src="resources/londonmapbot-mastodon.png" class="img-fluid" style="width:100.0%" alt="Example of a toot on Mastodon from the londonmapbot account. The image is an aerial image of London. The text provides the latitude and longitude of the centre of the image and also an OpenStreetMap link."></p>
-</section>
-<section id="await-twitter-implosion" class="level3">
-<h3 class="anchored" data-anchor-id="await-twitter-implosion">Await Twitter implosion</h3>
-<p>I want the bot to keep posting to Twitter for as long as I’m allowed to. In other words, we should <em>try</em> to post a tweet and <em>catch</em> any error silently, without disrupting the GitHub Action. So naturally I wrapped <code>post_tweet()</code> in a <code>tryCatch()</code> statement, yes? No, actually I used <code>purrr::possibly()</code> instead.</p>
-<p>Why? Basically because the syntax is easy to remember, lol. And what difference does it make to have one extra dependency for this task? To use it, you wrap your function of interest in <code>possibly()</code> and then it can fail without erroring-out the whole function.</p>
+<pre><code>Hello world!</code></pre>
+<p>There’s a subtlety in presentation too, which is that the two functions return text in different colours.</p>
+<p>The game loop itself runs inside a <code>repeat</code>, which is maybe uncommon for some R users. We’re mostly used to <code>for</code> or <code>while</code> loops for iteration with a known set of things to iterate over, whereas <code>repeat</code> will keep going until we specify a <code>break</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>possibly_post_tweet <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">possibly</span>(rtweet<span class="sc">::</span>post_tweet)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">possibly_post_tweet</span>(</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">status         =</span> latlon_details,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">media          =</span> temp_file,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">media_alt_text =</span> alt_text,</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">token          =</span> twitter_token</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">repeat</span> {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (keep_going) {</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">do_something</span>()</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span>keep_going) {</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>You can imagine a scenario where <code>keep_going</code> is set to <code>TRUE</code> and some actions happen as a result; and that if it becomes <code>FALSE</code> then the game loop ends. In {potato}, we make sure to first print the current values of <code>DESTINY</code>, <code>POTATO</code> and <code>ORC</code> so the user sees them before the game continues or ends.</p>
+<p>What are <code>DESTINY</code>, <code>POTATO</code> and <code>ORC</code>? Before we initiate that <code>repeat</code> loop we can specify a bunch of starting values for some important scoring variables. Stylistically, it makes sense to use ALL CAPS for these (that’s how they were written in the original game, after all), but there’s also an old-school rule-of-thumb to specify variables this way in R code so you can more easily spot them in your code.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>DESTINY <span class="ot">&lt;-</span> 0L</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>POTATO  <span class="ot">&lt;-</span> 0L</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>ORC     <span class="ot">&lt;-</span> 0L</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>in addition, we clearly need user input to decide what to do during the game. Most of the time, a user’s hand is forced and they need to roll. But sometimes they have the choice to remove an orc at the cost of one or more potatoes (depending on how the die falls).</p>
+<p>This is a logical variable that we can keep track of, i.e.&nbsp;can the user pay (<code>TRUE</code> or <code>FALSE</code>)?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>can_pay <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (COST <span class="sc">&lt;=</span> POTATO) {</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  can_pay <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (COST <span class="sc">&gt;</span> POTATO) {</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  can_pay <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If the cost to yeet an orc is equal-to or less-than the number of potatoes, we can elect to make the payment. This is expressed in the options provided to the user on the command line.</p>
+<p>Given the <code>can_pay</code> value, the user will get the option to either roll the die (<code>FALSE</code>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>event <span class="ot">&lt;-</span> <span class="fu">readline</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Press [ENTER] to roll... "</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Or choose to roll the die <em>or</em> make the payment (<code>TRUE</code>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>event <span class="ot">&lt;-</span> <span class="fu">readline</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Press [ENTER] to roll or [p] to pay 1 POTATO to remove 1 ORC... "</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Both of which require user input that results in a value stored in the <code>event</code> object. Note that hitting <kbd>Enter</kbd> results in an empty string (<code>""</code>).</p>
+<p>Die-roll values pass through a series of <code>if</code> statements that are activated based on the number rolled. So if you roll <code>1</code> or <code>2</code>, you’re <code>In the garden...</code>; if 3 or 4, you’ll get <code>A knock on the door...</code>; else the potato cost per orc-yeet increases by 1).</p>
+<p>A second roll is made automatically when in the garden or when a knock is heard. Here’s what happens if a <code>1</code> is rolled when in the garden:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (rolled_garden <span class="sc">==</span> 1L) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">paste</span>(</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>      rolled_garden_msg,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">"You happily root about all day in your garden."</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"- Result: +1 POTATO"</span>)</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  POTATO <span class="ot">&lt;-</span> POTATO <span class="sc">+</span> 1L</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Excellent, the <code>POTATO</code> variable counter is increased by 1 in this case and confirmed to the user in a <code>message()</code>. The latest <code>DESTINY</code>, <code>POTATO</code> and <code>ORC</code> scores are then printed back to the user at the start of the next <code>repeat</code> loop.</p>
+<p>And then you just… keep potatoing.</p>
 </section>
-<section id="fiddle-while-frisco-burns" class="level3">
-<h3 class="anchored" data-anchor-id="fiddle-while-frisco-burns">Fiddle while Frisco burns</h3>
-<p>While I was messing about with the londonmapbot code, I made a few things in the repo a bit more generic. For example, I altered the name of the GitHub Actions YAML file and the R script to be called ‘post-image’. This is more descriptive and it removes the need for someone forking the repo to have to manually change the name away from ‘londonmapbot’. You are so welcome.</p>
-</section>
-</section>
-<section id="parp" class="level2">
-<h2 class="anchored" data-anchor-id="parp">Parp</h2>
-<p>Farewell, until the next time we have to port londonmapot to another API-enabled microblogging site. We’ve had bird- and mammal-themed sites; my prediction is that the next site will be called ‘Seacucumber’ and we won’t ‘tweet’ or ‘toot’, we’ll ‘eviscerate’.<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a></p>
-<p>I mean, inverting one’s stomach is a daily reaction on Twitter anyway, amirite?</p>
+<section id="potato." class="level2">
+<h2 class="anchored" data-anchor-id="potato.">Potato.</h2>
+<p>Once again, you can visit Oliver Darkshire on Twitter as <a href="https://www.twitter.com/deathbybadger"><span class="citation" data-cites="deathbybadger">@deathbybadger</span></a> and support him on <a href="https://www.patreon.com/deathbybadger">Patreon</a>.</p>
+<p>You can find <a href="https://github.com/matt-dray/potato">the source code for {potato} on GitHub</a>. Issues and pull requests welcome. Just make sure you can afford the charge of one potato to submit.</p>
 </section>
 
 
@@ -328,7 +340,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-06-29 23:27:45 CEST</code></pre>
+<pre><code>Last rendered: 2023-06-29 22:48:40 CEST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -361,12 +373,8 @@ loaded via a namespace (and not attached):
 </div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>Happy Valentine’s to all my fellow monetisable users.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>During this process you have to explain why you want to set up the account. Don’t forget to say the magic word in your application, wink wink.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>‘Matt hivemind prerogative’, this is called.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Kerlogue influenced the {rtoot} team to <a href="https://github.com/schochastics/rtoot/issues/68">update the package</a> to handle environmental variables, but I could not get this to work, alas.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Did I mention I made <a href="https://github.com/matt-dray/dialga">the R package {dialga}</a> to convert R to cron to English, lol?<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>I <a href="https://en.wikipedia.org/wiki/Evisceration_(autotomy)">fact-checked myself on Wikipedia</a> and read this brand new sentence: ‘[evisceration] causes the wall of the cloaca to tear and the anus to gape.’<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Yeah, but have you seen the mind-boggling extent to which <a href="https://coolbutuseless.github.io/">Mike Cheng (AKA mikefc, AKA coolbutuseless, AKA R legend)</a> has gone to <a href="https://www.rstudio.com/conference/2022/talks/polygons-of-another-world-realtime/">turn R into a proper game engine?</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Potayto, potahto, let’s call the whole thing off.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
