@@ -1,25 +1,20 @@
 ---
-title: "Playgrounds with WebR and Quarto"
-author: Matt Dray
-date: '2023-03-16'
+title: Playgrounds with WebR and Quarto
+date: 2023-03-16
 slug: webr-quarto
 categories:
-  - code
-tags:
   - quarto
   - r
   - webr
 ---
 
-<div class="figure">
-<img src="resources/webr-quarto-test.png" alt="A screenshot of a webpage that has an embedded R code block. Some text asks the user to adjust the code and then click a button that says 'run code'. A shocked Pikachu appears in the corner." width="100%"/>
-</div>
+![](resources/webr-quarto-test.png){fig-alt="A screenshot of a webpage that has an embedded R code block. Some text asks the user to adjust the code and then click a button that says 'run code'. A shocked Pikachu appears in the corner." width="100%"}
 
-# tl;dr
+## tl;dr
 
 [WebR](https://docs.r-wasm.org/webr/latest/) lets you run R in the browser(!). Now you can [make WebR chunks in Quarto](https://github.com/coatless/quarto-webr) that render to editable, executable blocks(!).
 
-# Sliding into tedium
+## Sliding into tedium
 
 I wrote recently [a simple introduction to how R parses code](https://www.rostrum.blog/2023/03/03/getparsedata/). I provided a function that I said the reader could go away and run themselves. 
 
@@ -27,7 +22,7 @@ As in... copy-paste it into an instance of R running on their machine. Gross.
 
 Wouldn't it be better if people could just tinker with the code right there in the post? This kind of 'playground' could be great for explaining concepts and teaching.[^w3]
 
-# I seesaw a solution
+## I seesaw a solution
 
 WebR lets you run R in the browser. Read that again! This is a landmark piece of work from George Stagg and Lionel Henry.
 
@@ -39,14 +34,11 @@ I won't go into technicals and limitations here. For more information, see:
 
 Crucially for my needs, you can now [run WebR chunks in a Quarto document](https://github.com/coatless/quarto-webr), thanks to James J Balamuta. This renders interactive blocks of R code that the reader can adjust and execute with button-click:
 
-<div class="figure">
-<img src="resources/webr-demo.gif" alt="Animated gif showing a code block with R code inside that sets the value of 'x' to 'world' then pastes it together with the string 'hello'. A 'run code' button is clicked and the string 'hello world' is printed. The word 'hello' is then changed to 'ahoy' and the code is re-run and the printout changes to 'ahoy world'." width="40%"/>
-<p class="caption">Beware: this is a gif, not an embedded demo!</p>
-</div>
+![Beware: this is a gif, not an embedded demo!](resources/webr-demo.gif){fig-alt="Animated gif showing a code block with R code inside that sets the value of 'x' to 'world' then pastes it together with the string 'hello'. A 'run code' button is clicked and the string 'hello world' is printed. The word 'hello' is then changed to 'ahoy' and the code is re-run and the printout changes to 'ahoy world'." width="40%" fig-align="left"}
 
 Check out James's [coatless/quarto-webr](https://github.com/coatless/quarto-webr) GitHub repo for the source. There's also [a live demo](https://rd.thecoatlessprofessor.com/webR-quarto-demos/webr-quarto-html-demo.html) and [its source](https://github.com/coatless-r-n-d/webR-quarto-demos/blob/main/webr-quarto-html-demo.qmd).
 
-# Swinging into action
+## Swinging into action
 
 To have a go yourself, do follow [the setup steps](https://github.com/coatless/quarto-webr) in James's quarto-webr README and look at [the source of his demo](https://github.com/coatless-r-n-d/webR-quarto-demos/blob/main/webr-quarto-html-demo.qmd). 
 
@@ -62,16 +54,17 @@ You can [visit that live page](https://webr-parse-test.netlify.app/) or see the 
 
 So now you _can_ tinker with the example I gave in the original blogpost about parsing R code. Unfortunately I can't add this directly to the post, since this blog is not made with Quarto.
 
-# A blog-platform merry-go-round
+## A blog-platform merry-go-round
 
 I've written this quick demo and post because I was excited about what George & Lionel and James have put together. There's so many system-independent applications of this approach that could help with teaching and learning, or explaining simple ideas in a blog post.
 
 In fact, this blog may eventually switch from {blogdown} to Quarto to take advantage of WebR. It'll be a pain to convert old posts, but luckily I already missed the earlier {blogdown}-to-{distill} bandwagon, lol.[^distill]
 
----
+## Environment {.appendix}
+
 <details><summary>Session info</summary>
-```{r eval=TRUE, sessioninfo, echo=FALSE}
-sessioninfo::session_info()
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 ```
 </details>
 

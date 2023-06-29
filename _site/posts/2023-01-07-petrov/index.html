@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.4.176">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -19,9 +19,10 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -48,43 +49,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -112,6 +83,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   "panel-placement": "end",
   "type": "overlay",
   "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -121,7 +95,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
@@ -129,13 +104,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
     </a>
@@ -143,39 +118,43 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <span class="navbar-title">rostrum.blog (test)</span>
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html"><i class="bi bi-question-circle-fill" role="img">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
 </i> 
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../index.xml"><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
 </i> 
  <span class="menu-text">RSS</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2"><i class="bi bi-github" role="img" aria-label="GitHub source code">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
 </i> 
  <span class="menu-text">Source</span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">Stiliyan Petrov: Jesus?</h1>
                                 <div class="quarto-categories">
-                <div class="quarto-category">code</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">soccercolleagues</div>
+                <div class="quarto-category">sport</div>
               </div>
                   </div>
   </div>
@@ -186,7 +165,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Matt Dray </p>
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
             </div>
     </div>
       
@@ -203,23 +182,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#petrov-rescue" id="toc-petrov-rescue" class="nav-link" data-scroll-target="#petrov-rescue">Petrov Rescue</a></li>
+  <li><a href="#stan-in-r-but-not-rstan" id="toc-stan-in-r-but-not-rstan" class="nav-link" data-scroll-target="#stan-in-r-but-not-rstan">Stan in R, but not {rstan}</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<div class="figure">
-<p><img src="resources/petrov.jpg" alt="Close up of former footballer Stiliyan Petrov playing for Bulgaria. Text around his head says 'Stan Petrov', 'am jebus?', 'nativity' and 'get rekt opta' in Comic Sans font." width="100%"></p>
-</div>
-<section id="tldr" class="level1">
-<h1>tl;dr</h1>
+<p><img src="resources/petrov.jpg" class="img-fluid" style="width:100.0%" alt="Close up of former footballer Stiliyan Petrov playing for Bulgaria. Text around his head says 'Stan Petrov', 'am jebus?', 'nativity' and 'get rekt opta' in Comic Sans font."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
 <p>In which I prove wrong a tweeted <a href="https://en.wikipedia.org/wiki/Opta_Sports">Opta</a> football statistic, using R and Transfermarkt data. Oh wait, actually Opta were right. Ah, heck.</p>
 </section>
-<section id="petrov-rescue" class="level1">
-<h1>Petrov Rescue</h1>
+<section id="petrov-rescue" class="level2">
+<h2 class="anchored" data-anchor-id="petrov-rescue">Petrov Rescue</h2>
 <p>Basically, for little reason, I dislike the style of the tweets on <a href="https://twitter.com/OptaJoe/">the Twitter feed for Opta</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> (the company who do all the football stats).</p>
 <p>What is so outrageous? Each tweet always ends in a single, summary word that makes me cringe.</p>
 <p>Wait, what? Let’s take a look at <a href="https://twitter.com/OptaJoe/status/1611735498233622534?s=20">their most recent tweet</a> at time of writing:</p>
@@ -245,8 +236,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </blockquote>
 <p>No, this is more important than any Opta tweet ever: what if it’s… <em>wrong</em>?</p>
 </section>
-<section id="stan-in-r-but-not-rstan" class="level1">
-<h1>Stan in R, but not {rstan}</h1>
+<section id="stan-in-r-but-not-rstan" class="level2">
+<h2 class="anchored" data-anchor-id="stan-in-r-but-not-rstan">Stan in R, but not {rstan}</h2>
 <p>So I looked into it using R, of course.</p>
 <p>Turns out it’s pretty straightforward with <a href="https://jaseziv.github.io/worldfootballR/">the excellent {worldfootballR} package by Jason Zivkovic</a>, which helps fetch player data from <a href="https://www.transfermarkt.com/">Transfermarkt</a> (among other suppliers).</p>
 <p>Basically, we can fetch data about footballers from every team in a given league’s season since its inception. So, aha, you cannot escape, Opta!</p>
@@ -290,66 +281,60 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>      i_count <span class="sc">&gt;=</span> <span class="dv">2</span> <span class="sc">&amp;</span></span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>      v_count <span class="sc">&gt;=</span> <span class="dv">1</span> <span class="sc">&amp;</span></span>
 <span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>      y_count <span class="sc">&gt;=</span> <span class="dv">1</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="do">## # A tibble: 1 × 7</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="do">##   player_name    n_count a_count t_count i_count v_count y_count</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="do">##   &lt;chr&gt;            &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 stiliyanpetrov       1       1       2       2       1       1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<pre><code># A tibble: 1 × 7
+  player_name    n_count a_count t_count i_count v_count y_count
+  &lt;chr&gt;            &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;
+1 stiliyanpetrov       1       1       2       2       1       1</code></pre>
 <p>Oof… they were right. He is the only one.</p>
 <p>Wow, this humble pie is so delicious, thank you so much Opta for unintentionally spoonfeeding it to me.</p>
 <p>To be clear: Opta’s data analysts have a good track record, as far as I know. But I’ve got my eye on you! You’ll slip up one day!</p>
 <p>…But wait. Opta were misnaming Stan as ‘Stylian Petrov’ <a href="https://twitter.com/OptaJoe/status/169439820584714240?s=20">in tweets as late as 2012</a>. Get rekt! You missed the extra ‘i’ you need in ‘nativity’, fools! Put respect on Stiliyan’s name!</p>
 <p>‘Result’.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
-<hr>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
 <details>
 <summary>
 Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>─ Session info ───────────────────────────────────────────────────────────────
- setting  value
- version  R version 4.2.0 (2022-04-22)
- os       macOS Big Sur/Monterey 10.16
- system   x86_64, darwin17.0
- ui       X11
- language (EN)
- collate  en_US.UTF-8
- ctype    en_US.UTF-8
- tz       Europe/London
- date     2023-04-10
- pandoc   2.19.2 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)
+<pre><code>Last rendered: 2023-06-29 15:10:28 CEST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
 
-─ Packages ───────────────────────────────────────────────────────────────────
- package     * version date (UTC) lib source
- cli           3.6.0   2023-01-09 [1] CRAN (R 4.2.0)
- digest        0.6.31  2022-12-11 [1] CRAN (R 4.2.0)
- evaluate      0.20    2023-01-17 [1] CRAN (R 4.2.0)
- fastmap       1.1.0   2021-01-25 [1] CRAN (R 4.2.0)
- htmltools     0.5.2   2021-08-25 [1] CRAN (R 4.2.0)
- htmlwidgets   1.5.4   2021-09-08 [1] CRAN (R 4.2.0)
- jsonlite      1.8.4   2022-12-06 [1] CRAN (R 4.2.0)
- knitr         1.42    2023-01-25 [1] CRAN (R 4.2.0)
- rlang         1.0.6   2022-09-24 [1] CRAN (R 4.2.0)
- rmarkdown     2.14    2022-04-25 [1] CRAN (R 4.2.0)
- rstudioapi    0.14    2022-08-22 [1] CRAN (R 4.2.0)
- sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.2.0)
- xfun          0.37    2023-01-31 [1] CRAN (R 4.2.0)
- yaml          2.3.7   2023-01-23 [1] CRAN (R 4.2.0)
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
 
- [1] /Library/Frameworks/R.framework/Versions/4.2/Resources/library
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
-──────────────────────────────────────────────────────────────────────────────</code></pre>
+time zone: Europe/Zurich
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.14   yaml_2.3.7       
+ [9] rmarkdown_2.22    knitr_1.43.1      jsonlite_1.8.5    xfun_0.39        
+[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
 </div>
 </div>
 </details>
 
 
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>This post is not guerilla marketing for Opta. It would be <em>extremely</em> guerilla if they wanted to advertise on <em>this</em> blog.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
@@ -357,7 +342,7 @@ Session info
 <li id="fn3"><p>Hint: it’s a very ‘boring’ footballer, lol.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>By which I mean I lost 1-0.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -385,9 +370,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -423,10 +422,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -436,8 +434,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -452,6 +459,147 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -492,6 +640,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

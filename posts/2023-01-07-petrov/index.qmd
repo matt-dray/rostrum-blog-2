@@ -1,27 +1,20 @@
 ---
-title: 'Stiliyan Petrov: Jesus?'
-author: Matt Dray
-date: '2023-01-08'
+title: "Stiliyan Petrov: Jesus?"
+date: 2023-01-08
 slug: petrov
 categories:
-  - code
-tags:
-  - football
-  - opta
   - r
-  - soccer
   - soccercolleagues
+  - sport
 ---
 
-<div class="figure">
-<img src="resources/petrov.jpg" alt="Close up of former footballer Stiliyan Petrov playing for Bulgaria. Text around his head says 'Stan Petrov', 'am jebus?', 'nativity' and 'get rekt opta' in Comic Sans font." width="100%"/>
-</div>
+![](resources/petrov.jpg){fig-alt="Close up of former footballer Stiliyan Petrov playing for Bulgaria. Text around his head says 'Stan Petrov', 'am jebus?', 'nativity' and 'get rekt opta' in Comic Sans font." width="100%"}
 
-# tl;dr
+## tl;dr
 
 In which I prove wrong a tweeted [Opta](https://en.wikipedia.org/wiki/Opta_Sports) football statistic, using R and Transfermarkt data. Oh wait, actually Opta were right. Ah, heck.
 
-# Petrov Rescue
+## Petrov Rescue
 
 Basically, for little reason, I dislike the style of the tweets on [the Twitter feed for Opta](https://twitter.com/OptaJoe/)[^sponsor] (the company who do all the football stats).
 
@@ -55,7 +48,7 @@ Oh, and obviously you can ignore the candid dismissals in the tweet's replies, [
 
 No, this is more important than any Opta tweet ever: what if it's... _wrong_?
 
-# Stan in R, but not {rstan}
+## Stan in R, but not {rstan}
 
 So I looked into it using R, of course. 
 
@@ -113,10 +106,12 @@ epl_players |>
       v_count >= 1 &
       y_count >= 1
   )
-## # A tibble: 1 × 7
-##   player_name    n_count a_count t_count i_count v_count y_count
-##   <chr>            <int>   <int>   <int>   <int>   <int>   <int>
-## 1 stiliyanpetrov       1       1       2       2       1       1
+```
+```
+# A tibble: 1 × 7
+  player_name    n_count a_count t_count i_count v_count y_count
+  <chr>            <int>   <int>   <int>   <int>   <int>   <int>
+1 stiliyanpetrov       1       1       2       2       1       1
 ```
 
 Oof... they were right. He is the only one.
@@ -129,10 +124,11 @@ To be clear: Opta's data analysts have a good track record, as far as I know. Bu
 
 'Result'.[^score]
 
----
+## Environment {.appendix}
+
 <details><summary>Session info</summary>
-```{r sessioninfo, echo=FALSE}
-sessioninfo::session_info()
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 ```
 </details>
 

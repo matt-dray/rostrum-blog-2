@@ -1,27 +1,21 @@
 ---
-title: "Fun and learning. In a dungeon."
-author: Matt Dray
-date: '2023-03-15'
+title: Fun and learning. In a dungeon!
+date: 2023-03-15
 slug: in-a-dungeon
 categories:
   - event
-  - talk
-tags:
-  - conference
   - r
   - r.oguelike
+  - talk
 ---
 
-<div class="figure">
-<img src="resources/mobile-r.oguelike.png" alt="RStudio running a browser on a mobile phone playing the tile-based game from the r.oguelike package." width="100%"/>
-<p class="caption">Learn hard and you too can be a mobile gamedev like me.</p>
-</div>
+![Learn hard and you too can be a mobile gamedev like me.](resources/mobile-r.oguelike.png){fig-alt="RStudio running a browser on a mobile phone playing the tile-based game from the r.oguelike package." width="100%"}
 
-# tl;dr
+## tl;dr
 
 Today I spoke at a public sector[^strike] event for data scientists[^ds]. I said that learning is best when focused into little projects that are fun.
 
-# To the point
+## To the point
 
 The abstract sums it up, obviously:
 
@@ -31,11 +25,16 @@ Yes, a cheeky teaser there to pique the interest. But everyone came to my talk a
 
 You can just look at the slides below if you want ([direct link](https://matt-dray.github.io/in-a-dungeon), [source](https://github.com/matt-dray/in-a-dungeon)). Press 's' to pop out the speaker notes.
 
-<iframe width="700" height="449" src="https://matt-dray.github.io/in-a-dungeon" title="Slides for a presentation called 'fun and learning in a dungeon' written with Quarto."></iframe>
+```{r embed-slides, echo=FALSE}
+xaringanExtra::embed_xaringan(
+  "https://matt-dray.github.io/in-a-dungeon", 
+  border = "none",
+)
+```
 
 These were made with [Revealjs via Quarto](https://quarto.org/docs/presentations/revealjs/), of course.
 
-# On my soapbox
+## On my soapbox
 
 So what incredible insight did I bring to the event?
 
@@ -49,10 +48,11 @@ Is this a new thought technology? No. Is it always true and applicable to everyo
 
 Am I all too aware of how self-indulgent this all sounds? Yes. Did I need a whole talk to explain this? No, probably not. I'm happy if just one person stops to think about this next time they want to learn something. I'm also content if one person panicked slightly when they realised that R is a game engine now.
 
----
+## Environment {.appendix}
+
 <details><summary>Session info</summary>
-```{r eval=TRUE, sessioninfo, echo=FALSE}
-sessioninfo::session_info()
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 ```
 </details>
 

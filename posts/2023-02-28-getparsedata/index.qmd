@@ -1,29 +1,19 @@
 ---
-title: "I can't be parsed, mate"
-author: Matt Dray
-date: '2023-03-03'
+title: I can't be parsed, mate
+date: 2023-03-03
 slug: getparsedata
 categories:
-  - code
-  - tutorial
-tags:
-  - lintr
   - lobstr
-  - magrittr
-  - pipe
   - r
 ---
 
-<div class="figure">
-<img src="resources/handegg.png" alt="An American football quarterback about to pass the ball. He has the R logo on his shirt. Text above says 'pass the ball', text below is R code reading 'parse(text = 'the('ball')')'. The format is a 'deep-fried', highly pixellated meme where the centre of the iumage bloats out. A wide-eyed, smiling and crying emoji is in the corner." width="100%"/>
-<p class="caption">Image by <a href="https://pixabay.com/users/keithjj-2328014/">Keith Johnston</a> from <a href="https://pixabay.com">Pixabay</a>. Deep fried by Matt Dray.[^fry]</p>
-</div>
+![Image by <a href="https://pixabay.com/users/keithjj-2328014/">Keith Johnston</a> from <a href="https://pixabay.com">Pixabay</a>. Deep fried by Matt Dray.[^fry]](resources/handegg.png){fig-alt="An American football quarterback about to pass the ball. He has the R logo on his shirt. Text above says 'pass the ball', text below is R code reading 'parse(text = 'the('ball')')'. The format is a 'deep-fried', highly pixellated meme where the centre of the iumage bloats out. A wide-eyed, smiling and crying emoji is in the corner." width="100%"}
 
-# tl;dr
+## tl;dr
 
 R is capable of reading R code. Obviously. You can use `getParseData(parse())` to see what's going on. A very naive intro.
 
-# At an imparse
+## At an imparse
 
 There's many things that delight me about R coding.[^train] One meta thing I like is the idea that R has to recognise the code that you give it as... R code.
 
@@ -39,7 +29,7 @@ Here, `=` is used to assign (`=`), to set a function argument (`=`) and as part 
 
 How can a mere human understand this better?
 
-# Parsed tense
+## Parsed tense
 
 The cool ('cool') thing is that R gives you tools to be able to see the world as R sees it. 
 
@@ -53,7 +43,7 @@ I've used this approach before to:
 
 How might you tinker about with this yourself? Read on for a quickstart.
 
-# Parse the parcel
+## Parse the parcel
 
 I'll talk about two main functions: `parse()` and `getParseData()`, which are both part of base R.
 
@@ -90,7 +80,7 @@ Oh neato, so you can see `=` is indeed recognised as the token `EQ_ASSIGN` ('equ
 
 If you're wondering, the `keep.source = TRUE` bit was needed to encourage `parse()` to return its output, which is a necessary step within this non-interactive blog post.
 
-# Parseltongue
+## Parseltongue
 
 Want to take a look at the tokens in a given string of R code yourself? You can use this little function that contains `parse()` and `getParseData()` and returns you the simplified dataframe I showed above if `simplify = TRUE`, otherwise it gives the full read out.[^ex] 
 
@@ -114,13 +104,13 @@ parse_out(
 )
 ```
 
-<div class="tip"> `r fontawesome::fa("exclamation-circle")` <b>Update</b>
+<div class="tip"> ℹ️ <b>Update</b>
 
 Since I wrote this post, it's become possible to [include editable R blocks in a rendered Quarto document](https://github.com/coatless/quarto-webr), which can be run in the browser thanks to [WebR](https://docs.r-wasm.org/webr/latest/)(!). [I've made a quick demo](https://webr-parse-test.netlify.app/) and [post](https://www.rostrum.blog/2023/03/16/webr-quarto/) so you can play around with a simplified version of the parsing function above.
 
 </div>
 
-# Lateral parse
+## Lateral parse
 
 I'll leave you with another interesting thing that shows you the inner workings of R, which you might not realise as you run your code. We can look at how the code is actually executed, not just the tokens that it's composed of.
 
@@ -160,14 +150,15 @@ ast(mtcars |> head())
 
 Surprise! `mtcars |> head` is not executed like `` `|>`(mtcars, head) ``. It's literally executed like `head(mtcars)`. The base pipe is so special because it's baked right into the R source code as a separate type of token that is recognised to have a job distinct from a basic `SPECIAL`. This should make it a little faster to run compared to `%>%` as well.
 
-# Parse away
+## Parse away
 
 Well, 'cool' I guess. Now it's up to you: you can either parse on this knowledge, or leave it in the parsed.[^end]
 
----
+## Environment {.appendix}
+
 <details><summary>Session info</summary>
-```{r eval=TRUE, sessioninfo, echo=FALSE}
-sessioninfo::session_info()
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 ```
 </details>
 
@@ -176,7 +167,7 @@ sessioninfo::session_info()
 [^down]: Of course, I'm not mentioning right assignment (`->`) here, nor the plucky upstart of [down-asignment](https://www.rostrum.blog/2022/06/07/assign-down/), which is certain to be the future for assignment in R.
 [^tokens]: You can [see a list of these with English translations](https://github.com/wch/r-source/blob/0ee550ff68f22b8a1807377e728f99f2775cc43c/src/main/gram.y#L2312-L2350) in Winston Chang's GitHub copy of R's source code. So `NUM_CONST` is 'numeric constant', for example.
 [^carb]: Not `carb`ohydrates. 'Non-car people' should take a look at the 'Format' section of `?mtcars`. I mean, `drat` means 'rear axle ratio', what?
-[^lobstr]: A package with one of my favourite names and [hex logos](https://lobstr.r-lib.org/logo.png). The 'str' is from 'structure', as in 'the structure of code'. The logo is a lobster snipping apart the 'lob' from 'str' text. I mean, \*(lobster) chef's kiss\* on that one. `r emoji::emoji("lobster")`
+[^lobstr]: A package with one of my favourite names and [hex logos](https://lobstr.r-lib.org/logo.png). The 'str' is from 'structure', as in 'the structure of code'. The logo is a lobster snipping apart the 'lob' from 'str' text. I mean, \*(lobster) chef's kiss\* on that one. 🦞
 [^end]: Yeah, I'm hoping you didn't read this far. Obviously I didn't know how to end the post, sorry.
 [^ex]: An exercise for the reader is to alter this function to accept an R script file rather than a string (hint: `parse()` takes a `file` argument).
 [^renkun]: You may also enjoy [a post by Kun Ren](https://renkun.me/2020/11/08/using-parse-data-to-analyze-r-code/) about how this approach is useful for static analysis in [the {languageserver} package](https://github.com/REditorSupport/languageserver), which is a handy download for using R in VS Code.

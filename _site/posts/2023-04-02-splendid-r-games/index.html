@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.4.176">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -19,7 +19,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
 </style>
@@ -49,6 +49,9 @@ ul.task-list li input[type="checkbox"] {
   "panel-placement": "end",
   "type": "overlay",
   "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -58,7 +61,8 @@ ul.task-list li input[type="checkbox"] {
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
@@ -66,13 +70,13 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
     </a>
@@ -80,39 +84,43 @@ ul.task-list li input[type="checkbox"] {
     <span class="navbar-title">rostrum.blog (test)</span>
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html"><i class="bi bi-question-circle-fill" role="img">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
 </i> 
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../index.xml"><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
 </i> 
  <span class="menu-text">RSS</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2"><i class="bi bi-github" role="img" aria-label="GitHub source code">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
 </i> 
  <span class="menu-text">Source</span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">R is a game engine, fight me</h1>
                                 <div class="quarto-categories">
-                <div class="quarto-category">code</div>
+                <div class="quarto-category">videogames</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">shiny</div>
               </div>
                   </div>
   </div>
@@ -123,7 +131,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Matt Dray </p>
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
             </div>
     </div>
       
@@ -140,35 +148,50 @@ ul.task-list li input[type="checkbox"] {
   
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#stats-only" id="toc-stats-only" class="nav-link" data-scroll-target="#stats-only">Stats only!</a></li>
+  <li><a href="#stats-only-1" id="toc-stats-only-1" class="nav-link" data-scroll-target="#stats-only-1">Stats only?</a></li>
+  <li><a href="#wait-hes-serious" id="toc-wait-hes-serious" class="nav-link" data-scroll-target="#wait-hes-serious">Wait, he’s serious?</a></li>
+  <li><a href="#i-am-an-indie-game-dev-now" id="toc-i-am-an-indie-game-dev-now" class="nav-link" data-scroll-target="#i-am-an-indie-game-dev-now">I am an indie game dev now</a></li>
+  <li><a href="#ready-player-2" id="toc-ready-player-2" class="nav-link" data-scroll-target="#ready-player-2">Ready Player 2</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<div class="figure">
-<p><img src="resources/snes-r.png" alt="A crudely drawn image of the buttons from a Nintendo SNES controller, but the A, B, X and Y labels have all been changed to R." width="100%"></p>
-</div>
-<section id="tldr" class="level1">
-<h1>tl;dr</h1>
+<p><img src="resources/snes-r.png" class="img-fluid" style="width:100.0%" alt="A crudely drawn image of the buttons from a Nintendo SNES controller, but the A, B, X and Y labels have all been changed to R."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
 <p>R is ‘<a href="https://www.r-project.org/">a free software environment for statistical computing and graphics</a>’. Ahahaha, no it’s not, it’s a game engine. I’ve created <a href="https://github.com/matt-dray/awesome-r-games">a ‘splendid’ list of games</a> you can play—written in R—to prove it. <a href="https://github.com/matt-dray/splendid-r-games/issues">Help expand it</a>.</p>
 </section>
-<section id="stats-only" class="level1">
-<h1>Stats only!</h1>
+<section id="stats-only" class="level2">
+<h2 class="anchored" data-anchor-id="stats-only">Stats only!</h2>
 <p>R is not a general, multi-purpose programming language. It was written to do statistical analysis and make charts. You are literally not allowed to do anything else with it. You should use &lt;LANGUAGE&gt; instead, which is much more suited to your specific use case. R is a joke language for nerds.</p>
 <p>You should not read beyond this point if you think, quite rightly, that mirth and frivolity are unsuited to an R session.</p>
 </section>
-<section id="stats-only-1" class="level1">
-<h1>Stats only?</h1>
+<section id="stats-only-1" class="level2">
+<h2 class="anchored" data-anchor-id="stats-only-1">Stats only?</h2>
 <p>Unity. Unreal. GameMaker. Godot. All of these videogame engines are now obsolete.</p>
 <p>It is R—humble R!—that represents the future of gaming.</p>
 <p>To prove it, I’ve created <a href="https://github.com/matt-dray/awesome-r-games">a list of ‘splendid R games’ in a GitHub repo</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> that you are welcome to contribute to.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <p>Yes, R can be used for fun. Do not tell R Core.</p>
 </section>
-<section id="wait-hes-serious" class="level1">
-<h1>Wait, he’s serious?</h1>
+<section id="wait-hes-serious" class="level2">
+<h2 class="anchored" data-anchor-id="wait-hes-serious">Wait, he’s serious?</h2>
 <p>I think there’s three kinds of ‘platform’ for games written in R:</p>
 <ol type="1">
 <li>For the console</li>
@@ -176,30 +199,30 @@ ul.task-list li input[type="checkbox"] {
 <li>Ported</li>
 </ol>
 <p>Games played in the console are pretty straightforward and probably most common. You can run some code, or a function from a package, to launch some code in the R console that you can interact with. A simple option for this might involve use of <code>readline()</code> to receive user input, for example, like <a href="https://www.giorasimchoni.com/">Giora Simchoni</a>’s excellent text-based puzzler, <a href="https://github.com/gsimchoni/CastleOfR">Castle of R</a>.</p>
-<div class="figure">
-<img src="resources/castle.png" alt="Screenshot of R running in the terminal. A text interface asks the user to identify their skill in R. The user has typed option '4', which corresponds to the text 'what is R?'. The resulting text says 'welcome to the Castle of R' and explains its purpose." width="100%">
-<p class="caption">
-Giora’s Castle of R running in the terminal.
-</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/castle.png" class="img-fluid figure-img" style="width:100.0%" alt="Screenshot of R running in the terminal. A text interface asks the user to identify their skill in R. The user has typed option '4', which corresponds to the text 'what is R?'. The resulting text says 'welcome to the Castle of R' and explains its purpose."></p>
+<figcaption class="figure-caption">Giora’s Castle of R running in the terminal.</figcaption>
+</figure>
 </div>
 <p>Shiny can give you a little more flexibility when it comes to graphics and user input, at the expense of needing to host the app and maybe some extra JavaScript skills. A great example of this is <a href="https://www.pedrocsilva.com/">Pedro Silva</a>’s winning entry (<a href="https://sparktuga.shinyapps.io/ShinyDecisions/">app</a>, <a href="https://github.com/pedrocoutinhosilva/shiny.decisions">source</a>) to <a href="https://posit.co/blog/winners-of-the-2nd-shiny-contest/">the Posit Shiny contest in 2020</a>.</p>
-<div class="figure">
-<img src="resources/decisions.png" alt="A screenshot of a game that shows a world map with face, building and tree emojis on it. There are meters labelled 'wealth', 'opinion' and 'environment' and another with a halo on one end and devil horns the other. Text at the bottom says 'swipe left or right on the card to start'." width="100%">
-<p class="caption">
-A still from Pedro’s Shiny Decisions app.
-</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/decisions.png" class="img-fluid figure-img" style="width:100.0%" alt="A screenshot of a game that shows a world map with face, building and tree emojis on it. There are meters labelled 'wealth', 'opinion' and 'environment' and another with a halo on one end and devil horns the other. Text at the bottom says 'swipe left or right on the card to start'."></p>
+<figcaption class="figure-caption">A still from Pedro’s Shiny Decisions app.</figcaption>
+</figure>
 </div>
 <p>The third category is a little more boundary-pushing. Imagine if R was powerful enough to let you port existing games. Well, surprise, ya boi <a href="https://coolbutuseless.github.io/">Mike Cheng</a> (aka coolbutuseless) has pushed hard on expanding the capabilities of R to run fast enough and with realtime user input,<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> porting the classic <a href="https://en.wikipedia.org/wiki/Another_World_(video_game)"><em>Another World</em></a> (1991) to R, which was showcased at 2022’s Posit conference (<a href="https://github.com/coolbutuseless/anotherworld">source</a>, <a href="https://www.youtube.com/watch?v=LPotWAJnE_s">video</a>, <a href="https://coolbutuseless.github.io/2022/07/29/anotherworld-game-written-playable-in-r-with-nara-and-eventloop/">blog</a>).</p>
-<div class="figure">
-<img src="resources/another-world.png" alt="A screenshot of the game with the main character apparently waving to a shadowy silhouette in the foreground. The overalid title says 'moonshot' and text at the bottom is a quote by Mike Cheng saying 'i will commit myself to achieving the goal, before the year is out, of writing and playing a videogame in R'." width="100%">
-<p class="caption">
-A still from Mike’s rstudio::conf(2022) presentation, featuring Another World.
-</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/another-world.png" class="img-fluid figure-img" style="width:100.0%" alt="A screenshot of the game with the main character apparently waving to a shadowy silhouette in the foreground. The overalid title says 'moonshot' and text at the bottom is a quote by Mike Cheng saying 'i will commit myself to achieving the goal, before the year is out, of writing and playing a videogame in R'."></p>
+<figcaption class="figure-caption">A still from Mike’s rstudio::conf(2022) presentation, featuring Another World.</figcaption>
+</figure>
 </div>
 <p>Of course, within these ‘platforms’ are genres like word games, arcade games, puzzle games, etc. Will you be the first to create an MMORPG (a massively-multiplayer online R-powered game)?</p>
 </section>
-<section id="i-am-an-indie-game-dev-now" class="level1">
-<h1>I am an indie game dev now</h1>
+<section id="i-am-an-indie-game-dev-now" class="level2">
+<h2 class="anchored" data-anchor-id="i-am-an-indie-game-dev-now">I am an indie game dev now</h2>
 <p>I’ve always been interested in how videogames are coded,<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> wishing that I could do the same myself. Of course I could simply learn ‘real’ programming languages.</p>
 <p>Except that’s blasphemy. Of course I’d rather break my own mind and spirit in an attempt to make R achieve 0.1% of what might be possible in P*thon.</p>
 <p>Case in point, I’ve made a few R packages containing some little toys (in order of gooddest to baddest):</p>
@@ -210,74 +233,68 @@ A still from Mike’s rstudio::conf(2022) presentation, featuring Another World.
 <li>{ActionSquirrel} (<a href="https://www.rostrum.blog/2021/10/03/squirrel/">source</a>, <a href="https://github.com/matt-dray/ActionSquirrel">blog</a>) for a tile-based, turn-based minigame in the R console</li>
 <li>{hokey} (<a href="https://github.com/matt-dray/hokey">source</a>, <a href="https://www.rostrum.blog/2022/01/19/keypress/">blog</a>) for minigames that use <a href="https://github.com/gaborcsardi/keypress">direct keypress inputs with {keypress}</a></li>
 </ul>
-<div class="figure">
-<img src="resources/kevin.png" alt="Screenshot of R running in the terminal. The get_stats and see_pet functions from the tamRgo package have been run. The first prints some output showing characteristics and status of a cyber pet. The latter prints an image of the pet to the browser. The pet is called Kevin and is 139 in age. It appears to be unalive." width="100%">
-<p class="caption">
-Hint when playing {tamRgo}: do not forget about your pet for 138 days. RIP Kevin XVIII.
-</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/kevin.png" class="img-fluid figure-img" style="width:100.0%" alt="Screenshot of R running in the terminal. The get_stats and see_pet functions from the tamRgo package have been run. The first prints some output showing characteristics and status of a cyber pet. The latter prints an image of the pet to the browser. The pet is called Kevin and is 139 in age. It appears to be unalive."></p>
+<figcaption class="figure-caption">Hint when playing {tamRgo}: do not forget about your pet for 138 days. RIP Kevin XVIII.</figcaption>
+</figure>
 </div>
 <p>I’ve got something in the pipeline that involves extremely rudimentary physics in the R console. Wow! For release in 2023 (because game launches never go wrong).</p>
 </section>
-<section id="ready-player-2" class="level1">
-<h1>Ready Player 2</h1>
+<section id="ready-player-2" class="level2">
+<h2 class="anchored" data-anchor-id="ready-player-2">Ready Player 2</h2>
 <p>The splendid list must be missing a bunch of games. Please leave an issue or pull request <a href="https://github.com/matt-dray/splendid-r-games">in the splendid-r-games repo</a> to add more examples.</p>
 <p>Next stop: letting people run R games in the browser without an installed copy of R. This is already possible with a service like <a href="https://mybinder.org/">Binder</a>, which can spin up an instance of RStudio with packages pre-installed <a href="https://github.com/matt-dray/play-r.oguelike">I did this for {r.oguelike}</a>).</p>
-<div class="figure">
-<img src="resources/mobile-r.oguelike.png" alt="RStudio running a browser on a mobile phone playing the tile-based game from the r.oguelike package." width="100%">
-<p class="caption">
-Just like <a href="https://en.wikipedia.org/wiki/N-Gage_(device)">the Nokia N-Gage</a>, amirite?
-</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/mobile-r.oguelike.png" class="img-fluid figure-img" style="width:100.0%" alt="RStudio running a browser on a mobile phone playing the tile-based game from the r.oguelike package."></p>
+<figcaption class="figure-caption">Just like <a href="https://en.wikipedia.org/wiki/N-Gage_(device)">the Nokia N-Gage</a>, amirite?</figcaption>
+</figure>
 </div>
 <p>But soon you might be able to <a href="https://github.com/r-wasm/webr">use WebR to play games in the browser</a> without even spinning up RStudio, ooh. So look out for an R version of <a href="https://itch.io/">itch.io</a> in future, lol.</p>
-<hr>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
 <details>
 <summary>
 Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>─ Session info ───────────────────────────────────────────────────────────────
- setting  value
- version  R version 4.2.0 (2022-04-22)
- os       macOS Big Sur/Monterey 10.16
- system   x86_64, darwin17.0
- ui       X11
- language (EN)
- collate  en_US.UTF-8
- ctype    en_US.UTF-8
- tz       Europe/London
- date     2023-04-10
- pandoc   2.19.2 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)
+<pre><code>Last rendered: 2023-06-29 16:44:52 CEST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
 
-─ Packages ───────────────────────────────────────────────────────────────────
- package     * version date (UTC) lib source
- cli           3.6.0   2023-01-09 [1] CRAN (R 4.2.0)
- digest        0.6.31  2022-12-11 [1] CRAN (R 4.2.0)
- evaluate      0.20    2023-01-17 [1] CRAN (R 4.2.0)
- fastmap       1.1.0   2021-01-25 [1] CRAN (R 4.2.0)
- htmltools     0.5.2   2021-08-25 [1] CRAN (R 4.2.0)
- htmlwidgets   1.5.4   2021-09-08 [1] CRAN (R 4.2.0)
- jsonlite      1.8.4   2022-12-06 [1] CRAN (R 4.2.0)
- knitr         1.42    2023-01-25 [1] CRAN (R 4.2.0)
- rlang         1.0.6   2022-09-24 [1] CRAN (R 4.2.0)
- rmarkdown     2.14    2022-04-25 [1] CRAN (R 4.2.0)
- rstudioapi    0.14    2022-08-22 [1] CRAN (R 4.2.0)
- sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.2.0)
- xfun          0.37    2023-01-31 [1] CRAN (R 4.2.0)
- yaml          2.3.7   2023-01-23 [1] CRAN (R 4.2.0)
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
 
- [1] /Library/Frameworks/R.framework/Versions/4.2/Resources/library
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
-──────────────────────────────────────────────────────────────────────────────</code></pre>
+time zone: Europe/Zurich
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.14   yaml_2.3.7       
+ [9] rmarkdown_2.22    knitr_1.43.1      jsonlite_1.8.5    xfun_0.39        
+[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
 </div>
 </div>
 </details>
 
 
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>I originally labelled the GitHub repo as <a href="https://github.com/sindresorhus/awesome">an ‘awesome’ repo</a>, which I later learned has <a href="https://github.com/matt-dray/splendid-r-games/issues/4#issuecomment-1205015274">a very specific meaning</a>. You might have seen awesome lists before, like the <a href="https://github.com/mcanouil/awesome-quarto">awesome-quarto repo</a> by <a href="https://github.com/mcanouil">Mickaël</a>, or the new <a href="https://github.com/nanxstats/awesome-webr">awesome-webr list</a> by <a href="https://nanx.me/">Nan Xiao</a>. ‘Splendid’ is much more of a Bri’ish word than ‘awesome’, so it feels more natural anyway.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
@@ -285,7 +302,7 @@ Session info
 <li id="fn3"><p>See the <a href="https://coolbutuseless.github.io/package/nara/index.html">{nara}</a> and <a href="https://coolbutuseless.github.io/package/eventloop/index.html">{eventloop}</a> packages in particular.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>I like YouTube devlogs by folks like <a href="https://www.youtube.com/c/SebastianLague">Seb Lague</a>, <a href="https://www.youtube.com/@ThinMatrix">ThinMatrix</a>, <a href="https://www.youtube.com/@SquidGodDev">SquidGod</a>, <a href="https://www.youtube.com/c/jonastyroller">Jonas</a>, <a href="https://www.youtube.com/@Tantandev">TanTan</a> and others. R can never achieve what they’re up to, but I like listening through the logic of what they’re doing.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -313,9 +330,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -351,10 +382,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -364,8 +394,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -380,6 +419,147 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -420,6 +600,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

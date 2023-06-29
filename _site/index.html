@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.4.176">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -17,7 +17,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
 </style>
@@ -49,6 +49,9 @@ ul.task-list li input[type="checkbox"] {
   "panel-placement": "end",
   "type": "overlay",
   "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -58,7 +61,8 @@ ul.task-list li input[type="checkbox"] {
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script>
@@ -73,7 +77,7 @@ ul.task-list li input[type="checkbox"] {
     const options = {
       valueNames: ['listing-date','listing-title',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-title","listing-author","listing-date","listing-description"],
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -91,10 +95,11 @@ ul.task-list li input[type="checkbox"] {
   })
   </script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="styles.css">
-<link rel="alternate" type="application/rss+xml" title="rostrum.blog (test)" href="index.xml"></head>
+<link rel="alternate" type="application/rss+xml" title="rostrum.blog (test)" href="index.xml" data-external="1"></head>
 
 <body class="nav-fixed">
 
@@ -102,7 +107,7 @@ ul.task-list li input[type="checkbox"] {
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="./index.html" class="navbar-brand navbar-brand-logo">
     <img src="./images/logo-green-trans.png" alt="" class="navbar-logo">
     </a>
@@ -110,29 +115,31 @@ ul.task-list li input[type="checkbox"] {
     <span class="navbar-title">rostrum.blog (test)</span>
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"><i class="bi bi-question-circle-fill" role="img">
+    <a class="nav-link" href="./about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
 </i> 
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./index.xml"><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+    <a class="nav-link" href="./index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
 </i> 
  <span class="menu-text">RSS</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2"><i class="bi bi-github" role="img" aria-label="GitHub source code">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
 </i> 
  <span class="menu-text">Source</span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -153,7 +160,119 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
 <div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-categories="code" data-listing-date-sort="1680390000000" data-listing-file-modified-sort="1681163685844" data-listing-reading-time-sort="5.5">
+<div class="g-col-1" data-index="0" data-categories="clipr,markdown,ms-office,public-sector,quarto,r,wordup" data-listing-date-sort="1687298400000" data-listing-file-modified-sort="1688048486490" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7">
+<a href="./posts/2023-06-21-wordup-tables/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Convert a Word table to Markdown
+</h5>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+2023-06-21
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="1" data-categories="a11ytables,event,public-sector,r,talk" data-listing-date-sort="1686607200000" data-listing-file-modified-sort="1688048027593" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
+<a href="./posts/2023-06-13-panic-in-the-toolshed/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Panic! In The Toolshed
+</h5>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+2023-06-13
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="2" data-categories="apple,r,sport,xml,xml2" data-listing-date-sort="1686434400000" data-listing-file-modified-sort="1688048791472" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6">
+<a href="./posts/2023-06-10-apple-health-runs/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Extract run data from Apple Health (redux)
+</h5>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+2023-06-11
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="3" data-categories="ms-office,officer,officerExtras,public-sector,r" data-listing-date-sort="1686088800000" data-listing-file-modified-sort="1688055417357" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11">
+<a href="./posts/2023-06-07-rectangular-officer/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Rectangularise Word tables extracted by {officer}
+</h5>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+2023-06-07
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="4" data-categories="data-viz,history,ggplot2,r" data-listing-date-sort="1683669600000" data-listing-file-modified-sort="1688049010202" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7">
+<a href="./posts/2023-05-09-spear-ggplot2/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Recreating a dataviz with {ggplot2}
+</h5>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+2023-05-10
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="5" data-categories="bd2q,blog-meta,blogdown,quarto,r" data-listing-date-sort="1683410400000" data-listing-file-modified-sort="1688045131500" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10">
+<a href="./posts/2023-05-07-bd2q/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Automate {blogdown} to Quarto
+</h5>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+2023-05-07
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="6" data-categories="a11ytables,base,ms-office,r" data-listing-date-sort="1682200800000" data-listing-file-modified-sort="1688034634080" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8">
+<a href="./posts/2023-04-20-type-convert/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Matt Dray Teaches (Data) Typing
+</h5>
+<div class="card-attribution card-text-small end">
+<div class="listing-date">
+2023-04-23
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="7" data-categories="videogames,r,shiny" data-listing-date-sort="1680386400000" data-listing-file-modified-sort="1688049891678" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6">
 <a href="./posts/2023-04-02-splendid-r-games/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -169,7 +288,7 @@ R is a game engine, fight me
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="1" data-categories="code" data-listing-date-sort="1678924800000" data-listing-file-modified-sort="1681162964634" data-listing-reading-time-sort="3.215">
+<div class="g-col-1" data-index="8" data-categories="quarto,r,webr" data-listing-date-sort="1678921200000" data-listing-file-modified-sort="1688037566144" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
 <a href="./posts/2023-03-16-webr-test/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -185,12 +304,12 @@ Playgrounds with WebR and Quarto
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="2" data-categories="event,talk" data-listing-date-sort="1678838400000" data-listing-file-modified-sort="1681162964607" data-listing-reading-time-sort="2.85">
+<div class="g-col-1" data-index="9" data-categories="event,r,r.oguelike,talk" data-listing-date-sort="1678834800000" data-listing-file-modified-sort="1688048149943" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
 <a href="./posts/2023-03-11-in-a-dungeon/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
 <h5 class="no-anchor card-title listing-title">
-Fun and learning. In a dungeon.
+Fun and learning. In a dungeon!
 </h5>
 <div class="card-attribution card-text-small end">
 <div class="listing-date">
@@ -201,7 +320,7 @@ Fun and learning. In a dungeon.
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="3" data-categories="code,tutorial" data-listing-date-sort="1677801600000" data-listing-file-modified-sort="1681162964461" data-listing-reading-time-sort="7.42">
+<div class="g-col-1" data-index="10" data-categories="lobstr,r" data-listing-date-sort="1677798000000" data-listing-file-modified-sort="1688055469528" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8">
 <a href="./posts/2023-02-28-getparsedata/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -217,7 +336,7 @@ I can’t be parsed, mate
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="4" data-categories="code,tutorial" data-listing-date-sort="1677369600000" data-listing-file-modified-sort="1681164746333" data-listing-reading-time-sort="8.275">
+<div class="g-col-1" data-index="11" data-categories="oop,r,r6,s7,videogames" data-listing-date-sort="1677366000000" data-listing-file-modified-sort="1688055276850" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9">
 <a href="./posts/2023-02-23-nook-s7/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -233,7 +352,7 @@ Repaying Tom Nook with {S7}
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="5" data-categories="code" data-listing-date-sort="1675900800000" data-listing-file-modified-sort="1681162964395" data-listing-reading-time-sort="6.51">
+<div class="g-col-1" data-index="12" data-categories="api,github,londonmapbot,social-media,r,rtoot,rtweet" data-listing-date-sort="1675897200000" data-listing-file-modified-sort="1688046777678" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7">
 <a href="./posts/2023-02-09-londmapbotstodon/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -249,7 +368,7 @@ London from space via botsin.space
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="6" data-categories="code,package" data-listing-date-sort="1675296000000" data-listing-file-modified-sort="1681162964370" data-listing-reading-time-sort="13.01">
+<div class="g-col-1" data-index="13" data-categories="api,httr2,httptest2,r,trapinch" data-listing-date-sort="1675292400000" data-listing-file-modified-sort="1688055363191" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="13">
 <a href="./posts/2023-01-30-trapinch-begin/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -265,7 +384,7 @@ Wrapping PokéAPI with {trapinch}
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="7" data-categories="code" data-listing-date-sort="1673136000000" data-listing-file-modified-sort="1681162964338" data-listing-reading-time-sort="4.39">
+<div class="g-col-1" data-index="14" data-categories="r,soccercolleagues,sport" data-listing-date-sort="1673132400000" data-listing-file-modified-sort="1688044226703" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
 <a href="./posts/2023-01-07-petrov/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -281,7 +400,7 @@ Stiliyan Petrov: Jesus?
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="8" data-categories="code,package" data-listing-date-sort="1672963200000" data-listing-file-modified-sort="1681162964305" data-listing-reading-time-sort="3.915">
+<div class="g-col-1" data-index="15" data-categories="r,remorse,sonify" data-listing-date-sort="1672959600000" data-listing-file-modified-sort="1688055561009" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
 <a href="./posts/2023-01-06-remorse/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -297,7 +416,7 @@ Stiliyan Petrov: Jesus?
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="9" data-categories="code,package" data-listing-date-sort="1672790400000" data-listing-file-modified-sort="1681162964281" data-listing-reading-time-sort="5.27">
+<div class="g-col-1" data-index="16" data-categories="r,r.oguelike,sonify,videogames" data-listing-date-sort="1672786800000" data-listing-file-modified-sort="1688044829247" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6">
 <a href="./posts/2023-01-03-r.oguelike-sfx/index.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="card-body post-contents">
@@ -345,9 +464,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -383,10 +516,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -396,8 +528,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -412,6 +553,147 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -452,6 +734,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

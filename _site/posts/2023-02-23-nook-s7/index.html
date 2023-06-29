@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.4.176">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -19,9 +19,10 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -48,43 +49,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -112,6 +83,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   "panel-placement": "end",
   "type": "overlay",
   "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -121,7 +95,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
@@ -129,13 +104,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
     </a>
@@ -143,40 +118,45 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <span class="navbar-title">rostrum.blog (test)</span>
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html"><i class="bi bi-question-circle-fill" role="img">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
 </i> 
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../index.xml"><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
 </i> 
  <span class="menu-text">RSS</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2"><i class="bi bi-github" role="img" aria-label="GitHub source code">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
 </i> 
  <span class="menu-text">Source</span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">Repaying Tom Nook with {S7}</h1>
                                 <div class="quarto-categories">
-                <div class="quarto-category">code</div>
-                <div class="quarto-category">tutorial</div>
+                <div class="quarto-category">oop</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">r6</div>
+                <div class="quarto-category">s7</div>
+                <div class="quarto-category">videogames</div>
               </div>
                   </div>
   </div>
@@ -187,7 +167,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Matt Dray </p>
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
             </div>
     </div>
       
@@ -204,47 +184,62 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#again-oh-no" id="toc-again-oh-no" class="nav-link" data-scroll-target="#again-oh-no">2020 again, oh no</a></li>
+  <li><a href="#oop-they-did-it-again" id="toc-oop-they-did-it-again" class="nav-link" data-scroll-target="#oop-they-did-it-again">OOP they did it again</a></li>
+  <li><a href="#a-new-horizon-for-oop" id="toc-a-new-horizon-for-oop" class="nav-link" data-scroll-target="#a-new-horizon-for-oop">A new horizon for OOP</a></li>
+  <li><a href="#install" id="toc-install" class="nav-link" data-scroll-target="#install">Install</a></li>
+  <li><a href="#that-is-class" id="toc-that-is-class" class="nav-link" data-scroll-target="#that-is-class">That is class</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<div class="figure">
-<p><img src="resources/acnh-s7-knit.jpg" alt="Fish-eye lens selfie of the player-character from the game Animal Crossing New Horizons. The character is wearing a knitted black hoodie with bright green letters that say 'S7'. The picture is taken in the Resident Services building. Tom Nook, a raccoon-dog character, is in the background staring ominously at the player." width="100%"></p>
-</div>
-<section id="tldr" class="level1">
-<h1>tl;dr</h1>
+<p><img src="resources/acnh-s7-knit.jpg" class="img-fluid" style="width:100.0%" alt="Fish-eye lens selfie of the player-character from the game Animal Crossing New Horizons. The character is wearing a knitted black hoodie with bright green letters that say 'S7'. The picture is taken in the Resident Services building. Tom Nook, a raccoon-dog character, is in the background staring ominously at the player."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
 <p>The <del>R7</del> <a href="https://rconsortium.github.io/OOP-WG/">S7 object-oriented system</a> is coming to R. I’ve done a little R6-to-S7 translation on <a href="https://www.rostrum.blog/2020/04/04/repaying-tom-nook-with-r6/">an old project</a> to get a very cursory feel for it, featuring <a href="https://www.animal-crossing.com/new-horizons/">Animal Crossing New Horizons</a>.</p>
 <div class="tip">
-<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zm-248 50c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"></path></svg> <b>Update</b></p>
+<p>❗️ <b>Warning</b></p>
 <p>The S7 system and package are under development and could change at any time, rendering everything in this post useless.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> Heck, last time I checked, the system was called ‘R7’. There’s also a chance that S7 elements may have been integrated into base R itself by the time you read this.</p>
 </div>
 </section>
-<section id="again-oh-no" class="level1">
-<h1>2020 again, oh no</h1>
+<section id="again-oh-no" class="level2">
+<h2 class="anchored" data-anchor-id="again-oh-no">2020 again, oh no</h2>
 <p>Animal Crossing New Horizons (ACNH) was the perfect pandemic game. And the pandemic was the perfect time to <a href="https://www.rostrum.blog/2020/04/04/repaying-tom-nook-with-r6/">build an ersatz version of the ACNH in-game banking system</a> to solve <a href="https://adv-r.hadley.nz/r6.html#exercises-44">an exercise in the Advanced R book</a> using <a href="https://r6.r-lib.org/">the {R6} package for object-oriented programming (OOP)</a> in R.</p>
 <p>The exercise helped me fantasize about defeating the game’s main boss, the predatory loanshark (loanraccoon?) <a href="https://animalcrossing.fandom.com/wiki/Tom_Nook">Tom Nook</a>, via endless wire transfers of hard-earned in-game currency, called ‘Bells’.</p>
 <p>Of course, a lot has changed since 2020. Most importantly, <a href="https://github.com/RConsortium/OOP-WG">a new OOP system for R is being developed</a>. Conversely, Tom Nook has not changed. He is still a scourge.</p>
 <p>Anyway, maybe this is a chance to twitch my OOP muscles with this new system.</p>
 </section>
-<section id="oop-they-did-it-again" class="level1">
-<h1>OOP they did it again</h1>
+<section id="oop-they-did-it-again" class="level2">
+<h2 class="anchored" data-anchor-id="oop-they-did-it-again">OOP they did it again</h2>
 <p>The <a href="https://www.r-consortium.org/">R Consortium</a>’s OOP working group has been beavering (raccooning?) away to develop a new OOP system from the ground up: S7<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> (<a href="https://github.com/RConsortium/OOP-WG/issues/262">S3 + S4</a>, geddit?).</p>
 <p>The idea is to take the best elements of <a href="https://adv-r.hadley.nz/oo.html">the existing and in-built S3 and S4 systems</a>, interface with them and improve on them.</p>
 <p>You can <a href="https://rconsortium.github.io/OOP-WG/">read various design docs and meeting minutes on their documentation site</a>, which is housed in their <a href="https://github.com/RConsortium/OOP-WG/">‘OOP-WG’ GitHub repo</a>, and try out the current iteration of the associated package, fittingly called {S7}.</p>
 <p>You should refer to their docs in the first instance, or a useful third party review. For example, <a href="https://www.jumpingrivers.com/">Jumping Rivers</a> have… jumped the river on this one and produced <a href="https://www.jumpingrivers.com/blog/r7-oop-object-oriented-programming-r/">a handy intro</a>.</p>
 </section>
-<section id="a-new-horizon-for-oop" class="level1">
-<h1>A new horizon for OOP</h1>
+<section id="a-new-horizon-for-oop" class="level2">
+<h2 class="anchored" data-anchor-id="a-new-horizon-for-oop">A new horizon for OOP</h2>
 <p>Naturally, I should revisit my post on <a href="https://www.rostrum.blog/2020/04/04/repaying-tom-nook-with-r6/">Repaying Tom Nook with {R6}</a> by replicating it with {S7}. Naturally.</p>
 <p>Aha, but actually the {S7} package is more like a development of S3 and S4 objects, and is not a ‘new version’ of {R6}! Ah well. I’m noodling around with {S7} for my own devices and thought I’d post it here so I can refer back to it later.</p>
 <p>Basically I’m recycling content from a previous post to get a feel for the new system. But only in the most superficial, basic way. I spent about 15 minutes on this. Look elsewhere for actually-usefully material. You have been warned.</p>
 </section>
-<section id="install" class="level1">
-<h1>Install</h1>
+<section id="install" class="level2">
+<h2 class="anchored" data-anchor-id="install">Install</h2>
 <p>For now, the {S7} package is in <a href="https://github.com/RConsortium/OOP-WG/">the R Consortium’s OOP-WG GitHub repo</a>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)  <span class="co"># if not yet installed</span></span>
@@ -256,8 +251,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emoji)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="that-is-class" class="level1">
-<h1>That is class</h1>
+<section id="that-is-class" class="level2">
+<h2 class="anchored" data-anchor-id="that-is-class">That is class</h2>
 <p>A new class is constructed with… <code>new_class()</code></p>
 <p>We can give it a name. We can also give it properties: fields that contain data and can be provided a type check and default value. It’s possible to build validators for these as well, which ensure that certain conditions are met when the properties are adjusted. I’ll keep this simple for now: I just want the values to remain equal or greater than zero.</p>
 <div class="cell">
@@ -477,66 +472,54 @@ Please make a selection from the menu below
 </div>
 </div>
 <p>Huzzah. Get rekt, raccoon dog. More like Tom <em>Crook</em> amirite.</p>
-<div class="figure">
-<p><img src="resources/acnh-s7-knit-2.jpg" alt="Fish-eye lens selfie of the player-character from the game Animal Crossing New Horizons. The character is wearing a knitted black hoodie with bright green letters that say 'S7'. The picture is taken in the Resident Services building." width="100%"></p>
-</div>
-<hr>
+<p><img src="resources/acnh-s7-knit-2.jpg" class="img-fluid" style="width:100.0%" alt="Fish-eye lens selfie of the player-character from the game Animal Crossing New Horizons. The character is wearing a knitted black hoodie with bright green letters that say 'S7'. The picture is taken in the Resident Services building."></p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
 <details>
 <summary>
 Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>─ Session info ───────────────────────────────────────────────────────────────
- setting  value
- version  R version 4.2.0 (2022-04-22)
- os       macOS Big Sur/Monterey 10.16
- system   x86_64, darwin17.0
- ui       X11
- language (EN)
- collate  en_US.UTF-8
- ctype    en_US.UTF-8
- tz       Europe/London
- date     2023-04-10
- pandoc   2.19.2 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)
+<pre><code>Last rendered: 2023-06-29 18:14:39 CEST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
 
-─ Packages ───────────────────────────────────────────────────────────────────
- package     * version    date (UTC) lib source
- cli           3.6.0      2023-01-09 [1] CRAN (R 4.2.0)
- digest        0.6.31     2022-12-11 [1] CRAN (R 4.2.0)
- emoji       * 15.0       2022-11-03 [1] CRAN (R 4.2.0)
- evaluate      0.20       2023-01-17 [1] CRAN (R 4.2.0)
- fastmap       1.1.0      2021-01-25 [1] CRAN (R 4.2.0)
- fontawesome   0.2.2      2021-07-02 [1] CRAN (R 4.2.0)
- glue          1.6.2      2022-02-24 [1] CRAN (R 4.2.0)
- htmltools     0.5.2      2021-08-25 [1] CRAN (R 4.2.0)
- htmlwidgets   1.5.4      2021-09-08 [1] CRAN (R 4.2.0)
- jsonlite      1.8.4      2022-12-06 [1] CRAN (R 4.2.0)
- knitr         1.42       2023-01-25 [1] CRAN (R 4.2.0)
- lifecycle     1.0.3      2022-10-07 [1] CRAN (R 4.2.0)
- magrittr      2.0.3      2022-03-30 [1] CRAN (R 4.2.0)
- rlang         1.0.6      2022-09-24 [1] CRAN (R 4.2.0)
- rmarkdown     2.14       2022-04-25 [1] CRAN (R 4.2.0)
- rstudioapi    0.14       2022-08-22 [1] CRAN (R 4.2.0)
- S7          * 0.0.0.9000 2023-02-23 [1] Github (RConsortium/OOP-WG@f2db260)
- sessioninfo   1.2.2      2021-12-06 [1] CRAN (R 4.2.0)
- stringi       1.7.8      2022-07-11 [1] CRAN (R 4.2.0)
- stringr       1.5.0      2022-12-02 [1] CRAN (R 4.2.0)
- xfun          0.37       2023-01-31 [1] CRAN (R 4.2.0)
- yaml          2.3.7      2023-01-23 [1] CRAN (R 4.2.0)
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
 
- [1] /Library/Frameworks/R.framework/Versions/4.2/Resources/library
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
-──────────────────────────────────────────────────────────────────────────────</code></pre>
+time zone: Europe/Zurich
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] emoji_15.0    S7_0.0.0.9000
+
+loaded via a namespace (and not attached):
+ [1] digest_0.6.31     fastmap_1.1.1     xfun_0.39         magrittr_2.0.3   
+ [5] glue_1.6.2        stringr_1.5.0     knitr_1.43.1      htmltools_0.5.5  
+ [9] rmarkdown_2.22    lifecycle_1.0.3   cli_3.6.1         compiler_4.3.1   
+[13] rstudioapi_0.14   tools_4.3.1       evaluate_0.21     yaml_2.3.7       
+[17] rlang_1.1.1       jsonlite_1.8.5    htmlwidgets_1.6.2 stringi_1.7.12   </code></pre>
 </div>
 </div>
 </details>
 
 
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>‘Useless’ is an extremely relative term with regard to this blog.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
@@ -544,7 +527,7 @@ Session info
 <li id="fn3"><p><a href="https://github.com/hadley/emo">{emo}</a> is dead, long live <a href="https://emilhvitfeldt.github.io/emoji/">{emoji}</a>. Haha, joke’s on you, emo will never die. I know this because ‘emo’ was in my top 5 genres on Spotify Wrapped 2022, lololol.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>Why <code>L</code>? <a href="https://stackoverflow.com/questions/22191324/clarification-of-l-in-r/22192378#22192378">Shrug</a>. Just take the L.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -572,9 +555,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -610,10 +607,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -623,8 +619,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -639,6 +644,147 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -679,6 +825,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

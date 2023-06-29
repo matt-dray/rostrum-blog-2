@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.4.176">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -19,9 +19,10 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -48,43 +49,13 @@ pre.numberSource code > span > a:first-child::before
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
     padding: 0 4px; width: 4em;
-    color: #aaaaaa;
   }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
 div.sourceCode
   {   }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -112,6 +83,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   "panel-placement": "end",
   "type": "overlay",
   "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -121,7 +95,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
     "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit"
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 
@@ -129,13 +104,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
     <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
     </a>
@@ -143,40 +118,42 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <span class="navbar-title">rostrum.blog (test)</span>
     </a>
   </div>
+            <div id="quarto-search" class="" title="Search"></div>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html"><i class="bi bi-question-circle-fill" role="img">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
 </i> 
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../index.xml"><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
 </i> 
  <span class="menu-text">RSS</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2"><i class="bi bi-github" role="img" aria-label="GitHub source code">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
 </i> 
  <span class="menu-text">Source</span></a>
   </li>  
 </ul>
-              <div id="quarto-search" class="" title="Search"></div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">I can’t be parsed, mate</h1>
                                 <div class="quarto-categories">
-                <div class="quarto-category">code</div>
-                <div class="quarto-category">tutorial</div>
+                <div class="quarto-category">lobstr</div>
+                <div class="quarto-category">r</div>
               </div>
                   </div>
   </div>
@@ -187,7 +164,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Matt Dray </p>
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
             </div>
     </div>
       
@@ -204,26 +181,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#at-an-imparse" id="toc-at-an-imparse" class="nav-link" data-scroll-target="#at-an-imparse">At an imparse</a></li>
+  <li><a href="#parsed-tense" id="toc-parsed-tense" class="nav-link" data-scroll-target="#parsed-tense">Parsed tense</a></li>
+  <li><a href="#parse-the-parcel" id="toc-parse-the-parcel" class="nav-link" data-scroll-target="#parse-the-parcel">Parse the parcel</a></li>
+  <li><a href="#parseltongue" id="toc-parseltongue" class="nav-link" data-scroll-target="#parseltongue">Parseltongue</a></li>
+  <li><a href="#lateral-parse" id="toc-lateral-parse" class="nav-link" data-scroll-target="#lateral-parse">Lateral parse</a></li>
+  <li><a href="#parse-away" id="toc-parse-away" class="nav-link" data-scroll-target="#parse-away">Parse away</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
-<div class="figure">
-<img src="resources/handegg.png" alt="An American football quarterback about to pass the ball. He has the R logo on his shirt. Text above says 'pass the ball', text below is R code reading 'parse(text = 'the('ball')')'. The format is a 'deep-fried', highly pixellated meme where the centre of the iumage bloats out. A wide-eyed, smiling and crying emoji is in the corner." width="100%">
-<p class="caption">
-Image by <a href="https://pixabay.com/users/keithjj-2328014/">Keith Johnston</a> from <a href="https://pixabay.com">Pixabay</a>. Deep fried by Matt Dray.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>
-</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/handegg.png" class="img-fluid figure-img" style="width:100.0%" alt="An American football quarterback about to pass the ball. He has the R logo on his shirt. Text above says 'pass the ball', text below is R code reading 'parse(text = 'the('ball')')'. The format is a 'deep-fried', highly pixellated meme where the centre of the iumage bloats out. A wide-eyed, smiling and crying emoji is in the corner."></p>
+<figcaption class="figure-caption">Image by <a href="https://pixabay.com/users/keithjj-2328014/">Keith Johnston</a> from <a href="https://pixabay.com">Pixabay</a>. Deep fried by Matt Dray.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></figcaption>
+</figure>
 </div>
-<section id="tldr" class="level1">
-<h1>tl;dr</h1>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
 <p>R is capable of reading R code. Obviously. You can use <code>getParseData(parse())</code> to see what’s going on. A very naive intro.</p>
 </section>
-<section id="at-an-imparse" class="level1">
-<h1>At an imparse</h1>
+<section id="at-an-imparse" class="level2">
+<h2 class="anchored" data-anchor-id="at-an-imparse">At an imparse</h2>
 <p>There’s many things that delight me about R coding.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> One meta thing I like is the idea that R has to recognise the code that you give it as… R code.</p>
 <p>For example, does <code>x&lt;-1</code> mean ‘x is less than minus-one’? Hm, actually R recognises <code>&lt;-</code> as a ‘left-assignment operator’—a special ‘token’—that gives the name <code>x</code> the value of <code>1</code>. Subtle, but important.</p>
 <p>Another example: the tokens <code>&lt;-</code> and <code>=</code> have an equivalent role in <code>x &lt;- 1</code> and <code>x = 1</code>. For style reasons, you’ll probably want to replace <code>=</code> with <code>&lt;-</code>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> But don’t just ‘find and replace’ because <code>=</code> is context dependent. Consider:</p>
@@ -233,8 +228,8 @@ Image by <a href="https://pixabay.com/users/keithjj-2328014/">Keith Johnston</a>
 <p>Here, <code>=</code> is used to assign (<code>=</code>), to set a function argument (<code>=</code>) and as part of the equivalence operator (<code>==</code>). Oof.</p>
 <p>How can a mere human understand this better?</p>
 </section>
-<section id="parsed-tense" class="level1">
-<h1>Parsed tense</h1>
+<section id="parsed-tense" class="level2">
+<h2 class="anchored" data-anchor-id="parsed-tense">Parsed tense</h2>
 <p>The cool (‘cool’) thing is that R gives you tools to be able to see the world as R sees it.</p>
 <p>This is sometimes called ‘static code analysis’, in that you can interrogate the code for syntax errors <em>before</em> it executes. Packages like <a href="https://lintr.r-lib.org/">{lintr}</a> can even help tidy up (‘lint’) your code by adjusting or replacing the tokens.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <p>I’ve used this approach before to:</p>
@@ -245,8 +240,8 @@ Image by <a href="https://pixabay.com/users/keithjj-2328014/">Keith Johnston</a>
 </ul>
 <p>How might you tinker about with this yourself? Read on for a quickstart.</p>
 </section>
-<section id="parse-the-parcel" class="level1">
-<h1>Parse the parcel</h1>
+<section id="parse-the-parcel" class="level2">
+<h2 class="anchored" data-anchor-id="parse-the-parcel">Parse the parcel</h2>
 <p>I’ll talk about two main functions: <code>parse()</code> and <code>getParseData()</code>, which are both part of base R.</p>
 <p>You can pass a string of R code to <code>parse()</code> for it to be recognised as an ‘expression’. Let’s use the equals-rich <code>subset()</code> example from above.</p>
 <div class="cell">
@@ -296,8 +291,8 @@ Maserati Bora  15   8  301 335 3.54 3.57 14.6  0  1    5    8</code></pre>
 <p>Oh neato, so you can see <code>=</code> is indeed recognised as the token <code>EQ_ASSIGN</code> (‘equals assign’), <code>=</code> as <code>EQ_SUB</code> (equals in the context of supplying function arguments) and <code>==</code> as in <code>EQ</code> (the equivalence operator).</p>
 <p>If you’re wondering, the <code>keep.source = TRUE</code> bit was needed to encourage <code>parse()</code> to return its output, which is a necessary step within this non-interactive blog post.</p>
 </section>
-<section id="parseltongue" class="level1">
-<h1>Parseltongue</h1>
+<section id="parseltongue" class="level2">
+<h2 class="anchored" data-anchor-id="parseltongue">Parseltongue</h2>
 <p>Want to take a look at the tokens in a given string of R code yourself? You can use this little function that contains <code>parse()</code> and <code>getParseData()</code> and returns you the simplified dataframe I showed above if <code>simplify = TRUE</code>, otherwise it gives the full read out.<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>parse_out <span class="ot">&lt;-</span> <span class="cf">function</span>(string, <span class="at">simplify =</span> <span class="cn">TRUE</span>) {</span>
@@ -337,12 +332,12 @@ Maserati Bora  15   8  301 335 3.54 3.57 14.6  0  1    5    8</code></pre>
 </div>
 </div>
 <div class="tip">
-<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zm-248 50c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"></path></svg> <b>Update</b></p>
+<p>ℹ️ <b>Update</b></p>
 <p>Since I wrote this post, it’s become possible to <a href="https://github.com/coatless/quarto-webr">include editable R blocks in a rendered Quarto document</a>, which can be run in the browser thanks to <a href="https://docs.r-wasm.org/webr/latest/">WebR</a>(!). <a href="https://webr-parse-test.netlify.app/">I’ve made a quick demo</a> and <a href="https://www.rostrum.blog/2023/03/16/webr-quarto/">post</a> so you can play around with a simplified version of the parsing function above.</p>
 </div>
 </section>
-<section id="lateral-parse" class="level1">
-<h1>Lateral parse</h1>
+<section id="lateral-parse" class="level2">
+<h2 class="anchored" data-anchor-id="lateral-parse">Lateral parse</h2>
 <p>I’ll leave you with another interesting thing that shows you the inner workings of R, which you might not realise as you run your code. We can look at how the code is actually executed, not just the tokens that it’s composed of.</p>
 <p>Consider how the {magrittr} pipe <code>%&gt;%</code> is used. Here I’ve slightly adjusted the input to filter for 6 and 8 <code>carb</code>uretors; you’ll see why in a second.</p>
 <div class="cell">
@@ -401,62 +396,55 @@ Maserati Bora  15   8  301 335 3.54 3.57 14.6  0  1    5    8</code></pre>
 </div>
 <p>Surprise! <code>mtcars |&gt; head</code> is not executed like <code>`|&gt;`(mtcars, head)</code>. It’s literally executed like <code>head(mtcars)</code>. The base pipe is so special because it’s baked right into the R source code as a separate type of token that is recognised to have a job distinct from a basic <code>SPECIAL</code>. This should make it a little faster to run compared to <code>%&gt;%</code> as well.</p>
 </section>
-<section id="parse-away" class="level1">
-<h1>Parse away</h1>
+<section id="parse-away" class="level2">
+<h2 class="anchored" data-anchor-id="parse-away">Parse away</h2>
 <p>Well, ‘cool’ I guess. Now it’s up to you: you can either parse on this knowledge, or leave it in the parsed.<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a></p>
-<hr>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
 <details>
 <summary>
 Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>─ Session info ───────────────────────────────────────────────────────────────
- setting  value
- version  R version 4.2.0 (2022-04-22)
- os       macOS Big Sur/Monterey 10.16
- system   x86_64, darwin17.0
- ui       X11
- language (EN)
- collate  en_US.UTF-8
- ctype    en_US.UTF-8
- tz       Europe/London
- date     2023-04-10
- pandoc   2.19.2 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)
+<pre><code>Last rendered: 2023-06-29 18:17:50 CEST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
 
-─ Packages ───────────────────────────────────────────────────────────────────
- package     * version date (UTC) lib source
- cli           3.6.0   2023-01-09 [1] CRAN (R 4.2.0)
- crayon        1.5.2   2022-09-29 [1] CRAN (R 4.2.0)
- digest        0.6.31  2022-12-11 [1] CRAN (R 4.2.0)
- evaluate      0.20    2023-01-17 [1] CRAN (R 4.2.0)
- fastmap       1.1.0   2021-01-25 [1] CRAN (R 4.2.0)
- fontawesome   0.2.2   2021-07-02 [1] CRAN (R 4.2.0)
- htmltools     0.5.2   2021-08-25 [1] CRAN (R 4.2.0)
- htmlwidgets   1.5.4   2021-09-08 [1] CRAN (R 4.2.0)
- jsonlite      1.8.4   2022-12-06 [1] CRAN (R 4.2.0)
- knitr         1.42    2023-01-25 [1] CRAN (R 4.2.0)
- lobstr      * 1.1.2   2022-06-22 [1] CRAN (R 4.2.0)
- magrittr    * 2.0.3   2022-03-30 [1] CRAN (R 4.2.0)
- rlang         1.0.6   2022-09-24 [1] CRAN (R 4.2.0)
- rmarkdown     2.14    2022-04-25 [1] CRAN (R 4.2.0)
- rstudioapi    0.14    2022-08-22 [1] CRAN (R 4.2.0)
- sessioninfo   1.2.2   2021-12-06 [1] CRAN (R 4.2.0)
- xfun          0.37    2023-01-31 [1] CRAN (R 4.2.0)
- yaml          2.3.7   2023-01-23 [1] CRAN (R 4.2.0)
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
 
- [1] /Library/Frameworks/R.framework/Versions/4.2/Resources/library
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
-──────────────────────────────────────────────────────────────────────────────</code></pre>
+time zone: Europe/Zurich
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] magrittr_2.0.3 lobstr_1.1.2  
+
+loaded via a namespace (and not attached):
+ [1] digest_0.6.31     fastmap_1.1.1     xfun_0.39         knitr_1.43.1     
+ [5] htmltools_0.5.5   rmarkdown_2.22    cli_3.6.1         compiler_4.3.1   
+ [9] rstudioapi_0.14   tools_4.3.1       evaluate_0.21     yaml_2.3.7       
+[13] rlang_1.1.1       jsonlite_1.8.5    crayon_1.5.2      htmlwidgets_1.6.2</code></pre>
 </div>
 </div>
 </details>
 
 
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>You too <a href="https://www.rostrum.blog/2021/11/07/deepfry/">can use R to deep fry a meme</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
@@ -469,7 +457,7 @@ Session info
 <li id="fn8"><p>A package with one of my favourite names and <a href="https://lobstr.r-lib.org/logo.png">hex logos</a>. The ‘str’ is from ‘structure’, as in ‘the structure of code’. The logo is a lobster snipping apart the ‘lob’ from ‘str’ text. I mean, *(lobster) chef’s kiss* on that one. 🦞<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn9"><p>Yeah, I’m hoping you didn’t read this far. Obviously I didn’t know how to end the post, sorry.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div quarto-reuse="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -497,9 +485,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -535,10 +537,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -548,8 +549,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -564,6 +574,147 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
@@ -604,6 +755,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 
