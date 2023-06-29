@@ -7090,5 +7090,864 @@ loaded via a namespace (and not attached):
   <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-01-03-r.oguelike-sfx/index.html</guid>
   <pubDate>Tue, 03 Jan 2023 23:00:00 GMT</pubDate>
 </item>
+<item>
+  <title>Animate sprites in R with {pixeltrix}</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://whimsical-wisp-30974e.netlify.app/posts/2022-12-10-pixeltrix-animate/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-12-10-pixeltrix-animate/resources/mario.gif" class="img-fluid" style="width:32.0%" alt="The walk cycle of the Mario sprite from the original Super Mario Bros game"> <img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-12-10-pixeltrix-animate/resources/mario.gif" class="img-fluid" style="width:32.0%"> <img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-12-10-pixeltrix-animate/resources/mario.gif" class="img-fluid" style="width:32.0%"></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I’ve updated <a href="https://github.com/matt-dray/pixeltrix">the {pixeltrix} package</a> so you can create animated sprite gifs with a simple, interactive pixel editor from within R’s plot window.</p>
+</section>
+<section id="pix-all-the-right-boxes" class="level2">
+<h2 class="anchored" data-anchor-id="pix-all-the-right-boxes">Pix all the right boxes</h2>
+<p>The {pixeltrix} package—which I’ve <a href="https://www.rostrum.blog/2022/09/24/pixeltrix/">written about before</a>—lets you open an interactive R plot that you can click to turn ‘pixels’ on and off.</p>
+<p>I created it for one purpose: to quickly create simple, blocky sprites for <a href="https://github.com/matt-dray/tamRgo">my {tamRgo} package</a>, which lets you keep a persistent cyberpet on your computer (<a href="https://www.rostrum.blog/2022/11/13/tamrgo/">yes, really</a>).</p>
+<p>But wouldn’t it be nice if {pixeltrix} were more… general? Read on for a couple of improvements to the package that might help.</p>
+<div class="tip">
+<p>ℹ️ <b>Update</b></p>
+<p>The package has been updated again since this post. From version 0.2 you:</p>
+<ul>
+<li>can provide colours as input to <code>click_pixels()</code> and <code>frame_pixels()</code></li>
+<li>receive a <code>colours</code> attribute with the output matrices, which encodes the state and colour values</li>
+</ul>
+</div>
+</section>
+<section id="pixellate-to-accumulate" class="level2">
+<h2 class="anchored" data-anchor-id="pixellate-to-accumulate">Pixellate to accumulate</h2>
+<p>First, you can <a href="https://github.com/matt-dray/pixeltrix">install the updated package from GitHub</a>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">remotes<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"matt-dray/pixeltrix"</span>)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># v0.1.2 in this post</span></span>
+<span id="cb1-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(pixeltrix)</span></code></pre></div>
+</div>
+<p>Now the improvements: plotting with colour, and creating gif animations.</p>
+<section id="plot" class="level3">
+<h3 class="anchored" data-anchor-id="plot">1. Plot</h3>
+<p>The <code>click_pixel()</code> function opens an interactive plot. If <code>n_state = 3</code>, for example, then each pixel will cycle through three states as you keep clicking it. You’re returned a matrix of these values when you hit <kbd>Esc</kbd>.</p>
+<p>That was enough for {tamRgo}: I turned a binary matrix into a 1-bit sprite. But wouldn’t it be good—fundamental!—to be able to plot the matrix as an image with user-specified colours? So I made <code>draw_pixels()</code>.</p>
+<p>I’ve added a three-state matrix, <code>blue</code>, into the package as an example dataset. Let’s plot it with simple colours:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">draw_pixels</span>(</span>
+<span id="cb2-2">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">m =</span> pixeltrix<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span>blue, </span>
+<span id="cb2-3">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">colours =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"white"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#879afb"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gray20"</span>)</span>
+<span id="cb2-4">)</span></code></pre></div>
+</div>
+<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-12-10-pixeltrix-animate/resources/blue_draw.png" class="img-fluid" style="width:33.0%" alt="A 14 by 16 pixel grid with a sprite of the main character from the first generation of Pokemon games for the Game Boy. The background is white, the outlines are dark grey and the highlights are light blue."></p>
+<p>Of course, it’s the subtly-coloured player character from <em>Pokémon Blue</em> (1996) as seen on the Nintendo Game Boy Color.</p>
+</section>
+<section id="animate" class="level3">
+<h3 class="anchored" data-anchor-id="animate">2. Animate</h3>
+<p>Naturally, you could use <code>click_pixels()</code> and <code>draw_pixels()</code> to generate several images and combine them as ‘frames’ of an animation. Why not have a function that does this automatically?</p>
+<p>So that’s what I did:</p>
+<ul>
+<li><code>frame_pixels()</code> calls <code>click_pixels()</code> and adds the output as the first element of a list, then it passes that matrix into <code>edit_pixels()</code> as the template for the next frame (and so on until you choose to stop making frames)</li>
+<li><code>gif_pixels()</code> takes the list of matrices created by <code>frame_pixels()</code> and draws, combines and writes them to a gif</li>
+</ul>
+<p>I’ve prepared <code>pixeltrix::mario</code> as an example of an output from <code>frame_pixels()</code>. It contains each of three frames that comprise Mario’s walk cycle from <em>Super Mario Bros</em> on the NES.</p>
+<p>Here’s what the console output looked like when I made <code>mario</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">mario <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">frame_pixels</span>(</span>
+<span id="cb3-2">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n_rows   =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>,</span>
+<span id="cb3-3">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n_cols   =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>,</span>
+<span id="cb3-4">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n_states =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># background + 3 colours</span></span>
+<span id="cb3-5">)</span></code></pre></div>
+</div>
+<pre><code>Click squares in the plot window. Press &lt;Esc&gt; to end.
+Add a frame? y/n: y
+Click squares in the plot window. Press &lt;Esc&gt; to end.
+Current frame count: 2
+Add a frame? y/n: y
+Click squares in the plot window. Press &lt;Esc&gt; to end.
+Current frame count: 3
+Add a frame? y/n: n
+Final frame count: 3</code></pre>
+<p>You can see there’s interactivity; the user is prompted to add another frame with <code>Add a frame? y/n:</code>, where <code>y</code> will let you create a new frame and <code>n</code> will stop the process and return the list of matrices.</p>
+<p>And so you can see it’s a list of three matrices:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">str</span>(mario)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 3
+ $ : int [1:16, 1:16] 0 0 0 0 0 0 0 0 1 1 ...
+ $ : int [1:16, 1:16] 0 0 0 0 0 0 0 0 0 0 ...
+ $ : int [1:16, 1:16] 0 0 0 0 0 0 0 0 0 0 ...</code></pre>
+</div>
+</div>
+<p>You can then convert the list to a gif with <code>gif_pixels()</code>, which engifs the frames using <a href="https://cloud.r-project.org/web/packages/gifski/index.html">{gifski}</a>.<sup>1</sup></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">gif_pixels</span>(</span>
+<span id="cb7-2">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">frames =</span> mario,</span>
+<span id="cb7-3">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">colours =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(</span>
+<span id="cb7-4">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"white"</span>,    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># background</span></span>
+<span id="cb7-5">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#FDA428"</span>,  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># skin (yellowish)</span></span>
+<span id="cb7-6">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#FC0D1B"</span>,  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># overalls/hat (red)</span></span>
+<span id="cb7-7">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#A32B2E"</span>   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># hair, eyes, shirt, boots (brown)</span></span>
+<span id="cb7-8">  ),</span>
+<span id="cb7-9">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">file =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"mario.gif"</span>,</span>
+<span id="cb7-10">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">delay =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.15</span>  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># passed via dots to gifski::save_gif()</span></span>
+<span id="cb7-11">)</span></code></pre></div>
+</div>
+<pre><code>Inserting image 3 at 0.30s (100%)...
+Encoding to gif... done!
+[1] "mario.gif"</code></pre>
+<p>And if we open that file:</p>
+<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-12-10-pixeltrix-animate/resources/mario.gif" class="img-fluid" style="width:33.0%" alt="An animated 16 by 16 pixel grid with a coloured sprite of Mario from the original Super Mario Bros for the NES. There are three frames that each show a step in Mario's walk cycle."></p>
+<p>Yahoooooo, created entirely with R. Noice.</p>
+</section>
+<section id="pix-n-mix" class="level3">
+<h3 class="anchored" data-anchor-id="pix-n-mix">Pix n mix</h3>
+<p>So {pixeltrix} finally got a couple of nice-to-have (well, must-have) functions. This is enough for me to continue just messing around with it as a novelty<sup>2</sup>.</p>
+<p>I mean, come on: animated pixelart created in an interactive R plot window? Why? I mean, er… wow!</p>
+</section>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-06-29 19:00:47 CEST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/Zurich
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] pixeltrix_0.2.1.9000
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.14   yaml_2.3.7       
+ [9] rmarkdown_2.22    knitr_1.43.1      jsonlite_1.8.5    xfun_0.39        
+[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>The {pixeltrix} package has no dependencies and I didn’t want to force a user to install {gifski} if they weren’t going to use <code>gif_pixels()</code>. It’s therefore up to the user to install it. <a href="https://github.com/matt-dray/pixeltrix/issues/15">I also wonder</a> if I should provide an argument for the user to name a ‘gif engine’ of choice, e.g.&nbsp;{gifski} or {magick}, depending on what they’ve got installed on their machine.↩︎</p></li>
+<li id="fn2"><p>It’s never, ever going to have the features and quality of a premium pixel-art program like <a href="https://www.aseprite.org/">Aseprite</a>, obviously.↩︎</p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>art</category>
+  <category>gifski</category>
+  <category>locator</category>
+  <category>pixeltrix</category>
+  <category>r</category>
+  <category>videogames</category>
+  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2022-12-10-pixeltrix-animate/index.html</guid>
+  <pubDate>Sat, 10 Dec 2022 23:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Tamagotchi in R?</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://whimsical-wisp-30974e.netlify.app/posts/2022-10-29-tamRgo/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-10-29-tamRgo/resources/tamRgo_hex.png" class="img-fluid figure-img" style="width:50.0%" alt="Six pixellated characters showing a progression from a small blob creature, through to a larger hat-wearing creature, through to a tombstone."></p>
+<figcaption class="figure-caption">Hex logo: evolution line of a {tamRgo} digital pet (species Y, ‘hat guy’).</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I’ve written <a href="https://github.com/matt-dray/tamRgo">the concept R package {tamRgo}</a> to simulate a persistent digital pet in your R console and I think it’s pretty neat.</p>
+</section>
+<section id="had-an-oeuf" class="level2">
+<h2 class="anchored" data-anchor-id="had-an-oeuf">Had an oeuf?</h2>
+<p>R is a game engine<sup>1</sup>. Don’t @ me<sup>2</sup>.</p>
+<p><a href="https://r-pkgs.org/data.html#sec-data-persistent">Turns out that R can keep a ‘save state’</a>: developers can write a persistent file to the platform-independent path on a user’s machine resolved by <a href="https://rdrr.io/r/tools/userdir.html"><code>tools::R_user_dir()</code></a><sup>3</sup>.</p>
+<p>Of course, I’ve used this to make a concept R package. <a href="https://github.com/matt-dray/tamRgo">{tamRgo}</a> saves locally a ‘blueprint’ for a <a href="https://en.wikipedia.org/wiki/Tamagotchi"><em>Tamgotchi</em></a>-like digital pet<sup>4</sup>, which is read and updated when you interact with it in the R console.</p>
+<p><em>Tamago</em> (egg) + <em>uotchi</em> (‘watch’) = <em>Tamagotchi</em>. <em>Tamago</em> + R = {tamRgo}.</p>
+</section>
+<section id="nuovo-uovo" class="level2">
+<h2 class="anchored" data-anchor-id="nuovo-uovo">Nuovo uovo</h2>
+<section id="install" class="level3">
+<h3 class="anchored" data-anchor-id="install">Install</h3>
+<p>Use {remotes} to install the package <a href="https://github.com/matt-dray/tamRgo">from GitHub</a>. There’s also <a href="https://matt-dray.github.io/tamRgo/">an accompanying documentation website</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># install.packages("tamRgo")  # if not yet installed</span></span>
+<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"matt-dray/tamRgo"</span>)</span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(tamRgo)</span></code></pre></div>
+</div>
+<pre><code>Welcome to {tamRgo}, a digital pet in the R console!
+ - Docs: &lt;https://matt-dray.github.io/tamRgo&gt;
+ - New pet: lay_egg()
+ - Then: get_stats(), see_pet(), play(), feed(), clean()</code></pre>
+<p>It has no package dependencies, but you’ll need to be running a version of R greater than 4.0.</p>
+<p>Of course, it’s just a toy to demonstrate a concept. I’ve built out a bit of a ‘game loop’, but it’s just for fun and the code is not optimised. Bugs guaranteed, so <a href="https://github.com/matt-dray/tamRgo/issues">suggestions and code contributions are always welcome</a>.</p>
+</section>
+<section id="new-pet" class="level3">
+<h3 class="anchored" data-anchor-id="new-pet">New pet</h3>
+<p>To begin, you’ll need to generate you new cyberpet<sup>5</sup> by laying an egg. You’ll be asked to confirm it’s okay to save a blueprint file onto your computer, which is just a small list object stored as an RDS file.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lay_egg</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pet_name =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"KEVIN"</span>)</span></code></pre></div>
+</div>
+<pre><code>Save pet blueprint? y/n: y
+Saved pet blueprint.
+You have a new egg... it hatched!
+You can get_stats(), see_pet(), play(), feed(), clean().</code></pre>
+<p>The blueprint will be saved at the location resolved by <code>tools::R_user_dir("tamRgo", "data")</code>. You can always <code>release()</code> your pet into the wild, which will delete the blueprint file.</p>
+<p>So, you have a new pet. Now what? The hint suggests to check the stats, so let’s do that.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_stats</span>()</span></code></pre></div>
+</div>
+<pre><code>Characteristics
+ Name:    KEVIN
+ Species: Z
+ Age:     0
+ Level:   0 (newborn)
+ Alive:   TRUE
+Status
+ Happy:   ■■■□□  
+ Hungry:  ■■■□□  
+ Dirty:   □□□□□  </code></pre>
+<p>You can see some characteristics: the name you provided, the pet’s species (X, Y or Z) and their age (days since ‘birth’). You can see the pet’s level (whatever that means) and whether they are currently alive. There’s also status values, which are followed by five-point gauges, some of which are filled.</p>
+<p>Let’s quickly check what our pet looks like with <code>see_pet()</code>. Its appearance depends on the species and the level; newborns are pretty much a blob, but your pet will grow and develop as it levels.</p>
+<p>The rendering of the sprite, which is built with <a href="https://en.wikipedia.org/wiki/Block_Elements">unicode block elements</a>, will depend on the settings in your console. Your browser may also bork the the sprites as they appear in this post. See the package’s hex logo at the top of the page to get truer examples of the intended designs.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">see_pet</span>()</span></code></pre></div>
+</div>
+<pre><code>░░░░░░░
+░░███░░
+░█░█░█░
+░█████░
+░██░██░
+░░███░░
+░░░░░░░</code></pre>
+<p>Congratulations! KEVIN is a beautiful little chap.</p>
+</section>
+<section id="feed" class="level3">
+<h3 class="anchored" data-anchor-id="feed">Feed</h3>
+<p>Having just been born, KEVIN is a bit peckish. You can tell because the ‘Hungry’ gauge is partially filled. Let’s lower the value by using <code>feed()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">feed</span>()</span></code></pre></div>
+</div>
+<pre><code>'Hungry' status value is now 2/5</code></pre>
+<p>See how the ‘Hungry’ counter decreased by 1 to 2?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_stats</span>()</span></code></pre></div>
+</div>
+<pre><code>Characteristics
+  Name:    KEVIN
+  Species: Z
+  Age:     0
+  Level:   0 (newborn)
+  Alive:   TRUE
+Status
+  Happy:   ■■■□□  
+  Hungry:  ■■□□□  
+  Dirty:   □□□□□  </code></pre>
+</section>
+<section id="play" class="level3">
+<h3 class="anchored" data-anchor-id="play">Play</h3>
+<p>You can increase the ‘Happy’ value, which is currently 0, with <code>play()</code>. This begins a game of ‘higher or lower’ with user input. Yes, it’s not much of a skill-based game, but there’s a rumour that it’s easier under some circumstances and that a higher score is better for your pet’s wellbeing.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">play</span>()</span></code></pre></div>
+</div>
+<pre><code>Higher or lower than 4? Type h or l: h
+Wrong! It was 1. Score: 0/5.
+Higher or lower than 1? Type h or l: h
+Correct! It was 8. Score: 1/5.
+Higher or lower than 4? Type h or l: h
+Correct! It was 6. Score: 2/5.
+Higher or lower than 6? Type h or l: l
+Correct! It was 5. Score: 3/5.
+Higher or lower than 7? Type h or l: l
+Wrong! It was 10. Score: 3/5.
+Result: you scored 3/5!
+'Happy' status value is now 4/5</code></pre>
+</section>
+<section id="clean" class="level3">
+<h3 class="anchored" data-anchor-id="clean">Clean</h3>
+<p>After some time, your pet will become ‘dirty’, represented by a small pile of filth underneath their sprite.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">see_pet</span>()</span></code></pre></div>
+</div>
+<pre><code>░░░░░░░
+░░███░░
+░█░█░█░
+░█████░
+░██░██░
+░░███░░
+░░░░░░░
+░░░░░░░
+░░░█░░░
+░░███░░  
+░█████░ 
+░░░░░░░</code></pre>
+<p>Which is almost as big as KEVIN himself, wow. You’ll just need to <code>clean()</code> it away.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">clean</span>()</span></code></pre></div>
+</div>
+<pre><code>'Dirty' status value is now 0/5</code></pre>
+</section>
+<section id="persistence" class="level3">
+<h3 class="anchored" data-anchor-id="persistence">Persistence</h3>
+<p>Perhaps the most important thing to know is that you can end your R session and come back later and your pet will still be available. In fact, it will continue to live and grow on your computer while you’re away.</p>
+<p>Maybe you come back five days later. Here’s what you might see if you check your pet’s stats from any R session on your computer.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_stats</span>()</span></code></pre></div>
+</div>
+<pre><code>Characteristics
+  Name:    KEVIN
+  Species: Z
+  Age:     5
+  Level:   2 (youngling)
+  Alive:   TRUE
+Status
+  Happy:   □□□□□ !
+  Hungry:  ■■■■■ !
+  Dirty:   ■■■■■ !</code></pre>
+<p>Aha, so KEVIN’s age and level have increased since you’ve been away, even though you haven’t interacted with him for a while. But uh-oh, looks like his status values are at their worst.</p>
+<p>Pay attention to these status values. Look after your pet! Apparently there’s a chance it might become… ‘unalive’. Rumour has it that good owners have longer-living pets…</p>
+<p>Anyway, let’s quickly check KEVIN’s appearance now he’s level 2.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">see_pet</span>()</span></code></pre></div>
+</div>
+<pre><code>░░░░░░░░░░
+░░█░░░░█░░
+░░░█░░█░░░
+░░██████░░
+░░█░██░█░░
+░░██████░░
+░███░░███░
+░░██████░░
+░░█░░░░█░░
+░░░░░░░░░░
+░░░░░░░
+░░░█░░░
+░░███░░  
+░█████░ 
+░░░░░░░
+░░░░░░░
+░░░█░░░
+░░███░░  
+░█████░ 
+░░░░░░░
+░░░░░░░
+░░░█░░░
+░░███░░  
+░█████░ 
+░░░░░░░
+░░░░░░░
+░░░█░░░
+░░███░░  
+░█████░ 
+░░░░░░░
+░░░░░░░
+░░░█░░░
+░░███░░  
+░█████░ 
+░░░░░░░</code></pre>
+<p>Erm, well, cool antennae, bro. Totally distracts from the mess. Might need to <code>clean()</code> him.</p>
+</section>
+</section>
+<section id="under-the-shell" class="level2">
+<h2 class="anchored" data-anchor-id="under-the-shell">Under the shell</h2>
+<p>The underlying logic is pretty simple. I don’t want to give away too many spoilers, but it’s worth explaining some of the main components a bit.</p>
+<section id="blueprint" class="level3">
+<h3 class="anchored" data-anchor-id="blueprint">Blueprint</h3>
+<p>The whole system is dependent on a ‘blueprint’ file, which is what gets stored at the <code>tools::R_user_dir()</code> location. It’s a list object with elements like the pet’s name, species (randomly generated), ‘date of birth’, accumulated XP, status values (happy, hungry, dirty) and some other things.</p>
+<p>The blueprint is read and updated whenever you use a function from {tamRgo}. The current datetime is compared to the datetime of last interaction (stored in the blueprint) and the difference is used to calculate things like the pet’s age, XP accumulation and level and status values.</p>
+<p>This gives the impression that the pet has been ‘alive’ on the player’s machine while they’ve been away. A trick<sup>6</sup>!</p>
+</section>
+<section id="experience" class="level3">
+<h3 class="anchored" data-anchor-id="experience">Experience</h3>
+<p>The main goal is to accumulate XP and keep your pet alive. XP:</p>
+<ul>
+<li>is accumulated passively every hour</li>
+<li>is gained from the minigame in <code>play()</code>, where a higher score means more XP</li>
+<li>will result in the pet levelling up when certain thresholds have been met, which alters their appearance</li>
+</ul>
+<p>At a certain point, the pet will become ‘unalive’<sup>7</sup>. The chance of this happening is based on the pet’s accumulated XP. Basically:</p>
+<ul>
+<li>XP is ‘frozen’ at a certain age and the value is stored in the blueprint</li>
+<li>the chance of becoming unalive is tied to the frozen XP value, where more XP means a lower chance</li>
+<li>the number of days since the XP was frozen is used as a multiplier, so the chance of becoming unalive increases with time</li>
+</ul>
+<p>The current XP count is stored in the blueprint, but is hidden from the user. This moves focus away from tracking and improving a single number and hopefully towards a more general goal of keeping your pet happy, well-fed and clean.</p>
+</section>
+<section id="sprites" class="level3">
+<h3 class="anchored" data-anchor-id="sprites">Sprites</h3>
+<p>There are character ‘sprites’ that change with age and species (see the image at the top of this post). The sprite for a newborn, mature and unalive pet are the same regardless of species, but the other levels are dependent on whether the pet is species X, Y or Z. Of course, these are pixellated to mimic <a href="https://static.wikia.nocookie.net/tamagotchi/images/5/52/Tama_diagram.png/revision/latest?cb=20191126143322">the original <em>Tamagotchi</em> style</a>.</p>
+<p>The sprites are called by <code>see_pet()</code> as binary matrices of filled and unfilled ‘pixels’. I wrote the package <a href="https://github.com/matt-dray/pixeltrix">{pixeltrix}</a>, which I wrote about in <a href="https://www.rostrum.blog/2022/09/24/pixeltrix/">my last blog post</a> for a simple interactive way to design sprites by turning pixels ‘on’ and ‘off’ in a plotting window. Here’s a preview of a totally original little cyberfriend being incepted.</p>
+<div class="figure">
+<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-10-29-tamRgo/resources/pixeltrix.gif" alt="Gif of RStudio window. The console is running the code pixeltrix::click_pixels(6, 7, 3) and a plot appears with a 6 by 7 square grid. Some squares are clicked, changing them to light grey. A second click turns them dark grey. Eventually a little square character with a face is created. A matrix encoded the image is shown in the console when the escape key is pressed." width="100%"></p>
+</div>
+</section>
+</section>
+<section id="practical-yolk" class="level2">
+<h2 class="anchored" data-anchor-id="practical-yolk">Practical yolk</h2>
+<p>The package is not feature complete, lol<sup>8</sup>. To improve it, I <em>could</em> maybe<sup>9</sup>:</p>
+<ul>
+<li>animate the pixel graphics</li>
+<li>allow blueprints to be transferred between machines, so your pet can live across multiple devices<sup>10</sup></li>
+<li>add a battle system like <em>Digimon</em></li>
+<li>make the <code>play()</code> minigame actually fun and so it grants more XP for greater skill</li>
+<li>make more meaningful use of ‘hungry’ and ‘dirty’ statuses, perhaps include a hidden HP gauge that is reduced when these statuses are at their maximum for an extended period</li>
+</ul>
+<p>The main point of this toy was for me to work out how to store data on a user’s machine. Should you actually do that? It depends. Can you use it in a silly R package for purposes of fun? Well, yes, if you ask me.</p>
+<p>You can probably think of other ways to use <code>tools::R_user_dir()</code> for games in R, particularly for save states. Let me know when you’ve made a new triple-A game for R and I’ll add it to <a href="https://github.com/matt-dray/awesome-r-games">the list</a>.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-06-29 18:54:13 CEST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/Zurich
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] tamRgo_0.1.0
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.14   yaml_2.3.7       
+ [9] rmarkdown_2.22    knitr_1.43.1      jsonlite_1.8.5    xfun_0.39        
+[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Oh, wait, I have to explain myself? Look no further than <a href="https://www.youtube.com/watch?v=LPotWAJnE_s">Mike Cheng’s rstudio::conf22 talk</a> or the <a href="https://github.com/matt-dray/awesome-r-games">awesome-r-games list</a>. I’ve written toys like <a href="https://github.com/matt-dray/ActionSquirrel">{ActionSquirrel}</a>, <a href="https://github.com/matt-dray/safar6">{safar6}</a>, <a href="https://github.com/matt-dray/potato">{potato}</a> and <a href="https://github.com/matt-dray/r.oguelike">{r.oguelike}</a>.↩︎</p></li>
+<li id="fn2"><p>If you do try and @ me, then you can now do it over at <a href="https://fosstodon.org/@mattdray"><span class="citation" data-cites="mattdray">@mattdray</span><span class="citation" data-cites="fosstodon.org">@fosstodon.org</span></a>.↩︎</p></li>
+<li id="fn3"><p>You may be familiar with <a href="https://rappdirs.r-lib.org/">{rappdirs}</a>, a package that helps you find directories. <code>tools::R_user_dir()</code> is nice because it’s built into R, so no dependency is required.↩︎</p></li>
+<li id="fn4"><p>For the benefit of youths, <a href="https://en.wikipedia.org/wiki/Tamagotchi">a <em>Tamagotchi</em></a> was (is!) a little physical device that contains a ‘digital pet’, made popular in the late 90s. They have a little screen and physical buttons so you can see your pet and interact with it. Play with it, feed it, even reprimand it.↩︎</p></li>
+<li id="fn5"><p>There are few terms that evoke the same wave of late-90s nostalgia.↩︎</p></li>
+<li id="fn6"><p><em>Illusions, Michael.</em>↩︎</p></li>
+<li id="fn7"><p>A euphemism to protect the sensitive.↩︎</p></li>
+<li id="fn8"><p>Meanwhile, VS Code users can check out <a href="https://tonybaloney.github.io/vscode-pets/">Anthony Shaw’s <em>VS Code Pets</em></a> to have a little cat or dog (or Clippy!) in their IDE. There’s also a lot of digital-pet implementations on various blogs and YouTube, but it was <a href="https://youtu.be/KUjVfoLtHwc">SquidGodDev’s <em>Pocket Pets</em> for the Playdate</a> that really egged me on.↩︎</p></li>
+<li id="fn9"><p>Hahaha, as if I’d finish a side project.↩︎</p></li>
+<li id="fn10"><p>In fact, my initial approach to {tamRgo} was to store blueprints remotely in <a href="https://gist.github.com/">GitHub gists</a>. The plus-side is that this could (in theory) let you battle other pets by reading their blueprints from a URL. The downside is the overhead of requiring a GitHub account and API access. If you want, you can <a href="https://github.com/matt-dray/tamRgo/tree/65301b8f362ec047555217611d13af79e4f00020">peruse the {tamRgo} GitHub repo</a> just before I moved from Gist-based to local blueprints.↩︎</p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>r</category>
+  <category>tamRgo</category>
+  <category>videogames</category>
+  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2022-10-29-tamRgo/index.html</guid>
+  <pubDate>Sat, 12 Nov 2022 23:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Interactive pixel art in R with {pixeltrix}</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://whimsical-wisp-30974e.netlify.app/posts/2022-09-24-pixeltrix/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-09-24-pixeltrix/resources/pixeltrix.gif" class="img-fluid" style="width:100.0%" alt="Gif of RStudio window. The console is running the code pixeltrix::click_pixels(6, 7, 3) and a plot appears with a 6 by 7 square grid. Some squares are clicked, changing them to light grey. A second click turns them dark grey. Eventually a little square character with a face is created. A matrix encoded the image is shown in the console when the escape key is pressed."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I’ve written <a href="https://github.com/matt-dray/pixeltrix">{pixeltrix}</a>, an R package that lets you select ‘pixels’ interactively from a plot window and returns your final image as a matrix. You could use it to design sprites, for example.</p>
+</section>
+<section id="pixel-perfect" class="level2">
+<h2 class="anchored" data-anchor-id="pixel-perfect">Pixel perfect</h2>
+<p>I’ve written before about <a href="https://www.rostrum.blog/2021/06/28/pixel-art/">creating very simple pixel art in R</a>. To create a sprite of Link from <em>The Legend of Zelda</em> I had to write out by hand a vector that encoded its pixel values. It was tedious.</p>
+<p>There are, however, a couple of options in R to take an image and extract the pixels from it: see Florian Privé’s Shiny app in <a href="https://github.com/privefl/pixelart">the {pixelart} package</a> and Mike Cheng’s (AKA coolbutuseless) <a href="https://coolbutuseless.github.io/2018/08/13/gganimate-with-sprites/">blog post</a> that also describes how to animate them.<sup>1</sup></p>
+<p>But what if you want to create a sprite from scratch? It would be great if you could click pixels interactively and be returned a matrix encoding your image.</p>
+<p>I couldn’t find an R package to do this, so I decided to make a very simple one: <a href="https://github.com/matt-dray/pixeltrix">{pixeltrix}</a> (as in ‘pixel’ and ‘matrix’, but also as in ‘tricks’<sup>2</sup>, lol).</p>
+<p>It’s written entirely in base R (no Shiny or server needed) and can be run in the R console. It’s basically a <code>repeat</code> loop that runs <code>image()</code> to plot squares<sup>3</sup> (hereafter ‘pixels’) and <code>locator()</code><sup>4</sup> to let you click those pixels on and off. The coordinates of each click are matched to the nearest pixel centre, the pixel’s value is incremented by 1 (or wrapped back to zero) and the image is redrawn.</p>
+<p>The package is still in development, but I think it’s reached a useable state for my own purposes.</p>
+<div class="tip">
+<p>ℹ️ <b>Update</b></p>
+<p>I lied. The package has been updated since this post. You can read about the changes in <a href="https://www.rostrum.blog/2022/12/11/pixeltrix-animate/">a more recent blogpost</a>. Highlight: you can make animations now.</p>
+</div>
+</section>
+<section id="enter-the-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="enter-the-matrix">Enter the matrix</h2>
+<p>The package is available for download <a href="https://github.com/matt-dray/pixeltrix">from GitHub</a>. I have some ideas on how to improve it; go ahead and add your own ideas to the <a href="https://github.com/matt-dray/pixeltrix/issues">issues tracker</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># install.packages(remotes)  # if not yet installed</span></span>
+<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"matt-dray/pixeltrix"</span>) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># v0.1 in this post</span></span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(pixeltrix)</span></code></pre></div>
+</div>
+<p>The main function is <code>click_pixels()</code>, to which you pass plot dimensions (how many pixels tall and wide), the number of pixel ‘states’ (the number of values a pixel can take, so binary would be <code>2</code>) and whether you want to put a grid over the plot (makes it easier to see where the pixels are).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">click_pixels</span>(</span>
+<span id="cb2-2">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n_rows   =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>,</span>
+<span id="cb2-3">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n_cols   =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>,</span>
+<span id="cb2-4">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n_states =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>,</span>
+<span id="cb2-5">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">grid =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span></span>
+<span id="cb2-6">) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-&gt;</span> x</span></code></pre></div>
+</div>
+<p>This opens a plot window. Repeatedly click a pixel to cycle it through the number of states you asked for. For example, <code>n_states = 4</code> means you cycle it through values of 0, 1, 2 and 3 (wrapping back to 0), which will be manifested in the plot as different shades of grey.</p>
+<p>Note that you can only click one pixel at a time, so you’ll have to do a lot of clicking if your <code>n_states</code> value is high. Colouring stuff in really slowly is called ‘mindfulness’, I believe; good for your wellbeing.</p>
+<p>When you’re done, you press the <kbd>Esc</kbd> key, or the ‘Finish’ button in the plot window of RStudio. I saved all the images below via the ‘Export’ button in RStudio.</p>
+<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-09-24-pixeltrix/resources/simple.png" class="img-fluid" alt="A 3 by 3 square panel grid with darker squares in an x-shaped pattern."></p>
+<p>You’re returned a matrix that contains the value of each pixel in your image. So if you had set <code>n_states = 3</code>, a twice-clicked pixel gets the value 2, an unclicked pixel defaults to a value of 0, etc.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">x</span></code></pre></div>
+</div>
+<pre><code>     [,1] [,2] [,3]
+[1,]    1    0    1
+[2,]    0    1    0
+[3,]    1    0    1</code></pre>
+<p>This matrix is basically a blueprint of the image you created. You can take this and do other things with it. Maybe you’ll make art by passing it to <code>ggplot()</code> to match each of the pixel-state values to a colour. Maybe you’ll use it to plan your crochet or cross-stitch<sup>5</sup>, or to <a href="https://twitter.com/mohsinramay_/status/1573750033857581057?s=20&amp;t=07-AlT6Dhn9b2GnuJN3SQg">teach spatial epidemiology</a> (!).</p>
+<p>If you want to edit your matrix, you can pass it into <code>edit_pixels()</code>. This means you don’t have to start over from scratch with <code>click_pixels()</code> if you only want to change something small. Note that you can provide a higher <code>n_states</code> value to <code>edit_pixels()</code> than the current maximum in the matrix you provided.</p>
+</section>
+<section id="sprite-club" class="level2">
+<h2 class="anchored" data-anchor-id="sprite-club">Sprite club</h2>
+<p>My main purpose for the package is to create simple <a href="https://en.wikipedia.org/wiki/Sprite_(computer_graphics)">sprites</a>.</p>
+<p>I used {pixeltrix} to make each of the sprites below. They took about a minute each. It would’ve taken much longer to write their matrices by hand and to keep passing them to <code>image()</code> to visuliase them and make sure there weren’t any mistakes.</p>
+<section id="tamagotchi" class="level3">
+<h3 class="anchored" data-anchor-id="tamagotchi">Tamagotchi</h3>
+<p>Here’s a 1-bit original kuchipatchi sprite from <a href="https://en.wikipedia.org/wiki/Tamagotchi">the original 90s Tamagotchi</a> digital pets. It uses the default of two pixel states (binary): so 0 for white and 1 for grey.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">click_pixels</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">14</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">14</span>) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-&gt;</span> tam_sprite</span></code></pre></div>
+</div>
+<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-09-24-pixeltrix/resources/kuchipatchi.png" class="img-fluid" alt="A 14 by 14 pixel grid with a two-toned sprite of a pet character from the original 90s Tamagotchi pets."></p>
+<details>
+<summary>
+Click to expand matrix
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">tam_sprite</span></code></pre></div>
+</div>
+<pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14]
+ [1,]    0    0    0    0    1    1    1    1    1     1     0     0     0     0
+ [2,]    0    0    0    1    0    0    0    0    0     0     1     0     0     0
+ [3,]    0    1    1    0    1    0    0    0    0     1     0     1     0     0
+ [4,]    1    0    0    0    0    0    0    0    0     0     0     0     1     0
+ [5,]    0    1    1    1    0    0    0    0    0     0     0     0     1     0
+ [6,]    1    0    0    0    0    0    0    0    0     0     0     0     1     0
+ [7,]    0    1    1    1    0    0    0    0    0     0     0     0     1     0
+ [8,]    0    0    0    1    0    0    0    0    1     0     1     0     0     1
+ [9,]    0    0    0    1    0    0    0    0    1     0     1     0     0     1
+[10,]    0    0    0    1    0    0    0    0    0     1     0     0     0     1
+[11,]    0    0    0    0    1    0    0    0    0     0     0     0     1     0
+[12,]    0    0    0    0    0    1    0    1    1     1     0     1     0     0
+[13,]    0    0    0    0    0    1    0    1    0     1     0     1     0     0
+[14,]    0    0    0    0    0    0    1    0    0     0     1     0     0     0</code></pre>
+</details>
+<section id="pokémon" class="level4">
+<h4 class="anchored" data-anchor-id="pokémon">Pokémon</h4>
+<p>Here’s the player character from <a href="https://en.wikipedia.org/wiki/Pok%C3%A9mon_Red_and_Blue">the first generation of Pokémon games</a> on the Game Boy. It uses three states (<code>n_states = 3</code>): value 0 is white, 1 is light grey and 2 is dark grey.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">click_pixels</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">14</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">-&gt;</span> poke_sprite</span></code></pre></div>
+</div>
+<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-09-24-pixeltrix/resources/ash.png" class="img-fluid" alt="A 14 by 16 pixel grid with a three-toned sprite of the main character from the first generation of Pokemon games for the Game Boy."></p>
+<details>
+<summary>
+Click to expand matrix
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">poke_sprite</span></code></pre></div>
+</div>
+<pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14]
+ [1,]    0    0    0    0    2    2    2    2    2     2     0     0     0     0
+ [2,]    0    0    0    2    1    1    1    1    1     1     2     0     0     0
+ [3,]    0    0    2    1    1    1    1    1    1     1     1     2     0     0
+ [4,]    0    0    2    1    1    1    1    1    1     1     1     2     0     0
+ [5,]    0    2    2    2    1    0    0    0    0     1     2     2     2     0
+ [6,]    0    2    2    0    2    2    2    2    2     2     0     2     2     0
+ [7,]    2    0    2    0    0    0    0    0    0     0     0     2     0     2
+ [8,]    2    0    0    0    0    2    0    0    2     0     0     0     0     2
+ [9,]    0    2    2    0    0    2    0    0    2     0     0     2     2     0
+[10,]    0    2    2    2    0    0    1    1    0     0     2     2     2     0
+[11,]    2    0    0    2    2    2    2    2    2     2     2     0     0     2
+[12,]    2    0    0    2    2    2    2    2    2     2     2     0     0     2
+[13,]    0    2    2    2    1    1    2    2    1     1     2     2     2     0
+[14,]    0    0    2    1    2    2    1    1    2     2     1     2     0     0
+[15,]    0    0    2    1    1    1    2    2    1     1     1     2     0     0
+[16,]    0    0    0    2    2    2    0    0    2     2     2     0     0     0</code></pre>
+</details>
+</section>
+</section>
+</section>
+<section id="why" class="level2">
+<h2 class="anchored" data-anchor-id="why">Why?</h2>
+<p>Turns out the {pixeltrix} package is actually <a href="https://en.wiktionary.org/wiki/yak_shaving">yak-shaving</a> for another package I’m developing: <a href="https://github.com/matt-dray/tamRgo/">{tamRgo}</a>.</p>
+<p>{tamRgo} is a (very much work-in-progress) conceptual package for a Tamagotchi-like experience in the R console. You get a persistent interactive digital pet on your computer whose stats update in ‘real time’ while you’re away.</p>
+<p>I want to print a largeish canvas of pixels to visualise multiple pet ‘species’ and for the various interactions you can have (playing, feeding, cleaning). {pixeltrix} makes it much easier to design these scenes and returns matrices that I can add directly to {tamRgo}.</p>
+<div class="tip">
+<p>ℹ️ <b>Update</b></p>
+<p>I’ve now <a href="https://www.rostrum.blog/2022/11/13/tamrgo/">written a post about {tamRgo}</a>, where you can see how {pixeltrix} was used for the character sprites.</p>
+</div>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-06-29 18:52:13 CEST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/Zurich
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] pixeltrix_0.2.1.9000
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.14   yaml_2.3.7       
+ [9] rmarkdown_2.22    knitr_1.43.1      jsonlite_1.8.5    xfun_0.39        
+[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>You can even go into the third dimension (i.e.&nbsp;voxels) with Mike’s <a href="https://github.com/coolbutuseless/isocubes">{isocubes}</a> and its extension <a href="https://github.com/trevorld/oblicubes">{oblicubes}</a> by Trevor L Davies. <a href="https://www.rostrum.blog/2022/06/28/isometric-dungeon/">I used these in a demo of ‘3D’ dungeon-making</a> with my <a href="https://github.com/matt-dray/r.oguelike">{r.oguelike}</a> package.↩︎</p></li>
+<li id="fn2"><p><em>Illusions, Michael.</em>↩︎</p></li>
+<li id="fn3"><p>The only awkward part is that <code>image()</code> doesn’t plot with bounds of 0 to 1. There’s an overhang dependent on the number of squares you want to draw. This results in some small but awkward calculations so that the clicks can be mapped properly to the nearest pixel and so the grid overlay can be placed correctly.↩︎</p></li>
+<li id="fn4"><p>I’ve <a href="https://www.rostrum.blog/2021/11/04/kanto-locator/">written before</a> about using the <code>locator()</code> function to select points on fictitious maps.↩︎</p></li>
+<li id="fn5"><p>But see also <a href="https://apps.machlis.com/shiny/crochetapp/">Sharon Machlis’s ‘Overlay Mosaic Crochet Pattern Chart Generator’ Shiny app</a> for crochet patterns and <a href="https://rdvark.net/2022/05/14/introducing-embroidr/">Ben Vigreux’s {embroidr}</a> for planning embroidery projects.↩︎</p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>art</category>
+  <category>locator</category>
+  <category>pixeltrix</category>
+  <category>r</category>
+  <category>videogames</category>
+  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2022-09-24-pixeltrix/index.html</guid>
+  <pubDate>Fri, 23 Sep 2022 22:00:00 GMT</pubDate>
+</item>
 </channel>
 </rss>

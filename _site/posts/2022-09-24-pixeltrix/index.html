@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2022-09-24">
+
+<title>rostrum.blog (test) - Interactive pixel art in R with {pixeltrix}</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-black-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog (test)</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Interactive pixel art in R with {pixeltrix}</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">art</div>
+                <div class="quarto-category">locator</div>
+                <div class="quarto-category">pixeltrix</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">videogames</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 24, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#pixel-perfect" id="toc-pixel-perfect" class="nav-link" data-scroll-target="#pixel-perfect">Pixel perfect</a></li>
+  <li><a href="#enter-the-matrix" id="toc-enter-the-matrix" class="nav-link" data-scroll-target="#enter-the-matrix">Enter the matrix</a></li>
+  <li><a href="#sprite-club" id="toc-sprite-club" class="nav-link" data-scroll-target="#sprite-club">Sprite club</a>
+  <ul class="collapse">
+  <li><a href="#tamagotchi" id="toc-tamagotchi" class="nav-link" data-scroll-target="#tamagotchi">Tamagotchi</a></li>
+  </ul></li>
+  <li><a href="#why" id="toc-why" class="nav-link" data-scroll-target="#why">Why?</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><img src="resources/pixeltrix.gif" class="img-fluid" style="width:100.0%" alt="Gif of RStudio window. The console is running the code pixeltrix::click_pixels(6, 7, 3) and a plot appears with a 6 by 7 square grid. Some squares are clicked, changing them to light grey. A second click turns them dark grey. Eventually a little square character with a face is created. A matrix encoded the image is shown in the console when the escape key is pressed."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I’ve written <a href="https://github.com/matt-dray/pixeltrix">{pixeltrix}</a>, an R package that lets you select ‘pixels’ interactively from a plot window and returns your final image as a matrix. You could use it to design sprites, for example.</p>
+</section>
+<section id="pixel-perfect" class="level2">
+<h2 class="anchored" data-anchor-id="pixel-perfect">Pixel perfect</h2>
+<p>I’ve written before about <a href="https://www.rostrum.blog/2021/06/28/pixel-art/">creating very simple pixel art in R</a>. To create a sprite of Link from <em>The Legend of Zelda</em> I had to write out by hand a vector that encoded its pixel values. It was tedious.</p>
+<p>There are, however, a couple of options in R to take an image and extract the pixels from it: see Florian Privé’s Shiny app in <a href="https://github.com/privefl/pixelart">the {pixelart} package</a> and Mike Cheng’s (AKA coolbutuseless) <a href="https://coolbutuseless.github.io/2018/08/13/gganimate-with-sprites/">blog post</a> that also describes how to animate them.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>But what if you want to create a sprite from scratch? It would be great if you could click pixels interactively and be returned a matrix encoding your image.</p>
+<p>I couldn’t find an R package to do this, so I decided to make a very simple one: <a href="https://github.com/matt-dray/pixeltrix">{pixeltrix}</a> (as in ‘pixel’ and ‘matrix’, but also as in ‘tricks’<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, lol).</p>
+<p>It’s written entirely in base R (no Shiny or server needed) and can be run in the R console. It’s basically a <code>repeat</code> loop that runs <code>image()</code> to plot squares<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> (hereafter ‘pixels’) and <code>locator()</code><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> to let you click those pixels on and off. The coordinates of each click are matched to the nearest pixel centre, the pixel’s value is incremented by 1 (or wrapped back to zero) and the image is redrawn.</p>
+<p>The package is still in development, but I think it’s reached a useable state for my own purposes.</p>
+<div class="tip">
+<p>ℹ️ <b>Update</b></p>
+<p>I lied. The package has been updated since this post. You can read about the changes in <a href="https://www.rostrum.blog/2022/12/11/pixeltrix-animate/">a more recent blogpost</a>. Highlight: you can make animations now.</p>
+</div>
+</section>
+<section id="enter-the-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="enter-the-matrix">Enter the matrix</h2>
+<p>The package is available for download <a href="https://github.com/matt-dray/pixeltrix">from GitHub</a>. I have some ideas on how to improve it; go ahead and add your own ideas to the <a href="https://github.com/matt-dray/pixeltrix/issues">issues tracker</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(remotes)  # if not yet installed</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"matt-dray/pixeltrix"</span>) <span class="co"># v0.1 in this post</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pixeltrix)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The main function is <code>click_pixels()</code>, to which you pass plot dimensions (how many pixels tall and wide), the number of pixel ‘states’ (the number of values a pixel can take, so binary would be <code>2</code>) and whether you want to put a grid over the plot (makes it easier to see where the pixels are).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">click_pixels</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_rows   =</span> <span class="dv">3</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_cols   =</span> <span class="dv">3</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">n_states =</span> <span class="dv">2</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">grid =</span> <span class="cn">TRUE</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>) <span class="ot">-&gt;</span> x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This opens a plot window. Repeatedly click a pixel to cycle it through the number of states you asked for. For example, <code>n_states = 4</code> means you cycle it through values of 0, 1, 2 and 3 (wrapping back to 0), which will be manifested in the plot as different shades of grey.</p>
+<p>Note that you can only click one pixel at a time, so you’ll have to do a lot of clicking if your <code>n_states</code> value is high. Colouring stuff in really slowly is called ‘mindfulness’, I believe; good for your wellbeing.</p>
+<p>When you’re done, you press the <kbd>Esc</kbd> key, or the ‘Finish’ button in the plot window of RStudio. I saved all the images below via the ‘Export’ button in RStudio.</p>
+<p><img src="resources/simple.png" class="img-fluid" alt="A 3 by 3 square panel grid with darker squares in an x-shaped pattern."></p>
+<p>You’re returned a matrix that contains the value of each pixel in your image. So if you had set <code>n_states = 3</code>, a twice-clicked pixel gets the value 2, an unclicked pixel defaults to a value of 0, etc.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>     [,1] [,2] [,3]
+[1,]    1    0    1
+[2,]    0    1    0
+[3,]    1    0    1</code></pre>
+<p>This matrix is basically a blueprint of the image you created. You can take this and do other things with it. Maybe you’ll make art by passing it to <code>ggplot()</code> to match each of the pixel-state values to a colour. Maybe you’ll use it to plan your crochet or cross-stitch<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, or to <a href="https://twitter.com/mohsinramay_/status/1573750033857581057?s=20&amp;t=07-AlT6Dhn9b2GnuJN3SQg">teach spatial epidemiology</a> (!).</p>
+<p>If you want to edit your matrix, you can pass it into <code>edit_pixels()</code>. This means you don’t have to start over from scratch with <code>click_pixels()</code> if you only want to change something small. Note that you can provide a higher <code>n_states</code> value to <code>edit_pixels()</code> than the current maximum in the matrix you provided.</p>
+</section>
+<section id="sprite-club" class="level2">
+<h2 class="anchored" data-anchor-id="sprite-club">Sprite club</h2>
+<p>My main purpose for the package is to create simple <a href="https://en.wikipedia.org/wiki/Sprite_(computer_graphics)">sprites</a>.</p>
+<p>I used {pixeltrix} to make each of the sprites below. They took about a minute each. It would’ve taken much longer to write their matrices by hand and to keep passing them to <code>image()</code> to visuliase them and make sure there weren’t any mistakes.</p>
+<section id="tamagotchi" class="level3">
+<h3 class="anchored" data-anchor-id="tamagotchi">Tamagotchi</h3>
+<p>Here’s a 1-bit original kuchipatchi sprite from <a href="https://en.wikipedia.org/wiki/Tamagotchi">the original 90s Tamagotchi</a> digital pets. It uses the default of two pixel states (binary): so 0 for white and 1 for grey.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">click_pixels</span>(<span class="dv">14</span>, <span class="dv">14</span>) <span class="ot">-&gt;</span> tam_sprite</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="resources/kuchipatchi.png" class="img-fluid" alt="A 14 by 14 pixel grid with a two-toned sprite of a pet character from the original 90s Tamagotchi pets."></p>
+<details>
+<summary>
+Click to expand matrix
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tam_sprite</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14]
+ [1,]    0    0    0    0    1    1    1    1    1     1     0     0     0     0
+ [2,]    0    0    0    1    0    0    0    0    0     0     1     0     0     0
+ [3,]    0    1    1    0    1    0    0    0    0     1     0     1     0     0
+ [4,]    1    0    0    0    0    0    0    0    0     0     0     0     1     0
+ [5,]    0    1    1    1    0    0    0    0    0     0     0     0     1     0
+ [6,]    1    0    0    0    0    0    0    0    0     0     0     0     1     0
+ [7,]    0    1    1    1    0    0    0    0    0     0     0     0     1     0
+ [8,]    0    0    0    1    0    0    0    0    1     0     1     0     0     1
+ [9,]    0    0    0    1    0    0    0    0    1     0     1     0     0     1
+[10,]    0    0    0    1    0    0    0    0    0     1     0     0     0     1
+[11,]    0    0    0    0    1    0    0    0    0     0     0     0     1     0
+[12,]    0    0    0    0    0    1    0    1    1     1     0     1     0     0
+[13,]    0    0    0    0    0    1    0    1    0     1     0     1     0     0
+[14,]    0    0    0    0    0    0    1    0    0     0     1     0     0     0</code></pre>
+</details>
+<section id="pokémon" class="level4">
+<h4 class="anchored" data-anchor-id="pokémon">Pokémon</h4>
+<p>Here’s the player character from <a href="https://en.wikipedia.org/wiki/Pok%C3%A9mon_Red_and_Blue">the first generation of Pokémon games</a> on the Game Boy. It uses three states (<code>n_states = 3</code>): value 0 is white, 1 is light grey and 2 is dark grey.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">click_pixels</span>(<span class="dv">14</span>, <span class="dv">16</span>, <span class="dv">3</span>) <span class="ot">-&gt;</span> poke_sprite</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="resources/ash.png" class="img-fluid" alt="A 14 by 16 pixel grid with a three-toned sprite of the main character from the first generation of Pokemon games for the Game Boy."></p>
+<details>
+<summary>
+Click to expand matrix
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>poke_sprite</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14]
+ [1,]    0    0    0    0    2    2    2    2    2     2     0     0     0     0
+ [2,]    0    0    0    2    1    1    1    1    1     1     2     0     0     0
+ [3,]    0    0    2    1    1    1    1    1    1     1     1     2     0     0
+ [4,]    0    0    2    1    1    1    1    1    1     1     1     2     0     0
+ [5,]    0    2    2    2    1    0    0    0    0     1     2     2     2     0
+ [6,]    0    2    2    0    2    2    2    2    2     2     0     2     2     0
+ [7,]    2    0    2    0    0    0    0    0    0     0     0     2     0     2
+ [8,]    2    0    0    0    0    2    0    0    2     0     0     0     0     2
+ [9,]    0    2    2    0    0    2    0    0    2     0     0     2     2     0
+[10,]    0    2    2    2    0    0    1    1    0     0     2     2     2     0
+[11,]    2    0    0    2    2    2    2    2    2     2     2     0     0     2
+[12,]    2    0    0    2    2    2    2    2    2     2     2     0     0     2
+[13,]    0    2    2    2    1    1    2    2    1     1     2     2     2     0
+[14,]    0    0    2    1    2    2    1    1    2     2     1     2     0     0
+[15,]    0    0    2    1    1    1    2    2    1     1     1     2     0     0
+[16,]    0    0    0    2    2    2    0    0    2     2     2     0     0     0</code></pre>
+</details>
+</section>
+</section>
+</section>
+<section id="why" class="level2">
+<h2 class="anchored" data-anchor-id="why">Why?</h2>
+<p>Turns out the {pixeltrix} package is actually <a href="https://en.wiktionary.org/wiki/yak_shaving">yak-shaving</a> for another package I’m developing: <a href="https://github.com/matt-dray/tamRgo/">{tamRgo}</a>.</p>
+<p>{tamRgo} is a (very much work-in-progress) conceptual package for a Tamagotchi-like experience in the R console. You get a persistent interactive digital pet on your computer whose stats update in ‘real time’ while you’re away.</p>
+<p>I want to print a largeish canvas of pixels to visualise multiple pet ‘species’ and for the various interactions you can have (playing, feeding, cleaning). {pixeltrix} makes it much easier to design these scenes and returns matrices that I can add directly to {tamRgo}.</p>
+<div class="tip">
+<p>ℹ️ <b>Update</b></p>
+<p>I’ve now <a href="https://www.rostrum.blog/2022/11/13/tamrgo/">written a post about {tamRgo}</a>, where you can see how {pixeltrix} was used for the character sprites.</p>
+</div>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-06-29 18:52:13 CEST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/Zurich
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] pixeltrix_0.2.1.9000
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.14   yaml_2.3.7       
+ [9] rmarkdown_2.22    knitr_1.43.1      jsonlite_1.8.5    xfun_0.39        
+[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>You can even go into the third dimension (i.e.&nbsp;voxels) with Mike’s <a href="https://github.com/coolbutuseless/isocubes">{isocubes}</a> and its extension <a href="https://github.com/trevorld/oblicubes">{oblicubes}</a> by Trevor L Davies. <a href="https://www.rostrum.blog/2022/06/28/isometric-dungeon/">I used these in a demo of ‘3D’ dungeon-making</a> with my <a href="https://github.com/matt-dray/r.oguelike">{r.oguelike}</a> package.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><em>Illusions, Michael.</em><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The only awkward part is that <code>image()</code> doesn’t plot with bounds of 0 to 1. There’s an overhang dependent on the number of squares you want to draw. This results in some small but awkward calculations so that the clicks can be mapped properly to the nearest pixel and so the grid overlay can be placed correctly.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>I’ve <a href="https://www.rostrum.blog/2021/11/04/kanto-locator/">written before</a> about using the <code>locator()</code> function to select points on fictitious maps.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>But see also <a href="https://apps.machlis.com/shiny/crochetapp/">Sharon Machlis’s ‘Overlay Mosaic Crochet Pattern Chart Generator’ Shiny app</a> for crochet patterns and <a href="https://rdvark.net/2022/05/14/introducing-embroidr/">Ben Vigreux’s {embroidr}</a> for planning embroidery projects.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
