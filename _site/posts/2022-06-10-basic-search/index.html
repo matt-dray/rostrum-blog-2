@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2022-06-10">
+
+<title>rostrum.blog (test) - Automated pathfinding in {r.oguelike}</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-black-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog (test)</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Automated pathfinding in {r.oguelike}</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">game-dev</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">r.oguelike</div>
+                <div class="quarto-category">videogames</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 10, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#hunting-the-hunter" id="toc-hunting-the-hunter" class="nav-link" data-scroll-target="#hunting-the-hunter">Hunting the hunter</a></li>
+  <li><a href="#layers-deep" id="toc-layers-deep" class="nav-link" data-scroll-target="#layers-deep">Layers deep</a></li>
+  <li><a href="#dont-keep-it-simple-stupid" id="toc-dont-keep-it-simple-stupid" class="nav-link" data-scroll-target="#dont-keep-it-simple-stupid">Don’t keep it simple, stupid</a></li>
+  <li><a href="#here-comes-the-flood-fill" id="toc-here-comes-the-flood-fill" class="nav-link" data-scroll-target="#here-comes-the-flood-fill">Here comes the flood-fill</a>
+  <ul class="collapse">
+  <li><a href="#deep-breadth-first" id="toc-deep-breadth-first" class="nav-link" data-scroll-target="#deep-breadth-first">Deep breadth-first</a></li>
+  </ul></li>
+  <li><a href="#the-end-of-the-tunnel" id="toc-the-end-of-the-tunnel" class="nav-link" data-scroll-target="#the-end-of-the-tunnel">The end of the tunnel?</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/chase.gif" class="img-fluid figure-img" style="width:100.0%" alt="Animation of an R console, showing a rectangular grid of tiles that represents a dungeon room. Floor tiles are periods. Surrounding walls are hashmarks. There's an enemy character represented by a letter 'E' and a player character represented by an 'at' symbol. There's some obstacle walls separating them. The enemy character moves tile by tile around the obstacle until towards the player who is running away."></p>
+<figcaption class="figure-caption">The enemy <code>E</code> chases the player <code>@</code> who collects gold <code>$</code> and and an apple <code>a</code>.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I’ve experimented with simple <a href="https://en.wikipedia.org/wiki/Breadth-first_search">breadth-first search</a> for <a href="https://github.com/matt-dray/r.oguelike">{r.oguelike}</a>, a work-in-progress game-in-a-package for R. This means enemies can pathfind and chase down the player character.</p>
+</section>
+<section id="hunting-the-hunter" class="level2">
+<h2 class="anchored" data-anchor-id="hunting-the-hunter">Hunting the hunter</h2>
+<p>I’ve <a href="https://www.rostrum.blog/2022/04/25/r.oguelike-dev/">written before about the inception of {r.oguelike}</a>, a concept for <a href="https://en.wikipedia.org/wiki/Roguelike">a roguelike game</a> written in R, along with a simple method for creating <a href="https://www.rostrum.blog/2022/05/01/dungeon/">procedural tile-based cave-like dungeons</a>.</p>
+<p><img src="resources/r.oguelike-hex.png" class="img-fluid" style="width:25.0%" alt="Hex sticker design for the 'r.oguelike' R package. Black background with bright green font, reminiscent of old computer terminal output. In the centre, a three-by-ten arrangement of hashmarks and periods, along with a single at symbol and dollar sign, which looks like a classic ACII tile-based roguelike game. The text 'r.oguelike' is underneath."></p>
+<p>So far the enemies in the game have been stationary.</p>
+<p>I could let them wander randomly on each turn, which is easy to implement, but boring and unrealistic. Far better would be to introduce some kind of pathfinding via an algorithm, which would make enemies head toward the player character to engage in battle.</p>
+<p>In this post I’ll start with a naive approach—simply labelling all tiles with distance from the target—then show how an approach called <a href="https://en.wikipedia.org/wiki/Breadth-first_search">‘breadth-first search’</a> can alleviate the problem.</p>
+</section>
+<section id="layers-deep" class="level2">
+<h2 class="anchored" data-anchor-id="layers-deep">Layers deep</h2>
+<p>There’s a number of ways I could implement pathfinding in R. For purposes of this post, I’m using an approach that I think makes it easier to grasp conceptually.</p>
+<p>Each dungeon will be composed of two related matrices: one matrix is the tile map, which holds the tiles the user sees (i.e.&nbsp;<code>#</code> for walls, <code>.</code> for floor, <code>@</code> for the player character, <code>E</code> for enemy); the second matrix isn’t seen by the user, but holds travel-distance scores used by the enemy character to find a path to the target.</p>
+<p>I’ll use <code>m</code> throughout as the name of the matrix object holding the tile map and <code>d</code> as the name of the matrix object holding the distance map.</p>
+<p>Bear in mind that the characters can only move one tile per turn in a north, south, east or west direction, which has implications for how we label tiles with their distances.</p>
+</section>
+<section id="dont-keep-it-simple-stupid" class="level2">
+<h2 class="anchored" data-anchor-id="dont-keep-it-simple-stupid">Don’t keep it simple, stupid</h2>
+<p>Consider this very basic dungeon room that hosts an enemy character <code>E</code> that is seeking the player character <code>@</code>. It’s just an R matrix object, but we can print it nicely so it’s easier to read.</p>
+<details>
+<summary>
+Click for R code
+</summary>
+<p>Manually create a basic, rectangular dungeon room:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create room</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n_rows <span class="ot">&lt;-</span> <span class="dv">9</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>n_cols <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="st">"."</span>, n_rows <span class="sc">*</span> n_cols), n_rows, n_cols)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>m[<span class="dv">1</span>, ] <span class="ot">&lt;-</span> <span class="st">"#"</span>  <span class="co"># walls</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>m[, <span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">"#"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>m[<span class="fu">nrow</span>(m), ] <span class="ot">&lt;-</span> <span class="st">"#"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>m[, <span class="fu">ncol</span>(m)] <span class="ot">&lt;-</span> <span class="st">"#"</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Add player and enemy</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>m[<span class="dv">7</span>, <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="st">"@"</span>  <span class="co"># player</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>m[<span class="dv">3</span>, <span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="st">"E"</span>  <span class="co"># enemy</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For convenience, a function that pretty-prints the matrix to the console:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to print the map nicely</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>print_tiles <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq</span>(<span class="fu">nrow</span>(x))) {</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(x[i, ], <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print_tiles</span>(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print_tiles</span>(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># # # # # # # # # # 
+# . . . . . . . . # 
+# . E . . . . . . # 
+# . . . . . . . . # 
+# . . . . . . . . # 
+# . . . . . . . . # 
+# . @ . . . . . . # 
+# . . . . . . . . # 
+# # # # # # # # # # </code></pre>
+</div>
+</div>
+<p>What’s the simplest way that the enemy can find a path to the player?</p>
+<p>Probably it’s to label every traversable tile with <a href="https://en.wikipedia.org/wiki/Taxicab_geometry">a Manhattan-distance</a> (i.e.&nbsp;like a taxicab would move on the gridded streets of New York) away from the player’s position. Then the enemy can check its neighbouring tiles on each turn and select the next highest distance score until it reaches the player.</p>
+<p>So, below I’ve created a distance map by assigning the player position a score of 100, then I’ve decreased the score by 1 with each additional tile away from the player (remembering that characters can only move north, south, east or west). Walls score zero, so they’re effectively ignored.</p>
+<details>
+<summary>
+Click for R code
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>get_distance <span class="ot">&lt;-</span> <span class="cf">function</span>(m, peak_score) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Initiate distance matrix filled with zero</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  n_rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(m)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  n_cols <span class="ot">&lt;-</span> <span class="fu">ncol</span>(m)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">rep</span>(<span class="dv">0</span>, n_cols <span class="sc">*</span> n_rows), n_rows, n_cols)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Player location gets peak_score</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  player_loc <span class="ot">&lt;-</span> <span class="fu">which</span>(m <span class="sc">==</span> <span class="st">"@"</span>, <span class="at">arr.ind =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  m[player_loc[<span class="dv">1</span>], player_loc[<span class="dv">2</span>]] <span class="ot">&lt;-</span> peak_score</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Surrounding tiles get successively smaller distance scores</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (col_ind <span class="cf">in</span> <span class="fu">seq</span>(n_cols)) {</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (row_ind <span class="cf">in</span> <span class="fu">seq</span>(n_rows)) {</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>      distance <span class="ot">&lt;-</span> <span class="fu">abs</span>(player_loc[<span class="dv">1</span>] <span class="sc">-</span> row_ind) <span class="sc">+</span> <span class="fu">abs</span>(player_loc[<span class="dv">2</span>] <span class="sc">-</span> col_ind)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>      value <span class="ot">&lt;-</span> peak_score <span class="sc">-</span> distance</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (value <span class="sc">&lt;</span> <span class="dv">0</span>) value <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>      d[row_ind, col_ind] <span class="ot">&lt;-</span> value</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Walls aren't traversable, assign low value</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  walls <span class="ot">&lt;-</span> <span class="fu">which</span>(m <span class="sc">==</span> <span class="st">"#"</span>)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  d[walls] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  d</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_distance</span>(m, <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+ [1,]    0    0    0    0    0    0    0    0    0     0
+ [2,]    0   94   95   94   93   92   91   90   89     0
+ [3,]    0   95   96   95   94   93   92   91   90     0
+ [4,]    0   96   97   96   95   94   93   92   91     0
+ [5,]    0   97   98   97   96   95   94   93   92     0
+ [6,]    0   98   99   98   97   96   95   94   93     0
+ [7,]    0   99  100   99   98   97   96   95   94     0
+ [8,]    0   98   99   98   97   96   95   94   93     0
+ [9,]    0    0    0    0    0    0    0    0    0     0</code></pre>
+</div>
+</div>
+<p>See how the player-position at [7,3] is 100 and the values then drop by 1 in all directions?</p>
+<p>So the enemy would move south from its start position at [3,3] to the target position at [7,3], moving along a score gradient of 96 to 100.</p>
+<p>There’s an issue with this though: obstacles. What do you think will happen if we put a dividing wall between the characters? Here’s the same room with a wall splitting the characters, plus the distance matrix using the same approach as above.</p>
+<details>
+<summary>
+Click for R code
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>m[<span class="dv">5</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">8</span>] <span class="ot">&lt;-</span> <span class="st">"#"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print_tiles</span>(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># # # # # # # # # # 
+# . . . . . . . . # 
+# . E . . . . . . # 
+# . . . . . . . . # 
+# # # # # # # # . # 
+# . . . . . . . . # 
+# . @ . . . . . . # 
+# . . . . . . . . # 
+# # # # # # # # # # </code></pre>
+</div>
+</div>
+<details>
+<summary>
+Click for R code
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">get_distance</span>(m, <span class="dv">100</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+ [1,]    0    0    0    0    0    0    0    0    0     0
+ [2,]    0   94   95   94   93   92   91   90   89     0
+ [3,]    0   95   96   95   94   93   92   91   90     0
+ [4,]    0   96   97   96   95   94   93   92   91     0
+ [5,]    0    0    0    0    0    0    0    0   92     0
+ [6,]    0   98   99   98   97   96   95   94   93     0
+ [7,]    0   99  100   99   98   97   96   95   94     0
+ [8,]    0   98   99   98   97   96   95   94   93     0
+ [9,]    0    0    0    0    0    0    0    0    0     0</code></pre>
+</div>
+</div>
+<p>So, as before, the enemy begins on a distance score of 96 at [3,3] and will move south to 97 on [4,3].</p>
+<p>Now what? The wall has been scored as zero, so the enemy looks around for the largest distance score of its remaining neighbours. They all score 96, so the enemy character just selects randomly one of west, north or east.</p>
+<p>Uhoh: this means the enemy will be stuck in an infinite loop between the adjacent scores of 96 and 97. This isn’t very intelligent.</p>
+<p>How can we account for blockages like this?</p>
+</section>
+<section id="here-comes-the-flood-fill" class="level2">
+<h2 class="anchored" data-anchor-id="here-comes-the-flood-fill">Here comes the flood-fill</h2>
+<p>Perhaps a better approach is to ‘flood fill’ the distance scores. Imagine the start point is a source of water and it’s filling up the dungeon. Obviously the water will have to flow around walls and the hardest-to-reach areas will be filled last.</p>
+<p>A basic flood-fill approach we can implement is <a href="https://en.wikipedia.org/wiki/Breadth-first_search">‘breadth-first’</a>, which visits tiles in a ‘frontier’ expanding from the start point. Distance scores are assigned once to frontier tiles and neighbours are consecutively added to a ‘queue’ to be checked.</p>
+<p>This is slightly expensive because every traversable tile has to be assessed, but it means that multiple enemies can all use the same distance map to navigate.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>We don’t need to get too complicated for {r.oguelike}; it just has to work. I’ll illustrate the breadth-first approach with a pretty basic and verbose implementation.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<section id="deep-breadth-first" class="level3">
+<h3 class="anchored" data-anchor-id="deep-breadth-first">Deep breadth-first</h3>
+<p>Now to implement it in R. Reminder: we’ll use two matrices to represent the tile grid (seen by player) and the distance grid (just holds the distance scores).</p>
+<p>I’m going to use three main functions:</p>
+<ol type="1">
+<li><code>initiate_distance_map()</code>, which creates a distance-map matrix of equal size to the tile map and fills all traversable spaces with zero and all non-traversable spaces with <code>Inf</code>inity (which the character will want to avoid)</li>
+<li><code>populate_distance_map</code>, which flood-fills the traversable space by expanding a frontier from the start point, assigning a distance score to each neighbour that’s +1 of the score of the parent tile and adding those neighbours to the frontier queue so they can be inspected next</li>
+<li><code>move_enemy()</code> to move the enemy character one tile per turn towards the tile with the lowest distance score (i.e.&nbsp;the tile that holds the player <code>@</code>)</li>
+</ol>
+<section id="create-the-distance-score-matrix" class="level4">
+<h4 class="anchored" data-anchor-id="create-the-distance-score-matrix">Create the distance-score matrix</h4>
+<p>Using the same obstacle map from earlier in the post, we can first initiate a complementary distance-score matrix:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>initiate_distance_map <span class="ot">&lt;-</span> <span class="cf">function</span>(m) {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> m  <span class="co"># copy the tile map</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  d[<span class="fu">which</span>(d <span class="sc">!=</span> <span class="st">"#"</span>)] <span class="ot">&lt;-</span> <span class="dv">0</span>  <span class="co"># set non-wall tiles to 0</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  d[<span class="fu">which</span>(d <span class="sc">==</span> <span class="st">"#"</span>)] <span class="ot">&lt;-</span> <span class="cn">Inf</span>  <span class="co"># set wall tiles to infinity</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix</span>(<span class="fu">as.numeric</span>(d), <span class="fu">nrow</span>(d), <span class="fu">ncol</span>(d))  <span class="co"># recast as numeric</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can adjust those distance scores. The algorithm is basically:</p>
+<ol type="1">
+<li>Create a frontier vector of tile indices (i.e.&nbsp;the edges of the flood-fill as it moves outward) and add the starting tile (i.e.&nbsp;the tile index that holds the player character)</li>
+<li>Create a vector to hold tile indices that we’ve already visited</li>
+<li>Begin a loop where:
+<ul>
+<li>the first tile in the frontier queue becomes the ‘current’ tile</li>
+<li>the current tile is removed to the frontier</li>
+<li>the current tile is added to the visited list</li>
+<li>the tile indices of the current tile’s neighbours (north, south, east and west) are identified</li>
+<li>if not yet visited, the neighbours are assigned distance scores that are +1 of the current tile</li>
+</ul></li>
+<li>Continue the loop until you run out of tiles in the frontier queue</li>
+</ol>
+<p>I’ve written a small sub-function to handle neighbour-finding:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>get_neighbours <span class="ot">&lt;-</span> <span class="cf">function</span>(m, current) {</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  n_rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(m)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (m[current <span class="sc">-</span> n_rows] <span class="sc">!=</span> <span class="st">"#"</span>) current <span class="sc">-</span> n_rows,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (m[current <span class="sc">-</span> <span class="dv">1</span>] <span class="sc">!=</span> <span class="st">"#"</span>) current <span class="sc">-</span> <span class="dv">1</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (m[current <span class="sc">+</span> <span class="dv">1</span>] <span class="sc">!=</span> <span class="st">"#"</span>) current <span class="sc">+</span> <span class="dv">1</span>,</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (m[current <span class="sc">+</span> n_rows] <span class="sc">!=</span> <span class="st">"#"</span>) current <span class="sc">+</span> n_rows</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Which plugs into the main function for implementing the algorithm that assigns distance scores:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>populate_distance_map <span class="ot">&lt;-</span> <span class="cf">function</span>(m, d) {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  start <span class="ot">&lt;-</span> <span class="fu">which</span>(m <span class="sc">==</span> <span class="st">"@"</span>)  <span class="co"># start tile, i.e. player tile</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Initiate vectors</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  frontier <span class="ot">&lt;-</span> start  <span class="co"># to be assessed</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  visited <span class="ot">&lt;-</span> <span class="fu">c</span>()  <span class="co"># have been assessed</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> (<span class="fu">length</span>(frontier) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>    current  <span class="ot">&lt;-</span> frontier[<span class="dv">1</span>]  <span class="co"># set first tile of frontier as current</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    frontier <span class="ot">&lt;-</span> frontier[<span class="sc">!</span>frontier <span class="sc">==</span> current]  <span class="co"># remove current tile from frontier</span></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    visited  <span class="ot">&lt;-</span> <span class="fu">append</span>(visited, current)  <span class="co"># mark current as visited</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>    neighbours <span class="ot">&lt;-</span> <span class="fu">get_neighbours</span>(m, current)  <span class="co"># get vector of neighbour indices</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>    neighbours <span class="ot">&lt;-</span> neighbours[<span class="sc">!</span>neighbours <span class="sc">%in%</span> visited]</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (neighbour <span class="cf">in</span> neighbours) {</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="sc">!</span>neighbour <span class="sc">%in%</span> visited) {  <span class="co"># only assign distance to unvisited neighbours</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>        d[neighbour] <span class="ot">&lt;-</span> d[current] <span class="sc">+</span> <span class="dv">1</span>  <span class="co"># assign distance, one more than parent</span></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>    frontier <span class="ot">&lt;-</span> <span class="fu">append</span>(frontier, neighbours)  <span class="co"># add neighbour to the frontier</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>  d</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="move-to-target" class="level4">
+<h4 class="anchored" data-anchor-id="move-to-target">Move to target</h4>
+<p>Finally, here’s the function that lets the enemy check its neighbours for the lowest distance score and move one tile in that direction:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>move_enemy <span class="ot">&lt;-</span> <span class="cf">function</span>(m, d) {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Find tiles of interest</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  en_loc <span class="ot">&lt;-</span> <span class="fu">which</span>(m <span class="sc">==</span> <span class="st">"E"</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  player_loc <span class="ot">&lt;-</span> <span class="fu">which</span>(m <span class="sc">==</span> <span class="st">"@"</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  n_rows <span class="ot">&lt;-</span> <span class="fu">nrow</span>(m)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get neighbour tile indices</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  ind <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> en_loc <span class="sc">-</span> <span class="dv">1</span>,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">s =</span> en_loc <span class="sc">+</span> <span class="dv">1</span>,</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">e =</span> en_loc <span class="sc">+</span> n_rows,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">w =</span> en_loc <span class="sc">-</span> n_rows</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get tile content for neighbours</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  tiles <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> m[ind[<span class="st">"n"</span>]],</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">s =</span> m[ind[<span class="st">"s"</span>]],</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">e =</span> m[ind[<span class="st">"e"</span>]],</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">w =</span> m[ind[<span class="st">"w"</span>]]</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Get the distance score for a tile if traversable/target</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>  dist <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="cf">if</span> (tiles[<span class="st">"n"</span>] <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"."</span>, <span class="st">"@"</span>)) d[ind[<span class="st">"n"</span>]],</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">s =</span> <span class="cf">if</span> (tiles[<span class="st">"s"</span>] <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"."</span>, <span class="st">"@"</span>)) d[ind[<span class="st">"s"</span>]],</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">e =</span> <span class="cf">if</span> (tiles[<span class="st">"e"</span>] <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"."</span>, <span class="st">"@"</span>)) d[ind[<span class="st">"e"</span>]],</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">w =</span> <span class="cf">if</span> (tiles[<span class="st">"w"</span>] <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"."</span>, <span class="st">"@"</span>)) d[ind[<span class="st">"w"</span>]]</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Sample a direction if there's ties, move there</span></span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>  direction <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="fu">names</span>(dist[dist <span class="sc">==</span> <span class="fu">min</span>(dist)]), <span class="dv">1</span>)</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>  en_loc_new <span class="ot">&lt;-</span> ind[<span class="fu">names</span>(ind) <span class="sc">==</span> direction]</span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>  m[en_loc] <span class="ot">&lt;-</span> <span class="st">"."</span>  <span class="co"># replace old location with floor tile</span></span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>  m[en_loc_new] <span class="ot">&lt;-</span> <span class="st">"E"</span>  <span class="co"># place enemy in new location</span></span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>  m</span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="put-it-all-together" class="level4">
+<h4 class="anchored" data-anchor-id="put-it-all-together">Put it all together</h4>
+<p>Now to apply the functions to our dungeon room, with its minor obstacle. Here’s a reminder of the layout:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print_tiles</span>(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># # # # # # # # # # 
+# . . . . . . . . # 
+# . E . . . . . . # 
+# . . . . . . . . # 
+# # # # # # # # . # 
+# . . . . . . . . # 
+# . @ . . . . . . # 
+# . . . . . . . . # 
+# # # # # # # # # # </code></pre>
+</div>
+</div>
+<p>Now we can initiate the distance-score matrix:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">initiate_distance_map</span>(m)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+ [1,]  Inf  Inf  Inf  Inf  Inf  Inf  Inf  Inf  Inf   Inf
+ [2,]  Inf    0    0    0    0    0    0    0    0   Inf
+ [3,]  Inf    0    0    0    0    0    0    0    0   Inf
+ [4,]  Inf    0    0    0    0    0    0    0    0   Inf
+ [5,]  Inf  Inf  Inf  Inf  Inf  Inf  Inf  Inf    0   Inf
+ [6,]  Inf    0    0    0    0    0    0    0    0   Inf
+ [7,]  Inf    0    0    0    0    0    0    0    0   Inf
+ [8,]  Inf    0    0    0    0    0    0    0    0   Inf
+ [9,]  Inf  Inf  Inf  Inf  Inf  Inf  Inf  Inf  Inf   Inf</code></pre>
+</div>
+</div>
+<p>Then populate the distance scores from the target:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">populate_distance_map</span>(m, d)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>d</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+ [1,]  Inf  Inf  Inf  Inf  Inf  Inf  Inf  Inf  Inf   Inf
+ [2,]  Inf   18   17   16   15   14   13   12   11   Inf
+ [3,]  Inf   17   16   15   14   13   12   11   10   Inf
+ [4,]  Inf   16   15   14   13   12   11   10    9   Inf
+ [5,]  Inf  Inf  Inf  Inf  Inf  Inf  Inf  Inf    8   Inf
+ [6,]  Inf    2    1    2    3    4    5    6    7   Inf
+ [7,]  Inf    1    0    1    2    3    4    5    6   Inf
+ [8,]  Inf    2    1    2    3    4    5    6    7   Inf
+ [9,]  Inf  Inf  Inf  Inf  Inf  Inf  Inf  Inf  Inf   Inf</code></pre>
+</div>
+</div>
+<p>Success. You can see the start tile at [7,3] scores zero and emanates out to the right, around the obstacle, before wrapping back to the top-left and toward the enemy at position [3,3].</p>
+<p>The enemy needs only to move to the neighbouring tile with the lowest distance score. So from 16 to 15 on either [4,3] or [3,4], then to 14, to 13, etc.</p>
+<p>See how this time the character won’t get stuck trying to move south? The distance scores decrease from left to right before curving round the wall in the direction of the player’s tile.</p>
+<p>For fun, we can print to the console an animation of the movement, which I’ve captured in gif form.</p>
+<details>
+<summary>
+Click for R code
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="cf">repeat</span> {</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\014</span><span class="st">"</span>)  <span class="co"># clear console</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="fu">move_enemy</span>(m, d)  <span class="co"># move enemy</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print_tiles</span>(m)  <span class="co"># print to console</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">Sys.sleep</span>(<span class="fl">0.5</span>)  <span class="co"># wait</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">any</span>(m <span class="sc">==</span> <span class="st">"@"</span>)) <span class="cf">break</span>  <span class="co"># stop if player captured</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+<p><img src="resources/pathfind.gif" class="img-fluid" style="width:50.0%" alt="Animation of an R console, showing a rectangular grid of tiles that represents a dungeon room. Floor tiles are periods. Surrounding walls are hashmarks. There's an enemy character represented by a letter 'E' in the upper left, and a player character represented by an 'at' symbol in the lower left. There's an obstacle wall separating them. The enemy character moves tile by tile around the obstacle until it reaches the player."></p>
+<p>You can see the enemy go round the wall and reach the player using a pretty efficient path.</p>
+<p>And in a more dungeonlike room:</p>
+<p><img src="resources/pathfind-dungeon.gif" class="img-fluid" style="width:100.0%" alt="Animation of an R console, showing a rectangular grid of tiles that represents a dungeon room. Floor tiles are periods. Surrounding walls are hashmarks. There's an enemy character represented by a letter 'E' in the lower left, and a player character represented by an 'at' symbol toward the right. There's some obstacle walls separating them. The enemy character moves tile by tile around the obstacle until it reaches the player."></p>
+</section>
+</section>
+</section>
+<section id="the-end-of-the-tunnel" class="level2">
+<h2 class="anchored" data-anchor-id="the-end-of-the-tunnel">The end of the tunnel?</h2>
+<p>I’ve smashed this together quickly with some completely un-optimised code. Once I’ve ironed out some kinks, it’ll go into <a href="https://github.com/matt-dray/r.oguelike">the {r.oguelike} package</a> proper.</p>
+<p>Of course, I’ll need to consider:</p>
+<ul>
+<li>a moving player-character, so the distances map will need to be updated every turn</li>
+<li>limiting the range of the frontier to some specified distance away from the player, so that an enemy will only begin pathfinding when a player is closer and more ‘detectable’<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></li>
+<li>a ‘vision-cone’ so the enemy only ‘sees’ the player if there’s a clear set of floor tiles between them</li>
+<li>allowing different enemy classes to move differently, e.g.&nbsp;attack immediately, randomly, or when the player is within a certain distance</li>
+</ul>
+<p>As a basic preview, here’s what it looks like when you throw the pathfinding into <a href="https://www.rostrum.blog/2022/05/01/dungeon/">a procedurally-generated dungeon from {r.oguelike}</a>:</p>
+<p><img src="resources/chase.gif" class="img-fluid">{fig-“Animation of an R console, showing a rectangular grid of tiles that represents a dungeon room. Floor tiles are periods. Surrounding walls are hashmarks. There’s an enemy character represented by a letter ‘E’ and a player character represented by an ‘at’ symbol. There’s some obstacle walls separating them. The enemy character moves tile by tile around the obstacle until towards the player who is running away.” width=“100%”}</p>
+<p>This gives a nice impression of the panic that might set in if you’re down to 1 HP and a monster is chasing you into a dead-end.</p>
+<p>A quintessential roguelike ‘feature’!</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-06-30 22:55:20 CEST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/Zurich
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.14   yaml_2.3.7       
+ [9] rmarkdown_2.22    knitr_1.43.1      jsonlite_1.8.5    xfun_0.39        
+[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Yes, there are cleverer ways to do this. More advanced techniques include <a href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">Dijkstra</a>, which allows for weighted edges (e.g.&nbsp;a ‘cost’ for travelling over terrain types), and <a href="https://en.wikipedia.org/wiki/A*_search_algorithm">A-star</a>, which uses a heuristic to improve the efficiency of finding the shortest path between two points. Learn more in sensational <a href="https://www.redblobgames.com/pathfinding/a-star/introduction.html">introductions</a> and <a href="https://www.redblobgames.com/pathfinding/a-star/implementation.html">implementations</a> on <a href="https://www.redblobgames.com/">Red Blob Games</a> by <a href="https://twitter.com/redblobgames">Amit Patel</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Perhaps unsurprisingly, there’s not much on the web about implementing these algorithms in R for purposes of tile-based game development, specifically. There are implementations of theses algorithms, however, like <a href="https://github.com/machow/astar-r">Michael Chow’s A-star on GitHub</a>, which could be adapted.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>This behaviour probably makes more in-game sense. Unless you imagine the enemy has really great senses of smell or hearing and can detect the player wherever they are. Or your player character has just rolled low dexterity and is clumsy and loud.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
