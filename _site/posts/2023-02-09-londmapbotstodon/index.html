@@ -9,7 +9,7 @@
 <meta name="author" content="Matt Dray">
 <meta name="dcterms.date" content="2023-02-09">
 
-<title>rostrum.blog (test) - London from space via botsin.space</title>
+<title>rostrum.blog (test) - Porting a Twitter bot to Mastodon</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -150,7 +150,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">London from space via botsin.space</h1>
+      <h1 class="title">Porting a Twitter bot to Mastodon</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">api</div>
                 <div class="quarto-category">github-actions</div>
@@ -228,6 +228,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>You don’t know what the mapbotverse is? Oof. It’s a collection of 25 bot accounts that take some inspiration from <a href="https://twitter.com/londonmapbot">my londonmapbot account</a>, which uses <a href="https://github.com/features/actions">GitHub Actions</a> and <a href="https://docs.ropensci.org/rtweet/">the {rtweet} package</a> to tweet on schedule a picture of a random spot in Greater London via <a href="https://www.mapbox.com/">MapBox</a>.</p>
 <p>And so it’s time to update <a href="https://github.com/matt-dray/londonmapbot">the code behind londonmapbot</a> so that it continues to <a href="https://twitter.com/londonmapbot">post to Twitter</a> for as long as it survives. But also so that it lives on by <a href="https://botsin.space/@londonmapbot">posting to Mastodon</a> via <a href="https://schochastics.github.io/rtoot/">the {rtoot} package</a> as well.</p>
 <p>Mastowhat? Something something <a href="https://en.wikipedia.org/wiki/Mastodon_(social_network)">federated Twitter-replacement</a> sort of thing. Tooooooot tooooooot.</p>
+<div class="tip">
+<p>ℹ️ <b>Update</b></p>
+<p>I finally turned off londonmapbot on Twitter in May 2023.</p>
+</div>
 </section>
 <section id="masto-do-or-masto-do-not" class="level2">
 <h2 class="anchored" data-anchor-id="masto-do-or-masto-do-not">Masto-do or masto-do-not</h2>
@@ -278,7 +282,7 @@ Token (in environment variable format) has been copied to clipboard.
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">class =</span> <span class="st">"rtoot_bearer"</span>  <span class="co"># special token class</span></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Where <code>RTOOT_DEFAULT_TOKEN</code> is that API token from earlier, which is required for accessing Mastodon. As mentioned, it’s stored as <a href="https://docs.github.com/en/rest/actions/secrets">a GitHub repo secret</a> and called into the GitHub Action environment thanks to the <code>env: RTOOT_DEFAULT_TOKEN: ${{ secrets.RTOOT_DEFAULT_TOKEN }}</code> call in <a href="https://github.com/matt-dray/londonmapbot/blob/main/.github/workflows/post-image.yml">the YAML file</a>.</p>
+<p>Where <code>RTOOT_DEFAULT_TOKEN</code> is that API token from earlier, which is required for accessing Mastodon. As mentioned, it’s stored as <a href="https://docs.github.com/en/rest/actions/secrets">a GitHub repo secret</a> and called into the GitHub Action environment thanks to the <code>${{ secrets.RTOOT_DEFAULT_TOKEN }}</code> call in <a href="https://github.com/matt-dray/londonmapbot/blob/main/.github/workflows/post-image.yml">the YAML file</a>.</p>
 <p>This object can be passed quite happily to the <code>post_toot()</code> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rtoot<span class="sc">::</span><span class="fu">post_toot</span>(</span>
@@ -328,7 +332,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-06-29 23:27:45 CEST</code></pre>
+<pre><code>Last rendered: 2023-07-02 16:08:26 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -342,7 +346,7 @@ LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlap
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
-time zone: Europe/Zurich
+time zone: Europe/London
 tzcode source: internal
 
 attached base packages:
