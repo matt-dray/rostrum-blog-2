@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2021-11-27">
+
+<title>rostrum.blog (test) - R has obscenely long function names</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-black-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog (test)</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">R has obscenely long function names</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">base</div>
+                <div class="quarto-category">pacman</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">tidyverse</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 27, 2021</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#naming-things" id="toc-naming-things" class="nav-link" data-scroll-target="#naming-things">Naming things</a></li>
+  <li><a href="#the-long-and-the-short-of-it" id="toc-the-long-and-the-short-of-it" class="nav-link" data-scroll-target="#the-long-and-the-short-of-it">The long and the short of it</a>
+  <ul class="collapse">
+  <li><a href="#base-r" id="toc-base-r" class="nav-link" data-scroll-target="#base-r">Base R</a></li>
+  <li><a href="#tidyverse" id="toc-tidyverse" class="nav-link" data-scroll-target="#tidyverse">Tidyverse</a></li>
+  </ul></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><img src="resources/longboi.png" class="img-fluid" style="width:100.0%" alt="A crudely-drawn long dog with the R function name aspell_write_personal_dictionary_file written along the length of its body."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>Use <code>ls()</code> on a package name in the form <code>"package:base"</code> to see all the objects it contains. I’ve done this to find the longest (and shortest) function names in base R and the {tidyverse} suite.</p>
+</section>
+<section id="naming-things" class="level2">
+<h2 class="anchored" data-anchor-id="naming-things">Naming things</h2>
+<p>I try to keep to a few rules when creating function names, like:</p>
+<ul>
+<li>use a verb to make clear the intended action, like <a href="https://matt-dray.github.io/badgr/reference/get_badge.html"><code>get_badge()</code> from {badgr}</a></li>
+<li>start functions with a prefix to make autocomplete easier, like the <a href="https://matt-dray.github.io/dehex/reference/index.html"><code>dh_*()</code> functions from {dehex}</a></li>
+<li>try to be descriptive but succinct, like <a href="https://matt-dray.github.io/dialga/reference/r2cron.html"><code>r2cron()</code> from {dialga}</a></li>
+</ul>
+<p>It can be tricky to be succinct. Consider the base R function <code>suppressPackageStartupMessages()</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>: it’s a whopping 30 characters, but all the words are important. Something shortened, like <code>suppPkgStartMsg()</code>, wouldn’t be so clear.</p>
+<p>It <a href="https://www.rostrum.blog/2021/08/27/zzz/#fn1">made me wonder</a>: what’s the longest function name in R?<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>But! It seems tricky and time consuming to find the longest function name from <em>all</em> R packages. CRAN alone has over 18,000 at time of writing.</p>
+<p>A much easier (lazier) approach is to focus on some package subsets. I’ll look at base R and the {tidyverse}.</p>
+</section>
+<section id="the-long-and-the-short-of-it" class="level2">
+<h2 class="anchored" data-anchor-id="the-long-and-the-short-of-it">The long and the short of it</h2>
+<section id="base-r" class="level3">
+<h3 class="anchored" data-anchor-id="base-r">Base R</h3>
+<p>Certain R packages are built-in and attached by default on startup.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>base_names <span class="ot">&lt;-</span> <span class="fu">sessionInfo</span>()<span class="sc">$</span>basePkgs</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>base_names</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
+[7] "base"     </code></pre>
+</div>
+</div>
+<p>How can we fetch all the functions from these packages? We can use <code>ls()</code> to list all their objects, supplying the package name in the format <code>"package:base"</code>, for example. Note that I said ‘objects’, not ‘functions’, since it will also return names that refer to things like datasets.</p>
+<p>For fun, we can use this as an excuse to demo ‘lambda’ syntax and <a href="https://milesmcbain.micro.blog/2021/06/23/how-youd-fix.html">the dog’s balls approach</a> to function-writing, both introduced in R v4.1.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>base_pkgs <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"package:"</span>, base_names)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>base_fns <span class="ot">&lt;-</span> <span class="fu">lapply</span>(base_pkgs, ls) <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNames</span>(base_names) <span class="sc">|&gt;</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(\(object) <span class="fu">as.data.frame</span>(object)) <span class="sc">|&gt;</span> </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  (\(x) <span class="fu">do.call</span>(rbind, x))()  <span class="co"># the balls ()()</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>base_fns<span class="sc">$</span>package <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">.</span><span class="sc">\\</span><span class="st">d{,4}$"</span>, <span class="st">""</span>, <span class="fu">row.names</span>(base_fns))</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(base_fns) <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>base_fns<span class="sc">$</span>nchar <span class="ot">&lt;-</span> <span class="fu">nchar</span>(base_fns<span class="sc">$</span>object)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>base_fns <span class="ot">&lt;-</span> base_fns[<span class="fu">order</span>(<span class="sc">-</span>base_fns<span class="sc">$</span>nchar), ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Of the 2465 objects across these packages, a quick histogram shows that the most frequent character length is under 10, with a tail stretching out to over 30.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  base_fns<span class="sc">$</span>nchar,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Character length of base-object names"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Number of characters"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">las =</span> <span class="dv">1</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/hist-base-fns-1.png" class="img-fluid" alt="Histogram of character lengths for base object names. It's fairly normal around a bin of 6 to 8 characters, which has a peak frequency of over 400, plus there's a tail stretching out to over 30 characters." width="672"></p>
+</div>
+</div>
+<p>Here’s the top 10 by character length.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>base_fns_top <span class="ot">&lt;-</span> base_fns[<span class="fu">order</span>(<span class="sc">-</span>base_fns<span class="sc">$</span>nchar), ]</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(base_fns_top) <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="at">length =</span> <span class="fu">nrow</span>(base_fns_top))</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(base_fns_top, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                  object package nchar
+1  aspell_write_personal_dictionary_file   utils    37
+2     getDLLRegisteredRoutines.character    base    34
+3       getDLLRegisteredRoutines.DLLInfo    base    32
+4        reconcilePropertiesAndPrototype methods    31
+5         suppressPackageStartupMessages    base    30
+6          as.data.frame.numeric_version    base    29
+7           as.character.numeric_version    base    28
+8            print.DLLRegisteredRoutines    base    27
+9             as.data.frame.model.matrix    base    26
+10            conditionMessage.condition    base    26</code></pre>
+</div>
+</div>
+<p>So there are four objects with names longer than <code>suppressPackageStartupMessages()</code>, though they are rarely used as far as I can tell. The longest is <code>aspell_write_personal_dictionary_file()</code>, which has 37(!) characters. It’s part of the spellcheck functions in {utils}.</p>
+<p>It’s interesting to me that it follows some of those rules for function naming that I mentioned earlier. It has a verb, is descriptive and uses a prefix for easier autocomplete; ‘aspell’ refers to <a href="http://aspell.net/">the GNU open-source Aspell spellchecker</a> on which it’s based.</p>
+<p>I’m intrigued that the function uses snake_case rather than camelCase or dot.case, which seem more prevalent in base functions. You could argue then that the underscores have ‘inflated’ the length by four characters. Similarly, the prefix adds another six characters. So maybe the function could be simplified to <code>writePersonalDictionaryFile()</code>, which is merely 27 characters.</p>
+<p>What about shortest functions? There are many one-character functions in base R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sort</span>(base_fns[base_fns<span class="sc">$</span>nchar <span class="sc">==</span> <span class="dv">1</span>, ][[<span class="st">"object"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "-" ":" "!" "?" "(" "[" "{" "@" "*" "/" "&amp;" "^" "+" "&lt;" "=" "&gt;" "|" "~" "$"
+[20] "c" "C" "D" "F" "I" "q" "t" "T"</code></pre>
+</div>
+</div>
+<p>Some of these will be familiar, like <code>c()</code> to concatenate and <code>t()</code> to transpose. You might wonder why operators and brackets are in here. Remember: everything in R is a function, so <code>`[`(mtcars, "hp")</code> is the same as <code>mtcars["hp"]</code>. I have to admit that <code>stats::C()</code> and <code>stats::D()</code> were new to me.</p>
+</section>
+<section id="tidyverse" class="level3">
+<h3 class="anchored" data-anchor-id="tidyverse">Tidyverse</h3>
+<p>How about object names from the {tidyverse}?</p>
+<p>To start, we need to attach the packages. Running <code>library(tidyverse)</code> only loads the core packages of the tidyverse, so we need another approach to attach them all.</p>
+<p>One method is to get the a vector of the package names with the <code>tidyverse_packages()</code> function and pass it to <code>p_load()</code> from {pacman}, which prevents the need for a separate <code>library()</code> call for each one.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>First, here’s the tidyverse packages.</p>
+<div class="tip">
+<p>ℹ️ <b>Update</b></p>
+<p>I updated this post in July 2023. The {lubridate} package is now installed as part of the tidyverse and many new functions have appeared across the multitude of packages in the metapackage.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("tidyverse")  # if not installed</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>(  <span class="co"># in action!</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>tidy_names <span class="ot">&lt;-</span> <span class="fu">tidyverse_packages</span>()</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>tidy_names</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "broom"         "conflicted"    "cli"           "dbplyr"       
+ [5] "dplyr"         "dtplyr"        "forcats"       "ggplot2"      
+ [9] "googledrive"   "googlesheets4" "haven"         "hms"          
+[13] "httr"          "jsonlite"      "lubridate"     "magrittr"     
+[17] "modelr"        "pillar"        "purrr"         "ragg"         
+[21] "readr"         "readxl"        "reprex"        "rlang"        
+[25] "rstudioapi"    "rvest"         "stringr"       "tibble"       
+[29] "tidyr"         "xml2"          "tidyverse"    </code></pre>
+</div>
+</div>
+<p>And now to load them all.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("pacman")  # if not installed</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pacman)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">p_load</span>(<span class="at">char =</span> tidy_names)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Once again we can <code>ls()</code> over packages in the form <code>"package:dplyr"</code>. Now the {tidyverse} is loaded, we might as well use it to run the same pipeline as we did for the base packages.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tidy_pkgs <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"package:"</span>, tidy_names)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>tidy_fns <span class="ot">&lt;-</span> <span class="fu">map</span>(tidy_pkgs, ls) <span class="sc">|&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_names</span>(tidy_names) <span class="sc">|&gt;</span> </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">enframe</span>(<span class="at">name =</span> <span class="st">"package"</span>, <span class="at">value =</span> <span class="st">"object"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(object) <span class="sc">|&gt;</span> </span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">nchar =</span> <span class="fu">nchar</span>(object))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>So we’re looking at even more packages this time, since the whole tidyverse contains 3070 of them.</p>
+<p>The histogram is not too dissimilar to the one for base packages, though the tail is shorter, it’s arguably more normal-looking and the peak is perhaps slightly closer to 10. The latter could be because of more liberal use of snake_case.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  tidy_fns<span class="sc">$</span>nchar,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="st">"Character length of {tidyverse} object names"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab =</span> <span class="st">"Number of characters"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">las =</span> <span class="dv">1</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/hist-tidy-fns-1.png" class="img-fluid" alt="Histogram of character lengths for tidyverse object names. It's fairly normal around a bin of 8 to 10 characters, which has a peak frequency of over 600, plus there's a tail stretching out to over 30 characters." width="672"></p>
+</div>
+</div>
+<p>Here’s the top 10 by character length.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">slice_max</span>(tidy_fns, nchar, <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 3
+   package       object                            nchar
+   &lt;chr&gt;         &lt;chr&gt;                             &lt;int&gt;
+ 1 rlang         ffi_standalone_check_number_1.0.7    33
+ 2 googlesheets4 vec_ptype2.googlesheets4_formula     32
+ 3 googlesheets4 vec_cast.googlesheets4_formula       30
+ 4 cli           cli_progress_builtin_handlers        29
+ 5 rstudioapi    getRStudioPackageDependencies        29
+ 6 rstudioapi    registerCommandStreamCallback        29
+ 7 rlang         ffi_standalone_is_bool_1.0.7         28
+ 8 dbplyr        supports_star_without_alias          27
+ 9 rstudioapi    launcherPlacementConstraint          27
+10 cli           ansi_has_hyperlink_support           26
+11 ggplot2       scale_linewidth_continuous           26</code></pre>
+</div>
+</div>
+<p>Well there you are: <code>ffi_standalone_check_number_1.0.7()</code> from {rlang} wins the prize with 33 characters. What does it do? The full documentation is literally ‘Internal API for standalone-types-check’. Okey doke.</p>
+<p>Intriguingly, the next two are both from {googlesheets4}. The help pages say they’re ‘internal {vctrs} methods’. The names of these are long because of the construction: the first part tells us the method name, e.g.&nbsp;<code>vec_ptype2</code>, and the second part tells us that they apply to the <code>googlesheets4_formula</code> S3 class.</p>
+<p>So maybe these don’t really count because they would be executed as as <code>vec_ptype2()</code> and <code>vec_cast()</code>? And they’re inflated because they contain the package name, {googlesheets4}, which is quite a long one (13 characters). That would leave <code>cli::cli_progress_builtin_handlers()</code> and <code>rstudioapi::getRStudioPackageDependencies()</code> as the next longest (29 characters). The latter uses camelCase—which is typical of the {rstudioapi} package—so isn’t bulked out by underscores.</p>
+<p>On the other end of the spectrum, there’s only one function with one character: <code>dplyr::n()</code>. I think it makes sense to avoid single-character functions in non-base packages, because they aren’t terribly descriptive. <code>n()</code> can at least be understood to mean ‘number’.</p>
+<p>Instead, here’s all the two-letter functions from the {tidyverse}. Note that many of these are from {lubridate} and are shorthand expressions that make sense in context, like <code>hm()</code> for hour-minute. You can also see some of {rlang}’s operators creep in here, like bang-bang (<code>!!</code>) and the walrus (<code>:=</code>).<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>dplyr<span class="sc">::</span><span class="fu">filter</span>(tidy_fns, nchar <span class="sc">==</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 16 × 3
+   package   object nchar
+   &lt;chr&gt;     &lt;chr&gt;  &lt;int&gt;
+ 1 cli       no         2
+ 2 dplyr     do         2
+ 3 dplyr     id         2
+ 4 lubridate am         2
+ 5 lubridate hm         2
+ 6 lubridate ms         2
+ 7 lubridate my         2
+ 8 lubridate pm         2
+ 9 lubridate tz         2
+10 lubridate ym         2
+11 lubridate yq         2
+12 magrittr  or         2
+13 rlang     :=         2
+14 rlang     !!         2
+15 rlang     ll         2
+16 rlang     UQ         2</code></pre>
+</div>
+</div>
+<p>Many of these are due to {lubridate} using single letters to represent time periods, like <code>hm</code> is ‘hour minute’. You can also see some symbols from {rlang}, like the good ol’ <code>:=</code>, or ‘walrus’ operator.</p>
+<p>Both the {dplyr} functions here are no longer intended for use. I’m sad especially for <code>dplyr::do()</code>: the help page says it ‘never really felt like it belong[ed] with the rest of dplyr’. Sad.</p>
+<blockquote class="blockquote">
+<p>In memoriam: <code>do()</code>.</p>
+</blockquote>
+</section>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-04 20:08:24 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] xml2_1.3.4          rvest_1.0.3         rstudioapi_0.14    
+ [4] rlang_1.1.1         reprex_2.0.2        readxl_1.4.2       
+ [7] ragg_1.2.5          pillar_1.9.0        modelr_0.1.11      
+[10] magrittr_2.0.3      jsonlite_1.8.7      httr_1.4.6         
+[13] hms_1.1.3           haven_2.5.2         googlesheets4_1.1.1
+[16] googledrive_2.1.1   dtplyr_1.3.1        dbplyr_2.3.2       
+[19] cli_3.6.1           conflicted_1.2.0    broom_1.0.5        
+[22] pacman_0.5.1        lubridate_1.9.2     forcats_1.0.0      
+[25] stringr_1.5.0       dplyr_1.1.2         purrr_1.0.1        
+[28] readr_2.1.4         tidyr_1.3.0         tibble_3.2.1       
+[31] ggplot2_3.4.2       tidyverse_2.0.0    
+
+loaded via a namespace (and not attached):
+ [1] gtable_0.3.3      xfun_0.39         htmlwidgets_1.6.2 gargle_1.5.1     
+ [5] tzdb_0.4.0        vctrs_0.6.3       tools_4.3.1       generics_0.1.3   
+ [9] fansi_1.0.4       pkgconfig_2.0.3   data.table_1.14.8 lifecycle_1.0.3  
+[13] compiler_4.3.1    textshaping_0.3.6 munsell_0.5.0     htmltools_0.5.5  
+[17] yaml_2.3.7        cachem_1.0.8      tidyselect_1.2.0  digest_0.6.31    
+[21] stringi_1.7.12    fastmap_1.1.1     grid_4.3.1        colorspace_2.1-0 
+[25] utf8_1.2.3        withr_2.5.0       scales_1.2.1      backports_1.4.1  
+[29] timechange_0.2.0  rmarkdown_2.23    cellranger_1.1.0  memoise_2.0.1    
+[33] evaluate_0.21     knitr_1.43.1      glue_1.6.2        DBI_1.1.3        
+[37] R6_2.5.1          systemfonts_1.0.4 fs_1.6.2         </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p><a href="https://www.rostrum.blog/2021/08/27/zzz/">I wrote recently a whole post about package startup messages</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://twitter.com/mcguinlu/status/1443257017745948677?s=20">Luke was curious too</a>, so that’s at least two of us. (Luke also noticed that <a href="https://twitter.com/mcguinlu/status/1443256485367197708?s=20">a link to my {linkrot} package was itself rotten</a>, lol.)<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>My understanding is that a future version of R will allow an underscore as the left-hand-side placeholder, in a similar manner to how the {tidyverse} allows a dot. That will do away with the need for <code>()()</code>. Also ignore my badly-written base code; I’m trying to re-learn.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>In fact, <code>p_load()</code> will attempt installation if the package can’t be found in your library. Arguably, this is poor behaviour; you should always ask the user before installing something on their machine.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Bang-Bang and the Walrus, touring Spring 2022.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

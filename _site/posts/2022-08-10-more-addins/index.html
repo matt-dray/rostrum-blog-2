@@ -268,6 +268,12 @@ Right column
 <p>Go to the package website to <a href="https://matt-dray.github.io/quartostamp/reference/index.html">see the current list of functions</a> available in the Addin. Click them to learn more, including a preview of the actual text that will be inserted into your document.</p>
 <p>I think the limits of the package are the content that you would insert in the body of your Quarto doc, or to places like Revealjs slide headings. In other words, not Quarto YAML nor chunk options. These are autocompleted in RStudio, or otherwise dealt with already elsewhere.</p>
 <p>Do submit your ideas for {quartodown} as issues or pull requests in <a href="https://www.github.com/matt-dray/quartostamp">the GitHub repo</a>.</p>
+<div class="tip">
+<p>ℹ️ <b>Update</b></p>
+<p>The package was updated in June 2023 to version 0.1.0, which lets you highlight some text and run the addin so that the selected text becomes the body of the stamp. A simple dummy skeleton is inserted if you use the addin without highlighting any text, as described above.</p>
+<p>For example, you can write some bullets, highlight them, select ‘Insert Speaker Notes’ and you’ll get the appropriate markup for those bullets to be rendered as speaker notes in your Quarto presentation.</p>
+<p><img src="resources/quartostamp-replace.gif" class="img-fluid" style="width:100.0%" alt="An RStudio window with a Quarto presentation in the scripts pane. Some bullet-pointed text is highlighted, the 'addin' button is clicked and 'insert speaker notes' from the quartostamp package is clicked. The original text now has markup around it to indicate that it should be rendered as speaker notes."></p>
+</div>
 </section>
 <section id="package-snorkel" class="level2">
 <h2 class="anchored" data-anchor-id="package-snorkel">Package {snorkel}</h2>
@@ -309,7 +315,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-06-29 23:22:54 CEST</code></pre>
+<pre><code>Last rendered: 2023-07-04 18:14:23 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -323,7 +329,7 @@ LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlap
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
-time zone: Europe/Zurich
+time zone: Europe/London
 tzcode source: internal
 
 attached base packages:
@@ -332,7 +338,7 @@ attached base packages:
 loaded via a namespace (and not attached):
  [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
  [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.14   yaml_2.3.7       
- [9] rmarkdown_2.22    knitr_1.43.1      jsonlite_1.8.5    xfun_0.39        
+ [9] rmarkdown_2.22    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
 [13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
 </div>
 </div>

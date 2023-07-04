@@ -87,7 +87,7 @@ wordup::table_to_govspeak()
 
 To print this (and have it copied to your clipboard as the message says):
 
-```{r md-out, eval=FALSE}
+```
 | Column 1 | Column 2 | Column 3 | Column 4 | Column 5 |
 | ------- | ------: | ------: | ------: | ------: |
 | X | 100 | 1,000 | 1% | 15 |
@@ -97,7 +97,7 @@ To print this (and have it copied to your clipboard as the message says):
 The output table has been written to the clipboard.
 ```
 
-Boom. Notice that the third, fourth and fifth columns are recognised as numeric and therefore right-aligned (`------:`). This is entirely due to the argument `ignore_regex`, which defaults to removing commas, percentage symbols or anything in square brackets before it guesses what data type the column is.
+Boom. Note the crucial feature that the third, fourth and fifth columns are recognised as numeric---despite containing the strings `,`, `%` and `[c]`---and therefore right-aligned (`------:`). This is entirely due to the argument `ignore_regex`, which defaults to removing commas, percentage symbols or anything in square brackets before it guesses what data type the column is[^readr].
 
 And we can do fancy things like:
 
@@ -110,7 +110,7 @@ wordup::table_to_govspeak(
 
 Which outputs this thing:
 
-```{r md-out-args, eval=FALSE}
+```
 | Column 1 | Column 2 | Column 3 | Column 4 | Column 5 |
 | ------- | ------: | ------: | ------: | ------: |
 | # X | 100 | 1,000 | 1% | 15 |
@@ -137,3 +137,4 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 [^guidance]: There's specific [best-practice government guidance](https://analysisfunction.civilservice.gov.uk/policy-store/symbols-in-tables-definitions-and-help/) for the symbols that should be used for this purpose, such as '[c]' to mean that the data is suppressed due to reasons of confidentiality.
 [^cerberus]: Wrangling Word content with R is certainly a Herculean labour, amirite, classics fans? I know there are classicists who write R. Own up. There's no shame. Adriana is one of you.
 [^welcome]: I think you might be used to that by now if you've read this blog more than once.
+[^readr]: There are pre-existing functions that can parse numbers containing strings, like `readr::parse_number("10%")` returns `10`. But this particular function can't handle arbitrary strings in your number, like the placeholder `[c]` used to represent suppressed values.
