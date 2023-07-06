@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2022-04-25">
+
+<title>rostrum.blog (test) - Building a {r.oguelike} in R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-black-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog (test)</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Building a {r.oguelike} in R</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">gamedev</div>
+                <div class="quarto-category">keypress</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">r.oguelike</div>
+                <div class="quarto-category">R6</div>
+                <div class="quarto-category">videogames</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 25, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#rogue-like" id="toc-rogue-like" class="nav-link" data-scroll-target="#rogue-like">Rogue… like?</a></li>
+  <li><a href="#like-rogue" id="toc-like-rogue" class="nav-link" data-scroll-target="#like-rogue">Like Rogue!</a></li>
+  <li><a href="#r.oguelike" id="toc-r.oguelike" class="nav-link" data-scroll-target="#r.oguelike">{r.oguelike}</a>
+  <ul class="collapse">
+  <li><a href="#install-or-dont" id="toc-install-or-dont" class="nav-link" data-scroll-target="#install-or-dont">Install (or don’t)</a></li>
+  <li><a href="#demo" id="toc-demo" class="nav-link" data-scroll-target="#demo">Demo</a></li>
+  <li><a href="#engine" id="toc-engine" class="nav-link" data-scroll-target="#engine">Engine?</a></li>
+  <li><a href="#obvious-improvements" id="toc-obvious-improvements" class="nav-link" data-scroll-target="#obvious-improvements">Obvious improvements</a></li>
+  </ul></li>
+  <li><a href="#the-future" id="toc-the-future" class="nav-link" data-scroll-target="#the-future">The future</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><img src="resources/at-player.png" class="img-fluid" style="width:50.0%" alt="An at symbol with arms and legs. It holds a shield in one hand and is raising a sword with the other."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I started writing <a href="https://en.wikipedia.org/wiki/Roguelike">a roguelike game</a> (well, more of a ‘tech demo’) in <a href="https://matt-dray.github.io/r.oguelike/">an R package called {r.oguelike}</a>.</p>
+</section>
+<section id="rogue-like" class="level2">
+<h2 class="anchored" data-anchor-id="rogue-like">Rogue… like?</h2>
+<p>There’s loads of video game genres: beat ’em up, platformer, rhythm, MMORPG, sports, puzzle. <a href="https://en.wikipedia.org/wiki/Roguelike">Have you heard of roguelikes</a>?</p>
+<p>The name is literal: they’re <a href="https://en.wikipedia.org/wiki/Rogue_%28video_game%29">games that play like <em>Rogue</em></a>, a legendary dungeon-explorer from 1980 that set the bar for role-playing games.</p>
+<p>Perhaps most recognisably, it used ASCII text as ‘graphics’: the player controls a character denoted by the at symbol (<code>@</code>), while floor tiles are made of periods (<code>.</code>), for example.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/rogue.png" class="img-fluid figure-img" style="width:100.0%" alt="Screenshot of the game Rogue, which has graphics made entirely from ASCII characters. Several rooms are outlined with hyphens and pipes, with hashmark corridors between them. The player character is an at symbol. Some rooms have items in them, marked with various symbols. There's some commentary text printed above the map, which says '4 pieces of gold', and an inventory below, which says things like 'Hp 11."></p>
+<figcaption class="figure-caption">Screenshot of Rogue <a href="https://en.wikipedia.org/wiki/Roguelike#/media/File:Rogue_Screenshot.png">via Thedarkb on Wikipedia</a></figcaption>
+</figure>
+</div>
+<p>There are many interpretations of what exactly constitutes a ‘roguelike’, one of which is the strict <a href="http://www.roguebasin.com/index.php/Berlin_Interpretation">‘Berlin Interpretation’</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. Must-haves include:</p>
+<ul>
+<li>randomly-generated dungeons (a different map every time)</li>
+<li>permadeath (it’s game over when you die)</li>
+<li>turn-based battles (limitless thinking time, then one action)</li>
+<li>grid-based (everything takes up one tile of space)</li>
+<li>non-modal (all actions are possible at any time)</li>
+<li>complexity (rich problem solving with items, characters and interactions)</li>
+<li>resource management (items are limited and must be managed)</li>
+<li>hack ‘n’ slash (kill lots of monsters)</li>
+<li>exploration and discovery (find all corners of the map to solve problems)</li>
+</ul>
+<p>These aren’t necessarily hard and fast rules—many games have added their own twist—but they provide the essence of the genre.</p>
+</section>
+<section id="like-rogue" class="level2">
+<h2 class="anchored" data-anchor-id="like-rogue">Like Rogue!</h2>
+<p>So, what would it take to make a roguelike using R?</p>
+<p>I once made a tiny <a href="https://www.rostrum.blog/2021/10/03/squirrel/">game-in-a-package called {ActionSquirrel}</a>. You control an emoji squirrel on the R console, moving around a forest grid to collect randomly-placed nuts. Collect enough nuts to survive winter, which arrives within a certain number of turns, while avoiding a randomly-moving owl.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> ActionSquirrel<span class="sc">::</span>ActionSquirrel<span class="sc">$</span><span class="fu">new</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>🌳 🌳 🌳 🌳 🌳 
+🌳 🌳 🌰 🌳 🌳 
+🌳 🌳 🌳 🐿 🌳 
+🌳 🦉 🌳 🌳 🌳 
+🌳 🌳 🌳 🌳 🌳 
+Moves: 0 
+Nuts: 0</code></pre>
+</div>
+</div>
+<p>That’s not far off from some of the roguelike requirements: it has randomness and permadeath, is turn-based and grid-based and has non-modality. But it’s missing complexity, resource management, hack ‘n’ slash gameplay and exploration.</p>
+<p>And the aesthetic isn’t particularly… dungeony?</p>
+</section>
+<section id="r.oguelike" class="level2">
+<h2 class="anchored" data-anchor-id="r.oguelike">{r.oguelike}</h2>
+<p>So I started to build an R package containing an ‘engine’ for a game in the roguelike style, called {r.oguelike}.</p>
+<p>You can <a href="https://matt-dray.github.io/r.oguelike/">visit the package website</a> or <a href="https://github.com/matt-dray/r.oguelike">look at the source code in the GitHub repo</a>.</p>
+<p><img src="resources/r.oguelike-hex.png" class="img-fluid" style="width:25.0%" alt="Hex sticker design for the 'r.oguelike' R package. Black background with bright green font, reminiscent of old computer terminal output. In the centre, a three-by-ten arrangement of hashmarks and periods, along with a single at symbol and dollar sign, which looks like a classic ACII tile-based roguelike game. The text 'r.oguelike' is underneath."></p>
+<p>For now it’s just a toy to demo some possible approaches for some of the main game elements: ‘graphics’, movement, an inventory, item use and battling.</p>
+<p>As ever, everything in the package is subject to change and improvement (though I also may never finish it). Consider this a quick devlog about progress so far.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<section id="install-or-dont" class="level3">
+<h3 class="anchored" data-anchor-id="install-or-dont">Install (or don’t)</h3>
+<p>You can install from GitHub to make the package available on your machine.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)  <span class="co"># if not already installed</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"matt-dray/r.oguelike"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you prefer, you can also play in your browser without having to install anything. I’ve set up <a href="https://mybinder.org/">a Binder instance</a> of RStudio with {r.oguelike} preinstalled so you can just click the button below to launch it (it may take a moment to load):</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="https://mybinder.org/v2/gh/matt-dray/play-r.oguelike/main?urlpath=rstudio"><img src="https://mybinder.org/badge_logo.svg" class="img-fluid figure-img"></a></p>
+<figcaption class="figure-caption">Launch Rstudio Binder</figcaption>
+</figure>
+</div>
+<p>This also means it’s possible to <a href="https://twitter.com/mattdray/status/1486458576516399104?s=20&amp;t=dVwpJPwmMeBP3NTUhrn9gQ">play this game from your phone</a>, lol.</p>
+<div class="tip">
+<p>❗️ <b>Note</b></p>
+<p>The {r.oguelike} package is a work in progress and is developing at pace. Many things explained below may have been superseded or changed by the time you read this.</p>
+</div>
+</section>
+<section id="demo" class="level3">
+<h3 class="anchored" data-anchor-id="demo">Demo</h3>
+<p>Top-tip: improve immersion by changing your console colour palette to dark mode, so it’s like you’re really inside a cave, wow.</p>
+<p>To begin:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>r.oguelike<span class="sc">::</span><span class="fu">start_game</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When you start, the console clears and the user interface is printed.</p>
+<pre><code># # # # # # # # # 
+# . . $ . . E . # 
+# . . . . . . . # 
+# . . . . a . . # 
+# . . . . . @ . # 
+# # # # # # # # # 
+T: 25 | HP: 10 | G: 0 | A: 0
+Press key to start
+Input: </code></pre>
+<p>At the top is a map of a dungeon room, made of floor (<code>.</code>) and wall (<code>#</code>) tiles. The room has randomly-selected dimensions from within a certain range. Within the room are randomly-placed characters and objects: the player (<code>@</code>), an enemy (<code>E</code>), and a collectible apple (<code>a</code>) and gold (<code>$</code>).</p>
+<p>Below the dungeon room there’s:</p>
+<ul>
+<li>a status/inventory bar, which gives a numeric value for <code>T</code>urns remaining, <code>H</code>it <code>P</code>oints, <code>G</code>old and <code>A</code>pples<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></li>
+<li>a status message to provide information, usually to let the user know what has just happened</li>
+<li>a prompt for the user to input a key press</li>
+</ul>
+<p>The game is turn-based and begins when the user chooses a direction to move the player character. There are two methods for registering a key press:</p>
+<ul>
+<li>press <kbd>W</kbd>, <kbd>A</kbd>, <kbd>S</kbd> or <kbd>D</kbd> (i.e.&nbsp;up, left, down or right) and hit <kbd>Enter</kbd></li>
+<li>just press an arrow key <a href="https://github.com/gaborcsardi/keypress">if your console supports {keypress}</a> (not available in RStudio), a package from Gábor Csárdi that <a href="https://www.rostrum.blog/2022/01/19/keypress/">I wrote about recently</a></li>
+</ul>
+<p>In this demo, let’s aim first for the apple. The apple will return us 1 HP when consumed, so it’s a good idea to get it in our inventory as soon as possible. So, let’s input <kbd>W</kbd> and <kbd>Enter</kbd> (or press the up arrow if {keypress} is enabled).</p>
+<pre><code># # # # # # # # # 
+# . . $ . . E . # 
+# . . . . . . . # 
+# . . . . a @ . # 
+# . . . . . . . # 
+# # # # # # # # # 
+T: 24 | HP: 10 | G: 0 | A: 0
+Moved up
+Input: </code></pre>
+<p>The console will wipe the user interface will be re-printed. You’ll notice that your character has moved up one tile, the turn counter has decreased by 1 and the status message has changed to say ‘Moved up’.</p>
+<p>Now we can move left to collect the apple.</p>
+<pre><code># # # # # # # # # 
+# . . $ . . E . # 
+# . . . . . . . # 
+# . . . . @ . . # 
+# . . . . . . . # 
+# # # # # # # # # 
+T: 23 | HP: 10 | G: 0 | A: 1
+Collected apple (+1 A)
+Input: </code></pre>
+<p>Again, you can see the player has progressed one tile and the turn counter decreased. You’ll notice that the inventory spot for the apple increased by 1 and the status message has changed to <code>Collected apple (+1 A)</code> so we know what happened.</p>
+<p>What next? Let’s aim for the loot, signified by <code>$</code> on the map. I’ll fast-forward to show you what happens after moving left twice and up twice.</p>
+<pre><code># # # # # # # # # 
+# . . @ . . E . # 
+# . . . . . . . # 
+# . . . . . . . # 
+# . . . . . . . # 
+# # # # # # # # # 
+T: 19 | HP: 10 | G: 1 | A: 1
+Found gold (+1 G)
+Input: </code></pre>
+<p>The player now occupies the space where the gold was and the turn counter has decreased by 4. You’ll see that the status messages has updated to <code>Found gold (+1 G)</code> and the gold spot in the inventory has increased by 1, but note that the amount of gold is randomly selected from a range of possible values.</p>
+<p>There’s one obvious target left: the enemy character (<code>E</code>). So if we move right twice, we’ll start an encounter.</p>
+<p>When you occupy the space of the enemy, you begin a turn-based battle. At the moment, this is actually an ‘auto-battler’: a routine is run under-the-hood where the player and enemy trade blows until one is vanquished.</p>
+<p>Each character has attack and HP values. Of course, you can see that the player has 10 HP to start, but they also have attack strength of 2. The enemy character starts with a randomly selected HP value from within a range, and their attack strength is 1. The player attacks first, so will receive three points of damage from the enemy that has 4 HP, for example.</p>
+<pre><code># # # # # # # # # 
+# . . . . . @ . # 
+# . . . . . . . # 
+# . . . . . . . # 
+# . . . . . . . # 
+# # # # # # # # # 
+T: 12 | HP: 7 | G: 1 | A: 1
+You win! (-3 HP)
+Input: </code></pre>
+<p>So we know we won because the status message changed to <code>You win!</code> and a note of how many hit points we lost: <code>(-3 HP)</code>. Concurrently the HP in the inventory bar has reduced by that amount.</p>
+<p>Having lost some HP, we can add some back by consuming the apple, an action mapped to the number <kbd>1</kbd> key on your keyboard (regardless of whether you’re using {keypress} or not).</p>
+<pre><code># # # # # # # # # 
+# . . . . . @ . # 
+# . . . . . . . # 
+# . . . . . . . # 
+# . . . . . . . # 
+# # # # # # # # # 
+T: 11 | HP: 8 | G: 1 | A: 0
+Ate apple (+1 HP)
+Input: </code></pre>
+<p>So we get a message <code>Ate apple</code> and that our hit points have increased as a result: <code>(+1 HP)</code>. Of course, this means that the apple spot in the inventory has decreased to zero. Note that the HP maxes out at 10, so eating the apple won’t raise the HP value above that.</p>
+<p>This is the end of the demo: you’ve collected all the items and defeated the enemy. But I also added a lose condition, which occurs when you run out of turns.</p>
+<pre><code># # # # # # # # # 
+# . . . . . . . # 
+# . . . . . . . # 
+# . . . . . . . # 
+# @ . . . . . . # 
+# # # # # # # # # 
+T: 1 | HP: 8 | G: 1 | A: 0
+Moved left
+Input: a
+You died (max turns)! Try again!
+&gt; </code></pre>
+<p>The game ends and the command prompt (<code>&gt;</code>) returns.</p>
+</section>
+<section id="engine" class="level3">
+<h3 class="anchored" data-anchor-id="engine">Engine?</h3>
+<p>The technicals aren’t much to marvel at, really, but you can <a href="https://github.com/matt-dray/r.oguelike">take a look at the code in the GitHub repo</a> or <a href="https://matt-dray.github.io/r.oguelike/">on the website</a>.</p>
+<p>I called it an ‘engine’ earlier, but that was deceitful, lol.</p>
+<p>It’s just a <code>while</code> loop that keeps running so long as the <code>is_alive</code> state is set to <code>TRUE</code>. So running out of turns sets the <code>is_alive</code> value to <code>FALSE</code> and the loop is broken.</p>
+<p>The content of the loop is run after the player inputs a key press, which results in various counters being adjusted for the HP, etc. The loop concludes by printing the room with updated player locations, inventory bar and status messsage, ready for the next input.</p>
+<p>The room itself is just a matrix. When you move the player, a small calculation is done to determine where the player character should be in the next iteration. Imagine the player is in the centre of a 3 by 3 room, i.e.&nbsp;they’re in position [2,2] of a matrix with x and y dimensions of 3. If they move down, that’s equivalent to adding 1 to their current position, so 5 + 1 = 6. Similarly, moving right would be equivalent to adding 3, so 5 + 3 = 8.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">matrix</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>, <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3]
+[1,]    1    4    7
+[2,]    2    5    8
+[3,]    3    6    9</code></pre>
+</div>
+</div>
+<p>The code is pretty rough and you can see that the logic can start to become complicated quickly, but remember it’s just a demo for now.</p>
+</section>
+<section id="obvious-improvements" class="level3">
+<h3 class="anchored" data-anchor-id="obvious-improvements">Obvious improvements</h3>
+<p>There’s some obvious user-facing improvements to the features that are already in place:</p>
+<ul>
+<li>interactive turn-based battles, where the user can choose what move to make (perhaps defensive moves, HP replenishment or magic)</li>
+<li>enemy movement, so they aren’t just stationary</li>
+<li>different enemy types, with differing ‘AI’ (random movement, ‘chase’ player, etc) and attack/HP stats</li>
+<li>traps (e.g.&nbsp;certain tiles are hidden traps, some collectible items are bogus)</li>
+<li>fog of war/vision cones (you can’t see what’s ahead until you get there, or you can only see a certain distance around you at all times)</li>
+</ul>
+<p>There’s also a big-ticket item I haven’t touched: randomised or procedural dungeon generation. This is quite a big task and might end up as a blog post of its own. I encourage you to <a href="Roguelike Celebration">watch Herbert Wolverson’s talk at Roguelike Celebration 2020</a> for some ideas on this. At least at first, it could simply involve letting the player walk through doors to a few other rooms that contain randomised items.</p>
+<p>On the back-end, I’ve so far written everything in base R; the only dependency is {keypress} to make inputs easier for consoles that support it. But there’s only so many if-else statements you can write before your brain explodes. To this end, I’m working in a branch to make use of the object-oriented approach of <a href="https://r6.r-lib.org/articles/Introduction.html">the {R6} package</a>–as used in {ActionSquirrel}–to create general objects like enemies, rooms, etc, that should make it easier to handle and work with the elements of the game.</p>
+</section>
+</section>
+<section id="the-future" class="level2">
+<h2 class="anchored" data-anchor-id="the-future">The future</h2>
+<p>The package will change and grow as I add stuff, so do <a href="https://github.com/matt-dray/r.oguelike">check out the repo on GitHub</a> for any updates that may happened since you read this post.</p>
+<p>Obviously I’ll need some seed funding to set up my indie game company so I can begin making a cool 3D version of this. <a href="https://twitter.com/coolbutuseless/status/1495500110758883332?s=20&amp;t=FZSlvFFs3HBfS_pnAUtHLw">Oh, wait, mifekc is already on the case!</a></p>
+<p>Alright, nevermind. How about, erm, a roguelike-themed Wordle? Oh wait, <a href="https://twitter.com/st33d/status/1502425657493671944?s=20&amp;t=FZSlvFFs3HBfS_pnAUtHLw">it’s already been done!</a></p>
+<p>Might just take a nap instead, to be honest.</p>
+<div class="tip">
+<p>ℹ️ <b>Update</b></p>
+<p>You can now <a href="https://www.rostrum.blog/2022/05/01/dungeon/">read about how I’ve generated and integrated (very simple) procedural dungeons into the package</a>, replacing the rectangular rooms demonstrated above.</p>
+</div>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-06 19:27:41 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2    compiler_4.3.1       R6_2.5.1            
+ [4] fastmap_1.1.1        cli_3.6.1            tools_4.3.1         
+ [7] htmltools_0.5.5      rstudioapi_0.14      yaml_2.3.7          
+[10] rmarkdown_2.23       knitr_1.43.1         jsonlite_1.8.7      
+[13] xfun_0.39            digest_0.6.31        rlang_1.1.1         
+[16] ActionSquirrel_0.1.0 evaluate_0.21       </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>The <a href="https://www.youtube.com/watch?v=uM588ci-sMQ">Design Doc YouTube channel has a nice explainer</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>I’ve been watching indie game devlogs on YouTube by people like <a href="https://www.youtube.com/c/SebastianLague">Sebastian Lague</a>, <a href="https://www.youtube.com/c/ThinMatrix/">Karl (ThinMatrix)</a> and <a href="https://www.youtube.com/c/DaniDev">Dani</a>. I’d love to see more of this sort of thing for R package development, like <a href="https://www.youtube.com/c/BrunoRodrigues1988/videos">what Bruno Rodrigues has been doing on YouTube</a> for the development of <a href="https://b-rodrigues.github.io/chronicler/">the {chronicler} package</a>, for example.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Why are they <code>$</code> and <code>a</code> on the map, but <code>G</code> and <code>A</code> in the inventory bar? Good question. I’ll probably change that in future.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
