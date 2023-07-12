@@ -9,7 +9,7 @@ $theme: "default" !default;
 // Set theme colours
 $theme-primary: #00FF00;
 $theme-secondary: #000;
-$theme-tertiary: #BEBEBE;
+$theme-tertiary: #F2F3F5;
 
 // Import Google Fonts
 @import 'https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&display=swap';
@@ -39,6 +39,11 @@ h1, h2, h3, h4, h5, h6  {
   font-family: $font-family-monospace, monospace;
 }
 
+// Title
+h1 {
+  color: $theme-primary;
+}
+
 // Links in body text
 .content a {
   text-decoration: none;
@@ -59,9 +64,9 @@ h1, h2, h3, h4, h5, h6  {
 
 // Keyboard key
 kbd {
-  background-color: #eee;
+  background-color: white;
   border-radius: 3px;
-  border: 1px solid #b4b4b4;
+  border: 1px solid $theme-tertiary;
   box-shadow: 0 1px 1px rgba(0, 0, 0, .2), 0 2px 0 0 rgba(255, 255, 255, .7) inset;
   color: #222;
   display: inline-block;
@@ -82,4 +87,12 @@ td, th {
   font-weight: normal;
   border-bottom: none;
   padding: 5px;
+}
+
+// Custom tip box
+.tip {
+  padding: 20px 20px;
+  border-radius: 1px;
+  border-style: solid;
+  border-color: $theme-tertiary;
 }

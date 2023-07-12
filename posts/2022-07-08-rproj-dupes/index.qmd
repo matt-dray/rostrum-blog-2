@@ -1,0 +1,119 @@
+---
+title: Stop opening the same RStudio Project twice
+date: 2022-07-08
+slug: rproj-dupes
+categories:
+  - r
+  - rstudio
+---
+
+![](resources/rproj-dupes.png){fig-alt="An RStudio console on startup. After the usual R startup text it says 'Warning message: You've got open RStudio Projects with the same name' followed by a bullet point that says 'sandbox.Rproj'. Overlaid is the macOS item switcher showing that there are indeed two RStudio instances open with that name." width="100%"}
+
+## tl;dr 
+
+I keep opening more than one instance of the same RStudio Project and it's annoying me, so I wrote a function to warn me on startup.
+
+## Double trouble
+
+Sometimes I write code in an RStudio Project and then go and do something else. My memory is terrible, so later I might open a second instance of the same project and wonder what happened to that code I'd written before.
+
+Is there a way to stop this from happening? Maybe there's a setting in RStudio or something? Maybe I should just Google it?
+
+Nah, instead I hacked together a little function that can be run on startup to warn me---via both text and audio---if I have multiple RStudio sessions open with the same name. It's called `check_rproj_dupes()`.
+
+Note that the function checks which OS you're using with `.Platform$OS.type`, with the hope that one day I (or you) will write some corresponding code that will work on Windows. I don't use Windows, so I can't test anything.
+
+The code has a few steps:
+
+1. Pass the `ps` (process status) command with flag `-e` (show all running processes) to the shell via the `system()` function, which is captured in a vector when `intern = TRUE`
+2. Use `grepl()` to isolate the strings that contain the '.RProj' RStudio Project extension
+3. Extract the full paths to the .RProj files
+4. Extract the basenames from the paths (i.e. just the filename for the .RProj)
+5. Compare the basenames to see which are duplicated
+6. Display any matches in a warning message and, if `speak = TRUE`, read aloud a warning message that's passed to the `say` function via `system()`
+
+Yeah, this could be simplified, but I'm no code golfer. I just want it to work and for it to be pretty obvious what it's doing.
+
+Here it is (or see it [in a GitHub Gist](https://gist.github.com/matt-dray/b4ff92f01093f512dae99b670e3eddb7), where you can write your suggestions for how to improve it):
+
+```{r fn, eval=FALSE}
+check_rproj_dupes <- function(speak = FALSE) {
+
+  os <- .Platform$OS.type
+
+  if (os == "unix") {
+
+    ps_out <- system("ps -e", intern = TRUE)
+    ps_rproj <- ps_out[grepl(".Rproj", ps_out)]
+    ps_split <- strsplit(ps_rproj, "\\s")
+    rproj_paths <- lapply(ps_split, function(x) x[grepl(".Rproj$", x)])
+    rproj_basenames <- lapply(rproj_paths, basename)
+    rproj_dupes <- sort(unlist(rproj_basenames[duplicated(rproj_basenames)]))
+
+  }
+
+  if (os == "windows") {
+    stop("Sorry, check_rproj_dupes() doesn't work on Windows yet :-(")
+  }
+
+  if (length(rproj_dupes) > 0) {
+
+    if (speak & os == "unix") {
+
+      dupes_string <- paste(rproj_dupes, collapse = ", ")
+      dupes_string_say <- gsub("\\.Rproj", " dot ar proj ", dupes_string)
+
+      message <- paste(
+        "say ha, you fool, you have more than one open RStudio Project with",
+        ifelse(length(rproj_dupes) == 1, "this name:", "these names:"),
+        dupes_string_say
+      )
+
+      system(message)
+
+    }
+
+    warning(
+      "You've got open RStudio Projects with the same name:\n",
+      paste("-", rproj_dupes, collapse = "\n"), "\n",
+      call. = FALSE
+    )
+
+  }
+
+}
+
+check_rproj_dupes()
+rm(check_rproj_dupes)
+```
+
+How would you actually use this though? 
+
+You can add it to your 'hidden' .Rprofile file, which is a place that you can store code that runs whenever RStudio is started.[^rprofile] Perhaps the easiest way to open it is with `usethis::edit_r_profile()`. Then you can paste in all the code from the block above.[^gist]
+
+On startup, the code will run and if there's no problem, then you'll see no message. No news is good news.
+
+But let's say I had opened sandbox.Rproj earlier and was now opening the file again. In this second RStudio instance, the usual R startup message will print, followed by a warning:
+
+```
+Warning message:
+You've got open RStudio Projects with the same name:
+- sandbox.Rproj 
+```
+
+If `speak = TRUE` then you'll also hear this:
+
+<html><audio controls><source src="resources/duplicated.wav" type="audio/wav"></audio></html>
+
+So hopefully now I will be less confused when trying to manage my RStudio sessions. At worst I'll be shocked to hear the creepy computer voice tell me I'm a fool.
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^rprofile]: I tend not to put anything in here that would hamper reproducibility, i.e. another user shouldn't have to run anything in my .Rprofile to be able to re-run my scripts on their computer.
+[^gist]: The code is [in a GitHub Gist](https://gist.github.com/matt-dray/b4ff92f01093f512dae99b670e3eddb7) too, so in theory you could pass [the URL to the raw code](https://gist.githubusercontent.com/matt-dray/b4ff92f01093f512dae99b670e3eddb7/raw/517ad944f5c7e2cb97db5515103d409144db7e54/check-rproj-dupes.R) to `source()`. But don't do that because you shouldn't trust me or anyone. And also it won't work if you aren't connected to the internet.
