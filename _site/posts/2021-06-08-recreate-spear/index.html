@@ -188,7 +188,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
   <li><a href="#cottonviz" id="toc-cottonviz" class="nav-link" data-scroll-target="#cottonviz">#CottonViz</a></li>
-  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">1. Set-up</a>
+  <li><a href="#set-up" id="toc-set-up" class="nav-link" data-scroll-target="#set-up">1. Set-up</a>
   <ul class="collapse">
   <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
   <li><a href="#fonts" id="toc-fonts" class="nav-link" data-scroll-target="#fonts">Fonts</a></li>
@@ -196,8 +196,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#start-a-graphics-device" id="toc-start-a-graphics-device" class="nav-link" data-scroll-target="#start-a-graphics-device">Start a graphics device</a></li>
   <li><a href="#plotting-parameters" id="toc-plotting-parameters" class="nav-link" data-scroll-target="#plotting-parameters">Plotting parameters</a></li>
   </ul></li>
-  <li><a href="#lineplot" id="toc-lineplot" class="nav-link" data-scroll-target="#lineplot">2. Line plot</a></li>
-  <li><a href="#barplot" id="toc-barplot" class="nav-link" data-scroll-target="#barplot">3. Bar plot</a></li>
+  <li><a href="#line-plot" id="toc-line-plot" class="nav-link" data-scroll-target="#line-plot">2. Line plot</a></li>
+  <li><a href="#bar-plot" id="toc-bar-plot" class="nav-link" data-scroll-target="#bar-plot">3. Bar plot</a></li>
+  <li><a href="#margin-labels" id="toc-margin-labels" class="nav-link" data-scroll-target="#margin-labels">4. Margin labels</a></li>
   <li><a href="#saving" id="toc-saving" class="nav-link" data-scroll-target="#saving">5. Saving</a></li>
   <li><a href="#reflections" id="toc-reflections" class="nav-link" data-scroll-target="#reflections">Reflections</a>
   <ul class="collapse">
@@ -236,10 +237,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="resources/3_final.png" class="img-fluid" style="width:100.0%" alt="A recreation of Spear's original plot, with line plot, bar plot, labels and titles. It's not an identical match. The title font is not the same, for example."></p>
 <p>It’s certainly not an identical match to the original, but it gets most of the way there.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
 <p>You can find the scripts for both the recreation and gif in <a href="https://github.com/matt-dray/viz-recreation">my matt-dray/viz-recreation GitHub repo</a>.</p>
-<p>The rest of this post is a walkthrough of the code used to create the final output. It’s in five sections: (1) <a href="#setup">set-up</a>, (2) <a href="#lineplot">line plot</a>, (3) <a href="#barplot">bar plot</a>, (4) <a href="#marginlabels">margin labels</a> and (5) <a href="#saving">saving</a>, with a closing section reflecting on tricky parts and potential improvements.</p>
+<p>The rest of this post is a walkthrough of the code used to create the final output. It’s in five sections: (1) set-up, (2) line plot, (3) bar plot, (4) margin labels and (5) saving, with a closing section reflecting on tricky parts and potential improvements.</p>
 </section>
-<section id="setup" class="level2">
-<h2 class="anchored" data-anchor-id="setup">1. Set-up</h2>
+<section id="set-up" class="level2">
+<h2 class="anchored" data-anchor-id="set-up">1. Set-up</h2>
 <section id="data" class="level3">
 <h3 class="anchored" data-anchor-id="data">Data</h3>
 <p>The dataset is <a href="https://rss.org.uk/news-publication/news-publications/2021/section-group-reports/mary-eleanor-spear-dataviz-competition-for-childre/">available to download</a> from the RSS website, but it’s small enough that I can just recreate it here exactly.</p>
@@ -259,9 +260,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>I’ve used two font families that weren’t pre-installed on my system:</p>
 <ul>
 <li><a href="https://webonastick.com/fonts/routed-gothic/">Routed Gothic</a>, a very close match for the general text of the plot</li>
-<li><a href="https://www.ffonts.net/Hussar-Bold-Condensed.font">Hussar Bold Condensed</a>, a not-that-great match for the main title</li>
+<li><a href="https://www.ffonts.net/Hussar-Bold-Condensed.font">Hussar Bold Condensed</a>, a not-that-great match for the main title, but it’ll do</li>
 </ul>
-<p>Do let me know if you have better alternatives, particularly for the main title.</p>
 <p>It was sufficient for me to install these fonts on my system (macOS Big Sur running R v4.0.5) and invoke them by name, as you’ll see through the rest of this walkthrough. Your mileage may vary.</p>
 </section>
 <section id="constants" class="level3">
@@ -331,8 +331,8 @@ Click for constants (I hid this because it’s dull)
 <p>I’ve selected ‘<a href="https://webonastick.com/fonts/routed-gothic/">Routed Gothic</a>’ as the font family and I think it’s a great match. It’s based on the Leroy lettering set that was often used for hand-labelling technical drawings.</p>
 </section>
 </section>
-<section id="lineplot" class="level2">
-<h2 class="anchored" data-anchor-id="lineplot">2. Line plot</h2>
+<section id="line-plot" class="level2">
+<h2 class="anchored" data-anchor-id="line-plot">2. Line plot</h2>
 <p>So, here’s the first ‘hack’. I’m going to set up a ‘fake’ scatter plot with no content and then we’re going to add our desired content to it sequentially. This provides the correct plot dimensions to which we can add bespoke details.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dummy x-y scatter plot</span></span>
@@ -434,8 +434,8 @@ Click for constants (I hid this because it’s dull)
 <p>Excellent, that’s the line plot completed. The plot now looks like this:</p>
 <p><img src="resources/1_lp_2.png" class="img-fluid" style="width:100.0%" alt="The recreated plot in progress: the line plot has axes, labels, data and arrows."></p>
 </section>
-<section id="barplot" class="level2">
-<h2 class="anchored" data-anchor-id="barplot">3. Bar plot</h2>
+<section id="bar-plot" class="level2">
+<h2 class="anchored" data-anchor-id="bar-plot">3. Bar plot</h2>
 <p>The <code>barplot()</code> function is a little different to the <code>plot()</code> function.</p>
 <p>It doesn’t take the data as <code>x</code> and <code>y</code> arguments; we can instead pass it a single object that contains our data with each column corresponding to columns in the plot.</p>
 <div class="cell">
@@ -546,7 +546,10 @@ Stocks         10.657 10.744 11.164 7.326  2.530 3.080 5.283</code></pre>
 <span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And here’s our visualisation with both plots completed:</p>
-<p><img src="resources/2_bp_3.png" class="img-fluid" style="width:100.0%" alt="The recreated plot in progress: both the line plot on the left and the bar plot on the right are completed with axes, data, labels and arrows."> ## 4. Margin labels {#marginplot}</p>
+<p><img src="resources/2_bp_3.png" class="img-fluid" style="width:100.0%" alt="The recreated plot in progress: both the line plot on the left and the bar plot on the right are completed with axes, data, labels and arrows."></p>
+</section>
+<section id="margin-labels" class="level2">
+<h2 class="anchored" data-anchor-id="margin-labels">4. Margin labels</h2>
 <p>With both charts completed, we can add with <code>mtext()</code> the titles and captions that exist for the plot as a whole.</p>
 <p>The main title uses a different font family than was specified in <code>par()</code>, so we override it with the <code>family</code> argument.</p>
 <p>I couldn’t find a good (free) approximation of the font family that Spear used, so I’ve used one that has a similar ‘feel’, even if many of the typographical features are wrong (e.g.&nbsp;single-storey ‘a’). Here I’ve settled with ‘<a href="https://www.ffonts.net/Hussar-Bold-Condensed.font">Hussar Bold Condensed</a>’. Let me know if you recognise Spear’s actual font.</p>
@@ -689,7 +692,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-09 21:03:23 BST</code></pre>
+<pre><code>Last rendered: 2023-07-09 22:03:00 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)

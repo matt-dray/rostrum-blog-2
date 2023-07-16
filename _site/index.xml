@@ -10,7 +10,265 @@
 <atom:link href="https://whimsical-wisp-30974e.netlify.app/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.4.176</generator>
-<lastBuildDate>Tue, 20 Jun 2023 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 14 Jul 2023 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Save high scores for your R game</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://whimsical-wisp-30974e.netlify.app/posts/2023-07-15-hiscore/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2023-07-15-hiscore/resources/hiscore.gif" class="img-fluid" alt="R code run in an RStudio window. The hiscore package is attached and the play_coinflip function is run. The user guesses heads, it's wrong, they score zero, which is the new high score. The user tries again, is reminded that the high score is currently zero and then scores 1. The session is restarted, but the get_save_data function proves that the top score has been saved."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>You can save your high score in games made with R. See <a href="https://github.com/matt-dray/hiscore">the package {hiscore}</a> for a demo.</p>
+</section>
+<section id="boot-up" class="level2">
+<h2 class="anchored" data-anchor-id="boot-up">Boot up</h2>
+<p>I wrote recently about how <a href="https://www.rostrum.blog/2023/04/02/splendid-r-games/">R is a game engine</a> and started <a href="https://github.com/matt-dray/splendid-r-games">a list of games written in R</a>.</p>
+<p>All good game engines should let you save a high score, right?</p>
+<p>So I’ve done exactly this for a tiny concept package called <a href="https://github.com/matt-dray/hiscore">{hiscore}</a><sup>1</sup> that contains a simple game of luck</p>
+<p>The package runs code that saves your high score, which is retained between play sessions.</p>
+</section>
+<section id="install" class="level2">
+<h2 class="anchored" data-anchor-id="install">Install</h2>
+<p>You can install the package <a href="https://github.com/matt-dray/hiscore">from GitHub</a>. It has no dependencies, but you’ll need to be running R version 4, at least.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.package</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"remotes"</span>)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># if not yet installed</span></span>
+<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"matt-dray/hiscore"</span>)</span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(hiscore)</span></code></pre></div>
+</div>
+<p>Of course, it’s just a concept and I’ve intentionally kept this as trivial as possible, but you can <a href="https://github.com/matt-dray/hiscore/issues">leave an issue</a> with bugs or ideas.</p>
+</section>
+<section id="play" class="level2">
+<h2 class="anchored" data-anchor-id="play">Play</h2>
+<p>For demonstration purposes, the inbuilt game is super simple: get the longest streak of correctly guessed coinflips.</p>
+<p>To play, run <code>play_coinflip()</code> and type <kbd>H</kbd> or <kbd>T</kbd> and <kbd>Enter</kbd> when prompted. Basically, a coinflip is simulated with <code>sample(c("H", "T"), 1)</code> and then compared to the user’s input, supplied from the console following a <code>readline()</code> call.</p>
+<p>Keep going until you get it wrong. If you get a new high score, it’ll be saved.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">play_coinflip</span>()</span></code></pre></div>
+</div>
+<pre><code>[H]eads or [T]ails? Answer: H
+Correct! Current score: 1
+[H]eads or [T]ails? Answer: H
+Incorrect! Final score: 1
+New high score!
+New high score saved.</code></pre>
+<p>You can retrieve the current high score with <code>get_save_data()</code>, which returns a little table.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_save_data</span>()</span></code></pre></div>
+</div>
+<pre><code>      game high_score
+1 coinflip          1</code></pre>
+<p>Of course, you could also set up the function so that it records different player names too. And you could add additional games that would get their own row in this table.</p>
+</section>
+<section id="memory" class="level2">
+<h2 class="anchored" data-anchor-id="memory">Memory</h2>
+<p>Note that the high score data is retained on your computer even if you restart your session or reboot your machine. How so?</p>
+<p>This is thanks to <a href="https://rdrr.io/r/tools/userdir.html">the <code>tools::R_user_dir()</code> function</a>, which was added to R in version 4.0. It builds system-specific paths to ‘directories for storing R-related user-specific data, configuration and cache files’ where you can save package-related information.</p>
+<p>{hiscore} records top scores in this fashion. On my machine, the save location resolves to the following:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">tools<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">R_user_dir</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"hiscore"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"data"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "/Users/mattdray/Library/Application Support/org.R-project.R/R/hiscore"</code></pre>
+</div>
+</div>
+<p>Regular readers may remember that I used <code>R_user_dir()</code> in the {tamRgo} package (<a href="https://www.rostrum.blog/2022/11/13/tamrgo/">blog</a>, <a href="https://github.com/matt-dray/tamRgo">source</a>), which lets you look after a Tamagotchi-style cyber-pet in your console. I used the function to save a pet’s ‘blueprint’ (details such as name, age and hunger level) persistently.</p>
+</section>
+<section id="retry" class="level2">
+<h2 class="anchored" data-anchor-id="retry">Retry</h2>
+<p>Now imagine you want to retry to beat that incredible top score of 1. Since you last played, you probably restarted your session or computer.</p>
+<pre><code>Restarting R session...</code></pre>
+<p>But never fear: the high score was retained. You can see that when you run <code>play_coinflip()</code> again and are reminded of the current best.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(hiscore)</span>
+<span id="cb9-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">play_coinflip</span>()</span></code></pre></div>
+</div>
+<pre><code>Welcome. Your current high score is 1
+[H]eads or [T]ails? Answer: h
+Correct! Current score: 1
+[H]eads or [T]ails? Answer: t
+Correct! Current score: 2
+[H]eads or [T]ails? Answer: h
+Incorrect! Final score: 2
+New high score!
+New high score saved.</code></pre>
+<p>Great job, you doubled the previous record!</p>
+<p>When you get a game over, the <code>play_coinflip()</code> function checks the current high score and compares it to the final score for the current play session. The saved data is overwritten if the score is higher.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_save_data</span>()</span></code></pre></div>
+</div>
+<pre><code>      game high_score
+1 coinflip          2</code></pre>
+<p>I think it’s a good idea to make it easy for people to destroy the stored data if they want, which you can do easily with <code>delete_save_data()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">delete_save_data</span>()</span></code></pre></div>
+</div>
+<pre><code>Really delete? [Y]es/[N]o: Y
+High score data deleted.</code></pre>
+</section>
+<section id="game-over" class="level2">
+<h2 class="anchored" data-anchor-id="game-over">Game over</h2>
+<p>How else could this approach be used in an R gaming perspective? You could use this to save a game state, similar to what’s done for <a href="https://www.rostrum.blog/2022/11/13/tamrgo/">{tamRgo}</a>. The user could input <code>S</code>ave instead of performing a guess, which would record the current status of the game so the user can return later. But that would feel like cheating for a game like coinflip.</p>
+<p>Speaking of, here’s a cheatcode as a bonus for reading this far:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">cheat <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(game, score) {</span>
+<span id="cb15-2">  user_dir <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> tools<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">R_user_dir</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"hiscore"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"data"</span>)</span>
+<span id="cb15-3">  score_path <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">file.path</span>(user_dir, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"score_table.rds"</span>)</span>
+<span id="cb15-4">  score_table <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">readRDS</span>(score_path)</span>
+<span id="cb15-5">  score_game <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> score_table[score_table[[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"game"</span>]] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> game, ]</span>
+<span id="cb15-6">  score_game[[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"high_score"</span>]] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> score</span>
+<span id="cb15-7">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">saveRDS</span>(score_table, score_path)</span>
+<span id="cb15-8">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">message</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Congrats! You scored "</span>, score, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">" at "</span>, game, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"!"</span>)</span>
+<span id="cb15-9">}</span>
+<span id="cb15-10"></span>
+<span id="cb15-11"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cheat</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"coinflip"</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1e100</span>)</span></code></pre></div>
+</div>
+<pre><code>Congrats! You scored 1e+100 at coinflip!</code></pre>
+<p>Heh heh heh.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-16 11:02:06 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] hiscore_0.0.0.9000
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
+[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>As in ‘high score’ not as in ‘his core’.↩︎</p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>hiscore</category>
+  <category>r</category>
+  <category>videogames</category>
+  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-07-15-hiscore/index.html</guid>
+  <pubDate>Fri, 14 Jul 2023 23:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Convert a Word table to Markdown</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -7498,256 +7756,6 @@ loaded via a namespace (and not attached):
   <category>videogames</category>
   <guid>https://whimsical-wisp-30974e.netlify.app/posts/2022-11-13-tamRgo/index.html</guid>
   <pubDate>Sun, 13 Nov 2022 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Interactive pixel art in R with {pixeltrix}</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://whimsical-wisp-30974e.netlify.app/posts/2022-09-24-pixeltrix/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-09-24-pixeltrix/resources/pixeltrix.gif" class="img-fluid" style="width:100.0%" alt="Gif of RStudio window. The console is running the code pixeltrix::click_pixels(6, 7, 3) and a plot appears with a 6 by 7 square grid. Some squares are clicked, changing them to light grey. A second click turns them dark grey. Eventually a little square character with a face is created. A matrix encoded the image is shown in the console when the escape key is pressed."></p>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I’ve written <a href="https://github.com/matt-dray/pixeltrix">{pixeltrix}</a>, an R package that lets you select ‘pixels’ interactively from a plot window and returns your final image as a matrix. You could use it to design sprites, for example.</p>
-</section>
-<section id="pixel-perfect" class="level2">
-<h2 class="anchored" data-anchor-id="pixel-perfect">Pixel perfect</h2>
-<p>I’ve written before about <a href="https://www.rostrum.blog/2021/06/28/pixel-art/">creating very simple pixel art in R</a>. To create a sprite of Link from <em>The Legend of Zelda</em> I had to write out by hand a vector that encoded its pixel values. It was tedious.</p>
-<p>There are, however, a couple of options in R to take an image and extract the pixels from it: see Florian Privé’s Shiny app in <a href="https://github.com/privefl/pixelart">the {pixelart} package</a> and Mike Cheng’s (AKA coolbutuseless) <a href="https://coolbutuseless.github.io/2018/08/13/gganimate-with-sprites/">blog post</a> that also describes how to animate them.<sup>1</sup></p>
-<p>But what if you want to create a sprite from scratch? It would be great if you could click pixels interactively and be returned a matrix encoding your image.</p>
-<p>I couldn’t find an R package to do this, so I decided to make a very simple one: <a href="https://github.com/matt-dray/pixeltrix">{pixeltrix}</a> (as in ‘pixel’ and ‘matrix’, but also as in ‘tricks’<sup>2</sup>, lol).</p>
-<p>It’s written entirely in base R (no Shiny or server needed) and can be run in the R console. It’s basically a <code>repeat</code> loop that runs <code>image()</code> to plot squares<sup>3</sup> (hereafter ‘pixels’) and <code>locator()</code><sup>4</sup> to let you click those pixels on and off. The coordinates of each click are matched to the nearest pixel centre, the pixel’s value is incremented by 1 (or wrapped back to zero) and the image is redrawn.</p>
-<p>The package is still in development, but I think it’s reached a useable state for my own purposes.</p>
-<div class="tip">
-<p>ℹ️ <b>Update</b></p>
-<p>I lied. The package has been updated since this post. You can read about the changes in <a href="https://www.rostrum.blog/2022/12/11/pixeltrix-animate/">a more recent blogpost</a>. Highlight: you can make animations now.</p>
-</div>
-</section>
-<section id="enter-the-matrix" class="level2">
-<h2 class="anchored" data-anchor-id="enter-the-matrix">Enter the matrix</h2>
-<p>The package is available for download <a href="https://github.com/matt-dray/pixeltrix">from GitHub</a>. I have some ideas on how to improve it; go ahead and add your own ideas to the <a href="https://github.com/matt-dray/pixeltrix/issues">issues tracker</a>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># install.packages(remotes)  # if not yet installed</span></span>
-<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"matt-dray/pixeltrix"</span>) <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># v0.1 in this post</span></span>
-<span id="cb1-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(pixeltrix)</span></code></pre></div>
-</div>
-<p>The main function is <code>click_pixels()</code>, to which you pass plot dimensions (how many pixels tall and wide), the number of pixel ‘states’ (the number of values a pixel can take, so binary would be <code>2</code>) and whether you want to put a grid over the plot (makes it easier to see where the pixels are).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">click_pixels</span>(</span>
-<span id="cb2-2">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">n_rows   =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>,</span>
-<span id="cb2-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">n_cols   =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>,</span>
-<span id="cb2-4">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">n_states =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>,</span>
-<span id="cb2-5">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">grid =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span></span>
-<span id="cb2-6">) <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">-&gt;</span> x</span></code></pre></div>
-</div>
-<p>This opens a plot window. Repeatedly click a pixel to cycle it through the number of states you asked for. For example, <code>n_states = 4</code> means you cycle it through values of 0, 1, 2 and 3 (wrapping back to 0), which will be manifested in the plot as different shades of grey.</p>
-<p>Note that you can only click one pixel at a time, so you’ll have to do a lot of clicking if your <code>n_states</code> value is high. Colouring stuff in really slowly is called ‘mindfulness’, I believe; good for your wellbeing.</p>
-<p>When you’re done, you press the <kbd>Esc</kbd> key, or the ‘Finish’ button in the plot window of RStudio. I saved all the images below via the ‘Export’ button in RStudio.</p>
-<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-09-24-pixeltrix/resources/simple.png" class="img-fluid" alt="A 3 by 3 square panel grid with darker squares in an x-shaped pattern."></p>
-<p>You’re returned a matrix that contains the value of each pixel in your image. So if you had set <code>n_states = 3</code>, a twice-clicked pixel gets the value 2, an unclicked pixel defaults to a value of 0, etc.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">x</span></code></pre></div>
-</div>
-<pre><code>     [,1] [,2] [,3]
-[1,]    1    0    1
-[2,]    0    1    0
-[3,]    1    0    1</code></pre>
-<p>This matrix is basically a blueprint of the image you created. You can take this and do other things with it. Maybe you’ll make art by passing it to <code>ggplot()</code> to match each of the pixel-state values to a colour. Maybe you’ll use it to plan your crochet or cross-stitch<sup>5</sup>, or to <a href="https://twitter.com/mohsinramay_/status/1573750033857581057?s=20&amp;t=07-AlT6Dhn9b2GnuJN3SQg">teach spatial epidemiology</a> (!).</p>
-<p>If you want to edit your matrix, you can pass it into <code>edit_pixels()</code>. This means you don’t have to start over from scratch with <code>click_pixels()</code> if you only want to change something small. Note that you can provide a higher <code>n_states</code> value to <code>edit_pixels()</code> than the current maximum in the matrix you provided.</p>
-</section>
-<section id="sprite-club" class="level2">
-<h2 class="anchored" data-anchor-id="sprite-club">Sprite club</h2>
-<p>My main purpose for the package is to create simple <a href="https://en.wikipedia.org/wiki/Sprite_(computer_graphics)">sprites</a>.</p>
-<p>I used {pixeltrix} to make each of the sprites below. They took about a minute each. It would’ve taken much longer to write their matrices by hand and to keep passing them to <code>image()</code> to visuliase them and make sure there weren’t any mistakes.</p>
-<section id="tamagotchi" class="level3">
-<h3 class="anchored" data-anchor-id="tamagotchi">Tamagotchi</h3>
-<p>Here’s a 1-bit original kuchipatchi sprite from <a href="https://en.wikipedia.org/wiki/Tamagotchi">the original 90s Tamagotchi</a> digital pets. It uses the default of two pixel states (binary): so 0 for white and 1 for grey.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">click_pixels</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">14</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">14</span>) <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">-&gt;</span> tam_sprite</span></code></pre></div>
-</div>
-<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-09-24-pixeltrix/resources/kuchipatchi.png" class="img-fluid" alt="A 14 by 14 pixel grid with a two-toned sprite of a pet character from the original 90s Tamagotchi pets."></p>
-<details>
-<summary>
-Click to expand matrix
-</summary>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">tam_sprite</span></code></pre></div>
-</div>
-<pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14]
- [1,]    0    0    0    0    1    1    1    1    1     1     0     0     0     0
- [2,]    0    0    0    1    0    0    0    0    0     0     1     0     0     0
- [3,]    0    1    1    0    1    0    0    0    0     1     0     1     0     0
- [4,]    1    0    0    0    0    0    0    0    0     0     0     0     1     0
- [5,]    0    1    1    1    0    0    0    0    0     0     0     0     1     0
- [6,]    1    0    0    0    0    0    0    0    0     0     0     0     1     0
- [7,]    0    1    1    1    0    0    0    0    0     0     0     0     1     0
- [8,]    0    0    0    1    0    0    0    0    1     0     1     0     0     1
- [9,]    0    0    0    1    0    0    0    0    1     0     1     0     0     1
-[10,]    0    0    0    1    0    0    0    0    0     1     0     0     0     1
-[11,]    0    0    0    0    1    0    0    0    0     0     0     0     1     0
-[12,]    0    0    0    0    0    1    0    1    1     1     0     1     0     0
-[13,]    0    0    0    0    0    1    0    1    0     1     0     1     0     0
-[14,]    0    0    0    0    0    0    1    0    0     0     1     0     0     0</code></pre>
-</details>
-<section id="pokémon" class="level4">
-<h4 class="anchored" data-anchor-id="pokémon">Pokémon</h4>
-<p>Here’s the player character from <a href="https://en.wikipedia.org/wiki/Pok%C3%A9mon_Red_and_Blue">the first generation of Pokémon games</a> on the Game Boy. It uses three states (<code>n_states = 3</code>): value 0 is white, 1 is light grey and 2 is dark grey.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">click_pixels</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">14</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">16</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>) <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">-&gt;</span> poke_sprite</span></code></pre></div>
-</div>
-<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-09-24-pixeltrix/resources/ash.png" class="img-fluid" alt="A 14 by 16 pixel grid with a three-toned sprite of the main character from the first generation of Pokemon games for the Game Boy."></p>
-<details>
-<summary>
-Click to expand matrix
-</summary>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">poke_sprite</span></code></pre></div>
-</div>
-<pre><code>      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14]
- [1,]    0    0    0    0    2    2    2    2    2     2     0     0     0     0
- [2,]    0    0    0    2    1    1    1    1    1     1     2     0     0     0
- [3,]    0    0    2    1    1    1    1    1    1     1     1     2     0     0
- [4,]    0    0    2    1    1    1    1    1    1     1     1     2     0     0
- [5,]    0    2    2    2    1    0    0    0    0     1     2     2     2     0
- [6,]    0    2    2    0    2    2    2    2    2     2     0     2     2     0
- [7,]    2    0    2    0    0    0    0    0    0     0     0     2     0     2
- [8,]    2    0    0    0    0    2    0    0    2     0     0     0     0     2
- [9,]    0    2    2    0    0    2    0    0    2     0     0     2     2     0
-[10,]    0    2    2    2    0    0    1    1    0     0     2     2     2     0
-[11,]    2    0    0    2    2    2    2    2    2     2     2     0     0     2
-[12,]    2    0    0    2    2    2    2    2    2     2     2     0     0     2
-[13,]    0    2    2    2    1    1    2    2    1     1     2     2     2     0
-[14,]    0    0    2    1    2    2    1    1    2     2     1     2     0     0
-[15,]    0    0    2    1    1    1    2    2    1     1     1     2     0     0
-[16,]    0    0    0    2    2    2    0    0    2     2     2     0     0     0</code></pre>
-</details>
-</section>
-</section>
-</section>
-<section id="why" class="level2">
-<h2 class="anchored" data-anchor-id="why">Why?</h2>
-<p>Turns out the {pixeltrix} package is actually <a href="https://en.wiktionary.org/wiki/yak_shaving">yak-shaving</a> for another package I’m developing: <a href="https://github.com/matt-dray/tamRgo/">{tamRgo}</a>.</p>
-<p>{tamRgo} is a (very much work-in-progress) conceptual package for a Tamagotchi-like experience in the R console. You get a persistent interactive digital pet on your computer whose stats update in ‘real time’ while you’re away.</p>
-<p>I want to print a largeish canvas of pixels to visualise multiple pet ‘species’ and for the various interactions you can have (playing, feeding, cleaning). {pixeltrix} makes it much easier to design these scenes and returns matrices that I can add directly to {tamRgo}.</p>
-<div class="tip">
-<p>ℹ️ <b>Update</b></p>
-<p>I’ve now <a href="https://www.rostrum.blog/2022/11/13/tamrgo/">written a post about {tamRgo}</a>, where you can see how {pixeltrix} was used for the character sprites.</p>
-</div>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-06-29 18:52:13 CEST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/Zurich
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
-[1] pixeltrix_0.2.1.9000
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.14   yaml_2.3.7       
- [9] rmarkdown_2.22    knitr_1.43.1      jsonlite_1.8.5    xfun_0.39        
-[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>You can even go into the third dimension (i.e.&nbsp;voxels) with Mike’s <a href="https://github.com/coolbutuseless/isocubes">{isocubes}</a> and its extension <a href="https://github.com/trevorld/oblicubes">{oblicubes}</a> by Trevor L Davies. <a href="https://www.rostrum.blog/2022/06/28/isometric-dungeon/">I used these in a demo of ‘3D’ dungeon-making</a> with my <a href="https://github.com/matt-dray/r.oguelike">{r.oguelike}</a> package.↩︎</p></li>
-<li id="fn2"><p><em>Illusions, Michael.</em>↩︎</p></li>
-<li id="fn3"><p>The only awkward part is that <code>image()</code> doesn’t plot with bounds of 0 to 1. There’s an overhang dependent on the number of squares you want to draw. This results in some small but awkward calculations so that the clicks can be mapped properly to the nearest pixel and so the grid overlay can be placed correctly.↩︎</p></li>
-<li id="fn4"><p>I’ve <a href="https://www.rostrum.blog/2021/11/04/kanto-locator/">written before</a> about using the <code>locator()</code> function to select points on fictitious maps.↩︎</p></li>
-<li id="fn5"><p>But see also <a href="https://apps.machlis.com/shiny/crochetapp/">Sharon Machlis’s ‘Overlay Mosaic Crochet Pattern Chart Generator’ Shiny app</a> for crochet patterns and <a href="https://rdvark.net/2022/05/14/introducing-embroidr/">Ben Vigreux’s {embroidr}</a> for planning embroidery projects.↩︎</p></li>
-</ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>art</category>
-  <category>locator</category>
-  <category>pixeltrix</category>
-  <category>r</category>
-  <category>videogames</category>
-  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2022-09-24-pixeltrix/index.html</guid>
-  <pubDate>Fri, 23 Sep 2022 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

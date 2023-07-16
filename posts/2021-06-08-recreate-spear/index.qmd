@@ -40,9 +40,9 @@ It's certainly not an identical match to the original, but it gets most of the w
 
 You can find the scripts for both the recreation and gif in [my matt-dray/viz-recreation GitHub repo](https://github.com/matt-dray/viz-recreation).
 
-The rest of this post is a walkthrough of the code used to create the final output. It's in five sections: (1) [set-up](#setup), (2) [line plot](#lineplot), (3) [bar plot](#barplot), (4) [margin labels](#marginlabels) and (5) [saving](#saving), with a closing section reflecting on tricky parts and potential improvements.
+The rest of this post is a walkthrough of the code used to create the final output. It's in five sections: (1) set-up, (2) line plot, (3) bar plot, (4) margin labels and (5) saving, with a closing section reflecting on tricky parts and potential improvements.
 
-## 1. Set-up {#setup}
+## 1. Set-up
 
 ### Data
 
@@ -64,9 +64,7 @@ cotton <- data.frame(
 I've used two font families that weren't pre-installed on my system:
 
 * [Routed Gothic](https://webonastick.com/fonts/routed-gothic/), a very close match for the general text of the plot
-* [Hussar Bold Condensed](https://www.ffonts.net/Hussar-Bold-Condensed.font), a not-that-great match for the main title
-
-Do let me know if you have better alternatives, particularly for the main title.
+* [Hussar Bold Condensed](https://www.ffonts.net/Hussar-Bold-Condensed.font), a not-that-great match for the main title, but it'll do
 
 It was sufficient for me to install these fonts on my system (macOS Big Sur running R v4.0.5) and invoke them by name, as you'll see through the rest of this walkthrough. Your mileage may vary.
 
@@ -140,7 +138,7 @@ par(
 
 I've selected '[Routed Gothic](https://webonastick.com/fonts/routed-gothic/)' as the font family and I think it's a great match. It's based on the Leroy lettering set that was often used for hand-labelling technical drawings.
 
-## 2. Line plot {#lineplot}
+## 2. Line plot
 
 So, here's the first 'hack'. I'm going to set up a 'fake' scatter plot with no content and then we're going to add our desired content to it sequentially. This provides the correct plot dimensions to which we can add bespoke details.
 
@@ -261,7 +259,7 @@ Excellent, that's the line plot completed. The plot now looks like this:
 
 ![](resources/1_lp_2.png){fig-alt="The recreated plot in progress: the line plot has axes, labels, data and arrows." width="100%"}
 
-## 3. Bar plot {#barplot}
+## 3. Bar plot
 
 The `barplot()` function is a little different to the `plot()` function.
 
@@ -389,7 +387,8 @@ mapply(
 And here's our visualisation with both plots completed:
 
 ![](resources/2_bp_3.png){fig-alt="The recreated plot in progress: both the line plot on the left and the bar plot on the right are completed with axes, data, labels and arrows." width="100%"}
-## 4. Margin labels {#marginplot}
+
+## 4. Margin labels
 
 With both charts completed, we can add with `mtext()` the titles and captions that exist for the plot as a whole.
 
