@@ -285,7 +285,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(httr)  <span class="co"># requests via the internet </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="tip">
-<p>ℹ️ <b>Note</b></p>
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
 <p>If you’re thinking this approach is a bit long-winded, you’re right. As <a href="https://twitter.com/_TimTaylor_/status/1431387715728248834?s=20">Tim pointed out</a>, we could just extract the info via <a href="https://github.com/cran">METACRAN</a>, an unofficial CRAN mirror hosted on GitHub. It even has <a href="https://www.r-pkg.org/services#api">its own API</a>. I’ll leave that as an exercise for the reader.</p>
 </div>
 <section id="packages" class="level3">
@@ -294,10 +294,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cran_pkgs <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(tools<span class="sc">::</span><span class="fu">CRAN_package_db</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>This returns a dataframe containing 19844 rows, where each one is a package, along with 67 variables. We get information like the stuff that’s found in package DESCRIPTION files, but it doesn’t tell us whether a package has a zzz.R file.</p>
+<p>This returns a dataframe containing 19865 rows, where each one is a package, along with 67 variables. We get information like the stuff that’s found in package DESCRIPTION files, but it doesn’t tell us whether a package has a zzz.R file.</p>
 <p>One way to do this is to visit the GitHub repo associated with the package, if it has one, and see if a zzz.R exists. Of course, many packages are not on GitHub, but we’re going to ignore those for simplicity.</p>
 <div class="tip">
-<p>ℹ️ <b>Update</b></p>
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
 <p>I re-rendered this post in July 2023, so the output no longer reflects CRAN as it was when this post was published (August 2021).</p>
 <div>
 
@@ -324,16 +324,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_n</span>(has_repo, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 5 × 3
-  Package owner       repo   
-  &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;  
-1 mvp     RobinHankin mvp    
-2 papaja  crsh        papaja 
-3 BTYD    ghuiber     BTYD   
-4 RSQLite r-dbi       RSQLite
-5 disordR RobinHankin disordR</code></pre>
+  Package     owner          repo       
+  &lt;chr&gt;       &lt;chr&gt;          &lt;chr&gt;      
+1 MatrixEQTL  andreyshabalin MatrixEQTL 
+2 mitre       motherhack3r   mitre      
+3 path.chain  krzjoa         path.chain 
+4 shinyXYpad  stla           shinyXYpad 
+5 netdiffuseR USCCANA        netdiffuseR</code></pre>
 </div>
 </div>
-<p>There were 19844 CRAN packages total and now we have 8150 (41%) that appear to have a GitHub repo.</p>
+<p>There were 19865 CRAN packages total and now we have 8152 (41%) that appear to have a GitHub repo.</p>
 <p>If you’re wondering why we didn’t just use the package name as the repo name, it’s because they sometimes don’t match, e.g.&nbsp;{baseballDBR} is in a repo called ‘moneyball’.</p>
 <p>Now we can use the repo details to build a URL to a potential zzz.R URL. This comes in the form <code>https://raw.githubusercontent.com/&lt;owner&gt;/&lt;repo&gt;/&lt;defaultbranch&gt;/R/zzz.R"</code>.</p>
 </section>
@@ -451,7 +451,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>fosho_psm <span class="ot">&lt;-</span> <span class="fu">filter</span>(fosho_zzz, Package <span class="sc">%in%</span> has_psm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>So we started with 19844 CRAN packages and have winnowed it to down to 579 (3%) that have a call to <code>packageStartupMessage()</code> in their zzz.R.</p>
+<p>So we started with 19865 CRAN packages and have winnowed it to down to 579 (3%) that have a call to <code>packageStartupMessage()</code> in their zzz.R.</p>
 </section>
 <section id="table-of-results" class="level3">
 <h3 class="anchored" data-anchor-id="table-of-results"><a href="#table-of-results">Table of results</a></h3>
@@ -484,7 +484,7 @@ Click for table code
 </div>
 </div>
 <div class="tip">
-<p>❗️ <b>Warning</b></p>
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
 <p>I re-rendered this post in July 2023, so the table above may contain different packages to when it was first published. The section below relates to the originally-published post and may no longer reflect the content of the zzz.R files listed in the table above.</p>
 </div>
 </section>
@@ -536,7 +536,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-08 18:06:43 BST</code></pre>
+<pre><code>Last rendered: 2023-07-17 18:29:10 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -569,10 +569,10 @@ loaded via a namespace (and not attached):
 [13] pillar_1.9.0      tzdb_0.4.0        rlang_1.1.1       utf8_1.2.3       
 [17] stringi_1.7.12    reactR_0.4.4      xfun_0.39         timechange_0.2.0 
 [21] cli_3.6.1         withr_2.5.0       magrittr_2.0.3    crosstalk_1.2.0  
-[25] digest_0.6.31     grid_4.3.1        rstudioapi_0.14   hms_1.1.3        
-[29] lifecycle_1.0.3   vctrs_0.6.3       evaluate_0.21     glue_1.6.2       
-[33] fansi_1.0.4       colorspace_2.1-0  rmarkdown_2.23    ellipsis_0.3.2   
-[37] tools_4.3.1       pkgconfig_2.0.3   htmltools_0.5.5  </code></pre>
+[25] digest_0.6.31     grid_4.3.1        fontawesome_0.5.1 rstudioapi_0.15.0
+[29] hms_1.1.3         lifecycle_1.0.3   vctrs_0.6.3       evaluate_0.21    
+[33] glue_1.6.2        fansi_1.0.4       colorspace_2.1-0  rmarkdown_2.23   
+[37] ellipsis_0.3.2    tools_4.3.1       pkgconfig_2.0.3   htmltools_0.5.5  </code></pre>
 </div>
 </div>
 </details>

@@ -213,7 +213,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
 <p><a href="https://davidgohel.github.io/officer/">{officer} is an R package</a> that lets you extract elements of a Word document, including tables, into a tidy dataframe. I’ve written a function to ‘re-rectangularise’ extracted Word tables into a list of R dataframes.</p>
 <div class="tip">
-<p>ℹ️ <b>Update</b></p>
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
 <p>Turns out that <a href="https://elipousson.github.io/">Eli Pousson</a> has written the <a href="https://elipousson.github.io/officerExtras">{officerExtras} package</a> (<a href="https://github.com/elipousson/officerExtras/">install it from GitHub</a>), which already contains this functionality in <a href="https://elipousson.github.io/officerExtras/reference/officer_tables.html">the <code>officer_tables()</code> and <code>officer_table()</code> functions</a>. At least this proves my idea wasn’t too far-fetched!</p>
 <p>Also you can just use <a href="https://github.com/hrbrmstr/docxtractr"><code>docxtractr::docx_extract_all_tbls()</code> by Bob Rudis</a> to extract all the tables in one go, lol.</p>
 </div>
@@ -438,7 +438,7 @@ Click to expand the <code>.rectangularise_table()</code> definition.
 <p>To summarise, this is absolutely not the worst code-related crime I’ve committed on this blog. Sorry guv! I’ll definitely be sentenced to the most severe punishment if caught and tried: several minutes of hard labour, or ‘refactoring’ as they call it on the inside.</p>
 <p>At worst I’ll build an Andy-Dufresne-style tunnel out of my prison cell and hide the entrance behind years of accumulated hex stickers.</p>
 <div class="tip">
-<p>ℹ️ <b>Update</b></p>
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
 <p>As a bonus, I later wrote a quick reproducible example that part-solves the original reason for this post. Here I’ve used {docxtractr} to extract tables from docx files in separate subfolders and then combine them.</p>
 <details>
 <summary>
@@ -512,7 +512,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-06-29 18:16:59 CEST</code></pre>
+<pre><code>Last rendered: 2023-07-17 18:05:37 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -526,7 +526,7 @@ LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlap
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
-time zone: Europe/Zurich
+time zone: Europe/London
 tzcode source: internal
 
 attached base packages:
@@ -537,11 +537,12 @@ other attached packages:
 
 loaded via a namespace (and not attached):
  [1] digest_0.6.31     R6_2.5.1          fastmap_1.1.1     xfun_0.39        
- [5] knitr_1.43.1      htmltools_0.5.5   rmarkdown_2.22    xml2_1.3.4       
- [9] cli_3.6.1         zip_2.3.0         askpass_1.1       openssl_2.0.6    
-[13] textshaping_0.3.6 systemfonts_1.0.4 compiler_4.3.1    rstudioapi_0.14  
-[17] tools_4.3.1       ragg_1.2.5        evaluate_0.21     yaml_2.3.7       
-[21] rlang_1.1.1       jsonlite_1.8.5    htmlwidgets_1.6.2 uuid_1.1-0       </code></pre>
+ [5] fontawesome_0.5.1 knitr_1.43.1      htmltools_0.5.5   rmarkdown_2.23   
+ [9] xml2_1.3.5        cli_3.6.1         zip_2.3.0         askpass_1.1      
+[13] openssl_2.1.0     textshaping_0.3.6 systemfonts_1.0.4 compiler_4.3.1   
+[17] rstudioapi_0.15.0 tools_4.3.1       ragg_1.2.5        evaluate_0.21    
+[21] yaml_2.3.7        rlang_1.1.1       jsonlite_1.8.7    htmlwidgets_1.6.2
+[25] uuid_1.1-0       </code></pre>
 </div>
 </div>
 </details>

@@ -238,7 +238,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="excavations" class="level2">
 <h2 class="anchored" data-anchor-id="excavations">Excavations</h2>
 <div class="tip">
-<p>️ℹ️ <b>Note</b></p>
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
 <p>The {r.oguelike} package is a work in progress and is developing at pace. Many things explained below may have been superseded or changed by the time you read this.</p>
 </div>
 <section id="installlaunch" class="level3">
@@ -351,7 +351,7 @@ Click for a preview of the returned matrix.
 <p>What’s the actual process for generating these maps? The procedure is very simple: lay a map made entirely of wall tiles; select random sites for rooms<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> and replace with floor tiles; connect them with floor-tile corridors; expand the floor tiles generatively.</p>
 <p>The corridors are particularly important. Laying corridors is a cheap way of making all areas of the dungeon accessible, which maximises the opportunity for exploration. Vanilla implementations of some other approaches, like using perlin noise, would need post-processing to make sure isolated caves are connected up.</p>
 <div class="tip">
-<p>ℹ️ <b>Update</b></p>
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
 <p>After publishing this post, I had a quick play around with <a href="https://en.wikipedia.org/wiki/Perlin_noise">perlin noise</a> for seeding dungeons. I put code and an example output <a href="https://gist.github.com/matt-dray/fd5bf4b6560638e154353e4ec5c8b98a">in a small GitHub Gist</a>. It <a href="https://ambient.data-imaginist.com/reference/noise_perlin.html">uses <code>noise_perlin()</code> from the {ambient} package</a>.</p>
 </div>
 <section id="functions" class="level3">
@@ -450,7 +450,7 @@ Click for a preview of the returned matrix.
 <p>Ideally we can also create a system to place certain objects in certain spaces, like treasure in the far reaches of a dead-end, or a monster that’s in a narrow corridor and must be defeated to advance. Stuff like locked doors would be great too.</p>
 <p>That’s much more roguelike-like, like, amirite?</p>
 <div class="tip">
-<p>ℹ️ <b>Update</b></p>
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
 <p>Just after writing this post, I added code from <code>generate_dungeon()</code> into <code>start_game()</code>, so new games will now start with a procedural dungeon. <a href="https://twitter.com/mattdray/status/1522289244445753344?s=20&amp;t=lk0UHHNf23MYC2ir018ZTg">It seems to work pretty well</a>.</p>
 </div>
 </section>
@@ -465,7 +465,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-06 19:27:26 BST</code></pre>
+<pre><code>Last rendered: 2023-07-17 18:15:02 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -490,9 +490,9 @@ other attached packages:
 
 loaded via a namespace (and not attached):
  [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.14   yaml_2.3.7       
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
  [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
-[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
+[13] digest_0.6.31     rlang_1.1.1       fontawesome_0.5.1 evaluate_0.21    </code></pre>
 </div>
 </div>
 </details>

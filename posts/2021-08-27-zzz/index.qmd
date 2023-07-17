@@ -73,7 +73,7 @@ library(gh)    # interact with GitHub API
 library(httr)  # requests via the internet 
 ```
 
-<div class="tip"> ℹ️ <b>Note</b>
+<div class="tip"> `r fontawesome::fa("exclamation-circle")` <b>Note</b>
 
 If you're thinking this approach is a bit long-winded, you're right. As [Tim pointed out](https://twitter.com/_TimTaylor_/status/1431387715728248834?s=20), we could just extract the info via [METACRAN](https://github.com/cran), an unofficial CRAN mirror hosted on GitHub. It even has [its own API](https://www.r-pkg.org/services#api). I'll leave that as an exercise for the reader.
 
@@ -91,7 +91,7 @@ This returns a dataframe containing `r nrow(cran_pkgs)` rows, where each one is 
 
 One way to do this is to visit the GitHub repo associated with the package, if it has one, and see if a zzz.R exists. Of course, many packages are not on GitHub, but we're going to ignore those for simplicity.
 
-<div class="tip"> ℹ️ <b>Update</b>
+<div class="tip"> `r fontawesome::fa("exclamation-circle")` <b>Note</b>
 
 I re-rendered this post in July 2023, so the output no longer reflects CRAN as it was when this post was published (August 2021).
 
@@ -277,7 +277,7 @@ reactable(
 )
 ```
 
-<div class="tip"> ❗️ <b>Warning</b>
+<div class="tip"> `r fontawesome::fa("exclamation-circle")` <b>Note</b>
 
 I re-rendered this post in July 2023, so the table above may contain different packages to when it was first published. The section below relates to the originally-published post and may no longer reflect the content of the zzz.R files listed in the table above.
 

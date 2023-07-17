@@ -5,8 +5,8 @@ slug: kanto-locator
 categories:
   - locator
   - map
-  - videogames
   - r
+  - videogames
 ---
 
 ```{r setup, include=FALSE}
@@ -65,7 +65,7 @@ plot_map <- function(png_path) {
   on.exit(par(original_par))
   
   # Download and read image
-  tmp <- tempfile()
+  tmp <- tempfile(fileext = ".png")
   download.file(png_path, tmp, quiet = TRUE)
   img <- png::readPNG(tmp)
   unlink(tmp)  # clean up

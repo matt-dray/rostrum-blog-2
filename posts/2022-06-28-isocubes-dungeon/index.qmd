@@ -58,10 +58,6 @@ The user's keyboard input is accepted by `readline()` and this determines the ch
 
 Again, this all takes place inside the matrix that represents the dungeon, so we can also just lift this functionality into the {isocubes} version. Here you can see a series of user inputs to the console that result in the player moving around the floor tiles.
 
-<div class="figure">
-<img src="resources/02-isocubes-readline.gif" alt="Gif of a procedural dungeon in RStudio, which is composed of isometric cubes. The bottom cube layer represents the floor. The top layer is composed of brown 'wall' cubes. Gaps in the second layer expose the black floor cubes beneath. The result is an enclosed cavern-like space. A blue 'player' cube is controlled by inputs to the console: W, A, S and D keypresses move it up, left, down and right." width="100%"/>
-</div>
-
 ![](resources/02-isocubes-readline.gif){fig-alt="Gif of a procedural dungeon in RStudio, which is composed of isometric cubes. The bottom cube layer represents the floor. The top layer is composed of brown 'wall' cubes. Gaps in the second layer expose the black floor cubes beneath. The result is an enclosed cavern-like space. A blue 'player' cube is controlled by inputs to the console: W, A, S and D keypresses move it up, left, down and right." width="100%"}
 
 It was really pleasing when I got this to work, but it's also quite tedious to tap in a key and hit enter for each movement.
@@ -77,10 +73,6 @@ Mike also has [a package called {eventloop}](https://github.com/coolbutuseless/e
 Bear in mind that it doesn't work on Windows. Read more about it in [Mike's blog](https://coolbutuseless.github.io/2022/05/06/introducing-eventloop-realtime-interactive-rendering-in-r/).
 
 Here you can see the result of incorporating {eventloop}. The user is pressing the arrow keys---which you can see being printed to the console---to move the player. This is way more seamless than the previous `readline()` method.
-
-<div class="figure">
-<img src="" alt="Gif of an R graphics window showing a dungeon space made of isometric cubes. A user is controlling the movement of a blue cube around the black floor within the brown walls. The latest input is shown in the console as 'pressed left', etc." width="100%"/>
-</div>
 
 ![](resources/03-isocubes-eventloop.gif){fig-alt="Gif of an R graphics window showing a dungeon space made of isometric cubes. A user is controlling the movement of a blue cube around the black floor within the brown walls. The latest input is shown in the console as 'pressed left', etc." width="100%"}
 
@@ -98,7 +90,7 @@ Here you can see the enemy cube (yellow) hunting down the player-controlled cube
 
 I hope you enjoyed the victory dance at the end of the gif (it was the best I could do with the limited graphics).[^enemy]
 
-<div class="tip"> ℹ️ <b>Update</b>
+<div class="tip"> `r fontawesome::fa("exclamation-circle")` <b>Note</b>
 
 After this post was published, [the {oblicubes} package](https://github.com/trevorld/oblicubes) was published by [Trevor L Davies](https://github.com/trevorld). It allows you to use oblique projections. So obviously I had a go with {r.oguelike}.
 

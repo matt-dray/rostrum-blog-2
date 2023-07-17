@@ -38,10 +38,6 @@ typeof(c(nums, "[c]"))
 
 This is known behaviour, yes, but it causes a minor annoyance in the xlsx files output from an {a11ytables} workflow: Excel puts a warning marker in the corner of any cell in a text column that contains a numeric value.[^align]
 
-<div class="figure">
-<img src="resources/number-text.png" alt="Screenshot of an Excel worksheet. A cell containing a number has a warning that reads 'number stored as text'." width="100%"/>
-</div>
-
 ![](resources/number-text.png){fig-alt="Screenshot of an Excel worksheet. A cell containing a number has a warning that reads 'number stored as text'." width="100%"}
 
 [Cat left a GitHub issue](https://github.com/co-analysis/a11ytables/issues/93) related to this: columns entirely made of numbers were being marked by Excel with the 'number in a text column' warning. In this case, it was because Cat's suppression process resulted in _all_ columns being converted to character.

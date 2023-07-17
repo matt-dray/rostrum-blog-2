@@ -16,13 +16,13 @@ knitr::opts_chunk$set(eval = FALSE)  # twitter borked, so outputs hardcoded
 set.seed(1)
 ```
 
-![](resources/mosaic-random-1.png){fig-alt="A 25 by 25 grid of squares, each of which represents a random satellite image of Greater London that's been quantized to show one representative colour. This has resulted in various shades of grey, green and cream, depending on factors like urbanness and green space in the original satellite image. The arrangement of colours appears to be random." width="25%"}
+![](resources/mosaic-random-1.png){fig-alt="A 25 by 25 grid of squares, each of which represents a random satellite image of Greater London that's been quantized to show one representative colour. This has resulted in various shades of grey, green and cream, depending on factors like urbanness and green space in the original satellite image. The arrangement of colours appears to be random." width="30%"}
 
 ## tl;dr
 
 I used the {rtweet} and {magick} R packages to fetch tweets of random satellite images of London from [londonmapbot](https://twitter.com/londonmapbot) and then reduced each one to a single representative colour.
 
-<div class="tip"> ℹ️ <b>Update</b>
+<div class="tip"> `r fontawesome::fa("exclamation-circle")` <b>Note</b>
 
 londonmapbot no longer posts to Twitter due to API changes. It can be found on Mastodon instead at [botsin.space/@londonmapbot](https://botsin.space/@londonmapbot). You can read about that in [a more recent post](https://www.rostrum.blog/2023/02/09/londonmapbotstodon/).
 
