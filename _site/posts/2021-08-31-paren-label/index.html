@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2021-08-31">
+
+<title>rostrum.blog (test) - Auto-label closing parentheses in RStudio</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-black-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog (test)</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Auto-label closing parentheses in RStudio</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">blogsnip</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">rstudio</div>
+                <div class="quarto-category">rstudio-addins</div>
+                <div class="quarto-category">styler</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">August 31, 2021</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#matryoshka-functions" id="toc-matryoshka-functions" class="nav-link" data-scroll-target="#matryoshka-functions">Matryoshka functions</a></li>
+  <li><a href="#paren-in-a-codestack" id="toc-paren-in-a-codestack" class="nav-link" data-scroll-target="#paren-in-a-codestack">Paren in a codestack</a></li>
+  <li><a href="#a-biscuit-recipe" id="toc-a-biscuit-recipe" class="nav-link" data-scroll-target="#a-biscuit-recipe">A biscuit recipe</a>
+  <ul class="collapse">
+  <li><a href="#easy-as-a-b-d" id="toc-easy-as-a-b-d" class="nav-link" data-scroll-target="#easy-as-a-b-d">Easy as A, B, D</a></li>
+  <li><a href="#overengineer-is-my-middle-name" id="toc-overengineer-is-my-middle-name" class="nav-link" data-scroll-target="#overengineer-is-my-middle-name">‘Overengineer’ is my middle name</a></li>
+  </ul></li>
+  <li><a href="#bonus-rstudio-addin" id="toc-bonus-rstudio-addin" class="nav-link" data-scroll-target="#bonus-rstudio-addin">Bonus: RStudio addin</a></li>
+  <li><a href="#oh-crumbs" id="toc-oh-crumbs" class="nav-link" data-scroll-target="#oh-crumbs">Oh, crumbs…</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><img src="resources/add-biscuits.gif" class="img-fluid" style="width:100.0%" alt="Six nested functions in an RStudio script pane are highlighted and then an addin from the RStudio Addins menu is used, called 'add closing paren labels'. It breaks open the functions across several lines and adds labels after each closing bracket with the name of the function that it closes."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I wrote a novelty R function that inserts comments after closing parentheses with the names of the functions they belong to. (These are called <a href="https://code-biscuits.github.io/">biscuits</a>, apparently.) It’s available as an RStudio Addin from <a href="https://github.com/matt-dray/blogsnip">the {blogsnip} package</a>.</p>
+</section>
+<section id="matryoshka-functions" class="level2">
+<h2 class="anchored" data-anchor-id="matryoshka-functions">Matryoshka functions</h2>
+<p>Shiny apps can involve a lot of nested functions in the UI, which can make them difficult to handle.</p>
+<p>Sometimes I comment after a closing parenthesis (‘paren’) with the name of the function that it’s closing, which makes it easier to match the pairs.</p>
+<p><a href="https://twitter.com/nacnudus/status/1431739654789902339?s=20">Duncan told me</a> these labels are called <a href="https://code-biscuits.github.io/">‘biscuits’</a>, which is charming.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>ui <span class="ot">&lt;-</span> <span class="fu">fluidPage</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"hogwash"</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sidebarLayout</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"tripe"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mainPanel</span>(</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">"piffle"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      <span class="fu">tabsetPanel</span>(</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"bilge"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="fu">tabPanel</span>(</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>          <span class="st">"twaddle"</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        )  <span class="co"># tabPanel</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      )  <span class="co"># tabsetPanel</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    )  <span class="co"># mainPanel</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  )  <span class="co"># sidebarLayout</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>)  <span class="co"># fluidPage</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ideally you don’t want to write <a href="https://twitter.com/mxwlj/status/1433132926418374661?s=20">‘hadouken code’</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> like this, though. A well-designed Shiny app would be modular and abstract away the functions, making everything a delight to read and understand.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+</section>
+<section id="paren-in-a-codestack" class="level2">
+<h2 class="anchored" data-anchor-id="paren-in-a-codestack">Paren in a codestack</h2>
+<p>There are a few ways that the RStudio IDE can help with the problem of bracket-buddying in long-winded scripts. In particular:</p>
+<ol type="1">
+<li>Put your cursor next to a parenthesis and its partner will be automatically highlighted</li>
+<li>You can auto-indent with <kbd>Command</kbd> + <kbd>I</kbd> and <a href="https://twitter.com/mattdray/status/1431006821704216577?s=20">expose indent guides</a> with <em>Options</em> &gt; <em>Code</em> &gt; <em>Show indent guides</em> so that paren-pairs are aligned vertically</li>
+<li>Colour-match paren-pairs <a href="https://twitter.com/mattdray/status/1430563837003055107?s=20">with rainbow colours</a>, which you can activate with <em>Options</em> &gt; <em>Code</em> &gt; <em>Display</em></li>
+<li>Use the keyboard shortcut <kbd>Control</kbd> + <kbd>P</kbd> to <a href="https://twitter.com/mattdray/status/1432292336969699334">jump from an opening to a closing parenthesis</a></li>
+</ol>
+<p>You can see these in action in this gif:</p>
+<p><img src="resources/paren-jump.gif" class="img-fluid" style="width:100.0%" alt="Code for a simplified Shiny app in the RStudio editor. The keyboard shortcut Control-and-P is being used to jump from the opening to closing parenthesis of a given pair."></p>
+<p>These go some way to helping, but each is not perfect for me, personally. For example, as someone with colourblindness, I find the rainbow colouring isn’t distinct enough.</p>
+</section>
+<section id="a-biscuit-recipe" class="level2">
+<h2 class="anchored" data-anchor-id="a-biscuit-recipe">A biscuit recipe</h2>
+<p>So what if we want to use those closing-paren labels, or ‘biscuits’, instead? There doesn’t seem to be an option in RStudio for that.</p>
+<p>Naturally, I wondered about filling that gap in the market.</p>
+<p>As a result, consider this post a thought-experiment manifested with some clunky code that is poorly tested and probably doesn’t do exactly what you want it to do. You have been warned.</p>
+<section id="easy-as-a-b-d" class="level3">
+<h3 class="anchored" data-anchor-id="easy-as-a-b-d">Easy as A, B, D</h3>
+<p>Using R code, how can you work out the matching parentheses in an expression? Spoiler: it’s not that simple.</p>
+<p>Maybe you could treat an expression as a string, then label the opening and closing parens in forward and reverse order, respectively.</p>
+<p>In this example, the labels match up the parens for each imaginary function (uppercase for open-parens and lowercase for closing-parens):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="st">"first(second(third()))"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     A      B     Ccba</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>But this simple reversing heuristic doesn’t work for these expressions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="st">"first(second(third(), fourth()))"</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#     A      B     Cd        Dcba</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="st">"first(second(third(')')))"</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#     A      B     C d cba</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In the first example we’d get the parens for <code>third()</code> and <code>fourth()</code> mixed up. In the second we have a sneaky unopened closing paren inside a string.</p>
+<p>Not forgetting that this doesn’t solve how to extract each function name to use as the biscuit.</p>
+</section>
+<section id="overengineer-is-my-middle-name" class="level3">
+<h3 class="anchored" data-anchor-id="overengineer-is-my-middle-name">‘Overengineer’ is my middle name</h3>
+<p>Rather than the naive approach of chopping up and counting strings, I decided to parse the actual R expressions from them.</p>
+<p>I created a function to do this, <code>add_biscuits()</code>, that contains sub-functions for three steps:</p>
+<ol type="1">
+<li><code>.parse()</code> to interpret the R code from an input</li>
+<li><code>.label()</code> to match parenthesis pairs by their parent function, grab the parent function name and insert it as a comment after the closing paren</li>
+<li><code>.format()</code> to stick it all back together and style it</li>
+</ol>
+<p>The rest of the post walks through these functions. I’m certain there’s easier ways to do things, but the code here demonstrates the point I’m trying to reach.</p>
+<p>For demonstration, we can use one of the trickier examples from above as our input.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>string <span class="ot">&lt;-</span> <span class="st">"first(second(third('x'), fourth('y')))"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="parse" class="level4">
+<h4 class="anchored" data-anchor-id="parse">1. Parse</h4>
+<p>The <code>.parse()</code> function takes a string containing R code and returns a dataframe of its ‘syntax tree’. In other words, it breaks the string into ‘tokens’ that are recognised as units of R code: function calls, assignment arrows, etc.</p>
+<p>I’ve used <code>getParseData(parse())</code> to do the hard work of parsing the string into a dataframe with one row per token. The downside is that you must provide to it a file rather than a character object, so we first have to write it to a temporary file.</p>
+<p>I’ve then filtered the dataframe to get only the tokens that are R code (i.e.&nbsp;they aren’t spaces) and renumbered the rows so they’re consecutive. This will be useful when we want to extract the function names for each set of parens.</p>
+<details>
+<summary>
+Expand the <code>.parse()</code> function definition
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>.parse <span class="ot">&lt;-</span> <span class="cf">function</span>(string) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  file <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".R"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">writeLines</span>(string, file)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  tokens <span class="ot">&lt;-</span> <span class="fu">getParseData</span>(<span class="fu">parse</span>(file))</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  parsed <span class="ot">&lt;-</span> parsed[parsed<span class="sc">$</span>terminal <span class="sc">==</span> <span class="cn">TRUE</span>, ]</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames</span>(parsed) <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">seq</span>(<span class="fu">nrow</span>(parsed)))</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(parsed)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+<p>Here’s what the output looks like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tree <span class="ot">&lt;-</span> <span class="fu">.parse</span>(string)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>tree[, <span class="fu">c</span>(<span class="st">"line1"</span>, <span class="st">"col1"</span>, <span class="st">"parent"</span>, <span class="st">"token"</span>, <span class="st">"text"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   line1 col1 parent                token   text
+1      1    1      3 SYMBOL_FUNCTION_CALL  first
+2      1    6     40                  '('      (
+3      1    7      6 SYMBOL_FUNCTION_CALL second
+4      1   13     35                  '('      (
+5      1   14      9 SYMBOL_FUNCTION_CALL  third
+6      1   19     16                  '('      (
+7      1   20     12            STR_CONST    'x'
+8      1   23     16                  ')'      )
+9      1   24     35                  ','      ,
+10     1   26     23 SYMBOL_FUNCTION_CALL fourth
+11     1   32     30                  '('      (
+12     1   33     26            STR_CONST    'y'
+13     1   36     30                  ')'      )
+14     1   37     35                  ')'      )
+15     1   38     40                  ')'      )</code></pre>
+</div>
+</div>
+<p>So each row is a recognised R token, e.g.&nbsp;the function name from the <code>first()</code> function is a <code>SYMBOL_FUNCTION_CALL</code> and <code>'x'</code> is a <code>STR_CONSTANT</code>. Parentheses are recognised as separate special tokens too: <code>'('</code> and <code>')'</code>.</p>
+<p>We also get returned the position of each token in the input (<code>line*</code> and <code>col*</code>) and a variable called <code>parent</code> which tells us something about the association of tokens. In our case, opening- and closing-parens have the same <code>parent</code> value.</p>
+</section>
+<section id="label" class="level4">
+<h4 class="anchored" data-anchor-id="label">2. Label</h4>
+<p>So we can tie our paren pairs together with the <code>parent</code> variable and we know where to place the biscuit with the <code>line1</code> and <code>col1</code> information. But how to extract the function name and ‘biscuitise’ it?</p>
+<p>I’ve written the slightly awkward <code>.label()</code> function for this. It takes the output from <code>.parse()</code> and checks each row to see if it’s a closing-paren token; if so, it finds the position of the matching open-paren by <code>parent</code>; then it looks at the text of the token in the preceding row to get the function name and sticks that in a new column called <code>label</code>.</p>
+<details>
+<summary>
+Expand the <code>.label()</code> function definition
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>.label <span class="ot">&lt;-</span> <span class="cf">function</span>(tree) {</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  tree<span class="sc">$</span>label <span class="ot">&lt;-</span> <span class="cn">NA_character_</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (tkn <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(tree))) {</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    tree<span class="sc">$</span>label[tkn] <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>      tree<span class="sc">$</span>token[[tkn]] <span class="sc">==</span> <span class="st">"')'"</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>      tree[<span class="fu">as.numeric</span>(<span class="fu">rownames</span>(</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        tree[tree<span class="sc">$</span>parent <span class="sc">==</span> tree<span class="sc">$</span>parent[[tkn]] <span class="sc">&amp;</span> tree<span class="sc">$</span>token <span class="sc">==</span> <span class="st">"'('"</span>, ]</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>      )) <span class="sc">-</span> <span class="dv">1</span>, <span class="st">"text"</span>],</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>      <span class="cn">NA_character_</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(tree)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+<p>So now we have the required biscuit for each closing paren:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>tree_lbl <span class="ot">&lt;-</span> <span class="fu">.label</span>(tree)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>tree_lbl[<span class="sc">!</span><span class="fu">is.na</span>(tree_lbl<span class="sc">$</span>label), <span class="fu">c</span>(<span class="st">"text"</span>, <span class="st">"label"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   text  label
+8     )  third
+13    ) fourth
+14    ) second
+15    )  first</code></pre>
+</div>
+</div>
+</section>
+<section id="format" class="level4">
+<h4 class="anchored" data-anchor-id="format">3. Format</h4>
+<p>The last step needs involves sticking everything back together again. My quick solution is hacky and needs a refactor for sure.</p>
+<p>The <code>.format()</code> function does a couple of awkward things: recognises and pastes commas to their preceding token (otherwise we’ll get lines in the output that start with a comma, which is valid, but not my style) and pastes in the biscuits with a suffixed <code>#</code> to mark it as a comment. Of course, this blocks downstream code, so we can add a linebreak with <code>\n</code>.</p>
+<p>The output is still going to be a bit uggo though, so I employed {styler} to reformat it in tidyverse style. This is very definitely opinionated.</p>
+<details>
+<summary>
+Expand the <code>.format()</code> function definition
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>.format <span class="ot">&lt;-</span> <span class="cf">function</span>(tree_lbl) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  tree_lbl<span class="sc">$</span>comma <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ifelse</span>(tree_lbl<span class="sc">$</span>text <span class="sc">!=</span> <span class="st">","</span>, <span class="cn">NA_character_</span>, <span class="st">","</span>)[<span class="sc">-</span><span class="dv">1</span>], <span class="cn">NA_character_</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  )  <span class="co"># lag commas</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  tree_lbl <span class="ot">&lt;-</span> tree_lbl[tree_lbl<span class="sc">$</span>token <span class="sc">!=</span> <span class="st">"','"</span>, ]  <span class="co"># remove comma tokens</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  tree_lbl<span class="sc">$</span>string <span class="ot">&lt;-</span> <span class="cn">NA_character_</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (tkn <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(tree_lbl))) {</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(tree_lbl<span class="sc">$</span>comma[tkn])) {  <span class="co"># when there's a comma</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.na</span>(tree_lbl<span class="sc">$</span>label[tkn])) {  <span class="co"># paste with biscuit</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>        tree_lbl<span class="sc">$</span>string[tkn] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>          <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, tree_lbl<span class="sc">$</span>text[tkn], tree_lbl<span class="sc">$</span>comma[tkn],</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>          <span class="st">"#"</span>, tree_lbl<span class="sc">$</span>label[tkn], <span class="st">"</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>        ) </span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">is.na</span>(tree_lbl<span class="sc">$</span>label[tkn])) {  <span class="co"># paste without biscuit</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>        tree_lbl<span class="sc">$</span>string[tkn] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>          <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, tree_lbl<span class="sc">$</span>text[tkn], tree_lbl<span class="sc">$</span>comma[tkn], <span class="st">"</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>        ) </span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">is.na</span>(tree_lbl<span class="sc">$</span>comma[tkn]) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(tree_lbl<span class="sc">$</span>label[tkn])) {</span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>      tree_lbl<span class="sc">$</span>string[tkn] <span class="ot">&lt;-</span> <span class="fu">paste0</span>(</span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>        <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, tree_lbl<span class="sc">$</span>text[tkn], <span class="st">"#"</span>, tree_lbl<span class="sc">$</span>label[tkn], <span class="st">"</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>      ) </span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {  <span class="co"># no comma, no biscuit</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>      tree_lbl<span class="sc">$</span>string[tkn] <span class="ot">&lt;-</span> tree_lbl<span class="sc">$</span>text[tkn]</span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>  string_out <span class="ot">&lt;-</span> <span class="fu">paste0</span>(tree_lbl<span class="sc">$</span>string, <span class="at">collapse =</span> <span class="st">""</span>)</span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a>  string_out <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"</span><span class="sc">\n\n</span><span class="st">"</span>, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>, string_out)</span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>  styled <span class="ot">&lt;-</span> <span class="fu">suppressWarnings</span>(</span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>    utils<span class="sc">::</span><span class="fu">capture.output</span>(styler<span class="sc">::</span><span class="fu">style_text</span>(string_out))</span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(styled, <span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+<p>Let’s hand over to <code>.format()</code> the labelled tree dataframe that was output from <code>.label()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">.format</span>(tree_lbl)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "first(\n  second(\n    third(\"x\"), # third\n    fourth(\"y\") # fourth\n  ) # second\n) # first"</code></pre>
+</div>
+</div>
+<p>So the output is a character vector, with one element per line of our output R file. You can see in the console how this looks.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>first(
+  second(
+    third("x"), # third
+    fourth("y") # fourth
+  ) # second
+) # first</code></pre>
+</div>
+</div>
+<p>Real noice: we’ve got a comment after each closing bracket that notes which function it’s closing. You can argue that some of these biscuits are redundant, but the goal has been achieved!</p>
+<p>A reminder of the original input:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>string</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "first(second(third('x'), fourth('y')))"</code></pre>
+</div>
+</div>
+</section>
+<section id="combined-function" class="level4">
+<h4 class="anchored" data-anchor-id="combined-function">4. Combined function</h4>
+<p>And so, we can put these three steps together in one function: <code>add_biscuits()</code>, which is a cuter name than <code>label_parens()</code> or whatever.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>add_biscuits <span class="ot">&lt;-</span> <span class="cf">function</span>(string) { </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.parse</span>(string) <span class="sc">|&gt;</span> <span class="fu">.label</span>() <span class="sc">|&gt;</span> <span class="fu">.format</span>()</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The output from each sub-function passes to the next, so it’s a nice chance to use the pipe operator (R &gt;= v4.1).</p>
+<p>Let’s try it on that awkward example with the sneaky extra bracket.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>string2 <span class="ot">&lt;-</span> <span class="st">"first(second(third(')')))"</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">add_biscuits</span>(string2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>first(
+  second(
+    third(")") # third
+  ) # second
+) # first</code></pre>
+</div>
+</div>
+<p>So only the ‘real’ closing-paren tokens have been recognised and labelled.</p>
+</section>
+</section>
+</section>
+<section id="bonus-rstudio-addin" class="level2">
+<h2 class="anchored" data-anchor-id="bonus-rstudio-addin">Bonus: RStudio addin</h2>
+<p>You’re thinking ‘cool, but how can I use this thing practically?’ The answer is an RStudio addin.</p>
+<p>I’ve <a href="https://www.rostrum.blog/2019/10/22/blogsnip/">written before</a> about <a href="https://github.com/matt-dray/blogsnip">{blogsnip}</a>, my package of R Markdown-related RStudio addins to help me prepare blog posts. I’ve put the <code>add_biscuits()</code> function in there for now.</p>
+<p>Install from GitHub with {remotes} as follows and then restart RStudio. {blogsnip} doesn’t force you to install {styler}, so you’ll have to do that too (if you haven’t already).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"remotes"</span>, <span class="st">"styler"</span>))</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"matt-dray/blogsnip"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There should now be a ‘BLOGSNIP’ section in the ‘Addins’ menu (top navigation bar) with an option to ‘Add closing paren labels’. Select a full R expression in the script window, then select ‘Add closing paren labels’. Your code will be replaced with the same code, but with biscuits inserted.</p>
+<p><img src="resources/add-biscuits.gif" class="img-fluid" style="width:100.0%" alt="Six nested functions in an RStudio script pane are highlighted and then an addin from the RStudio Addins menu is used, called 'add closing paren labels'. It breaks open the functions across several lines and adds labels after each closing bracket with the name of the function that it closes."></p>
+<p>Beware: your code will be replaced if you use the addin. Of course, you can edit or undo the output as necessary.</p>
+<p>You can set a keyboard shortcut for this too, if you want. Go to <em>Tools</em> &gt; <em>Modify Keyboard Shortcuts…</em>. I set mine to <kbd>Ctrl</kbd> + <kbd>Cmd</kbd> + <kbd>P</kbd>, since <kbd>Ctrl</kbd> + <kbd>P</kbd> is the shortcut that jumps from opening to closing parens.</p>
+</section>
+<section id="oh-crumbs" class="level2">
+<h2 class="anchored" data-anchor-id="oh-crumbs">Oh, crumbs…</h2>
+<p>Let me be clear: <code>add_biscuits()</code> is half-baked (lol). It works on the simple examples here, but I’m pretty sure it will break horribly on more complex things. I haven’t really tested it properly.</p>
+<p>It gets confused if there’s already some labelled closing parens. It gets confused if you don’t highlight enough code to capture all the opening and closing parens. It gets confused if you run it over more than one expression. It ignores curly and square parentheses. Etc, etc.</p>
+<p>So, use the function at your own risk, or better yet: improve it by <a href="https://github.com/matt-dray/blogsnip">contributing to {blogsnip}</a>.</p>
+<p>Or even better yet, just use a good implementation of this functionality that someone else has probably written and I’ve been too lazy to search for.</p>
+<p>Or, y’know, don’t write heavily-nested code that requires you to write comments after closing parens.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-18 21:09:29 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] vctrs_0.6.3        crayon_1.5.2       cli_3.6.1          knitr_1.43.1      
+ [5] rlang_1.1.1        xfun_0.39          rex_1.2.1          processx_3.8.2    
+ [9] purrr_1.0.1        styler_1.10.1      xmlparsedata_1.0.5 jsonlite_1.8.7    
+[13] rprojroot_2.0.3    htmltools_0.5.5    ps_1.7.5           rmarkdown_2.23    
+[17] R.cache_0.16.0     evaluate_0.21      fastmap_1.1.1      lifecycle_1.0.3   
+[21] yaml_2.3.7         cyclocomp_1.1.0    compiler_4.3.1     lintr_3.0.2       
+[25] htmlwidgets_1.6.2  rstudioapi_0.15.0  R.oo_1.25.0        R.utils_2.12.2    
+[29] digest_0.6.33      R6_2.5.1           magrittr_2.0.3     callr_3.7.3       
+[33] R.methodsS3_1.8.2  tools_4.3.1        withr_2.5.0        lazyeval_0.2.2    
+[37] xml2_1.3.5         remotes_2.4.2      desc_1.4.2        </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>The code looks like the shockwave emanating from <a href="https://en.wikipedia.org/wiki/Hadouken">a ‘hadouken’ energy-ball</a> from the Street Fighter video games.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>And if you’re nesting too much, maybe consider <a href="https://simplystatistics.org/2018/07/27/why-i-indent-my-code-8-spaces/">Roger Peng’s eight-space indentation</a> to punish yourself.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

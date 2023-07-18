@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2020-12-20">
+
+<title>rostrum.blog (test) - Mapping londonmapbot tweets with {leaflet}</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-black-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog (test)</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Mapping londonmapbot tweets with {leaflet}</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">geospatial</div>
+                <div class="quarto-category">leaflet</div>
+                <div class="quarto-category">PostcodesioR</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">rtweet</div>
+                <div class="quarto-category">sf</div>
+                <div class="quarto-category">twitter</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 20, 2020</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#the-bot" id="toc-the-bot" class="nav-link" data-scroll-target="#the-bot">The bot</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
+  <li><a href="#fetch-tweets" id="toc-fetch-tweets" class="nav-link" data-scroll-target="#fetch-tweets">Fetch tweets</a></li>
+  <li><a href="#extract-tweet-information" id="toc-extract-tweet-information" class="nav-link" data-scroll-target="#extract-tweet-information">Extract tweet information</a></li>
+  <li><a href="#reverse-geocode" id="toc-reverse-geocode" class="nav-link" data-scroll-target="#reverse-geocode">Reverse geocode</a></li>
+  <li><a href="#convert-to-spatial-object" id="toc-convert-to-spatial-object" class="nav-link" data-scroll-target="#convert-to-spatial-object">Convert to spatial object</a></li>
+  <li><a href="#map-it" id="toc-map-it" class="nav-link" data-scroll-target="#map-it">Map it</a>
+  <ul class="collapse">
+  <li><a href="#london-boundary-geojson" id="toc-london-boundary-geojson" class="nav-link" data-scroll-target="#london-boundary-geojson">London boundary geojson</a></li>
+  <li><a href="#build-map-with-leaflet" id="toc-build-map-with-leaflet" class="nav-link" data-scroll-target="#build-map-with-leaflet">Build map with {leaflet}</a></li>
+  </ul></li>
+  <li><a href="#map" id="toc-map" class="nav-link" data-scroll-target="#map">The map</a></li>
+  <li><a href="#development" id="toc-development" class="nav-link" data-scroll-target="#development">Development</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/leicester-square.png" class="img-fluid figure-img" style="width:100.0%" alt="Screenshot of a leaflet map showing Leicester Square, London, with a popup giving geographic information and a satellite view."></p>
+<figcaption class="figure-caption">Closest I’ve been to Leicester Square since the start of lockdown.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I recently <a href="https://www.rostrum.blog/2020/09/21/londonmapbot/">made a Twitter bot with R, {rtweet}, MapBox and GitHub Actions</a> – <a href="https://twitter.com/londonmapbot">londonmapbot</a> – that tweets images of random coordinates in London. I decided to explore them interactively by creating a simple <a href="https://rstudio.github.io/leaflet/">{leaflet}</a> map. You can <a href="#map">jump directly to the map</a>).</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>Twitter changed its API terms in 2023. As a result, you probably can’t re-run the code in this blog. <a href="https://www.rostrum.blog/2023/02/09/londonmapbotstodon/">Read about</a> how I moved londonmapbot to Mastodon at <a href="https://botsin.space/@londonmapbot">botsin.space/<span class="citation" data-cites="londonmapbot">@londonmapbot</span></a> because of these changes.</p>
+</div>
+</section>
+<section id="the-bot" class="level2">
+<h2 class="anchored" data-anchor-id="the-bot">The bot</h2>
+<p>I built <a href="https://www.twitter.com/londonmapbot/">the londonmapbot Twitter bot</a> as a fun little project to get to grips with <a href="https://github.com/features/actions">GitHub Actions</a>. An action is scheduled every 30 minutes to run some R code that (1) selects random coordinates in London, (2) fetches a satellite image from <a href="https://docs.mapbox.com/api/overview/">the MapBox API</a>, (3) generates an <a href="https://www.openstreetmap.org/">OpenStreetMap</a> URL, all of which are (4) passed to <a href="https://docs.ropensci.org/rtweet/">{rtweet}</a> to post to the londonmapbot account.</p>
+<p>The outputs have been compelling so far. The composition is usually ‘accidentally’ pleasing. Sometimes landmarks are captured, like <a href="https://twitter.com/londonmapbot/status/1334220239467376643?s=20">The Shard</a>, <a href="https://twitter.com/londonmapbot/status/1333173374332395522?s=20">The Natural History Museum and V&amp;A</a> and <a href="https://twitter.com/londonmapbot/status/1333702486545354752?s=20">Heathrow</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/shard.png" class="img-fluid figure-img" style="width:100.0%" alt="Screenshot of a tweet by londonmapbot showing a satellite view of the area round London Bridge Station and The Shard."></p>
+<figcaption class="figure-caption">The Shard looks pointy even in 2D.</figcaption>
+</figure>
+</div>
+<p>I was wondering whether the bot has ‘found’ other landmarks that I hadn’t noticed or whether it’s found my house. <a href="https://github.com/matt-dray/londonmapbot">The londonmapbot source code</a> doesn’t have a log file for all the coordinates it’s generated, so I figured the easiest way to get this information and explore it would be to grab all the tweets – which contain the coordinates as text – and then map the results.</p>
+</section>
+<section id="packages" class="level2">
+<h2 class="anchored" data-anchor-id="packages">Packages</h2>
+<p>I’m loading <a href="https://www.tidyverse.org/">the tidyverse</a> for data manipulation with {dplyr}, {tidyr} and {stringr}. <a href="https://docs.ropensci.org/rtweet/">{rtweet}</a> greatly simplifies the Twitter API and the objects it returns. We’ll use it to fetch all the tweets from londonmapbot.</p>
+<p>I’m using a few geography-related packages:</p>
+<ul>
+<li><a href="https://r-spatial.github.io/sf/">{sf}</a> for tidy dataframes with spatial information</li>
+<li><a href="https://docs.ropensci.org/geojsonio/">{geojsonio}</a> to read spatial files in geojson format</li>
+<li><a href="https://docs.ropensci.org/PostcodesioR/">{PostcodesioR}</a> to fetch additional geographic data given our x-y information</li>
+<li><a href="https://rstudio.github.io/leaflet/">{leaflet}</a> to build interactive maps from spatial data.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(rtweet)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(sf)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(geojsonio)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(PostcodesioR)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(leaflet)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A particular shoutout to <a href="https://ropensci.org/">rOpenSci</a> for this post: {rtweet}, {geojsonio} and {PostcodesioR} have all passed muster to become part of the rOpenSci suite of approved packages.</p>
+</section>
+<section id="fetch-tweets" class="level2">
+<h2 class="anchored" data-anchor-id="fetch-tweets">Fetch tweets</h2>
+<p>{rtweet} does all the legwork to fetch and parse information from the Twitter API, saving you loads of effort.</p>
+<p>The <code>rtweet::get_timeline()</code> function is amazing in its user-side simplicity. Pass the account name from which to fetch tweets, along with the number of tweets to get (3200 is the maximum).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>lmb_tweets <span class="ot">&lt;-</span> <span class="fu">get_timeline</span>(<span class="st">"londonmapbot"</span>, <span class="at">n =</span> <span class="dv">3200</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>lmb_tweets[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="fu">c</span>(<span class="st">"created_at"</span>, <span class="st">"text"</span>)]  <span class="co"># limited preview</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code># A tibble: 5 x 2
+  created_at          text                                                      
+  &lt;dttm&gt;              &lt;chr&gt;                                                     
+1 2020-12-29 09:36:20 "51.5519, -0.33\nhttps://t.co/ica9ZypBLS https://t.co/5gS…
+2 2020-12-29 08:59:46 "51.4392, 0.1636\nhttps://t.co/2DsbbLYIDG https://t.co/KV…
+3 2020-12-29 06:28:48 "51.6773, -0.2555\nhttps://t.co/1hu2VoxCBF https://t.co/b…
+4 2020-12-29 05:56:15 "51.674, -0.4042\nhttps://t.co/HMhmUVVrIn https://t.co/mP…
+5 2020-12-29 05:31:03 "51.4451, 0.1058\nhttps://t.co/nWuqy4s7am https://t.co/qv…</code></pre>
+<p>{rtweet} has a function to quick-plot tweets over time. There’s meant to be a tweet every half-hour from londonmapbot, but GitHub Actions has been a little inconsistent and sometimes fails to post.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rtweet<span class="sc">::</span><span class="fu">ts_plot</span>(lmb_tweets) <span class="sc">+</span>  <span class="co"># plot daily tweets</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"@londonmapbot tweets per day"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">""</span>, <span class="at">caption =</span> <span class="st">"Data collected via {rtweet}"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="resources/ts-plot-1.png" class="img-fluid" style="width:100.0%" alt="Tweet volume from the londonmapbot account between September and December 2020. The amount is inconsistent and is about 25 to 40 tweets per day."></p>
+</section>
+<section id="extract-tweet-information" class="level2">
+<h2 class="anchored" data-anchor-id="extract-tweet-information">Extract tweet information</h2>
+<p>The dataframe returned by {rtweet} contains nearly 100 columns. For our purposes we can minimise to:</p>
+<ul>
+<li>the unique tweet identifier, <code>status_id</code>, which we can use to build a URL back to the tweet</li>
+<li>the datetime the tweet was <code>created_at</code></li>
+<li>the tweet text content, from which we can isolate the latitude and longitude values</li>
+<li>the <code>media_url</code> to the MapBox image attached to each tweet</li>
+<li>the full OpenStreetMap link in each tweet via <code>urls_expanded_urls</code></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>lmb_simple <span class="ot">&lt;-</span> lmb_tweets <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(text, <span class="st">"^</span><span class="sc">\\</span><span class="st">d"</span>)) <span class="sc">%&gt;%</span>  <span class="co"># must start with a digit</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(  <span class="co"># break column into new columns given separator</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    text,  <span class="co"># column to separate</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"lat"</span>, <span class="st">"lon"</span>),  <span class="co"># names to split into</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">sep =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">s"</span>,  <span class="co"># separate on spaces</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">extra =</span> <span class="st">"drop"</span> <span class="co"># discard split elements</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(  <span class="co"># tidy up variables </span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">lat =</span> <span class="fu">str_remove</span>(lat, <span class="st">","</span>),</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">c</span>(lat, lon), as.numeric)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(  <span class="co"># focus variables</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    status_id, created_at, lat, lon,</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">osm_url =</span> urls_expanded_url, media_url</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>lmb_simple[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="fu">c</span>(<span class="st">"status_id"</span>, <span class="st">"lat"</span>, <span class="st">"lon"</span>)]  <span class="co"># limited preview</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code># A tibble: 5 x 3
+  status_id             lat    lon
+  &lt;chr&gt;               &lt;dbl&gt;  &lt;dbl&gt;
+1 1343853346478841862  51.6 -0.33 
+2 1343844145518026752  51.4  0.164
+3 1343806154397409280  51.7 -0.256
+4 1343797964645523456  51.7 -0.404
+5 1343791619049480192  51.4  0.106</code></pre>
+</section>
+<section id="reverse-geocode" class="level2">
+<h2 class="anchored" data-anchor-id="reverse-geocode">Reverse geocode</h2>
+<p>Tweets from londonmapbot are really simple by design; they only have the latitude and longitude, a link to OpenStreetMap and a satellite image pulled from <a href="https://docs.mapbox.com/api/overview/">the MapBox API</a>. It might be interesting to provide additional geographic information.</p>
+<p>{PostcodesioR} can perform a ‘reverse geocode’<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> of our coordinates. Give latitude and longitude to <code>PostcodesioR::reverse_geocoding()</code> and it returns a list with various administrative geographies for that point.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>lmb_geocode <span class="ot">&lt;-</span>  lmb_simple <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">reverse_geocode =</span> <span class="fu">map2</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">.x =</span> lon, <span class="at">.y =</span> lat,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>      <span class="sc">~</span><span class="fu">reverse_geocoding</span>(.x, .y, <span class="at">limit =</span> <span class="dv">1</span>)  <span class="co"># limit to first result</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="at">cols =</span> reverse_geocode) <span class="sc">%&gt;%</span>  <span class="co"># unpack listcol</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hoist</span>(reverse_geocode, <span class="st">"postcode"</span>) <span class="sc">%&gt;%</span>  <span class="co"># pull out postcode into a </span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">hoist</span>(reverse_geocode, <span class="st">"admin_district"</span>) <span class="co"># pull out borough</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>lmb_geocode[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="fu">c</span>(<span class="st">"lat"</span>, <span class="st">"lon"</span>, <span class="st">"postcode"</span>, <span class="st">"admin_district"</span>)]  <span class="co"># limited preview</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code># A tibble: 5 x 4
+    lat    lon postcode admin_district
+  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;         
+1  51.6 -0.33  UB6 7QT  Ealing        
+2  51.4  0.164 DA5 2DJ  Bexley        
+3  51.7 -0.256 WD6 5PL  Hertsmere     
+4  51.7 -0.404 WD24 5TU Watford       
+5  51.4  0.106 DA15 9BQ Bexley</code></pre>
+<p>The object returned from the reverse geocode is a nested list that we can <code>tidyr::hoist()</code> the geographic information from. Here we grabbed the postcode and ‘administrative district’, which for our purposes is the London borough that the point is in.</p>
+</section>
+<section id="convert-to-spatial-object" class="level2">
+<h2 class="anchored" data-anchor-id="convert-to-spatial-object">Convert to spatial object</h2>
+<p>Right now we have a dataframe where the geographic information is stored as numeric values. We can use the {sf} package to convert and handle this information as spatial information instead.</p>
+<p>Basically we can use {sf} to ‘geographise’ our dataframe. It can add geometry (points in our case), dimensions (XY, meaning 2D), the maximum geographic extent (a ‘bounding box’ that roughly covers London) and recognition of the coordinate reference system (‘4236’ for latitude-longitude).</p>
+<p>The <code>sf::st_as_sf()</code> function performs the magic of converting our tidy dataframe into a tidy spatial dataframe. You’ll see that the print method provides us the extra spatial metadata and that our geographic information has been stored in a special <code>geometry</code> column with class <code>sfc_POINT</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>lmb_sf <span class="ot">&lt;-</span> lmb_geocode <span class="sc">%&gt;%</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">"lon"</span>, <span class="st">"lat"</span>),  <span class="co"># xy columns</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">crs =</span> <span class="dv">4326</span>,  <span class="co"># coordinate reference system code</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">remove =</span> <span class="cn">FALSE</span>  <span class="co"># retain the xy columns</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>lmb_sf[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="fu">c</span>(<span class="st">"status_id"</span>, <span class="st">"geometry"</span>)]  <span class="co"># limited preview</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>Simple feature collection with 5 features and 1 field
+geometry type:  POINT
+dimension:      XY
+bbox:           xmin: -0.4042 ymin: 51.4392 xmax: 0.1636 ymax: 51.6773
+CRS:            EPSG:4326
+# A tibble: 5 x 2
+  status_id                    geometry
+  &lt;chr&gt;                     &lt;POINT [°]&gt;
+1 1343853346478841862   (-0.33 51.5519)
+2 1343844145518026752  (0.1636 51.4392)
+3 1343806154397409280 (-0.2555 51.6773)
+4 1343797964645523456  (-0.4042 51.674)
+5 1343791619049480192  (0.1058 51.4451)</code></pre>
+</section>
+<section id="map-it" class="level2">
+<h2 class="anchored" data-anchor-id="map-it">Map it</h2>
+<section id="london-boundary-geojson" class="level3">
+<h3 class="anchored" data-anchor-id="london-boundary-geojson">London boundary geojson</h3>
+<p>Coordinates for londonmapbot tweets are selected randomly within a rectangle roughly within the boundary of the M25 motorway. We can grab a polygon of the Greater London boundary to see which points fall within the ‘true’ extent of London.</p>
+<p>To do this, I’m using a set of boundaries for England’s regions<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> via the <a href="https://geoportal.statistics.gov.uk/datasets/nuts-level-1-january-2018-ultra-generalised-clipped-boundaries-in-the-united-kingdom">Office for National Statistics’s Open Geography Portal</a> API. The polygons are ‘ultra generalised’ to be represented by very few points (every 500m). This means it doesn’t follow the exact boundary of London, but that’s okay: it’s only being used as a guide and we get the benefit of a small polygon file.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>ldn_sf <span class="ot">&lt;-</span> <span class="fu">geojson_read</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(  <span class="co"># API endpoint for NUTS1 geography geojson</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://opendata.arcgis.com/datasets/"</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"01fd6b2d7600446d8af768005992f76a_4.geojson"</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  ), </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">what =</span> <span class="st">"sp"</span>  <span class="co"># read as spatial object</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_as_sf</span>() <span class="sc">%&gt;%</span>  <span class="co"># convert to sf object</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(nuts118nm <span class="sc">==</span> <span class="st">"London"</span>)  <span class="co"># London polygon only</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>ldn_sf[, <span class="fu">c</span>(<span class="st">"nuts118nm"</span>, <span class="st">"geometry"</span>)]  <span class="co"># limited preview</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>Simple feature collection with 1 feature and 1 field
+geometry type:  MULTIPOLYGON
+dimension:      XY
+bbox:           xmin: -0.5097014 ymin: 51.28676 xmax: 0.3340242 ymax: 51.69188
+CRS:            unknown
+  nuts118nm                       geometry
+1    London MULTIPOLYGON (((-0.01191868...</code></pre>
+<p>{ggplot2} has a geom for quick-plotting of {sf} objects, so we can check the boundary.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(ldn_sf) <span class="sc">+</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>() <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"London boundary"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Ultra-generalised NUTS1 extent"</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Data collected via ONS Open Geography Portal API"</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="resources/ldn-map-1.png" class="img-fluid" style="width:100.0%" alt="A simple map of London's administratve boundary."></p>
+</section>
+<section id="build-map-with-leaflet" class="level3">
+<h3 class="anchored" data-anchor-id="build-map-with-leaflet">Build map with {leaflet}</h3>
+<p>You can build up layers in {leaflet} in a similar kind of way to a {ggplot2} graphic. The base map is applied with <code>addProviderTiles()</code>, followed by the London boundary with <code>addPolygons()</code>, with the points added as circle-shaped points with <code>addCircleMarkers()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>lmb_map <span class="ot">&lt;-</span> <span class="fu">leaflet</span>(ldn_sf, <span class="at">width =</span> <span class="st">'100%'</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addProviderTiles</span>(<span class="st">"CartoDB.Positron"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addPolygons</span>(  <span class="co"># generalised London boundary</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">weight =</span> <span class="dv">2</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">opacity =</span> <span class="dv">1</span>, <span class="at">fillOpacity =</span> <span class="fl">0.2</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addCircleMarkers</span>(  <span class="co"># locations as points</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">lng =</span> lmb_sf<span class="sc">$</span>lon, <span class="at">lat =</span> lmb_sf<span class="sc">$</span>lat,  <span class="co"># xy</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">radius =</span> <span class="dv">5</span>, <span class="at">stroke =</span> <span class="cn">FALSE</span>,  <span class="co"># marker design</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">fillOpacity =</span> <span class="fl">0.5</span>, <span class="at">fillColor =</span> <span class="st">"#0000FF"</span>,  <span class="co"># marker colours</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">clusterOptions =</span> <span class="fu">markerClusterOptions</span>(),  <span class="co"># bunch-up markers</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">popup =</span> <span class="sc">~</span><span class="fu">paste0</span>(  <span class="co"># dynamic HTML-creation for popup content</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>      emo<span class="sc">::</span><span class="fu">ji</span>(<span class="st">"round_pushpin"</span>), <span class="st">" "</span>, lmb_sf<span class="sc">$</span>lat, <span class="st">", "</span>, lmb_sf<span class="sc">$</span>lon, <span class="st">"&lt;br&gt;"</span>,</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>      emo<span class="sc">::</span><span class="fu">ji</span>(<span class="st">"postbox"</span>), lmb_sf<span class="sc">$</span>admin_district, </span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>      <span class="st">", "</span>, lmb_sf<span class="sc">$</span>postcode, <span class="st">"&lt;br&gt;"</span>,</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>      emo<span class="sc">::</span><span class="fu">ji</span>(<span class="st">"bird"</span>), <span class="st">" &lt;a href='https://twitter.com/londonmapbot/status/"</span>,</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>      lmb_sf<span class="sc">$</span>status_id, <span class="st">"'&gt;Tweet&lt;/a&gt;&lt;br&gt;"</span>,</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>      emo<span class="sc">::</span><span class="fu">ji</span>(<span class="st">"world_map"</span>), <span class="st">" "</span>, <span class="st">"&lt;a href='"</span>,</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>      lmb_sf<span class="sc">$</span>osm_url, <span class="st">"' width='100%'&gt;OpenStreetMap&lt;/a&gt;&lt;br&gt;&lt;br&gt;"</span>,</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>      <span class="st">"&lt;img src='"</span>, lmb_sf<span class="sc">$</span>media_url, <span class="st">"' width='200'&gt;"</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The markers, which are blue dots, have rich pop-ups when clicked. The information is generated dynamically for each point by pasting HTML strings with the content of the dataframe. Props to <a href="https://lapsedgeographer.london/">Matt Kerlogue</a>’s <a href="https://twitter.com/narrowbotR">narrowbotR</a>, which uses this emoji-info layout in its automated tweets.</p>
+<p>To keep the design simple and uncluttered, I’ve intentionally used a muted base map (‘Positron’ from CartoDB) and limited the amount of pop-up content.</p>
+<p>In the pop-up you’ll see information from the tweet, including the satellite image and printed coordinates; URLs to the original tweet and OpenStreetMap; plus the reverse-geocoded info we got from {PostcodesioR}.</p>
+<p>Since there are thousands of points, it makes sense to cluster them with <code>markerClusterOptions()</code> to avoid graphical and navigational troubles. Click a cluster to expand until you reach a marker.</p>
+</section>
+</section>
+<section id="map" class="level2">
+<h2 class="anchored" data-anchor-id="map">The map</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>lmb_map</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you can’t see the satellite photos in each pop-up you may need to change browser.</p>
+<p>And no, it hasn’t captured my house yet!</p>
+</section>
+<section id="development" class="level2">
+<h2 class="anchored" data-anchor-id="development">Development</h2>
+<p>I made this for my own amusement and as an excuse to use {PostcodesioR} and reacquaint myself with {leaflet}. If I were going to develop it, I would make a Shiny app that continuously refreshes with the latest tweet information. I may revisit londonmapbot in future, or create a new bot; in which case the reverse geocoding capabilities of {PostcodesioR} could come in handy for providing more content in tweet text.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-18 19:03:41 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
+[13] digest_0.6.31     rlang_1.1.1       fontawesome_0.5.1 evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+<p>
+</p>
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>I’m going to assume this is also a wrestling move.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Technically we’re using the <a href="https://en.wikipedia.org/wiki/NUTS_1_statistical_regions_of_England">NUTS1 regional designations</a>, a <a href="https://en.wikipedia.org/wiki/Eurostat">Eurostat</a> standard.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

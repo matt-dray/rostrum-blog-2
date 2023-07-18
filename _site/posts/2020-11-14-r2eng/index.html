@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2020-11-14">
+
+<title>rostrum.blog (test) - Translate R to English with {r2eng}</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-black-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog (test)</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Translate R to English with {r2eng}</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">accessibility</div>
+                <div class="quarto-category">binder</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">r2eng</div>
+                <div class="quarto-category">rstudio-addins</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 14, 2020</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#communication-is-hard" id="toc-communication-is-hard" class="nav-link" data-scroll-target="#communication-is-hard">Communication is hard</a></li>
+  <li><a href="#hello-r2eng" id="toc-hello-r2eng" class="nav-link" data-scroll-target="#hello-r2eng">Hello {r2eng}</a>
+  <ul class="collapse">
+  <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation">Installation</a></li>
+  <li><a href="#how-it-works" id="toc-how-it-works" class="nav-link" data-scroll-target="#how-it-works">How it works</a></li>
+  <li><a href="#using-r2eng" id="toc-using-r2eng" class="nav-link" data-scroll-target="#using-r2eng">Using {r2eng}</a></li>
+  <li><a href="#bonus-material" id="toc-bonus-material" class="nav-link" data-scroll-target="#bonus-material">Bonus material</a></li>
+  </ul></li>
+  <li><a href="#theres-lots-to-do" id="toc-theres-lots-to-do" class="nav-link" data-scroll-target="#theres-lots-to-do">There’s lots to do</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><img src="resources/r2eng_hex.png" class="img-fluid" style="width:30.0%" alt="Hexagonal logo for the r2eng package showing the package name inside a speech bubble with the URL matt-dray.github.io/r2eng."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I created the work-in-progress {r2eng} package (<a href="https://github.com/matt-dray/r2eng">source</a>, <a href="https://matt-dray.github.io/r2eng/">site</a>) to help translate R expressions to speakable English. Inspired by <a href="https://www.youtube.com/watch?v=ckW9sSdIVAc">Amelia McNamara</a> and with a huge amount of help from <a href="https://twitter.com/chainsawriot">Chung-hong Chan</a>.</p>
+</section>
+<section id="communication-is-hard" class="level2">
+<h2 class="anchored" data-anchor-id="communication-is-hard">Communication is hard</h2>
+<p>Amelia McNamara (<a href="http://www.amelia.mn/">site</a>, <a href="https://twitter.com/AmeliaMN">Twitter</a>) gave a talk at the useR! 2020 conference called ‘Speaking R’. Watch the video on <a href="https://www.youtube.com/watch?v=ckW9sSdIVAc">YouTube</a>, or take a look at the <a href="https://www.amelia.mn/SpeakingR/#1">slides</a>.</p>
+<p>To summarise greatly: R code should be speakable so that we can teach, learn and communicate with minimal friction.</p>
+<p>‘Speakable’ means I should be able to read an R expression to you as an English sentence (rather than reading out individual characters) and we should be able to understand each other.</p>
+<p>But this is all easier said than… said.</p>
+<p>Ideally we’d have an agreed dictionary that maps each R token to an equivalent English phrase. But there will always be variation between users and across communities; between beginners and aficionados; and given differences in spoken language.</p>
+<p>Then there’s context. We might agree that the operator <code>%&gt;%</code> is called a ‘pipe’, but you might say the word ‘then’ when reading an expression. So <code>data %&gt;% print()</code> might be spoken as ‘data <em>then</em> print’.</p>
+<p>The order of parsing may also differ between people. Something as simple as <code>x &lt;- 1</code> could be ‘x gets 1’, ‘assign the value 1 to the variable named x’, or something else entirely. Now imagine that on the scale of an entire script.</p>
+<p>I don’t think we can completely ‘solve’ any of this, but we could probably develop the conversation with the help of a tool accessible from R itself.</p>
+</section>
+<section id="hello-r2eng" class="level2">
+<h2 class="anchored" data-anchor-id="hello-r2eng">Hello {r2eng}</h2>
+<p>This is where the {r2eng} package comes in. The goal is to take an R expression and translate it to an equivalent speakable, English sentence, from within R itself.</p>
+<p>The initial focus has been to:</p>
+<ul>
+<li>concentrate on translating to English (I’m biased)</li>
+<li>map the most common R operators (e.g.&nbsp;assignment, maths, brackets)</li>
+<li>use commonly-used (but currently opinionated<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>) English translations for R operators (‘gets’ for <code>&lt;-</code>)</li>
+<li>work on a simple one-to-one, left-to-right mapping of R to English</li>
+<li>keep the API simple, so you just supply an expression and get a result</li>
+<li>simply <em>begin</em> an approach to address what was raised in Amelia’s presentation</li>
+</ul>
+<p>Obviously the package is not finished, let alone perfect, and it requires more theoretical and practical considerations to make it truly useful. Clearly I don’t have all the answers and I’m certainly not an arbiter of language, but I think the purpose is defined and it certainly works for simple cases.</p>
+<p>At worst, I hope the package will encourage discussion. There’s been some interest <a href="https://twitter.com/mattdray/status/1282378130901131264?s=20">on Twitter</a> and <a href="https://community.rstudio.com/t/how-do-you-speak-r/73727">on the RStudio Community site</a>, but do consider contributing thoughts and ideas to <a href="https://github.com/matt-dray/r2eng">the {r2eng} GitHub repo</a>.</p>
+<p>In this vein, it’s important to highlight Chung-hong Chan’s valuable contributions to the package. Check out his <a href="http://chainsawriot.com/">website</a> and find him on <a href="https://twitter.com/chainsawriot">Twitter</a>. Chung-hong was responsible for updating {r2eng} to handle <a href="https://github.com/matt-dray/r2eng/commit/c38e0a44a785f3ac10dfd7a9302cf3f77091ba55">non-standard evaluation</a> in the <code>translate()</code> function and for replacing my original simple R-to-English lookup with a proper <a href="https://github.com/matt-dray/r2eng/commit/dcbfa08a7b7798a76c6c7101c9c152b1a3ccb77f">parsing method</a> for interpreting R expressions.</p>
+<section id="installation" class="level3">
+<h3 class="anchored" data-anchor-id="installation">Installation</h3>
+<p>You can install the package from GitHub using the {remotes} package. The package is in development version 0.0.0.9005 at the time of writing and this post discusses functionality for that version. Things may change.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)  <span class="co"># if not already installed</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"matt-dray/r2eng"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="how-it-works" class="level3">
+<h3 class="anchored" data-anchor-id="how-it-works">How it works</h3>
+<section id="recognising-tokens" class="level4">
+<h4 class="anchored" data-anchor-id="recognising-tokens">Recognising tokens</h4>
+<p>The secret sauce of the package is that it recognises the ‘tokens’ that make up an R expression. So the assignment operator, <code>&lt;-</code>, is recognised as a single token rather than the less-than (<code>&lt;</code>) and hyphen (<code>-</code>) characters typed sequentially.</p>
+<p>This power is brought to {r2eng} thanks to <a href="https://github.com/jimhester/lintr">{lintr}</a>, a package by <a href="https://www.jimhester.com/">Jim Hester</a> that assesses your code for possible errors and style improvements.</p>
+<p>An important part of this process is parsing R expressions and recognising tokens using the <code>lintr::get_source_expressions()</code> function. For example, that <code>&lt;-</code> operator is recognised as the special token <code>LEFT_ASSIGN</code> under the hood.</p>
+<p>This is some deep R magic. You can see a <a href="https://github.com/wch/r-source/blob/trunk/src/main/gram.y">special grammar file</a> file in the R source code that <a href="https://github.com/wch/r-source/blob/trunk/src/main/gram.y#L2092-L2127">carries these mappings</a>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Put simply, {r2eng} hijacks this process, adds a step that maps each token to English terms, then recombines the text into a sentence.</p>
+</section>
+<section id="speech" class="level4">
+<h4 class="anchored" data-anchor-id="speech">Speech</h4>
+<p>By default, {r2eng} will translate an R expression and then your computer will speak it out loud.</p>
+<p>This is relatively straightforward on a Mac: the resulting English text is handed to your machine with a <code>system()</code> call and is vocalised by the built-in VoiceOver text-to-speech converter. This functionality is not built into Windows by default, so the <code>system()</code> call fails silently.</p>
+<p>Of course, this assumes that VoiceOver will do a good job of parsing the English expression from {r2eng}, but that isn’t guaranteed because of issues like localised pronunciation and uncommon words. I’ve written before about how <a href="https://www.rostrum.blog/2019/09/20/say-package/">text-to-speech isn’t necessarily that good at recognising R package names</a>, for example.</p>
+<p>In theory, and assuming that the translation gets good, {r2eng} could be used as a simple accessibility tool because it can interpret R-specific tokens in a way that VoiceOver cannot.</p>
+</section>
+</section>
+<section id="using-r2eng" class="level3">
+<h3 class="anchored" data-anchor-id="using-r2eng">Using {r2eng}</h3>
+<p>You can find further examples in <a href="https://github.com/matt-dray/r2eng/blob/master/README.md">the package README</a>, but I’ll explain here the main functionality.</p>
+<p>First I’ll attach the package after having installed it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(r2eng)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="the-translate-function" class="level4">
+<h4 class="anchored" data-anchor-id="the-translate-function">The <code>translate()</code> function</h4>
+<p>There are two main functions in {r2eng}: <code>translate()</code> and <code>translate_string()</code>. They convert from a bare or quoted R expression, respectively, to English.</p>
+<p><code>translate()</code> takes advantage of non-standard evaluation: you pass bare (i.e.&nbsp;unquoted) R code to the <code>expression</code> argument and a few things happen.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">translate</span>(data <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Original expression: data &lt;- 1 + 1
+English expression: data gets 1 plus 1 </code></pre>
+</div>
+</div>
+<p>First, it prints both the original R expression and the corresponding English translation. Second, and only if you are using macOS, the English string is passed to a system command that vocalises the string.</p>
+<p>Here’s a more complex example using some {dplyr} functions. Note that we don’t need to attach {dplyr} to be able to translate.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">translate</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  data <span class="sc">%&gt;%</span> <span class="fu">select</span>(x, y) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(y <span class="sc">==</span> <span class="st">"example"</span>),</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">function_call_end =</span> <span class="st">""</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Original expression: data %&gt;% select(x, y) %&gt;% dplyr::filter(y == "example")
+English expression: data then select open paren x , y close paren then dplyr double-colon filter open paren y double equals string "example" close paren</code></pre>
+</div>
+</div>
+<p>Note the <code>function_call_end</code> argument in this example. The default is <code>"of "</code>, which would would have made the translation <code>data then select of open paren x y close paren</code>, etc. Feedback suggested that this was how some users spoke the English translation out loud, so the functionality has been included for now.</p>
+<p>While <code>translate()</code> takes a bare expression, <code>translate_string()</code> takes a string.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)  <span class="co"># attach for pipes</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">"data&lt;-1+1"</span> <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">translate_string</span>(<span class="at">speak =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Original expression: data &lt;- 1 + 1
+English expression: data gets 1 plus 1 </code></pre>
+</div>
+</div>
+<p>We get the same sort of output as the <code>translate()</code> example, but this time I set the <code>speak</code> argument to <code>FALSE</code> to stop the English text from being ‘spoken’ by my computer and I also eliminated spaces from the input to demonstrate that they’re ignored.</p>
+</section>
+<section id="r2eng-objects" class="level4">
+<h4 class="anchored" data-anchor-id="r2eng-objects">r2eng objects</h4>
+<p>Of course, you can assign a translation to an object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>my_translation <span class="ot">&lt;-</span> </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">translate</span>(data <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span>, <span class="at">speak =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The object is a special <code>r2eng</code> S3 class of object, which is also a list.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(my_translation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "list"  "r2eng"</code></pre>
+</div>
+</div>
+<p>You can apply some methods to such an object: <code>print()</code>, <code>speak()</code> and <code>evaluate()</code>.</p>
+<p>Print the object to see that custom console output again:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(my_translation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Original expression: data &lt;- 1 + 1
+English expression: data gets 1 plus 1 </code></pre>
+</div>
+</div>
+<p>Re-call the system command that ‘speaks’ the R expression out loud (again, only on macOS).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">speak</span>(my_translation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And you can actually evaluate the R expression you supplied to <code>translate()</code> in the first place. So the expression we supplied, <code>data &lt;- 1 + 1</code>, is evaluated so that calling <code>data</code> gives us the result of <code>1 + 1</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">evaluate</span>(my_translation)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+</div>
+</section>
+<section id="r2eng-class-list-elements" class="level4">
+<h4 class="anchored" data-anchor-id="r2eng-class-list-elements">r2eng-class list elements</h4>
+<p>You can also access the R expression, the English translation and the mapping between them as elements of your <code>r2eng</code> list object.</p>
+<p>Here’s the R expression again:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>my_translation<span class="sc">$</span>r_expression</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "data &lt;- 1 + 1"</code></pre>
+</div>
+</div>
+<p>And the translated output:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>my_translation<span class="sc">$</span>eng_expression</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] " data gets 1 plus 1 "</code></pre>
+</div>
+</div>
+<p>And a <code>data.frame</code> object that contains the mapping.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>map <span class="ot">&lt;-</span> my_translation<span class="sc">$</span>translation_map</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>map[map<span class="sc">$</span>text <span class="sc">!=</span> <span class="st">""</span>, ]  <span class="co"># filter out text spaces</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        token text  eng
+1      SYMBOL data data
+2 LEFT_ASSIGN   &lt;- gets
+4   NUM_CONST    1    1
+6         '+'    + plus
+7   NUM_CONST    1    1</code></pre>
+</div>
+</div>
+<p>This element is a good summary of what {r2eng} is doing under the hood: it breaks the R expression into recognised tokens and maps words to them where it knows what the corresponding English for that token should be. So <code>&lt;-</code> is recognised as the token <code>LEFT_ASSIGN</code>, which is mapped internally to the English text <code>gets</code>.</p>
+</section>
+</section>
+<section id="bonus-material" class="level3">
+<h3 class="anchored" data-anchor-id="bonus-material">Bonus material</h3>
+<section id="rstudio-addin" class="level4">
+<h4 class="anchored" data-anchor-id="rstudio-addin">RStudio Addin</h4>
+<p>The <code>print()</code> and <code>speak()</code> functions can be accessed via an RStudio addin that’s installed with the package (you may need to restart RStudio after installation). To use them, highlight an R expression in your script and select from the RStudio addins menu:</p>
+<ul>
+<li>‘Speak R Expression In English’ to vocalise the expression through your computer’s speakers (macOS only)</li>
+<li>‘Print R Expression In English’ to output an English translation to the console</li>
+</ul>
+<p>These can be mapped to keyboard shortcuts so you can highlight and translate quickly without specifically calling <code>translate()</code> and <code>print()</code> or <code>speak()</code>.</p>
+</section>
+<section id="binder-demo" class="level4">
+<h4 class="anchored" data-anchor-id="binder-demo">Binder demo</h4>
+<p>Maybe you don’t want to install the package. That’s fine. Instead, you can try out the package by opening this <a href="https://mybinder.org/">Binder</a> instance of RStudio with {r2eng} and the tidyverse pre-installed. Click this badge to launch it:</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><a href="https://mybinder.org/v2/gh/matt-dray/try-r2eng/master?urlpath=rstudio"><img src="https://mybinder.org/badge_logo.svg" class="img-fluid figure-img"></a></p>
+</figure>
+</div>
+<p>The downside is that you can’t use the speak method. Make sure to set the argument <code>speak = FALSE</code> in <code>translate()</code> or <code>translate_string()</code>, or you’ll get a warning message when you run your code.</p>
+<p>You can find the source for this at the <a href="https://github.com/matt-dray/try-r2eng">try-r2eng</a> GitHub repo and you can <a href="https://www.rostrum.blog/2019/08/25/holepunch-drake/">read one of my posts</a> on how to set up Binder using <a href="https://karthik.github.io/holepunch/">Karthik Ram’s {holepunch} package</a>.</p>
+</section>
+</section>
+</section>
+<section id="theres-lots-to-do" class="level2">
+<h2 class="anchored" data-anchor-id="theres-lots-to-do">There’s lots to do</h2>
+<p>As mentioned, this is really just the beginning.</p>
+<p>There’s plenty of room for simple improvements, as well as some long term possibilities. For example, we could:</p>
+<ul>
+<li>expand the list of R tokens that can be translated</li>
+<li>allow for context-dependent translation where the same token can be used for more than one application</li>
+<li>do user-research to find out the most common English terms used</li>
+<li>provide instructions to make the speak method possible on non-Mac platforms</li>
+<li>include full script awareness so that we aren’t limited by left-to-right interpretation</li>
+<li>expand the package for non-English languages, or create {r2es}, {r2fr}, etc</li>
+<li>etc</li>
+</ul>
+<p>Hopefully we can work on some of these things and this won’t be the last post about {r2eng} on this blog. In the meantime, do consider contributing to <a href="https://github.com/matt-dray/r2eng">the GitHub repo</a>.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-18 21:07:14 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] magrittr_2.0.3   r2eng_0.0.0.9005
+
+loaded via a namespace (and not attached):
+ [1] vctrs_0.6.3        crayon_1.5.2       cli_3.6.1          knitr_1.43.1      
+ [5] rlang_1.1.1        xfun_0.39          rex_1.2.1          processx_3.8.2    
+ [9] purrr_1.0.1        xmlparsedata_1.0.5 jsonlite_1.8.7     rprojroot_2.0.3   
+[13] htmltools_0.5.5    ps_1.7.5           rmarkdown_2.23     evaluate_0.21     
+[17] fastmap_1.1.1      lifecycle_1.0.3    yaml_2.3.7         cyclocomp_1.1.0   
+[21] compiler_4.3.1     lintr_3.0.2        htmlwidgets_1.6.2  rstudioapi_0.15.0 
+[25] digest_0.6.33      R6_2.5.1           callr_3.7.3        tools_4.3.1       
+[29] withr_2.5.0        lazyeval_0.2.2     xml2_1.3.5         remotes_2.4.2     
+[33] desc_1.4.2        </code></pre>
+</div>
+</div>
+</details>
+<p>
+</p>
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>A good example of opinionated word choice is this character: <code>(</code>. Is it an ‘open bracket’, ‘open parenthesis’, ‘open paren’, ‘mouth for an emoticon smiley’, or something else entirely? {r2eng} uses ‘open paren’, largely for brevity.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>I first saw the gram.y file in action in <a href="https://speakerdeck.com/andycraig/x-equals-x-plus-1">Andrew Craig’s interesting TokyoR talk</a> about extending R to accept function definitions in the form <code>(x) =&gt; x + 1</code>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

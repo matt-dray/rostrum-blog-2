@@ -144,9 +144,31 @@ For my own tracking purposes, I've run:
 * for a total distance of `r round(sum(runs$distance_km))` km
 * for a total duration of about `r round(sum(as.numeric(runs$duration)) / 60 / 60 / 24, 0)` days
 
-And I can recreate one of the plots from the old post while we're here:
+And I can recreate a couple of the plots from the old post while we're here. Here's the 'run barcode', with one vertical line per run (the darker it is the greater the distance):
 
-```{r plot}
+```{r barcode, fig.height=1, fig.width=10, fig.alt='A one-dimensional plot of days represented by vertical lines, with run distance coloured on a scale of white to black.'}
+library(dplyr, warn.conflicts = FALSE)
+library(tidyr)
+
+run_days <- left_join(
+  data.frame(date = as_date(ymd("2020-03-23"):ymd("2023-06-25"))),
+  runs |>
+    transmute(date = ymd(as_date(start)), km = distance_km, duration) |>
+    filter(date >= "2020-03-23" & date <= "2023-06-25") |>
+    group_by(date) |> 
+    summarise(km = sum(km), .groups = "drop"),
+  by = "date"
+) |>
+  replace_na(list(run = 0))
+
+par(mar = rep(0, 4))
+image(matrix(run_days$km), col = grey.colors(11, 0.8, 0))
+box(col = "white")
+```
+
+And of course, a simple distance over time plot:
+
+```{r plot, fig.alt='Run distance over time scatterplot, which shows a high frequency of 5 and 10 km runs.'}
 plot(
   x = runs$start, 
   y = runs$distance_km, 
@@ -159,7 +181,7 @@ plot(
 
 Some patterns are obvious. For example, there's lots of 5 km runs until about mid-2021, when it hops to more like 7 km. That's when I started running for 30 mins at a time, rather than for 5 km specifically.
 
-I'm pretty happy at these two distances, obviously, but maybe I should do more 21.1 km half-marathons. Or a full marathon? No no, that's foolish: it would expand my y-axis too much and make it harder to observe patterns at shorter distances, amirite.
+I'm pretty happy at 5 and 10 km, obviously, but maybe I should do more 21.1 km half-marathons. Or a full marathon? No no, that's foolish: it would expand my y-axis too much and make it harder to observe patterns at shorter distances, amirite.
 
 ## Environment {.appendix}
 
