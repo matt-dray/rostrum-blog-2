@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2020-08-09">
+
+<title>rostrum.blog (test) - GitHub Actions for R packages</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-black-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog (test)</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">GitHub Actions for R packages</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">continuous-integration</div>
+                <div class="quarto-category">codecov</div>
+                <div class="quarto-category">covr</div>
+                <div class="quarto-category">github-actions</div>
+                <div class="quarto-category">pkgdown</div>
+                <div class="quarto-category">r-lib</div>
+                <div class="quarto-category">usethis</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">August 9, 2020</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#shortcut" id="toc-shortcut" class="nav-link" data-scroll-target="#shortcut">Shortcut</a></li>
+  <li><a href="#lights-camera" id="toc-lights-camera" class="nav-link" data-scroll-target="#lights-camera">Lights, camera…</a></li>
+  <li><a href="#actions" id="toc-actions" class="nav-link" data-scroll-target="#actions">…Actions</a></li>
+  <li><a href="#usethis-and-r-lib" id="toc-usethis-and-r-lib" class="nav-link" data-scroll-target="#usethis-and-r-lib">{usethis} and r-lib</a>
+  <ul class="collapse">
+  <li><a href="#example-r2eng-package" id="toc-example-r2eng-package" class="nav-link" data-scroll-target="#example-r2eng-package">Example: {r2eng} package</a></li>
+  </ul></li>
+  <li><a href="#tickety-boo" id="toc-tickety-boo" class="nav-link" data-scroll-target="#tickety-boo">Tickety-boo</a></li>
+  <li><a href="#other-platforms-are-available" id="toc-other-platforms-are-available" class="nav-link" data-scroll-target="#other-platforms-are-available">Other platforms are available</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><img src="resources/actions-tab.png" class="img-fluid" style="width:100.0%" alt="The Actions tab of the a GitHub repository showing successful tests with tick marks next to them."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>You can trigger <a href="https://github.com/features/actions">GitHub Actions</a> to build and test your R package after a push or pull request. Create <code>.github/workflows/</code> in your repo and add <a href="https://github.com/r-lib/actions/tree/master/examples">pre-prepared actions by the r-lib team</a> with <code>usethis::use_github_action()</code>.</p>
+</section>
+<section id="shortcut" class="level2">
+<h2 class="anchored" data-anchor-id="shortcut">Shortcut</h2>
+<p>I refer back to this post a lot, so here’s some jump-links to the sections with the code I need:</p>
+<ol type="1">
+<li><a href="#build">Build check</a></li>
+<li><a href="#test">Test coverage</a></li>
+<li><a href="#pkgdown">Build {pkgdown} site</a></li>
+</ol>
+<p>Otherwise read on for a more thorough explanation of GitHub Actions in the context of R packages.</p>
+</section>
+<section id="lights-camera" class="level2">
+<h2 class="anchored" data-anchor-id="lights-camera">Lights, camera…</h2>
+<p><a href="https://github.com/features/actions">GitHub Actions</a> is a service that can be triggered to run workflows that build, test and deploy your code on GitHub. In other words, a <a href="https://en.wikipedia.org/wiki/Continuous_integration">continuous integration</a> platform baked right into GitHub.</p>
+<p>Before you start, I recommend checking out <a href="https://www.jimhester.com/talk/2020-rsc-github-actions/">Jim Hester’s talk from rstudio::conf 2020</a> and reading <a href="https://ropenscilabs.github.io/actions_sandbox/">the GitHub Actions with R book</a>.</p>
+<p>GitHub Actions can be really helpful for developing R packages.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> For example, you can trigger actions with a push or pull request (PR) that:</p>
+<ul>
+<li>run an <a href="http://r-pkgs.had.co.nz/check.html">R CMD build check</a> of your package on multiple platforms</li>
+<li>run your <a href="https://testthat.r-lib.org/">{testthat} unit tests</a></li>
+<li>check test coverage with <a href="https://covr.r-lib.org/">{covr}</a> and <a href="https://codecov.io/">Codecov</a></li>
+<li>rebuild your <a href="https://pkgdown.r-lib.org/">{pkgdown} website</a></li>
+</ul>
+<p>Checking the build and coverage are standard practices for package development. They help ensure that your package works and is stable. GitHub Actions provides the icing on the cake by doing these things automatically.</p>
+<p>These are all important for users of your package too. Build and coverage results show the robustness of the code and a website makes your documentation much easier to access.</p>
+<p>I wrote this post to remind me how to do it.</p>
+</section>
+<section id="actions" class="level2">
+<h2 class="anchored" data-anchor-id="actions">…Actions</h2>
+<p>How are actions stored, recognised and triggered?</p>
+<p>Actions are expressed in YAML script files that read like a recipe for what to run and when to run it. You put these files in your repo at the path <code>.github/workflows/</code>, where GitHub recognises them. The information is interpreted and the actions are run remotely given the specified trigger.</p>
+<p>You can learn more about the content of these YAML files from the <a href="https://ropenscilabs.github.io/actions_sandbox/understanding-yaml.html">GitHub actions with R book</a>.</p>
+<p>You could set these up manually, but actually you can shortcut the process with the {usethis} package and some pre-written examples.</p>
+</section>
+<section id="usethis-and-r-lib" class="level2">
+<h2 class="anchored" data-anchor-id="usethis-and-r-lib">{usethis} and r-lib</h2>
+<p>{usethis} helps to shortcut the tedious setup steps of R packages and projects. It also includes functions to add GitHub Actions to your R package for you.</p>
+<p>In particular, <code>usethis::use_github_action()</code> will add a YAML file to <code>.github/workflows/</code> where GitHub Actions will find it; you just supply the name of a pre-written action.</p>
+<p>Where do these pre-written actions come from? Well, the kind folks at <a href="https://github.com/r-lib">r-lib</a> have made <a href="https://github.com/r-lib/actions/tree/master/examples">a repo of R-focused examples</a> that you can use.</p>
+<section id="example-r2eng-package" class="level3">
+<h3 class="anchored" data-anchor-id="example-r2eng-package">Example: {r2eng} package</h3>
+<p>I recently used this method to set up GitHub Actions for the <a href="https://github.com/matt-dray/r2eng">in-development {r2eng} package</a>.</p>
+<p>{r2eng} has <a href="https://github.com/matt-dray/r2eng/tree/master/.github/workflows">three actions in the workflow folder</a>:</p>
+<ol type="1">
+<li><code>R-CMD-check.yaml</code> (<a href="https://github.com/matt-dray/r2eng/blob/master/.github/workflows/R-CMD-check.yaml">see the YAML file</a>) to run a build check</li>
+<li><code>test-coverage.yaml</code> (<a href="https://github.com/matt-dray/r2eng/blob/master/.github/workflows/test-coverage.yaml">YAML</a>) to assess how much of the code is protected by testing</li>
+<li><code>pkgdown.yaml</code> (<a href="https://github.com/matt-dray/r2eng/blob/master/.github/workflows/pkgdown.yaml">YAML</a>) to build the package’s website with {pkgdown}</li>
+</ol>
+<p>This is a typical, minimal set of actions that suit me when developing R packages. Let’s talk them through.</p>
+<section id="build" class="level4">
+<h4 class="anchored" data-anchor-id="build">1. Build check</h4>
+<p>An R CMD check<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> runs a bunch of tests on your package (including your own unit tests) and returns errors, notes and warnings. You’re aiming for a passing build to prove the package is up to scratch.</p>
+<p>{usethis} has three actions-related functions specifically for setting up the build check. The standard one will run the R CMD check on macOS, Linux and Windows to make sure it passes across all these platforms.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>Run this line to add the <code>R-CMD-check.yaml</code> action to the <code>.github/workflows/</code> folder:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_github_action_check_standard</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note that this function will create <code>.github/workflows/</code> if it doesn’t already exist.</p>
+<p>Folllowing a push or PR, GitHub Actions will now automatically set up and run a build check on each OS to make sure the package meets the requirements.</p>
+</section>
+<section id="test" class="level4">
+<h4 class="anchored" data-anchor-id="test">2. Test coverage</h4>
+<p>The R CMD check runs your unit tests, but it doesn’t calculate how much of your code is actually <a href="https://en.wikipedia.org/wiki/Code_coverage">covered</a> by testing. Ideally you want this to be 100%, but also bear in mind that the metric doesn’t take account of the volume or quality of tests.</p>
+<p>I use another r-lib package, <a href="https://covr.r-lib.org/">{covr}</a>, to interactively check how much of my code is tested. (In particular, the <code>covr::report()</code> function provides an interactive HTML report showing the total percentage and a line-by-line breakdown of where tests are missing.)</p>
+<p>You can set up the free services <a href="http://about.codecov.io/">Codecov</a> or <a href="https://coveralls.io/">Coveralls</a> to make your results public. You’ll need to have signed up for these services and granted their access to the repo you want to report on.</p>
+<p>{usethis} makes it easy to set up these services for your repo: it adds the relevant YAML files, a line to the ‘Suggests’ section of your DESCRIPTION, and a badge to your README.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_coverage</span>(<span class="st">"codecov"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can see an example in action on <a href="https://codecov.io/gh/matt-dray/r2eng">the Codecov page for {r2eng}</a>, which shows the percentage of coverage, a breakdown of the lines ‘hit’ and ‘missed’, and the commits that led to checks.</p>
+<p>Of course, you can automate this. Run this line to add the <code>test-coverage.yaml</code> action to the <code>.github/workflows/</code> folder</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">use_github_action</span>(<span class="st">"test-coverage"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The ‘test-coverage’ GitHub Action will recheck coverage when you next push to the repo, with the results being updated on your coverage service of choice.</p>
+</section>
+<section id="pkgdown" class="level4">
+<h4 class="anchored" data-anchor-id="pkgdown">3. Build {pkgdown} site</h4>
+<p><a href="https://pkgdown.r-lib.org/">{pkgdown}, also from r-lib,</a> can automatically and painlessly generate a simple website from your package’s documentation, which you are free to customise. You can serve the site on the web via GitHub Pages so users can access the docs easily online.</p>
+<p>For example, here’s <a href="https://matt-dray.github.io/r2eng/">the {pkgdown} website for the {r2eng} package</a>, which uses default settings at time of writing. You can see that the README has become the home page and there are ‘Reference’ and ‘Changelog’ tabs that autopoulate with the function documentation and NEWS file. Additional tabs are added here depending on the contents of your repo; for example, vignettes are added to an ‘Articles’ tab if they exist.</p>
+<p><a href="https://ropenscilabs.github.io/actions_sandbox/websites-using-pkgdown-bookdown-and-blogdown.html">The GitHub Actions with R book has a section on {pkgdown}</a>. In short, the steps are:</p>
+<ol type="1">
+<li>Set-up an empty ‘gh-pages’ branch in your repo (<a href="https://ropenscilabs.github.io/actions_sandbox/websites-using-pkgdown-bookdown-and-blogdown.html">the book has some code to do this from the command line</a>)<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></li>
+<li>Back in the main branch, run the {usethis} <code>usethis::use_pkgdown()</code> to activate {pkgdown} for your package repo</li>
+<li>Run <code>usethis::use_github_action("pkgdown")</code> to add the YAML file that tells GitHub Actions to build the website on push</li>
+<li>Push to your repo and GitHub Actions will generate the website files in the gh-pages branch</li>
+<li>From your repo settings, set GitHub Pages to serve from the root of the gh-pages branch</li>
+<li>Wait a few minutes and navigate to your site (in the form ‘username.github.io/reponame’)</li>
+</ol>
+<p>GitHub Actions will now rebuild the site automatically every time you make changes and push them.</p>
+</section>
+</section>
+</section>
+<section id="tickety-boo" class="level2">
+<h2 class="anchored" data-anchor-id="tickety-boo">Tickety-boo</h2>
+<p>You’ll get the full results of the actions in the ‘Actions’ tab of your repo on GitHub. A successful check gets a satisfying tick next it. A failing test gets a cross. You can select a result and expand the results to trace exactly what the error was.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/actions-tab.png" class="img-fluid figure-img" style="width:100.0%" alt="The Actions tab of the a GitHub repository showing successful tests with tick marks next to them."></p>
+<figcaption class="figure-caption">Successful builds in the ‘pkgdown’ workflow.</figcaption>
+</figure>
+</div>
+<p>This is handy because you and your users can check the results of your checks from the ‘Actions’ tab of you repo without leaving GitHub.</p>
+<p>It also means you can spot a failing PR and provide more commits to fix it before it gets merged.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/pr.png" class="img-fluid figure-img" style="width:100.0%" alt="A GitHub pull request showing the successful results of each test run with GitHub Actions."></p>
+<figcaption class="figure-caption">Ticks! Ticks! Ticks!</figcaption>
+</figure>
+</div>
+<p>You can also generate Markdown badges<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> for your README that display the results of these actions and automatically update when they’re re-run. These are great for an at-a-glance understanding of a package’s development state. {usethis} adds these to your README automatically, but it’s useful to know that you can get these badges from GitHub itself.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/make-badge.png" class="img-fluid figure-img" style="width:100.0%" alt="GitHub's 'create status badge' tool showing a badge for the R CMD check and the Markdown needed to reproduce it."></p>
+<figcaption class="figure-caption">More easily obtained than having to defeat a Pokémon gym leader.</figcaption>
+</figure>
+</div>
+<p>For example, you can <a href="https://github.com/matt-dray/r2eng/blob/master/README.md">see badges in the {r2eng} README</a>, like this one showing the percentage of test coverage:</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><a href="https://codecov.io/gh/matt-dray/r2eng"><img src="https://codecov.io/gh/matt-dray/r2eng/branch/master/graph/badge.svg" class="img-fluid figure-img"></a></p>
+</figure>
+</div>
+<p>Clicking them takes you to the relevant codecov.io page for the full breakdown of results.</p>
+</section>
+<section id="other-platforms-are-available" class="level2">
+<h2 class="anchored" data-anchor-id="other-platforms-are-available">Other platforms are available</h2>
+<p>So, I think a combo of {usethis} and r-lib’s pre-prepared YAML files is the simplest route to auto-checking your R package and rebuilding its site.</p>
+<p>There are many other <a href="https://github.com/r-lib/actions/tree/master/examples">YAML examples from r-lib</a> though, and you can write your own. There’s also <a href="https://github.com/sdras/awesome-actions">an ‘awesome list’ of more general-purpose actions</a> to explore.</p>
+<p>It’s important to note that there are several other platforms for continuous integration, like <a href="https://travis-ci.org/">Travis CI</a> and <a href="https://www.appveyor.com/">Appveyor</a> (<a href="https://bookdown.org/rdpeng/RProgDA/continuous-integration.html">see Roger Peng’s book</a> for an overview), but this requires you to setup multiple accounts and configuration files. At time of writing, GitHub Actions has the benefit of testing across all the major operating systems and is easier to set up (learn more in <a href="https://speakerdeck.com/jimhester/github-actions-for-r?slide=17">Jim Hester’s talk</a>).</p>
+<p>Anyway, good luck in putting a GitHub Action in action on GitHub.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-19 21:21:21 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
+[13] digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>You can do other interesting things with it, like run code on schedule. <a href="https://github.com/matt-dray/londonmapbot">I used GitHub Actions</a> to <a href="https://www.rostrum.blog/2020/09/21/londonmapbot/">automate the posting of tweets to a Twitter bot account</a>, <a href="https://twitter.com/londonmapbot">@londonmapbot</a>, for example.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Learn more about checks from <a href="http://r-pkgs.had.co.nz/check.html">Hadley Wickham</a> and <a href="https://kbroman.org/pkg_primer/pages/check.html">Karl Broman</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The other two functions test on macOS only (<code>use_github_action_check_release()</code>) and on all three operating systems and also on some minor R releases too (<code>use_github_action_check_full()</code>), though the latter is considered ‘overkill’ according to the documentation.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>For posterity, and in case the book ever disappears, the code that creates an empty ‘gh-pages’ branch from the command line is like:</p>
+<pre><code>git checkout --orphan gh-pages
+git rm -rf .
+git commit --allow-empty -m 'Initial gh-pages commit'
+git push origin gh-pages
+git checkout main</code></pre>
+<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></li>
+<li id="fn5"><p>I showed how to create these sorts of badges in an earlier blog post: <a href="https://www.rostrum.blog/2020/05/08/readme-badge/">‘Make a README badge with {badgr}’</a>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

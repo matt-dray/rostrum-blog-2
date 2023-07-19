@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2020-06-06">
+
+<title>rostrum.blog (test) - Animal Crossing Tinder with {shinysense}</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-black-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog (test)</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Animal Crossing Tinder with {shinysense}</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">googledrive</div>
+                <div class="quarto-category">googlesheets4</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">shiny</div>
+                <div class="quarto-category">shinysense</div>
+                <div class="quarto-category">videogames</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 6, 2020</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#tidy-tuesday" id="toc-tidy-tuesday" class="nav-link" data-scroll-target="#tidy-tuesday">Tidy Tuesday</a>
+  <ul class="collapse">
+  <li><a href="#shinysense" id="toc-shinysense" class="nav-link" data-scroll-target="#shinysense">{shinysense}</a></li>
+  <li><a href="#googlesheets4" id="toc-googlesheets4" class="nav-link" data-scroll-target="#googlesheets4">{googlesheets4}</a></li>
+  </ul></li>
+  <li><a href="#the-acnh-popularity-contest" id="toc-the-acnh-popularity-contest" class="nav-link" data-scroll-target="#the-acnh-popularity-contest">The ACNH Popularity Contest</a></li>
+  <li><a href="#how-to-use" id="toc-how-to-use" class="nav-link" data-scroll-target="#how-to-use">How to use</a>
+  <ul class="collapse">
+  <li><a href="#data-and-hosting" id="toc-data-and-hosting" class="nav-link" data-scroll-target="#data-and-hosting">Data and hosting</a></li>
+  </ul></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/20200606_screenshot-demo.png" class="img-fluid figure-img" style="width:100.0%" alt="Screenshot of the ACNH Popularity Contest app showing a villager that the user is being asked to swipe left to dislike or right to like."></p>
+<figcaption class="figure-caption">Lily &lt;3 4eva</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>The villagers of <a href="https://en.wikipedia.org/wiki/Animal_Crossing:_New_Horizons">Animal Crossing: New Horizons</a> are taking part in a popularity contest and you’re the judge.</p>
+<p>I made <a href="https://mattdray.shinyapps.io/acnh-swipe/">an R Shiny app</a> where you swipe right if you like a randomly-presented villager and left if you dislike them.</p>
+<p><a href="https://mattdray.shinyapps.io/acnh-swipe/">Visit the app here</a> and help decide the most popular villager! You can also <a href="https://github.com/matt-dray/acnh-swipe">visit the source code</a>.</p>
+</section>
+<section id="tidy-tuesday" class="level2">
+<h2 class="anchored" data-anchor-id="tidy-tuesday">Tidy Tuesday</h2>
+<p><a href="https://github.com/rfordatascience/tidytuesday">Tidy Tuesday</a> is an open event for the R community. The organisers provide a data set and participants submit their take on wrangling and presenting the data, usually via Twitter with the hashtag <a href="https://twitter.com/search?q=%23tidytuesday">#tidytuesday</a>.</p>
+<p>A <a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-05-05/readme.md">recent data set</a> (week 19) via <a href="https://villagerdb.com/">VillagerDB</a> includes information about villager non-player characters from the wildly popular <a href="https://en.wikipedia.org/wiki/Animal_Crossing:_New_Horizons">Animal Crossing: New Horizons</a> game for the Nintendo Switch. A similar set of data was also <a href="https://www.kaggle.com/jessicali9530/animal-crossing-new-horizons-nookplaza-dataset/data">uploaded to Kaggle</a>.</p>
+<p>I couldn’t resist, having recently written about <a href="https://www.rostrum.blog/2020/04/04/repaying-tom-nook-with-r6/">learning R6 object-oriented programming with an Animal Crossing example</a>.</p>
+<p>This was also a good chance to learn more about two packages in particular: {shinysense} and {googlesheets4}.</p>
+<section id="shinysense" class="level3">
+<h3 class="anchored" data-anchor-id="shinysense">{shinysense}</h3>
+<p><a href="http://nickstrayer.me/">Nick Strayer</a>‘s <a href="http://nickstrayer.me/shinysense/">{shinysense}</a> package lets Shiny ’sense the world around it’, with modules for touch, vision, hearing and motion.</p>
+<p>I wanted to try out shinyswipr, which presents a user with a ‘card’ that they can swipe. The direction of swiping can be used to indicate something, like a preference. After swiping, the card content can be updated.</p>
+<p>You can <a href="https://livefreeordichotomize.com/2017/03/12/introducing-shinyswipr-swipe-your-way-to-a-great-shiny-ui/">read Nick’s blog post</a> about its inception.</p>
+</section>
+<section id="googlesheets4" class="level3">
+<h3 class="anchored" data-anchor-id="googlesheets4">{googlesheets4}</h3>
+<p>In <a href="https://nickstrayer.shinyapps.io/shinyswipr_demo/">Nick’s shinyswipr example</a>, he presents back to the user their swipe history, but how can we record the information from all users and return the collated results?</p>
+<p>There’s <a href="https://shiny.rstudio.com/articles/persistent-data-storage.html">a number of ways to do persistent storing with Shiny</a>, but a relatively simple one is to write the data to Google Sheets and read the entire sheet back into the app.</p>
+<p>The <a href="https://googlesheets4.tidyverse.org/">{googlesheets4} package</a> by <a href="https://jennybryan.org/">Jenny Bryan</a> helps you do exactly that, with functions like <code>sheet_append()</code> and <code>read_sheet()</code>.</p>
+</section>
+</section>
+<section id="the-acnh-popularity-contest" class="level2">
+<h2 class="anchored" data-anchor-id="the-acnh-popularity-contest">The ACNH Popularity Contest</h2>
+<p>There’s a lot of articles online about favourite villagers, but they aren’t very democratic. They tend to cite characters like <a href="https://animalcrossing.fandom.com/wiki/Raymond">Raymond</a>, <a href="https://animalcrossing.fandom.com/wiki/Beau">Beau</a>, <a href="https://animalcrossing.fandom.com/wiki/Marshal">Marshal</a>, <a href="https://animalcrossing.fandom.com/wiki/Judy">Judy</a> and <a href="https://animalcrossing.fandom.com/wiki/Audie">Audie</a>.</p>
+<p>It’s time to let the people speak.</p>
+</section>
+<section id="how-to-use" class="level2">
+<h2 class="anchored" data-anchor-id="how-to-use">How to use</h2>
+<p>If you <a href="https://mattdray.shinyapps.io/acnh-swipe/">visit the app</a>, or look at the image at the top of this post, you’ll see that the user is presented with a card containing a randomly-selected villager and some details (name, species, personality and hobby).</p>
+<p>You can move the card to the right to indicate you like the character, or to the left if you dislike them. On mobile you can swipe left or right with your finger. On desktop you can click and drag the card.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/acnh-tinder-shiny.gif" class="img-fluid figure-img" style="width:100.0%" alt="Gif showing a blue card on a green background. The card has a picture of a villager from Nintendo's Animal Crossing game with their name, personality type, species and hobby. A mouse cursor swipes the card to the right, meaning 'like', and another card appears with a different character. The card is swiped to the left, meaning 'dislike'."></p>
+<figcaption class="figure-caption">No dates guaranteed. The characters aren’t actually real, y’see.</figcaption>
+</figure>
+</div>
+<p>The swipe event results in the information being written to a Google Sheet and triggers the entirety of the updated data set to be read back to the app. It’s then wrangled lightly and the information is presented as a table of the current top 10 villagers by ‘like’ count. Finally, a new random villager is presented.</p>
+<p>This is obviously a bit of fun and definitely not polished. Do <a href="https://github.com/matt-dray/acnh-swipe/issues">let me know</a> of any bugs that you find, though. I’m aware that mobiles may not display the fonts correctly, for example.</p>
+<section id="data-and-hosting" class="level3">
+<h3 class="anchored" data-anchor-id="data-and-hosting">Data and hosting</h3>
+<p>No data about the user is stored. The app records only the date-time, the villager name and the swipe direction.</p>
+<p>The app is <a href="https://www.shinyapps.io/">hosted for free on shinyapps.io</a>, so there’s a limited number of uptime hours it can use per month.</p>
+</section>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
+<p>I hope that enough people cast a vote to make the results interesting… but <a href="https://animalcrossing.fandom.com/wiki/Villager_list_(New_Horizons)">there’s nearly 400 villagers</a>, so that seems unlikely!</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>I’ve <a href="https://www.rostrum.blog/2022/01/07/acnh-swipe-results/">written a more recent post</a> where I aggregated the results for the thousands of swipes that people made in the app!</p>
+</div>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-19 21:47:26 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
+[13] digest_0.6.33     rlang_1.1.1       fontawesome_0.5.1 evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
