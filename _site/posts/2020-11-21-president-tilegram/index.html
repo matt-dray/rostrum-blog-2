@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2020-11-21">
+
+<title>rostrum.blog (test) - The US electoral college with {tilegramsR}</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-black-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog (test)</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">The US electoral college with {tilegramsR}</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">dataviz</div>
+                <div class="quarto-category">geospatial</div>
+                <div class="quarto-category">ggtext</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">tilegramsR</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 21, 2020</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#send-a-cartogram" id="toc-send-a-cartogram" class="nav-link" data-scroll-target="#send-a-cartogram">Send a cartogram</a></li>
+  <li><a href="#back-to-college" id="toc-back-to-college" class="nav-link" data-scroll-target="#back-to-college">Back to college</a></li>
+  <li><a href="#tile-style" id="toc-tile-style" class="nav-link" data-scroll-target="#tile-style">Tile style</a></li>
+  <li><a href="#district-structure-strictures" id="toc-district-structure-strictures" class="nav-link" data-scroll-target="#district-structure-strictures">District-structure strictures</a></li>
+  <li><a href="#party-time" id="toc-party-time" class="nav-link" data-scroll-target="#party-time">Party time</a></li>
+  <li><a href="#gram-them-tiles" id="toc-gram-them-tiles" class="nav-link" data-scroll-target="#gram-them-tiles">Gram them tiles</a></li>
+  <li><a href="#zoom-enhance" id="toc-zoom-enhance" class="nav-link" data-scroll-target="#zoom-enhance">Zoom! Enhance!</a></li>
+  <li><a href="#development" id="toc-development" class="nav-link" data-scroll-target="#development">Development</a></li>
+  <li><a href="#other-solutions" id="toc-other-solutions" class="nav-link" data-scroll-target="#other-solutions">Other solutions</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><img src="resources/tile.png" class="img-fluid" style="width:100.0%" alt="A zoomed-in portion of a tilegram map, with hexagons coloured red and blue to indicate the winning party."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p><a href="https://bhaskarvk.github.io/tilegramsR/">The {tilegramsR} package</a> for R contains a geospatial object for mapping <a href="https://en.wikipedia.org/wiki/United_States_Electoral_College">the US electoral college</a>. I amended it for states that use the <a href="https://www.fairvote.org/maine_nebraska">congressional district method</a> and generated a minimalist map of the results for the 2020 US presidential election.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+</section>
+<section id="send-a-cartogram" class="level2">
+<h2 class="anchored" data-anchor-id="send-a-cartogram">Send a cartogram</h2>
+<p>It’s usually best to scale subnational divisions by voter count when visualising election results. This is because election outcomes are decided by people, not land area. <a href="https://en.wikipedia.org/wiki/Cartogram">Cartograms</a> are a good choice for this: they’re maps where geographic units are resized according to something other than area.</p>
+<p>One format of the cartogram is the tilegram. Tilegrams disregard the shape of the geographic units entirely and represent them with uniformly-shaped ‘tiles’ instead. Squares are often used, but hexagons give you a bit more freedom to pack the units and approximate geographic location. <a href="https://www.youtube.com/watch?v=thOifuHs6eY">Hexagons are the bestagons</a>, after all.</p>
+<p>A tilegram may end up looking strange if you’re used to looking at Mercator-projected maps, but it’s a better reflection of relative voter contribution.</p>
+</section>
+<section id="back-to-college" class="level2">
+<h2 class="anchored" data-anchor-id="back-to-college">Back to college</h2>
+<p>So we could make a tilegram of the recent US presidential election with a separate shape for each state. Right? Well, yeah, but there’s a better way.</p>
+<p>The US presidential election is special because the total vote count doesn’t directly elect the leader. Instead there’s <a href="https://en.wikipedia.org/wiki/United_States_Electoral_College">an ‘electoral college’ system</a>. Put extremely simply, each state has a number of representatives (‘electors’) that are sent to vote for the candidate that got the majority vote share in their state. The winning national candidate has the majority of state electors declaring for them (270 of 538).</p>
+<p>So it’s electors, not states, that should be represented by each unit in a tilegram of US presidential election results.</p>
+</section>
+<section id="tile-style" class="level2">
+<h2 class="anchored" data-anchor-id="tile-style">Tile style</h2>
+<p>Fortunately for us, <a href="https://bhaskarvk.github.io/tilegramsR/">the {tilegramsR} package by Bhaskar V. Karambelkar</a> has an <code>sf_FiveThirtyEightElectoralCollege</code><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> object that contains tilegram data for the US where each elector is represented by one hexagon.</p>
+<p>It’s <a href="https://r-spatial.github.io/sf/">an sf-class object</a>, which means it contains tidy geospatial information: each row is an elector, with a column for the state abbreviation and a column for the hexagon geometries.</p>
+<p>Before we take a look, let’s load the packages used in this post.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Data wrangling</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dplyr)       <span class="co"># data manipulation</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(stringr)     <span class="co"># string manipulation</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Mapping</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tilegramsR)  <span class="co"># tilegram objects</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(ggplot2)     <span class="co"># plotting</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(ggtext)      <span class="co"># text rendering in plots</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(ggthemes)    <span class="co"># has a map theme</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(patchwork)   <span class="co"># organise plots</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The default print method for sf-class objects shows us a few things. We can see there are 538 two-dimensional shapes: one for each elector. Note that this map is built in arbitrary space: the bounding box doesn’t reflect actual geography and there’s no coordinate reference system (CRS). The preview of the features shows us each row of the dataset with each state labelled with its abbreviation (CA is California, for example).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>sf_FiveThirtyEightElectoralCollege</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 538 features and 3 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 293.6239 ymin: 16.95238 xmax: 2495.803 ymax: 1661.333
+CRS:           NA
+First 10 features:
+   FID state tilegramVa                       geometry
+1   02    AK          3 POLYGON ((293.6239 237.3333...
+2   06    CA         55 POLYGON ((352.3486 847.619,...
+3   06    CA         55 POLYGON ((322.9862 796.7619...
+4   06    CA         55 POLYGON ((352.3486 745.9048...
+5   06    CA         55 POLYGON ((322.9862 695.0476...
+6   06    CA         55 POLYGON ((352.3486 644.1905...
+7   02    AK          3 POLYGON ((322.9862 288.1905...
+8   02    AK          3 POLYGON ((352.3486 237.3333...
+9   06    CA         55 POLYGON ((411.0734 949.3333...
+10  06    CA         55 POLYGON ((381.711 898.4762,...</code></pre>
+</div>
+</div>
+<p>Similarly, there’s an object called <code>sf_FiveThirtyEightElectoralCollege.states</code> that contains geometry to delineate state boundaries in the <code>sf_FiveThirtyEightElectoralCollege</code> object. We can combine these and look at a quick tilegram of the US electoral college using {ggplot2} and the special <code>geom_sf()</code> geom for visualising geospatial data stored in sf format.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> sf_FiveThirtyEightElectoralCollege) <span class="sc">+</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> sf_FiveThirtyEightElectoralCollege.states,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">alpha =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">1</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_map</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/college-538-map-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>You can see that each elector is represented by a single hexagon and groups of hexagons are combined into states (thick outlines). Hexagons are placed roughly in the familiar shape of the US despite the change to the apparent area of each one. The non-contiguous regions in the lower left are Alaska (three electors) and Hawaii (four).</p>
+</section>
+<section id="district-structure-strictures" class="level2">
+<h2 class="anchored" data-anchor-id="district-structure-strictures">District-structure strictures</h2>
+<p>In general, the winner of the popular vote within a state gains all the electors for that state. There are two exceptions: Nebraska (NE) and Maine (ME). These states use <a href="https://www.fairvote.org/maine_nebraska">the ‘congressional district method’</a>.</p>
+<p>The popular-vote winner gets two electors by default and the remaining electors are won by the winner of the popular vote in each district (three in Nebraska and two in Maine). In other words, the electors from these states could be from more than one party.</p>
+<p>This is sometimes represented in electoral college maps by colouring Nebraska and Maine with stripes of with each party’s colour. We can avoid that suboptimal representation with a tilegram because we can individually colour our tiles.</p>
+<p>Unfortunately, the <code>sf_FiveThirtyEightElectoralCollege</code> doesn’t account for the congressional district method, so we’ll have to build this in ourselves. We can isolate rows for Nebraska and Maine and then generate a new column to create distinct names for the districts, which we’ll number sequentially.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Isolate/update states with the congressional district method</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>cdm_sf <span class="ot">&lt;-</span> sf_FiveThirtyEightElectoralCollege <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"NE"</span>, <span class="st">"ME"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">state_cdm =</span> <span class="fu">c</span>(</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>      <span class="st">"NE"</span>, <span class="st">"NE"</span>, <span class="st">"NE1"</span>, <span class="st">"NE2"</span>, <span class="st">"NE3"</span>, </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>      <span class="st">"ME"</span>, <span class="st">"ME"</span>, <span class="st">"ME1"</span>, <span class="st">"ME2"</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(state, state_cdm, <span class="fu">everything</span>())</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>cdm_sf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 9 features and 4 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 851.5092 ymin: 932.381 xmax: 2407.716 ymax: 1661.333
+CRS:           NA
+  state state_cdm FID tilegramVa                       geometry
+1    NE        NE  31          5 POLYGON ((851.5092 1000.19,...
+2    NE        NE  31          5 POLYGON ((910.2339 1000.19,...
+3    NE       NE1  31          5 POLYGON ((939.5963 949.3333...
+4    NE       NE2  31          5 POLYGON ((968.9587 1000.19,...
+5    NE       NE3  31          5 POLYGON ((998.3211 949.3333...
+6    ME        ME  23          4 POLYGON ((2290.266 1559.619...
+7    ME        ME  23          4 POLYGON ((2319.628 1610.476...
+8    ME       ME1  23          4 POLYGON ((2348.991 1559.619...
+9    ME       ME2  23          4 POLYGON ((2319.628 1508.762...</code></pre>
+</div>
+</div>
+<p>You can see that we’ve retained the original <code>state</code> column and now also have a <code>state_cdm</code> column that contains tiles named by district.</p>
+<p>Now we can replace the data for these states in our original sf-class object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Update the original object with the new information</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>f38_cdm_sf <span class="ot">&lt;-</span> sf_FiveThirtyEightElectoralCollege <span class="sc">%&gt;%</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">state_cdm =</span> state) <span class="sc">%&gt;%</span>  <span class="co"># generate column</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>state <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"ME"</span>, <span class="st">"NE"</span>)) <span class="sc">%&gt;%</span>  <span class="co"># remove old NE and ME</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(cdm_sf) <span class="sc">%&gt;%</span> <span class="co"># bind updated NE and ME </span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(state, state_cdm, <span class="fu">everything</span>())  <span class="co"># relocate cols</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="party-time" class="level2">
+<h2 class="anchored" data-anchor-id="party-time">Party time</h2>
+<p>We have our geospatial information sorted; now to create vectors of the states won by each candidate as declared by <a href="https://blog.ap.org/behind-the-news/understanding-the-election-how-ap-declares-winners">the Associated Press (AP)</a> at time of writing.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vector of states/districts won by Democrat candidate</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>d_states <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"AZ"</span>, <span class="st">"CA"</span>, <span class="st">"CO"</span>, <span class="st">"CT"</span>, <span class="st">"DC"</span>, <span class="st">"DE"</span>, <span class="st">"GA"</span>, <span class="st">"HI"</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"IL"</span>, <span class="st">"MA"</span>, <span class="st">"MD"</span>, <span class="st">"ME"</span>, <span class="st">"ME1"</span>, <span class="st">"MI"</span>, <span class="st">"MN"</span>, <span class="st">"NE2"</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"NH"</span>, <span class="st">"NJ"</span>, <span class="st">"NM"</span>, <span class="st">"NV"</span>, <span class="st">"NY"</span>, <span class="st">"OR"</span>, <span class="st">"PA"</span>, <span class="st">"RI"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"VA"</span>, <span class="st">"VT"</span>, <span class="st">"WA"</span>, <span class="st">"WI"</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Vector of states/districts won by Republican candidate</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>r_states <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"AK"</span>, <span class="st">"AL"</span>, <span class="st">"AR"</span>, <span class="st">"FL"</span>, <span class="st">"IA"</span>, <span class="st">"ID"</span>, <span class="st">"IN"</span>, <span class="st">"KS"</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"KY"</span>, <span class="st">"LA"</span>, <span class="st">"ME2"</span>, <span class="st">"MO"</span>, <span class="st">"MS"</span>, <span class="st">"MT"</span>, <span class="st">"NC"</span>, <span class="st">"ND"</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"NE"</span>, <span class="st">"NE1"</span>, <span class="st">"NE3"</span>, <span class="st">"OH"</span>, <span class="st">"OK"</span>, <span class="st">"SC"</span>, <span class="st">"SD"</span>, <span class="st">"TN"</span>,</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"TX"</span>, <span class="st">"UT"</span>, <span class="st">"WV"</span>, <span class="st">"WY"</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>With this information we can add a couple of columns to our geospatial object: <code>result</code> to indicate a <code>D</code>emocrat or <code>R</code>epublican winner, and the symbolic <code>colour</code> of the party (blue for Democrat and red for Republican). We’ll refer to this colour column in the plot so we can colour the tiles correctly.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Mark districts with winning party and provide colour</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>results_sf <span class="ot">&lt;-</span> f38_cdm_sf <span class="sc">%&gt;%</span> </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">result =</span> <span class="fu">case_when</span>(</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>      state_cdm <span class="sc">%in%</span> d_states <span class="sc">~</span> <span class="st">"D"</span>,  <span class="co"># Democrat</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>      state_cdm <span class="sc">%in%</span> r_states <span class="sc">~</span> <span class="st">"R"</span>   <span class="co"># Republican</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">colour =</span> <span class="fu">case_when</span>(</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>      result <span class="sc">==</span> <span class="st">"D"</span> <span class="sc">~</span> <span class="st">"#0000FF"</span>,  <span class="co"># blue</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>      result <span class="sc">==</span> <span class="st">"R"</span> <span class="sc">~</span> <span class="st">"#FF0000"</span>   <span class="co"># red</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(state, state_cdm, result, colour, <span class="fu">everything</span>())</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>results_sf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Simple feature collection with 538 features and 6 fields
+Geometry type: POLYGON
+Dimension:     XY
+Bounding box:  xmin: 293.6239 ymin: 16.95238 xmax: 2495.803 ymax: 1661.333
+CRS:           NA
+First 10 features:
+   state state_cdm result  colour FID tilegramVa                       geometry
+1     AK        AK      R #FF0000  02          3 POLYGON ((293.6239 237.3333...
+2     CA        CA      D #0000FF  06         55 POLYGON ((352.3486 847.619,...
+3     CA        CA      D #0000FF  06         55 POLYGON ((322.9862 796.7619...
+4     CA        CA      D #0000FF  06         55 POLYGON ((352.3486 745.9048...
+5     CA        CA      D #0000FF  06         55 POLYGON ((322.9862 695.0476...
+6     CA        CA      D #0000FF  06         55 POLYGON ((352.3486 644.1905...
+7     AK        AK      R #FF0000  02          3 POLYGON ((322.9862 288.1905...
+8     AK        AK      R #FF0000  02          3 POLYGON ((352.3486 237.3333...
+9     CA        CA      D #0000FF  06         55 POLYGON ((411.0734 949.3333...
+10    CA        CA      D #0000FF  06         55 POLYGON ((381.711 898.4762,...</code></pre>
+</div>
+</div>
+</section>
+<section id="gram-them-tiles" class="level2">
+<h2 class="anchored" data-anchor-id="gram-them-tiles">Gram them tiles</h2>
+<p>The plot will be built from our sf-class object that has been edited for the congressional district method and contains the results; the state boundaries from <code>sf_FiveThirtyEightElectoralCollege.states</code>; and the title with coloured as a key matching the candidate’s party.</p>
+<p>Note that Nebraska (centre-left) and Maine (upper-right) are indeed coloured to represent more than one party, given the share of votes in their congressional district systems.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Build plot object</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(  <span class="co"># layer containing district hexagons</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> results_sf,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">fill =</span> results_sf<span class="sc">$</span>colour,  <span class="co"># hex interiors</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> results_sf<span class="sc">$</span>colour  <span class="co"># hex outlines</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span> </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(  <span class="co"># layer containing state hexagons</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">data =</span> sf_FiveThirtyEightElectoralCollege.states,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"white"</span>,  <span class="co"># state boundaries</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="dv">0</span>,  <span class="co"># transparent</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">1</span>  <span class="co"># thickness</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_map</span>() <span class="co"># remove non-data plot elements</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/plot-1.png" class="img-fluid" alt="A map of the US where each state is made of hexagons that represent congressional districts." width="672"></p>
+</div>
+</div>
+<p>I think that’s quite pleasing.</p>
+<p>We can add some more contextual information with titles. In particular, we can use the text rendering of {ggtext} to create a subtitle with the candidates’ names coloured as a key to the map.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span>  <span class="co"># the original plot object</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(  <span class="co"># {ggtext} to colour names by party</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"&lt;span style='font-size:15pt'&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="st">    US Presidential Election 2020"</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"&lt;span style='font-size:10pt'&gt;Electoral college votes for</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;span style='color:#0000FF;'&gt;Joe Biden&lt;/span&gt; (306) and </span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;span style='color:#FF0000;'&gt;Donald Trump&lt;/span&gt; (232)</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="st">    &lt;/span&gt;"</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"Made with {ggplot2}, {tilemapsR} and {ggtext}"</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.title =</span> <span class="fu">element_markdown</span>(<span class="at">lineheight =</span> <span class="fl">1.1</span>),</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_markdown</span>(<span class="at">lineheight =</span> <span class="fl">1.1</span>)</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/plot-title-1.png" class="img-fluid" alt="A map of the US where each state is made of hexagins that represent congressional districts. There are more blue than red hexagons. The subtitle says that this equates to 306 Biden votes to 232 Trump votes." width="672"></p>
+</div>
+</div>
+</section>
+<section id="zoom-enhance" class="level2">
+<h2 class="anchored" data-anchor-id="zoom-enhance">Zoom! Enhance!</h2>
+<p>In case you didn’t spot Nebraska and Maine, we can plot these two alone and label them by <code>state_cdm</code> to expose the district names.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Quick and dirty function to plot each state</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>plot_state <span class="ot">&lt;-</span> <span class="cf">function</span>(state_abbrev) {</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Isolate state data</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  state_sf <span class="ot">&lt;-</span> results_sf <span class="sc">%&gt;%</span> </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">str_detect</span>(state, <span class="fu">paste0</span>(<span class="st">"^"</span>, state_abbrev)))</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Build plot</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf</span>(</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> state_sf,</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">fill =</span> state_sf<span class="sc">$</span>colour, <span class="at">color =</span> state_sf<span class="sc">$</span>colour</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_sf_text</span>(  <span class="co"># overlay state abbrev</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">data =</span> state_sf, <span class="fu">aes</span>(<span class="at">label =</span> state_cdm),</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">size =</span> <span class="dv">5</span>, <span class="at">color =</span> <span class="st">"white"</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">+</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_map</span>()</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Provide a </span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (state_abbrev <span class="sc">==</span> <span class="st">"NE"</span>) {</span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Nebraska"</span>)</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> <span class="cf">if</span> (state_abbrev <span class="sc">==</span> <span class="st">"ME"</span>){</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    p <span class="ot">&lt;-</span> p <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Maine"</span>)</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(p)</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Arrange plots side-by-side with {patchwork}</span></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_state</span>(<span class="st">"NE"</span>) <span class="sc">+</span> <span class="fu">plot_state</span>(<span class="st">"ME"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/plot2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Note that the districts aren’t necessarily placed in geographically-accurate locations within each state, relatively speaking. But that’s okay, because the tilegram is not an accurate representation of geography anyway.</p>
+</section>
+<section id="development" class="level2">
+<h2 class="anchored" data-anchor-id="development">Development</h2>
+<p>I’ve chosen to keep these maps very simple, partly for the aesthetics, but also because the purpose is to communicate the share of electoral college votes with minimal distraction.</p>
+<p>You could do a number of other things to provide further information, like label states with <code>geom_sf_text()</code>, colour the tiles by vote share rather than outright winner, or make it interactive with <a href="https://rstudio.github.io/leaflet/">the {leaflet} package</a> and include mouseovers to show a full breakdown of results.</p>
+</section>
+<section id="other-solutions" class="level2">
+<h2 class="anchored" data-anchor-id="other-solutions">Other solutions</h2>
+<p>You can find many, many examples of cartograms or other map types used to display the presidential election results. For example, check out:</p>
+<ul>
+<li><a href="https://www.wsj.com/election-results-2020/">The Wall Street Journal</a> has a square version of the hexagonal map in this post</li>
+<li><a href="https://ig.ft.com/us-election-2020/">The Financial Times</a> shows a regular map with each state’s electoral college contribution overlaid as squares</li>
+<li>The <a href="https://www.bbc.co.uk/news/election/us2020/results">BBC</a> and <a href="https://graphics.reuters.com/USA-ELECTION/RESULTS-LIVE-US/jbyprxelqpe/">Reuters</a> have a regular map with the option to switch to a cartogram with one square per state</li>
+</ul>
+<p>Let me know if you seen any particularly good examples.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-21 18:39:40 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] patchwork_1.1.2  ggthemes_4.2.4   ggtext_0.1.2     ggplot2_3.4.2   
+[5] tilegramsR_0.2.0 sf_1.0-14        stringr_1.5.0    dplyr_1.1.2     
+
+loaded via a namespace (and not attached):
+ [1] utf8_1.2.3         generics_0.1.3     class_7.3-22       xml2_1.3.5        
+ [5] KernSmooth_2.23-21 stringi_1.7.12     digest_0.6.33      magrittr_2.0.3    
+ [9] evaluate_0.21      grid_4.3.1         fastmap_1.1.1      jsonlite_1.8.7    
+[13] e1071_1.7-13       DBI_1.1.3          purrr_1.0.1        fansi_1.0.4       
+[17] scales_1.2.1       cli_3.6.1          rlang_1.1.1        units_0.8-2       
+[21] commonmark_1.9.0   munsell_0.5.0      withr_2.5.0        yaml_2.3.7        
+[25] tools_4.3.1        colorspace_2.1-0   vctrs_0.6.3        R6_2.5.1          
+[29] proxy_0.4-27       lifecycle_1.0.3    classInt_0.4-9     htmlwidgets_1.6.2 
+[33] pkgconfig_2.0.3    pillar_1.9.0       gtable_0.3.3       glue_1.6.2        
+[37] Rcpp_1.0.11        xfun_0.39          tibble_3.2.1       tidyselect_1.2.0  
+[41] rstudioapi_0.15.0  knitr_1.43.1       farver_2.1.1       htmltools_0.5.5   
+[45] rmarkdown_2.23     compiler_4.3.1     markdown_1.7       gridtext_0.1.5    </code></pre>
+</div>
+</div>
+</details>
+<p>
+</p>
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Disclaimer: I am not a US citizen.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The object was created and named for the tilegrams by <a href="https://fivethirtyeight.com/">fivethirtyeight</a>, a company named after the total count of electors in the US electoral college.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,215 @@
+---
+title: Postcode pandemonium with {data.table}
+author: Matt Dray
+date: 2020-05-16
+slug: postcode-pandemonium
+categories:
+  - data.table
+  - geospatial
+  - r
+  - tictoc
+---
+
+```{r, include=FALSE, eval=FALSE}
+# Local load of the postcode file, if URL download fails
+zip_path <- "~/Downloads/NSPL21_FEB_2023_UK.zip"
+pcodes_dt <- data.table::fread(unzip(zip_path, files = "Data/NSPL21_FEB_2023_UK.csv"))
+```
+
+![Postcodes in Bath are unlikely to score highly (via Wikimedia)](resources/600px-BA_postcode_area_map.svg.png){fig-alt="A map of the BA postcode area around Bath, UK." width="100%"}
+
+## tl;dr
+
+I used the R package {data.table} to find the highest- and lowest-scoring UK postcodes based on the sum of their numbers and letters (A = 1, B = 2, etc). You can [jump to the results](#results).
+
+## The premise
+
+Yesterday I noticed that the hashtag #PostcodePandemonium was trending on Twitter.[^tweet] The premise was to sum the numbers and letters in your [postcode](https://en.wikipedia.org/wiki/Postcodes_in_the_United_Kingdom), where the letters have been converted to their position in the alphabet (i.e. A = 1, B = 2, etc). Highest value 'wins'.
+
+Which existing postcode has the highest score? And the lowest?
+
+## Process
+
+### Attach packages
+
+I've been using Matt Dowle and Arun Srinivasan's [lightning-fast {data.table} package](https://rdatatable.gitlab.io/data.table/) recently and wanted to use it here to handle millions of UK postcodes. I've prioritised for readability in this post rather than efficiency, but let me know how to improve things.
+
+```{r library}
+suppressPackageStartupMessages({
+  library(data.table)  # a better data.frame
+  library(stringr)     # simple string handling
+  library(tictoc)      # timing
+})
+```
+
+I'm using Sergei Izrailev's [{tictoc} package](http://collectivemedia.github.io/tictoc/) to time the processes throughout.
+
+### Get the data
+
+The latest postcode data (February 2020) is available on [the Open Geography Portal by the Office for National Statistics](https://geoportal.statistics.gov.uk/datasets/national-statistics-postcode-lookup-february-2020). From there you can download a zipped folder that contains the file we want, `NSPL_FEB_2020_UK.csv`.
+
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+I re-rendered this post in July 2023 and the link to the February 2020 postcode file no longer works. Instead, we'll use the latest at time of writing: [February 2023](https://geoportal.statistics.gov.uk/datasets/national-statistics-postcode-lookup-2021-census-february-2023/about).
+</div><P>
+
+First, you can download the .zip to a temporary location on your machine. The file is pretty large (about 180 MB), so I'm increasing the timeout value for `download.file()` so that the download has time to complete. You might want to consider downloading the file to your local computer and reading it from there.
+
+```{r download-temp}
+# URL to postcode zip file
+zip_url <- paste0(
+  "https://www.arcgis.com/",
+  "sharing/rest/content/items/",
+  "c7debafcef564e7a9dfb8ca881be4253/data"
+)
+
+# Setup a temporary folder to download into
+tmp <- tempdir()
+zip_path <- file.path(tmp, "postcodes.zip")
+
+# Download the zip file to the tempporary location
+options(timeout = max(1000, getOption("timeout")))
+download.file(zip_url, zip_path)
+```
+
+You can then `unzip()` the CSV file inside {data.table}'s `fread()` for a rapid read.
+
+```{r read-unzip}
+tic("CSV read complete")
+pcodes_dt <- fread(unzip(zip_path, files = "Data/NSPL21_FEB_2023_UK.csv"))
+toc()
+
+unlink(tmp)  # remove temp location
+```
+
+And we can check the dimensions of this object.
+
+```{r dim}
+# Rows and columns in the data set
+dim(pcodes_dt)
+```
+
+So there's more than 2.5 million rows. Some postcodes have, however, been terminated over time. We'll need to filter for the postcodes that are still active (thanks to [Robert Kaleta](https://twitter.com/RobertKaleta/status/1261733628461146113) for pointing this out). 
+
+We can also simplify to just the postcode column that we want using {data.table}'s `.()` notation. Data in the `pcds` column has the consistent form of letter, letter, digit, space, digit, letter, letter (e.g. 'AB12 3CD'), which makes them relatively easy to deal with.
+
+```{r doterm}
+# Filter for empty date of termination (doterm)
+# Retain only the postcode column
+pcodes_dt <- pcodes_dt[is.na(doterm), .(pcds)]
+
+head(pcodes_dt)
+
+nrow(pcodes_dt)
+```
+
+You can see that this removes a large number of terminated postcodes.
+
+### Extract
+
+Now to extract the numbers and letters so that 'AB12 3CD' is broken into A, B, 12, 3, C and D, for example. Note that we want to extract multi-digit numbers if they exist within each half (the 'outward' and 'inward' parts) of the postcode, so 12 rather than 1 and 2, and 12 and 3 rather than 123.
+
+The walrus operator (`:=`) is used here as a function to create new columns and assign names to them. I've chose to use {stringr}'s `str_extract_all()` function to match the strings we want. The regular expression contains values in the curly braces to indicate the desired character lengths to be matched.
+
+This will produce two list-columns: one with the letters extracted into it and one with the numbers. 
+
+```{r extract}
+# Extract letters into one list column and numbers into another
+pcodes_dt[, `:=`(letter = str_extract_all(pcds, "[:alpha:]{1}"),
+                 number = str_extract_all(pcds, "[:digit:]{1,2}"))]
+
+pcodes_dt
+```
+
+Remember that {data.table} edits in place, so the `pcodes_dt` object will be updated and without the need to overwrite it (i.e. no need to do something like `pcodes_dt <- pcodes_dt[<whatever>]`).
+
+### Numbers and letters
+
+Now to work with the `number` list-column. The values are currently character-class because they were extracted from the postcode strings; they need to be made numeric before they can be summed. `lapply()` is used here to pass the function `as.numeric()` to achieve this.
+
+```{r numbers}
+tic("Make numbers numeric class")
+pcodes_dt[, number := lapply(number, as.numeric)]
+toc()
+```
+
+And now to work with the `letter` list column. The custom function in `lapply()` first turns the letters into the factor class, where the full set of possible levels is provided by the `LETTERS` vector, and then uses `as.numeric()` to convert each factor level to its corresponding numeric value.
+
+This works on the principle that `as.numeric(factor(c("A", "B", "C")))` becomes `c(1, 2, 3)`. The first factor level, `A` gets converted to 1, `B` to 2 and so on. 
+
+```{r letters}
+tic("Convert letters to numbers, make numeric class")
+pcodes_dt[, letter_number := lapply(
+  letter, function(x) as.numeric(factor(x, levels = LETTERS)))]
+toc()
+```
+
+### Scores
+
+Now to separately sum the number and letter values in each row of the list-columns and add them together for the final score.
+
+```{r sum}
+# Generate summation columns for letters and numbers separately
+pcodes_dt[, `:=`(number_sum = lapply(number, sum),
+                 letter_sum = lapply(letter_number, sum))]
+
+# Make the sum columns numeric- rather than list-class
+pcodes_dt$number_sum <- as.numeric(pcodes_dt$number_sum)
+pcodes_dt$letter_sum <- as.numeric(pcodes_dt$letter_sum)
+
+# Sum the number and letter values
+pcodes_dt[, score := number_sum + letter_sum]
+
+# The first few scores
+head(pcodes_dt[, .(pcds, number_sum, letter_sum, score)])
+```
+
+So you can see, for example, that AB10 1AB has a number sum of 11 (10 + 1) and a letter sum of 6 (a couple of As and Bs, so 1 + 2 + 1 + 2), totalling 17.
+
+## Results {#results}
+
+Now to order the results, focus on the postcodes and scores alone, and preview the top and bottom scores (provided by default in {data.table}'s print method).
+
+```{r rank}
+# Select cols and reorder by score
+pcodes_dt[order(-score), .(pcds, score)]
+```
+
+So the top-scoring postcode was WV99 1ZZ with 197 points. It's on an industrial estate in Telford, north-east of Birmingham. You can [view it on Google Maps](https://goo.gl/maps/574KB3wmc6wy9Rms6).
+
+The lowest scoring postcodes were in Birmingham (Holloway Circus at [B1 1BA](https://goo.gl/maps/ZM7p9ZjFWXBc4nt6A) and Arena Birmingham at [B1 2AA](https://goo.gl/maps/yPgYP74uP3AqMtCa7)) and Bath (near Bath Spa train station at [BA1 1AA](https://goo.gl/maps/eD5jL7dbeb8sAkZf9) and south of Farmborough at [BA2 0AA](https://goo.gl/maps/DN2ZAm1AJAz2oq329)). They scored only 7.
+
+The distribution of scores looks like this:
+
+```{r}
+hist(
+  pcodes_dt$score,
+  xlab = "Score",
+  main = "Histogram of postcode scores"
+)
+```
+
+It's slightly skewed, with nearly 350,000 instances of scores between 60 and 70 and very few scores over 150.
+
+Let's check out the summary statistics.
+
+```{r}
+summary(pcodes_dt$score)
+```
+
+So the mean score is just under 70.
+
+How does your score compare?
+
+!['WV' provides 23 + 22 = 45 points in itself (via Wikimedia)](resources/500px-WV_postcode_area_map.svg.png){fig-alt="A map of the WV postcode area around Wolverhampton" width="100%"}
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^tweet]: It originated from the social media team at a company controlled by one of the largest corporations in the world, so I don't think it's cynical to say that the whole thing was a marketing ploy.
