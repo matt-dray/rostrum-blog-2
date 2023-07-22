@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2020-03-22">
+
+<title>rostrum.blog (test) - Ninja scaffolding for {xaringan}</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-black-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../../site_libs/fitvids-2.1.1/fitvids.min.js"></script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog (test)</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Ninja scaffolding for {xaringan}</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">css</div>
+                <div class="quarto-category">kunoichi</div>
+                <div class="quarto-category">ninjutsu</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">rmarkdown</div>
+                <div class="quarto-category">xaringan</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 22, 2020</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#slide-themes" id="toc-slide-themes" class="nav-link" data-scroll-target="#slide-themes">Slide themes</a></li>
+  <li><a href="#slide-layouts" id="toc-slide-layouts" class="nav-link" data-scroll-target="#slide-layouts">Slide layouts</a></li>
+  <li><a href="#demo-ninja-scaffold" id="toc-demo-ninja-scaffold" class="nav-link" data-scroll-target="#demo-ninja-scaffold">Demo: ninja scaffold</a></li>
+  <li><a href="#adapting-the-layout" id="toc-adapting-the-layout" class="nav-link" data-scroll-target="#adapting-the-layout">Adapting the layout</a>
+  <ul class="collapse">
+  <li><a href="#defining-the-classes" id="toc-defining-the-classes" class="nav-link" data-scroll-target="#defining-the-classes">Defining the classes</a></li>
+  <li><a href="#using-the-classes" id="toc-using-the-classes" class="nav-link" data-scroll-target="#using-the-classes">Using the classes</a></li>
+  </ul></li>
+  <li><a href="#what-now" id="toc-what-now" class="nav-link" data-scroll-target="#what-now">What now?</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/split-main2.png" class="img-fluid figure-img" alt="A slide split into four sections, with a title row, footer row and two main-body rows, the lower of which is split in two vertically."></p>
+<figcaption class="figure-caption">Example of modified Ninjutsu for ‘scaffolding’ a {xaringan} slide.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p><a href="https://emitanaka.org/ninja-theme/themes/kunoichi/kunoichi-theme-example.html#6">Emi Tanaka’s Ninjutsu</a> CSS for <a href="https://slides.yihui.org/xaringan/#1">{xaringan}</a> breaks slides into ‘cells’, which are useful for arranging plots, tables, etc. <a href="https://matt-dray.github.io/ninja-scaffold/">I’ve been experimenting</a> with Emi’s CSS to create my own layouts.</p>
+</section>
+<section id="slide-themes" class="level2">
+<h2 class="anchored" data-anchor-id="slide-themes">Slide themes</h2>
+<p>The <a href="https://slides.yihui.org/xaringan/#1">{xaringan}</a> package by <a href="https://yihui.org/">Yihui Xie</a> – an implementation of <a href="https://github.com/gnab/remark">remark.js</a> – lets you create reproducible slides with R.</p>
+<p>You can create your own themes for {xaringan} by supplying some <a href="https://simple.wikipedia.org/wiki/Cascading_Style_Sheets">CSS</a>. Yihui has <a href="https://yihui.org/en/2017/10/xaringan-themes/">encouraged users</a> to add their themes to the package itself.</p>
+<p>Tip: if you don’t know CSS, <a href="https://www.garrickadenbuie.com/">Garrick Aden-Buie</a>’s <a href="https://www.garrickadenbuie.com/project/xaringanthemer/">{xaringanthemer}</a> package lets you write R code and will generate the corresponding CSS for you.</p>
+</section>
+<section id="slide-layouts" class="level2">
+<h2 class="anchored" data-anchor-id="slide-layouts">Slide layouts</h2>
+<p>I was given a brief to create slides with a particular layout of page elements (plots, tables, text). How could I create a ‘scaffold’ in {xaringan} into which I could place the page elements?</p>
+<p>Fortunately, <a href="https://twitter.com/statsgen">Emi Tanaka</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> created <a href="https://emitanaka.org/ninja-theme/themes/kunoichi/kunoichi-theme-example.html#7">Ninjutsu</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>: CSS classes for splitting your page into columns and rows. This is now built into {xaringan} along with <a href="https://emitanaka.org/ninja-theme/themes/kunoichi/kunoichi-theme-example.html#1">her Kunoichi theme</a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<p>For example, the <code>split-1-2-1</code> class from Ninjutsu splits the slide into three columns that are 25%, 50% and 25% of the total page width (hence ‘1-2-1’).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode css code-with-copy"><code class="sourceCode css"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.split-1-2-1</span><span class="op">&gt;</span><span class="fu">.column</span><span class="in">:first-of-type</span> {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">width</span>: <span class="dv">25</span><span class="dt">%</span><span class="op">;</span> <span class="kw">height</span>: <span class="dv">100</span><span class="dt">%</span><span class="op">;</span> <span class="kw">position</span>: <span class="dv">absolute</span><span class="op">;</span> <span class="kw">top</span>: <span class="dv">0</span><span class="op">;</span> <span class="kw">left</span>: <span class="dv">0</span><span class="op">;</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">.split-1-2-1</span><span class="op">&gt;</span><span class="fu">.column</span><span class="in">:nth-of-type(2)</span> {</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">width</span>: <span class="dv">50</span><span class="dt">%</span><span class="op">;</span> <span class="kw">height</span>: <span class="dv">100</span><span class="dt">%</span><span class="op">;</span> <span class="kw">position</span>: <span class="dv">absolute</span><span class="op">;</span> <span class="kw">top</span>: <span class="dv">0</span><span class="op">;</span> <span class="kw">left</span>: <span class="dv">25</span><span class="dt">%</span><span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">.split-1-2-1</span><span class="op">&gt;</span><span class="fu">.column</span><span class="in">:nth-of-type(3)</span> {</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">width</span>: <span class="dv">25</span><span class="dt">%</span><span class="op">;</span> <span class="kw">height</span>: <span class="dv">100</span><span class="dt">%</span><span class="op">;</span> <span class="kw">position</span>: <span class="dv">absolute</span><span class="op">;</span> <span class="kw">top</span>: <span class="dv">0</span><span class="op">;</span> <span class="kw">right</span>: <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>There’s one line of CSS for each of the three columns that the slide will be split into. In this example, the first column (<code>first-of-type</code>) starts from the extreme left (<code>left: 0;</code>), the middle column (<code>nth-of-type(2)</code>) starts where the first one ends (<code>left: 25%;</code>) and the third one (<code>nth-of-type(3)</code>) starts from the extreme right (<code>right: 0;</code>).</p>
+</section>
+<section id="demo-ninja-scaffold" class="level2">
+<h2 class="anchored" data-anchor-id="demo-ninja-scaffold">Demo: ninja scaffold</h2>
+<p>I adapted Emi’s CSS to create the layouts I wanted. You can:</p>
+<ul>
+<li><a href="https://github.com/matt-dray/ninja-scaffold">find the source on GitHub</a></li>
+<li><a href="https://github.com/matt-dray/ninja-scaffold/blob/master/custom.css">inspect the relevant custom CSS</a></li>
+<li><a href="https://matt-dray.github.io/ninja-scaffold/">see a demo slideshow</a>, or view it embedded below</li>
+</ul>
+<div class="cell">
+<div class="cell-output-display">
+<div class="shareagain" style="min-width:300px;margin:1em auto;" data-exeternal="1">
+<iframe src="https://matt-dray.github.io/ninja-scaffold/" width="1600" height="900" style="border:2px solid currentColor;" loading="lazy" allowfullscreen=""></iframe>
+<script>fitvids('.shareagain', {players: 'iframe'});</script>
+</div>
+</div>
+</div>
+<p>Read the rest of this post for an explanation of how I did it.</p>
+</section>
+<section id="adapting-the-layout" class="level2">
+<h2 class="anchored" data-anchor-id="adapting-the-layout">Adapting the layout</h2>
+<p>Specifically, I wanted to define title, body and footer-bar sections for:</p>
+<ul>
+<li>a title page</li>
+<li>a main, generic content page</li>
+<li>a content page that could show a table and plot next to each other, with a wider table underneath</li>
+</ul>
+<p>This means I could colour them and/or fill them with content according to some additional CSS formatting.</p>
+<p>To do this, I tweaked Emi’s <code>split-1-2-1</code> class to create classes with rows (rather than columns) split into the sections I wanted.</p>
+<p>Below are some simplified examples of what I did. You can <a href="https://github.com/matt-dray/ninja-scaffold/blob/master/custom.css">see the original CSS in the source code</a> of the demo I’ve put on GitHub.</p>
+<section id="defining-the-classes" class="level3">
+<h3 class="anchored" data-anchor-id="defining-the-classes">Defining the classes</h3>
+<p>The title page has two rows, one is a large header area to hold a logo and the other is where the talk metadata goes (<a href="https://matt-dray.github.io/ninja-scaffold/#5">see demo</a>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode css code-with-copy"><code class="sourceCode css"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.split-title</span><span class="op">&gt;</span><span class="fu">.row</span><span class="in">:first-of-type</span> {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">height</span>: <span class="dv">35</span><span class="dt">%</span><span class="op">;</span> <span class="kw">width</span>: <span class="dv">100</span><span class="dt">%</span><span class="op">;</span> <span class="kw">position</span>: <span class="dv">absolute</span><span class="op">;</span> <span class="kw">top</span>: <span class="dv">0</span><span class="op">;</span> <span class="kw">left</span>: <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">.split-title</span><span class="op">&gt;</span><span class="fu">.row</span><span class="in">:nth-of-type(2)</span> {</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">height</span>: <span class="dv">65</span><span class="dt">%</span><span class="op">;</span> <span class="kw">width</span>: <span class="dv">100</span><span class="dt">%</span><span class="op">;</span> <span class="kw">position</span>: <span class="dv">absolute</span><span class="op">;</span> <span class="kw">left</span>: <span class="dv">0</span><span class="op">;</span> <span class="kw">top</span>: <span class="dv">35</span><span class="dt">%</span><span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The main slide class has a title and footer section and the content goes in the large section between (<a href="https://matt-dray.github.io/ninja-scaffold/#6">see demo</a>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode css code-with-copy"><code class="sourceCode css"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.split-main1</span><span class="op">&gt;</span><span class="fu">.row</span><span class="in">:first-of-type</span> {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">height</span>: <span class="dv">15</span><span class="dt">%</span><span class="op">;</span> <span class="kw">width</span>: <span class="dv">100</span><span class="dt">%</span><span class="op">;</span> <span class="kw">position</span>: <span class="dv">absolute</span><span class="op">;</span> <span class="kw">top</span>: <span class="dv">0</span><span class="op">;</span> <span class="kw">left</span>: <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">.split-main1</span><span class="op">&gt;</span><span class="fu">.row</span><span class="in">:nth-of-type(2)</span> {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">height</span>: <span class="dv">80</span><span class="dt">%</span><span class="op">;</span> <span class="kw">width</span>: <span class="dv">100</span><span class="dt">%</span><span class="op">;</span> <span class="kw">position</span>: <span class="dv">absolute</span><span class="op">;</span> <span class="kw">left</span>: <span class="dv">0</span><span class="op">;</span> <span class="kw">bottom</span>: <span class="dv">5</span><span class="dt">%</span><span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">.split-main1</span><span class="op">&gt;</span><span class="fu">.row</span><span class="in">:nth-of-type(3)</span> {</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">height</span>: <span class="dv">5</span><span class="dt">%</span><span class="op">;</span> <span class="kw">width</span>: <span class="dv">100</span><span class="dt">%</span><span class="op">;</span> <span class="kw">position</span>: <span class="dv">absolute</span><span class="op">;</span> <span class="kw">bottom</span>: <span class="dv">0</span><span class="op">;</span> <span class="kw">left</span>: <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I modified slightly this class so the large blank area is split once more (<a href="https://matt-dray.github.io/ninja-scaffold/#7">see demo</a>):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode css code-with-copy"><code class="sourceCode css"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.split-main2</span><span class="op">&gt;</span><span class="fu">.row</span><span class="in">:first-of-type</span> { </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">height</span>: <span class="dv">15</span><span class="dt">%</span><span class="op">;</span> <span class="kw">width</span>: <span class="dv">100</span><span class="dt">%</span><span class="op">;</span> <span class="kw">position</span>: <span class="dv">absolute</span><span class="op">;</span> <span class="kw">top</span>: <span class="dv">0</span><span class="op">;</span> <span class="kw">left</span>: <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">.split-main2</span><span class="op">&gt;</span><span class="fu">.row</span><span class="in">:nth-of-type(2)</span> { </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">height</span>: <span class="dv">40</span><span class="dt">%</span><span class="op">;</span> <span class="kw">width</span>: <span class="dv">100</span><span class="dt">%</span><span class="op">;</span> <span class="kw">position</span>: <span class="dv">absolute</span><span class="op">;</span> <span class="kw">left</span>: <span class="dv">0</span><span class="op">;</span> <span class="kw">top</span>: <span class="dv">15</span><span class="dt">%</span><span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">.split-main2</span><span class="op">&gt;</span><span class="fu">.row</span><span class="in">:nth-of-type(3)</span> { </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">height</span>: <span class="dv">40</span><span class="dt">%</span><span class="op">;</span> <span class="kw">width</span>: <span class="dv">100</span><span class="dt">%</span><span class="op">;</span> <span class="kw">position</span>: <span class="dv">absolute</span><span class="op">;</span> <span class="kw">left</span>: <span class="dv">0</span><span class="op">;</span> <span class="kw">bottom</span>: <span class="dv">5</span><span class="dt">%</span><span class="op">;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">.split-main2</span><span class="op">&gt;</span><span class="fu">.row</span><span class="in">:nth-of-type(4)</span> { </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">height</span>: <span class="dv">5</span><span class="dt">%</span><span class="op">;</span> <span class="kw">width</span>: <span class="dv">100</span><span class="dt">%</span><span class="op">;</span> <span class="kw">position</span>: <span class="dv">absolute</span><span class="op">;</span> <span class="kw">bottom</span>: <span class="dv">0</span><span class="op">;</span> <span class="kw">left</span>: <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="using-the-classes" class="level3">
+<h3 class="anchored" data-anchor-id="using-the-classes">Using the classes</h3>
+<p>Having defined the CSS, how do we use it?</p>
+<p>Let’s say I’d saved this CSS into a file called <code>custom.CSS</code>, along with some font specifications in <code>custom-fonts.CSS</code>. Here’s a simplified YAML header showing how to declare these CSS files in your {xaringan} .Rmd file:</p>
+<pre><code>---
+title: "Example Title"
+output:
+  xaringan::moon_reader:
+    css: [default, ninjutsu, custom.css, custom-fonts.css]
+---</code></pre>
+<p>The CSS files are listed in this order so that the later-listed files take precedence if there’s any clashes. Remember also that in-built themes don’t need the <code>.css</code> file extension, but you need to provide the full path for any custom CSS.</p>
+<p>With {xaringan} you name the class at the top of a slide to actually apply it, where slides are defined by three hyphens <code>---</code>.</p>
+<p>You can <a href="https://github.com/matt-dray/ninja-scaffold/blob/master/index.Rmd">see an example in the source code</a> of the demo I put on GitHub.</p>
+<section id="class-split-main1" class="level4">
+<h4 class="anchored" data-anchor-id="class-split-main1">Class <code>split-main1</code></h4>
+<p>So, the <code>split-main1</code> could be used like this:</p>
+<pre><code>---
+class: split-main1
+
+.row[.content[
+This Is A Title
+]]
+
+.row[.content[
+This is the main body area of the slide.
+]]</code></pre>
+<p>Remember that the <code>split-main1</code> class is split into three separate rows for the title, main body and footer sections. We can define what’s in each row with <code>.row[]</code> and then define the content inside a call to <code>.content[]</code>.</p>
+<p>The first <code>.row[]</code> call will take the style from <code>.split-main1&gt;.row:first-of-type</code> in our CSS, the second will take the CSS information from <code>.split-main1&gt;.row:nth-of-type(2)</code>, and so on.</p>
+<p>Note that Ninjutsu also lets you adjust the content of classes by chaining calls like <code>.content.vmiddle[]</code>, which will make the content vertically centred in this case.</p>
+</section>
+<section id="class-split-main2" class="level4">
+<h4 class="anchored" data-anchor-id="class-split-main2">Class <code>split-main2</code></h4>
+<p>The <code>split-main2</code> class has an additional <code>.row[]</code> to define because the main body area is composed of two rows rather than one.</p>
+<p>Here I’ve added a <code>split-two[]</code> call inside the second <code>.row[]</code> call and declared <code>.column[]</code> twice within it. This results the main body area containing one row the width of the page and one row split into two columns (<a href="https://matt-dray.github.io/ninja-scaffold/#8">see demo</a>).</p>
+<pre><code>---
+class: split-main2
+
+.row[.content[
+This Is A Title
+]]
+
+.row[.content[
+This is the second row of the page. It's full-width.
+]]
+
+.row[.content[
+.split-two[
+.column[.content[
+This is the third row, which is split in two. This is the left column.
+]]
+.column[.content[
+This is the right-hand column of the third row.
+]]
+]
+]]
+
+.row[
+]</code></pre>
+</section>
+</section>
+</section>
+<section id="what-now" class="level2">
+<h2 class="anchored" data-anchor-id="what-now">What now?</h2>
+<p>I think there’s a lot of promise in this approach for making bespoke page layouts.</p>
+<p>I’ve already used this approach at work to design a {xaringan} template to a specification, which I used to help automate the generation of a large number of reports. In particular, I used the <code>split-main2</code> class to arrange a small table in the top-left, a plot in the top-right, and a full-width wide table below them.</p>
+<p>It’s possible to create these kinds of layouts in other ways – <a href="https://github.com/mattkerlogue/pagedown-test">like in {pagedown}</a> or with <a href="https://www.w3schools.com/css/css_grid.asp">fancier CSS</a> skills. For now I’m most comfortable with {xaringan} and the features it offers, like presenter notes and presenter view. But this is probably less important if your goal is <a href="https://www.rostrum.blog/2020/03/12/knit-with-params/#demo-ninja-knitting">to output to PDF</a>.</p>
+<p>I look forward to seeing how Ninjutsu and other {xaringan} themes develop to help with page layouts for reproducible presentations.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-22 15:54:05 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2   compiler_4.3.1      fastmap_1.1.1      
+ [4] cli_3.6.1           tools_4.3.1         htmltools_0.5.5    
+ [7] xaringanExtra_0.7.0 rstudioapi_0.15.0   yaml_2.3.7         
+[10] rmarkdown_2.23      knitr_1.43.1        jsonlite_1.8.7     
+[13] xfun_0.39           digest_0.6.33       rlang_1.1.1        
+[16] evaluate_0.21      </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>A certified <a href="https://pagedown.rbind.io/html-letter">great hacker</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://en.wikipedia.org/wiki/Ninjutsu">Wikipedia</a>: ‘the strategy and tactics of unconventional warfare, guerrilla warfare and espionage purportedly practiced by the ninja’.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://en.wikipedia.org/wiki/Kunoichi">Wikipedia</a>: ‘a female ninja or practitioner of ninjutsu’.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
