@@ -1,0 +1,180 @@
+---
+title: Packages that Sparked Joy in 2019
+date: 2019-12-27
+slug: pkgs-2019
+categories:
+  - arsenal
+  - blogdown
+  - drake
+  - govdown
+  - polite
+  - purrr
+  - r
+  - usethis
+  - xaringan
+---
+
+![Marie Kondo (Netflix via Giphy).](https://media.giphy.com/media/4ZkiXE2yGFCEA3Sm6V/giphy.gif){fig-alt="Marie Kondo putting her hands together and bowing." width="50%" fig-align="left"}
+
+## Thank you package-makers
+
+I've used a lot of packages in 2019 and many have brought great joy to my R experience. Thank you to everyone who has created, maintained or contributed to a package this year.
+
+Some particular packages of note for me have been:
+
+* 🤖 [{usethis}](#usethis) by Hadley Wickham and Jenny Bryan
+* 🦆 [{drake}](#drake) by Will Landau
+* 🐈 [{purrr}](#purrr) by Lionel Henry and Hadley Wickham
+
+And some honourable mentions are:
+
+* 📝 [{blogdown}](#blogdown) by Yihui Xie
+* ⚔️ [{xaringan}](#xaringan) by Yihui Xie
+* 🙇 [{polite}](#polite) by Dmytro Perepolkin
+* ↔️ [{arsenal}](#arsenal) by Ethan Heinzen, Jason Sinnwell, Elizabeth Atkinson, Tina Gunderson and Gregory Dougherty
+
+Click the package name to jump to that section.
+
+## Packages of note
+
+### {usethis}{#usethis}
+
+The format and content of R packages is objectively odd. What files are necessary? What structure should it have? [The {usethis} package](https://usethis.r-lib.org/) from [RStudio](https://rstudio.com/)'s [Hadley Wickham](http://hadley.nz/) and [Jenny Bryan](https://jennybryan.org/) makes it far easier for newcomers and experienced useRs alike.
+
+In fact, you can make a minimal package in two lines:
+
+1. `create_package()` to create the necessary package structure
+1. `use_r()` to create in the right place an R script for your functions
+
+But there's way more functions to help you set up your package. To name a few more that I use regularly:
+
+* `use_vignette()` and `use_readme_md()` for more documentation
+* `use_testthat()` and `use_test()` for setting up tests
+* `use_package()` to add packages to the `Imports` section of the `DESCRIPTION` file
+* `use_data()` and `use_data_raw()` to add data sets to the package and the code used to create them
+* `use_*_license()` to add a license
+
+There are also other flavours of function like `git_*()` and `pr_*()` to work with version control and `proj_*()` for working with RStudio Projects.
+
+I focused this year on making different types of package. {usethis} made it much easier to develop:
+
+* [{altcheckr}](https://www.rostrum.blog/2019/12/08/altcheckr/) to read and assess [image alt text from web pages](https://www.w3.org/WAI/tutorials/images/)
+* [{oystr}](https://www.rostrum.blog/2019/12/23/oystr/) to handle London travel-history data from an [Oyster card](https://oyster.tfl.gov.uk/oyster/entry.do)
+* [{gdstheme}](https://www.rostrum.blog/2019/05/24/xaringan-template/) to use a [{xaringan}](https://slides.yihui.org/xaringan/) presentation theme and template
+* [{blogsnip}](https://www.rostrum.blog/2019/10/22/blogsnip/) to insert blog-related code snippets via an [RStudio addin](https://rstudio.github.io/rstudioaddins/) (there's even a `use_addin()` function to create the all-important `inst/rstudio/addins.dcf` file)
+
+For more package-development info, I recommend [Emil Hvitfeldt's {usethis} workflow](https://www.hvitfeldt.me/blog/usethis-workflow-for-package-development/), as well as [Karl Broman's R Package Primer](https://kbroman.org/pkg_primer/) and [Hadley Wickham's R Packages book](http://r-pkgs.had.co.nz/). To help me remember this stuff, [I also wrote some slides about developing a package from scratch](https://www.rostrum.blog/2019/11/01/usethis/) with {usethis} functions.
+
+### {drake}{#drake}
+
+Your analysis has got 12 input data files. They pass through 15 functions There are some computationally-intensive, long-running processes. Plots and tables are produced and R Markdown files are rendered. How do you keep on top of this? Is it enough to have a set of numbered script files (`01_read.R`, etc) or a single script file that sources the rest? What if something changes? Do you have to re-run everything from scratch?
+
+You need a workflow manager. Save yourself some hassle and use [Will Landau](https://wlandau.github.io/)'s [{drake} package](https://docs.ropensci.org/drake/), backed by [rOpenSci](https://ropensci.org/blog/2018/02/06/drake/)'s peer review process. {drake} 'remembers' all the dependencies between files and only re-runs what needs to be re-run if any errors are found or changes are made. It also provides visualisations of your workflow and allows for high-performance computing.
+
+In short, you:
+
+1. Supply the steps of your analysis as functions to `drake_plan()`, which generates a data frame of commands (functions) to operate over a set of targets (objects)
+1. Run `make()` on your plan to run the steps and generate the outputs
+1. If required, make changes anywhere in your workflow and re-`make()` the plan -- {drake} will only re-run things that are dependent on what you changed
+
+Below is an extreme example from [a happy customer](https://twitter.com/FrederikAust/status/1205103780938833921?s=20). Each point on the graph is an object or function; black ones are out of date and will be updated when `make()` is next run.
+
+!['I'm *so* glad {drake} is tracking those dependencies between #rstats computations for me'](resources/aust-drake.jpg){fig-alt="A graph of a complicated-looking drake pipeline. There are hundreds of interconnected nodes." width="100%"}
+
+It's hard to do {drake} justice in just a few paragraphs, but luckily it's one of the best-documented packages out there. Take a look at:
+
+* the [{drake} rOpenSci website](https://github.com/ropensci/drake)
+* the [thorough user manual](https://books.ropensci.org/drake/)
+* the [learndrake GitHub repo](https://github.com/wlandau/learndrake), which can be launched in the cloud
+* the [drakeplanner Shiny app](https://wlandau.shinyapps.io/drakeplanner/) 
+* Will's [{drake} examples page](https://wlandau.github.io/drake-examples/)
+* this [rOpenSci community call](https://ropensci.org/commcalls/2019-09-24/)
+* a [Journal of Open Source Software (JOSS) paper](https://joss.theoj.org/papers/10.21105/joss.00550)
+* more things listed in [the documentation section of the user manual](https://books.ropensci.org/drake/index.html#documentation)
+
+I [wrote about {drake} earlier in the year](https://ropensci.org/commcalls/2019-09-24/) and [made a demo](https://github.com/matt-dray/drake-egg-rap) and [some slides](https://github.com/matt-dray/drake-egg-rap/blob/master/docs/drake-presentation.pdf). I think it could be useful for reproducibility of statistical publications in particular.
+
+### {purrr}{#purrr}
+
+You want to apply a function over the elements of some list or vector.
+
+The `map()` family of functions from [the {purrr} package](https://purrr.tidyverse.org/)--by [Lionel Henry](https://twitter.com/_lionelhenry?lang=en) and [Hadley Wickham](http://hadley.nz/) of [RStudio](https://rstudio.com/)--has a concise and consistent syntax for doing this.
+
+You can choose what gets returned from your iterations by selecting the appropriate `map_*()` variant: `map()` for a list, `map_df()` for a data frame, `map_chr()` for a character vector and so on. Here's a trivial example that counts the number of [Street Fighter](https://en.wikipedia.org/wiki/Street_Fighter_II:_The_World_Warrior) characters from selected continents. Here's a list:
+
+```{r list}
+# Create the example list
+street_fighter <- list(
+ china = "Chun Li", japan = c("Ryu", "E Honda"),
+ usa = c("Ken", "Guile", "Balrog"), `???` = "M Bison"
+)
+
+street_fighter  # take a look at the list
+```
+
+Now to map the `length()` function to each element of the list and return a named integer vector.
+
+```{r map-int}
+library(purrr)  # load the package
+
+# Get the length of each list element
+purrr::map_int(
+  street_fighter,  # list
+  length           # function
+)
+```
+
+But what if you want to iterate over two or more elements? You can use `map2()` or `pmap()`. And what if you want to get the side effects? `walk()` and `pwalk()`.
+
+{purrr} is also great for working with data frames with columns that contain lists (listcols), like the `starwars` data from the {dplyr} package. Let's use the `length()` function again, but in the context of a listcol, to get the characters in the most films.
+
+```{r listcol}
+# Load packages
+suppressPackageStartupMessages(library(dplyr))
+library(purrr)
+
+# map() a listcol within a mutate() call
+starwars %>% 
+  mutate(films_count = map_int(films, length)) %>% 
+  select(name, films, films_count) %>% 
+  arrange(desc(films_count)) %>% head()
+```
+
+Why not just write a loop or use the `*apply` functions? [Jenny Bryan has a good {purrr} tutorial](https://jennybc.github.io/purrr-tutorial/bk01_base-functions.html) that explains why you might consider either choice. Basically, do what you feel; I like the syntax consistency and the ability to predict what function I need based on its name.
+
+Check out the excellent [{purrr} cheatsheet](https://github.com/rstudio/cheatsheets/blob/master/purrr.pdf) for some prompts and excellent visual guidance.
+
+## Honourable mentions
+
+### {blogdown}{#blogdown}
+
+This blog, and I'm sure [many others](https://awesome-blogdown.com/), wouldn't exist without [{blogdown}](https://github.com/rstudio/blogdown/blob/master/README.md) by [Yihui Xie](https://yihui.org/). {blogdown} lets you write and render R Markdown files into blog posts via static site generators like [Hugo](https://gohugo.io/). This is brilliant if you're trying to get R output into a blog post with minimal fuss. [The {blogdown} book](https://bookdown.org/yihui/blogdown/) by Yihui, [Amber Thomas](https://amber.rbind.io/), [Alison Presmanes Hill](https://alison.rbind.io/) is particularly helpful.
+
+### {xaringan}{#xaringan}
+
+[{xaringan}](https://slides.yihui.org/xaringan/#1) is another great package from [Yihui Xie](https://yihui.org/) that lets you turn R Markdown into a slideshow using [remark.js](http://remarkjs.com/). It's very customisable via CSS, to the extent that I was able [to mimic the house style of my organisation](https://www.rostrum.blog/2019/05/24/xaringan-template/) this year. One of my favourite functions[^yolo] is `inf_mr()` (Infinite Moon Reader), which lets you [live-preview your outputs as they're written](https://yihui.org/en/2019/02/ultimate-inf-mr/).
+
+### {polite}{#polite}
+
+Web scraping is ethically dubious if you fail to respect the terms of the sites you're visiting. [Dmytro Perepolkin](https://www.ddrive.no/) has made it easy to be a good citizen of the internet with [the {polite} package](https://dmi3kno.github.io/polite/), which has just hit version 1.0.0 and is on CRAN (congratulations!). First you introduce yourself to the site with a `bow()` and collect any information about limits and no-go pages from [the robots.txt file](http://www.robotstxt.org/robotstxt.html), then you can modify search paths with a `nod()` and collect information from them with a `scrape()`. Very responsible.
+
+### {arsenal}{#arsenal}
+
+I've been using the handy[^arsenal] {arsenal} package to compare data frames as part of a quality assurance process. First, you supply two data frames to `comparedf()` to create a 'compare' object. Run `diffs()` on that object to create a new data frame where each row is a mismatch, given a tolerance, with columns for the location and values that are causing problems. We managed to quality assure nearly a million values with this method in next to no time. [Check out their vignette](https://cran.r-project.org/web/packages/arsenal/vignettes/comparedf.html) on how to do this.
+
+## Bonus!
+
+### {govdown}
+
+Aha, well done for reading this far. As a bonus, I'm calling out [Duncan Garmonsway](https://twitter.com/nacnudus)'s [{govdown} package](https://ukgovdatascience.github.io/govdown/). Duncan grappled with the complexities of things like Pandoc and Lua filters to build a package that applies the accessibility-friendly [GOV.UK design system](https://design-system.service.gov.uk/) to R Markdown. This means you can create things like the [the Reproducible Analaytical Pipelines (RAP) website](https://ukgovdatascience.github.io/rap-website/) in the style of [GOV.UK](https://www.gov.uk/). [Endorsed by Yihui Xie himself](https://twitter.com/nacnudus/status/1186600342072516608)! Check out Duncan's [{tidyxl} and {unpivotr} packages for handling nightmare Excel files](https://nacnudus.github.io/spreadsheet-munging-strategies/) while you're at it.
+
+### Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^yolo]: Along with [`yolo: true`](https://yihui.org/en/2019/03/yolo-karl/), of course.
+[^arsenal]: [Unlike Arsenal FC in 2019](https://www.bbc.co.uk/sport/cricket/50803748), rofl.
