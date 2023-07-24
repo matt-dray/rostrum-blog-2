@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2019-09-12">
+
+<title>rostrum.blog - The Carpentries: teach with live coding</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-black-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">The Carpentries: teach with live coding</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">carpentries</div>
+                <div class="quarto-category">pedagogy</div>
+                <div class="quarto-category">r</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 12, 2019</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#carving-new-coders" id="toc-carving-new-coders" class="nav-link" data-scroll-target="#carving-new-coders">Carving new coders</a></li>
+  <li><a href="#whittling-down-the-complexity" id="toc-whittling-down-the-complexity" class="nav-link" data-scroll-target="#whittling-down-the-complexity">Whittling down the complexity</a></li>
+  <li><a href="#say-what-you-saw" id="toc-say-what-you-saw" class="nav-link" data-scroll-target="#say-what-you-saw">Say what you saw</a>
+  <ul class="collapse">
+  <li><a href="#clamp-down-on-negative-behaviours" id="toc-clamp-down-on-negative-behaviours" class="nav-link" data-scroll-target="#clamp-down-on-negative-behaviours">Clamp down on negative behaviours</a></li>
+  <li><a href="#make-it-plane" id="toc-make-it-plane" class="nav-link" data-scroll-target="#make-it-plane">Make it plane</a></li>
+  </ul></li>
+  <li><a href="#hammer-it-home" id="toc-hammer-it-home" class="nav-link" data-scroll-target="#hammer-it-home">Hammer it home</a>
+  <ul class="collapse">
+  <li><a href="#sanding-the-rough-edges" id="toc-sanding-the-rough-edges" class="nav-link" data-scroll-target="#sanding-the-rough-edges">Sanding the rough edges</a></li>
+  <li><a href="#nailing-it" id="toc-nailing-it" class="nav-link" data-scroll-target="#nailing-it">Nailing it</a></li>
+  </ul></li>
+  <li><a href="#i-axe-one-thing-of-you" id="toc-i-axe-one-thing-of-you" class="nav-link" data-scroll-target="#i-axe-one-thing-of-you">I axe one thing of you</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/apple1.jpg" class="img-fluid figure-img" style="width:100.0%" alt="An early Apple I computer with a wooden chassis."></p>
+<figcaption class="figure-caption">An example of hardware carpentry, lol (Wikimedia Commons, CC BY-SA 2.0).</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I learnt a lot about how to teach live coding by becoming a Carpentries instructor.</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>This post was <a href="https://carpentries.org/blog/2019/09/live-coding-experience/">cross-posted to The Carpentries blog</a> on 30 September 2019.</p>
+</div>
+<p>
+</p></section>
+<section id="carving-new-coders" class="level2">
+<h2 class="anchored" data-anchor-id="carving-new-coders">Carving new coders</h2>
+<p><a href="https://carpentries.org/about/">The Carpentries</a> is a global non-profit initiative to help build foundational skills in coding and data science. For example, <a href="https://software-carpentry.org/">Software Carpentry</a> contains <a href="https://software-carpentry.org/lessons/">lessons about the shell, git, R and Python</a>, while <a href="https://datacarpentry.org/">Data Carpentry</a> and <a href="https://librarycarpentry.org/">Library Carpentry</a> teach more domain-specific knowledge.</p>
+<p>I took part in a two-day remote workshop to learn how to become a badged Carpentries instructor. There was a strong focus on understanding how people learn and how best to teach them to maintain motivation.</p>
+<p>The schedule and materials from the workshop <a href="https://carpentries.github.io/instructor-training/">are available openly online</a>. I encourage you to take a look and <a href="https://carpentries.org/become-instructor/">consider becoming an instructor yourself</a>.</p>
+</section>
+<section id="whittling-down-the-complexity" class="level2">
+<h2 class="anchored" data-anchor-id="whittling-down-the-complexity">Whittling down the complexity</h2>
+<p>I learnt a lot from the part of the workshop about live coding and wanted to share the experience.</p>
+<p>The Carpentries use <a href="https://carpentries.org/workshops/">a specific workshop format</a> with an emphasis on using participatory live coding. This means people follow along with the instructor who is sharing their code on a screen at the front of the room. There are no slideshows to sit through, so no <a href="https://dilbert.com/strip/2010-02-22">‘death by PowerPoint’</a>.</p>
+<p>There are some features of live coding that make it conducive to learning:</p>
+<ul>
+<li>it slows down the pace so all learners can keep up</li>
+<li>instructors must explain what they’re doing with every line, encouraging detailed explanation</li>
+<li>learners become familiarised with running code given the particulars of their machine and software</li>
+<li>it’s beneficial for learners to see the instructor make mistakes and correct them</li>
+</ul>
+<p>I recommend looking at <a href="https://carpentries.github.io/instructor-training/14-live/index.html#top-ten-tips-for-participatory-live-coding-in-a-workshop">The Carpentries top ten tips for participatory live coding</a>, which is a short but excellent resource to make sure people get the most out of your session.</p>
+</section>
+<section id="say-what-you-saw" class="level2">
+<h2 class="anchored" data-anchor-id="say-what-you-saw">Say what you saw</h2>
+<p>You can probably remember a workshop that you enjoyed and learnt a lot from. Maybe you can think of one that didn’t go so well. What was the difference? How can you, as an instructor, engage with participants and motivate learning?</p>
+<p>In <a href="https://carpentries.github.io/instructor-training/14-live/index.html">the ‘live coding is a skill’ lesson</a> we watched two contrasting videos staged by <a href="https://lexnederbragt.com/about">Lex Nederbragt</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> that show an instructor live-coding in front of a class.</p>
+<p>These videos are linked in the sections below. Pay attention to whether they follow the <a href="https://carpentries.github.io/instructor-training/14-live/index.html#top-ten-tips-for-participatory-live-coding-in-a-workshop">top tips for live coding</a> in particular.</p>
+<section id="clamp-down-on-negative-behaviours" class="level3">
+<h3 class="anchored" data-anchor-id="clamp-down-on-negative-behaviours">Clamp down on negative behaviours</h3>
+<p>First, take a look at <a href="https://www.youtube.com/embed/bXxBeNkKmJE">this video of an instructor who has room to improve</a>.</p>
+<div data-align="center">
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/bXxBeNkKmJE" frameborder="0" allowfullscreen=""> </iframe></p>
+</div>
+<p>What did you notice? What would make it difficult for you to engage?</p>
+<p>For example, the instructor didn’t:</p>
+<ul>
+<li>check if everyone could see the small white-on-black text on the screen</li>
+<li>explain each line as it was executed</li>
+<li>turn off notifications on their computer and phone</li>
+<li>notice a participant’s sticky note (which <a href="https://carpentries.github.io/instructor-training/14-live/#sticky-notes">signals that help is needed</a>)</li>
+</ul>
+<p>These are all behaviours that can be improved upon given feedback and reflection.</p>
+</section>
+<section id="make-it-plane" class="level3">
+<h3 class="anchored" data-anchor-id="make-it-plane">Make it plane</h3>
+<p><a href="https://www.youtube.com/embed/SkPmwe_WjeY">The second video</a> demonstrated more positive behaviours.</p>
+<div data-align="center">
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/SkPmwe_WjeY" frameborder="0" allowfullscreen=""> </iframe></p>
+</div>
+<p>For example, the instructor:</p>
+<ul>
+<li>explained each line as it was being typed</li>
+<li>re-sized the shell so people will always see the last-typed line</li>
+<li>physically pointed out things on the projector screen to reinforce what was happening in the code</li>
+<li>made an error, but talked it through</li>
+</ul>
+<p>This time the instructor considered the needs of the audience and kept them engaged.</p>
+</section>
+</section>
+<section id="hammer-it-home" class="level2">
+<h2 class="anchored" data-anchor-id="hammer-it-home">Hammer it home</h2>
+<p>We then did short, three-minute, live-coding demos of Carpentries materials in small groups. We <a href="https://carpentries.github.io/instructor-training/11-practice-teaching/index.html">provided feedback</a> to help each other improve and engage better with learners.</p>
+<p>We ran the demo twice each: <a href="https://carpentries.github.io/instructor-training/14-live/index.html">the first time</a> was relatively cold with little preparation, but for <a href="https://carpentries.github.io/instructor-training/17-performance/index.html">the second attempt</a> we had a chance to react to the feedback and to think about <a href="https://carpentries.github.io/instructor-training/demos_rubric/">the teaching demo assessment rubric</a>.</p>
+<section id="sanding-the-rough-edges" class="level3">
+<h3 class="anchored" data-anchor-id="sanding-the-rough-edges">Sanding the rough edges</h3>
+<p>I chose to do the <a href="http://swcarpentry.github.io/r-novice-gapminder/05-data-structures-part2/index.html">‘exploring data frames’</a> episode of the <a href="http://swcarpentry.github.io/r-novice-gapminder/">R for Reproducible Scientific Research lesson</a> of <a href="https://software-carpentry.org/">Software Carpentry</a>.</p>
+<p>Positive feedback from my first attempt included that I:</p>
+<ul>
+<li>made sure everyone could see what was on my screen and it was at a sufficient zoom level (I had reset RStudio to its defaults because this is what beginners would see)</li>
+<li>gave the learning objectives and recap of the previous session to remind people what we were doing and what we had done already</li>
+<li>executed code line by line at an appropriate speed with clear instructions</li>
+</ul>
+<p>Some points to improve upon where that I:</p>
+<ul>
+<li>didn’t say out loud the keyboard shortcut that I was using to execute the lines</li>
+<li>said that the <code>c()</code> function was for ‘concatenating’ elements into vectors, which is a word that some people may not be familiar with</li>
+<li>used the word ‘simply’ when describing how to do something, a phrase that could undermine a learner’s progress if they aren’t able to complete that task (a case of an ‘expert blind spot’, as <a href="https://carpentries.github.io/instructor-training/03-expertise/#expertise-and-teaching">discussed in the ‘expertise and instruction’ lesson</a> of the workshop)</li>
+</ul>
+</section>
+<section id="nailing-it" class="level3">
+<h3 class="anchored" data-anchor-id="nailing-it">Nailing it</h3>
+<p>I reacted to the feedback to help improve things for my second live-coding demo. For example, I:</p>
+<ul>
+<li>said out-loud every action I was doing, including physical key presses when necessary (e.g.&nbsp;“and run this line with the command and enter shortcut”)</li>
+<li>avoided phrases like ‘simply do this’ and ‘just do that’</li>
+<li>said that the ‘c’ in the <code>c()</code> function means to ‘combine’ rather than to ‘concatenate’<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
+</ul>
+<p>I also did a couple of extra things:</p>
+<ul>
+<li>added three lines of comments at the top of the file to explain the objectives and goals</li>
+<li>pre-loaded an object into the environment (they learnt how to do this in the previous session) to avoid a slightly awkward explanation at the beginning</li>
+<li>expanded my RStudio window so more code be seen at once</li>
+</ul>
+<p>The second attempt was well-received, thanks to feedback and a greater appreciation of the audience’s needs.</p>
+</section>
+</section>
+<section id="i-axe-one-thing-of-you" class="level2">
+<h2 class="anchored" data-anchor-id="i-axe-one-thing-of-you">I axe one thing of you</h2>
+<p>I got a lot out of the workshop and will be continuing <a href="https://carpentries.github.io/instructor-training/checkout/">the checkout process</a> to get badged as a Carpentries instructor.</p>
+<p>Do take a look at <a href="https://carpentries.github.io/instructor-training/">the workshop materials</a>, particularly the <a href="https://carpentries.github.io/instructor-training/14-live/index.html#top-ten-tips-for-participatory-live-coding-in-a-workshop">top ten tips for participatory live coding</a>, and <a href="https://carpentries.org/become-instructor/">consider becoming an instructor yourself</a>.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-24 20:25:27 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
+[13] digest_0.6.33     rlang_1.1.1       fontawesome_0.5.1 evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p><a href="https://lexnederbragt.com/about">Lex Nederbragt</a> is an instructor with <a href="https://zenodo.org/search?page=1&amp;size=20&amp;q=lex%20nederbragt&amp;type=lesson">many contributions to The Carpentries</a>. I also recommend you <a href="https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005510">check out the ‘good enough practices in scientific computing’ paper</a>, of which he is an author.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>To explain: <a href="https://stat.ethz.ch/R-manual/R-patched/library/base/html/c.html">the help page for <code>c()</code></a> actually says ‘combine’ in the title—‘Combine Values into a Vector or List’—but also says that the elements passed to it are ‘the objects to be concatenated’.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
