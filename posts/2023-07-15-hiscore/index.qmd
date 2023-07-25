@@ -142,20 +142,20 @@ How else could this approach be used in an R gaming perspective? You could use t
 Speaking of, here's a cheatcode as a bonus for reading this far:
 
 ```{r cheat}
-cheat <- function(game, score) {
+cheat <- function(game, new_score) {
   user_dir <- tools::R_user_dir("hiscore", "data")
   score_path <- file.path(user_dir, "score_table.rds")
   score_table <- readRDS(score_path)
-  score_game <- score_table[score_table[["game"]] == game, ]
-  score_game[["high_score"]] <- score
+  score_table[score_table[["game"]] == game, "high_score"] <- new_score
   saveRDS(score_table, score_path)
-  message("Congrats! You scored ", score, " at ", game, "!")
 }
 
 cheat("coinflip", 1e100)
+get_save_data()
 ```
 ```
-Congrats! You scored 1e+100 at coinflip!
+      game high_score
+1 coinflip     1e+100
 ```
 
 Heh heh heh.
