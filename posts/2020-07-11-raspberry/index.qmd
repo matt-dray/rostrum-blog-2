@@ -15,6 +15,10 @@ categories:
   - vim
 ---
 
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(eval = FALSE)  # mostly command line, so outputs hardcoded
+```
+
 ![Raspberry Pi 2 Model B (rostrum.blog limited edition)](resources/pi.jpg){fig-alt="My Raspberry Pi 2 Model B housed in a white plastic case with a rostrum.blog sticker on the top." width="NA"}
 
 ## tl;dr
@@ -65,7 +69,7 @@ In each case, we'll be running commands from the Terminal to install what we nee
 
 Before installing things, it's a good idea to run the update command so that [the latest package versions are installed](https://askubuntu.com/questions/222348/what-does-sudo-apt-get-update-do)
 
-```
+```{bash}
 sudo apt-get update
 ```
 
@@ -81,7 +85,7 @@ This is where [Nvim-R](https://github.com/jalvesaq/Nvim-R) comes in. It turns yo
 
 R can be installed from the command line with:
 
-``` 
+``` {bash}
 sudo apt-get install r-base r-base-core r-base-dev
 ```
 
@@ -95,7 +99,7 @@ But what are they, actually? Vim is [a powerful text editor](https://en.wikipedi
 
 I've been using Neovim, which can be installed with:
 
-```
+```{bash}
 sudo apt install neovim
 ```
 
@@ -117,20 +121,20 @@ We can install a plugin manager to help install and manage Nvim-R and other Neov
 
 Having installed Neovim, you can get vim-plug by running this via Terminal:
 
-```
+```{bash}
 sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 ```
 
 You specify your plugins in a special `init.vim` file. Run the following line to create the file and open it in Neovim in the Terminal so you can begin editing:
 
-```
+```{bash}
 nvim ~/.config/nvim/init.vim
 ```
 
 You can then toggle into Neovim's 'insert' mode (press <kbd>i</kbd>) and paste (<kbd>ctrl</kbd> + <kbd>shift</kbd> + <kbd>V</kbd>) this in:
 
-```
+```{bash}
 " Specify a directory for plugins
 " - Avoid using standard Vim directory names like 'plugin'
 call plug#begin('~/.vim/plugged')
@@ -151,7 +155,7 @@ This is a super minimal `init.vim` example. You can add a whole bunch of other p
 
 Enter 'normal' mode (press <kbd>Esc</kbd>) and then type the following and hit <kbd>Enter</kbd>:
 
-```
+```{bash}
 :PluginInstall
 ```
 
@@ -198,7 +202,7 @@ You can install the package (currently v0.20) from CRAN. I found that I had to i
 
 You can run this from Nvim-R or you can run <kbd>R</kbd> to start R from a Terminal window.
 
-```{r install-pkgs, eval=FALSE}
+```{r}
 install.packages(c("httpuv", "blogdown"))
 ```
 
@@ -210,7 +214,7 @@ But we also need two further things that aren't R packages: Pandoc and Hugo.
 
 {blogdown} is based on turning R Markdown files into HTML files to be served as a website. A crucial element of this conversion process is a document converter called [Pandoc](https://pandoc.org/). It can be installed via the Terminal with:
 
-```
+```{bash}
 sudo apt-get install pandoc
 ```
 
@@ -226,13 +230,13 @@ Instead, I used [snapcraft](https://snapcraft.io/), which describes itself as 't
 
 To enable the installation of 'snaps', you first need to run:
 
-```
+```{bash}
 sudo apt install snapd
 ```
 
 After a reboot, [install the Hugo snap](https://snapcraft.io/install/hugo/raspbian):
 
-```
+```{bash}
 sudo snap install hugo
 ```
 

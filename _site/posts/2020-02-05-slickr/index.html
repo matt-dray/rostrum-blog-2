@@ -99,6 +99,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="../../site_libs/fitvids-2.1.1/fitvids.min.js"></script>
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -191,7 +192,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
-  <li><a href="#ride-the-carousel" id="toc-ride-the-carousel" class="nav-link" data-scroll-target="#ride-the-carousel">Ride the carousel</a></li>
+  <li><a href="#merry-go-round" id="toc-merry-go-round" class="nav-link" data-scroll-target="#merry-go-round">Merry-go-round</a></li>
   <li><a href="#pokédemo" id="toc-pokédemo" class="nav-link" data-scroll-target="#pokédemo">PokéDemo</a></li>
   <li><a href="#carousel-mechanics" id="toc-carousel-mechanics" class="nav-link" data-scroll-target="#carousel-mechanics">Carousel mechanics</a>
   <ul class="collapse">
@@ -214,14 +215,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<iframe src="https://matt-dray.github.io/pkmn_slickr/carousel_only" width="100%" height="550" frameborder="0" allowtransparency="true" allow="encrypted-media">
-</iframe>
+<div class="cell">
+<div class="cell-output-display">
+<div class="shareagain" style="min-width:300px;margin:1em auto;" data-exeternal="1">
+<iframe src="https://matt-dray.github.io/pkmn_slickr/carousel_only" width="400" height="300" style="border:FALSE;width=100%" loading="lazy" allowfullscreen=""></iframe>
+<script>fitvids('.shareagain', {players: 'iframe'});</script>
+</div>
+</div>
+</div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>You can make fun little scrolling ‘carousel’ type widgets in R with <a href="https://metrumresearchgroup.github.io/slickR/">the {slickR} package</a>. I’ve made an example that shows Pokemon sprites.</p>
+<p>You can make fun little scrolling ‘carousel’ type widgets in R with <a href="https://metrumresearchgroup.github.io/slickR/">the {slickR} package</a>. I’ve made an example that shows Pokémon sprites (above). Click the small sprites at the bottom to scroll the carousel to that Pokémon’s evolution chain; click the full-size sprites to go to that character’s Bulbapedia page.</p>
 </section>
-<section id="ride-the-carousel" class="level2">
-<h2 class="anchored" data-anchor-id="ride-the-carousel">Ride the carousel</h2>
+<section id="merry-go-round" class="level2">
+<h2 class="anchored" data-anchor-id="merry-go-round">Merry-go-round</h2>
 <p>I was browsing GitHub and the <a href="https://metrumresearchgroup.github.io/slickR/">{slickR}</a> package by <a href="https://yonicd.netlify.com/">Jonathan Sidi</a> was suggested as a repo to explore.</p>
 <p>{slickR} is an <a href="https://www.htmlwidgets.org/">htmlwidget</a> that generates carousels using the <a href="https://kenwheeler.github.io/slick/">Slick JavaScript library</a> by <a href="http://kenwheeler.github.io/">Ken Wheeler</a>.</p>
 <p>You’ve seen carousels before. They’re pretty ubiquitous for scrolling horizontally through images on websites. {slickR} provides a neat way of embedding these in R Markdown documents and Shiny apps. Plus, the elements in the carousel can be basically anything (iframes, plots, etc), not just images.</p>
@@ -258,7 +265,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="synced-sandwich" class="level3">
 <h3 class="anchored" data-anchor-id="synced-sandwich">Synced sandwich</h3>
-<p>I created two more of these {slickR} objects for the back sprite and the Pokemon name and number, with slight differences compared to the code above.</p>
+<p>I created two more of these {slickR} objects for the back sprite and the Pokémon name and number, with slight differences compared to the code above.</p>
 <p>I then sandwiched all three together like this:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>carousel <span class="ot">&lt;-</span></span>
@@ -295,7 +302,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-22 16:15:01 BST</code></pre>
+<pre><code>Last rendered: 2023-07-25 19:28:19 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -316,10 +323,12 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
- [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
-[13] digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
+ [1] htmlwidgets_1.6.2   compiler_4.3.1      fastmap_1.1.1      
+ [4] cli_3.6.1           tools_4.3.1         htmltools_0.5.5    
+ [7] xaringanExtra_0.7.0 rstudioapi_0.15.0   yaml_2.3.7         
+[10] rmarkdown_2.23      knitr_1.43.1        jsonlite_1.8.7     
+[13] xfun_0.39           digest_0.6.33       rlang_1.1.1        
+[16] evaluate_0.21      </code></pre>
 </div>
 </div>
 </details>

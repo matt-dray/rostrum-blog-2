@@ -270,7 +270,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>In each case, we’ll be running commands from the Terminal to install what we need.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <p>Before installing things, it’s a good idea to run the update command so that <a href="https://askubuntu.com/questions/222348/what-does-sudo-apt-get-update-do">the latest package versions are installed</a></p>
-<pre><code>sudo apt-get update</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <section id="ride" class="level3">
 <h3 class="anchored" data-anchor-id="ride">1. Install R and an IDE</h3>
 <p>It’s not too tricky to get hold of R, but what coding environment can we use?</p>
@@ -279,7 +281,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="r" class="level4">
 <h4 class="anchored" data-anchor-id="r">1a. Install R</h4>
 <p>R can be installed from the command line with:</p>
-<pre><code>sudo apt-get install r-base r-base-core r-base-dev</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install r-base r-base-core r-base-dev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>This grabs the latest R version that’s available for the platform, which is 3.5. At time of writing, version 4.0 has been released on other platforms, so we’ll miss out on the latest advancements like <code>stringsAsFactors=FALSE</code> by default, sadly.</p>
 </section>
 <section id="neovim" class="level4">
@@ -287,7 +291,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>A prerequisite for Nvim-R is either <a href="https://www.vim.org/">Vim</a> or <a href="https://neovim.io/">Neovim</a>. Nvim-R is a plugin for these tools.</p>
 <p>But what are they, actually? Vim is <a href="https://en.wikipedia.org/wiki/Vim_(text_editor)">a powerful text editor</a> for the command line and Neovim is <a href="https://en.wikipedia.org/wiki/Vim_(text_editor)#Neovim">effectively a more extensible version of it</a>.</p>
 <p>I’ve been using Neovim, which can be installed with:</p>
-<pre><code>sudo apt install neovim</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install neovim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>At time of writing, this installs version 0.3.4. You can enter Neovim by opening a terminal and running <code>nvim</code>. This puts you into a text editor interface.</p>
 </section>
 <section id="nvimr" class="level4">
@@ -305,27 +311,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h5 class="anchored" data-anchor-id="vim-plug-and-nvim-r">vim-plug and Nvim-R</h5>
 <p>We can install a plugin manager to help install and manage Nvim-R and other Neovim extensions: <a href="https://github.com/junegunn/vim-plug">vim-plug</a> by Junegunn Choi.</p>
 <p>Having installed Neovim, you can get vim-plug by running this via Terminal:</p>
-<pre><code>sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span> <span class="at">-c</span> <span class="st">'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>You specify your plugins in a special <code>init.vim</code> file. Run the following line to create the file and open it in Neovim in the Terminal so you can begin editing:</p>
-<pre><code>nvim ~/.config/nvim/init.vim</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nvim</span> ~/.config/nvim/init.vim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>You can then toggle into Neovim’s ‘insert’ mode (press <kbd>i</kbd>) and paste (<kbd>ctrl</kbd> + <kbd>shift</kbd> + <kbd>V</kbd>) this in:</p>
-<pre><code>" Specify a directory for plugins
-" - Avoid using standard Vim directory names like 'plugin'
-call plug#begin('~/.vim/plugged')
-
-" List of plugins.
-" Make sure you use single quotes
-
-" Shorthand notation
-Plug 'jalvesaq/Nvim-R', {'branch': 'stable'}
-
-" Initialize plugin system
-call plug#end()</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="st">" Specify a directory for plugins</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="st">"</span> <span class="at">-</span> Avoid using standard Vim directory names like <span class="st">'plugin'</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">call</span> plug#begin<span class="er">(</span><span class="st">'~/.vim/plugged'</span><span class="kw">)</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="st">" List of plugins.</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span> Make sure you use single quotes</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="st">" Shorthand notation</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="st">Plug 'jalvesaq/Nvim-R', {'branch': 'stable'}</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="st">"</span> Initialize plugin system</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="ex">call</span> plug#end<span class="er">(</span><span class="kw">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>Where <code>Plug 'jalvesaq/Nvim-R'</code> is the part where <a href="https://vimawesome.com/plugin/nvim-r">the Nvim-R plugin</a> is specified.</p>
 <p>This is a super minimal <code>init.vim</code> example. You can add a whole bunch of other plugins to this list that will allow for things like code autocompletion and themes. You can also add lines to this file to modify various settings within Neovim.</p>
 <p>Enter ‘normal’ mode (press <kbd>Esc</kbd>) and then type the following and hit <kbd>Enter</kbd>:</p>
-<pre><code>:PluginInstall</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">:PluginInstall</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>This triggers the installation of the plugins you specified in the <code>init.vim</code> file. For me, this installed the latest Nvim-R version, 0.9.14.</p>
 <p>I found <a href="https://www.youtube.com/watch?v=nm45WagtV3w">a YouTube video</a> and a <a href="https://gist.github.com/rohitfarmer/68cdadeaeeb196e8a6ecdebdee6e76a5">GitHub gist</a> by <a href="https://rohitfarmer.github.io/">Rohit Farmer</a> really useful for doing these steps. Rohit provides some good examples of additional plugins that will improve your experience of Nvim-R.</p>
 </section>
@@ -374,7 +388,9 @@ call plug#end()</code></pre>
 <section id="pandoc" class="level4">
 <h4 class="anchored" data-anchor-id="pandoc">2b. Install Pandoc</h4>
 <p>{blogdown} is based on turning R Markdown files into HTML files to be served as a website. A crucial element of this conversion process is a document converter called <a href="https://pandoc.org/">Pandoc</a>. It can be installed via the Terminal with:</p>
-<pre><code>sudo apt-get install pandoc</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install pandoc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>This installed version 2.2.1 at time of writing.</p>
 </section>
 <section id="hugo" class="level4">
@@ -383,9 +399,13 @@ call plug#end()</code></pre>
 <p>You can install Hugo from within R with <code>blogdown::install_hugo()</code>, but this failed for me because it tries to install a 64-bit version and Raspberry Pi OS is 32-bit.</p>
 <p>Instead, I used <a href="https://snapcraft.io/">snapcraft</a>, which describes itself as ‘the app store for Linux’. It bundles up everything you need for a given installation, including dependencies. This is great for a noob like me.</p>
 <p>To enable the installation of ‘snaps’, you first need to run:</p>
-<pre><code>sudo apt install snapd</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install snapd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>After a reboot, <a href="https://snapcraft.io/install/hugo/raspbian">install the Hugo snap</a>:</p>
-<pre><code>sudo snap install hugo</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> snap install hugo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>This installed version 0.73.0 for me at time of writing.</p>
 </section>
 </section>
@@ -422,7 +442,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-19 21:31:01 BST</code></pre>
+<pre><code>Last rendered: 2023-07-25 15:18:27 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)

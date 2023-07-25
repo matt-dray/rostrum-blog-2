@@ -11,13 +11,20 @@ categories:
   - videogames
 ---
 
-<iframe src="https://matt-dray.github.io/pkmn_slickr/carousel_only" width="100%" height="550" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+```{r embed-carousel, echo=FALSE, eval=TRUE}
+xaringanExtra::embed_xaringan(
+  "https://matt-dray.github.io/pkmn_slickr/carousel_only",
+  ratio = "4:3",
+  border = FALSE,
+  style = "width=100%"
+)
+```
 
 ## tl;dr
 
-You can make fun little scrolling 'carousel' type widgets in R with [the {slickR} package](https://metrumresearchgroup.github.io/slickR/). I've made an example that shows Pokemon sprites.
+You can make fun little scrolling 'carousel' type widgets in R with [the {slickR} package](https://metrumresearchgroup.github.io/slickR/). I've made an example that shows Pokémon sprites (above). Click the small sprites at the bottom to scroll the carousel to that Pokémon's evolution chain; click the full-size sprites to go to that character's Bulbapedia page. 
 
-## Ride the carousel
+## Merry-go-round
 
 I was browsing GitHub and the [{slickR}](https://metrumresearchgroup.github.io/slickR/) package by [Jonathan Sidi](https://yonicd.netlify.com/) was suggested as a repo to explore.
 
@@ -67,7 +74,7 @@ You can then tweak the look and behaviour by adding `settings()` with a `+` (lik
 
 ### Synced sandwich
 
-I created two more of these {slickR} objects for the back sprite and the Pokemon name and number, with slight differences compared to the code above.
+I created two more of these {slickR} objects for the back sprite and the Pokémon name and number, with slight differences compared to the code above.
 
 I then sandwiched all three together like this:
 

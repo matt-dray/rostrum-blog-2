@@ -23,9 +23,7 @@ Reproducibility is an important part of any data analysis. Will people be able t
 
 R has lots of solutions for making your analysis reproducible, but one thing that gets overlooked is the reproducibility of the workflow itself. In other words, the interdependencies between functions, file and objects and the order in which they run.
 
-<div class="figure">
-<img src="resources/targets-hex.png" alt="The hexagon logo for the targets package, which shows images of a folder, histogram and bar chart joined consecutively by arrows." width="30%"/>
-</div>
+![](resources/targets-hex.png){fig-alt="The hexagon logo for the targets package, which shows images of a folder, histogram and bar chart joined consecutively by arrows." width="30%" fig-align="left"}
 
 The R package {targets} ‘remembers’ these relationships. In short, {targets} makes sure that only the impacted objects are re-run when you update your analysis. This means you don’t have to recreate everything from scratch each time.
 
@@ -54,7 +52,8 @@ The slides[^xaringan] are embedded below. The presentation considers the need fo
 ```{r slides, echo=FALSE}
 xaringanExtra::embed_xaringan(
   "https://matt-dray.github.io/targets-dsfest/",
-  ratio = "4:3"
+  ratio = "4:3",
+  border = FALSE
 )
 ```
 
