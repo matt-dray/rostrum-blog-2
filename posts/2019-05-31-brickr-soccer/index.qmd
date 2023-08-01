@@ -1,0 +1,260 @@
+---
+title: Make a {brickr} soccer player
+date: 2019-05-31
+slug: brickr-soccer
+categories:
+  - brickr
+  - dataviz
+  - r
+  - sports
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(kableExtra)
+```
+
+## tl;dr 
+
+You can create 3D Lego models with [{brickr}](https://github.com/ryantimpe/brickr). I made some models of soccer players.
+
+## Virtual Lego
+
+[{brickr}](https://github.com/ryantimpe/brickr) is a fun package by [Ryan Timpe](http://www.ryantimpe.com/) that lets you build 2D mosaics and 3D models with Lego-like virtual bricks,[^timpe] with a little help from [Tyler Morgan Wall](https://www.tylermw.com/)'s [{rayshader}](https://github.com/tylermorganwall/rayshader) package.
+
+You can get started with the [brickr toybox](https://github.com/ryantimpe/brickr_toybox), which lets you arrange bricks in a spreadsheet that {brickr} can turn into a 3D model.
+
+![From Ryan's [original tweet](https://twitter.com/ryantimpe/status/1116042824657641474?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1116042824657641474%7Ctwgr%5E368635df2dac383ab9cd082ca6295947c25a096a%7Ctwcon%5Es1_&ref_url=https%3A%2F%2Fwww.rostrum.blog%2F2019%2F05%2F31%2Fbrickr-soccer%2F).](resources/toybox.jpg){fig-alt="A mocked-up box cover for a Lego set called 'brickr starter kit'. Text reads 'Excel template for designing models in R with brickr' and 'lay out the models in the spreadsheet and import into R using brickr.' The side panel says '4 sets, 2 templates, 1 how-to, infinite bricks'." width="100%"}
+
+## Kick-off
+
+First, we install {brickr} from GitHub.[^cran]
+
+```{r install, eval=FALSE}
+remotes::install_github("ryantimpe/brickr")
+```
+
+And attach it along with some tidyverse packages.
+
+```{r attach}
+suppressPackageStartupMessages({
+  library(brickr)
+  library(dplyr)
+  library(tibble)
+})
+```
+
+I've written a function called `create_brickr_player()` that lets you build a soccer player and select the brick colours for the shirt, socks, and much more. It lets you create the same model but change the brick colours with minimum fuss.
+
+The function is simple. It helps you create a data frame that specifies the location and colour of individual bricks on successive 2D planes to build up a 3D model.
+
+This data frame is a plan that can be interpreted by {brickr} and transformed into a special list that can be rendered in 3D space.
+
+<details><summary>Click for the function definition.</summary>
+
+Note that the arguments must all be numeric codes as per `brickr::lego_colors()`.
+
+```{r fn}
+create_brickr_player <- function(
+  hair_col = 34,
+  skin_col = 5,
+  boot_col = 6,
+  shirt_body_col = 3,
+  shirt_sleeve_col = 1,
+  shorts_col = 1,
+  sock_col = 3,
+  sock_trim_col = 1
+){
+
+  tibble::tribble(
+
+    ~"Level", ~`1`, ~`2`, ~`3`, ~`4`, ~`5`,
+
+    "A", 0, 0, 0, 0, 0,
+    "A", 0, boot_col, 0, boot_col, 0,
+    "A", 0, boot_col, 0, boot_col,0,
+
+    "B", 0, 0, 0, 0, 0,
+    "B", 0, sock_col, 0, sock_col, 0,
+    "B", 0, 0, 0, 0, 0,
+
+    "C", 0, 0, 0, 0, 0,
+    "C", 0, sock_trim_col, 0, sock_trim_col, 0,
+    "C", 0, 0, 0, 0, 0,
+
+    "D", 0, 0, 0, 0, 0,
+    "D", 0, skin_col, 0, skin_col, 0,
+    "D", 0, 0, 0, 0, 0,
+
+    "E", 0, shorts_col, 0, shorts_col, 0,
+    "E", 0, shorts_col, 0, shorts_col, 0,
+    "E", 0, shorts_col, 0, shorts_col, 0,
+
+    "F", 0, shorts_col, shorts_col, shorts_col, 0,
+    "F", 0, shorts_col, shorts_col, shorts_col, 0,
+    "F", 0, shorts_col, shorts_col, shorts_col, 0,
+
+    "G", 0, shirt_body_col, shirt_body_col, shirt_body_col, 0,
+    "G", skin_col, shirt_body_col, shirt_body_col, shirt_body_col, skin_col,
+    "G", 0, shirt_body_col, shirt_body_col, shirt_body_col, 0,
+
+    "H", 0, shirt_body_col, shirt_body_col, shirt_body_col, 0,
+    "H", skin_col, shirt_body_col, shirt_body_col, shirt_body_col, skin_col,
+    "H", 0, shirt_body_col, shirt_body_col, shirt_body_col, 0,
+
+    "I", 0, shirt_body_col, shirt_body_col, shirt_body_col, 0,
+    "I", skin_col, shirt_body_col, shirt_body_col, shirt_body_col, skin_col,
+    "I", 0, shirt_body_col, shirt_body_col, shirt_body_col, 0,
+
+    "J", 0, shirt_body_col, shirt_body_col, shirt_body_col, 0,
+    "J", shirt_sleeve_col, shirt_body_col, shirt_body_col, shirt_body_col, shirt_sleeve_col,
+    "J", 0, shirt_body_col, shirt_body_col, shirt_body_col, 0,
+
+    "K", 0, shirt_body_col, shirt_body_col, shirt_body_col, 0,
+    "K", shirt_sleeve_col, shirt_sleeve_col, shirt_body_col, shirt_sleeve_col, shirt_sleeve_col,
+    "K", 0, shirt_body_col, shirt_body_col, shirt_body_col, 0,
+
+    "L", 0, 0, 0, 0, 0,
+    "L", 0, 0, skin_col, 0, 0,
+    "L", 0, 0, 0, 0, 0,
+
+    "M", 0, skin_col, skin_col, skin_col, 0,
+    "M", 0, skin_col, skin_col, skin_col, 0,
+    "M", 0, skin_col, skin_col, skin_col, 0,
+
+    "N", 0, hair_col, hair_col, hair_col, 0,
+    "N", 0, hair_col, skin_col, hair_col, 0,
+    "N", 0, skin_col, skin_col, skin_col, 0,
+
+    "O", 0, hair_col, hair_col, hair_col, 0,
+    "O", 0, hair_col, hair_col, hair_col, 0,
+    "O", 0, hair_col, hair_col, hair_col, 0
+  )
+
+}
+```
+</details>
+
+Here's what happens when you use the function with default arguments. 
+
+```{r plan}
+player_plan <- create_brickr_player()
+player_plan  # preview the object
+```
+
+Each layer of bricks gets a separate value in the `Level` column. The x-dimension is represented by the rows of the data frame and the y-dimension by the numbered columns.
+
+Every non-zero number represents a brick and each value represents a different colour. For example, layer A has dimensions of 3 x 5 where 4 spots will be filled with a brick. Each of these has the value '2', which encodes the colour black. Layer B, meanwhile, has a couple of bricks with value '7', which is bright red.
+
+How do you know which numbers encode which colours? You can access the codes from the `lego_colors` data frame in the {brickr} package.
+
+```{r select}
+select(lego_colors, brickrID, Color, hex)  # colour codes
+```
+
+<details><summary>Click for full brick colour codes.</summary>
+```{r colour-codes}
+lego_colors %>% 
+  mutate(
+    hex = cell_spec(
+      hex, 
+      "html", 
+      background = factor(brickrID, lego_colors$brickrID, lego_colors$hex)
+    )
+  ) %>% 
+  select(`Colour ID` = brickrID, Colour = Color, `Hex code` = hex) %>% 
+  kable(format = "html", escape = FALSE) %>%
+  kable_styling("striped", full_width = TRUE)
+```
+</details>
+
+So '1' is white, '2' is black and so on. I think Timpe selected this set of colours to match the colours available from Lego sets. 
+
+### Boring, boring Arsenal
+
+To actually build the model, pass the data frame to a couple of {brickr} functions.
+
+The first is `bricks_from_table()` that converts the data frame to a list containing several elements that define the required bricks and colours. 
+
+```{r bricks-from-table}
+# Convert plan to list with brick types and colours
+player_bricks <- player_plan %>%
+  bricks_from_table()
+
+names(player_bricks)  # see the element names
+```
+
+As a side note, you can use `display_pieces()` to find out the set of pieces you'll need to recreate the model in real life!
+
+```{r display-pieces}
+build_pieces(player_bricks)
+```
+
+Pass the list object to the `display_bricks()` function to get the plan rendered into 3D. This opens a new device window and the model will be built up layer by layer. When complete, you can use your mouse to click and drag the object to look at at from all directions.
+
+```{r display-brickes, eval=FALSE}
+build_bricks(player_bricks)  # opens separate window
+```
+
+<img src="resources/arsenal.gif" alt="A gif of a 3D Lego model of an Arsenal soccer player built with the create_bricker_player function.">
+
+So the default set builds up to make a player that has red socks with white trim, white shorts, and a red shirt with white sleeves. An Arsenal player, of course.[^arsenal]
+
+### Show your support
+
+To change the colour of the player's shirt you just need to change all the bricks associated with the shirt. This could be tedious by hand, so `create_brickr_player()` has an argument to do exactly this. Set `shirt_body_col` to '6' to make it bright blue, for example.
+
+You can change more than the shirt colour. Here's the current set of arguments:
+
+* `shirt_body_col` and `shirt_sleeve_col`
+* `shorts_col`
+* `sock_col` and `sock_trim_col`
+* `boot_col`
+* `hair_col` and `skin_col`
+
+So you could create a Manchester City player with the following:
+
+```{r city, eval=FALSE}
+# Build player plan with certain colours
+man_city <- create_brickr_player(
+  hair_col = 6,           # Black
+  skin_col = 34,          # Dark brown
+  boot_col = 3,           # Bright red
+  shirt_body_col = 30,    # Light royal blue
+  shirt_sleeve_col = 30,  # Light royal blue
+  shorts_col = 1,         # White
+  sock_col = 16,          # Earth blue
+  sock_trim_col = 16      # Earth blue
+)
+
+# Convert plan to list and render it
+man_city %>%
+  bricks_from_table() %>%
+  display_bricks()
+```
+
+<img src="resources/raheem.gif" alt="A gif of a 3D Lego model of a Manchester City soccer player built with the create_bricker_player function.">
+
+In fact, this is a faithful rendering of the 2019 Premier League winner, FA Cup winner, League Cup winner, PFA Team of the Year inductee, PFA Young Player of the Year and FWA Footballer of the Year [Raheem Sterling](https://en.wikipedia.org/wiki/Raheem_Sterling). Obviously.
+
+I've added a couple more to [a GitHub Gist](https://gist.github.com/matt-dray/b075e1f2cb5da93a656b6e6e70990c44). Feel free to add more.
+
+## Extra-time
+
+Hopefully this is useful for anyone who wants to create the same {brickr} model in multiple colours. I realise that might be a niche audience.
+
+The obvious next step would be to allow for features of the plan to change. For example, you could set an argument for `player_height` and add or remove layers from the plan to make the final model taller or shorter. Or maybe different shirt types could be specified, like `horizontal_stripe = TRUE`.
+
+Pull requests always welcome!
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^timpe]: Not an official product (yet).
+[^arsenal]: Why Arsenal? Mostly to demonstrate that sleeves can be a different colour to the shirt body, but also because [they just got binned 4-1 by Chelsea in the Europa League final](https://en.wikipedia.org/wiki/2019_UEFA_Europa_League_Final) and I feel sorry for them. 
+[^cran]: The package was on CRAN when this post was originally written, but it was later removed.

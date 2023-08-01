@@ -10,7 +10,203 @@
 <atom:link href="https://whimsical-wisp-30974e.netlify.app/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.4.176</generator>
-<lastBuildDate>Fri, 14 Jul 2023 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 31 Jul 2023 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>One weird trick to {monetize} your R package</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://whimsical-wisp-30974e.netlify.app/posts/2023-08-01-monetize/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2023-08-01-monetize/resources/monetize-hats.png" class="img-fluid figure-img" style="width:40.0%" alt="Three green dollar symbols in Comic Sans, each with an emoji hat on."></p>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p><a href="https://github.com/matt-dray/monetize">The {monetize} R package</a> gives you inspiration for monetising your R package. Developers rise up!</p>
+</section>
+<section id="free-as-in-free" class="level2">
+<h2 class="anchored" data-anchor-id="free-as-in-free">Free as in free</h2>
+<p>There’s one good reason why SAS, SPSS and Stata<sup>1</sup> are such successful and beloved statistical tools: money.</p>
+<p>For some reason, R remains free and open source. But what if <a href="https://en.wikipedia.org/wiki/R_(programming_language)">Ihaka &amp; Gentleman</a> originally wanted users to be charged a literal (New Zealand) dollar<sup>2</sup> every time they use the <code>$</code> symbol to access an element from an object? I’m just asking the question!</p>
+<p>Us package developers should seize the initiative and harvest the sweet, sweet bounty of our labour. But how? I will tell you the secret!</p>
+</section>
+<section id="free-as-in-not-quite" class="level2">
+<h2 class="anchored" data-anchor-id="free-as-in-not-quite">Free as in not quite</h2>
+<p>Introducing the {monetize} R package! It will provide the inspiration you seek. Serious entrepreneurs can <a href="https://github.com/matt-dray/monetize">install from GitHub</a><sup>3</sup>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"remotes"</span>)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># if not yet installed</span></span>
+<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"matt-dray/monetize"</span>)</span>
+<span id="cb1-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(monetize)</span></code></pre></div>
+</div>
+<pre><code>Welcome to the monetize(TM) package FREE TRIAL version!
+Try our EXCLUSIVE add_one() function!
+Try watch_ad() to gain MEGA COINS and increase your MEMBER LEVEL for REWARDS!
+And now a quick message from our sponsor:
+  🧃 IMBIBE ACME(TM)-BRAND FRUIT PULP (7% FEWER INSECT COMPONENTS)! 🪳</code></pre>
+<p>The package contains the exclusive <code>add_one()</code> function, which surprisingly doesn’t come pre-installed with base R. A gap in the market!</p>
+<p>Users should speculate to accumulate, so there’s a small cost to use the function. In {monetize}, each use of a function costs 1 MEGA COIN.</p>
+<p>Because I am so kind, I have chosen for users to receive a 30-day FREE TRIAL of the package and to receive 3 MEGA COINS as an exclusive NEW-MEMBER PERK.</p>
+<p>One use of the function costs the low, low price of 1 MEGA COIN. Merely a small payment, or ‘micro transaction’, if you will.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_one</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span></code></pre></div>
+</div>
+<pre><code>📅 You have 30 days left of your FREE TRIAL!
+🏅 Your MEMBER LEVEL is 1! Try watch_ad()!
+💰 Your MEGA COIN balance is now 2! Try watch_ad()!
+[1] 2</code></pre>
+<p>Along with the result, the function helpfully prints the number of days left in your FREE TRIAL, your MEMBER LEVEL and the number of MEGA COINS you have left.</p>
+<p>What’s a MEMBER LEVEL? Well, at MEMBER LEVEL 1, the function can’t guarantee a correct result. 20% of the time there’ll be an off-by-one error. But R users index from 1 anyway, so they’ll be used to that.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_one</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span></code></pre></div>
+</div>
+<pre><code>📅 You have 30 days left of your FREE TRIAL!
+🏅 Your MEMBER LEVEL is 1! Try watch_ad()!
+💰 Your MEGA COIN balance is now 1! Try watch_ad()!
+[1] 3</code></pre>
+<p>How can you get the correct result 100% of the time? That’s an exclusive for MEMBER LEVEL 2. How do you reach MEMBER LEVEL 2? What happens if you run out of MEGA COINS?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_one</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span></code></pre></div>
+</div>
+<pre><code>📅 You have 30 days left of your FREE TRIAL!
+🏅 Your MEMBER LEVEL is 1! Try watch_ad()!
+Error: 😭 You'll need more MEGA COINS to re-use this function! Try watch_ad()!</code></pre>
+<p>Answer: simply watch some ads! I’ve managed to get an ad deal with the famous <a href="https://en.wikipedia.org/wiki/Acme_Corporation">Acme(TM) Corporation</a>. Maybe you could get a sponsorship deal from a third-party whose interests align with your users’ interests; maybe SAS, SPSS or Stata would be interested?</p>
+<p>Anyway, the user can just <code>watch_ad()</code> in exchange for MEGA COINS: I’ve allowed the user to employ their FREE WILL to watch a <code>"short"</code> ad for 1 MEGA COIN or a <code>"long"</code> ad for 3 MEGA COINS.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">watch_ad</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"short"</span>)</span></code></pre></div>
+</div>
+<pre><code>🌭 CONSUME ACME(TM)-BRAND RECONSTITUTED MEAT-LIKE CYLINDERS! 🐕
+🌭 CONSUME ACME(TM)-BRAND RECONSTITUTED MEAT-LIKE CYLINDERS! 🐕
+🌭 CONSUME ACME(TM)-BRAND RECONSTITUTED MEAT-LIKE CYLINDERS! 🐕
+🌭 CONSUME ACME(TM)-BRAND RECONSTITUTED MEAT-LIKE CYLINDERS! 🐕
+🌭 CONSUME ACME(TM)-BRAND RECONSTITUTED MEAT-LIKE CYLINDERS! 🐕
+Congratulations! Your new MEGA COIN total is 1!</code></pre>
+<p>Reach MEMBER LEVEL 2 after gaining 10 all-time MEGA COINS and MEMBER LEVEL 3 after 20 MEGA COINS.</p>
+<p>What’s the exclusive MEMBER LEVEL 3? Well, you get the perk of an actually-correct answer like in MEMBER LEVEL 2… plus the value gets a randomised FREE HAT!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_one</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span></code></pre></div>
+</div>
+<pre><code>📅 You have 30 days left of your FREE TRIAL!
+🏅 Your MEMBER LEVEL is 3! Try watch_ad()!
+💰 Your MEGA COIN balance is now 19! Try watch_ad()!
+🎩 
+ 2 </code></pre>
+<p>What a tease! Oh, and the stats are persistent, so your users can’t refresh their session and wipe the slate clean. Watch the cash roll in!</p>
+</section>
+<section id="free-as-in-absolutely-not" class="level2">
+<h2 class="anchored" data-anchor-id="free-as-in-absolutely-not">Free as in absolutely not</h2>
+<p>I hope this has been an inspirational eye-opener for you and that one day you can be as rich as me. Oh, you didn’t know I was rich? How else could I afford to keep this absolute juggernaut of a blog going?</p>
+<p>To demonstrate how little I personally need them, here are some more ideas to maximise your financial rewards via R. You could try:</p>
+<ul>
+<li>releasing version updates as paid add-ons, like <a href="https://en.wikipedia.org/wiki/Downloadable_content">videogame DLC</a> (you could also make them take several hours to download, like videogame DLC, which would definitely heighten the tension)</li>
+<li><a href="https://en.wikipedia.org/wiki/Loot_box#Criticism">loot boxes</a> to allow users to gamble—I mean, test their precognitive skills—for new functionality (<code>add_two()</code> could be a common drop, while <code>multiply_by_two()</code> is ultra rare)</li>
+<li>using certified financial guru <a href="https://github.com/nacnudus/ggbillboard">Duncan Garmonsway’s {ggbillboard} package</a> (‘use vacant ggplot2 facets for advertising’)</li>
+</ul>
+<p>You are welcome. Don’t read the small print for nerds.</p>
+<details>
+<summary>
+Small print for nerds.
+</summary>
+It’s a simple trick: up-to-date stats are stored on the user’s computer in the directory resolved by <code>tools::R_user_dir("monetize", "data")</code><sup>4</sup> and are updated each time you use the functions in the package. Easy to circumvent… if you know how.
+</details>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-08-01 11:37:35 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] monetize_0.0.0.9000
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
+[13] digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Curious why they all start with ‘S’? It’s in deference to ‘R’, which comes first in the alphabet and in being really cool.↩︎</p></li>
+<li id="fn2"><p>Did you also know that the use of the New Zealand dollar is part of <a href="htpps://rostrum.blog/2021/07/15/dollar-dollar">a wider conspiracy</a>? The sheep dip goes deep on this one.↩︎</p></li>
+<li id="fn3"><p>Don’t.↩︎</p></li>
+<li id="fn4"><p>I consider this my hattrick of posts on <code>R_user_dir()</code>. I wrote about it as a way to <a href="https://rostrum.blog2023/02/02/trapinch">cache data from the PokéAPI in {trapinch}</a> and <a href="https://rostrum.blog/2022/11/13/tamrgo">store cyber pet blueprints in {tamRgo}</a>, the latter of which led to a post on <a href="https://rostrum.blog/2023/07/15/hiscore">saving high-score data with {hiscore}</a>.↩︎</p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>monetize</category>
+  <category>r</category>
+  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-08-01-monetize/index.html</guid>
+  <pubDate>Mon, 31 Jul 2023 23:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Save high scores for your R game</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -7532,362 +7728,6 @@ loaded via a namespace (and not attached):
   <category>videogames</category>
   <guid>https://whimsical-wisp-30974e.netlify.app/posts/2022-12-11-pixeltrix-animate/index.html</guid>
   <pubDate>Sun, 11 Dec 2022 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Tamagotchi in R?</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://whimsical-wisp-30974e.netlify.app/posts/2022-11-13-tamRgo/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="quarto-figure quarto-figure-left">
-<figure class="figure">
-<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-11-13-tamRgo/resources/tamRgo_hex.png" class="img-fluid figure-img" style="width:33.0%" alt="Six pixellated characters showing a progression from a small blob creature, through to a larger hat-wearing creature, through to a tombstone."></p>
-<figcaption class="figure-caption">Development of a {tamRgo} digital pet.</figcaption>
-</figure>
-</div>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I’ve written <a href="https://github.com/matt-dray/tamRgo">the concept R package {tamRgo}</a> to simulate a persistent digital pet in your R console, lol.</p>
-</section>
-<section id="had-an-oeuf" class="level2">
-<h2 class="anchored" data-anchor-id="had-an-oeuf">Had an oeuf?</h2>
-<p>R is a game engine<sup>1</sup>. Don’t @ me<sup>2</sup>.</p>
-<p><a href="https://r-pkgs.org/data.html#sec-data-persistent">Turns out that R can keep a ‘save state’</a>: developers can write a persistent file to the platform-independent path on a user’s machine resolved by <a href="https://rdrr.io/r/tools/userdir.html"><code>tools::R_user_dir()</code></a><sup>3</sup>.</p>
-<p>Of course, I’ve used this to make a concept R package. <a href="https://github.com/matt-dray/tamRgo">{tamRgo}</a> saves locally a ‘blueprint’ for a <a href="https://en.wikipedia.org/wiki/Tamagotchi"><em>Tamgotchi</em></a>-like digital pet<sup>4</sup>, which is read and updated when you interact with it in the R console.</p>
-<p><em>Tamago</em> (egg) + <em>uotchi</em> (‘watch’) = <em>Tamagotchi</em>. <em>Tamago</em> + R = {tamRgo}.</p>
-</section>
-<section id="nuovo-uovo" class="level2">
-<h2 class="anchored" data-anchor-id="nuovo-uovo">Nuovo uovo</h2>
-<section id="install" class="level3">
-<h3 class="anchored" data-anchor-id="install">Install</h3>
-<p>Use {remotes} to install the package <a href="https://github.com/matt-dray/tamRgo">from GitHub</a>. There’s also <a href="https://matt-dray.github.io/tamRgo/">an accompanying documentation website</a>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># install.packages("tamRgo")  # if not yet installed</span></span>
-<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"matt-dray/tamRgo"</span>)</span>
-<span id="cb1-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(tamRgo)</span></code></pre></div>
-</div>
-<pre><code>Welcome to {tamRgo}, a digital pet in the R console!
- - Docs: &lt;https://matt-dray.github.io/tamRgo&gt;
- - New pet: lay_egg()
- - Then: get_stats(), see_pet(), play(), feed(), clean()</code></pre>
-<p>It has no package dependencies, but you’ll need to be running a version of R greater than 4.0.</p>
-<p>Of course, it’s just a toy to demonstrate a concept. I’ve built out a bit of a ‘game loop’, but it’s just for fun and the code is not optimised. Bugs guaranteed, so <a href="https://github.com/matt-dray/tamRgo/issues">suggestions and code contributions are always welcome</a>.</p>
-</section>
-<section id="new-pet" class="level3">
-<h3 class="anchored" data-anchor-id="new-pet">New pet</h3>
-<p>To begin, you’ll need to generate you new cyberpet<sup>5</sup> by laying an egg. You’ll be asked to confirm it’s okay to save a blueprint file onto your computer, which is just a small list object stored as an RDS file.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">lay_egg</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">pet_name =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"KEVIN"</span>)</span></code></pre></div>
-</div>
-<pre><code>Save pet blueprint? y/n: y
-Saved pet blueprint.
-You have a new egg... it hatched!
-You can get_stats(), see_pet(), play(), feed(), clean().</code></pre>
-<p>The blueprint will be saved at the location resolved by <code>tools::R_user_dir("tamRgo", "data")</code>. You can always <code>release()</code> your pet into the wild, which will delete the blueprint file.</p>
-<p>So, you have a new pet. Now what? The hint suggests to check the stats, so let’s do that.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">get_stats</span>()</span></code></pre></div>
-</div>
-<pre><code>Characteristics
- Name:    KEVIN
- Species: Z
- Age:     0
- Level:   0 (newborn)
- Alive:   TRUE
-Status
- Happy:   ■■■□□  
- Hungry:  ■■■□□  
- Dirty:   □□□□□  </code></pre>
-<p>You can see some characteristics: the name you provided, the pet’s species (X, Y or Z) and their age (days since ‘birth’). You can see the pet’s level (whatever that means) and whether they are currently alive. There’s also status values, which are followed by five-point gauges, some of which are filled.</p>
-<p>Let’s quickly check what our pet looks like with <code>see_pet()</code>. Its appearance depends on the species and the level; newborns are pretty much a blob, but your pet will grow and develop as it levels.</p>
-<p>The rendering of the sprite, which is built with <a href="https://en.wikipedia.org/wiki/Block_Elements">unicode block elements</a>, will depend on the settings in your console. Your browser may also bork the the sprites as they appear in this post. See the package’s hex logo at the top of the page to get truer examples of the intended designs.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">see_pet</span>()</span></code></pre></div>
-</div>
-<pre><code>░░░░░░░
-░░███░░
-░█░█░█░
-░█████░
-░██░██░
-░░███░░
-░░░░░░░</code></pre>
-<p>Congratulations! KEVIN is a beautiful little chap.</p>
-</section>
-<section id="feed" class="level3">
-<h3 class="anchored" data-anchor-id="feed">Feed</h3>
-<p>Having just been born, KEVIN is a bit peckish. You can tell because the ‘Hungry’ gauge is partially filled. Let’s lower the value by using <code>feed()</code>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">feed</span>()</span></code></pre></div>
-</div>
-<pre><code>'Hungry' status value is now 2/5</code></pre>
-<p>See how the ‘Hungry’ counter decreased by 1 to 2?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">get_stats</span>()</span></code></pre></div>
-</div>
-<pre><code>Characteristics
-  Name:    KEVIN
-  Species: Z
-  Age:     0
-  Level:   0 (newborn)
-  Alive:   TRUE
-Status
-  Happy:   ■■■□□  
-  Hungry:  ■■□□□  
-  Dirty:   □□□□□  </code></pre>
-</section>
-<section id="play" class="level3">
-<h3 class="anchored" data-anchor-id="play">Play</h3>
-<p>You can increase the ‘Happy’ value, which is currently 0, with <code>play()</code>. This begins a game of ‘higher or lower’ with user input. Yes, it’s not much of a skill-based game, but there’s a rumour that it’s easier under some circumstances and that a higher score is better for your pet’s wellbeing.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">play</span>()</span></code></pre></div>
-</div>
-<pre><code>Higher or lower than 4? Type h or l: h
-Wrong! It was 1. Score: 0/5.
-Higher or lower than 1? Type h or l: h
-Correct! It was 8. Score: 1/5.
-Higher or lower than 4? Type h or l: h
-Correct! It was 6. Score: 2/5.
-Higher or lower than 6? Type h or l: l
-Correct! It was 5. Score: 3/5.
-Higher or lower than 7? Type h or l: l
-Wrong! It was 10. Score: 3/5.
-Result: you scored 3/5!
-'Happy' status value is now 4/5</code></pre>
-</section>
-<section id="clean" class="level3">
-<h3 class="anchored" data-anchor-id="clean">Clean</h3>
-<p>After some time, your pet will become ‘dirty’, represented by a small pile of filth underneath their sprite.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">see_pet</span>()</span></code></pre></div>
-</div>
-<pre><code>░░░░░░░
-░░███░░
-░█░█░█░
-░█████░
-░██░██░
-░░███░░
-░░░░░░░
-░░░░░░░
-░░░█░░░
-░░███░░  
-░█████░ 
-░░░░░░░</code></pre>
-<p>Which is almost as big as KEVIN himself, wow. You’ll just need to <code>clean()</code> it away.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">clean</span>()</span></code></pre></div>
-</div>
-<pre><code>'Dirty' status value is now 0/5</code></pre>
-</section>
-<section id="persistence" class="level3">
-<h3 class="anchored" data-anchor-id="persistence">Persistence</h3>
-<p>Perhaps the most important thing to know is that you can end your R session and come back later and your pet will still be available. In fact, it will continue to live and grow on your computer while you’re away.</p>
-<p>Maybe you come back five days later. Here’s what you might see if you check your pet’s stats from any R session on your computer.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">get_stats</span>()</span></code></pre></div>
-</div>
-<pre><code>Characteristics
-  Name:    KEVIN
-  Species: Z
-  Age:     5
-  Level:   2 (youngling)
-  Alive:   TRUE
-Status
-  Happy:   □□□□□ !
-  Hungry:  ■■■■■ !
-  Dirty:   ■■■■■ !</code></pre>
-<p>Aha, so KEVIN’s age and level have increased since you’ve been away, even though you haven’t interacted with him for a while. But uh-oh, looks like his status values are at their worst.</p>
-<p>Pay attention to these status values. Look after your pet! Apparently there’s a chance it might become… ‘unalive’. Rumour has it that good owners have longer-living pets…</p>
-<p>Anyway, let’s quickly check KEVIN’s appearance now he’s level 2.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">see_pet</span>()</span></code></pre></div>
-</div>
-<pre><code>░░░░░░░░░░
-░░█░░░░█░░
-░░░█░░█░░░
-░░██████░░
-░░█░██░█░░
-░░██████░░
-░███░░███░
-░░██████░░
-░░█░░░░█░░
-░░░░░░░░░░
-░░░░░░░
-░░░█░░░
-░░███░░  
-░█████░ 
-░░░░░░░
-░░░░░░░
-░░░█░░░
-░░███░░  
-░█████░ 
-░░░░░░░
-░░░░░░░
-░░░█░░░
-░░███░░  
-░█████░ 
-░░░░░░░
-░░░░░░░
-░░░█░░░
-░░███░░  
-░█████░ 
-░░░░░░░
-░░░░░░░
-░░░█░░░
-░░███░░  
-░█████░ 
-░░░░░░░</code></pre>
-<p>Erm, well, cool antennae, bro. Totally distracts from the mess. Might need to <code>clean()</code> him.</p>
-</section>
-</section>
-<section id="under-the-shell" class="level2">
-<h2 class="anchored" data-anchor-id="under-the-shell">Under the shell</h2>
-<p>The underlying logic is pretty simple. I don’t want to give away too many spoilers, but it’s worth explaining some of the main components a bit.</p>
-<section id="blueprint" class="level3">
-<h3 class="anchored" data-anchor-id="blueprint">Blueprint</h3>
-<p>The whole system is dependent on a ‘blueprint’ file, which is what gets stored at the <code>tools::R_user_dir()</code> location. It’s a list object with elements like the pet’s name, species (randomly generated), ‘date of birth’, accumulated XP, status values (happy, hungry, dirty) and some other things.</p>
-<p>The blueprint is read and updated whenever you use a function from {tamRgo}. The current datetime is compared to the datetime of last interaction (stored in the blueprint) and the difference is used to calculate things like the pet’s age, XP accumulation and level and status values.</p>
-<p>This gives the impression that the pet has been ‘alive’ on the player’s machine while they’ve been away. A trick<sup>6</sup>!</p>
-</section>
-<section id="experience" class="level3">
-<h3 class="anchored" data-anchor-id="experience">Experience</h3>
-<p>The main goal is to accumulate XP and keep your pet alive. XP:</p>
-<ul>
-<li>is accumulated passively every hour</li>
-<li>is gained from the minigame in <code>play()</code>, where a higher score means more XP</li>
-<li>will result in the pet levelling up when certain thresholds have been met, which alters their appearance</li>
-</ul>
-<p>At a certain point, the pet will become ‘unalive’<sup>7</sup>. The chance of this happening is based on the pet’s accumulated XP. Basically:</p>
-<ul>
-<li>XP is ‘frozen’ at a certain age and the value is stored in the blueprint</li>
-<li>the chance of becoming unalive is tied to the frozen XP value, where more XP means a lower chance</li>
-<li>the number of days since the XP was frozen is used as a multiplier, so the chance of becoming unalive increases with time</li>
-</ul>
-<p>The current XP count is stored in the blueprint, but is hidden from the user. This moves focus away from tracking and improving a single number and hopefully towards a more general goal of keeping your pet happy, well-fed and clean.</p>
-</section>
-<section id="sprites" class="level3">
-<h3 class="anchored" data-anchor-id="sprites">Sprites</h3>
-<p>There are character ‘sprites’ that change with age and species (see the image at the top of this post). The sprite for a newborn, mature and unalive pet are the same regardless of species, but the other levels are dependent on whether the pet is species X, Y or Z. Of course, these are pixellated to mimic <a href="https://static.wikia.nocookie.net/tamagotchi/images/5/52/Tama_diagram.png/revision/latest?cb=20191126143322">the original <em>Tamagotchi</em> style</a>.</p>
-<p>The sprites are called by <code>see_pet()</code> as binary matrices of filled and unfilled ‘pixels’. I wrote the package <a href="https://github.com/matt-dray/pixeltrix">{pixeltrix}</a>, which I wrote about in <a href="https://www.rostrum.blog/2022/09/24/pixeltrix/">my last blog post</a> for a simple interactive way to design sprites by turning pixels ‘on’ and ‘off’ in a plotting window. Here’s a preview of a totally original little cyberfriend being incepted.</p>
-<div class="figure">
-<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-11-13-tamRgo/resources/pixeltrix.gif" alt="Gif of RStudio window. The console is running the code pixeltrix::click_pixels(6, 7, 3) and a plot appears with a 6 by 7 square grid. Some squares are clicked, changing them to light grey. A second click turns them dark grey. Eventually a little square character with a face is created. A matrix encoded the image is shown in the console when the escape key is pressed." width="100%"></p>
-</div>
-</section>
-</section>
-<section id="practical-yolk" class="level2">
-<h2 class="anchored" data-anchor-id="practical-yolk">Practical yolk</h2>
-<p>The package is not feature complete, lol<sup>8</sup>. To improve it, I <em>could</em> maybe<sup>9</sup>:</p>
-<ul>
-<li>animate the pixel graphics</li>
-<li>allow blueprints to be transferred between machines, so your pet can live across multiple devices<sup>10</sup></li>
-<li>add a battle system like <em>Digimon</em></li>
-<li>make the <code>play()</code> minigame actually fun and so it grants more XP for greater skill</li>
-<li>make more meaningful use of ‘hungry’ and ‘dirty’ statuses, perhaps include a hidden HP gauge that is reduced when these statuses are at their maximum for an extended period</li>
-</ul>
-<p>The main point of this toy was for me to work out how to store data on a user’s machine. Should you actually do that? It depends. Can you use it in a silly R package for purposes of fun? Well, yes, if you ask me.</p>
-<p>You can probably think of other ways to use <code>tools::R_user_dir()</code> for games in R, particularly for save states. Let me know when you’ve made a new triple-A game for R and I’ll add it to <a href="https://github.com/matt-dray/awesome-r-games">the list</a>.</p>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-06 19:27:05 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
-[1] tamRgo_0.1.0
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.14   yaml_2.3.7       
- [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
-[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>Oh, wait, I have to explain myself? Look no further than <a href="https://www.youtube.com/watch?v=LPotWAJnE_s">Mike Cheng’s rstudio::conf22 talk</a> or the <a href="https://github.com/matt-dray/awesome-r-games">awesome-r-games list</a>. I’ve written toys like <a href="https://github.com/matt-dray/ActionSquirrel">{ActionSquirrel}</a>, <a href="https://github.com/matt-dray/safar6">{safar6}</a>, <a href="https://github.com/matt-dray/potato">{potato}</a> and <a href="https://github.com/matt-dray/r.oguelike">{r.oguelike}</a>.↩︎</p></li>
-<li id="fn2"><p>If you do try and @ me, then you can now do it over at <a href="https://fosstodon.org/@mattdray"><span class="citation" data-cites="mattdray">@mattdray</span><span class="citation" data-cites="fosstodon.org">@fosstodon.org</span></a>.↩︎</p></li>
-<li id="fn3"><p>You may be familiar with <a href="https://rappdirs.r-lib.org/">{rappdirs}</a>, a package that helps you find directories. <code>tools::R_user_dir()</code> is nice because it’s built into R, so no dependency is required.↩︎</p></li>
-<li id="fn4"><p>For the benefit of youths, <a href="https://en.wikipedia.org/wiki/Tamagotchi">a <em>Tamagotchi</em></a> was (is!) a little physical device that contains a ‘digital pet’, made popular in the late 90s. They have a little screen and physical buttons so you can see your pet and interact with it. Play with it, feed it, even reprimand it.↩︎</p></li>
-<li id="fn5"><p>There are few terms that evoke the same wave of late-90s nostalgia.↩︎</p></li>
-<li id="fn6"><p><em>Illusions, Michael.</em>↩︎</p></li>
-<li id="fn7"><p>A euphemism to protect the sensitive.↩︎</p></li>
-<li id="fn8"><p>Meanwhile, VS Code users can check out <a href="https://tonybaloney.github.io/vscode-pets/">Anthony Shaw’s <em>VS Code Pets</em></a> to have a little cat or dog (or Clippy!) in their IDE. There’s also a lot of digital-pet implementations on various blogs and YouTube, but it was <a href="https://youtu.be/KUjVfoLtHwc">SquidGodDev’s <em>Pocket Pets</em> for the Playdate</a> that really egged me on.↩︎</p></li>
-<li id="fn9"><p>Hahaha, as if I’d finish a side project.↩︎</p></li>
-<li id="fn10"><p>In fact, my initial approach to {tamRgo} was to store blueprints remotely in <a href="https://gist.github.com/">GitHub gists</a>. The plus-side is that this could (in theory) let you battle other pets by reading their blueprints from a URL. The downside is the overhead of requiring a GitHub account and API access. If you want, you can <a href="https://github.com/matt-dray/tamRgo/tree/65301b8f362ec047555217611d13af79e4f00020">peruse the {tamRgo} GitHub repo</a> just before I moved from Gist-based to local blueprints.↩︎</p></li>
-</ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>gamedev</category>
-  <category>r</category>
-  <category>tamRgo</category>
-  <category>videogames</category>
-  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2022-11-13-tamRgo/index.html</guid>
-  <pubDate>Sun, 13 Nov 2022 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
