@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2019-04-07">
+
+<title>rostrum.blog - Fix leaky pipes in R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-black-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Fix leaky pipes in R</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">debug</div>
+                <div class="quarto-category">magrittr</div>
+                <div class="quarto-category">pipe</div>
+                <div class="quarto-category">pipes</div>
+                <div class="quarto-category">pipecleaner</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">tamper</div>
+                <div class="quarto-category">tidylog</div>
+                <div class="quarto-category">tidyverse</div>
+                <div class="quarto-category">ViewPipeSteps</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 7, 2019</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#cest-un-pipe" id="toc-cest-un-pipe" class="nav-link" data-scroll-target="#cest-un-pipe">C’est un pipe</a></li>
+  <li><a href="#ce-nest-pas-debuggable" id="toc-ce-nest-pas-debuggable" class="nav-link" data-scroll-target="#ce-nest-pas-debuggable">Ce n’est pas debuggable?</a></li>
+  <li><a href="#ce-nest-pas-une-probleme" id="toc-ce-nest-pas-une-probleme" class="nav-link" data-scroll-target="#ce-nest-pas-une-probleme">Ce n’est pas une probleme?</a>
+  <ul>
+  <li><a href="#summary-inspection" id="toc-summary-inspection" class="nav-link" data-scroll-target="#summary-inspection">1. Summary inspection</a>
+  <ul class="collapse">
+  <li><a href="#tidylog" id="toc-tidylog" class="nav-link" data-scroll-target="#tidylog">1a. {tidylog}</a></li>
+  <li><a href="#viewpipesteps" id="toc-viewpipesteps" class="nav-link" data-scroll-target="#viewpipesteps">1b. {ViewPipeSteps}</a></li>
+  </ul></li>
+  <li><a href="#debug-mode" id="toc-debug-mode" class="nav-link" data-scroll-target="#debug-mode">2. Debug mode</a>
+  <ul class="collapse">
+  <li><a href="#tamper" id="toc-tamper" class="nav-link" data-scroll-target="#tamper">2a. {tamper}</a></li>
+  <li><a href="#pipecleaner" id="toc-pipecleaner" class="nav-link" data-scroll-target="#pipecleaner">2b. {pipecleaner}</a></li>
+  <li><a href="#magrittr" id="toc-magrittr" class="nav-link" data-scroll-target="#magrittr">2c. {magrittr}</a></li>
+  <li><a href="#debug-fun" id="toc-debug-fun" class="nav-link" data-scroll-target="#debug-fun">2d. <code>debug()</code></a></li>
+  </ul></li>
+  <li><a href="#operator-hacking" id="toc-operator-hacking" class="nav-link" data-scroll-target="#operator-hacking">3. Operator hacking</a>
+  <ul class="collapse">
+  <li><a href="#pipes" id="toc-pipes" class="nav-link" data-scroll-target="#pipes">3a. {pipes}</a></li>
+  <li><a href="#bizarro-pipe" id="toc-bizarro-pipe" class="nav-link" data-scroll-target="#bizarro-pipe">3b. Bizarro pipe</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#maider" id="toc-maider" class="nav-link" data-scroll-target="#maider">M’aider</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/data-pipe.png" class="img-fluid figure-img" style="width:100.0%" alt="The character Data from Star Trek: The Next Generation is smoking a pipe."></p>
+<figcaption class="figure-caption">Data leaking from a pipe.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>You can chain function calls in R with <code>%&gt;%</code>. There’s a few ways to catch errors in these pipelines.</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>This post was first published before the base pipe (<code>|&gt;</code>) existed. You should assume that the solutions here work for the {magrittr} pipe (<code>%&gt;%</code>) only.</p>
+<p>More solutions have emerged since this post was published, like <a href="https://moodymudskipper.github.io/boomer/">Antoine Fabri’s {boomer}</a> and <a href="https://github.com/seankross/mario">Sean Kross’s {mario}</a>. I may update this post in future.</p>
+</div>
+<p>
+</p></section>
+<section id="cest-un-pipe" class="level2">
+<h2 class="anchored" data-anchor-id="cest-un-pipe">C’est un pipe</h2>
+<p>R users will be familiar with <a href="https://magrittr.tidyverse.org/articles/magrittr.html">{magrittr}’s <code>%&gt;%</code> (pipe) operator</a> by now, created for <a href="http://stefanbache.dk/">Stefan Milton Bache</a> and <a href="http://hadley.nz/">Hadley Wickham</a>’s <a href="https://CRAN.R-project.org/package=magrittr">{magrittr} package</a> and popularised by <a href="https://www.tidyverse.org/">the tidyverse</a>.</p>
+<p>It lets you chain function calls. <code>x %&gt;% y()</code> evaluates the same way as <code>y(x)</code>. Par exemple, avec les pingouins:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr, <span class="at">warn.conflicts =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get mean mass for two </span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>peng_pipe <span class="ot">&lt;-</span> penguins <span class="sc">%&gt;%</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Adelie"</span>, <span class="st">"Chinstrap"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_length =</span> <span class="fu">mean</span>(bill_length_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_length =</span> <span class="fu">round</span>(mean_length))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>peng_pipe</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  species   mean_length
+  &lt;fct&gt;           &lt;dbl&gt;
+1 Adelie             39
+2 Chinstrap          49</code></pre>
+</div>
+</div>
+</section>
+<section id="ce-nest-pas-debuggable" class="level2">
+<h2 class="anchored" data-anchor-id="ce-nest-pas-debuggable">Ce n’est pas debuggable?</h2>
+<p>Not everyone likes this approach. That’s okay. Multi-step pipes could obscure what’s happened to your data and might make debugging harder.</p>
+<p>I think most people create pipes interactively and check outputs as they go, or else make sensibly-lengthed chains for each ‘unit’ of wrangling (read, clean, model, etc). Hadley discusses this in <a href="https://r4ds.had.co.nz/pipes.html">the pipes chapter of the R for Data Science book</a>.</p>
+<p>I’ve summarised a few solutions in this post, which can be summarised even more in this table:</p>
+<table class="table">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 51%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 8%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Package</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: center;">Message</th>
+<th style="text-align: center;"><code>View()</code></th>
+<th style="text-align: center;"><code>print()</code></th>
+<th style="text-align: center;">Debug</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">{tidylog}</td>
+<td style="text-align: left;">Console-printed description of changes</td>
+<td style="text-align: center;">✔</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✘</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">{ViewPipeSteps}</td>
+<td style="text-align: left;">RStudio Addin: see changes to data set per step</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✔</td>
+<td style="text-align: center;">✔</td>
+<td style="text-align: center;">✘</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">{tamper}</td>
+<td style="text-align: left;">Stack trace replacement for pipe debugging</td>
+<td style="text-align: center;">✔</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">{pipecleaner}</td>
+<td style="text-align: left;">RStudio Addin: ‘burst’ pipes and debug</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">{magrittr}</td>
+<td style="text-align: left;"><code>debug_pipe()</code> function</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>debug()</code></td>
+<td style="text-align: left;">R’s good old <code>debug()</code> function</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">{pipes}</td>
+<td style="text-align: left;">Special assignment operators</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✔</td>
+<td style="text-align: center;">✔</td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Bizarro pipe</td>
+<td style="text-align: left;">Replace <code>%&gt;%</code> with <code>-&gt;.;</code> and observe <code>.Last.level</code></td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✘</td>
+<td style="text-align: center;">✘</td>
+</tr>
+</tbody>
+</table>
+<p>‘Message’ means whether it prints something informative to the console; <code>View()</code> and <code>print()</code> tell you if the data set can be viewed at each step; and ‘debug’ if it opens the debug menu.</p>
+</section>
+<section id="ce-nest-pas-une-probleme" class="level2">
+<h2 class="anchored" data-anchor-id="ce-nest-pas-une-probleme">Ce n’est pas une probleme?</h2>
+<p>I’ve gathered the solutions into three categories (click to jump):</p>
+<ol type="1">
+<li><a href="#summary-inspection">Summary inspection</a></li>
+</ol>
+<ol type="a">
+<li><a href="#tidylog">{tidylog}</a></li>
+<li><a href="#viewpipesteps">{ViewPipeSteps}</a></li>
+</ol>
+<ol start="2" type="1">
+<li><a href="#debug-mode">Debug mode</a></li>
+</ol>
+<ol type="a">
+<li><a href="#tamper">{tamper}</a></li>
+<li><a href="#pipecleaner">{pipecleaner}</a></li>
+<li><a href="#magrittr">{magrittr}</a></li>
+<li><a href="#debug-fun"><code>debug()</code></a></li>
+</ol>
+<ol start="3" type="1">
+<li><a href="#operator-hacking">Operator hacking</a></li>
+</ol>
+<ol type="a">
+<li><a href="#pipes">{pipes}</a></li>
+<li><a href="#bizarro-pipe">Bizarro pipe</a></li>
+</ol>
+<section id="summary-inspection" class="level3">
+<h3 class="anchored" data-anchor-id="summary-inspection">1. Summary inspection</h3>
+<p>These are packages for seeing what happened to your data set at each step of your pipeline, rather than highlighting where the problem was.</p>
+<section id="tidylog" class="level4">
+<h4 class="anchored" data-anchor-id="tidylog">1a. {tidylog}</h4>
+<p><a href="https://github.com/elbersb/tidylog">The {tidylog} package by Benjamin Elbers</a> prints to the console some summary sentences of the changes that have happened to your data after each pipe step. You can install it from CRAN:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidylog"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Make sure you attach it after {dplyr}.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidylog)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'tidylog'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:dplyr':
+
+    add_count, add_tally, anti_join, count, distinct, distinct_all,
+    distinct_at, distinct_if, filter, filter_all, filter_at, filter_if,
+    full_join, group_by, group_by_all, group_by_at, group_by_if,
+    inner_join, left_join, mutate, mutate_all, mutate_at, mutate_if,
+    relocate, rename, rename_all, rename_at, rename_if, rename_with,
+    right_join, sample_frac, sample_n, select, select_all, select_at,
+    select_if, semi_join, slice, slice_head, slice_max, slice_min,
+    slice_sample, slice_tail, summarise, summarise_all, summarise_at,
+    summarise_if, summarize, summarize_all, summarize_at, summarize_if,
+    tally, top_frac, top_n, transmute, transmute_all, transmute_at,
+    transmute_if, ungroup</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:stats':
+
+    filter</code></pre>
+</div>
+</div>
+<p>You can see from the output that {tidylog} masks all the {dplyr} functions. In other words, you can continue use the {dplyr} function names as usual, but {tidylog} will add a side-effect: it will print in English a summary of the changes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>peng_pipe <span class="ot">&lt;-</span> penguins <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Adelie"</span>, <span class="st">"Chinstrap"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_length =</span> <span class="fu">mean</span>(bill_length_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_length =</span> <span class="fu">round</span>(mean_length))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>filter: removed 124 rows (36%), 220 rows remaining</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>group_by: one grouping variable (species)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>summarise: now 2 rows and 2 columns, ungrouped</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>mutate: changed 2 values (100%) of 'mean_length' (0 new NA)</code></pre>
+</div>
+</div>
+<p>This a nice passive approach. But how does this help? We can sense-check each step. For example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>peng_pipe <span class="ot">&lt;-</span> penguins <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Cycliophora"</span>, <span class="st">"Onychophora"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_length =</span> <span class="fu">mean</span>(bill_length_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_length =</span> <span class="fu">round</span>(mean_length))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>filter: removed all rows (100%)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>group_by: one grouping variable (species)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>summarise: now 0 rows and 2 columns, ungrouped</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>mutate: no changes</code></pre>
+</div>
+</div>
+<p>Did you spot the extremely contrived error? I filtered for species that don’t exist in the data set<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. This was reported as <code>filter: removed all rows (100%)</code> in the first step.</p>
+<p>I’ll unload {tidylog} before continuing so it doesn’t interfere with the other examples.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unloadNamespace</span>(<span class="st">"tidylog"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="viewpipesteps" class="level4">
+<h4 class="anchored" data-anchor-id="viewpipesteps">1b. {ViewPipeSteps}</h4>
+<p><a href="https://github.com/daranzolin/ViewPipeSteps">The {ViewPipeSteps} package by David Ranzolin</a> is an <a href="http://rstudio.github.io/rstudioaddins/">RStudio Addin</a> available from GitHub. Basically it lets you <code>View()</code> or <code>print()</code> at each step of your pipeline so you can see what’s happened to the the data set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"daranzolin/ViewPipeSteps"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ViewPipeSteps)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After installing you can simply highlight your code and select ‘View Pipe Chain Steps’ or ‘Print Pipe Chain Steps’ from the RStudio Addins menu.</p>
+<p>Beware if you have lots of steps in your pipeline because it’s going to fill up your console, or a whole bunch of RStudio tabs or windows containing each cut of the data set.</p>
+</section>
+</section>
+<section id="debug-mode" class="level3">
+<h3 class="anchored" data-anchor-id="debug-mode">2. Debug mode</h3>
+<p>These are packages that help highlight where a problem occurred. These take you to the <a href="https://support.rstudio.com/hc/en-us/articles/205612627-Debugging-with-RStudio">debug menu</a>, which is worth reading up on if you haven’t used it before.</p>
+<section id="tamper" class="level4">
+<h4 class="anchored" data-anchor-id="tamper">2a. {tamper}</h4>
+<p><a href="https://github.com/gaborcsardi/tamper">Gábor Csárdi’s {tamper} package</a> makes pipe debugging easier with a simple, informative interface. The package is currently available on GitHub but is archived.</p>
+<p>You set the error argument of <code>options()</code> to <code>tamper</code> once installed and loaded. From now on {tamper} will override the default stack trace report you get when an error is found. Here I’ve used a column that doesn’t exist in the data set:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"gaborcsardi/tamper"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">error =</span> tamper<span class="sc">::</span>tamper)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>penguins <span class="sc">%&gt;%</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Adelie"</span>, <span class="st">"Chinstrap"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">%&gt;%</span> </span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_length =</span> <span class="fu">mean</span>(bill_girth, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span>  <span class="co"># error here!</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_length =</span> <span class="fu">round</span>(mean_length))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When there’s an error, {tamper} highlights the problematic line with an arrow. Typing ‘0’ will exit the {tamper} report; ‘1’ switches you back to the stack trace; ‘2’ will enter debug mode. Here’s how that looks in the console at first:</p>
+<pre><code>## Error in mean(Sepal.Girth) : object 'Sepal.Girth' not found
+## 
+## Enter 0 to exit or choose:
+## 
+## 1:    Switch mode
+## 2:    Take me to the error
+## 
+## 3:    penguins %&gt;%
+## 4: -&gt;   filter(., Species %in% c("Adelie", "Chinstrap")) %&gt;%
+## 5:      group_by(., species) %&gt;%
+## 6:      summarise(., mean_length = mean(bill_girth, na.rm = TRUE)) %&gt;%
+## 7:      mutate(., mean_length = round(mean_length))
+## 
+## Selection:</code></pre>
+</section>
+<section id="pipecleaner" class="level4">
+<h4 class="anchored" data-anchor-id="pipecleaner">2b. {pipecleaner}</h4>
+<p><a href="https://alistaire47.github.io/pipecleaner/index.html">The {pipecleaner} package by Edward Visel</a> is another <a href="http://rstudio.github.io/rstudioaddins/">RStudio Addin</a> available on GitHub. It has the best name.</p>
+<p>You highlight your code and select ‘debug pipeline in browser’ from the RStudio Addins menu. This ‘bursts’ your pipeline to one intermediate object per function call, then opens the debug menu. You can also simply ‘burst pipes’ from the Addins menu without debug mode.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"alistaire47/pipecleaner"</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pipecleaner)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Intact, original pipeline</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>peng_pipe <span class="ot">&lt;-</span> penguins <span class="sc">%&gt;%</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Adelie"</span>, <span class="st">"Chinstrap"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_length =</span> <span class="fu">mean</span>(bill_length_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_length =</span> <span class="fu">round</span>(mean_length))</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Highlight the original pipeline and select 'debug pipeline in browser' or </span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 'burst pipes' from the RStudio Addins menu</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>dot1 <span class="ot">&lt;-</span> <span class="fu">filter</span>(penguins, species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Adelie"</span>, <span class="st">"Chinstrap"</span>))</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>dot2 <span class="ot">&lt;-</span> <span class="fu">group_by</span>(dot1, species)</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>dot3 <span class="ot">&lt;-</span> <span class="fu">summarise</span>(dot2, <span class="at">mean_length =</span> <span class="fu">mean</span>(bill_length_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>peng_pipe <span class="ot">&lt;-</span> <span class="fu">mutate</span>(dot3, <span class="at">mean_length =</span> <span class="fu">round</span>(mean_length))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>So effectively it steps through each new object to report back errors. But it leaves you with multiple objects (with meaningless names) to clean up; there’s no ‘fix pipes’ option to return to your original pipeline.</p>
+</section>
+<section id="magrittr" class="level4">
+<h4 class="anchored" data-anchor-id="magrittr">2c. {magrittr}</h4>
+<p>Surprise: <a href="https://magrittr.tidyverse.org/reference/debug_pipe.html">the {magrittr} package</a> itself has the function <code>debug_pipe()</code> to let you see what’s being passed into the next function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>peng_pipe <span class="ot">&lt;-</span> penguins <span class="sc">%&gt;%</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Adelie"</span>, <span class="st">"Chinstrap"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_length =</span> <span class="fu">mean</span>(bill_length_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">debug_pipe</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_length =</span> <span class="fu">round</span>(mean_length))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Not much to say about this one, but worth mentioning because <code>%&gt;%</code> gets re-exported in other packages<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> but <code>debug_pipe()</code> doesn’t.</p>
+</section>
+<section id="debug-fun" class="level4">
+<h4 class="anchored" data-anchor-id="debug-fun">2d. <code>debug()</code></h4>
+<p>You can simply use R’s <code>debug()</code> function, as <a href="https://community.rstudio.com/t/whats-currently-the-recommended-way-to-debug-pipe-chains/14724/3?u=matt">pointed out by Nathan Werth</a>.</p>
+<p>You can do this for a given function in the pipeline:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">debug</span>(summarise)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>peng_pipe <span class="ot">&lt;-</span> penguins <span class="sc">%&gt;%</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Adelie"</span>, <span class="st">"Chinstrap"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_length =</span> <span class="fu">mean</span>(bill_length_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_length =</span> <span class="fu">round</span>(mean_length))</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="fu">undebug</span>(summarise)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Or you can even debug each step by setting up <code>debug(`%&gt;%`)</code>, since the pipe is itself a function, after all.</p>
+</section>
+</section>
+<section id="operator-hacking" class="level3">
+<h3 class="anchored" data-anchor-id="operator-hacking">3. Operator hacking</h3>
+<p>It’s possible to make variant pipe operators. Maybe we don’t even need <code>%&gt;%</code>?</p>
+<section id="pipes" class="level4">
+<h4 class="anchored" data-anchor-id="pipes">3a. {pipes}</h4>
+<p>Antoine Fabri forked the {magrittr} GitHub repo to add a bunch of <code>%&gt;%</code> variants that have side properties. These are available from his <a href="https://github.com/moodymudskipper/pipes">{pipes} package</a>.</p>
+<p>A few of direct relevance to this discussion:</p>
+<ul>
+<li><code>%P&gt;%</code> to <code>print()</code> the data set to the console</li>
+<li><code>%V&gt;%</code> will <code>View()</code> the full data set</li>
+<li><code>%D&gt;%</code> opens with debug menu</li>
+</ul>
+<p>Others apply different functions during the piping step. There’s some nice ones for summaries, like <code>%glimpse&gt;%</code> and <code>%skim&gt;%</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"moodymudskipper/pipes"</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pipes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>Attaching package: 'pipes'
+
+The following object is masked from 'package:dplyr':
+
+    %&gt;%</code></pre>
+<p>Here’s an example of <code>%P&gt;%</code> that pipes forward into the next function and prints it to console.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>peng_pipe <span class="ot">&lt;-</span> penguins <span class="sc">%&gt;%</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Adelie"</span>, <span class="st">"Chinstrap"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(species) <span class="sc">%P&gt;%</span>  <span class="co"># note %P&gt;% operator </span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_length =</span> <span class="fu">mean</span>(bill_length_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_length =</span> <span class="fu">round</span>(mean_length))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>summarise(., mean_length = mean(bill_length_mm, na.rm = TRUE))
+
+# A tibble: 2 × 2
+  species   mean_length
+  &lt;fct&gt;           &lt;dbl&gt;
+1 Adelie           38.8
+2 Chinstrap        48.8</code></pre>
+<p>Noe that the final output of the chain is assigned to <code>peng_pipe</code>. We’re seeing the printed output of the <code>summarise()</code> step without the following <code>mutate()</code> step, given where we placed the <code>%P&gt;%</code> operator.</p>
+<p>So this one could have gone in the ‘summary inspection’ section above, but it contains more functions than for printing and viewing alone.</p>
+</section>
+<section id="bizarro-pipe" class="level4">
+<h4 class="anchored" data-anchor-id="bizarro-pipe">3b. Bizarro pipe</h4>
+<p>Forget installing a package to get the pipe. We can create an operator that acts like a pipe but can be run so that we can check what’s happening at each step.</p>
+<p><a href="http://www.win-vector.com/blog/2017/01/using-the-bizarro-pipe-to-debug-magrittr-pipelines-in-r/">John Mount’s solution is the ‘Bizarro pipe’</a>, which looks like <code>-&gt;.;</code>. This is a simple hack that’s legitimate base R code. The <code>-&gt;.;</code> operator reads as ‘right-assign the left-hand side to a period and then perform the next operation’.</p>
+<p>Things you might be wondering:</p>
+<ul>
+<li>yes, you can use a <code>-&gt;</code> for assignment to the right</li>
+<li>yes, you can assign to <code>.</code>, but you’ll need to explicitly supply it as the data argument to the next function call in your Bizarro pipeline</li>
+<li>yes, you can use semi-colons in R for run-on code execution, try <code>head(penguins); tail(penguins)</code></li>
+</ul>
+<p>This means you can execute each line in turn and check the output. But wait: an object called <code>.</code> is not presented in the global environment. Not unless you check ‘Show .Last.value in environment listing’ in RStudio’s settings. Now when you run the line you’ll see the ‘.Last.value’ that’s been output.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="ot">-&gt;</span>.;</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(., species <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Adelie"</span>, <span class="st">"Chinstrap"</span>)) <span class="ot">-&gt;</span>.;</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">group_by</span>(., species) <span class="ot">-&gt;</span>.;</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise</span>(., <span class="at">mean_length =</span> <span class="fu">mean</span>(bill_length_mm, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="ot">-&gt;</span>.;</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mutate</span>(., <span class="at">mean_length =</span> <span class="fu">round</span>(mean_length)) <span class="ot">-&gt;</span> peng_pipe</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note that the name of the object comes at the end; we’re always passing the object to the right.</p>
+<p>This might confuse your colleagues, but hey, no dependencies are needed!</p>
+</section>
+</section>
+</section>
+<section id="maider" class="level2">
+<h2 class="anchored" data-anchor-id="maider">M’aider</h2>
+<p>What’s your approach to this problem? What have I missed?</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-08-02 20:22:59 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] palmerpenguins_0.1.1 dplyr_1.1.2         
+
+loaded via a namespace (and not attached):
+ [1] vctrs_0.6.3       cli_3.6.1         knitr_1.43.1      clisymbols_1.2.0 
+ [5] rlang_1.1.1       xfun_0.39         purrr_1.0.1       generics_0.1.3   
+ [9] jsonlite_1.8.7    glue_1.6.2        htmltools_0.5.5   fansi_1.0.4      
+[13] rmarkdown_2.23    evaluate_0.21     tibble_3.2.1      fontawesome_0.5.1
+[17] fastmap_1.1.1     yaml_2.3.7        lifecycle_1.0.3   compiler_4.3.1   
+[21] htmlwidgets_1.6.2 pkgconfig_2.0.3   tidyr_1.3.0       rstudioapi_0.15.0
+[25] digest_0.6.33     R6_2.5.1          tidyselect_1.2.0  utf8_1.2.3       
+[29] pillar_1.9.0      magrittr_2.0.3    tools_4.3.1      </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Welcome to Biology Geek Corner. <a href="https://www.nature.com/articles/378711a0">Cycliophora</a> is a <a href="https://en.wikipedia.org/wiki/Phylum">phylum</a> containing just <a href="https://en.wikipedia.org/wiki/Symbion">one genus and (probably) three species</a>. Our own phylum – <a href="https://en.wikipedia.org/wiki/Chordate">Chordata</a> – contains 55,000 species. <a href="https://en.wikipedia.org/wiki/Symbion_pandora"><em>Symbion pandora</em></a> was the first cycliophoran species found in 1995, which appears to live <a href="https://en.wikipedia.org/wiki/Commensalism">commensally</a> and exclusively on lobster lips. <a href="https://en.wikipedia.org/wiki/Onychophora">Onychophora</a> is the velvet worm phylum that contains wee beasties that <a href="https://www.youtube.com/watch?v=LY8TgD6-7kg">spray slime, have little adorable claws and are, surprise, kinda velvety</a> (<a href="https://www.wired.com/2014/10/velvet-worm-named-totoro/">one species is named ‘totoro’</a> because of its similarity to <a href="https://ghibli.fandom.com/wiki/My_Neighbor_Totoro">My Neighbour Totoro</a>’s <a href="https://ghibli.fandom.com/wiki/Catbus">Catbus</a>).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://usethis.r-lib.org/reference/use_pipe.html">Check out <code>usethis::use_pipe()</code></a> for re-exporting the pipe to use in your own package.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
