@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2018-11-25">
+
+<title>rostrum.blog - Quantify colour by {magick}</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-black-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Quantify colour by {magick}</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">colour</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">magick</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Matt Dray </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 25, 2018</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#colour-search" id="toc-colour-search" class="nav-link" data-scroll-target="#colour-search">Colour search</a></li>
+  <li><a href="#art-of-the-possible" id="toc-art-of-the-possible" class="nav-link" data-scroll-target="#art-of-the-possible">Art of the possible</a></li>
+  <li><a href="#its-a-kind-of-imagemagick" id="toc-its-a-kind-of-imagemagick" class="nav-link" data-scroll-target="#its-a-kind-of-imagemagick">It’s a kind of ImageMagick</a></li>
+  <li><a href="#code" id="toc-code" class="nav-link" data-scroll-target="#code">Code</a>
+  <ul class="collapse">
+  <li><a href="#read-a-test-image" id="toc-read-a-test-image" class="nav-link" data-scroll-target="#read-a-test-image">Read a test image</a></li>
+  <li><a href="#prepare-simple-colours" id="toc-prepare-simple-colours" class="nav-link" data-scroll-target="#prepare-simple-colours">Prepare simple colours</a></li>
+  <li><a href="#quantify-the-colours" id="toc-quantify-the-colours" class="nav-link" data-scroll-target="#quantify-the-colours">Quantify the colours</a></li>
+  </ul></li>
+  <li><a href="#and-so-we-must-p-art" id="toc-and-so-we-must-p-art" class="nav-link" data-scroll-target="#and-so-we-must-p-art">And so we must p-art</a>
+  <ul class="collapse">
+  <li><a href="#reef-fish" id="toc-reef-fish" class="nav-link" data-scroll-target="#reef-fish">Reef fish</a></li>
+  <li><a href="#hong-kong-lights" id="toc-hong-kong-lights" class="nav-link" data-scroll-target="#hong-kong-lights">Hong Kong lights</a></li>
+  <li><a href="#ladybird" id="toc-ladybird" class="nav-link" data-scroll-target="#ladybird">Ladybird</a></li>
+  </ul></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I used <a href="https://docs.ropensci.org/magick/articles/intro.html">the {magick} package</a> in R to map an image’s colours to their nearest match from a simplified palette, then quantified how much of the image was covered by each colour in that palette.</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>I later learnt about <a href="https://github.com/zumbov2/colorfindr">{colorfindr}</a> by <a href="https://twitter.com/DavidZumbach">David Zumbach</a>, which can extract colours from images, provide composition details and generate palettes. Check it out.</p>
+</div>
+<p>
+</p></section>
+<section id="colour-search" class="level2">
+<h2 class="anchored" data-anchor-id="colour-search">Colour search</h2>
+<p>As a side project at work, we wanted users to be able to search images of artwork by their prevalence of colours from a small simple palette (red, blue, yellow, etc). Lots of online services let you sort images by colour, like <a href="https://artsexperiments.withgoogle.com/artpalette/colors/a46053-433932-c2ad8f-b5996a-746251">Google Arts &amp; Culture</a>, <a href="https://www.designspiration.net/search/saves/?q=%2389ebd7%20%23afff11%20%23e5ff91%20%23ff9775%20%23f38d00">Designspiration</a> and <a href="https://labs.tineye.com/multicolr/">TinEye Multicolr</a>.</p>
+</section>
+<section id="art-of-the-possible" class="level2">
+<h2 class="anchored" data-anchor-id="art-of-the-possible">Art of the possible</h2>
+<p>What might be a relatively simple and straightforward way to do this in R? By ‘simple’ I mean we don’t want to do any hard work. We don’t want to consider any colour theory<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> and we want to stick to simple, easily-named colours like ‘green’.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>So, we can do the following:</p>
+<ol type="1">
+<li>Read in an image</li>
+<li>Prepare a set of ‘simple colours’</li>
+<li>Map the simple colours to the image</li>
+<li>Quantify the colours</li>
+</ol>
+</section>
+<section id="its-a-kind-of-imagemagick" class="level2">
+<h2 class="anchored" data-anchor-id="its-a-kind-of-imagemagick">It’s a kind of ImageMagick</h2>
+<p>The <a href="https://docs.ropensci.org/magick/articles/intro.html">{magick}</a> R package is an implementation of <a href="https://www.imagemagick.org/script/index.php">ImageMagick</a>, an open-source software suite whose emphasis is image manipulation from the command line. The flexibility of {magick} can be seen in its <a href="https://cran.r-project.org/web/packages/magick/vignettes/intro.html">vignette</a>.</p>
+<p>The package was created and is maintained by <a href="https://twitter.com/opencpu?lang=en">Jeroen Ooms</a>, a software engineer and postdoc at <a href="https://ropensci.org/">rOpenSci</a>, a collective that seeks <a href="https://ropensci.org/packages/">to develop tools for open and reproducible research</a>.</p>
+<p><a href="https://ropensci.org/blog/2018/10/24/commcall-nov2018/">rOpenSci hosted a workshop</a> from Ooms about working with images in R and the <a href="https://jeroen.github.io/munster2018/">presentation slides</a> caught my attention. I’ve used some of Jeroen’s code below.</p>
+</section>
+<section id="code" class="level2">
+<h2 class="anchored" data-anchor-id="code">Code</h2>
+<p>First we need to load our packages; all are available from CRAN.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tibble)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(magick)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="read-a-test-image" class="level3">
+<h3 class="anchored" data-anchor-id="read-a-test-image">Read a test image</h3>
+<p>I’ve chosen a colourful image to use for our test case: it’s a picture of a bunch of <a href="https://www.lego.com/en-gb/themes/duplo">Lego Duplo bricks</a>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>We’ll use <code>image_read()</code> to read the JPEG as an object of class ‘magick’ and then <code>image_scale()</code> to reduce the image size and save some space.</p>
+<p>Printing the image also gives us some details of format, dimensions, etc.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Path to the image</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>duplo_path <span class="ot">&lt;-</span> <span class="st">"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Lego_dublo_arto_alanenpaa_2.JPG/2560px-Lego_dublo_arto_alanenpaa_2.JPG"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Read as magick object and resize</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>duplo <span class="ot">&lt;-</span> <span class="fu">image_read</span>(duplo_path) <span class="sc">%&gt;%</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">image_scale</span>(<span class="at">geometry =</span> <span class="fu">c</span>(<span class="st">"x600"</span>))</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(duplo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 7
+  format width height colorspace matte filesize density
+  &lt;chr&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt;      &lt;lgl&gt;    &lt;int&gt; &lt;chr&gt;  
+1 JPEG     900    600 sRGB       FALSE        0 72x72  </code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/duplo-1.png" class="img-fluid" width="450"></p>
+</div>
+</div>
+</section>
+<section id="prepare-simple-colours" class="level3">
+<h3 class="anchored" data-anchor-id="prepare-simple-colours">Prepare simple colours</h3>
+<p>We’ll map a set of simple colours to the test image. This means that the colours from the test image will be replaced by the ‘closest’ colour from our simple set.</p>
+<p>One way to do this is to define our simple colour set and create an image from them. In this case I’m taking just six colours.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate named vector of 'simple' colours</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cols_vec <span class="ot">&lt;-</span> <span class="fu">setNames</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"#000000"</span>, <span class="st">"#0000ff"</span>, <span class="st">"#008000"</span>, <span class="st">"#ff0000"</span>, <span class="st">"#ffffff"</span>, <span class="st">"#ffff00"</span>),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"blue"</span>, <span class="st">"green"</span>, <span class="st">"red"</span>, <span class="st">"white"</span>, <span class="st">"yellow"</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we can plot squares of these colours, using <code>image_graph()</code> to read them as magick-class objects.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> My method here is not the most efficient, but you can see the output is an image that contains our six colours.</p>
+<details>
+<summary>
+Click for code
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For each vector element (colour) create a square of that colour</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(cols_vec)) {</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  fig_name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">names</span>(cols_vec)[i], <span class="st">"_square"</span>)  <span class="co"># create object name</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">assign</span>(</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    fig_name,  <span class="co"># set name</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">image_graph</span>(<span class="at">width =</span> <span class="dv">100</span>, <span class="at">height =</span> <span class="dv">100</span>, <span class="at">res =</span> <span class="dv">300</span>)  <span class="co"># create magick object</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">4</span>))  <span class="co"># set plot margins</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot.new</span>()  <span class="co"># new graphics frame</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rect</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="at">col =</span> cols_vec[i], <span class="at">border =</span> cols_vec[i])  <span class="co"># build rectangle</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">assign</span>(fig_name, magick<span class="sc">::</span><span class="fu">image_crop</span>(<span class="fu">get</span>(fig_name), <span class="st">"50x50+10+10"</span>)) <span class="co"># crop</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dev.off</span>()  <span class="co"># shut down plotting device</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rm</span>(i, fig_name)  <span class="co"># clear up</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate names of the coloured square objects</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>col_square <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">names</span>(cols_vec), <span class="st">"_square"</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine magick objects (coloured squares)</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>simple_cols <span class="ot">&lt;-</span> <span class="fu">image_append</span>(<span class="fu">c</span>(</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get</span>(col_square[<span class="dv">1</span>]), <span class="fu">get</span>(col_square[<span class="dv">2</span>]), <span class="fu">get</span>(col_square[<span class="dv">3</span>]),</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get</span>(col_square[<span class="dv">4</span>]), <span class="fu">get</span>(col_square[<span class="dv">5</span>]), <span class="fu">get</span>(col_square[<span class="dv">6</span>])</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(simple_cols)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 7
+  format width height colorspace matte filesize density
+  &lt;chr&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt;      &lt;lgl&gt;    &lt;int&gt; &lt;chr&gt;  
+1 PNG      300     50 sRGB       TRUE         0 300x300</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/print-col-squares-1.png" class="img-fluid" width="150"></p>
+</div>
+</div>
+<section id="map-to-the-image" class="level4">
+<h4 class="anchored" data-anchor-id="map-to-the-image">Map to the image</h4>
+<p>Now we can apply the simple colour set to the test image using <code>image_map()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>duplo_mapped <span class="ot">&lt;-</span> <span class="fu">image_map</span>(<span class="at">image =</span> duplo, <span class="at">map =</span> simple_cols)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And we can use <code>image_animate()</code> to see the difference between the two.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">image_animate</span>(<span class="fu">c</span>(duplo, duplo_mapped), <span class="at">fps =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/animation-1.gif" class="img-fluid"></p>
+</div>
+</div>
+<p>Great. You can see where the original colours have been replaced by the ‘closest’ simple colours.</p>
+<p>Note in particular where the more reflective surfaces are mapped to white than the actual brick colour.</p>
+<p>This is okay: the brick may be blue, but we’ve only defined <em>one</em> shade of blue. If a particular shade is closer to white, then so be it.</p>
+</section>
+</section>
+<section id="quantify-the-colours" class="level3">
+<h3 class="anchored" data-anchor-id="quantify-the-colours">Quantify the colours</h3>
+<p>Now we can take this mapped image and quantify how much of the image belongs to each colour. Imagine we’ve broken the image into pixels and then we’re counting how many belng to each of our six colours.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to count the colours (adapted from Jeroen Ooms)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>count_colors <span class="ot">&lt;-</span> <span class="cf">function</span>(image) {</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  data <span class="ot">&lt;-</span> <span class="fu">image_data</span>(image) <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">apply</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>, paste, <span class="at">collapse =</span> <span class="st">""</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    as.vector <span class="sc">%&gt;%</span> <span class="fu">table</span>() <span class="sc">%&gt;%</span>  <span class="fu">as.data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">setNames</span>(<span class="fu">c</span>(<span class="st">"hex"</span>, <span class="st">"freq"</span>))</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  data<span class="sc">$</span>hex <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"#"</span>, data<span class="sc">$</span>hex, <span class="at">sep=</span><span class="st">""</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(data)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Dataframe of dominant colours </span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>duplo_col_freq <span class="ot">&lt;-</span> duplo_mapped <span class="sc">%&gt;%</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count_colors</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">enframe</span>(cols_vec) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">hex =</span> value),</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"hex"</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(freq)) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percent =</span> <span class="dv">100</span><span class="sc">*</span><span class="fu">round</span>((freq<span class="sc">/</span><span class="fu">sum</span>(freq)), <span class="dv">3</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Colour name</span><span class="st">`</span> <span class="ot">=</span> name, <span class="at">Hexadecimal =</span> hex,</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Frequency of colour</span><span class="st">`</span> <span class="ot">=</span> freq, <span class="st">`</span><span class="at">Percent of image</span><span class="st">`</span> <span class="ot">=</span> percent</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>duplo_mapped  <span class="co"># see mapped image again</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/count-colours-1.png" class="img-fluid" width="450"></p>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(duplo_col_freq)  <span class="co"># quantify colour</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Colour name</th>
+<th style="text-align: left;">Hexadecimal</th>
+<th style="text-align: right;">Frequency of colour</th>
+<th style="text-align: right;">Percent of image</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">red</td>
+<td style="text-align: left;">#ff0000</td>
+<td style="text-align: right;">132135</td>
+<td style="text-align: right;">24.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">white</td>
+<td style="text-align: left;">#ffffff</td>
+<td style="text-align: right;">107841</td>
+<td style="text-align: right;">20.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">black</td>
+<td style="text-align: left;">#000000</td>
+<td style="text-align: right;">103645</td>
+<td style="text-align: right;">19.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">yellow</td>
+<td style="text-align: left;">#ffff00</td>
+<td style="text-align: right;">79750</td>
+<td style="text-align: right;">14.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">green</td>
+<td style="text-align: left;">#008000</td>
+<td style="text-align: right;">64868</td>
+<td style="text-align: right;">12.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blue</td>
+<td style="text-align: left;">#0000ff</td>
+<td style="text-align: right;">51761</td>
+<td style="text-align: right;">9.6</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>So red makes up almost a quarter of the image, with white and black just behind. This makes sense: many of the bricks are red and much of the shadow areas of yellow bricks were rendered as red, while black and white make up many of the other shadows and reflective surfaces.</p>
+</section>
+</section>
+<section id="and-so-we-must-p-art" class="level2">
+<h2 class="anchored" data-anchor-id="and-so-we-must-p-art">And so we must p-art</h2>
+<p>So, you can map a simple colour set to an image with {magick} and then quantify how much of the image is covered by that simple set.</p>
+<p>Of course, there are many possibilities beyond what’s been achieved here. For example, you could create a tool where the user chooses a colour and images are returned in order of dominance for that colour. You could also write this all into a function that takes a folder of images and returns the percentage of each colour in each image.</p>
+<p>Below are some additional examples of the approach taken in this post.</p>
+<section id="reef-fish" class="level3">
+<h3 class="anchored" data-anchor-id="reef-fish">Reef fish</h3>
+<details>
+<summary>
+Click for details
+</summary>
+<p>Image by <a href="https://commons.wikimedia.org/wiki/File:100%25_reef-fish_Endemism_at_90_m_off_Kure_Atoll.jpg">Richard L Pyle from Wikimedia Commons, CC0 1.0.</a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>reef_path <span class="ot">&lt;-</span> <span class="st">"https://upload.wikimedia.org/wikipedia/commons/0/05/100%25_reef-fish_Endemism_at_90_m_off_Kure_Atoll.jpg"</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>reef <span class="ot">&lt;-</span> <span class="fu">image_read</span>(reef_path) <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">image_scale</span>(<span class="at">geometry =</span> <span class="fu">c</span>(<span class="st">"x600"</span>))</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>reef_mapped <span class="ot">&lt;-</span> <span class="fu">image_map</span>(<span class="at">image =</span> reef, <span class="at">map =</span> simple_cols)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>reef_col_freq <span class="ot">&lt;-</span> reef_mapped <span class="sc">%&gt;%</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count_colors</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">enframe</span>(cols_vec) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">hex =</span> value),</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"hex"</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(freq)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percent =</span> <span class="dv">100</span><span class="sc">*</span><span class="fu">round</span>((freq<span class="sc">/</span><span class="fu">sum</span>(freq)), <span class="dv">3</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Colour name</span><span class="st">`</span> <span class="ot">=</span> name, <span class="at">Hexadecimal =</span> hex,</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Frequency of colour</span><span class="st">`</span> <span class="ot">=</span> freq, <span class="st">`</span><span class="at">Percent of image</span><span class="st">`</span> <span class="ot">=</span> percent</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>reef_animate <span class="ot">&lt;-</span> <span class="fu">image_animate</span>(<span class="fu">c</span>(reef, reef_mapped), <span class="at">fps =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/reef-print-1.gif" class="img-fluid" alt="A photo of fish on a reef, animated to show it in full colour and then simplified colour."></p>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Colour name</th>
+<th style="text-align: left;">Hexadecimal</th>
+<th style="text-align: right;">Frequency of colour</th>
+<th style="text-align: right;">Percent of image</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">blue</td>
+<td style="text-align: left;">#0000ff</td>
+<td style="text-align: right;">317143</td>
+<td style="text-align: right;">49.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">black</td>
+<td style="text-align: left;">#000000</td>
+<td style="text-align: right;">214642</td>
+<td style="text-align: right;">33.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">green</td>
+<td style="text-align: left;">#008000</td>
+<td style="text-align: right;">76234</td>
+<td style="text-align: right;">11.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">yellow</td>
+<td style="text-align: left;">#ffff00</td>
+<td style="text-align: right;">13296</td>
+<td style="text-align: right;">2.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">red</td>
+<td style="text-align: left;">#ff0000</td>
+<td style="text-align: right;">10086</td>
+<td style="text-align: right;">1.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">white</td>
+<td style="text-align: left;">#ffffff</td>
+<td style="text-align: right;">8799</td>
+<td style="text-align: right;">1.4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="hong-kong-lights" class="level3">
+<h3 class="anchored" data-anchor-id="hong-kong-lights">Hong Kong lights</h3>
+<details>
+<summary>
+Click for details
+</summary>
+<p>Image by <a href="https://commons.wikimedia.org/wiki/File:Neon_lights,_Nathan_Road,_Hong_Kong.jpg">Daniel Case from Wikimedia Commons, CC BY-SA 3.0</a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>neon_path <span class="ot">&lt;-</span> <span class="st">"https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Neon_lights%2C_Nathan_Road%2C_Hong_Kong.jpg/900px-Neon_lights%2C_Nathan_Road%2C_Hong_Kong.jpg"</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>neon <span class="ot">&lt;-</span> <span class="fu">image_read</span>(neon_path) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">image_scale</span>(<span class="at">geometry =</span> <span class="fu">c</span>(<span class="st">"x600"</span>))</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>neon_mapped <span class="ot">&lt;-</span> <span class="fu">image_map</span>(<span class="at">image =</span> neon, <span class="at">map =</span> simple_cols)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>neon_col_freq <span class="ot">&lt;-</span> neon_mapped <span class="sc">%&gt;%</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count_colors</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">enframe</span>(cols_vec) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">hex =</span> value),</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"hex"</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(freq)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percent =</span> <span class="dv">100</span><span class="sc">*</span><span class="fu">round</span>((freq<span class="sc">/</span><span class="fu">sum</span>(freq)), <span class="dv">3</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Colour name</span><span class="st">`</span> <span class="ot">=</span> name, <span class="at">Hexadecimal =</span> hex,</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Frequency of colour</span><span class="st">`</span> <span class="ot">=</span> freq, <span class="st">`</span><span class="at">Percent of image</span><span class="st">`</span> <span class="ot">=</span> percent</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>neon_animate <span class="ot">&lt;-</span> <span class="fu">image_animate</span>(<span class="fu">c</span>(neon, neon_mapped), <span class="at">fps =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/neon-print-1.gif" class="img-fluid" alt="A photo of Hong Kong neon lights, animated to show it in full colour and then simplified colour."></p>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Colour name</th>
+<th style="text-align: left;">Hexadecimal</th>
+<th style="text-align: right;">Frequency of colour</th>
+<th style="text-align: right;">Percent of image</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">black</td>
+<td style="text-align: left;">#000000</td>
+<td style="text-align: right;">191573</td>
+<td style="text-align: right;">71.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">green</td>
+<td style="text-align: left;">#008000</td>
+<td style="text-align: right;">23126</td>
+<td style="text-align: right;">8.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">blue</td>
+<td style="text-align: left;">#0000ff</td>
+<td style="text-align: right;">18454</td>
+<td style="text-align: right;">6.8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">red</td>
+<td style="text-align: left;">#ff0000</td>
+<td style="text-align: right;">17553</td>
+<td style="text-align: right;">6.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">yellow</td>
+<td style="text-align: left;">#ffff00</td>
+<td style="text-align: right;">10872</td>
+<td style="text-align: right;">4.0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">white</td>
+<td style="text-align: left;">#ffffff</td>
+<td style="text-align: right;">8422</td>
+<td style="text-align: right;">3.1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="ladybird" class="level3">
+<h3 class="anchored" data-anchor-id="ladybird">Ladybird</h3>
+<details>
+<summary>
+Click for details
+</summary>
+<p>Image by <a href="https://commons.wikimedia.org/wiki/File:Erysimum_Cheiranthoides_(215134987).jpeg">Elena Andreeva from Wikimedia Commons, CC0 1.0.</a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>lbird_path <span class="ot">&lt;-</span> <span class="st">"https://upload.wikimedia.org/wikipedia/commons/d/d5/Erysimum_Cheiranthoides_%28215134987%29.jpeg"</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>lbird <span class="ot">&lt;-</span> <span class="fu">image_read</span>(lbird_path) <span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">image_scale</span>(<span class="at">geometry =</span> <span class="fu">c</span>(<span class="st">"x600"</span>))</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>lbird_mapped <span class="ot">&lt;-</span> <span class="fu">image_map</span>(<span class="at">image =</span> lbird, <span class="at">map =</span> simple_cols)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>lbird_col_freq <span class="ot">&lt;-</span> lbird_mapped <span class="sc">%&gt;%</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count_colors</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">enframe</span>(cols_vec) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">hex =</span> value),</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="st">"hex"</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(freq)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">percent =</span> <span class="dv">100</span><span class="sc">*</span><span class="fu">round</span>((freq<span class="sc">/</span><span class="fu">sum</span>(freq)), <span class="dv">3</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Colour name</span><span class="st">`</span> <span class="ot">=</span> name, <span class="at">Hexadecimal =</span> hex,</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Frequency of colour</span><span class="st">`</span> <span class="ot">=</span> freq, <span class="st">`</span><span class="at">Percent of image</span><span class="st">`</span> <span class="ot">=</span> percent</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>lbird_animate <span class="ot">&lt;-</span> <span class="fu">image_animate</span>(<span class="fu">c</span>(lbird, lbird_mapped), <span class="at">fps =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/lbird-print-1.gif" class="img-fluid" alt="A photo of a ladybird on a leaf, animated to show it in full colour and then simplified colour."></p>
+</div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Colour name</th>
+<th style="text-align: left;">Hexadecimal</th>
+<th style="text-align: right;">Frequency of colour</th>
+<th style="text-align: right;">Percent of image</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">white</td>
+<td style="text-align: left;">#ffffff</td>
+<td style="text-align: right;">302626</td>
+<td style="text-align: right;">54.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">blue</td>
+<td style="text-align: left;">#0000ff</td>
+<td style="text-align: right;">118010</td>
+<td style="text-align: right;">21.3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">yellow</td>
+<td style="text-align: left;">#ffff00</td>
+<td style="text-align: right;">101797</td>
+<td style="text-align: right;">18.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">green</td>
+<td style="text-align: left;">#008000</td>
+<td style="text-align: right;">27892</td>
+<td style="text-align: right;">5.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">red</td>
+<td style="text-align: left;">#ff0000</td>
+<td style="text-align: right;">2322</td>
+<td style="text-align: right;">0.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">black</td>
+<td style="text-align: left;">#000000</td>
+<td style="text-align: right;">1153</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-08-05 17:29:58 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] magick_2.7.4 tibble_3.2.1 dplyr_1.1.2 
+
+loaded via a namespace (and not attached):
+ [1] vctrs_0.6.3       cli_3.6.1         knitr_1.43.1      rlang_1.1.1      
+ [5] xfun_0.39         png_0.1-8         generics_0.1.3    jsonlite_1.8.7   
+ [9] glue_1.6.2        htmltools_0.5.5   fansi_1.0.4       rmarkdown_2.23   
+[13] evaluate_0.21     fontawesome_0.5.1 fastmap_1.1.1     yaml_2.3.7       
+[17] lifecycle_1.0.3   compiler_4.3.1    htmlwidgets_1.6.2 Rcpp_1.0.11      
+[21] pkgconfig_2.0.3   rstudioapi_0.15.0 digest_0.6.33     R6_2.5.1         
+[25] tidyselect_1.2.0  utf8_1.2.3        curl_5.0.1        pillar_1.9.0     
+[29] magrittr_2.0.3    withr_2.5.0       tools_4.3.1      </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Just as well, because I’m colourblind.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>There are <a href="http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf">five named versions of olive drab</a> in R’s named palette.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://commons.wikimedia.org/wiki/Lego#/media/File:Lego_dublo_arto_alanenpaa_2.JPG">Photo by Arto Alanenpää</a>, CC0-BY-4.0 from Wikimedia Creative Commons.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Artefacts introduced during compression of PNGs and JPGs might mean that your set of six colours ends up being <em>more</em> than six. It’s preferable to generate our colour set within R, inside <code>image_graph()</code>, so that we have only our six defined colours.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
