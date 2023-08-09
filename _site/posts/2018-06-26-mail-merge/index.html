@@ -166,7 +166,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Matt Dray </p>
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
             </div>
     </div>
       
@@ -232,8 +232,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="who-will-she-choose" class="level2">
 <h2 class="anchored" data-anchor-id="who-will-she-choose">Who will she choose?</h2>
-<p>To keep to the turn-of-the-millennium theme, this post explains how to autogenerate reports that contain data for each episode of the first season of the hit late-90s-early-2000s-weirdly-articulate-teen-angst-love-triangle masterpiece that is <a href="https://www.imdb.com/title/tt0118300/" target="_blank">Dawson’s Creek</a>. Data via <a href="https://en.wikipedia.org/wiki/List_of_Dawson%27s_Creek_episodes#Season_1:_1998" target="_blank">Wikipedia</a>.</p>
-<p>I’ve created <a href="https://github.com/matt-dray/mail-merge-2018" target="_blank">an accompanying GitHub repository</a> where you can download or clone a whole R Project that replicates the approach used in this post.</p>
+<p>To keep to the turn-of-the-millennium theme, this post explains how to autogenerate reports that contain data for each episode of the first season of the hit late-90s-early-2000s-weirdly-articulate-teen-angst-love-triangle masterpiece that is <a href="https://www.imdb.com/title/tt0118300/">Dawson’s Creek</a>. Data via <a href="https://en.wikipedia.org/wiki/List_of_Dawson%27s_Creek_episodes#Season_1:_1998">Wikipedia</a>.</p>
+<p>I’ve created <a href="https://github.com/matt-dray/mail-merge-2018">an accompanying GitHub repository</a> where you can download or clone a whole R Project that replicates the approach used in this post.</p>
 </section>
 <section id="approach" class="level2">
 <h2 class="anchored" data-anchor-id="approach">Approach</h2>
@@ -243,7 +243,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>make reference to a Word document that contains the style information for your output (i.e.&nbsp;fonts, colours, etc)</li>
 <li>loop over each element (e.g.&nbsp;each episode), supplying data to the template and rendering (‘knitting’) a separate output file for each one</li>
 </ul>
-<p>[Update: this approach is quite basic. You may want to read <a href="https://www.rostrum.blog/2020/03/12/knit-with-params/" target="_blank">a more recent post on this blog</a> that uses <a href="https://rmarkdown.rstudio.com/developer_parameterized_reports.html%23parameter_types%2F">parameterised R Markdown</a> reports and iteration with the {purrr} package, which may suit you better.]</p>
+<p>[Update: this approach is quite basic. You may want to read <a href="https://www.rostrum.blog/2020/03/12/knit-with-params/">a more recent post on this blog</a> that uses <a href="https://rmarkdown.rstudio.com/developer_parameterized_reports.html%23parameter_types%2F">parameterised R Markdown</a> reports and iteration with the {purrr} package, which may suit you better.]</p>
 <section id="set-up" class="level3">
 <h3 class="anchored" data-anchor-id="set-up">Set up</h3>
 <p>I recommend creating an RStudio Project with three files important to this task:</p>
@@ -275,8 +275,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="template">1. The template</h3>
 <section id="r-markdown" class="level4">
 <h4 class="anchored" data-anchor-id="r-markdown">R Markdown</h4>
-<p>Your report template should be an R Markdown file. In short, R Markdown files allow you to write plain text formatted with special symbols and insert R code inline or in ‘chunks’. You can <a href="https://rmarkdown.rstudio.com/" target="_blank">find out more about R Markdown from the RStudio website</a>. I’ve also written <a href="https://matt-dray.github.io/knitting-club/" target="_blank">a short guide to writing R Markdown documents</a> and created <a href="https://matt-dray.github.io/quick-rmd/#1" target="_blank">a small set of slides</a>, both with beginners in mind.</p>
-<p>You can see the full R Markdown file for this demo <a href="https://github.com/matt-dray/mail-merge-2018/blob/master/01_template.Rmd" target="_blank">in the source code on GitHub</a>.</p>
+<p>Your report template should be an R Markdown file. In short, R Markdown files allow you to write plain text formatted with special symbols and insert R code inline or in ‘chunks’. You can <a href="https://rmarkdown.rstudio.com/">find out more about R Markdown from the RStudio website</a>. I’ve also written <a href="https://matt-dray.github.io/knitting-club/">a short guide to writing R Markdown documents</a> and created <a href="https://matt-dray.github.io/quick-rmd/#1">a small set of slides</a>, both with beginners in mind.</p>
+<p>You can see the full R Markdown file for this demo <a href="https://github.com/matt-dray/mail-merge-2018/blob/master/01_template.Rmd">in the source code on GitHub</a>.</p>
 </section>
 <section id="specify-word-output" class="level4">
 <h4 class="anchored" data-anchor-id="specify-word-output">Specify Word output</h4>
@@ -294,11 +294,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 class="anchored" data-anchor-id="reference-the-data">Reference the data</h4>
 <p>We’ll be feeding data into the template via an object called <code>episode</code>. This object is a data frame that contains the variables that we want to put into our template, with one row per episode (more on this in <a href="#loop">the section below about iterating</a> below).</p>
 <p>When it comes to iterating over the data to produce each output file, we’ll be subsetting a row at a time so we only pass one episode’s information to the template.</p>
-<p>This means the R code in our R Markdown file should refer to the <code>episode</code> object. For example, here’s some inline code that will be rendered into the production code and title (<a href="https://github.com/matt-dray/mail-merge-2018/blob/dd0e15b9653d1aadb310f679316d1dadb1c5398f/01_template.Rmd#L15" target="_blank">see this in the source repo on GitHub</a>):</p>
+<p>This means the R code in our R Markdown file should refer to the <code>episode</code> object. For example, here’s some inline code that will be rendered into the production code and title (<a href="https://github.com/matt-dray/mail-merge-2018/blob/dd0e15b9653d1aadb310f679316d1dadb1c5398f/01_template.Rmd#L15">see this in the source repo on GitHub</a>):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="st">`</span><span class="at">r paste0(episode$production_code, ": '", episode$title, "'")</span><span class="st">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>And here’s an example R Markdown chunk that will get a table containing information about the episodes (<a href="https://github.com/matt-dray/mail-merge-2018/blob/dd0e15b9653d1aadb310f679316d1dadb1c5398f/01_template.Rmd#L19-L28" target="_blank">see this in the source code</a>):</p>
+<p>And here’s an example R Markdown chunk that will get a table containing information about the episodes (<a href="https://github.com/matt-dray/mail-merge-2018/blob/dd0e15b9653d1aadb310f679316d1dadb1c5398f/01_template.Rmd#L19-L28">see this in the source code</a>):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>episode <span class="sc">%&gt;%</span> </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(  <span class="co"># choose these columns for display</span></span>
@@ -314,20 +314,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="style" class="level3">
 <h3 class="anchored" data-anchor-id="style">2. The style</h3>
 <p>The default output when rendering R Markdown to Word is a bit boring. Instead, you can create a separate dummy Word document that contains modified styles to suit your theme.</p>
-<p>You can read more about creating a style document in <a href="https://rmarkdown.rstudio.com/articles_docx.html" target="_blank">Richard Layton’s ‘happy collaboration with Rmd to docx’</a> on the R Markdown site. Basically you create a dummy document in which you’ve set the formatting for each style element (title, third-level header, paragraph text, etc), store it in your working repository and refer to it from the YAML of your R Markdown report (as mentioned in <a href="#template">the section above</a>).</p>
+<p>You can read more about creating a style document in <a href="https://rmarkdown.rstudio.com/articles_docx.html">Richard Layton’s ‘happy collaboration with Rmd to docx’</a> on the R Markdown site. Basically you create a dummy document in which you’ve set the formatting for each style element (title, third-level header, paragraph text, etc), store it in your working repository and refer to it from the YAML of your R Markdown report (as mentioned in <a href="#template">the section above</a>).</p>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
 <p><img src="resources/dawson_style.PNG" class="img-fluid figure-img" style="width:75.0%" alt="Screenshot of Microsoft Word showing the style document."></p>
 <figcaption class="figure-caption">The style document</figcaption>
 </figure>
 </div>
-<p>You can download the example style file used in this demo <a href="https://github.com/matt-dray/mail-merge-2018/tree/master/" target="_blank">from the GitHub repo</a>.</p>
+<p>You can download the example style file used in this demo <a href="https://github.com/matt-dray/mail-merge-2018/tree/master/">from the GitHub repo</a>.</p>
 </section>
 <section id="loop" class="level3">
 <h3 class="anchored" data-anchor-id="loop">3. Iterate</h3>
 <p>So we have the template (<code>.Rmd</code>) and style (<code>.docx</code>) files in place. Now we need an R script (<code>.R</code>) to orchestrate the iteration of our outputs.</p>
 <p>This script (i) reads the data and (ii) executes a loop that applies episode data to the template, saving to a specified subfolder with a unique file name. You’ll get one document for each unique element; in this demo we’ll get 13 because there are 13 rows (episodes) in our data set.</p>
-<p>You can see the script file for this demo in <a href="https://github.com/matt-dray/mail-merge-2018/blob/master/02_loop.R" target="_blank">the source code on GitHub</a>.</p>
+<p>You can see the script file for this demo in <a href="https://github.com/matt-dray/mail-merge-2018/blob/master/02_loop.R">the source code on GitHub</a>.</p>
 <p>After reading in the data with something like <code>data &lt;- readr::read_csv(file = "data/dawsons-creek-season-1.csv")</code> you can write a loop that looks something like this:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> data<span class="sc">$</span>production_code){  <span class="co"># for each unique episode...</span></span>
@@ -388,7 +388,7 @@ Session info
 <p>I don’t wanna wait for this post to be oooover…</p>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-08-08 23:28:06 BST</code></pre>
+<pre><code>Last rendered: 2023-08-09 00:06:56 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -422,7 +422,7 @@ loaded via a namespace (and not attached):
 
 <ol>
 <li id="fn1"><p>See <a href="https://github.com/andrie/mailmerge">Andrie de Vries’s package {mailmerge}</a> if you actually want to iteratively formulate email content from a template and email to people via {gmailr}.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>You don’t have to render to Word. You could <a href="https://bookdown.org/yihui/rmarkdown/output-formats.html" target="_blank">render to HTML or PDF instead</a>, using CSS to style your document instead of a <code>.docx</code> style template.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>You don’t have to render to Word. You could <a href="https://bookdown.org/yihui/rmarkdown/output-formats.html">render to HTML or PDF instead</a>, using CSS to style your document instead of a <code>.docx</code> style template.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
