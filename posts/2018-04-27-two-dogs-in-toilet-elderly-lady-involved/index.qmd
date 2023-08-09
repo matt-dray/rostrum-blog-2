@@ -1,0 +1,261 @@
+---
+title: TWO DOGS IN TOILET ELDERLY LADY INVOLVED
+date: 2018-04-27
+slug: two-dogs-in-toilet-elderly-lady-involved
+categories:
+  - dataviz
+  - geospatial
+  - leaflet
+  - r
+  - rvest
+  - sf
+---
+
+![A pigeon does not belong inside a chimney.](resources/mr-chimney.jpg){fig-alt="A pigeon that's stuck inside a chimney breast." width="60%" fig-align="left"}
+
+## tl;dr
+
+Animals get stuck in weird places, just ask [the London Fire Brigade](https://data.london.gov.uk/dataset/animal-rescue-incidents-attended-by-lfb/resource/e6211993-9ea2-4ed4-9378-7344653e9c31). I used [the {sf} package](https://github.com/r-spatial/sf) to handling some animal rescue spatial data prior to [interactive mapping with {leaflet}](https://rstudio.github.io/leaflet/).
+
+## The problem
+
+Sometimes I need to convert coordinate data to latitude and longitude for interactive mapping using the [{leaflet}](https://rstudio.github.io/leaflet/) package in R.
+
+I'm going to demo the {sf} package, show how to reproject coordinates, work with points and polygon data, make an interactive map with {leaflet} and do a bonus bit of webscraping.
+
+## Special features
+
+The [{sf} ('simple features') package](https://github.com/r-spatial/sf) from [Edzer Pebesma](https://orcid.org/0000-0001-8049-7069) has a series of classes and methods for spatial data. The package is becoming popular because simple feature access is a widely-used multi-platform [ISO standard](https://www.iso.org/standard/40114.html) and the package supports the popular [tidy data](http://r4ds.had.co.nz/tidy-data.html) paradigm and can be integrated with [tidyverse operations](https://www.tidyverse.org/). This and more was [spelled out by Pebesma in a post](https://edzer.github.io/UseR2017/) from [UseR! 2017](https://user2017.brussels/).
+
+You can read more about anlyses with {sf} in [Geocomputation with R](https://bookdown.org/robinlovelace/geocompr/) by Robin Lovelace, Jakub Nowosad and Jannes Muenchow.
+
+## Data: animal rescues
+
+I've found an interesting example dataset that contains eastings and northings: [animal rescue incidents](https://data.london.gov.uk/dataset/animal-rescue-incidents-attended-by-lfb/resource/e6211993-9ea2-4ed4-9378-7344653e9c31) attended by the [London Fire Brigade](https://www.london-fire.gov.uk/incidents/) from the excellent [London Data Store](https://data.london.gov.uk/). In their words:
+
+> The London Fire Brigade attends a range of non-fire incidents (which we call 'special services'). These 'special services' include assistance to animals that may be trapped or in distress.
+
+This is close to my heart because a pigeon fell down our chimney recently. After a brave rescue mission (putting on some rubber gloves and contorting my arms through a tiny vent hole) I think I'm now qualified to join an elite search and rescue team.
+
+### Clean
+
+We can read the data directly from [the datastore](https://data.london.gov.uk/dataset/animal-rescue-incidents-attended-by-lfb/resource/e6211993-9ea2-4ed4-9378-7344653e9c31) as a CSV file.
+
+```{r read-data}
+suppressPackageStartupMessages(library(tidyverse))
+library(janitor, warn.conflicts = FALSE)
+
+csv_path <- "https://data.london.gov.uk/download/animal-rescue-incidents-attended-by-lfb/01007433-55c2-4b8a-b799-626d9e3bc284/Animal%20Rescue%20incidents%20attended%20by%20LFB%20from%20Jan%202009.csv"
+
+rescue <- read_csv(csv_path, show_col_types = FALSE)
+
+# A sample of the rows and columns
+rescue %>%
+  select(DateTimeOfCall, `IncidentNotionalCost(£)`, AnimalGroupParent, Borough) %>%
+  slice_sample(n = 5)
+```
+
+So each row is an 'incident' to which the brigade were called and there's `r nrow(rescue)` of them recorded in the dataset. There are `r ncol(rescue)` columns for variables relating to incident, including when it was, what it was and where it was.
+
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+This post was first written in April 2018, but was re-rendered with the latest rescue data as of August 2023.
+</div><p>
+
+### Explore
+
+This post isn't about the dataset, but it's worth having a closer look at it. I've added an interactive table below so you can search for incidents, creatures, locations and the notional cost of the callout.
+
+```{r datatable, echo=FALSE}
+library(DT)
+
+rescue %>%
+  mutate(
+    Animal = as.factor(AnimalGroupParent),
+    Borough = as.factor(Borough),
+    `IncidentNotionalCost(£)` = if_else(
+      `IncidentNotionalCost(£)` == "NULL", 
+      NA_character_, 
+      `IncidentNotionalCost(£)`
+    ),
+    `IncidentNotionalCost(£)` = as.numeric(`IncidentNotionalCost(£)`)
+  ) %>% 
+  select(
+    Incident = FinalDescription, Animal, Borough,
+    `Notional cost (£)` = `IncidentNotionalCost(£)`
+  ) %>% 
+  datatable(options = list(autoWidth = TRUE, pageLength = 5, dom = "ftp"))
+```
+
+Obviously there are plenty of cats up trees, but there's so much more. Some of the more unique entries are:
+
+> DOG WITH JAW TRAPPED IN MAGAZINE RACK
+
+> SWAN IN DISTRESS
+
+> FERRET STUCK IN LIFT SHAFT
+
+And of course:
+
+> TWO DOGS IN TOILET ELDERLY LADY INVOLVED
+
+## Data: points
+
+Each incident in our data is a point in space with an X and Y coordinate. It's currently eastings and northings, but we want to transform it to latitude and longitude.
+
+### The sf class and reprojection
+
+A  [Coordinate Reference System](https://en.wikipedia.org/wiki/Spatial_reference_system) (CRS) is required to project geographic entities -- points, polygons, etc -- onto a surface. There are many systems for doing this, from local to global, each with its own CRS code. This isn't a post about geography and projections, but you can read more in the CRS chapter of [rspatial.org](http://rspatial.org/spatial/rst/6-crs.html).
+
+First we convert the our dataframe-class object an 'sf' class object using the `st_as_sf` function, which readies it for spatial analysis. We simply provide arguments that point to the columns containing the coordinates and the CRS code for that projection system. 
+
+We can then use the `st_transform()` function to convert our projection system from eastings and northings to to latitude and longitude. 
+
+```{r as-sf}
+library(sf, quietly = TRUE)
+
+rescue_sf <- rescue %>% 
+  st_as_sf(
+    coords = c("Easting_rounded", "Northing_rounded"),
+    crs = 27700  # coordinate reference system code for eastings/northings
+  ) %>% 
+  st_transform(crs = 4326)  # the coord ref system code for latlong
+```
+
+So what happened more specifically? Our eastings and northings were combined with `st_as_sf()` into a two element [list-column](https://jennybc.github.io/purrr-tutorial/ls13_list-columns.html) called `geometry` with data type `sfc_POINT`. Our new sf-class object also contains some metadata detailing the geometry type -- `POINTS` in our case -- and the projection system of the coordinate data, which we converted to latlong with the `st_transform()` function.
+
+### Tidyverse manipulation
+
+As mentioned, one advantage of using {sf} is that sf-class objects use the [tidy data](http://r4ds.had.co.nz/tidy-data.html) paradigm that allows for use of the [tidyverse](https://www.tidyverse.org/). Some users may prefer this relative to the 'Spatial Points Data Frame' (SPDF) class that is produced by the {sp} package for points data. SPDFs are an [S4 class](http://adv-r.had.co.nz/S4.html), which means they have 'slots' of data, coordinates, etc.
+
+In the code chunk above I used pipes to pass the `rescue` dataframe to `st_as_sf()` and then to `st_transform()`. You can also use {dplyr} functions like `filter()` on your sf-class object.
+
+```{r dplyr}
+filtered_rescue_sf <- rescue_sf %>%
+  filter(
+    AnimalGroupParent %in% c("Dog", "Cat", "Bird"),  # just these animals
+    DateTimeOfCall > ymd("2017-01-01") &
+      DateTimeOfCall < ymd("2017-12-31")  # 2017 only
+  )
+```
+
+We can also use the `st_coordinates()` function to extract the XY (latitude and longitude) coordinates from the column containing our {sf} point geometry. This means we can have separate columns for the latitude and longitude, as well as our list-column.
+
+```{r st_coordinates}
+rescue_coords <- as.data.frame(st_coordinates(filtered_rescue_sf))
+filtered_rescue_sf <- bind_cols(filtered_rescue_sf, rescue_coords)
+```
+
+## Data: polygons
+
+### Read and convert GeoJSON
+
+While we're messing around with the {sf} package we can investigate polygons by adding in the borders for each of the London boroughs from a [GeoJSON](http://geojson.org/) file.
+
+First, read [Local Authority District](https://en.wikipedia.org/wiki/Districts_of_England) (LADs) data directly from the [Open Geography Portal](http://geoportal.statistics.gov.uk/) and then use the `st_as_sf()` function to make the conversion from the sp class to the sf class.
+
+```{r geojson, warning=FALSE}
+suppressPackageStartupMessages(library(geojsonio))
+
+# Download boundary data to temporary location
+geojson_path <- "https://services1.arcgis.com/ESMARspQHYMw9BZ9/arcgis/rest/services/Local_Authority_Districts_May_2023_UK_BUC_V2/FeatureServer/0/query?outFields=*&where=1%3D1&f=geojson"
+temp_geojson <- tempfile(fileext = ".geojson")
+download.file(geojson_path, temp_geojson, quiet = TRUE)
+
+# Read the geojson and convert to sf class
+lad_sf <- temp_geojson %>%
+  geojson_read(what = "sp") %>% 
+  st_as_sf()
+
+unlink(temp_geojson)  # discard temporary file
+```
+
+This means our polygon dataset is a tidy dataframe with the polygon information stored as `MULTIPOLYGON` type in a list-column with as many elements as required to draw each polygon (e.g. a square requires four sets of XY points that can be joined together). The outcome is very similar to what we had for our points data.
+
+### Scrape London boroughs
+
+But which of these LADs are London boroughs? We can extract a vector of the boroughs from Wikipedia using the [{rvest}](http://blog.rstudio.com/2014/11/24/rvest-easy-web-scraping-with-r/) package and use it to filter our data. The CSS selector used in the `html_nodes()` function below can be extracted using the very handy [SelectorGadget tool](http://selectorgadget.com/).
+
+```{r boroughs}
+library(rvest, warn.conflicts = FALSE)
+library(xml2)
+
+wiki_page <- "https://en.wikipedia.org/wiki/List_of_London_boroughs"
+
+boroughs <- wiki_page %>%
+  read_html() %>% 
+  html_nodes(css = "td:nth-child(1) > a") %>%
+  html_text() %>% 
+  tolower()
+
+boroughs_sf <- lad_sf %>% 
+  mutate(LAD23NM = tolower(LAD23NM)) %>% 
+  filter(LAD23NM %in% boroughs)
+
+head(boroughs_sf$LAD23NM)
+```
+
+## Map it
+
+So now we can plot the data. The `addPolygons()` function accepts each `MULTIPOLYGON` in the list-column of our London boroughs dataset.  The `addMarkers()` function accepts the POINTS-type list-column to plot each point at the latitude and longitude specified.
+
+This is a very simple map for now. You can:
+
+* zoom with the `+` and `-` buttons or scroll with your mouse wheel
+* click and drag to move the map
+* click the points to get a pop-up showing more information
+* hover over a borough to highlight it and show a label
+
+```{r leaflet}
+library(leaflet)  # for interactive mapping
+
+# put the map together
+leaflet(boroughs_sf) %>% 
+  addProviderTiles(providers$Wikimedia) %>%
+  addPolygons(  # add London borough boundaries
+    label = ~tools::toTitleCase(LAD23NM),  # label on hover
+    color = "black",  # boundary colour
+    weight = 2,  # boundary thickness
+    opacity = 1,  # fully opaque lines
+    fillOpacity = 0.2,  # mostly transparent
+    highlightOptions = highlightOptions(
+      color = "white",  # turn boundary white on hover
+      weight = 2,  # same as polygon boundary
+      bringToFront = TRUE  # overlay the highglight
+    )
+  ) %>% 
+  addAwesomeMarkers( # add incident points
+    lng = filtered_rescue_sf$X, lat = filtered_rescue_sf$Y,
+    icon = awesomeIcons(
+      library = "ion",  # from this icon library
+      icon = "ion-android-alert",  # use this icon
+      iconColor = "white",  # colour it white
+      # colour by animal
+      markerColor = case_when(  # different colours for each
+        filtered_rescue_sf$AnimalGroupParent == "Dog" ~ "red",
+        filtered_rescue_sf$AnimalGroupParent == "Cat" ~ "blue",
+        filtered_rescue_sf$AnimalGroupParent == "Bird" ~ "black"
+      )
+    ),
+    popup = ~paste0(  # display this information on click
+      "<b>Animal</b>: ", filtered_rescue_sf$AnimalGroupParent, "<br>",
+      "<b>Incident</b>: ", filtered_rescue_sf$FinalDescription, "<br>",
+      "<b>Date</b>: ", filtered_rescue_sf$DateTimeOfCall, "<br>",
+      "<b>Borough</b>: ", filtered_rescue_sf$Borough, "<br>",
+      "<b>Notional cost</b>: £", filtered_rescue_sf$`IncidentNotionalCost(£)`
+    )
+  )
+```
+<br>
+Okay cool, we get a simple map of London with borough boundaries and markers showing incidents in 2017, with a different colour for each of three selected animal groups (red = dog, blue = cat, black = bird).
+
+My main advice? Keep an eye on your pets. And consider covering your chimney.
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
