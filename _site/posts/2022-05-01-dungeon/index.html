@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2022-05-01">
+
+<title>rostrum.blog - Simple procedural dungeons in R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Simple procedural dungeons in R</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">gamedev</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">r.oguelike</div>
+                <div class="quarto-category">videogames</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 1, 2022</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#generate-to-accumulate" id="toc-generate-to-accumulate" class="nav-link" data-scroll-target="#generate-to-accumulate">Generate to accumulate</a></li>
+  <li><a href="#excavations" id="toc-excavations" class="nav-link" data-scroll-target="#excavations">Excavations</a>
+  <ul class="collapse">
+  <li><a href="#installlaunch" id="toc-installlaunch" class="nav-link" data-scroll-target="#installlaunch">Install/launch</a></li>
+  <li><a href="#prepare" id="toc-prepare" class="nav-link" data-scroll-target="#prepare">Prepare</a></li>
+  <li><a href="#demo" id="toc-demo" class="nav-link" data-scroll-target="#demo">Demo</a></li>
+  <li><a href="#more-examples" id="toc-more-examples" class="nav-link" data-scroll-target="#more-examples">More examples</a></li>
+  </ul></li>
+  <li><a href="#proceed-the-procedure" id="toc-proceed-the-procedure" class="nav-link" data-scroll-target="#proceed-the-procedure">Proceed the procedure</a>
+  <ul class="collapse">
+  <li><a href="#functions" id="toc-functions" class="nav-link" data-scroll-target="#functions">Functions</a></li>
+  <li><a href="#sampling" id="toc-sampling" class="nav-link" data-scroll-target="#sampling">Sampling</a></li>
+  </ul></li>
+  <li><a href="#going-deeper" id="toc-going-deeper" class="nav-link" data-scroll-target="#going-deeper">Going deeper</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/r.oguelike-generate.gif" class="img-fluid figure-img" style="width:100.0%" alt="Gif showing the steps to generate an ASCII-character tiled dungeon in R. First, a map is created with four randomly-placed floor tiles, then they're connected with corridors, then the tiles around the floor tiles are converted from wall to floor tiles, randomly, for three iterations."></p>
+<figcaption class="figure-caption">Three iterations to expand four randomly-placed floor tiles into a cavern.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I wrote a (very!) basic procedure to generate randomised ASCII-character tile-based dungeons for <a href="https://matt-dray.github.io/r.oguelike/">{r.oguelike}, an in-development roguelike-game-in-a-package for R</a>.</p>
+</section>
+<section id="generate-to-accumulate" class="level2">
+<h2 class="anchored" data-anchor-id="generate-to-accumulate">Generate to accumulate</h2>
+<p><a href="https://www.rostrum.blog/2022/04/25/r.oguelike-dev/">I wrote recently</a> about <a href="https://matt-dray.github.io/r.oguelike/">the {r.oguelike} R package</a>, which contains the beginnings of <a href="https://en.wikipedia.org/wiki/Roguelike">a roguelike game</a> written entirely in R.</p>
+<p><img src="resources/r.oguelike-hex.png" class="img-fluid" style="width:25.0%" alt="Hex sticker design for the 'r.oguelike' R package. Black background with bright green font, reminiscent of old computer terminal output. In the centre, a three-by-ten arrangement of hashmarks and periods, along with a single at symbol and dollar sign, which looks like a classic ACII tile-based roguelike game. The text 'r.oguelike' is underneath."></p>
+<p>A key element of roguelike games is that <a href="http://www.roguebasin.com/index.php/Berlin_Interpretation">the dungeons should be procedurally generated</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> so that the player gets a different one each time they play.</p>
+<p>There are many algorithmic systems for dungeon creation, like wave function collapse, perlin noise, binary space partitioning, cellular automata, etc.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> See <a href="https://www.youtube.com/watch?v=TlLIOgWYVpI">the talk by Herbert Wolverson at Roguelike Celebration</a>, for example.</p>
+<p>I plan to take a look at these approaches in future, but I wanted to start with something a bit more… <em>naïve</em>. I just want a simple interconnected space that spawns with randomised rooms, corridors and galleries.</p>
+</section>
+<section id="excavations" class="level2">
+<h2 class="anchored" data-anchor-id="excavations">Excavations</h2>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>The {r.oguelike} package is a work in progress and is developing at pace. Many things explained below may have been superseded or changed by the time you read this.</p>
+</div>
+<section id="installlaunch" class="level3">
+<h3 class="anchored" data-anchor-id="installlaunch">Install/launch</h3>
+<p>You can <a href="https://github.com/matt-dray/r.oguelike">install the (currently work-in-progress) {r.oguelike} package from GitHub</a>, via {remotes}.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)  <span class="co"># if not already installed</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"matt-dray/r.oguelike"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can also launch RStudio in the browser with {r.oguelike} preinstalled, <a href="https://mybinder.org/">thanks to Binder</a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> (may take a couple of minutes to load):</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><a href="https://mybinder.org/v2/gh/matt-dray/play-r.oguelike/main?urlpath=rstudio"><img src="https://mybinder.org/badge_logo.svg" class="img-fluid figure-img" alt="A button to launch a Binder instance that says 'launch binder' on it."></a></p>
+</figure>
+</div>
+</section>
+<section id="prepare" class="level3">
+<h3 class="anchored" data-anchor-id="prepare">Prepare</h3>
+<p>Before we begin, note that we can talk about generative ‘dungeons’ in the context of connected rooms, like in <a href="https://en.wikipedia.org/wiki/The_Binding_of_Isaac_(video_game)"><em>The Binding of Isaac</em></a>, or more freeform structures, like world maps in <a href="https://en.wikipedia.org/wiki/Dwarf_Fortress"><em>Dwarf Fortress</em></a>. We’re going for the latter, which amounts to interconnected caverns.</p>
+<p>The function we’ll be using is called <code>generate_dungeon()</code>, which prints to the console a cavern that differs each time you run it.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> You can alter the output using the arguments:</p>
+<ul>
+<li><code>iterations</code> is the number of times to ‘grow’ the caverns</li>
+<li><code>n_row</code> and <code>n_col</code> give the map dimensions</li>
+<li><code>n_rooms</code> is the number of rooms to spawn</li>
+<li><code>is_snake</code> for a cavern that is continuous from left to right and wiggly</li>
+<li><code>is_organic</code> for a more freeform vs ‘square’ look to the caverns</li>
+<li><code>colour</code> to print the output in colour</li>
+</ul>
+<p>You can always run <code>set.seed()</code> before <code>generate_dungeon()</code> to create the same dungeon every time you run the function with the same parameters.</p>
+</section>
+<section id="demo" class="level3">
+<h3 class="anchored" data-anchor-id="demo">Demo</h3>
+<p>So here’s a smallish dungeon with 3 growth iterations for 4 starting rooms, on a map with tile dimensions of 20 rows by 30 columns.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dungeon <span class="ot">&lt;-</span> r.oguelike<span class="sc">::</span><span class="fu">generate_dungeon</span>(<span class="dv">3</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here’s a screenshot of the output so you can see it in colour.</p>
+<p><img src="resources/dungeon.png" class="img-fluid" style="width:100.0%" alt="A tile-based map made of ASCII. Red hashmarks for cave walls. Black periods for cavern-floor tiles. Yellow hyphens and pipes for the boundary of the map. The cavern has a number of interconnected tunnels and some short dead-ends."></p>
+<details>
+<summary>
+Click for the actual console output.
+</summary>
+<pre><code>| - - - - - - - - - - - - - - - - - - - - - - - - - - - - | 
+| # # # # # # . # # # # # # # # # # # # # # # # # # # # # | 
+| # # . # . . . . # # # # # . # # # # # # # # # # # # # # | 
+| # . . . . # . . # # # . . . . # # # # # # # # # # # # # | 
+| # . . . . . . . . . . . . . . . # # # # # # # # # # # # | 
+| . . . # . . # . . # # . . . . . # # # # # # # # # # # # | 
+| . . . . # # # . # # # # # . . # # # # # # # # # # # # # | 
+| . . # # # # # # # # # # # . # # # # # # # # # # # # # # | 
+| . . . . # # # # # # # # . . . # # # # # # # # # # # # # | 
+| . . . . # # # # # # # # # . . # # # # # # # # # # # # # | 
+| . . . # # # # # # # . # . . . # # # # # # # # # # # # # | 
+| . . . # # # # # # . . . . . . . # # # # # # # # # # # # | 
+| . . . # # . . # . . # . . . . . . . . . # . . . # # # # | 
+| . . . . . . . . . . . . . . . . . . . . . . . . # # # # | 
+| . . # # . . . # . # . . . # . . . # # . . # . . # # # # | 
+| # # # # . . . # . # # # # # . # . # # # # . . . # # # # | 
+| # # # # # # # # # # # # # # # # # # # # . . . . # # # # | 
+| # # # # # # # # # # # # # # # # # # # # . . . # # # # # | 
+| # # # # # # # # # # # # # # # # # # # # # # . # # # # # | 
+| - - - - - - - - - - - - - - - - - - - - - - - - - - - - | </code></pre>
+</details>
+<p>So, in this example you can see we have a little cavern with some interconnected areas and a dead-end in the lower right. The tiles represent:</p>
+<ul>
+<li>cavern-floor tiles (black periods), which is where the character can traverse</li>
+<li>cave wall tiles (red hashmarks, which can’t be passed through)</li>
+<li>a boundary around the edge (yellow hyphens and pipe symbols)</li>
+</ul>
+<p>Note that the actual output from the function—a matrix that represents the dungeon tiles—is returned invisibly.</p>
+<details>
+<summary>
+Click for a preview of the returned matrix.
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preview first 10 rows and columns</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dungeon[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>[,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+[1,] "|"  "-"  "-"  "-"  "-"  "-"  "-"  "-"  "-"  "-"  
+[2,] "|"  "#"  "#"  "#"  "#"  "#"  "#"  "."  "#"  "#"  
+[3,] "|"  "#"  "#"  "."  "#"  "."  "."  "."  "."  "#"  
+[4,] "|"  "#"  "."  "."  "."  "."  "#"  "."  "."  "#"  
+[5,] "|"  "#"  "."  "."  "."  "."  "."  "."  "."  "."  
+[6,] "|"  "."  "."  "."  "#"  "."  "."  "#"  "."  "."  
+[7,] "|"  "."  "."  "."  "."  "#"  "#"  "#"  "."  "#"  
+[8,] "|"  "."  "."  "#"  "#"  "#"  "#"  "#"  "#"  "#"  
+[9,] "|"  "."  "."  "."  "."  "#"  "#"  "#"  "#"  "#"  
+[10,] "|"  "."  "."  "."  "."  "#"  "#"  "#"  "#"  "#"  </code></pre>
+<p></p>
+</details></section>
+<section id="more-examples" class="level3">
+<h3 class="anchored" data-anchor-id="more-examples">More examples</h3>
+<p>I think this process works best with a larger map grid (i.e.&nbsp;higher <code>n_row</code> and <code>n_col</code> values), more randomly-selected room start-points (higher <code>n_rooms</code>) and more growth steps (higher <code>iterations</code>).</p>
+<p>Here’s a larger maze-like dungeon:</p>
+<p><img src="resources/dungeon-maze.png" class="img-fluid" style="width:100.0%" alt="A dungeonlike map made from ASCII characters. Cave tiles are marked with a period and are black. Rock wall tiles are marked with red hashmarks. The outer boundary wall is made of yellow hyphens and pipe symbols. The corridors snake around, but are fully connected. There are some dead ends."></p>
+<p>This one came out more like a doughnut, with a central ‘pillar’ of rock-wall tiles:</p>
+<p><img src="resources/dungeon-donut.png" class="img-fluid" style="width:100.0%" alt="A dungeonlike map made from ASCII characters. Cave tiles are marked with a period and are black. Rock wall tiles are marked with red hashmarks. The outer boundary wall is made of yellow hyphens and pipe symbols. The cave is a big circle, connected around a single, central mass of rock."></p>
+<p>And this one is the result of using <code>is_snake = TRUE</code>, which creates a single, long snaking cavern:</p>
+<p><img src="resources/dungeon-snake.png" class="img-fluid" style="width:100.0%" alt="A dungeonlike map made from ASCII characters. Cave tiles are marked with a period and are black. Rock wall tiles are marked with red hashmarks. The outer boundary wall is made of yellow hyphens and pipe symbols. The corridor is a single snaking corridor from left to write, wiggling from top to bottom."></p>
+<p>Here’s what happens if we set <code>is_organic = FALSE</code> and <code>is_snake = TRUE</code>. You get much obvious ‘rooms’ connected by small corridors:</p>
+<p><img src="resources/dungeon-rooms.png" class="img-fluid" style="width:100.0%" alt="A dungeonlike map made from ASCII characters. Cave tiles are marked with a period and are black. Rock wall tiles are marked with red hashmarks. Four small, discrete rooms made of floor tiles are connected from left-to-right with corridors that are a single tile wide."></p>
+<p>And if we set <code>is_organic = FALSE</code> and <code>is_snake = FALSE</code> we get something interconnected, but looks more ‘artificial’ or manmade with its mostly square walls:</p>
+<p><img src="resources/dungeon-artificial.png" class="img-fluid" style="width:100.0%" alt="A dungeonlike map made from ASCII characters. Cave tiles are marked with a period and are black. Rock wall tiles are marked with red hashmarks. There are many straight-line corridors of different widths, which looks less organic and cavelike and more man-made."></p>
+<p>You can see how the shape of these dungeons can be used as part of the storytelling. Is the player in a big cavern, hollowed out long ago by natural processes? Or perhaps in an underground city, chiselled-out by dwarves?</p>
+</section>
+</section>
+<section id="proceed-the-procedure" class="level2">
+<h2 class="anchored" data-anchor-id="proceed-the-procedure">Proceed the procedure</h2>
+<p>What’s the actual process for generating these maps? The procedure is very simple: lay a map made entirely of wall tiles; select random sites for rooms<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> and replace with floor tiles; connect them with floor-tile corridors; expand the floor tiles generatively.</p>
+<p>The corridors are particularly important. Laying corridors is a cheap way of making all areas of the dungeon accessible, which maximises the opportunity for exploration. Vanilla implementations of some other approaches, like using perlin noise, would need post-processing to make sure isolated caves are connected up.</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>After publishing this post, I had a quick play around with <a href="https://en.wikipedia.org/wiki/Perlin_noise">perlin noise</a> for seeding dungeons. I put code and an example output <a href="https://gist.github.com/matt-dray/fd5bf4b6560638e154353e4ec5c8b98a">in a small GitHub Gist</a>. It <a href="https://ambient.data-imaginist.com/reference/noise_perlin.html">uses <code>noise_perlin()</code> from the {ambient} package</a>.</p>
+</div>
+<section id="functions" class="level3">
+<h3 class="anchored" data-anchor-id="functions">Functions</h3>
+<p>These steps are handled in <a href="https://github.com/matt-dray/r.oguelike/blob/main/R/dungeon.R">the <code>generate_dungeon()</code> function</a> by a few <a href="https://github.com/matt-dray/r.oguelike/blob/main/R/dungeon-utils.R">sub-functions</a>, which looks a bit like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">.create_dungeon</span>(n_row, n_col, n_rooms)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">.connect_dungeon</span>(m, is_snake)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>i <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (i <span class="sc">&lt;</span> iterations) {</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="fu">.grow_dungeon</span>(m)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  i <span class="ot">&lt;-</span> i <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">.draw_dungeon</span>(m, colour)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Not much right? But what’s actually happening?</p>
+<ol type="1">
+<li>First, <code>.create_dungeon()</code>:
+<ul>
+<li>prepares a matrix with dimensions <code>n_row</code> and <code>n_col</code></li>
+<li>fills the matrix with tiles that represent non-traversable rocky cave walls (<code>#</code>)</li>
+<li>selects randomly an <code>n_rooms</code> number of non-edge tiles in that map and replaces them with traversable cavern-floor tiles (<code>.</code>)</li>
+</ul></li>
+<li>Then <code>.connect_dungeon()</code> (this function is run now if <code>is_organic = TRUE</code>, otherwise after <code>.grow_dungeon()</code> in the next step):
+<ul>
+<li>connects rooms with straight, right-angled corridors made of floor tiles (connected from lowest to highest if <code>is_snake = TRUE</code>, otherwise randomly)</li>
+</ul></li>
+<li>Now the iterative bit, <code>.grow_dungeon()</code>, which happens in a while-loop whose <code>iterations</code> are determined, which:
+<ul>
+<li>spawns randomly with <code>sample()</code> a new cavern-floor tile to the north, south, east or west or current floor tiles</li>
+<li>performs one round of spawning for the number of <code>iterations</code> provided</li>
+</ul></li>
+<li>Finally, <code>.draw_dungeon()</code>:
+<ul>
+<li>prints to the console, using <code>cat()</code>, each line of the matrix in turn</li>
+<li>colours the output with <a href="https://github.com/r-lib/crayon">the {crayon} package</a>, if requested</li>
+</ul></li>
+</ol>
+<p>And we can look at the output at each step to see what’s going on:</p>
+<p><img src="resources/r.oguelike-generate.gif" class="img-fluid" style="width:100.0%" alt="Gif showing the steps to generate an ASCII-character tiled dungeon in R. First, a map is created with four randomly-placed floor tiles, then they're connected with corridors, then the tiles around the floor tiles are converted from wall to floor tiles, randomly, for three iterations."></p>
+<p>So, the map started with four randomly-selected floor tiles; these were joined with straight, right-angled corridors; then three iterations expanded out the floor space from the existing floor tiles.</p>
+</section>
+<section id="sampling" class="level3">
+<h3 class="anchored" data-anchor-id="sampling">Sampling</h3>
+<p>What does it mean to ‘expand out the floor space’? Let’s focus on the little bit of the <code>.grow_dungeon()</code> function that actually does this.</p>
+<p>Here’s a tiny example matrix of wall tiles with a floor tile in the middle:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="st">"#"</span>, <span class="dv">3</span>, <span class="dv">3</span>)  <span class="co"># wall tiles</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>m[<span class="dv">2</span>, <span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="st">"."</span>  <span class="co"># floor tiles</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3]
+[1,] "#"  "#"  "#" 
+[2,] "#"  "."  "#" 
+[3,] "#"  "#"  "#" </code></pre>
+</div>
+</div>
+<p>Now we find the adjacent tiles and sample a random number of them to also become floor tiles.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>start_tile <span class="ot">&lt;-</span> <span class="fu">which</span>(m <span class="sc">==</span> <span class="st">"."</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>adjacent_tiles <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  start_tile <span class="sc">-</span> <span class="dv">1</span>,        <span class="co"># north</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  start_tile <span class="sc">+</span> <span class="dv">1</span>,        <span class="co"># south</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  start_tile <span class="sc">-</span> <span class="fu">ncol</span>(m),  <span class="co"># east </span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  start_tile <span class="sc">+</span> <span class="fu">ncol</span>(m)   <span class="co"># west </span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>change_to_floor <span class="ot">&lt;-</span> <span class="fu">sample</span>(</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  adjacent_tiles,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(adjacent_tiles), <span class="dv">1</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>m[change_to_floor] <span class="ot">&lt;-</span> <span class="st">"."</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3]
+[1,] "#"  "#"  "#" 
+[2,] "."  "."  "#" 
+[3,] "#"  "."  "#" </code></pre>
+</div>
+</div>
+<p>So one, two, three, or all of the adjacent tiles could be turned to a floor tile.</p>
+<p>This is then repeated for the number of <code>iterations</code> provided by the user.</p>
+</section>
+</section>
+<section id="going-deeper" class="level2">
+<h2 class="anchored" data-anchor-id="going-deeper">Going deeper</h2>
+<p>So! I encourage you to play with this. Mess around with the arguments and see what you can come up with.</p>
+<p>What now for developing the package? Well, the {r.oguelike} package already has <a href="https://www.rostrum.blog/2022/04/25/r.oguelike-dev/">the rudiments of gameplay in the <code>start_game()</code> function</a>, so the next step is to place the player, enemies and items into these dungeon spaces and let the player explore them.</p>
+<p>Ideally we can also create a system to place certain objects in certain spaces, like treasure in the far reaches of a dead-end, or a monster that’s in a narrow corridor and must be defeated to advance. Stuff like locked doors would be great too.</p>
+<p>That’s much more roguelike-like, like, amirite?</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>Just after writing this post, I added code from <code>generate_dungeon()</code> into <code>start_game()</code>, so new games will now start with a procedural dungeon. <a href="https://twitter.com/mattdray/status/1522289244445753344?s=20&amp;t=lk0UHHNf23MYC2ir018ZTg">It seems to work pretty well</a>.</p>
+</div>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-17 18:15:02 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] r.oguelike_0.1.0
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
+[13] digest_0.6.31     rlang_1.1.1       fontawesome_0.5.1 evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>I’m not a computer scientist, but Wikipedia says ‘procedural’ involves ‘creating data algorithmically as opposed to manually, typically through a combination of human-generated assets and algorithms coupled with computer-generated randomness and processing power’. The page <a href="https://en.wikipedia.org/wiki/Procedural_generation#Video_games">specifically points out roguelikes</a> as having these properties, so I assume what I’ve done can be described as ‘procedural’?<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Definitely one of these should be the name for your new band.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>There’s no such thing as a free <em>launch</em>, unless it’s with Binder (why have I not thought of this incredible wordplay before and how much should I charge the Binder team for its use?).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>In future, this function will be integrated into the <code>start_game()</code> function, but I may still export it so people (i.e.&nbsp;me) can use it for fun.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Akshually, it’s not just a case of choosing a random set of four points within the length of the matrix. The 1D matrix is split <code>n_rooms</code> times and we sample from within each of those chunks. This, hopefully, should keep the dungeons relatively-well spread out.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,62 @@
+---
+title: "Knitting Club: R Markdown for beginners"
+date: 2018-09-24
+slug: knitting-club
+categories:
+  - knitr
+  - r
+  - rmarkdown
+---
+
+![](resources/knit.png){fig-alt="The 'knit' button in RStudio showing a ball of wool with a knitting needle in it." width="30%"}
+
+## tl;dr
+
+I made a couple of training resources about R Markdown for reproducibility:
+
+1. Knitting Club ([see the slides](https://matt-dray.github.io/knitting-club/) or [source](https://github.com/matt-dray/knitting-club))
+2. Quick R Markdown (see the [slides](https://matt-dray.github.io/quick-rmd/#1) or [source](https://matt-dray.github.io/quick-rmd/)).
+
+## Reproducibility
+
+It's often important to recreate and verify prior work, as well as update it in future as data changes. In government we're using a code-based approach called [Reproducible Analytical Pipelines](https://ukgovdatascience.github.io/rap-website/) (RAP) to automate and make reproducible our statistical publications; speeding up our work while reducing error and building confidence.
+
+R has many packages that help with reproducibility. Take a look at [the CRAN Task View](https://cran.r-project.org/web/views/ReproducibleResearch.html) for some examples.
+
+[R Markdown](https://rmarkdown.rstudio.com/) is a particularly useful and ubiquitous tool. It allows you to execute R code inside your document and 'knit' it into a readable report with the {knitr} package by [Yihui Xie](https://yihui.org/). You can re-run the code, or alter the parameters and re-knit it without stress. This is much faster and less error-prone versus a workflow that moves data between a database, spreadsheet and word processor.
+
+The [R Markdown bible](https://bookdown.org/yihui/rmarkdown/) has been released recently by Yihui Xie, JJ Allaire and Garrett Grolemund and is the go-to resource for creating [reports, presentations, dashboards, websites, books and blogs](https://rmarkdown.rstudio.com/formats.html) in R Markdown.
+
+## Resources
+
+I made some short resources earlier in the year to help beginners in my organisation learn about R Markdown. They're a little rough, but got the job done. I'm unlikely to update them in future, but you can go to the source on GitHub and leave an issue, or make a pull request.
+
+### 1. Knitting Club
+
+Knitting Club is a document about R Markdown and {knitr} made with R markdown and {knitr}. It's [freely available on the web](https://matt-dray.github.io/knitting-club/) and you can find [the code on GitHub](https://github.com/matt-dray/knitting-club). 
+
+I presented this document in a cross-department [Coffee & Coding](https://ukgovdatascience.github.io/rap-website/resource-coffee-and-coding.html) session in April 2018. The blurb was:
+
+> Do you have *woolly* knowledge of document creation in R? *Needle* little help? Matt Dray will drop some *purls* of wisdom and *unravel a yarn* about the *knitty*-gritty of R Markdown and the ‘knitr’ package for one-click document creation. Don’t get the *point*? If a deadline is *looming*, you’ll avoid a *stitch*-up from endless re-running of code and copy-pasting of outputs into a Word document. Come along and have *a ball*!
+
+Ha.
+
+### 2. Quick R Markdown
+
+If the Knitting Club document is too long, you can check out this shorter slide-based introduction to R Markdown below. You can also [access the slides alone](https://matt-dray.github.io/quick-rmd/#1) and find [the source on GitHub](https://matt-dray.github.io/quick-rmd/).
+
+```{r embed-slides, echo=FALSE, eval=TRUE}
+xaringanExtra::embed_xaringan(
+  "https://matt-dray.github.io/quick-rmd/",
+  ratio = "4:3",
+  border = FALSE
+)
+```
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>

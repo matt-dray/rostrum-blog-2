@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2020-09-16">
+
+<title>rostrum.blog - Friendship ended with Google Analytics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Friendship ended with Google Analytics</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">blog-meta</div>
+                <div class="quarto-category">google-analytics</div>
+                <div class="quarto-category">goatcounter</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">September 16, 2020</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#do-blogposts-dream-of-electric-goats" id="toc-do-blogposts-dream-of-electric-goats" class="nav-link" data-scroll-target="#do-blogposts-dream-of-electric-goats">Do blogposts dream of electric goats?</a></li>
+  <li><a href="#friendship-ended" id="toc-friendship-ended" class="nav-link" data-scroll-target="#friendship-ended">Friendship ended</a></li>
+  <li><a href="#new-best-friend" id="toc-new-best-friend" class="nav-link" data-scroll-target="#new-best-friend">New best friend</a></li>
+  <li><a href="#herding-goatcounter" id="toc-herding-goatcounter" class="nav-link" data-scroll-target="#herding-goatcounter">Herding GoatCounter</a></li>
+  <li><a href="#greatest-of-all-time-goat" id="toc-greatest-of-all-time-goat" class="nav-link" data-scroll-target="#greatest-of-all-time-goat">Greatest Of All Time (GOAT)</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/mudasir.png" class="img-fluid figure-img" style="width:100.0%" alt="Classic meme showing two men clasping hands with two inset images of another man with a cross drawn through him, with text reading 'Friendship ended with MUDASIR now SALMAN is my best friend'. The text is edited to replace 'MUDASIR' with 'GOOGLE ANALYTICS' and 'SALMAN' with 'GOATCOUNTER'. Mudasir's face is replaced by the Google Analytics logo and Salman's with Goatcounter's."></p>
+<figcaption class="figure-caption">mudasir.jpg</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>This blog now uses <a href="https://www.goatcounter.com/">GoatCounter</a> instead of <a href="https://en.wikipedia.org/wiki/Google_Analytics">Google Analytics</a>. GoatCounter is a lightweight and unobtrusive site-visit counter made by developer <a href="https://www.arp242.net">Martin Tournoij</a>.</p>
+</section>
+<section id="do-blogposts-dream-of-electric-goats" class="level2">
+<h2 class="anchored" data-anchor-id="do-blogposts-dream-of-electric-goats">Do blogposts dream of electric goats?</h2>
+<p><a href="https://www.rostrum.blog/2020/02/27/get-blogging/">I write posts on this blog for me and for other learners</a>. It’s great if people find the content useful or interesting.</p>
+<p>But I don’t and never will make money from this site, so why would I care how many visits it gets?</p>
+<p>A highly-viewed post indicates to me that the topic is worth talking about. It’s a signal that it might be worth writing more about that thing in future. Popular posts might also need updating over time to keep the information up to date.</p>
+<p>So I think I have a use case. Except I don’t want to ‘track’ people; I just want to count visits and views.</p>
+</section>
+<section id="friendship-ended" class="level2">
+<h2 class="anchored" data-anchor-id="friendship-ended">Friendship ended</h2>
+<p>I’ve been using <a href="https://en.wikipedia.org/wiki/Google_Analytics">Google Analytics</a> for this blog since it began in April 2018. Why? My naïve reasons were that it’s free, it’s ubiquitous and it’s easily <a href="https://bookdown.org/yihui/blogdown/templates.html">implemented in {blogdown}</a>.</p>
+<p>It’s massively bloated for my use case though. Acquisition reports, revenue per user and cohort analysis are not relevant to me. And I don’t even know what they mean.</p>
+<p>More importantly, I’m uncomfortable with various <a href="https://en.wikipedia.org/wiki/Privacy_concerns_regarding_Google">privacy concerns</a> around the company and platform. I don’t need or want you to be the product.</p>
+<p>This change has been a long time coming and follows my earlier removal of <a href="https://en.wikipedia.org/wiki/Disqus">the Disqus comment platform</a>, thanks to <a href="https://masalmon.eu/2019/10/02/disqus/">a Maëlle Salmon post</a>.</p>
+</section>
+<section id="new-best-friend" class="level2">
+<h2 class="anchored" data-anchor-id="new-best-friend">New best friend</h2>
+<p><a href="https://alternativeto.net/software/google-analytics/">A number of alternatives are available</a>,<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> but I chose <a href="https://www.goatcounter.com/">GoatCounter</a> by independent developer <a href="https://www.arp242.net">Martin Tournoij</a>. Why?</p>
+<p>To summarise, the large type at the top of <a href="https://www.goatcounter.com/">the GoatCounter home page</a> says:</p>
+<blockquote class="blockquote">
+<p>Easy web analytics. No tracking of personal data.</p>
+</blockquote>
+<p>What does that encompass?</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">What</th>
+<th style="text-align: left;">Explain</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Privacy</td>
+<td style="text-align: left;">GoatCounter doesn’t collect personally-identifiable data and as such it <a href="https://www.goatcounter.com/gdpr">‘probably doesn’t require a GDPR consent notice’</a>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Simple web interface</td>
+<td style="text-align: left;"><a href="https://www.goatcounter.com/design">A clean interface</a> with focus on visits and viewers over time (<a href="https://stats.arp242.net/">see a live demo</a>).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Transparent</td>
+<td style="text-align: left;">GoatCounter is <a href="https://github.com/zgoat/goatcounter">open source</a> and the creator is open about comparisons to other products.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Thoughtful</td>
+<td style="text-align: left;">The creator has <a href="https://github.com/zgoat/goatcounter/blob/master/docs/rationale.markdown">written openly about the rationale</a> and has considered users of assistive tech.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Free</td>
+<td style="text-align: left;">With paid plans or donations available (<a href="https://www.patreon.com/arp242/">Patreon</a>, <a href="https://github.com/sponsors/arp242">GitHub Sponsors</a>).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lightweight</td>
+<td style="text-align: left;">It’s less than 3 kb.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="herding-goatcounter" class="level2">
+<h2 class="anchored" data-anchor-id="herding-goatcounter">Herding GoatCounter</h2>
+<p>Switching to GoatCounter was straightforward.</p>
+<p>This blog was created with the R package <a href="https://bookdown.org/yihui/blogdown/">{blogdown}</a>, which is built on the <a href="https://gohugo.io/">Hugo static site generator</a>, and it’s deployed via <a href="https://www.netlify.com/">Netlify</a>. Your mileage may vary, but there were basically three steps:</p>
+<ol type="1">
+<li>Remove the Google Analytics token from <a href="https://github.com/matt-dray/rostrum-blog/blob/master/config.toml">the site’s <code>config.toml</code> file</a>.</li>
+<li><a href="https://www.goatcounter.com/signup">Create a GoatCounter account</a>.</li>
+<li>Add a single script tag to the <code>&lt;body&gt;</code> of your site<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</li>
+</ol>
+<p>For that last step I used <a href="https://docs.netlify.com/site-deploys/post-processing/snippet-injection/">a special Netlify feature that inserts code snippets into the HTML of your site on deployment</a>.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> I didn’t have to worry about where to put it in the code of the site.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/inject.png" class="img-fluid figure-img" style="width:100.0%" alt="Netlify's HTML injection option confirming the GoatCounter code snippet used to count page visits."></p>
+<figcaption class="figure-caption">Analytics straight into the vein.</figcaption>
+</figure>
+</div>
+<p>Your stats will then be available from a URL in the form <code>https://yoursite.goatcounter.com</code>, which you set during the sign-up process.</p>
+<p>Now you can start counting sheep. Er… goats.</p>
+</section>
+<section id="greatest-of-all-time-goat" class="level2">
+<h2 class="anchored" data-anchor-id="greatest-of-all-time-goat">Greatest Of All Time (GOAT)</h2>
+<p>The switch does mean I’ll lose cumulative view counts for posts that already exist, but I’m not bothered about that. I can always export the Google Analytics data and manually add it to GoatCounter’s counts.</p>
+<p>For interest, here’s the most viewed posts as counted by Google Analytics:</p>
+<ol type="1">
+<li><a href="https://www.rostrum.blog/2020/04/04/repaying-tom-nook-with-r6/">Repaying Tom Nook with {R6}</a> (Apr 2020)</li>
+<li><a href="https://www.rostrum.blog/2019/12/27/pkgs-2019/">Packages that Sparked Joy in 2019</a> (Dec 2019)</li>
+<li><a href="https://www.rostrum.blog/2019/05/24/xaringan-template/">Package a {xaringan} template</a> (May 2019)</li>
+<li><a href="https://www.rostrum.blog/2018/06/26/mail-merge/">Mail merge with R and Dawson’s Creek</a> (Jun 2018)</li>
+<li><a href="https://www.rostrum.blog/2019/09/20/say-package/">How do you pronounce {dplyr}?</a> (Sep 2019)</li>
+</ol>
+<p>In particular, the <a href="https://www.rostrum.blog/2020/04/04/repaying-tom-nook-with-r6/">post about {R6}</a> is a good example of something I wanted to learn and then blog about for posterity. I think the timing helped in people viewing it, since <a href="https://animal-crossing.com/new-horizons/">Animal Crossing: New Horizons</a> had just been released to great fanfare. To illustrate the ‘zeitgeistiness’, this post had the highest view spike of any post and has settled down a great deal since then.</p>
+<p>The <a href="https://www.rostrum.blog/2018/06/26/mail-merge/">‘mail merge’ post</a> is a good example of <a href="https://twitter.com/drob/status/928447584712253440?s=20">that classic David Robinson tweet</a>:</p>
+<blockquote class="blockquote">
+<p>When you’ve written the same code 3 times, write a function. When you’ve given the same in-person advice 3 times, write a blog post</p>
+</blockquote>
+<p>Given its popularity, I also decided to overhaul it to make it more simple and accessible. It also led to a later post on <a href="https://www.rostrum.blog/2020/03/12/knit-with-params/">parameterised R Markdown reports</a>, which I think is actually the better solution in most cases.</p>
+<p>I wouldn’t have known any of this without having a record of page views, but the method for collecting that data no longer <a href="https://www.urbandictionary.com/define.php?term=grinds%20my%20goat">grinds my goat</a>.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-19 08:15:58 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
+[13] digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>You can read about some further considerations in <a href="https://mentalpivot.com/ethical-web-analytics-alternatives-google/">a blog by David Papandrew</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>This is provided to you by GoatCounter when you set up an account, but it’s just in the form <code>&lt;script data-goatcounter="https://yoursite.goatcounter.com/count" async src="//gc.zgo.at/count.js"&gt;&lt;/script&gt;</code>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Thanks to <a href="https://maxyfc.dev/posts/2020/01/adding-web-analytics/">a post by Max</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

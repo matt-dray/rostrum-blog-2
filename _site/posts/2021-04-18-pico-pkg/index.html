@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2021-04-18">
+
+<title>rostrum.blog - Make the simplest R package with {pico}</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Make the simplest R package with {pico}</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">pico</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">usethis</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 18, 2021</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#function-in-a-haystack" id="toc-function-in-a-haystack" class="nav-link" data-scroll-target="#function-in-a-haystack">Function in a haystack</a></li>
+  <li><a href="#whats-the-problem" id="toc-whats-the-problem" class="nav-link" data-scroll-target="#whats-the-problem">What’s the problem?</a></li>
+  <li><a href="#minimalism" id="toc-minimalism" class="nav-link" data-scroll-target="#minimalism">Minimalism</a></li>
+  <li><a href="#introducing-pico" id="toc-introducing-pico" class="nav-link" data-scroll-target="#introducing-pico">Introducing {pico}</a>
+  <ul class="collapse">
+  <li><a href="#install-pico" id="toc-install-pico" class="nav-link" data-scroll-target="#install-pico">Install {pico}</a></li>
+  <li><a href="#create-your-package" id="toc-create-your-package" class="nav-link" data-scroll-target="#create-your-package">Create your package</a></li>
+  <li><a href="#install-your-package" id="toc-install-your-package" class="nav-link" data-scroll-target="#install-your-package">Install your package</a></li>
+  </ul></li>
+  <li><a href="#add-new-functions" id="toc-add-new-functions" class="nav-link" data-scroll-target="#add-new-functions">Add new functions</a></li>
+  <li><a href="#huge-limitations" id="toc-huge-limitations" class="nav-link" data-scroll-target="#huge-limitations">Huge limitations</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><img src="resources/pico_hex.png" class="img-fluid" style="width:25.0%" alt="Hexagonal logo for the pico package with the package name in very small font in light brown on a darker brown background."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I made <a href="https://github.com/matt-dray/pico">{pico}</a>, an R package for creating tiny R packages with the absolute minimum structure and content. The goal: to demystify package making.</p>
+</section>
+<section id="function-in-a-haystack" class="level2">
+<h2 class="anchored" data-anchor-id="function-in-a-haystack">Function in a haystack</h2>
+<p>I saw <a href="https://twitter.com/WeAreRLadies/status/1383135972926296064">a @WeAreRLadies tweet</a> from last week’s curator, <a href="https://twitter.com/ShreyaLouis">@ShreyaLouis</a>. The gist was ‘how can you be more organised when recalling and reusing your own R code?’</p>
+<p>See <a href="https://twitter.com/WeAreRLadies/status/1383135972926296064">the thread</a> for ideas, but I had <a href="https://twitter.com/favstats/status/1383138145491943425?s=20">the same thought as Fabio</a>: create a personal package of your frequently-used functions so you can invoke them whenever you want.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+</section>
+<section id="whats-the-problem" class="level2">
+<h2 class="anchored" data-anchor-id="whats-the-problem">What’s the problem?</h2>
+<p><a href="https://twitter.com/WeAreRLadies/status/1383142336050384896?s=20">Packages are daunting</a>, particularly if you haven’t made one before. I’ve <a href="https://github.com/matt-dray/projects/blob/main/README.md#-r-packages">written a number of packages for fun and learning</a>, but none have been <a href="https://cran.r-project.org/">submitted to CRAN</a> and I’m never quite sure if I’m doing everything ‘correctly’.</p>
+<p>From personal experience, I think the esoteric structure and content of R packages are a barrier to beginners. Like, what is the <code>man/</code> folder and what’s an <code>.Rd</code> file? It’s easy to look at a chonky package repo on GitHub, like the popular <a href="https://github.com/tidyverse/dplyr/">{dplyr}</a>, and despair.</p>
+<p>Yes, you could RTFM (‘Read the Hecking Manual’) about R packages, but have you <a href="http://www.hep.by/gnu/r-patched/r-exts/R-exts.html#SEC_Top">looked at it</a> before? And it’s not even necessary to follow all of these steps if you don’t have dreams of submitting it to CRAN.</p>
+<p>What if—for teaching purposes—we strip back to the absolute barest of requirements with the goal of demystifying packages and to make it easier to get started?</p>
+</section>
+<section id="minimalism" class="level2">
+<h2 class="anchored" data-anchor-id="minimalism">Minimalism</h2>
+<p>What’s the least we need for a functioning package? Well, following <a href="http://kbroman.org/pkg_primer/pages/minimal.html">Karl Broman’s book</a>, all you need is two files and a subfolder. That is all.</p>
+<p>Here’s how it looks for an imaginary package called {mypkg}:</p>
+<pre><code>mypkg/
+├── R/
+│   └── functions.R
+└── DESCRIPTION</code></pre>
+<p>The <code>mypkg/R/functions.R</code> file is a normal R script where you put your function definitions, like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>say_hi <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">name =</span> <span class="st">"buddy"</span>) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">"Ahoy-hoy "</span>, name, <span class="st">"!"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>DESCRIPTION</code> file (which has no file extension) might not be as familiar, but it’s basically a text file with only two lines: the package name and a version number (typically 0.0.0.9000 indicates a package under development, whereas 0.1 might be a minor release).<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<pre><code>Package: mypkg
+Version: 0.0.0.9000</code></pre>
+<p>The <code>DESCRIPTION</code> file is like a magic flag that identifies that this folder is special and contains an R package; it isn’t just a boring folder with some R scripts in it.</p>
+<p>…And that’s all you need.</p>
+</section>
+<section id="introducing-pico" class="level2">
+<h2 class="anchored" data-anchor-id="introducing-pico">Introducing {pico}</h2>
+<p>So, you could point-and-click to create a folder with the structure and content outlined above, but I’ve also created <a href="https://github.com/matt-dray/pico">the {pico} package</a> to make the setup even easier.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>The basic process for using {pico} is:</p>
+<ol type="1">
+<li>Install {pico} with <code>remotes::install_github("matt-dray/pico")</code></li>
+<li>Create your package with e.g.&nbsp;<code>pico::create("mypkg", "~/Documents/")</code> (the second argument is a filepath for where to put the package folder)</li>
+<li>Add new function definitions to the <code>mypkg/R/functions.R</code> script file</li>
+<li>Install the package to your computer with <code>remotes::install_local("~/Documents/mypkg")</code> and attach it like a normal package with <code>library(mypkg)</code></li>
+</ol>
+<p>Later you can add more functions to <code>R/functions.R</code> (or add more script files to the <code>R/</code> folder) and can reinstall the package with <code>install_local()</code>, using the <code>force = TRUE</code> argument to overwrite the old version.</p>
+<p>Let’s take a look at those steps in a bit more depth.</p>
+<section id="install-pico" class="level3">
+<h3 class="anchored" data-anchor-id="install-pico">Install {pico}</h3>
+<p>First, you can install {pico} <a href="https://github.com/matt-dray/pico">from GitHub</a> with help from the {remotes} package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)  <span class="co"># if not yet installed</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"matt-dray/pico"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can look up the help files with <code>?pico::create()</code> at any time.</p>
+<p>It’s a really small package, but let me know if you <a href="https://github.com/matt-dray/pico/issues">find any bugs</a> or you want to contribute.</p>
+</section>
+<section id="create-your-package" class="level3">
+<h3 class="anchored" data-anchor-id="create-your-package">Create your package</h3>
+<p>There’s only one function in {pico}: <code>create()</code>. It generates a folder with the minimum required content, as outlined above. You supply a package <code>name</code> and a <code>dir</code>ectory (folder on your computer) where you want your package to be generated.</p>
+<p>As a demonstration, here’s how to create a pico package called {mypkg} in <a href="https://en.wikipedia.org/wiki/Temporary_folder">a temporary folder</a>. You should put yours somewhere more permanent and convenient like <code>~/Documents</code> on macOS, for example.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> <span class="fu">tempdir</span>()</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>pico<span class="sc">::</span><span class="fu">create</span>(<span class="at">name =</span> <span class="st">"mypkg"</span>, <span class="at">dir =</span> tmp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Pico package {mypkg} written to:
+  /var/folders/cg/5x7y2f0x6tqb9mqrc13pd8_40000gn/T//RtmpRGhTOc/mypkg</code></pre>
+</div>
+</div>
+<p>This will output some lines in the R console that confirm your new package has been written to the location you specified (my example path here is convoluted because it’s just a temporary folder).</p>
+<p>The <code>name</code> will be checked against R-package naming standards: it should contain alphanumeric characters or periods only, must have at least two characters, and can’t start with a number nor end with a period. The provided <code>dir</code>ectory also will be checked for existence and, if it already contains a folder with the proposed name of your package, you’ll be asked interactively if you want to overwrite it.</p>
+</section>
+<section id="install-your-package" class="level3">
+<h3 class="anchored" data-anchor-id="install-your-package">Install your package</h3>
+<p>So, the package now exists on your computer inside a folder. Now how do you use its functions in an R session?</p>
+<p>Normally, you would use <code>install.packages()</code> to fetch a package from CRAN and install it to your computer’s R package library. We can do something similar, but instead of fetching from CRAN, we can fetch the package ‘locally’, i.e.&nbsp;from your computer.</p>
+<p>To do this, we can use the {remotes} package, which we installed earlier. It contains an <code>install_local()</code> function to which you pass the package’s filepath on your computer.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_local</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">path =</span> <span class="fu">file.path</span>(tmp, <span class="st">"mypkg"</span>)  <span class="co"># change to your packages filepath</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>✓  checking for file  ‘private/var/folders/cg/5x7y2f0x6tqb9mqrc13pd8_40000gn/T//RtmpRGhTOc/mypkg ’ ...
+ ─  preparing ‘mypkg’:
+ ✓  checking DESCRIPTION meta-information
+ ─  checking for LF line-endings in source and make files and shell scripts
+ ─  checking for empty or unneeded directories
+ ─  creating default NAMESPACE file
+ ─  building ‘mypkg_0.0.9000.tar.gz’
+ 
+ * installing *source* package ‘mypkg’ ...
+ ** using staged installation
+ ** R
+ ** byte-compile and prepare package for lazy loading
+ ** help
+ No man pages found in package  ‘mypkg’ 
+ *** installing help indices
+ ** building package indices
+ ** testing if installed package can be loaded from temporary location
+ ** testing if installed package can be loaded from final location
+ ** testing if installed package keeps a record of temporary installation path
+ * DONE (mypkg)</code></pre>
+</div>
+</div>
+<p>You’ll see some output that describes the installation process, ending with <code>DONE</code>.</p>
+<p>The package is now installed into your R package library and can be attached like any other package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mypkg)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now the functions from the package are available for use. By default, <code>create()</code> added a dummy function called <code>say_hi()</code> to <code>R/functions.R</code>, which we can use now:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">say_hi</span>(<span class="st">"chums"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Ahoy-hoy chums!"</code></pre>
+</div>
+</div>
+<p>So, we created an R package, installed it and used it.</p>
+</section>
+</section>
+<section id="add-new-functions" class="level2">
+<h2 class="anchored" data-anchor-id="add-new-functions">Add new functions</h2>
+<p>Of course, you’ll want to add your own functions to your package. The basic steps are:</p>
+<ol type="1">
+<li>Open the <code>R/functions.R</code> script</li>
+<li>Paste in your function definitions and save the file</li>
+<li>Rerun <code>remotes::install_local()</code> with the argument <code>force = TRUE</code></li>
+<li>Restart R, so the updated package is recognised</li>
+</ol>
+<p>Here’s what this might look like for our example package. First, you might add the function <code>say_bye()</code> by adding these lines to the <code>functions.R</code> file:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>say_bye <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">name =</span> <span class="st">"folks"</span>) {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">"Cheerio "</span>, name, <span class="st">"!"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After you saved the updated file, you can re-run <code>install_local()</code> with the file path and <code>force = TRUE</code>, which will overwrite the old version in the package library.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_local</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a> <span class="at">path =</span> <span class="fu">file.path</span>(tmp, <span class="st">"mypkg"</span>),</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a> <span class="at">force =</span> <span class="cn">TRUE</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You must restart R after you’ve done this.</p>
+<p>Your new functions will then be available from your package, much like the dummy <code>say_hi()</code> function was. Here’s <code>say_bye()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mypkg)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">say_bye</span>(<span class="st">"friends"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Cheerio friends!"</code></pre>
+</div>
+</div>
+<p>So, that means that all those functions you keep forgetting, or that are stored across multiple locations, can be made available to you from one package. And ultimately, all it required was <code>install_github()</code>, <code>create()</code> and <code>install_local()</code>.</p>
+<p>Note that it can get unwieldy to add all your functions to the <code>functions.R</code> file provided by {pico}, but you can group them up into several R scripts in the <code>R/</code> subfolder if you like.</p>
+</section>
+<section id="huge-limitations" class="level2">
+<h2 class="anchored" data-anchor-id="huge-limitations">Huge limitations</h2>
+<p>So, I think {pico} is a quick way to get you from ‘no-package’ to ‘package’ quickly, but more importantly it has none of the esoteric, daunting structure and content of a ‘normal’ package.</p>
+<p>However.</p>
+<p>A pico package doesn’t encourage best practice, nor is it very useful for sharing. That’s why I think the only practical applications are for learning the basics of package structure, or for building a small package of functions that you might personally want to use again in future.</p>
+<p>I would absolutely advocate for learning how to make a ‘real’ package, because that additional structure and content is really powerful and exists for a reason. For example, we haven’t documented any of our functions. What if you add a function to your package but you can’t remember how to use it? We also haven’t tested anything. What if something breaks?</p>
+<p>I’ve <a href="https://www.rostrum.blog/2019/11/01/usethis/">written before about the wonders of {usethis}</a>, a package made specifically to help develop your own R packages without thinking too hard. I believe it provides the perfect starting point for developing your own package without worrying about exactly what files are needed and where.</p>
+<p>There’s a vast array of free web-based resources out there for package building. For example, some that I’ve found useful are:</p>
+<ul>
+<li><a href="https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/">Hilary Parker’s <em>Writing an R Package from Scratch</em> post</a></li>
+<li><a href="https://r-mageddon.netlify.com/post/writing-an-r-package-from-scratch/">Tom Westlake’s update to Hilary’s post</a></li>
+<li><a href="https://develop-rpkgs.netlify.app/">Fabio Votta’s fun slides</a></li>
+<li><a href="https://www.hvitfeldt.me/blog/usethis-workflow-for-package-development/">Emil Hvitfeldt’s {usethis} workflow</a></li>
+<li><a href="https://kbroman.org/pkg_primer/">Karl Broman’s <em>R Package Primer</em> site</a>, a primer for package development</li>
+<li><a href="http://r-pkgs.had.co.nz/">Hadley Wickham’s <em>R Packages</em> book</a></li>
+</ul>
+<p>You should make use of those resources, for sure. Do not use {pico} for any serious work. {pico}’s purpose here is to think about how we might demystify package development. At worst I think it’s an interesting curiosity.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-16 13:41:04 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] mypkg_0.0.9000
+
+loaded via a namespace (and not attached):
+ [1] desc_1.4.2        digest_0.6.31     R6_2.5.1          fastmap_1.1.1    
+ [5] xfun_0.39         remotes_2.4.2     knitr_1.43.1      htmltools_0.5.5  
+ [9] rmarkdown_2.23    ps_1.7.5          cli_3.6.1         processx_3.8.1   
+[13] callr_3.7.3       pico_0.0.0.9000   compiler_4.3.1    rprojroot_2.0.3  
+[17] prettyunits_1.1.1 rstudioapi_0.15.0 tools_4.3.1       pkgbuild_1.4.1   
+[21] evaluate_0.21     yaml_2.3.7        crayon_1.5.2      rlang_1.1.1      
+[25] jsonlite_1.8.7    htmlwidgets_1.6.2</code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>My initial thought was to try and respond—in a single tweet—with the code required to build a package. That might help show how little code is required, especially with shortcuts like <code>usethis::create_package()</code> and <code>usethis::use_r()</code>. But I think there’s a little too much extra explanation required for this to be a viable, helpful response.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>You don’t need to worry too much about the version number for now, especially if you aren’t releasing the package to the world. You can read more <a href="https://r-pkgs.org/description.html#version">in Hadley’s book</a>, though.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Yo, I heard you like packages that make packages, so I wrote you a package to make a package.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

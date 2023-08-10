@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2018-11-29">
+
+<title>rostrum.blog - Change your {blogdown} fonts</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Change your {blogdown} fonts</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">blogdown</div>
+                <div class="quarto-category">css</div>
+                <div class="quarto-category">hugo</div>
+                <div class="quarto-category">r</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 29, 2018</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#not-my-type" id="toc-not-my-type" class="nav-link" data-scroll-target="#not-my-type">Not my type</a></li>
+  <li><a href="#storefont-window" id="toc-storefont-window" class="nav-link" data-scroll-target="#storefont-window">Storefont window</a></li>
+  <li><a href="#fontastic-helper" id="toc-fontastic-helper" class="nav-link" data-scroll-target="#fontastic-helper">Fontastic helper</a>
+  <ul class="collapse">
+  <li><a href="#get-fonts" id="toc-get-fonts" class="nav-link" data-scroll-target="#get-fonts">1. Get fonts</a></li>
+  <li><a href="#recognise-fonts" id="toc-recognise-fonts" class="nav-link" data-scroll-target="#recognise-fonts">2. Recognise fonts</a></li>
+  </ul></li>
+  <li><a href="#just-my-type" id="toc-just-my-type" class="nav-link" data-scroll-target="#just-my-type">Just my type</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/nirvana.gif" class="img-fluid figure-img" style="width:100.0%" alt="Gif with Kurt Cobain of Nirvana singing 'that's okay, because so are you' from the song Lithium."></p>
+<figcaption class="figure-caption">Lithium by Nirvana (<a href="https://giphy.com/gifs/nirvana-lithium-3Qf8fuRU2JJ1m">via Giphy</a>)</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>Want to change the font for your <a href="https://bookdown.org/yihui/blogdown/">{blogdown}</a> site? I’ve been using this workflow:</p>
+<ol type="1">
+<li>Find a font on <a href="https://fonts.google.com/">the Google Fonts site</a></li>
+<li>Search for the font name on the independent <a href="https://google-webfonts-helper.herokuapp.com/fonts/roboto?subsets=latin">Google Web Fonts Helper</a></li>
+<li>Download the zip file from the Helper, then copy all the files to <code>static/fonts/</code> folder</li>
+<li>Copy the CSS from the Helper into your <code>static/css/fonts.css</code> file</li>
+</ol>
+</section>
+<section id="not-my-type" class="level2">
+<h2 class="anchored" data-anchor-id="not-my-type">Not my type</h2>
+<p>You can change the default font face for your <a href="https://bookdown.org/yihui/blogdown/" target="_blank">{blogdown} blog</a> with freely-available files from <a href="https://fonts.google.com/" target="_blank">Google Fonts</a>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>In this post I’ll show how you can do this with a bit of help from the <a href="https://google-webfonts-helper.herokuapp.com/fonts" target="_blank">Google Web Fonts Helper</a>) by <a href="https://mranftl.com/">Mario Ranftl</a> and by copy-pasting a small amount of CSS.</p>
+<p>I know this approach works for this blog’s base theme: <a href="https://themes.gohugo.io/hugo-lithium-theme/" target="_blank">Lithium for Hugo</a> by <a href="https://github.com/jrutheiser" target="_blank">Jonathan Rutheiser</a> and edited for use with <a href="https://bookdown.org/yihui/blogdown/" target="_blank">{blogdown}</a> by <a href="https://github.com/yihui/hugo-lithium" target="_blank">Yihui Xie</a>. Your mileage may vary.</p>
+<p>Important note: do not adjust your site’s <code>themes/</code> folder. We’ll be changing things in the <code>static/</code> folder only.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+</section>
+<section id="storefont-window" class="level2">
+<h2 class="anchored" data-anchor-id="storefont-window">Storefont window</h2>
+<p>The <a href="https://fonts.google.com/">Google Fonts catalog</a> has nearly a thousand open-source fonts that you can use for your site. You can filter by categories (serif, sans-serif, monspace, etc), language and font properties (thickness, slant, etc) to find what you’re looking for. You can type a sentence and see how it looks in each font.</p>
+<p><img src="resources/gf-home.png" class="img-fluid" style="width:100.0%" alt="Google Fonts main page showing previews of Roboto and Gelasio fonts."></p>
+<p>Click a font name to go to a specimen page (example: <a href="https://fonts.google.com/specimen/Open+Sans">Open Sans</a>). Here you can see who designed it and a bit of information about the font itself. Of course, you also get a preview of the characters and styles. There’s even some suggestions for popular pairings.</p>
+<p><img src="resources/gf-specimen.png" class="img-fluid" style="width:100.0%" alt="Google Fonts specimen page showing a preview of Open Sans."></p>
+<p>Clicking the ‘select this font’ button will add a font to a ‘tray’ in the bottom right of the page, which is a bit like a shopping basket on a retail site. You can compare your selected fonts by clicking the ‘preview and share’ button in the upper right of the tray.</p>
+</section>
+<section id="fontastic-helper" class="level2">
+<h2 class="anchored" data-anchor-id="fontastic-helper">Fontastic helper</h2>
+<p>You will hopefully have selected a font after countless hours perusing Google Fonts.</p>
+<p>Rather than use Google Fonts to get the files, I recommend you use <a href="https://google-webfonts-helper.herokuapp.com/fonts" target="_blank">Google Web Fonts Helper</a>). Why? It has a simple interface and gives you what you need in one screen (<a href="https://google-webfonts-helper.herokuapp.com/fonts/open-sans?subsets=latin">example: Open Sans</a>).</p>
+<p>Use the search in the upper right and select your font. Sections 1 and 2 let you select character sets (cyrillic, latin, etc) and styles (regular, italic, etc). The default for many fonts is latin and regular, which is often what you want.</p>
+<p><img src="resources/gh-opensans.png" class="img-fluid" style="width:100.0%" alt="Open Sans download page on the Google Fonts Helper website."></p>
+<p>Now we’re going to (1) get the font files and (2) make your site recognise them.</p>
+<section id="get-fonts" class="level3">
+<h3 class="anchored" data-anchor-id="get-fonts">1. Get fonts</h3>
+<p><img src="resources/gh-download.png" class="img-fluid" style="width:100.0%" alt="Open Sans download page on the Google Fonts Helper website, scrolled down to a big download button."></p>
+<p>To make the font files available to your site:</p>
+<ol type="1">
+<li>Go to ‘4. Download files’ on the Helper font page</li>
+<li>Click the big blue button that says <code>&lt;font-name&gt;.zip</code> to download a zipped folder of the font files</li>
+<li>Unzip the file and copy all the files to the <code>static/fonts/</code> folder of your site</li>
+</ol>
+<p>By default, you’ll be copying across multiple file types (eot, svg, ttf, woff, woff2), which will give the best possible coverage for users of your site visitng from different browsers. You can, in theory, get away with using just the woff and woff2 files for modern browsers. Except there’s always an IE6 user somewhere.</p>
+</section>
+<section id="recognise-fonts" class="level3">
+<h3 class="anchored" data-anchor-id="recognise-fonts">2. Recognise fonts</h3>
+<p><img src="resources/gh-copycss.png" class="img-fluid" style="width:100.0%" alt="Open Sans download page on the Google Fonts Helper website, scrolled down to a section of copiable CSS for your website."></p>
+<p>It’s not enough to just host the font files; we need to adjust some CSS. CSS files are basically style instructions that inform how HTML files (like our blog posts) should be rendered. You don’t need to be a CSS expert for this part.</p>
+<p>Here’s the steps in short:</p>
+<ol type="1">
+<li>Go to ‘3. Copy CSS’ on the Helper font page</li>
+<li>Copy the CSS code</li>
+<li>Paste it into <code>static/css/fonts/</code> (you can overwrite the CSS for any other fonts that you aren’t using)</li>
+<li>Adjust the font specifications for the body and title text, overwriting the font you’re replacing</li>
+</ol>
+<p>It’s worth explaining those last couple of steps a bit more. The default <code>static/css/fonts.css</code> file for the Lithium theme looks like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode css code-with-copy"><code class="sourceCode css"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">@font-face</span> {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-family</span>: <span class="st">'Merriweather'</span><span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-style</span>: <span class="dv">normal</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-weight</span>: <span class="dv">400</span><span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  src: <span class="fu">local(</span><span class="st">'Merriweather'</span><span class="fu">)</span><span class="op">,</span> <span class="fu">local(</span><span class="st">'Merriweather-Regular'</span><span class="fu">)</span><span class="op">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>       <span class="fu">url(</span><span class="st">'../fonts/merriweather-v13-latin-regular.woff2'</span><span class="fu">)</span> <span class="fu">format(</span><span class="st">'woff2'</span><span class="fu">)</span><span class="op">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>       <span class="fu">url(</span><span class="st">'../fonts/merriweather-v13-latin-regular.woff'</span><span class="fu">)</span> <span class="fu">format(</span><span class="st">'woff'</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="im">@font-face</span> {</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-family</span>: <span class="st">'Lato'</span><span class="op">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-style</span>: <span class="dv">normal</span><span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-weight</span>: <span class="dv">400</span><span class="op">;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  src: <span class="fu">local(</span><span class="st">'Lato Regular'</span><span class="fu">)</span><span class="op">,</span> <span class="fu">local(</span><span class="st">'Lato-Regular'</span><span class="fu">)</span><span class="op">,</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>       <span class="fu">url(</span><span class="st">'../fonts/lato-v11-latin-regular.woff2'</span><span class="fu">)</span> <span class="fu">format(</span><span class="st">'woff2'</span><span class="fu">)</span><span class="op">,</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>       <span class="fu">url(</span><span class="st">'../fonts/lato-v11-latin-regular.woff'</span><span class="fu">)</span> <span class="fu">format(</span><span class="st">'woff'</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>body {</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-family</span>: <span class="st">'Merriweather'</span><span class="op">,</span> <span class="dv">serif</span><span class="op">;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>h1<span class="op">,</span> h2<span class="op">,</span> h3<span class="op">,</span> h4<span class="op">,</span> h5<span class="op">,</span> h6<span class="op">,</span> <span class="fu">.nav</span><span class="op">,</span> <span class="fu">.article-duration</span><span class="op">,</span> <span class="fu">.archive-item-link</span><span class="op">,</span> <span class="fu">.footer</span> {</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-family</span>: <span class="st">'Lato'</span><span class="op">,</span> <span class="dv">sans-serif</span><span class="op">;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>@font-face</code> sections declare the fonts and where the files are stored. There are two: Merriweather and Lato.</p>
+<p>The last two sections (that don’t start with <code>@</code>) point out which fonts should be used in the main <code>body</code> text and for a number of other elements of the site, like headers (<code>h1</code>, etc) and the <code>.footer</code>. Other elements can be added.</p>
+<p>You can also name more than one font for each site element. For example, the <code>font-family: 'Merriweather', serif;</code> of the the <code>body {}</code> section says that body text should be ‘Merriweather’ but should default to the host computer’s generic serif file if there’s a problem displaying Merriweather.</p>
+<p>So, you can copy-paste over the <code>@font-face</code> sections with the CSS you copied from the Helper and then adjust the <code>font-family</code> names with your selections.</p>
+</section>
+</section>
+<section id="just-my-type" class="level2">
+<h2 class="anchored" data-anchor-id="just-my-type">Just my type</h2>
+<p>As examples, you can see rostrum.blog’s <a href="https://github.com/matt-dray/rostrum-blog/tree/master/static/fonts"><code>static/fonts/</code></a> folder and <a href="https://github.com/matt-dray/rostrum-blog/blob/master/static/css/fonts.css"><code>static/css/fonts.css</code></a>.</p>
+<p>Compare the CSS file for this site to the Lithium default above:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode css code-with-copy"><code class="sourceCode css"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* roboto-regular - latin */</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">@font-face</span> {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-family</span>: <span class="st">'Roboto'</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-style</span>: <span class="dv">normal</span><span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-weight</span>: <span class="dv">400</span><span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  src: <span class="fu">url(</span><span class="st">'../fonts/roboto-v20-latin-regular.eot'</span><span class="fu">)</span><span class="op">;</span> <span class="co">/* IE9 Compat Modes */</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  src: <span class="fu">local(</span><span class="st">'Roboto'</span><span class="fu">)</span><span class="op">,</span> <span class="fu">local(</span><span class="st">'Roboto-Regular'</span><span class="fu">)</span><span class="op">,</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>       <span class="fu">url(</span><span class="st">'../fonts/roboto-v20-latin-regular.eot?#iefix'</span><span class="fu">)</span> <span class="fu">format(</span><span class="st">'embedded-opentype'</span><span class="fu">)</span><span class="op">,</span> <span class="co">/* IE6-IE8 */</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>       <span class="fu">url(</span><span class="st">'../fonts/roboto-v20-latin-regular.woff2'</span><span class="fu">)</span> <span class="fu">format(</span><span class="st">'woff2'</span><span class="fu">)</span><span class="op">,</span> <span class="co">/* Super Modern Browsers */</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>       <span class="fu">url(</span><span class="st">'../fonts/roboto-v20-latin-regular.woff'</span><span class="fu">)</span> <span class="fu">format(</span><span class="st">'woff'</span><span class="fu">)</span><span class="op">,</span> <span class="co">/* Modern Browsers */</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>       <span class="fu">url(</span><span class="st">'../fonts/roboto-v20-latin-regular.ttf'</span><span class="fu">)</span> <span class="fu">format(</span><span class="st">'truetype'</span><span class="fu">)</span><span class="op">,</span> <span class="co">/* Safari, Android, iOS */</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>       <span class="fu">url(</span><span class="st">'../fonts/roboto-v20-latin-regular.svg#Roboto'</span><span class="fu">)</span> <span class="fu">format(</span><span class="st">'svg'</span><span class="fu">)</span><span class="op">;</span> <span class="co">/* Legacy iOS */</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">/* lekton-regular - latin */</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="im">@font-face</span> {</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-family</span>: <span class="st">'Lekton'</span><span class="op">;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-style</span>: <span class="dv">normal</span><span class="op">;</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-weight</span>: <span class="dv">400</span><span class="op">;</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  src: <span class="fu">url(</span><span class="st">'../fonts/lekton-v10-latin-regular.eot'</span><span class="fu">)</span><span class="op">;</span> <span class="co">/* IE9 Compat Modes */</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  src: <span class="fu">local(</span><span class="st">'Lekton'</span><span class="fu">)</span><span class="op">,</span> <span class="fu">local(</span><span class="st">'Lekton-Regular'</span><span class="fu">)</span><span class="op">,</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>       <span class="fu">url(</span><span class="st">'../fonts/lekton-v10-latin-regular.eot?#iefix'</span><span class="fu">)</span> <span class="fu">format(</span><span class="st">'embedded-opentype'</span><span class="fu">)</span><span class="op">,</span> <span class="co">/* IE6-IE8 */</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>       <span class="fu">url(</span><span class="st">'../fonts/lekton-v10-latin-regular.woff2'</span><span class="fu">)</span> <span class="fu">format(</span><span class="st">'woff2'</span><span class="fu">)</span><span class="op">,</span> <span class="co">/* Super Modern Browsers */</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>       <span class="fu">url(</span><span class="st">'../fonts/lekton-v10-latin-regular.woff'</span><span class="fu">)</span> <span class="fu">format(</span><span class="st">'woff'</span><span class="fu">)</span><span class="op">,</span> <span class="co">/* Modern Browsers */</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>       <span class="fu">url(</span><span class="st">'../fonts/lekton-v10-latin-regular.ttf'</span><span class="fu">)</span> <span class="fu">format(</span><span class="st">'truetype'</span><span class="fu">)</span><span class="op">,</span> <span class="co">/* Safari, Android, iOS */</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>       <span class="fu">url(</span><span class="st">'../fonts/lekton-v10-latin-regular.svg#Lekton'</span><span class="fu">)</span> <span class="fu">format(</span><span class="st">'svg'</span><span class="fu">)</span><span class="op">;</span> <span class="co">/* Legacy iOS */</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>body {</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-family</span>: <span class="st">'Roboto'</span><span class="op">,</span> <span class="dv">serif</span><span class="op">;</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>h1<span class="op">,</span> h2<span class="op">,</span> h3<span class="op">,</span> h4<span class="op">,</span> h5<span class="op">,</span> h6<span class="op">,</span> <span class="fu">.nav</span><span class="op">,</span> <span class="fu">.article-duration</span><span class="op">,</span> <span class="fu">.archive-item-link</span><span class="op">,</span> <span class="fu">.article-meta</span><span class="op">,</span> <span class="fu">.footer</span> {</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-family</span>: <span class="st">'Lekton'</span><span class="op">,</span> <span class="dv">monospace</span><span class="op">;</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>code {</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-family</span>: <span class="st">'Lekton'</span><span class="op">,</span> <span class="dv">monospace</span><span class="op">;</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  <span class="kw">font-size</span>: <span class="dv">100</span><span class="dt">%</span><span class="op">;</span></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I chose the monospace <a href="https://fonts.google.com/specimen/Lekton" target="_blank">Lekton</a> for code and headers and the serif <a href="https://fonts.google.com/specimen/Roboto" target="_blank">Roboto</a> for the body. I like Lekton’s relative narrowness especially, along with its almost-square <code>{braces}</code>. Roboto is clean and clear, if ubiquitous.</p>
+<p>As ever with these decisions, I may well change my mind again at some point.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-08-05 16:56:13 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
+[13] digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>See also sections <a href="https://bookdown.org/yihui/blogdown/templates.html#how-to" target="_blank">2.5.1</a> and <a href="https://bookdown.org/yihui/blogdown/static-files.html" target="_blank">2.7</a> of <a href="https://bookdown.org/yihui/blogdown/" target="_blank">the Blogdown book</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://twitter.com/apreshill/status/1078494406301212672">Just ask Alison</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

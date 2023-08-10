@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2020-06-14">
+
+<title>rostrum.blog - Take a {ghdump} to download GitHub repos</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Take a {ghdump} to download GitHub repos</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">gh</div>
+                <div class="quarto-category">ghdump</div>
+                <div class="quarto-category">github</div>
+                <div class="quarto-category">r</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 14, 2020</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#clone-army" id="toc-clone-army" class="nav-link" data-scroll-target="#clone-army">Clone army</a></li>
+  <li><a href="#ghdump" id="toc-ghdump" class="nav-link" data-scroll-target="#ghdump">{ghdump}</a>
+  <ul class="collapse">
+  <li><a href="#get-and-use" id="toc-get-and-use" class="nav-link" data-scroll-target="#get-and-use">Get and use</a></li>
+  <li><a href="#interactivity" id="toc-interactivity" class="nav-link" data-scroll-target="#interactivity">Interactivity</a></li>
+  <li><a href="#under-the-hood" id="toc-under-the-hood" class="nav-link" data-scroll-target="#under-the-hood">Under the hood</a></li>
+  </ul></li>
+  <li><a href="#why-bother" id="toc-why-bother" class="nav-link" data-scroll-target="#why-bother">Why bother?</a>
+  <ul class="collapse">
+  <li><a href="#iteration" id="toc-iteration" class="nav-link" data-scroll-target="#iteration">1. Iteration</a></li>
+  <li><a href="#file-manipulation" id="toc-file-manipulation" class="nav-link" data-scroll-target="#file-manipulation">2. File manipulation</a></li>
+  <li><a href="#user-input" id="toc-user-input" class="nav-link" data-scroll-target="#user-input">3. User input</a></li>
+  <li><a href="#stickers" id="toc-stickers" class="nav-link" data-scroll-target="#stickers">4. Stickers</a></li>
+  </ul></li>
+  <li><a href="#this-belongs-in-a-dump" id="toc-this-belongs-in-a-dump" class="nav-link" data-scroll-target="#this-belongs-in-a-dump">This belongs in a dump</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="resources/ghdump_hex.png" class="img-fluid figure-img" style="width:30.0%" alt="A silhouette of a dump truck dumping trash bags."></p>
+<figcaption class="figure-caption">My garbage GitHub repos being dumped onto my local machine.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>Run <code>ghd_copy()</code> from <a href="https://github.com/matt-dray/ghdump">the {ghdump} package</a> to either clone or download all the GitHub repositories for a given user. Intended for archival purposes or setting up a new computer.</p>
+<p>The package comes with no guarantees and will likely be in a perpetual work-in-progress state. Please <a href="https://github.com/matt-dray/ghdump/issues">submit issues</a> or pull requests.</p>
+</section>
+<section id="clone-army" class="level2">
+<h2 class="anchored" data-anchor-id="clone-army">Clone army</h2>
+<p>Situation:</p>
+<ul>
+<li>Sometimes I get a new computer and want to clone all my repos to it</li>
+<li>Sometimes I want to be able to archive my repos so I’m not dependent on GitHub nor any given computer</li>
+<li>it would be tedious to download or clone the repos one-by-one from the GitHub interface</li>
+</ul>
+<p>Wants:</p>
+<ul>
+<li>To clone (with HTTPS or SSH) or download all of my repos with one command</li>
+<li>Be able to unzip downloaded repos en masse if I want to</li>
+<li>Do all this from within R, mostly for the learning experience, but also to allow for user interactivity</li>
+</ul>
+<p>Observations:</p>
+<ul>
+<li>I don’t know of a specific R function that automates mass-downloading or mass-cloning of GitHub repos</li>
+<li><a href="https://github.com/r-lib/gh">the {gh} package</a> provides a lightweight <a href="https://developer.github.com/v3/">GitHub API</a> wrapper for R that’s likely to be helpful</li>
+<li>R has many file-handling functions that will be helpful</li>
+</ul>
+</section>
+<section id="ghdump" class="level2">
+<h2 class="anchored" data-anchor-id="ghdump">{ghdump}</h2>
+<p>The result is that I wrote a function, <code>ghd_copy()</code>, that copies (clones or downloads) all the repos for a given user to a specified location. You can get it in <a href="https://github.com/matt-dray/ghdump">the tiny {ghdump} package</a>.</p>
+<p>The function interacts with the GitHub API thanks to <a href="https://github.com/r-lib/gh">the {gh} package</a> by Gábor Csárdi, Jenny Bryan and Hadley Wickham, while iterating over repos comes thanks to <a href="https://purrr.tidyverse.org/">the {purrr} package</a> by Lionel Henry and Hadley Wickham.</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Update</b></p>
+<p>As of May 2022 there’s also <a href="https://docs.ropensci.org/gitcellar/">a handy rOpenSci package called {gitcellar}</a>, by Maëlle Salmon and Jeroen Ooms, which is for downloading an organisation’s repos for archival purposes.</p>
+</div>
+<section id="get-and-use" class="level3">
+<h3 class="anchored" data-anchor-id="get-and-use">Get and use</h3>
+<p>Install with:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"matt-dray/ghdump"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ghdump)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To use the package, you’ll need a GitHub account and <a href="https://happygitwithr.com/github-pat.html">a GitHub Personal Access Token (PAT) stored in your .Renviron file</a>. You can do this with the following steps:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">browse_github_pat</span>()  <span class="co"># opens browser to generate token</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>usethis<span class="sc">::</span><span class="fu">edit_r_environ</span>()     <span class="co"># add your token to the .Renviron</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># then restart R</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can use {ghdump} to download the repos for a specified user:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ghd_copy</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">gh_user =</span> <span class="st">"matt-dray"</span>,           <span class="co"># download repos for this user</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">dest_dir =</span> <span class="st">"~/Documents/repos"</span>,  <span class="co"># full local file path to copy to</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">copy_type =</span> <span class="st">"download"</span>           <span class="co"># "download" or "clone" the repos</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Or clone them:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ghd_copy</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">gh_user =</span> <span class="st">"matt-dray"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">dest_dir =</span> <span class="st">"~/Documents/repos"</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">copy_type =</span> <span class="st">"clone"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">protocol =</span> <span class="st">"https"</span> <span class="co"># specify "https" or "ssh"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you want to use the SSH protocol when cloning, you need to make sure that you’ve <a href="https://happygitwithr.com/ssh-keys.html">set up your keys</a>.</p>
+</section>
+<section id="interactivity" class="level3">
+<h3 class="anchored" data-anchor-id="interactivity">Interactivity</h3>
+<p>My expectation is to use <code>ghd_copy()</code> infrequently and in a non-programmatic way, so I’ve made it quite interactive. This means user input is required; you’ll get some yes/no questions in the console that will affect how the function runs.</p>
+<p>Here’s an imaginary demo of the output from <code>ghd_copy()</code> when <code>copy_type = "download"</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ghd_copy</span>(<span class="st">"made-up-user"</span>, <span class="st">"~/Desktop/test-download"</span>, <span class="st">"download"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>Fetching GitHub repos for user made-up-user... 3 repos found
+Create new directory at path ~/Desktop/test-download? y/n: y
+Definitely download all 3 repos? y/n: y
+Downloading zipped repositories to ~/Desktop/test-download
+
+trying URL 'https://github.com/made-up-user/fake-repo-1/archive/master.zip'
+Content type 'application/zip' length 100 bytes
+==================================================
+downloaded 100 bytes
+
+trying URL 'https://github.com/made-up-user/fake-repo-2/archive/master.zip'
+Content type 'application/zip' length 100 bytes
+==================================================
+downloaded 100 bytes
+
+trying URL 'https://github.com/made-up-user/fake-repo-3/archive/master.zip'
+Content type 'application/zip' length 100 bytes
+==================================================
+downloaded 100 bytes
+
+Unzip all folders? y/n: y
+Unzipping repositories
+Retain the zip files? y/n: y
+Keeping zipped folders.
+Remove '-master' suffix from unzipped directory names? y/n: y
+Renaming files to remove '-master' suffix
+Finished downloading</code></pre>
+<p>And now imaginary demo of the output from <code>ghd_copy()</code> when <code>copy_type = "clone"</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ghd_copy</span>(<span class="st">"made-up-user"</span>, <span class="st">"~/Desktop/test-clone"</span>, <span class="st">"clone"</span>, <span class="st">"ssh"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>Fetching GitHub repos for user made-up-user... 3 repos found
+Create new directory at path ~/Desktop/test-clone? y/n: y
+Definitely clone all 3 repos? y/n: y
+Cloning repositories to ~/Desktop/test-clone 
+Cloning into 'fake-repo-1'...
+Cloning into 'fake-repo-2'...
+Cloning into 'fake-repo-3'...
+Finished cloning</code></pre>
+<p>Note that cloning has only been tested on my own Mac OS machine at this point (June 2020) and is not guaranteed to work elsewhere yet. Please <a href="https://github.com/matt-dray/ghdump/issues">submit issues</a> or pull requests to help improve this.</p>
+</section>
+<section id="under-the-hood" class="level3">
+<h3 class="anchored" data-anchor-id="under-the-hood">Under the hood</h3>
+<p>What are the steps to downloading repos with <code>ghdump::ghd_copy()</code>? Each of the functions in this section are not exported from the package, but you can access them by prefacing with <code>ghdump:::</code> (the rare triple-colon operator) if you want to see their code.</p>
+<p>First, to get repo info:</p>
+<ol type="1">
+<li><code>ghd_get_repos()</code> passes a GitHub username to <code>gh::gh()</code>, which contacts the GitHub API to return a gh_response object that contains info about each of that user’s repos</li>
+<li><code>ghd_extract_names()</code> takes the gh_response object from <code>ghd_get_repos()</code> and extracts the names into a character vector</li>
+</ol>
+<p>Then to download (if <code>copy_type = "download"</code>):</p>
+<ol type="1">
+<li><code>ghd_enframe_urls()</code> turns the character vector of repo names into a data.frame, with a corresponding column that contains the URL to a zip file for that repo</li>
+<li><code>ghd_copy_zips()</code> takes each zip file URL from that data frame and downloads them to the file path provided by the user</li>
+<li><code>ghd_unzip()</code> unzips the zipped repos</li>
+</ol>
+<p>You can, of course, use these intermediate functions if you have slightly different needs. Maybe you want to limit the repos that are downloaded; do this by filtering the vector output from <code>ghd_extract_names()</code> for example.</p>
+<p>Or to clone (if <code>copy_type = "clone"</code>):</p>
+<ol type="1">
+<li><code>ghd_clone_multi()</code> that iterates cloning over the repos, itself calling <code>ghd_clone_one()</code></li>
+</ol>
+</section>
+</section>
+<section id="why-bother" class="level2">
+<h2 class="anchored" data-anchor-id="why-bother">Why bother?</h2>
+<p>What did I learn from doing this? As if I have to explain myuself to you, lol.</p>
+<section id="iteration" class="level3">
+<h3 class="anchored" data-anchor-id="iteration">1. Iteration</h3>
+<p>Aside from {gh}, the package also depends on {purrr} for iterative programming.</p>
+<p>For example, the gh_response object output from <code>ghdump:::ghd_get_repos()</code> is passed to <code>map()</code> with the <code>pluck()</code> function to extract the repo names.</p>
+<p>Another example is the use of <code>walk()</code>, which is like <code>map()</code>, except we use it when the output is some ‘side effect’. By ‘side effect’, we mean that it doesn’t return an R object. For example, we can <code>walk()</code> the <code>unzip()</code> function over the path to each zip file. This doesn’t return anything in R; it results in some local files being manipulated.</p>
+</section>
+<section id="file-manipulation" class="level3">
+<h3 class="anchored" data-anchor-id="file-manipulation">2. File manipulation</h3>
+<p>R can be used to interact with files on your computer. There’s a number of these base R functions in the package:</p>
+<ul>
+<li><code>dir.create()</code> to create a new folder</li>
+<li><code>file.remove()</code> to remove a file or folder</li>
+<li><code>list.files()</code> and <code>list.dirs()</code> to return a character vector files and folders at some path</li>
+<li><code>file.rename</code> to change the name of a file or folder</li>
+<li><code>unzip()</code> to unpack a zipped folder</li>
+</ul>
+</section>
+<section id="user-input" class="level3">
+<h3 class="anchored" data-anchor-id="user-input">3. User input</h3>
+<p>How do you ask questions of your user and get answers? This interactivity is made possible by <code>readline()</code>. You pass it a string to prompt the user, whose return value can be stored.</p>
+<p>For example, this is how it looks in the console:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>answer <span class="ot">&lt;-</span> <span class="fu">readline</span>(<span class="st">"Do you like pizza? "</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>Do you like pizza? yes</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>answer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>[1] "yes"</code></pre>
+<p>Where a user has written <code>yes</code> after the prompt on the second line.</p>
+</section>
+<section id="stickers" class="level3">
+<h3 class="anchored" data-anchor-id="stickers">4. Stickers</h3>
+<p>I’ve designed a few hex stickers with the {hexSticker} package; you can see them in <a href="https://github.com/matt-dray/stickers">my ‘stickers’ GitHub repo</a>. This time I made the sticker for {ghdump} using Dmytro Perepolkin’s <a href="https://github.com/dmi3kno/bunny">{bunny}</a> package, which is a helper for the <a href="https://cran.r-project.org/web/packages/magick/vignettes/intro.html">{magick} package</a> from Jeroen Ooms. It’s <a href="https://www.ddrive.no/post/making-hex-and-twittercard-with-bunny-and-magick/">a very smooth process</a> with much flexibility.</p>
+</section>
+</section>
+<section id="this-belongs-in-a-dump" class="level2">
+<h2 class="anchored" data-anchor-id="this-belongs-in-a-dump">This belongs in a dump</h2>
+<p>Yeah, maybe. It’s not sophisticated, but I’ve found it useful for my own specific purposes.</p>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-21 18:39:31 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
+[13] digest_0.6.33     rlang_1.1.1       fontawesome_0.5.1 evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

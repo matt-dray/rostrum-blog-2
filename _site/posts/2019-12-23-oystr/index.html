@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2019-12-23">
+
+<title>rostrum.blog - Handle London travel data with {oystr}</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Handle London travel data with {oystr}</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">dataviz</div>
+                <div class="quarto-category">oyster</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">transport</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 23, 2019</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#clam-ouring-for-a-package" id="toc-clam-ouring-for-a-package" class="nav-link" data-scroll-target="#clam-ouring-for-a-package">Clam-ouring for a package</a>
+  <ul class="collapse">
+  <li><a href="#winkle-out-the-data" id="toc-winkle-out-the-data" class="nav-link" data-scroll-target="#winkle-out-the-data">Winkle out the data</a></li>
+  <li><a href="#like-it-or-limpet" id="toc-like-it-or-limpet" class="nav-link" data-scroll-target="#like-it-or-limpet">Like it or limpet</a></li>
+  <li><a href="#being-un-shellfish-with-dependencies" id="toc-being-un-shellfish-with-dependencies" class="nav-link" data-scroll-target="#being-un-shellfish-with-dependencies">Being un-shellfish with dependencies</a></li>
+  </ul></li>
+  <li><a href="#flexing-the-packages-mussels" id="toc-flexing-the-packages-mussels" class="nav-link" data-scroll-target="#flexing-the-packages-mussels">Flexing the package’s mussels</a></li>
+  <li><a href="#shuck-it-up" id="toc-shuck-it-up" class="nav-link" data-scroll-target="#shuck-it-up">Shuck it up</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><img src="resources/oystr_hex.png" class="img-fluid" style="width:30.0%" alt="A hexagon-shaped sticker for the oystr package, featuring an oystercatcher bird and a link to matt-dray.github.io/oystr."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<ul>
+<li>Problem: I wanted to analyse my Transport for London (TfL) travel data</li>
+<li>Solution: I came up with the R package name {oystr} and a hex sticker design</li>
+<li>Practical solution: <a href="https://matt-dray.github.io/oystr/">I actually wrote the package</a></li>
+<li>Self-flagellation: it has zero dependencies</li>
+<li>Further problem: TfL won’t give me information I need to complete it properly</li>
+<li>Result: blog it and move on</li>
+<li>Revelation: I’ve spent more than 53 days on TfL trains since Autumn 2014</li>
+</ul>
+</section>
+<section id="clam-ouring-for-a-package" class="level2">
+<h2 class="anchored" data-anchor-id="clam-ouring-for-a-package">Clam-ouring for a package</h2>
+<p><a href="https://tfl.gov.uk/">Transport for London</a> (TfL) operates the travel system in London. To use their services you ‘<a href="https://tfl.gov.uk/fares/how-to-pay-and-where-to-buy-tickets-and-oyster/pay-as-you-go/touching-in-and-out">tap in</a>’ with <a href="https://oyster.tfl.gov.uk/oyster/entry.do">an Oyster card</a>.</p>
+<p>You can sign up for monthly CSV files of your Oyster journey data, or <a href="https://oyster.tfl.gov.uk/oyster/entry.do">you can sign in and download it from their website</a>, but they’re not in a fully machine-readable state. Hence the {oystr} package.</p>
+<p>Install and load with:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)  <span class="co"># if not yet installed</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"oystr"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(oystr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>{oystr} has two main functions:</p>
+<ul>
+<li><code>oy_read()</code> to read in CSV files from a folder and stitch them together</li>
+<li><code>oy_clean()</code> to wrangle the data into shape and engineer new columns</li>
+</ul>
+<p>There’s two functions that deal with summarising the data, but are very much under development at time of writing:</p>
+<ul>
+<li><code>oy_summary()</code> to create a list of basic data summaries, like most visited stations</li>
+<li><code>oy_lineplot()</code> to create a simple plots of data over time</li>
+</ul>
+<p>There’s also two example data sets:</p>
+<ul>
+<li><code>journeys_read</code> is what a journey-history data set looks like when read in by <code>oy_read()</code></li>
+<li><code>journeys_clean</code> is what that read-in data set looks like when cleaned by <code>oy_clean()</code></li>
+</ul>
+<p>There’s also Oyster-related colours in <code>oy_col()</code>.</p>
+<p>You can read more on <a href="https://matt-dray.github.io/oystr/">the {oystr} website</a>, including <a href="https://matt-dray.github.io/oystr/articles/oystr-intro.html">a vignette</a>, and <a href="https://github.com/matt-dray/oystr">find the source on GitHub</a>.</p>
+<section id="winkle-out-the-data" class="level3">
+<h3 class="anchored" data-anchor-id="winkle-out-the-data">Winkle out the data</h3>
+<p>The <code>oy_read()</code> function is straightforward: basically, you supply a folder path and it finds the Oyster journey CSV files with the expected column names, reads them and binds them all together. That ends up looking like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(journeys_read)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   102 obs. of  8 variables:
+ $ Date          : chr  "31-Aug-2018" "31-Aug-2018" "28-Aug-2018" "28-Aug-2018" ...
+ $ Start.Time    : chr  "16:11" "06:47" "18:57" "13:49" ...
+ $ End.Time      : chr  "16:50" "07:34" "19:44" "14:43" ...
+ $ Journey.Action: chr  "Station A to Station B" "Station B to Station A" "Station C to Station R" "Station R to Station L" ...
+ $ Charge        : chr  "0" "0" "0" "0" ...
+ $ Credit        : chr  "NA" "NA" "NA" "NA" ...
+ $ Balance       : num  8 8 8 8 8 8 8 8 8 8 ...
+ $ Note          : chr  "NA" "NA" "NA" "NA" ...</code></pre>
+</div>
+</div>
+<p>But this isn’t enough. The data files have several columns, like <code>Date</code>, <code>Start time</code> and <code>Balance</code> (<a href="https://github.com/matt-dray/oystr/blob/master/inst/extdata/july.csv">see an anonymised example</a>) that need sorting.</p>
+<p>The <code>oy_clean()</code> function is the real MVP<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. It does things like:</p>
+<ul>
+<li>enforce the datetime class where needed</li>
+<li>engineer an end date (some journeys ended a different day to when they started)</li>
+<li>calculate journey duration</li>
+<li>extract mode of transport, start and end stations, bus routes, etc</li>
+</ul>
+<p>That ends up looking like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(journeys_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'data.frame':   102 obs. of  13 variables:
+ $ datetime_start  : POSIXct, format: "2018-08-31 16:11:00" "2018-08-31 06:47:00" ...
+ $ datetime_end    : POSIXct, format: "2018-08-31 16:50:00" "2018-08-31 07:34:00" ...
+ $ weekday_start   : Ord.factor w/ 7 levels "Monday"&lt;"Tuesday"&lt;..: 5 5 2 2 7 7 7 7 6 6 ...
+ $ journey_duration: 'difftime' num  39 47 47 54 ...
+  ..- attr(*, "units")= chr "mins"
+ $ mode            : chr  "Train" "Train" "Train" "Train" ...
+ $ station_start   : chr  "Station A" "Station B" "Station C" "Station R" ...
+ $ station_end     : chr  "Station A" "Station B" "Station C" "Station R" ...
+ $ bus_route       : chr  NA NA NA NA ...
+ $ payment         : chr  NA NA NA NA ...
+ $ charge          : chr  "0" "0" "0" "0" ...
+ $ credit          : chr  "NA" "NA" "NA" "NA" ...
+ $ balance         : num  8 8 8 8 8 8 8 8 8 8 ...
+ $ note            : chr  "NA" "NA" "NA" "NA" ...</code></pre>
+</div>
+</div>
+</section>
+<section id="like-it-or-limpet" class="level3">
+<h3 class="anchored" data-anchor-id="like-it-or-limpet">Like it or limpet</h3>
+<p>It was tricky to deal with the <code>Journey/Action</code> column. It’s a bin for all sorts of things like:</p>
+<ul>
+<li><code>Bus journey, route 87</code></li>
+<li><code>St James's Park to Kings Cross [London Underground / National Rail]"</code></li>
+<li><code>Entered and exited Pimlico</code></li>
+<li><code>[No touch-in] to Waterloo (platforms 1-11) [National Rail]"</code></li>
+<li><code>Season ticket added on touch in, Liverpool Street [National Rail]</code></li>
+<li><code>Automated Refund, Southbury</code></li>
+<li><code>Topped up,</code></li>
+</ul>
+<p>In fact, I don’t know all the possibilities for this column and TfL won’t tell me: I sent a help request and was told that this information isn’t available. I could do a <a href="https://www.gov.uk/make-a-freedom-of-information-request">Freedom of Information</a> (FOI) request, but I can only get my own Oyster history. Which I already have.</p>
+<p>This limits how useful this package can be for other people; I can’t handle formats for the <code>Journey/Action</code> column that I haven’t seen before. So I might as well write about where I’ve got to with {oystr} and <a href="https://github.com/matt-dray/oystr/issues/14">encourage you to add to this list of possible formats I’ve started</a>.</p>
+</section>
+<section id="being-un-shellfish-with-dependencies" class="level3">
+<h3 class="anchored" data-anchor-id="being-un-shellfish-with-dependencies">Being un-shellfish with dependencies</h3>
+<p>As an aside, I set myself a small challenge for {oystr}: to use only base R functions and avoid dependencies. These are packages that would have to be installed to make {oystr} work.</p>
+<p>Why do this? In part because:</p>
+<ul>
+<li>I admire the philosophy of the <a href="http://www.tinyverse.org/">tinyverse</a> (‘lightweight is the right weight’)</li>
+<li><a href="https://www.rostrum.blog/2019/12/08/altcheckr/">my last package, {altcheckr}, was stuffed with dependencies</a></li>
+<li>I’ve been writing too much <a href="https://www.tidyverse.org/">tidyverse code</a> and want the sweet nostalgia hit of some classic base R code</li>
+<li>I’m a hero and I care about my users (me); you’re (I’m) welcome</li>
+</ul>
+<p>To be more specific, I wanted to avoid required packages in <a href="http://r-pkgs.had.co.nz/description.html#dependencies">the ‘Imports’ and ‘Remotes’ fields of the the DESCRIPTION file</a>. Packages in the ‘Suggests’ field are fine; for example, {testthat} and {knitr} are required for development, but not by the user.</p>
+</section>
+</section>
+<section id="flexing-the-packages-mussels" class="level2">
+<h2 class="anchored" data-anchor-id="flexing-the-packages-mussels">Flexing the package’s mussels</h2>
+<p>Okey dokey, so for about five years I’ve been collecting my Oyster data as monthly CSVs emailed to me by TfL, though some months are missing. I won’t be sharing these data, but here’s some quick examples of applying {oystr} to it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read all the CSV files from a folder path</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>data_read <span class="ot">&lt;-</span> <span class="fu">oy_read</span>(<span class="st">"~/Desktop/oyster"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next is <code>oy_clean()</code> to wrangle the data into shape.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Pass the data frame output from oy_read()</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>data_clean <span class="ot">&lt;-</span> <span class="fu">oy_clean</span>(data_read)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As a quick overview, there’s 1794 rows of data in the output, of which 97 per cent is train journeys. The earliest recorded journey start is 2014-09-01 07:32:00.</p>
+<p>We can take this cleaned data and summarise it in various ways. For example, the <code>oy_summary()</code> function provides a list where each element is a basic summary.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>train_summ <span class="ot">&lt;-</span> <span class="fu">oy_summary</span>(data_clean, <span class="at">mode =</span> <span class="st">"Train"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(train_summ)  <span class="co"># list element names</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>[1] "count_journeys"   "stations_popular" "stations_matrix"  "duration_total"  
+[5] "day_popular"</code></pre>
+<p>So for example, I can use train_summ$duration_total to find out that I’ve spent 76321 mins on TfL’s trains.</p>
+<p>That’s 53 days.</p>
+<p>You could also plot the data. Here’s a histogram coloured with Oyster-related colours from <code>oy_cols()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="fl">4.5</span>, <span class="fl">4.5</span>, <span class="dv">5</span>, <span class="dv">0</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.numeric</span>(data_clean<span class="sc">$</span>journey_duration),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="cn">NULL</span>, <span class="at">xlab =</span> <span class="st">"Journey duration (mins)"</span>, </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> <span class="fu">oy_cols</span>(<span class="st">"oyster_cyan"</span>), <span class="at">border =</span> <span class="fu">oy_cols</span>(<span class="st">"oyster_blue"</span>),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">120</span>, <span class="dv">5</span>), <span class="at">las =</span> <span class="dv">1</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>title <span class="ot">&lt;-</span> <span class="st">"Matt Dray's journeys are 40 to 45 mins long, mostly"</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>sub <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">"Travelling sweatily via TfL trains since Autumn 2014"</span>)</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(<span class="at">side =</span> <span class="dv">3</span>, <span class="at">line =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>), <span class="at">adj =</span> <span class="dv">0</span>, <span class="at">cex =</span> <span class="fu">c</span>(<span class="fl">1.2</span>, <span class="dv">1</span>), <span class="fu">c</span>(title, sub))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="resources/plot-1.png" class="img-fluid" style="width:100.0%" alt="Histogram showing that my journey times are mostly 40 to 45 mins. The subtitle is 'traveling sweatily by via TfL trains since autium 2014."></p>
+<p>So that’s my commute dominating the peak of that histogram. The two-hour journey went right across the network from Southbury in London’s north-west to Hounslow in the south-west. I assume the three-minute journey from South Kensington to Gloucester Road to avoid zombie-dinosaur attacks outside the <a href="https://www.nhm.ac.uk/visit/galleries-and-museum-map/dinosaurs.html">Natural History Museum.</a></p>
+<p>Obviously you could take the cleaned data and do some other neat stuff. Maybe I’ll do another post about this in future.</p>
+</section>
+<section id="shuck-it-up" class="level2">
+<h2 class="anchored" data-anchor-id="shuck-it-up">Shuck it up</h2>
+<p>There’s plenty to do. The main task is to handle all formats of the <code>Journey/Action</code> column and then use this to inform how the summary and plot functions should be improved. Ultimately, <code>oy_read()</code> and <code>oy_clean()</code> work for me right now, but you may run into trouble if you actually try to use the package.</p>
+<p>Eventually I’d like the package to be at least as good as the sticker.</p>
+<p><a href="https://github.com/matt-dray/oystr">Feel free to suggest or make improvements</a> and don’t forget to <a href="https://github.com/matt-dray/oystr/issues/14">add to my log of <code>Journey/Action</code> formats</a> if you’ve seen some different things.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-23 11:22:24 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] oystr_0.0.0.9000
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
+[13] digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>MVP means ‘<a href="https://www.imdb.com/title/tt0196106/">Most Valuable Primate</a>’, but also <a href="https://en.wikipedia.org/wiki/Minimum_viable_product">Minimum Viable Product</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

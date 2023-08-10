@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2019-06-20">
+
+<title>rostrum.blog - The Mountain Goats with {trelliscopejs}</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../../site_libs/fitvids-2.1.1/fitvids.min.js"></script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">The Mountain Goats with {trelliscopejs}</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">dataviz</div>
+                <div class="quarto-category">music</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">spotifyr</div>
+                <div class="quarto-category">trelliscope</div>
+                <div class="quarto-category">trelliscopejs</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 20, 2019</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#small-multiples" id="toc-small-multiples" class="nav-link" data-scroll-target="#small-multiples">Small multiples</a></li>
+  <li><a href="#goat-discography" id="toc-goat-discography" class="nav-link" data-scroll-target="#goat-discography">Goat discography</a></li>
+  <li><a href="#ready-the-data" id="toc-ready-the-data" class="nav-link" data-scroll-target="#ready-the-data">Ready the data</a>
+  <ul class="collapse">
+  <li><a href="#get-data-and-simplify" id="toc-get-data-and-simplify" class="nav-link" data-scroll-target="#get-data-and-simplify">Get data and simplify</a></li>
+  <li><a href="#album-artwork" id="toc-album-artwork" class="nav-link" data-scroll-target="#album-artwork">Album artwork</a></li>
+  <li><a href="#prep-for-trelliscope" id="toc-prep-for-trelliscope" class="nav-link" data-scroll-target="#prep-for-trelliscope">Prep for trelliscope</a></li>
+  </ul></li>
+  <li><a href="#generate-trelliscope" id="toc-generate-trelliscope" class="nav-link" data-scroll-target="#generate-trelliscope">Generate trelliscope</a>
+  <ul class="collapse">
+  <li><a href="#host-your-trelliscope" id="toc-host-your-trelliscope" class="nav-link" data-scroll-target="#host-your-trelliscope">Host your trelliscope</a></li>
+  </ul></li>
+  <li><a href="#energy" id="toc-energy" class="nav-link" data-scroll-target="#energy">Energy</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="cell">
+<div class="cell-output-display">
+<div class="shareagain" style="min-width:300px;margin:1em auto;" data-exeternal="1">
+<iframe src="https://matt-dray.github.io/goat-scope/" width="400" height="300" style="border:FALSE;" loading="lazy" allowfullscreen=""></iframe>
+<script>fitvids('.shareagain', {players: 'iframe'});</script>
+</div>
+</div>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I used <a href="https://hafen.github.io/trelliscopejs/">{trelliscopejs}</a> to make an interactive ‘small multiples’ display for <a href="http://www.mountain-goats.com/">The Mountain Goats</a> discography. You can interact with an embedded version above or <a href="https://matt-dray.github.io/goat-scope/">click here to open full screen</a>.</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>The {trelliscopejs} package has been superseded by <a href="https://github.com/trelliscope/trelliscope">{trelliscope}</a>.</p>
+</div>
+<p>
+</p></section>
+<section id="small-multiples" class="level2">
+<h2 class="anchored" data-anchor-id="small-multiples">Small multiples</h2>
+<p>The <a href="https://hafen.github.io/trelliscopejs/">{trelliscopejs}</a> R package by <a href="https://ryanhafen.com/">Ryan Hafen</a> harnesses the power of his <a href="https://github.com/hafen/trelliscopejs-lib">trelliscopejs-lib</a> JavaScript library.</p>
+<p>What does it do? It provides an interactive interface for visualising, organising and exploring data visualisations in small multiples.</p>
+<p>What are ‘small multiples’? Rather than over-plotting data for multiple levels of some variable, you can facet by them into separate ‘panels’ and display the outputs side by side for easy comparison.</p>
+<p>Ryan has written <a href="https://hafen.github.io/trelliscopejs/index.html">documentation</a>, an <a href="https://ryanhafen.com/blog/trelliscopejs/">introductory post</a> and has created some trelliscopes using using <a href="http://hafen.github.io/trelliscopejs-demo/gapminder/">gapminder</a> and <a href="https://ryanhafen.com/blog/pokemon/">Pokémon</a> data, for example.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> His package is relatively simple to use and does a lot of legwork to provide a nice interface for your data.</p>
+</section>
+<section id="goat-discography" class="level2">
+<h2 class="anchored" data-anchor-id="goat-discography">Goat discography</h2>
+<p><a href="https://www.rostrum.blog/2019/04/25/gen-tmg-lyrics/">In a previous post</a> I used the <a href="https://www.rcharlie.com/spotifyr/">{spotifyr}</a>, <a href="https://github.com/josiahparry/genius">{genius}</a> and <a href="https://github.com/abresler/markovifyR">{markovifyR}</a> packages to generate new lyrics for the band <a href="https://en.wikipedia.org/wiki/The_Mountain_Goats">The Mountain Goats</a>.</p>
+<p>The data from Spotify is interesting. It has musical information like key and tempo, but also <a href="https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/">audio features</a> like ‘danceability’ and ‘acousticness’ scaled from 0 to 1. We also got links to album art in that data set.</p>
+<p>I’m going to use these data in this post to provide a trelliscope example. Each panel will be a track; the visualisation will be album artwork rather than a plot; and audio features will be available to sort and filter data.</p>
+</section>
+<section id="ready-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="ready-the-data">Ready the data</h2>
+<p>We’ll load {trelliscopejs} and some <a href="https://www.tidyverse.org/">tidyverse packages</a> to help us out.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(trelliscopejs)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dplyr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(readr)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="get-data-and-simplify" class="level3">
+<h3 class="anchored" data-anchor-id="get-data-and-simplify">Get data and simplify</h3>
+<p>You can follow the instructions <a href="https://www.rostrum.blog/2019/04/25/gen-tmg-lyrics/#get-lyrics">in the previous post</a> to get the data. I’m going to load those data from a pre-prepared <a href="https://www.r-bloggers.com/remember-to-use-the-rds-format/">RDS file</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the file from a local source and check number of columns</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>raw_goat <span class="ot">&lt;-</span> <span class="fu">read_rds</span>(<span class="st">"resources/goat_discography.RDS"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(raw_goat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 41</code></pre>
+</div>
+</div>
+<p>There’s 41 variables, so let’s simplify.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>small_goat <span class="ot">&lt;-</span> raw_goat <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(available_markets) <span class="sc">%&gt;%</span>  <span class="co"># unnest character vector</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(available_markets <span class="sc">==</span> <span class="st">"US"</span>) <span class="sc">%&gt;%</span>  <span class="co"># releases from one country only</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    track_name, album_name, track_n, album_release_year,  <span class="co"># track detail</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    duration_ms, key_mode, time_signature, <span class="co"># musical info</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    danceability, energy, speechiness, acousticness,  <span class="co"># audio features</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    instrumentalness, liveness, valence, loudness  <span class="co"># audio features</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(energy))  <span class="co"># order by 'energy' audio feature</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(small_goat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 313
+Columns: 15
+$ track_name         &lt;chr&gt; "Choked Out", "Pure Intentions", "If You See Light"…
+$ album_name         &lt;chr&gt; "Beat the Champ", "Bitter Melon Farm", "Get Lonely"…
+$ track_n            &lt;int&gt; 5, 18, 10, 16, 14, 20, 17, 8, 21, 4, 2, 13, 3, 9, 8…
+$ album_release_year &lt;dbl&gt; 2015, 2002, 2006, 2011, 1996, 2012, 2002, 2002, 201…
+$ duration_ms        &lt;int&gt; 102653, 134333, 118013, 167120, 234600, 165840, 137…
+$ key_mode           &lt;chr&gt; "D major", "A major", "C major", "B minor", "D majo…
+$ time_signature     &lt;int&gt; 4, 4, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, …
+$ danceability       &lt;dbl&gt; 0.565, 0.648, 0.566, 0.422, 0.281, 0.681, 0.592, 0.…
+$ energy             &lt;dbl&gt; 0.951, 0.934, 0.927, 0.903, 0.899, 0.895, 0.884, 0.…
+$ speechiness        &lt;dbl&gt; 0.0808, 0.0989, 0.0642, 0.0682, 0.0526, 0.0253, 0.0…
+$ acousticness       &lt;dbl&gt; 0.000239, 0.646000, 0.002930, 0.000620, 0.262000, 0…
+$ instrumentalness   &lt;dbl&gt; 2.78e-05, 2.14e-01, 8.52e-01, 1.01e-02, 2.72e-02, 4…
+$ liveness           &lt;dbl&gt; 0.1320, 0.3890, 0.1990, 0.3420, 0.2080, 0.1390, 0.4…
+$ valence            &lt;dbl&gt; 0.726, 0.424, 0.324, 0.860, 0.350, 0.970, 0.591, 0.…
+$ loudness           &lt;dbl&gt; -3.970, -15.557, -8.047, -8.562, -9.177, -6.936, -1…</code></pre>
+</div>
+</div>
+<p>Note that I’ve ordered by ‘energy’. The trelliscope output being created will be sorted in this variable.</p>
+</section>
+<section id="album-artwork" class="level3">
+<h3 class="anchored" data-anchor-id="album-artwork">Album artwork</h3>
+<p>Unnesting the <code>available_markets</code> character vector removed the <code>album_image</code> variable, which is a nested data frame with URLs to different-sized album artwork. We can grab unique album image URLs and join them back to our data set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>goat_pics <span class="ot">&lt;-</span> raw_goat <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(album_images) <span class="sc">%&gt;%</span>  <span class="co"># unnest dataframe fo URLs</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(width <span class="sc">==</span> <span class="dv">640</span>) <span class="sc">%&gt;%</span>  <span class="co"># just the largest images</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(album_name, url) <span class="sc">%&gt;%</span>  <span class="co"># simplify dataset</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(album_name, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)  <span class="co"># one unique entry per album</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(goat_pics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 21
+Columns: 2
+$ album_name &lt;chr&gt; "In League with Dragons", "Goths", "Beat the Champ", "Trans…
+$ url        &lt;chr&gt; "https://i.scdn.co/image/3896e2b47b548a33d0c9e9f662011a2a09…</code></pre>
+</div>
+</div>
+<p>And now to join the album image URLs back to our simplified data set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>small_goat_pics <span class="ot">&lt;-</span> <span class="fu">left_join</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> small_goat,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> goat_pics,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">"album_name"</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(small_goat_pics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 313
+Columns: 16
+$ track_name         &lt;chr&gt; "Choked Out", "Pure Intentions", "If You See Light"…
+$ album_name         &lt;chr&gt; "Beat the Champ", "Bitter Melon Farm", "Get Lonely"…
+$ track_n            &lt;int&gt; 5, 18, 10, 16, 14, 20, 17, 8, 21, 4, 2, 13, 3, 9, 8…
+$ album_release_year &lt;dbl&gt; 2015, 2002, 2006, 2011, 1996, 2012, 2002, 2002, 201…
+$ duration_ms        &lt;int&gt; 102653, 134333, 118013, 167120, 234600, 165840, 137…
+$ key_mode           &lt;chr&gt; "D major", "A major", "C major", "B minor", "D majo…
+$ time_signature     &lt;int&gt; 4, 4, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, …
+$ danceability       &lt;dbl&gt; 0.565, 0.648, 0.566, 0.422, 0.281, 0.681, 0.592, 0.…
+$ energy             &lt;dbl&gt; 0.951, 0.934, 0.927, 0.903, 0.899, 0.895, 0.884, 0.…
+$ speechiness        &lt;dbl&gt; 0.0808, 0.0989, 0.0642, 0.0682, 0.0526, 0.0253, 0.0…
+$ acousticness       &lt;dbl&gt; 0.000239, 0.646000, 0.002930, 0.000620, 0.262000, 0…
+$ instrumentalness   &lt;dbl&gt; 2.78e-05, 2.14e-01, 8.52e-01, 1.01e-02, 2.72e-02, 4…
+$ liveness           &lt;dbl&gt; 0.1320, 0.3890, 0.1990, 0.3420, 0.2080, 0.1390, 0.4…
+$ valence            &lt;dbl&gt; 0.726, 0.424, 0.324, 0.860, 0.350, 0.970, 0.591, 0.…
+$ loudness           &lt;dbl&gt; -3.970, -15.557, -8.047, -8.562, -9.177, -6.936, -1…
+$ url                &lt;chr&gt; "https://i.scdn.co/image/ecf370a7190fa0673b0aa2ff0c…</code></pre>
+</div>
+</div>
+<p>So the album artwork URL has been added to the <code>url</code> column.</p>
+</section>
+<section id="prep-for-trelliscope" class="level3">
+<h3 class="anchored" data-anchor-id="prep-for-trelliscope">Prep for trelliscope</h3>
+<p>Now we have a nice <a href="https://r4ds.had.co.nz/tidy-data.html">tidy data frame</a>, but I’m going to make a couple more changes to prepare the data for trelliscoping<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. First, I need to use the <code>img_panel()</code> function to declare that the album images should be the thing being visualised in each panel. Then I can rename the variables to make them look nicer when displayed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>prepared_goat <span class="ot">&lt;-</span> small_goat_pics <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">panel =</span> <span class="fu">img_panel</span>(url)) <span class="sc">%&gt;%</span>  <span class="co"># identify as viz for panel</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename_all</span>(tools<span class="sc">::</span>toTitleCase) <span class="sc">%&gt;%</span>  <span class="co"># first letter capitalised</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Track =</span> Track_name,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Album =</span> Album_name,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Track #</span><span class="st">`</span> <span class="ot">=</span> Track_n,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">Year =</span> Album_release_year,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Duration (ms)</span><span class="st">`</span> <span class="ot">=</span> Duration_ms,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Key mode</span><span class="st">`</span> <span class="ot">=</span> Key_mode,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Time sig</span><span class="st">`</span> <span class="ot">=</span> Time_signature</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Url)  <span class="co"># discard unneeded variable</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="generate-trelliscope" class="level2">
+<h2 class="anchored" data-anchor-id="generate-trelliscope">Generate trelliscope</h2>
+<p>Now we’re ready. The call to <code>trelliscope()</code> takes the data set and then a bunch of other arguments like a title and subtitle and the default state for the number of rows and columns of panels and the default data to show on the panel under the visualisation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">trelliscope</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  prepared_goat,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">name =</span> <span class="st">"The Mountain Goats discography"</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">desc =</span> <span class="st">"Explore the Mountain Goats backcatalogue and filter and sort by audio features"</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">md_desc =</span> <span class="st">"[The Mountain Goats](http://www.mountain-goats.com/) are a band. Data were collected from [Genius](https://genius.com/) and [Spotify](https://www.spotify.com/) APIs using the [{genius}](https://github.com/josiahparry/genius) and [{spotifyr}](https://www.rcharlie.com/spotifyr/) R packages, respectively."</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">5</span>,  <span class="co"># arrangement of panels</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">state =</span> <span class="fu">list</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Track"</span>, <span class="st">"Album"</span>, <span class="st">"Track #"</span>, <span class="st">"Year"</span>, <span class="st">"Energy"</span>)),  <span class="co"># display on panels</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I’ve embedded the trelliscope at the top of this post, but I recommend you <a href="https://matt-dray.github.io/goat-scope/">click here to open it full screen</a>.</p>
+<p>Explore the data by altering the defaults in the grid, labels, filter and sort buttons in the left-hand navigation panel. Cycle through the panels with the arrows in the upper right. Hit the ‘?’ button in the upper right to get more information on trelliscope and its shortcuts.</p>
+<section id="host-your-trelliscope" class="level3">
+<h3 class="anchored" data-anchor-id="host-your-trelliscope">Host your trelliscope</h3>
+<p>Use the argument <code>path = "&lt;file path to save to&gt;"</code> in the <code>trelliscope()</code> function to save the files (I learnt this from <a href="https://github.com/hafen/trelliscopejs/issues/24#issuecomment-276883861">a GitHub issue</a>). You can then host the folder’s contents somewhere. I put mine in <a href="https://github.com/matt-dray/goat-scope">a GitHub repo</a> so it could be served via GitHub Pages.</p>
+</section>
+</section>
+<section id="energy" class="level2">
+<h2 class="anchored" data-anchor-id="energy">Energy</h2>
+<p>I’ve ordered the panels of the trelliscope by the ‘energy’ of the tracks; most energetic first. The top track for energy is one of my favourites: ‘Choked Out’ from ‘Beat the Champ’. Here’s an embedded Spotify snippet.</p>
+<iframe src="https://open.spotify.com/embed/track/6VAOhkoZypZtGFgrnIGr48" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media">
+</iframe>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-08-02 16:18:25 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] tidyr_1.3.0         readr_2.1.4         dplyr_1.1.2        
+[4] trelliscopejs_0.2.6
+
+loaded via a namespace (and not attached):
+ [1] gtable_0.3.3            jsonlite_1.8.7          compiler_4.3.1         
+ [4] crayon_1.5.2            webshot_0.5.5           tidyselect_1.2.0       
+ [7] progress_1.2.2          scales_1.2.1            yaml_2.3.7             
+[10] fastmap_1.1.1           ggplot2_3.4.2           R6_2.5.1               
+[13] autocogs_0.1.4          generics_0.1.3          knitr_1.43.1           
+[16] backports_1.4.1         htmlwidgets_1.6.2       checkmate_2.2.0        
+[19] tibble_3.2.1            munsell_0.5.0           xaringanExtra_0.7.0    
+[22] tzdb_0.4.0              pillar_1.9.0            rlang_1.1.1            
+[25] utf8_1.2.3              xfun_0.39               cli_3.6.1              
+[28] withr_2.5.0             magrittr_2.0.3          digest_0.6.33          
+[31] grid_4.3.1              rstudioapi_0.15.0       fontawesome_0.5.1      
+[34] base64enc_0.1-3         DistributionUtils_0.6-0 hms_1.1.3              
+[37] mclust_6.0.0            lifecycle_1.0.3         prettyunits_1.1.1      
+[40] vctrs_0.6.3             evaluate_0.21           glue_1.6.2             
+[43] fansi_1.0.4             colorspace_2.1-0        purrr_1.0.1            
+[46] rmarkdown_2.23          tools_4.3.1             pkgconfig_2.0.3        
+[49] htmltools_0.5.5        </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>I also once explored the use of <a href="https://matt-dray.github.io/stem-trelliscope/">Trelliscope for UK education data</a> and have been meaning to write about it ever since.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Definitely a real verb.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2019-02-14">
+
+<title>rostrum.blog - Graphing the Relayverse of podcasts</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Graphing the Relayverse of podcasts</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">dataviz</div>
+                <div class="quarto-category">ggraph</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">rvest</div>
+                <div class="quarto-category">tidygraph</div>
+                <div class="quarto-category">visNetwork</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 14, 2019</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#podcast-networks" id="toc-podcast-networks" class="nav-link" data-scroll-target="#podcast-networks">Podcast networks</a></li>
+  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
+  <li><a href="#harvest-data" id="toc-harvest-data" class="nav-link" data-scroll-target="#harvest-data">Harvest data</a></li>
+  <li><a href="#tidygraph" id="toc-tidygraph" class="nav-link" data-scroll-target="#tidygraph">Tidygraph</a></li>
+  <li><a href="#visualisation" id="toc-visualisation" class="nav-link" data-scroll-target="#visualisation">Visualisation</a>
+  <ul class="collapse">
+  <li><a href="#static-with-ggraph" id="toc-static-with-ggraph" class="nav-link" data-scroll-target="#static-with-ggraph">Static with {ggraph}</a></li>
+  <li><a href="#interactive-with-visnetwork" id="toc-interactive-with-visnetwork" class="nav-link" data-scroll-target="#interactive-with-visnetwork">Interactive with {visNetwork}</a></li>
+  </ul></li>
+  <li><a href="#what-now" id="toc-what-now" class="nav-link" data-scroll-target="#what-now">What now?</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/relayverse.gif" class="img-fluid figure-img" style="width:100.0%" alt="A gif of the graph network for Relay FM, showing the ability to zoom and select nodes with the visNetwork package"></p>
+<figcaption class="figure-caption">The Relay FM podcast network, visualised. <a href="https://www.rostrum.blog/output/relayverse.html">View it here</a>.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I made an interactive <a href="https://en.wikipedia.org/wiki/Network_theory">graph network</a> of the podcast host relationships on <a href="https://www.relay.fm">Relay FM</a> using R. <a href="https://www.rostrum.blog/output/relayverse.html">You can interact with it in a separate window</a> and find out below how it was made.</p>
+</section>
+<section id="podcast-networks" class="level2">
+<h2 class="anchored" data-anchor-id="podcast-networks">Podcast networks</h2>
+<p>Podcasting is becoming big business. Music-streaming giant Spotify just acquired the podcast network <a href="https://www.gimletmedia.com/">Gimlet</a> for <a href="https://www.recode.net/2019/2/1/18207198/spotify-gimlet-podcast-acquisition">a reported $200 million</a>.</p>
+<p>Other networks include <a href="https://www.theincomparable.com/">The Incomparable</a>, <a href="http://5by5.tv/">5by5</a> and <a href="https://www.radiotopia.fm/">Radiotopia</a>. Such networks can boost revenue and listener numbers and provide access to expertise, management and resources.</p>
+<p><a href="https://www.relay.fm">Relay FM</a> is a network that focuses largely on tech content<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. It was started by Myke Hurley and Stephen Hackett in 2014 and you can find a list of <a href="https://www.relay.fm/shows">shows</a> and <a href="https://www.relay.fm/people">personnel</a> on their site. Many of Relay FM’s hosts have hosted more than one podcast within the network. What do the relationships between them look like?</p>
+<p>This post is about preparing and visualising this ‘Relayverse’ using the R packages <a href="https://www.data-imaginist.com/2017/introducing-tidygraph/">{tidygraph}for network data handling</a> and <a href="https://www.ggplot2-exts.org/ggraph.html">{ggraph} for network visualisation</a> (both by <a href="https://twitter.com/thomasp85">Thomas Lin Pedersen</a>), along with <a href="https://cran.r-project.org/web/packages/visNetwork/vignettes/Introduction-to-visNetwork.html">the {visNetwork} package</a>.</p>
+<p>Scroll to the bottom to find the interactive tool if you aren’t interested in the code.</p>
+</section>
+<section id="packages" class="level2">
+<h2 class="anchored" data-anchor-id="packages">Packages</h2>
+<p>I’m using two suites of ‘tidy’ packages in this post: one set for data collection and manipulation, and one set for graph network building, analysis and visualisation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Data collection and manipulation</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dplyr)  <span class="co"># data manipulation</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(rvest)  <span class="co"># for scraping webpages</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(stringr)  <span class="co"># string manipulation</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyr)  <span class="co"># tidying dataframes</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(purrr)  <span class="co"># applying functions over data</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Graph networks</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidygraph)  <span class="co"># set up graph network</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(ggraph)  <span class="co"># visualise static graphs</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(cowplot)  <span class="co"># for plot arrangement</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(visNetwork)  <span class="co"># wrapper for javascript interactive viz</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="harvest-data" class="level2">
+<h2 class="anchored" data-anchor-id="harvest-data">Harvest data</h2>
+<p>We can use <a href="https://blog.rstudio.com/2014/11/24/rvest-easy-web-scraping-with-r/">the {rvest} package</a> to scrape podcast details from <a href="https://en.wikipedia.org/wiki/Relay_FM">the Wikipedia page for Relay FM</a>. There are two separate tables: one for current and one for retired (discontinued) shows.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/relay-wikipedia.png" class="img-fluid figure-img" style="width:100.0%" alt="A screenshot of a table on Wikipedia containing data about podcast shows from Relay FM"></p>
+<figcaption class="figure-caption">One of the target Wikipedia tables of current Relay FM shows</figcaption>
+</figure>
+</div>
+<p><code>read_html()</code> gets the HTML for the selected page; <code>html_node()</code> identifies which element needs to be scraped<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>; and <code>html_table()</code> interprets the HTML information as a data frame. I’ve removed the show ‘B-Sides’ because it’s clips from other shows.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the HTML for the selected page</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>relay_wiki <span class="ot">&lt;-</span> <span class="fu">read_html</span>(<span class="st">"https://en.wikipedia.org/wiki/Relay_FM"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the table with current shows</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>current <span class="ot">&lt;-</span> relay_wiki <span class="sc">%&gt;%</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_node</span>(<span class="at">xpath =</span> <span class="st">'//*[@id="mw-content-text"]/div/table[2]'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="sc">!</span>Podcast <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Members Only"</span>, <span class="st">'Paid "Members Only" Shows'</span>, <span class="st">"B-Sides"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Status =</span> <span class="st">"Current"</span>)  <span class="co"># label rows as current shows</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the table with retired shows</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>retired <span class="ot">&lt;-</span> relay_wiki <span class="sc">%&gt;%</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_node</span>(<span class="at">xpath =</span> <span class="st">'//*[@id="mw-content-text"]/div/table[3]'</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_table</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="st">`</span><span class="at">Number of episodes</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Status =</span> <span class="st">"Retired"</span>)  <span class="co"># label rows as retired shows</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Combine the tables into one dataframe</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>shows <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(current, retired)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Look at a few random hosts/podcasts from the table</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(shows, Podcast, Hosts) <span class="sc">%&gt;%</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_n</span>(<span class="dv">5</span>) <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Podcast</th>
+<th style="text-align: left;">Hosts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Virtual</td>
+<td style="text-align: left;">Federico ViticciMyke Hurley</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Free Agents</td>
+<td style="text-align: left;">Jason SnellDavid Sparks</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bionic</td>
+<td style="text-align: left;">Myke HurleyMatt Alexander</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Less Than or Equal</td>
+<td style="text-align: left;">Aleen Simms</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Canvas</td>
+<td style="text-align: left;">Federico ViticciFraser Spiers</td>
+</tr>
+</tbody>
+</table>
+<p>Unfortunately the host names are in the form ‘First LastFirst Last’ so we need a regular expression to split the string where a lowercase letter meets an uppercase letter<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. This leaves us with a list column that we can <code>unnest()</code> to get one row per podcast-host combination.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Clean the host names</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>shows_clean <span class="ot">&lt;-</span> shows <span class="sc">%&gt;%</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">Hosts =</span> <span class="fu">str_remove_all</span>(Hosts, <span class="st">"formerly hosted by.*$"</span>),  <span class="co"># remove text and former hosts</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Hosts =</span> <span class="fu">str_remove_all</span>(Hosts, <span class="st">" </span><span class="sc">\\</span><span class="st">(originally</span><span class="sc">\\</span><span class="st">)"</span>),  <span class="co"># remove '(originally)' text</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">Hosts =</span> <span class="fu">str_remove_all</span>(Hosts, <span class="st">"</span><span class="sc">\\</span><span class="st">[[:digit:]</span><span class="sc">\\</span><span class="st">]"</span>),  <span class="co"># remove Wikipedia references</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Hosts =</span> <span class="fu">str_split</span>(Hosts, <span class="st">"(?&lt;=[a-z])(?=[A-Z])"</span>) <span class="co"># split where lowercase meets uppercase</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Hosts <span class="sc">!=</span> <span class="st">"Maddy Myers"</span>) <span class="sc">%&gt;%</span>  <span class="co"># hack to remove a former host</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Podcast, Hosts, Status)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Print a random sample of 10</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_n</span>(shows_clean, <span class="dv">10</span>) <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Podcast</th>
+<th style="text-align: left;">Hosts</th>
+<th style="text-align: left;">Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Connected</td>
+<td style="text-align: left;">Myke Hurley</td>
+<td style="text-align: left;">Current</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Mixed Feelings</td>
+<td style="text-align: left;">Gillian Parker</td>
+<td style="text-align: left;">Current</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">BONANZA</td>
+<td style="text-align: left;">Matt Alexander</td>
+<td style="text-align: left;">Current</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Remaster</td>
+<td style="text-align: left;">Myke Hurley</td>
+<td style="text-align: left;">Current</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Isometric</td>
+<td style="text-align: left;">Steve Lubitz</td>
+<td style="text-align: left;">Retired</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">The Prompt</td>
+<td style="text-align: left;">Stephen M. Hackett</td>
+<td style="text-align: left;">Retired</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Presentable</td>
+<td style="text-align: left;">Jeff Veen</td>
+<td style="text-align: left;">Current</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Remaster</td>
+<td style="text-align: left;">Shahid Kamal Ahmad</td>
+<td style="text-align: left;">Current</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Remaster</td>
+<td style="text-align: left;">Federico Viticci</td>
+<td style="text-align: left;">Current</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Liftoff</td>
+<td style="text-align: left;">Stephen M. Hackett</td>
+<td style="text-align: left;">Current</td>
+</tr>
+</tbody>
+</table>
+<p>Notice there were a couple of cleaning steps there to remove the text ‘formerly hosted by’ and the names of the former hosts. There’s one instance where this protocol isn’t followed in the table and the host’s name is followed by ‘(originally)’. I removed the text with regex, but then just removed the host’s name manually with a <code>filter()</code> to avoid some complex regex.</p>
+<p>Our data frame is now tidy and ready for Tidygraph, but before moving on, we can do things like look at the host with the most active shows.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>shows_clean <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Status <span class="sc">==</span> <span class="st">"Current"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Hosts) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Hosts</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Myke Hurley</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Stephen M. Hackett</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">David Sparks</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Jason Snell</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Mikah Sargent</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tiffany Arment</td>
+<td style="text-align: right;">3</td>
+</tr>
+</tbody>
+</table>
+<p>Or out of interest, the shows that have had the most hosts.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>shows_clean <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Podcast) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n)) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Podcast</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Isometric</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Disruption</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Connected</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Remaster</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Rocket</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">The Prompt</td>
+<td style="text-align: right;">3</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="tidygraph" class="level2">
+<h2 class="anchored" data-anchor-id="tidygraph">Tidygraph</h2>
+<p>The <a href="https://www.data-imaginist.com/2017/introducing-tidygraph/">tidygraph package</a> was created by <a href="https://twitter.com/thomasp85">Thomas Lin Pedersen</a>. It is:</p>
+<blockquote class="blockquote">
+<p>an entry into <a href="https://www.tidyverse.org/">the tidyverse</a> that provides a tidy framework for all things relational (networks/graphs, trees, etc)</p>
+</blockquote>
+<p>To use the package, we need every host combination<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> for each podcast, which can be achieved with the <code>combn()</code> function. This gives us a pair of points (‘nodes’ in graph-speak) that can be connected by a line (an ‘edge’) to indicate their relationship.</p>
+<p>But a show with one host doesn’t have a pair of points, so I’m going to duplicate these rows first. If we don’t do this, we can’t plot these shows because they won’t have a connection between two nodes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Isolate the shows with one host </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>solo_vec <span class="ot">&lt;-</span> shows_clean <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Podcast) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pull</span>(Podcast)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter the show-host dataframe by solo-hosted podcasts</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>solo_df <span class="ot">&lt;-</span> <span class="fu">filter</span>(shows_clean, Podcast <span class="sc">%in%</span> solo_vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we can bind these rows to the data and then get our host combinations. Big shout out to <a href="https://www.williamrchase.com/post/finding-combinations-in-the-tidyverse/">William Chase</a> for a solution to getting all combinations of elements within some parent element (e.g.&nbsp;hosts within podcasts).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Prepare host combinations per show</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>relay_combos <span class="ot">&lt;-</span> shows_clean <span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(solo_df) <span class="sc">%&gt;%</span>  <span class="co"># to duplicate the shows with solo hosts</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Podcast) <span class="sc">%&gt;%</span>  <span class="co"># operate within each podcast</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">split</span>(.<span class="sc">$</span>Podcast) <span class="sc">%&gt;%</span>  <span class="co"># split on podcast</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(., <span class="dv">2</span>) <span class="sc">%&gt;%</span>  <span class="co"># gets vector of hosts per podcast list element</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="sc">~</span><span class="fu">combn</span>(.x, <span class="at">m =</span> <span class="dv">2</span>)) <span class="sc">%&gt;%</span>   <span class="co"># all pair combiantions</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(<span class="sc">~</span><span class="fu">t</span>(.x)) <span class="sc">%&gt;%</span>  <span class="co"># transpose the matrix</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(as_tibble) <span class="sc">%&gt;%</span>  <span class="co"># convert to a tibble dataframe</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="at">.id =</span> <span class="st">"Podcast"</span>) <span class="sc">%&gt;%</span>  <span class="co"># list-element name to column</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(V1, V2, Podcast)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="fu">sample_n</span>(relay_combos, <span class="dv">10</span>) <span class="sc">%&gt;%</span> knitr<span class="sc">::</span><span class="fu">kable</span>()  <span class="co"># random sample of 10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">V1</th>
+<th style="text-align: left;">V2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Myke Hurley</td>
+<td style="text-align: left;">Tom Gerhardt</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">David Sparks</td>
+<td style="text-align: left;">Rose Orchard</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Federico Viticci</td>
+<td style="text-align: left;">Fraser Spiers</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Christina Warren</td>
+<td style="text-align: left;">Simone de Rochefort</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Alex Cox</td>
+<td style="text-align: left;">Savannah Million</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Andy Ihnatko</td>
+<td style="text-align: left;">Florence Ion</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Stephen M. Hackett</td>
+<td style="text-align: left;">Myke Hurley</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Jason Snell</td>
+<td style="text-align: left;">Stephen M. Hackett</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">K Tempest Bradford</td>
+<td style="text-align: left;">Aleen Simms</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Myke Hurley</td>
+<td style="text-align: left;">Stephen M. Hackett</td>
+</tr>
+</tbody>
+</table>
+<p>We can turn this data frame of host-pair combinations into a tidygraph object with the <code>as_tbl_graph()</code> function. This class of object contains two data frames (the nodes and the edges) and some metadata.</p>
+<p>We can also use functions from the {tidygraph}package to help calculate various network statistics. For example, the <code>centrality_degree()</code> function tells us the nodes with the most connections. We can add this as a column in our node data and use this later to do things like resize nodes depending on their centrality.</p>
+<p>You can manipulate the nodes and edges data frames in this tidygraph object by using the <code>activate()</code> function to switch between them. Currently the node data are active (it says ‘active’ above the nodes data frame), so our application of <code>centrality_degree()</code> to the network object will affect the node data specifically.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>relay_graph <span class="ot">&lt;-</span> <span class="fu">as_tbl_graph</span>(relay_combos, <span class="at">directed =</span> <span class="cn">FALSE</span>)<span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">connections =</span> <span class="fu">centrality_degree</span>()) <span class="sc">%&gt;%</span>  <span class="co"># number of connections</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(connections))  <span class="co"># order by number of shows</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(relay_graph)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code># A tbl_graph: 38 nodes and 64 edges
+#
+# An undirected multigraph with 8 components
+#
+# Node Data: 38 x 2 (active)
+  name               connections
+  &lt;chr&gt;                    &lt;dbl&gt;
+1 Myke Hurley                 21
+2 Stephen M. Hackett          11
+3 Brianna Wu                   9
+4 Mikah Sargent                9
+5 Federico Viticci             8
+6 Georgia Dow                  7
+# … with 32 more rows
+#
+# Edge Data: 64 x 3
+   from    to Podcast   
+  &lt;int&gt; &lt;int&gt; &lt;chr&gt;     
+1    10    10 Almanac   
+2     1    30 Analog(ue)
+3    11    31 Automators
+# … with 61 more rows</code></pre>
+<p>The edges and nodes are now in the same object. You can see we have about 38 nodes and 64 edges and that the network is undirected (nodes don’t ‘point’ to each other). We also have eight ‘components’, which are the isolated groups of nodes that connect to each other, but not to other groups.</p>
+</section>
+<section id="visualisation" class="level2">
+<h2 class="anchored" data-anchor-id="visualisation">Visualisation</h2>
+<section id="static-with-ggraph" class="level3">
+<h3 class="anchored" data-anchor-id="static-with-ggraph">Static with {ggraph}</h3>
+<p><a href="https://www.ggplot2-exts.org/ggraph.html">The {ggraph} package</a> was designed to work seamlessly with {tidygraph}objects and the {ggplot2} plotting package. You simply pass your {tidygraph}object to {ggraph}‘s ’graph’ argument. Below are a couple of examples for demonstration purposes that show you just a handful of options. You can learn more about {ggraph}’s <a href="https://www.data-imaginist.com/2017/ggraph-introduction-layouts/">layouts</a>, <a href="https://www.data-imaginist.com/2017/ggraph-introduction-nodes/">nodes</a> and <a href="https://www.data-imaginist.com/2017/ggraph-introduction-edges/">edges</a> in a series of blog posts from Thomas Lin Pedersen. This example arranges the nodes (hosts) circularly (plot A) and a straight line (B) and sizes them by the number of connections to other hosts. Each line (edge) represents a co-hosting relationship.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">graph =</span> relay_graph,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">layout =</span> <span class="st">"linear"</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">circular =</span> <span class="cn">TRUE</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> connections)) <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_arc</span>() <span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">&lt;-</span> <span class="fu">ggraph</span>(</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">graph =</span> relay_graph,</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">layout =</span> <span class="st">"linear"</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>) <span class="sc">+</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> connections)) <span class="sc">+</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_arc</span>() <span class="sc">+</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_grid</span>(g1, g2, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="resources/ggraph-arc-1.png" class="img-fluid" style="width:100.0%" alt="Two network graphs of the same data. One is labelled 'A' and is arranged with nodes around the edge of a circle. The other, labelled 'B' has nodes arranged along a line with arcs joining them. Most nodes have only one connection, up to about 20"></p>
+<p>This example arranges the nodes (hosts) according to an algorithm specified by the <code>layout</code> argument to <code>ggraph()</code> and sizes them by the number of connections to other hosts. Each line (edge) represents a co-hosting relationship and multiple connections are shown separately by ‘fanning’ them out (hence the <code>geom_edge_fan()</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggraph</span>(<span class="at">graph =</span> relay_graph, <span class="at">layout =</span> <span class="st">"nicely"</span>) <span class="sc">+</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> connections)) <span class="sc">+</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_fan</span>() <span class="sc">+</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_void</span>() <span class="sc">+</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><img src="resources/ggraph-fan-1.png" class="img-fluid" style="width:100.0%" alt="A network graph. There's one interconnected group with over 20 nodes, 5 isolated pairs and two isolated singletons."></p>
+<p>I haven’t added labels on the nodes nor the points because of the visual clutter it creates for this particular example. You could use <code>geom_node_text()</code> to add node labels and something like <code>aes(label = &lt;column_name&gt;)</code> in your edge geom to label the connections.</p>
+<p>This is where interactive network graphs come in handy, as you can zoom, pan and hover to get more info.</p>
+</section>
+<section id="interactive-with-visnetwork" class="level3">
+<h3 class="anchored" data-anchor-id="interactive-with-visnetwork">Interactive with {visNetwork}</h3>
+<p><a href="https://datastorm-open.github.io/visNetwork/">The {visNetwork} package</a> wraps <a href="http://visjs.org">the <code>vis.js</code> library</a> to make interactive network graphs. Its <code>visNetwork()</code> function takes separate data frames of edges and nodes that are in <a href="https://datastorm-open.github.io/visNetwork/nodes.html">a pre-specified format</a>, so we won’t be able to use our tidygraph object for this.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dataframe of unique nodes with an ID value</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">&lt;-</span> shows_clean <span class="sc">%&gt;%</span>  <span class="co"># take our podcast-host dataset</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(Hosts) <span class="sc">%&gt;%</span>  <span class="co"># get column of unique hosts</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(Hosts) <span class="sc">%&gt;%</span>  <span class="co"># alphabetical order</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">as.character</span>(<span class="fu">row_number</span>()), <span class="at">label =</span> Hosts) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Hosts) <span class="co">#%&gt;%  # provides pop up value on viz</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Dataframe of 'origin' and 'destination' nodes for edge drawing</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">&lt;-</span> relay_combos <span class="sc">%&gt;%</span> </span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(nodes, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"V1"</span> <span class="ot">=</span> <span class="st">"label"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(nodes, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"V2"</span> <span class="ot">=</span> <span class="st">"label"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">from =</span> id.x, <span class="at">to =</span> id.y, <span class="at">title =</span> Podcast)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we plug the data into the <code>visNetwork()</code> function and pipe this into some other other functions to set some options. It’s quite a lot of code, but the piping into other <code>vis*()</code> functions breaks it up into more manageable chunks.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">visNetwork</span>(  <span class="co"># add main features</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  nodes, edges,  <span class="co"># add node and edge data</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="fu">list</span>(  <span class="co"># set main title and style it</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">text =</span> <span class="st">"The Relayverse"</span>,</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"font-family:Lekton, monospace;font-weight:bold;font-size:30px;text-align:center;"</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">submain =</span> <span class="fu">list</span>(  <span class="co"># set subtitle and style it</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">text =</span> <span class="st">"Click hosts (nodes) to see co-host relationships (edges)"</span>,</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"font-family:Lekton, monospace;font-weight:regular;font-size:20px;text-align:center;"</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">footer =</span> <span class="fu">list</span>(  <span class="co"># add a footer and style it</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">text =</span> <span class="fu">paste0</span>(<span class="st">"Source: Wikipedia ("</span>, <span class="fu">format</span>(<span class="fu">Sys.Date</span>(), <span class="st">"%Y/%m/%d"</span>), <span class="st">")"</span>),</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"font-family:Lekton, monospace;font-weight:regular;font-size:15px;text-align:right;"</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visNodes</span>(  <span class="co"># node styling</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">shape =</span> <span class="st">"icon"</span>,  <span class="co"># node is an icon specified below </span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">icon =</span> <span class="fu">list</span>(<span class="at">code =</span> <span class="st">"f130"</span>, <span class="at">size =</span> <span class="dv">75</span>, <span class="at">color =</span> <span class="st">"#000000"</span>),  <span class="co"># microphone icon</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">font =</span> <span class="fu">list</span>(<span class="at">face =</span> <span class="st">"Lekton"</span>, <span class="at">size =</span> <span class="dv">20</span>)</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visEdges</span>(  <span class="co"># edge styling</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">"#447d9b"</span>, <span class="at">highlight =</span> <span class="st">"#c83c3c"</span>, <span class="at">opacity =</span> <span class="fl">0.5</span>),</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="dv">3</span>, <span class="at">selectionWidth =</span> <span class="dv">5</span>  <span class="co"># selected edge is thicker</span></span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visOptions</span>(  <span class="co"># general graph options</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">highlightNearest =</span> <span class="cn">TRUE</span>,  <span class="co"># on-hover highlight nearest nodes</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">nodesIdSelection =</span> <span class="cn">TRUE</span>  <span class="co"># select node from dropdown</span></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visPhysics</span>(  <span class="co"># set physics 'engine' and options</span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">solver =</span> <span class="st">"forceAtlas2Based"</span>, </span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">forceAtlas2Based =</span> <span class="fu">list</span>(<span class="at">gravitationalConstant =</span> <span class="sc">-</span><span class="dv">50</span>)</span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visLayout</span>(<span class="at">randomSeed =</span> <span class="dv">1337</span>) <span class="sc">%&gt;%</span>  <span class="co"># reproduce the same network each time</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visInteraction</span>(<span class="at">navigationButtons =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span>  <span class="co"># add naviagation buttons</span></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addFontAwesome</span>()  <span class="co"># makes sure that FontAwesome dependency is in place</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I recommend you <a href="https://www.rostrum.blog/output/relayverse.html">view the network in its own window</a>. There’s a gif at the top of the blog for a preview.</p>
+<ul>
+<li>use the navigation buttons or your trackpad/mouse to navigate the network</li>
+<li>click a node to highlight a host and their co-hosts (single hosts loop back to themselves)</li>
+<li>hover over an edge to show a label with the show name</li>
+<li>select a host from the dropdown menu to highlight them and their co-hosts</li>
+<li>click and drag a node to move it</li>
+</ul>
+<p>This is a very simple example, but <a href="https://datastorm-open.github.io/visNetwork/">lots of other {visNetwork} options are available</a>.</p>
+</section>
+</section>
+<section id="what-now" class="level2">
+<h2 class="anchored" data-anchor-id="what-now">What now?</h2>
+<p>This was really just an introduction to {tidygraph}, {ggraph} and {visNetwork}. These packages make network analysis a little more consistent and can provide some interesting stats and visuals very quickly. A next step might be to produce a ‘network of podcast networks’, since Relay FM hosts appear in shows on other networks as well.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-08-04 08:28:48 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
+[13] digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Some personal favourites: <a href="https://www.relay.fm/analogue">Analogue</a>, <a href="https://www.relay.fm/cortex">Cortex</a>, <a href="https://www.relay.fm/playingforfun">Playing For Fun</a>, <a href="https://www.relay.fm/rd">Reconcilable Differences</a>, <a href="https://www.relay.fm/topfour">Top Four</a> and <a href="https://www.relay.fm/connected">Connected</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://cran.r-project.org/web/packages/rvest/vignettes/selectorgadget.html">Try SelectorGadget</a> or your <a href="http://blog.corynissen.com/2015/01/using-rvest-to-scrape-html-table.html">your browser’s ‘Inspect’ tool</a> to help isolate the xpath of the element of interest.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>The regex <code>(?&lt;=[a-z])(?=[A-Z])</code> can be interpreted as ‘split after but not including (<code>?&lt;=</code>) a lowercase letter (<code>[a-z]</code>), and before but not including (<code>?=</code>) a capital letter (<code>[A-Z]</code>)’.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>We want <em>combinations</em>, not <em>permutations</em>. ‘Federico Viticci to Stephen M. Hackett’ is the same as ‘Stephen M. Hackett to Federico Viticci’, for example.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

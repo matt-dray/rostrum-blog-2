@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2021-06-08">
+
+<title>rostrum.blog - Recreating Spear’s #CottonViz in base R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Recreating Spear’s #CottonViz in base R</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">dataviz</div>
+                <div class="quarto-category">r</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">June 8, 2021</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#cottonviz" id="toc-cottonviz" class="nav-link" data-scroll-target="#cottonviz">#CottonViz</a></li>
+  <li><a href="#set-up" id="toc-set-up" class="nav-link" data-scroll-target="#set-up">1. Set-up</a>
+  <ul class="collapse">
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
+  <li><a href="#fonts" id="toc-fonts" class="nav-link" data-scroll-target="#fonts">Fonts</a></li>
+  <li><a href="#constants" id="toc-constants" class="nav-link" data-scroll-target="#constants">Constants</a></li>
+  <li><a href="#start-a-graphics-device" id="toc-start-a-graphics-device" class="nav-link" data-scroll-target="#start-a-graphics-device">Start a graphics device</a></li>
+  <li><a href="#plotting-parameters" id="toc-plotting-parameters" class="nav-link" data-scroll-target="#plotting-parameters">Plotting parameters</a></li>
+  </ul></li>
+  <li><a href="#line-plot" id="toc-line-plot" class="nav-link" data-scroll-target="#line-plot">2. Line plot</a></li>
+  <li><a href="#bar-plot" id="toc-bar-plot" class="nav-link" data-scroll-target="#bar-plot">3. Bar plot</a></li>
+  <li><a href="#margin-labels" id="toc-margin-labels" class="nav-link" data-scroll-target="#margin-labels">4. Margin labels</a></li>
+  <li><a href="#saving" id="toc-saving" class="nav-link" data-scroll-target="#saving">5. Saving</a></li>
+  <li><a href="#reflections" id="toc-reflections" class="nav-link" data-scroll-target="#reflections">Reflections</a>
+  <ul class="collapse">
+  <li><a href="#tricky-parts" id="toc-tricky-parts" class="nav-link" data-scroll-target="#tricky-parts">Tricky parts</a></li>
+  <li><a href="#improvements" id="toc-improvements" class="nav-link" data-scroll-target="#improvements">Improvements</a></li>
+  </ul></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><img src="resources/cottonviz.gif" class="img-fluid" style="width:100.0%" alt="Gif where each frame shows the progression of recreating an original plot about cotton supplies in 1940s USA. Axes and lines are added to a plot on the left, then crosshatching, bars and axes are added to a plot on the right, and finally some titles and captions are added. The original plot is shown in the final frame to compare it to the recreation."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>For a competition I recreated a data visulisation using base R.</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p><a href="https://www.rostrum.blog/2023/05/10/spear-ggplot2/">I won the ‘most accurate’ prize</a>, lol.</p>
+</div>
+</section>
+<section id="cottonviz" class="level2">
+<h2 class="anchored" data-anchor-id="cottonviz">#CottonViz</h2>
+<p>The <a href="https://rss.org.uk/membership/rss-groups-and-committees/sections/young-statisticians/">Young Statistician’s</a> and <a href="https://rss.org.uk/membership/rss-groups-and-committees/sections/history-of-statistics/">History of Stats</a> sections of the <a href="https://rss.org.uk/">Royal Statistical Society</a> (RSS) have <a href="https://rss.org.uk/news-publication/news-publications/2021/section-group-reports/mary-eleanor-spear-dataviz-competition-for-childre/">challenged people</a> to recreate<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> or remix <a href="https://en.wikipedia.org/wiki/Mary_Eleanor_Spear">Mary Eleanor Spear’s</a> visualisation of cotton supplies in the United States in the 1940s:<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p><img src="resources/4_original.jpg" class="img-fluid" style="width:100.0%" alt="Mary Eleanor Spear's original plot of cotton supplies in 1940s USA. On the left is a line plot showing that carry-over stocks fell from 1942 to 1948, while consumption dropped slightly and exports rose slightly. A bar plot to the right shows the same data as a stacked bar chart. There are titles and captions around the plots."></p>
+<p>I thought it would be interesting to recreate it using only R’s built-in base graphics. This might be a nice demo of zero-dependency plotting for R users who are more familiar with {ggplot2}.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>Long-story short, here’s what popped out at the end of my scripting:</p>
+<p><img src="resources/3_final.png" class="img-fluid" style="width:100.0%" alt="A recreation of Spear's original plot, with line plot, bar plot, labels and titles. It's not an identical match. The title font is not the same, for example."></p>
+<p>It’s certainly not an identical match to the original, but it gets most of the way there.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>You can find the scripts for both the recreation and gif in <a href="https://github.com/matt-dray/viz-recreation">my matt-dray/viz-recreation GitHub repo</a>.</p>
+<p>The rest of this post is a walkthrough of the code used to create the final output. It’s in five sections: (1) set-up, (2) line plot, (3) bar plot, (4) margin labels and (5) saving, with a closing section reflecting on tricky parts and potential improvements.</p>
+</section>
+<section id="set-up" class="level2">
+<h2 class="anchored" data-anchor-id="set-up">1. Set-up</h2>
+<section id="data" class="level3">
+<h3 class="anchored" data-anchor-id="data">Data</h3>
+<p>The dataset is <a href="https://rss.org.uk/news-publication/news-publications/2021/section-group-reports/mary-eleanor-spear-dataviz-competition-for-childre/">available to download</a> from the RSS website, but it’s small enough that I can just recreate it here exactly.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>cotton <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Year =</span> <span class="dv">1942</span><span class="sc">:</span><span class="dv">1948</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">US consumption</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">11160</span>, <span class="dv">9993</span>,  <span class="dv">9693</span>,  <span class="dv">9423</span>,  <span class="dv">10072</span>, <span class="dv">9374</span>,  <span class="dv">7833</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">Exports          =</span> <span class="fu">c</span>(<span class="dv">1480</span>,  <span class="dv">1139</span>,  <span class="dv">2007</span>,  <span class="dv">3613</span>,  <span class="dv">3545</span>,  <span class="dv">1968</span>,  <span class="dv">4785</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Stocks           =</span> <span class="fu">c</span>(<span class="dv">10657</span>, <span class="dv">10744</span>, <span class="dv">11164</span>, <span class="dv">7326</span>,  <span class="dv">2530</span>,  <span class="dv">3080</span>,  <span class="dv">5283</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Total supply</span><span class="st">`</span>   <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">23297</span>, <span class="dv">21876</span>, <span class="dv">22864</span>, <span class="dv">20362</span>, <span class="dv">16147</span>, <span class="dv">14422</span>, <span class="dv">17901</span>),</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">check.names =</span> <span class="cn">FALSE</span>  <span class="co"># allows for spaces in variable names</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="fonts" class="level3">
+<h3 class="anchored" data-anchor-id="fonts">Fonts</h3>
+<p>I’ve used two font families that weren’t pre-installed on my system:</p>
+<ul>
+<li><a href="https://webonastick.com/fonts/routed-gothic/">Routed Gothic</a>, a very close match for the general text of the plot</li>
+<li><a href="https://www.ffonts.net/Hussar-Bold-Condensed.font">Hussar Bold Condensed</a>, a not-that-great match for the main title, but it’ll do</li>
+</ul>
+<p>It was sufficient for me to install these fonts on my system (macOS Big Sur running R v4.0.5) and invoke them by name, as you’ll see through the rest of this walkthrough. Your mileage may vary.</p>
+</section>
+<section id="constants" class="level3">
+<h3 class="anchored" data-anchor-id="constants">Constants</h3>
+<p>I’ve set a few values as objects so they can be reused and changed more easily without having to copy-paste in the body of the script. Note that I’ve used the convention here that constants are <code>ALL_CAPS</code>, so they’re easier to spot in the plotting code.</p>
+<details>
+<summary>
+Click for constants (I hid this because it’s dull)
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Constants: general</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>CEX       <span class="ot">&lt;-</span> <span class="fl">0.8</span>      <span class="co"># font size</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>YDIV      <span class="ot">&lt;-</span> <span class="dv">1000</span>     <span class="co"># division for y-axis</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>BLACK     <span class="ot">&lt;-</span> <span class="st">"black"</span>  <span class="co"># easy to supply off-black instead</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>WHITE     <span class="ot">&lt;-</span> <span class="st">"white"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>XTICK_LEN <span class="ot">&lt;-</span> <span class="fl">0.02</span>     <span class="co"># x axis tick length</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>YTICK_LEN <span class="ot">&lt;-</span> <span class="fl">0.03</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Constants: lineplot (LP)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>LP_YLIM      <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">12</span>)  <span class="co"># y-axis limite</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>LP_WIDTH     <span class="ot">&lt;-</span> <span class="dv">3</span>         <span class="co"># width of lines</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>LP_YTICK_SEQ <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">2</span>)  <span class="co"># y tick locations </span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>LP_YLAB_SEQ  <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">12</span>, <span class="dv">2</span>)  <span class="co"># y label locations</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Constants: barplot (BP)</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>BP_YLIM        <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">25</span>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>BP_YTICK_SEQ   <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">5</span>, <span class="dv">20</span>, <span class="dv">5</span>)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>BP_YLAB_SEQ    <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">25</span>, <span class="dv">5</span>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>BP_SPACE       <span class="ot">&lt;-</span> <span class="fl">0.5</span>  <span class="co"># space between bars</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>BP_HATCH_ANGLE <span class="ot">&lt;-</span> <span class="dv">45</span>   <span class="co"># hatchmark angle</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>BP_HATCH_HI    <span class="ot">&lt;-</span> <span class="dv">25</span>   <span class="co"># hatchmark density</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>BP_HATCH_MID   <span class="ot">&lt;-</span> <span class="dv">22</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>BP_HATCH_LO    <span class="ot">&lt;-</span> <span class="dv">12</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
+</section>
+<section id="start-a-graphics-device" class="level3">
+<h3 class="anchored" data-anchor-id="start-a-graphics-device">Start a graphics device</h3>
+<p>With base plotting you first open a new ‘device’ so that your plotting calls can be captured. You specify things here like the write path and dimensions. When you’ve finished your plotting code, you run <code>dev.off()</code> to close the device and save the output.</p>
+<p>Here I’m using <code>png()</code> so the output is a PNG file. This function is part of the suite of in-built graphics devices from the {grDevices} package, which also includes things like the lossless <code>tiff()</code> format.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">png</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"~/Desktop/cottonviz.png"</span>,  <span class="co"># set to a path of your choice</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">width  =</span> <span class="dv">20</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">height =</span> <span class="fl">12.2</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">units  =</span> <span class="st">"cm"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">res    =</span> <span class="dv">1200</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can think of this as setting up a canvas and then you’re going to layer plot objects over the top of it (perhaps not too dissimilar to {ggplot2}). Beware: things like units and placement of elements will be related to the <code>height</code> and <code>width</code> that you’ve declared here.</p>
+<p>That means you shouldn’t necessarily rely on the graphics windows opened by R or RStudio when previewing the final output; you should rely only on a saved output.</p>
+</section>
+<section id="plotting-parameters" class="level3">
+<h3 class="anchored" data-anchor-id="plotting-parameters">Plotting parameters</h3>
+<p>With base R you can set various <code>par()</code>ameters that apply to your plot as a whole. The chart we’re recreating is one row of two plots, so we can use <code>mfrow = c(1, 2)</code>, for example. We can also set some global things like the font family.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set plotting parameters</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">mgp =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.2</span>, <span class="dv">0</span>),   <span class="co"># gap to tick labels</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">1</span>),  <span class="co"># margins</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>),      <span class="co"># plot layout</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ann =</span> <span class="cn">FALSE</span>,          <span class="co"># annotation</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex.axis =</span> CEX,       <span class="co"># axis font size</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="st">"Routed Gothic"</span>  <span class="co"># font family</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I’ve selected ‘<a href="https://webonastick.com/fonts/routed-gothic/">Routed Gothic</a>’ as the font family and I think it’s a great match. It’s based on the Leroy lettering set that was often used for hand-labelling technical drawings.</p>
+</section>
+</section>
+<section id="line-plot" class="level2">
+<h2 class="anchored" data-anchor-id="line-plot">2. Line plot</h2>
+<p>So, here’s the first ‘hack’. I’m going to set up a ‘fake’ scatter plot with no content and then we’re going to add our desired content to it sequentially. This provides the correct plot dimensions to which we can add bespoke details.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dummy x-y scatter plot</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> cotton<span class="sc">$</span>Year,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> cotton<span class="sc">$</span><span class="st">`</span><span class="at">US consumption</span><span class="st">`</span> <span class="sc">/</span> YDIV,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>,    <span class="co"># no axes</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">pch =</span> <span class="st">""</span>,        <span class="co"># expunge axes/points</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim =</span> LP_YLIM,  <span class="co"># y-axis min/max limits</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">xaxs =</span> <span class="st">"i"</span>,      <span class="co"># set 'absolute origin'</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">yaxs =</span> <span class="st">"i"</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note the use of <code>yaxs</code> and <code>xaxs = "i"</code> which ensures that the axis limits are exactly at the minimum and maximum values for the axis (e.g.&nbsp;it forces [0,0] to be in the extreme lower-left.)</p>
+<p>Now we can build up the plot axes with manual calls to <code>axis()</code>.</p>
+<p>In short, we supply to <code>axis()</code> the <code>side</code> (<code>1</code> is the x-axis) and the locations for things like <code>labels</code> and <code>tck</code> (ticks). I’ve used separate calls for ticks and labels on the primary y-axis (<code>side = 2</code>) because the min and max values (0 and 12) are actually set just above and below the ticks. I’ve copied the primary y-axis call for a secondary y-axis (<code>side = 4</code>) too.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual x-axis</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">1</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">at =</span> <span class="dv">1942</span><span class="sc">:</span><span class="dv">1948</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="dv">1942</span>, <span class="fu">paste0</span>(<span class="st">"'"</span>, <span class="dv">43</span><span class="sc">:</span><span class="dv">48</span>)),  <span class="co"># i.e. 1942, '43, '44, etc</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">tck =</span> XTICK_LEN,   <span class="co"># tick length</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> WHITE,       <span class="co"># i.e. axis isn't visible</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.ticks =</span> BLACK  <span class="co"># i.e. axis ticks are visible</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual y-axis (just ticks)</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">2</span>,</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">at =</span> LP_YTICK_SEQ,  <span class="co"># no ticks needed for origin/max</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="cn">FALSE</span>, </span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">tck =</span> YTICK_LEN, </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> WHITE,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.ticks =</span> BLACK</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual y-axis (just labels)</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">2</span>,</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">at =</span> <span class="fu">c</span>(<span class="fl">0.2</span>, LP_YTICK_SEQ, <span class="fl">11.8</span>),  <span class="co"># min/max labels above/below tick</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> LP_YLAB_SEQ, </span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">las =</span> <span class="dv">1</span>,</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">tck =</span> <span class="dv">0</span>,</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> WHITE, </span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.ticks =</span> BLACK</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual secondary y-axis (just ticks)</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">4</span>,</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">at =</span> LP_YTICK_SEQ,</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">tck =</span> YTICK_LEN,</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> WHITE,</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.ticks =</span> BLACK</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I don’t know of a way to make the y-axis label appear horizontally at the top of the axis, so I’ve used <code>mtext()</code> to place a label in the margin (hence the ‘m’ in <code>mtext</code>) space above the plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Y-axis label: horizontal at top of axis</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(<span class="st">"Millions of Boles"</span>, <span class="at">side =</span> <span class="dv">3</span>, <span class="at">cex =</span> CEX <span class="sc">-</span> <span class="fl">0.1</span>, <span class="at">adj =</span> <span class="sc">-</span><span class="fl">0.07</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This gives us all the ticks and labels, but we’re missing the axes themselves. Spear used a box around the whole plot; you can do this in R with a call to <code>box()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bounding box around plot boundary</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">box</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here’s what the plot looks like at this point:</p>
+<p><img src="resources/1_lp_1.png" class="img-fluid" style="width:100.0%" alt="The recreated plot in progress: the axes and labels of the lineplot are the only thing added to the plotting area."></p>
+<p>Next we need to actually plot some data! We can use <code>mapply()</code> to pass the parameters to a custom function that contains calls to <code>lines()</code> and <code>text()</code>, which lay down the trace and label for each group iteratively.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate lines and labels for each group iteratively</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mapply</span>(</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(type, lty, x, y, label) { </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lines</span>(cotton<span class="sc">$</span>Year, cotton[[type]] <span class="sc">/</span> YDIV, <span class="at">lty =</span> lty, <span class="at">lwd =</span> LP_WIDTH)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">text</span>(x, y, label, <span class="at">cex =</span> CEX)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="fu">c</span>(<span class="st">"US consumption"</span>, <span class="st">"Exports"</span>, <span class="st">"Stocks"</span>),</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">lty =</span> <span class="fu">c</span>(<span class="st">"solid"</span>, <span class="st">"longdash"</span>, <span class="st">"dashed"</span>),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">c</span>(<span class="fl">1946.5</span>, <span class="fl">1943.7</span>, <span class="fl">1946.2</span>), </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">11</span>, <span class="fl">3.2</span>, <span class="fl">6.8</span>),</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">c</span>(<span class="st">"U. S. Consumption"</span>, <span class="st">"Exports"</span>, <span class="st">"Carry – over</span><span class="sc">\n</span><span class="st">stocks"</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I would normally do iterative things with the <code>map()</code> family of functions from <a href="https://purrr.tidyverse.org/">the {purrr} package</a> by Lionel Henry and Hadley Wickham, so I welcome suggestions on appropriate use of the various base <code>*apply()</code> functions in this scenario.</p>
+<p>Finally we can add the arrows that point to the lines from the labels. Base R has a handy <code>arrows()</code> function to which you supply start and end coordinates and parameters for the arrowhead. I used an advanced-coder technique called ‘trial-and-error’ for this.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Add arrows from labels to lines</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">arrows</span>(</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x0 =</span> <span class="fu">c</span>(<span class="fl">1945.4</span>, <span class="fl">1944.2</span>, <span class="fl">1945.5</span>),  <span class="co"># arrow origin</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y0 =</span> <span class="fu">c</span>(<span class="fl">10.8</span>, <span class="fl">3.2</span>, <span class="fl">7.1</span>),</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">x1 =</span> <span class="fu">c</span>(<span class="dv">1945</span>, <span class="fl">1944.4</span>, <span class="fl">1945.2</span>),    <span class="co"># arrowhead</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">y1 =</span> <span class="fu">c</span>(<span class="fl">9.6</span>, <span class="dv">3</span>, <span class="fl">6.8</span>),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">angle =</span> <span class="dv">12</span>,    <span class="co"># 'pointy-ness'</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">length =</span> <span class="fl">0.07</span>  <span class="co"># arrowhead length</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Excellent, that’s the line plot completed. The plot now looks like this:</p>
+<p><img src="resources/1_lp_2.png" class="img-fluid" style="width:100.0%" alt="The recreated plot in progress: the line plot has axes, labels, data and arrows."></p>
+</section>
+<section id="bar-plot" class="level2">
+<h2 class="anchored" data-anchor-id="bar-plot">3. Bar plot</h2>
+<p>The <code>barplot()</code> function is a little different to the <code>plot()</code> function.</p>
+<p>It doesn’t take the data as <code>x</code> and <code>y</code> arguments; we can instead pass it a single object that contains our data with each column corresponding to columns in the plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert dataframe structure for passing to barplot()</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>cotton_transpose <span class="ot">&lt;-</span> <span class="fu">t</span>(cotton)[<span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>,] <span class="sc">/</span> YDIV</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(cotton_transpose) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="fu">paste0</span>(<span class="st">"'"</span>, <span class="dv">43</span><span class="sc">:</span><span class="dv">48</span>))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>cotton_transpose</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                         '43    '44   '45    '46   '47   '48
+US consumption 11.160  9.993  9.693 9.423 10.072 9.374 7.833
+Exports         1.480  1.139  2.007 3.613  3.545 1.968 4.785
+Stocks         10.657 10.744 11.164 7.326  2.530 3.080 5.283</code></pre>
+</div>
+</div>
+<p>Note that I’ve supplied column names here in the form they’ll appear on the plot (e.g.&nbsp;<code>'43</code>), except for the first column, which I’ve left blank because the axis label needs to be applied separately for that one case (<code>1942</code>).</p>
+<p>Spear’s cotton barplot uses hatching (i.e.&nbsp;parallel lines in one direction) and crosshatching (i.e.&nbsp;perpendicular lines laid over each other) to ‘shade’ the bars. This approach was used a lot in manual charting because colour wasn’t necessarily available, and it was easy enough to achieve with a set square and rule.</p>
+<p>R lets you control the <code>density</code> and <code>angle</code> of shading in a <code>barplot()</code>, but the angle can only take one value. To create a crosshatch, you need to lay down a separate <code>barplot()</code> layer that is composed only of hatching in one direction. You can then supply a second <code>barplot()</code> call with the hatching in the other direction.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Barplot layer with hatching only (allows for crosshatching)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  cotton_transpose, </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>,      <span class="co"># suppress axes</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">xaxt =</span> <span class="st">"n"</span>,        <span class="co"># suppress x-axis bar labels</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim =</span> BP_YLIM,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">space =</span> BP_SPACE,  <span class="co"># space between bars</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">border =</span> WHITE,    <span class="co"># border around bars</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> BLACK,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">density =</span> <span class="fu">rep</span>(<span class="fu">c</span>(BP_HATCH_HI, <span class="dv">0</span>, BP_HATCH_LO), <span class="dv">7</span>),  <span class="co"># line 'closeness'</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">angle =</span> <span class="dv">360</span> <span class="sc">-</span> BP_HATCH_ANGLE  <span class="co"># top-left to bottom-right</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This is the bar plot with only the first layer of hatching:</p>
+<p><img src="resources/2_bp_1.png" class="img-fluid" style="width:100.0%" alt="The recreated plot in progress: the line plot is completed; the first layer of bar plot hatching has been added."></p>
+<p>Note that this layer of hatching is only required in the bottom and top bars of the stack because they will end up being crosshatched, specifically. The middle bar will only be hatched, not crosshatched, so it’s blank in this first layer.</p>
+<p>Now we can apply the rest of the bar plot. Since we want to add this <code>barplot()</code> call on top of the previous one, we need to use the argument <code>add = TRUE</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Barplot layer with features</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  cotton_transpose, </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">axes =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">ylim =</span> BP_YLIM,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">space =</span> BP_SPACE,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> BLACK,</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">density =</span> <span class="fu">rep</span>(<span class="fu">c</span>(BP_HATCH_HI, BP_HATCH_MID, BP_HATCH_LO), <span class="dv">7</span>),</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">angle =</span> BP_HATCH_ANGLE, <span class="co"># bottom-left to upper-right</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">add =</span> <span class="cn">TRUE</span>              <span class="co"># add as layer on top of existing plot</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And now we have both layers of hatching, the bar boundaries and the x-axis bar labels:</p>
+<p><img src="resources/2_bp_2.png" class="img-fluid" style="width:100.0%" alt="The recreated plot in progress: the line plot is completed; the bar plot has bars with hatching and outlines, and axis labels."></p>
+<p>You’ll notice I suppressed the axes again. The approach to building the bespoke bar plot axes is very similar to that of the line plot, using <code>axis()</code>, <code>box()</code> and <code>mtext()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual y-axis (just ticks)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">2</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">at =</span> BP_YTICK_SEQ,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">tck =</span> YTICK_LEN,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> WHITE,</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.ticks =</span> BLACK</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual y-axis (just labels)</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">2</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">at =</span> <span class="fu">c</span>(<span class="fl">0.4</span>, BP_YTICK_SEQ, <span class="fl">24.6</span>), </span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">tck =</span> <span class="dv">0</span>, </span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> BP_YLAB_SEQ, </span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">las =</span> <span class="dv">1</span>, </span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> WHITE</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Manual secondary y-axis (just ticks)</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a><span class="fu">axis</span>(</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">4</span>,</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">at =</span> BP_YTICK_SEQ,</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">tck =</span> YTICK_LEN,</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">col =</span> WHITE,</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.ticks =</span> BLACK</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a><span class="co"># X-axis label: horizontal at top of axis</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(<span class="st">"Millions of Boles"</span>, <span class="at">side =</span> <span class="dv">3</span>, <span class="at">adj =</span> <span class="sc">-</span><span class="fl">0.09</span>, <span class="at">cex =</span> CEX <span class="sc">-</span> <span class="fl">0.1</span>)</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a><span class="co"># The first label is at the origin</span></span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(<span class="st">"1942"</span>, <span class="at">side =</span> <span class="dv">1</span>, <span class="at">line =</span> <span class="fl">0.2</span>, <span class="at">adj =</span> <span class="sc">-</span><span class="fl">0.06</span>, <span class="at">cex =</span> CEX)</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a><span class="co"># Bounding box around plot boundary</span></span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a><span class="fu">box</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Awkwardly, the first x-axis label in the bar plot (<code>1942</code>) has to be created manually because it’s placed under the origin point in the original chart, rather than under the bar itself, which is the default.</p>
+<p>Finally we can add the labels over the top of the bars. I’ve done this in a similar iterative manner as the line plot, where there’s a call to create a white box with <code>rect()</code>, over which a <code>text()</code> label can be applied.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply labels iteratively</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mapply</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(x, y, xleft, ybottom, xright, ytop, label) { </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rect</span>(xleft, ybottom, xright, ytop, <span class="at">col =</span> WHITE, <span class="at">border =</span> <span class="cn">NA</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">text</span>(x, y, label, <span class="at">cex =</span> CEX)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xleft   =</span> <span class="fu">c</span>(<span class="fl">4.4</span>,  <span class="fl">4.3</span>,  <span class="fl">3.2</span>),</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">ybottom =</span> <span class="fu">c</span>(<span class="fl">14.4</span>, <span class="fl">10.4</span>, <span class="fl">6.4</span>),</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">xright  =</span> <span class="fu">c</span>(<span class="fl">6.6</span>,  <span class="fl">6.7</span>,  <span class="fl">7.8</span>),</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">ytop    =</span> <span class="fu">c</span>(<span class="fl">15.6</span>, <span class="fl">11.6</span>, <span class="fl">7.6</span>),</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fl">5.5</span>,</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">11</span>, <span class="dv">7</span>),</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> <span class="fu">c</span>(<span class="st">"STOCKS*"</span>, <span class="st">"EXPORTS"</span>, <span class="st">"U. S. CONSUMPTION"</span>)</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And here’s our visualisation with both plots completed:</p>
+<p><img src="resources/2_bp_3.png" class="img-fluid" style="width:100.0%" alt="The recreated plot in progress: both the line plot on the left and the bar plot on the right are completed with axes, data, labels and arrows."></p>
+</section>
+<section id="margin-labels" class="level2">
+<h2 class="anchored" data-anchor-id="margin-labels">4. Margin labels</h2>
+<p>With both charts completed, we can add with <code>mtext()</code> the titles and captions that exist for the plot as a whole.</p>
+<p>The main title uses a different font family than was specified in <code>par()</code>, so we override it with the <code>family</code> argument.</p>
+<p>I couldn’t find a good (free) approximation of the font family that Spear used, so I’ve used one that has a similar ‘feel’, even if many of the typographical features are wrong (e.g.&nbsp;single-storey ‘a’). Here I’ve settled with ‘<a href="https://www.ffonts.net/Hussar-Bold-Condensed.font">Hussar Bold Condensed</a>’. Let me know if you recognise Spear’s actual font.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Main title</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">text =</span> <span class="st">"Distribution   of   United   States   Cotton"</span>,</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">outer =</span> <span class="cn">TRUE</span>,  <span class="co"># outer plot margin</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">3</span>,      <span class="co"># i.e. the top</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">line =</span> <span class="sc">-</span><span class="dv">3</span>,     <span class="co"># relative to outside to plot limit</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> CEX <span class="sc">+</span> <span class="fl">0.5</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="st">"Hussar Bold Condensed"</span>,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">font =</span> <span class="dv">2</span>       <span class="co"># bold type</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I left extra spaces between the words in the title text to approximate their placement in Spear’s image.</p>
+<p>The remaining labels were just a case of fiddling with the <code>line</code> and <code>at</code> arguments to get them in the right place.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 'Subtitle' for line plot</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">text =</span> <span class="st">"MULTIPLE CURVE"</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">outer =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">3</span>,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">line =</span> <span class="sc">-</span><span class="dv">1</span>,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">adj =</span> <span class="fl">0.06</span>,  <span class="co"># nudge</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> CEX,</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">font =</span> <span class="dv">3</span>  <span class="co"># italic</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="co"># 'Subtitle' for bar plot</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">text =</span> <span class="st">"COMPONENT COLUMN"</span>,</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">outer =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">3</span>,</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">line =</span> <span class="sc">-</span><span class="dv">1</span>,</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">adj =</span> <span class="fl">0.68</span>,</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> CEX,</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">font =</span> <span class="dv">3</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Caption: source</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">text =</span> <span class="st">"Source: U. S. Department of Agriculture"</span>,</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">outer =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">1</span>,  <span class="co"># bottom</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">line =</span> <span class="sc">-</span><span class="dv">1</span>,</span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">adj =</span> <span class="fl">0.02</span>,</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> CEX</span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Caption: stocks asterisk</span></span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(</span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">text =</span> <span class="st">"*END OF SEASON, JULY 31"</span>,</span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">outer =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">1</span>,</span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">line =</span> <span class="sc">-</span><span class="dv">2</span>,</span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">adj =</span> <span class="fl">0.94</span>,</span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> CEX <span class="sc">-</span> <span class="fl">0.2</span>,</span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Caption: US cotton</span></span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a><span class="fu">mtext</span>(</span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">text =</span> <span class="st">"U. S. Supply of U. S. Cotton"</span>,</span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">outer =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">side =</span> <span class="dv">1</span>,</span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">line =</span> <span class="sc">-</span><span class="dv">1</span>,</span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">adj =</span> <span class="fl">0.97</span>,</span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> CEX</span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And so the final output looks like this:</p>
+<p><img src="resources/3_final.png" class="img-fluid" style="width:100.0%" alt="The recreated plot in progress: the recreation is complete, with both the line adn bar plots completed and the titles and captions added."></p>
+<p>And a gif of the steps of the chart’s creation, ending with the original image:</p>
+<p><img src="resources/cottonviz.gif" class="img-fluid" style="width:100.0%" alt="Gif where each frame shows the progression of recreating an original plot about cotton supplies in 1940s USA. Axes and lines are added to a plot on the left, then crosshatching, bars and axes are added to a plot on the right, and finally some titles and captions are added. The original plot is shown in the final frame to compare it to the recreation."></p>
+</section>
+<section id="saving" class="level2">
+<h2 class="anchored" data-anchor-id="saving">5. Saving</h2>
+<p>Having opened a graphics device earlier with <code>png()</code> and then added out plotting elements, we can now close the graphics device and save the output.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You’ll want to run all the code from start to finish to encompass the <code>png()</code> call at the start and the <code>dev.off()</code> call at the end. I’ve <a href="https://github.com/matt-dray/viz-recreation">put all the code in a GitHub repo</a> should you want to use it.</p>
+</section>
+<section id="reflections" class="level2">
+<h2 class="anchored" data-anchor-id="reflections">Reflections</h2>
+<p>The final output certainly isn’t a perfect match for the original, but I think it gets 90% of the way there without the need for endless tweaking. There were some particularly tricky things I was able to deal with, but also some things that I need to improve to make the recreation identical to the original.</p>
+<section id="tricky-parts" class="level3">
+<h3 class="anchored" data-anchor-id="tricky-parts">Tricky parts</h3>
+<p>There were a few non-standard plot elements that needed to be dealt with, but are relatively trivial with base R functions. To review:</p>
+<ul>
+<li>the minimum and maximum labels on the y axis are not on the ticks, they’re slightly above and below them, respectively</li>
+<li>hatching can only be done in one direction, so it requires an ‘under-layer’ of hatching in the opposite direction to that of the main plot itself</li>
+<li>there’s no function in base to apply a text label with a filled box under it; you need to use <code>text()</code> and <code>rect()</code> together</li>
+<li>the x-axis labels aren’t all the same: the first is <code>1942</code> and the rest are in the form <code>'43</code></li>
+<li>the first x-axis label on the bar chart, <code>1942</code> is not actually under the bar, but under the origin</li>
+</ul>
+</section>
+<section id="improvements" class="level3">
+<h3 class="anchored" data-anchor-id="improvements">Improvements</h3>
+<p>There’s a lot of things I could do, but there would be a few things to prioritise:</p>
+<ul>
+<li>I’ve used a lot of manual adjustments to get the chart elements in roughly the right place; that’s fine for a one-off chart like this, but isn’t that useful for making this code more generic</li>
+<li>I didn’t get the ruler out and measure everything, so there are slight differences when the original and recreation are overlaid</li>
+<li>I haven’t really optimised the code or tried to tidy it up; there may be some unnecessary lines that were part of development that don’t need to be in the final script</li>
+<li>I’ve tried to match the font families as best I can, but the font used in the main title is particularly difficult to find a (free) match for</li>
+<li>R’s built-in line dashes aren’t quite the same as Spear’s, but I think they’re close enough</li>
+</ul>
+<p>And finally a bonus improvement, though it requires you to download a package. We can save our plot with maximum resolution, etc, but for fun we can invoke some of the artefacts that are present in Spear’s plot with some help from <a href="https://docs.ropensci.org/magick/index.html">the {magick} image-processing package</a> via Jeroen Ooms and rOpenSci (e.g.&nbsp;see below for how to add blur).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magick)  <span class="co"># install from CRAN</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the plot PNG</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>cottonviz <span class="ot">&lt;-</span> <span class="fu">image_read</span>(<span class="st">"~/Desktop/cottonviz.png"</span>)  <span class="co"># set to your path</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply blurring parameters</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>cottonviz_blur <span class="ot">&lt;-</span> <span class="fu">image_blur</span>(</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  cottonviz,</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">radius =</span> <span class="dv">14</span>, <span class="at">sigma =</span> <span class="dv">7</span>  <span class="co"># blur parameters</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the image</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="fu">image_write</span>(</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>  cottonviz_blur,</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"~/Desktop/cottonviz_blur.png"</span>  <span class="co"># set to your path</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>That would end up looking like this:</p>
+<p><img src="resources/5_blur.png" class="img-fluid" style="width:100.0%" alt="The final recreation plot with blur applied to mimic the artefacts involved in the hand-drawing and photocopying of the original."></p>
+<p>With a bit more tweaking and addition of some noise, you could probably do a good job of mimicking the ‘aged’ look of the original.</p>
+</section>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-17 18:36:08 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] magick_2.7.4
+
+loaded via a namespace (and not attached):
+ [1] digest_0.6.31     fastmap_1.1.1     xfun_0.39         fontawesome_0.5.1
+ [5] magrittr_2.0.3    knitr_1.43.1      htmltools_0.5.5   rmarkdown_2.23   
+ [9] cli_3.6.1         compiler_4.3.1    rstudioapi_0.15.0 tools_4.3.1      
+[13] evaluate_0.21     Rcpp_1.0.11       yaml_2.3.7        rlang_1.1.1      
+[17] jsonlite_1.8.7    htmlwidgets_1.6.2</code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>As an aside, check out <a href="#recreationthursday">#RecreationThursday on Twitter</a>. It’s a community challenge to <a href="https://twitter.com/_natalie_oshea/status/1400526683170541570?s=20">recreate an art piece</a> selected each fortnight by a rotating curator (i.e.&nbsp;the curator changes, not that they’re physically spinning).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>I admit to not knowing much about Spear, so I’m glad that she was selected as the subject of the challenge. One thing I learnt is that Spear might be best known for the box plot, which she originated as the ‘range plot’ in her book <a href="https://archive.org/details/ChartingStatistics_201801">Charting Statistics</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>I haven’t spent much time with base plotting in the last five years (!) and I’m getting increasingly agitated by mounting dependencies in my projects. Locals have been confused recently by a strange fellow walking the streets, repeating <a href="http://www.tinyverse.org/">the tinyverse</a> mantra of ‘lightweight is the right weight’.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>You may have noticed that the ‘US consumption’ line appears a little different to that in Spear’s original, where the line is flatter. I don’t yet know if this is an issue with the supplied data.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,90 @@
+---
+title: Animal Crossing Tinder with {shinysense}
+date: 2020-06-06
+slug: acnh-swipe
+categories:
+  - googledrive
+  - googlesheets4
+  - r
+  - shiny
+  - shinysense
+  - videogames
+---
+
+![Lily <3 4eva](resources/20200606_screenshot-demo.png){fig-alt="Screenshot of the ACNH Popularity Contest app showing a villager that the user is being asked to swipe left to dislike or right to like." width="100%"}
+
+## tl;dr 
+
+The villagers of [Animal Crossing: New Horizons](https://en.wikipedia.org/wiki/Animal_Crossing:_New_Horizons) are taking part in a popularity contest and you're the judge.
+
+I made [an R Shiny app](https://mattdray.shinyapps.io/acnh-swipe/) where you swipe right if you like a randomly-presented villager and left if you dislike them.
+
+[Visit the app here](https://mattdray.shinyapps.io/acnh-swipe/) and help decide the most popular villager! You can also [visit the source code](https://github.com/matt-dray/acnh-swipe).
+
+## Tidy Tuesday
+
+[Tidy Tuesday](https://github.com/rfordatascience/tidytuesday) is an open event for the R community. The organisers provide a data set and participants submit their take on wrangling and presenting the data, usually via Twitter with the hashtag [#tidytuesday](https://twitter.com/search?q=%23tidytuesday).
+
+A [recent data set](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-05-05/readme.md) (week 19) via [VillagerDB](https://villagerdb.com/) includes information about villager non-player characters from the wildly popular [Animal Crossing: New Horizons](https://en.wikipedia.org/wiki/Animal_Crossing:_New_Horizons) game for the Nintendo Switch. A similar set of data was also [uploaded to Kaggle](https://www.kaggle.com/jessicali9530/animal-crossing-new-horizons-nookplaza-dataset/data).
+
+I couldn't resist, having recently written about [learning R6 object-oriented programming with an Animal Crossing example](https://www.rostrum.blog/2020/04/04/repaying-tom-nook-with-r6/).
+
+This was also a good chance to learn more about two packages in particular: {shinysense} and {googlesheets4}.
+
+### {shinysense}
+
+[Nick Strayer](http://nickstrayer.me/)'s [{shinysense}](http://nickstrayer.me/shinysense/) package lets Shiny 'sense the world around it', with modules for touch, vision, hearing and motion.
+
+I wanted to try out shinyswipr, which presents a user with a 'card' that they can swipe. The direction of swiping can be used to indicate something, like a preference. After swiping, the card content can be updated.
+
+You can [read Nick's blog post](https://livefreeordichotomize.com/2017/03/12/introducing-shinyswipr-swipe-your-way-to-a-great-shiny-ui/) about its inception.
+
+### {googlesheets4}
+
+In [Nick's shinyswipr example](https://nickstrayer.shinyapps.io/shinyswipr_demo/), he presents back to the user their swipe history, but how can we record the information from all users and return the collated results?
+
+There's [a number of ways to do persistent storing with Shiny](https://shiny.rstudio.com/articles/persistent-data-storage.html), but a relatively simple one is to write the data to Google Sheets and read the entire sheet back into the app.
+
+The [{googlesheets4} package](https://googlesheets4.tidyverse.org/) by [Jenny Bryan](https://jennybryan.org/) helps you do exactly that, with functions like `sheet_append()` and `read_sheet()`.
+
+## The ACNH Popularity Contest
+
+There's a lot of articles online about favourite villagers, but they aren't very democratic. They tend to cite characters like [Raymond](https://animalcrossing.fandom.com/wiki/Raymond), [Beau](https://animalcrossing.fandom.com/wiki/Beau), [Marshal](https://animalcrossing.fandom.com/wiki/Marshal), [Judy](https://animalcrossing.fandom.com/wiki/Judy) and [Audie](https://animalcrossing.fandom.com/wiki/Audie).
+
+It's time to let the people speak.
+
+## How to use
+
+If you [visit the app](https://mattdray.shinyapps.io/acnh-swipe/), or look at the image at the top of this post, you'll see that the user is presented with a card containing a randomly-selected villager and some details (name, species, personality and hobby).
+
+You can move the card to the right to indicate you like the character, or to the left if you dislike them. On mobile you can swipe left or right with your finger. On desktop you can click and drag the card.
+
+![No dates guaranteed. The characters aren't actually real, y'see.](resources/acnh-tinder-shiny.gif){fig-alt="Gif showing a blue card on a green background. The card has a picture of a villager from Nintendo's Animal Crossing game with their name, personality type, species and hobby. A mouse cursor swipes the card to the right, meaning 'like', and another card appears with a different character. The card is swiped to the left, meaning 'dislike'." width="100%"}
+
+The swipe event results in the information being written to a Google Sheet and triggers the entirety of the updated data set to be read back to the app. It's then wrangled lightly and the information is presented as a table of the current top 10 villagers by 'like' count. Finally, a new random villager is presented.
+
+This is obviously a bit of fun and definitely not polished. Do [let me know](https://github.com/matt-dray/acnh-swipe/issues) of any bugs that you find, though. I'm aware that mobiles may not display the fonts correctly, for example.
+
+### Data and hosting
+
+No data about the user is stored. The app records only the date-time, the villager name and the swipe direction.
+
+The app is [hosted for free on shinyapps.io](https://www.shinyapps.io/), so there's a limited number of uptime hours it can use per month.
+
+## Results
+
+I hope that enough people cast a vote to make the results interesting... but [there's nearly 400 villagers](https://animalcrossing.fandom.com/wiki/Villager_list_(New_Horizons)), so that seems unlikely!
+
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+I've [written a more recent post](https://www.rostrum.blog/2022/01/07/acnh-swipe-results/) where I aggregated the results for the thousands of swipes that people made in the app!
+</div>
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>

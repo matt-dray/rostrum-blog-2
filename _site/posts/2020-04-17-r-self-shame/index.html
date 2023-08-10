@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2020-04-17">
+
+<title>rostrum.blog - Owning the shame of my old R code</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Owning the shame of my old R code</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">reproducibility</div>
+                <div class="quarto-category">self-help</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Matt Dray </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">April 17, 2020</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#a-startling-discovery" id="toc-a-startling-discovery" class="nav-link" data-scroll-target="#a-startling-discovery">A startling discovery</a></li>
+  <li><a href="#files" id="toc-files" class="nav-link" data-scroll-target="#files">1. Falling foul of a file-finding fail</a>
+  <ul class="collapse">
+  <li><a href="#justified-arson" id="toc-justified-arson" class="nav-link" data-scroll-target="#justified-arson">Justified arson</a></li>
+  </ul></li>
+  <li><a href="#attach" id="toc-attach" class="nav-link" data-scroll-target="#attach">2. Getting too attached</a></li>
+  <li><a href="#env" id="toc-env" class="nav-link" data-scroll-target="#env">3. Polluting the environment</a></li>
+  <li><a href="#repeat" id="toc-repeat" class="nav-link" data-scroll-target="#repeat">4. There’s a function for that</a></li>
+  <li><a href="#reflections" id="toc-reflections" class="nav-link" data-scroll-target="#reflections">Reflections</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="resources/brehm-1895-lemur.jpg" class="img-fluid figure-img" style="width:75.0%" alt="Line drawing of a lemur in a aggressive posture."></p>
+<figcaption class="figure-caption">Scorn (all images from Brehm’s Life of Animals, 1895).</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>In which I reflect on my past-self’s journey toward better R code.</p>
+<p>This post suggests alternatives to <code>file.choose()</code>, <code>setwd()</code> and <code>attach()</code>; encourages sensible project structure; and talks about the benefit of writing functions.</p>
+</section>
+<section id="a-startling-discovery" class="level2">
+<h2 class="anchored" data-anchor-id="a-startling-discovery">A startling discovery</h2>
+<p>I dug up a time capsule from a decade ago. It contained poorly constructed R code.</p>
+<p>Twist: <em>it was me who wrote it</em>.</p>
+<p>Reading these scripts brought back the sweet nostalgia of running the vanilla R GUI on my <a href="https://en.wikipedia.org/wiki/MacBook_(2006%E2%80%932012)">precious white MacBook</a>, using R as little more than an interactive calculator for <a href="https://www.rostrum.blog/2019/04/30/markov-chain-phd-2/">ecological analyses</a>.</p>
+<p>There were some things in that code that look alien to me now (click to jump ahead):</p>
+<ol type="1">
+<li><a href="#files"><code>file.choose()</code> and <code>setwd()</code> for non-reproducible file locations</a></li>
+<li><a href="#attach">The <code>attach()</code> function for basically hiding his data and forgetting it exists</a></li>
+<li><a href="#env">Working in the same R workspace at all times regardless of context</a></li>
+<li><a href="#repeat">Repeating code over and over and over and over and…</a></li>
+</ol>
+<p>This post is about learning. It’s about looking for improvements. Everyone is a beginner at some point and everyone is taught in a different way. There’s no shame in that.</p>
+<p>Hopefully this post might act as a shortcut for you to hear about some alternative techniques.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="resources/brehm-1895-otter.jpg" class="img-fluid figure-img" style="width:75.0%" alt="Line drawing of an otter in agony with its paw trapped in some fishing tackle."></p>
+<figcaption class="figure-caption">Agony.</figcaption>
+</figure>
+</div>
+</section>
+<section id="files" class="level2">
+<h2 class="anchored" data-anchor-id="files">1. Falling foul of a file-finding fail</h2>
+<p>Can’t remember where a file is? Don’t want long file paths cluttering your scripts? Nevermind! Past-Matthew was using <code>file.choose()</code>, which opens your file explorer so you can navigate to the correct file.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">file.choose</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>But how can anyone reading your script (including you) know what file you actually read in? It’s not recorded in your script. You can’t re-run this code without that information.</p>
+<p>Solutions:</p>
+<ul>
+<li>good project-folder structure that puts all the elements of your analysis — data, scripts, outputs — in one place so its portable and others can use it without having to change anything</li>
+<li>relative file paths that start from your project folder, so you can use computer-agnostic paths like <code>data/cool-data.csv</code> rather <code>path/specific/to/my/machine/data/cool-data.csv</code></li>
+</ul>
+<p>Tools:</p>
+<ul>
+<li><a href="https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects">RStudio Projects</a> encourage good folder structure and have the bonus of relative file paths, which start from the directory containing the .Rproj file.</li>
+<li><a href="https://here.r-lib.org/">the {here} package</a> by <a href="https://twitter.com/krlmlr">Kirill Müller</a> also helps with relative file paths; <code>here()</code> finds a file based on the perceived ‘home’ for the project, or just where a manually-placed hidden <code>.here</code> file is placed with <code>set_here()</code></li>
+</ul>
+<section id="justified-arson" class="level3">
+<h3 class="anchored" data-anchor-id="justified-arson">Justified arson</h3>
+<p>You may wonder why I haven’t mentioned <code>setwd()</code> as a solution here. It’s because <a href="https://jennybryan.org/">Jenny Bryan</a> will <a href="https://www.tidyverse.org/blog/2017/12/workflow-vs-script/">set your computer on fire</a>.</p>
+<p>But past-Matthew did this.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> He used <code>setwd()</code> to point to where a project was stored locally:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"/Users/Matthew//local/path/to/project/"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"data/some_file.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>What’s the problem? The bit in <code>setwd()</code> is not reproducible — it’s the file location on one particular machine only.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="resources/brehm-1895-mouse.jpg" class="img-fluid figure-img" style="width:75.0%" alt="Line drawing of two mice that look like they're laughing."></p>
+<figcaption class="figure-caption">Mirth.</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="attach" class="level2">
+<h2 class="anchored" data-anchor-id="attach">2. Getting too attached</h2>
+<p>This problem begins with a question: how does R know where to look for a variable?</p>
+<p>Here’s three ways to calculate Pokémon body mass index by reference to variables in a data set:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read Pokémon data from URL</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">suppressMessages</span>(readr<span class="sc">::</span><span class="fu">read_csv</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"https://raw.githubusercontent.com/mwdray/datasets/master/pokemon_go_captures.csv"</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co"># BMI calculation three ways</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">mean</span>(df<span class="sc">$</span>weight_kg <span class="sc">/</span> df<span class="sc">$</span>height_m <span class="sc">^</span> <span class="dv">2</span>)  <span class="co"># dollar notation</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">mean</span>(df[[<span class="st">"weight_kg"</span>]] <span class="sc">/</span> df[[<span class="st">"height_m"</span>]] <span class="sc">^</span> <span class="dv">2</span>)  <span class="co"># square brackets</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">with</span>(df, <span class="fu">mean</span>(weight_kg <span class="sc">/</span> height_m <span class="sc">^</span> <span class="dv">2</span>))  <span class="co"># with() function</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co"># All produce the same results?</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">all</span>(x <span class="sc">==</span> y, y <span class="sc">==</span> z, x <span class="sc">==</span> z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p>So each line specifies the data frame object where R should look for the named variables. If you don’t provide this object, R will error:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(weight_kg <span class="sc">/</span> height_m <span class="sc">^</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>## Error in mean(weight_kg / height_m ^ 2) : object 'weight_kg' not found</code></pre>
+<p>R was searching for the <code>weight_kg</code> variable in a few places, starting with the global environment, but couldn’t find it. You can see the search path it takes:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">search</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] ".GlobalEnv"        "package:stats"     "package:graphics" 
+[4] "package:grDevices" "package:utils"     "package:datasets" 
+[7] "package:methods"   "Autoloads"         "package:base"     </code></pre>
+</div>
+</div>
+<p>The data object isn’t in there, so that’s why it can’t find those variables.</p>
+<p>Past-Matthew got around this by using <code>attach()</code>, which lets you add objects to the search path.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(df)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">search</span>()  <span class="co"># now 'df' is in the search path</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] ".GlobalEnv"        "df"                "package:stats"    
+ [4] "package:graphics"  "package:grDevices" "package:utils"    
+ [7] "package:datasets"  "package:methods"   "Autoloads"        
+[10] "package:base"     </code></pre>
+</div>
+</div>
+<p>The following expression can now be calculated because R can find the variable names in the attached <code>df</code> object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(weight_kg <span class="sc">/</span> height_m <span class="sc">^</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 31.17416</code></pre>
+</div>
+</div>
+<p>So we never need to refer to the data frame name at all. Wow, how can that be bad?</p>
+<p>Here’s one reason. Consider a data set with column names that match our original:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df2 <span class="ot">&lt;-</span> df[species <span class="sc">==</span> <span class="st">"caterpie"</span>, ]</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">attach</span>(df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from df:
+
+    charge_attack, combat_power, fast_attack, height_bin, height_m,
+    hit_points, species, weight_bin, weight_kg</code></pre>
+</div>
+</div>
+<p>You might be able to guess the problem: R will get variables from <code>df2</code> first, since it was the most recently attached.</p>
+<p>Bad news: this means the code we wrote earlier will get a different result.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(weight_kg <span class="sc">/</span> height_m <span class="sc">^</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 31.64357</code></pre>
+</div>
+</div>
+<p>This has serious implications for reproducibility and the confidence you can have in your results.</p>
+<p>See also the ‘search list shuffle’ danger of <code>attach()</code> referenced in Circle 8.1.35 of <a href="https://www.burns-stat.com/pages/Tutor/R_inferno.pdf">The R Inferno</a> by Patrick Burns.</p>
+<p>Past-Matthew was using this approach because he was taught with <a href="https://www.wiley.com/en-gb/The+R+Book%2C+2nd+Edition-p-9780470973929">Mick Crawley’s R Book</a>. Mick says <code>attach()</code> ‘makes the code easier to understand for beginners’ (page 18)<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> — possibly because expressions end up looking less cluttered. But this only sets up beginners (like me) for problems later. In fact, Mick even says, perhaps confusingly, to ‘avoid using attach wherever possible’ in his book.</p>
+<p>Pro tip: if you do ever use <code>attach()</code> (don’t), you’ll want to make sure you <code>detach()</code> your objects from the search path.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(df)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="resources/brehm-1895-hare.jpg" class="img-fluid figure-img" style="width:75.0%" alt="Line drawing of two hares, one of which is standing on its hind legs."></p>
+<figcaption class="figure-caption">Bemusement.</figcaption>
+</figure>
+</div>
+</section>
+<section id="env" class="level2">
+<h2 class="anchored" data-anchor-id="env">3. Polluting the environment</h2>
+<p>Past-Matthew clearly executed different projects and scripts in the same running instance of R.</p>
+<p>The potential for confusion and error is high in this scenario. Was the object <code>results</code> created from <code>analysis1.R</code> or <code>analysis2.R</code>? Maybe <code>results</code> is now out of date because the code has been updated.</p>
+<p>I’m also certain that the content of past-Matthew’s workspace was being saved at the end of each session — the default behaviour — meaning all that trash would come back next time he fired up R.</p>
+<p>There were also some strange defensive lines like the following, which pre-emptively unloads the {nlme} package because of a namespace conflict with {lme4}:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(<span class="st">"package:nlme"</span>)  <span class="co"># conflicts with lme4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I assume this was because past-Matthew was never quite sure of the state of his current working environment.</p>
+<p>These days I treat everything in my environment with suspicion and restart R regularly and rebuild objects from scratch. This means I can have confidence that my script does what I think it does and also stops interference from older objects that are clogging up my environment.</p>
+<p>I also modified the default behaviour of RStudio to prevent my workspace being saved, which means I can start afresh when I open a project. To do this, untick ‘Restore .Rdata on startup’ and set ‘Save workspace to .RData on exit’ to ‘Never’ in Tools &gt; Global Options &gt; General &gt; Basic &gt; Workspace.</p>
+<p><a href="https://r4ds.had.co.nz/workflow-projects.html">Read more about workflow in the R for Data Science book</a> by Garrett Grolemund and Hadley Wickham.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="resources/brehm-1895-gopher.jpg" class="img-fluid figure-img" style="width:75.0%" alt="Line drawing of two gophers, one side-on and one with its face popping up from a hole."></p>
+<figcaption class="figure-caption">Disgust.</figcaption>
+</figure>
+</div>
+</section>
+<section id="repeat" class="level2">
+<h2 class="anchored" data-anchor-id="repeat">4. There’s a function for that</h2>
+<p>Turns out past-Matthew repeated loads of code because functions looked too much like Real Programming and were therefore Quite Hard.</p>
+<p>Here’s a simple example of code repetition that was pretty common in past-Matthew’s scripts:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Subset the data and then get a mean value</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>sub_koffing <span class="ot">&lt;-</span> <span class="fu">subset</span>(df, species <span class="sc">==</span> <span class="st">"koffing"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>mean_koffing <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">mean</span>(sub_koffing[[<span class="st">"weight_kg"</span>]]), <span class="dv">2</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Do it again for a different species</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>sub_paras <span class="ot">&lt;-</span> <span class="fu">subset</span>(df, species <span class="sc">==</span> <span class="st">"paras"</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>mean_paras <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">mean</span>(sub_paras[[<span class="st">"weight_kg"</span>]]), <span class="dv">2</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Do it again for a different species</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>sub_geodude <span class="ot">&lt;-</span> <span class="fu">subset</span>(df, species <span class="sc">==</span> <span class="st">"geodude"</span>)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>mean_geodude <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">mean</span>(sub_koffing[[<span class="st">"weight_kg"</span>]]), <span class="dv">2</span>)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Print results</span></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>mean_koffing; mean_paras; mean_geodude</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.92</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.39</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.92</code></pre>
+</div>
+</div>
+<p>You know this is bad news; copy-pasting leads to mistakes. See how two of those outputs are suspiciously similar? Oops.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>(Note the use of semi-colons here as well. Past-Matthew seemed to like using these to print multiple results, but I don’t use these anymore and don’t see anyone else doing it.)</p>
+<p>Functions let you write the meat of the code just once, eliminating the copy-paste error. You can then loop over the variables of interest to get your results.</p>
+<p>The effort of learning to write your own functions is worth it to avoid the problems. See <a href="https://r4ds.had.co.nz/functions.html">R for Data Science</a> for more on this.</p>
+<p>Here’s one way to tackle the code repetition above:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to calcuate a rounded mean value for a given species</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>get_sp_mean <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  sp, <span class="at">data =</span> df, <span class="at">var =</span> <span class="st">"weight_kg"</span>, <span class="at">dp =</span> <span class="dv">2</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>) {</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  sub_sp <span class="ot">&lt;-</span> <span class="fu">subset</span>(data, species <span class="sc">==</span> sp)  <span class="co"># subset data</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  mean_sp <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">mean</span>(sub_sp[[var]]), dp)  <span class="co"># get mean</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(mean_sp)  <span class="co"># function will output the mean value</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a named vector to iterate over</span></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>species <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"koffing"</span>, <span class="st">"paras"</span>, <span class="st">"geodude"</span>)</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(species) <span class="ot">&lt;-</span> species  <span class="co"># make it a named vector</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterate over the vector to apply the function</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>purrr<span class="sc">::</span><span class="fu">map</span>(species, get_sp_mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$koffing
+[1] 0.92
+
+$paras
+[1] 5.39
+
+$geodude
+[1] 23.24</code></pre>
+</div>
+</div>
+<p>Friendship ended with code repetition. Now bespoke functions and {purrr} are my best friends.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="resources/brehm-1895-loris.jpg" class="img-fluid figure-img" style="width:75.0%" alt="Line drawing of la loris staring into the foreground."></p>
+<figcaption class="figure-caption">Empathy.</figcaption>
+</figure>
+</div>
+</section>
+<section id="reflections" class="level2">
+<h2 class="anchored" data-anchor-id="reflections">Reflections</h2>
+<p>I think it’s a good exercise to look back and critique your old code. What changes have you made to your coding practices over time?</p>
+<p>There’s no shame in writing code that does what you want it to do. I can see why past-Matthew did the things he did. But I’m also glad he stopped doing them.</p>
+<p>See you in ten years to look back on the inevitably terrible code I’ve written in this blog.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-22 11:47:37 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] crayon_1.5.2      vctrs_0.6.3       cli_3.6.1         knitr_1.43.1     
+ [5] rlang_1.1.1       xfun_0.39         purrr_1.0.1       jsonlite_1.8.7   
+ [9] bit_4.0.5         glue_1.6.2        htmltools_0.5.5   hms_1.1.3        
+[13] fansi_1.0.4       rmarkdown_2.23    evaluate_0.21     tibble_3.2.1     
+[17] tzdb_0.4.0        fastmap_1.1.1     yaml_2.3.7        lifecycle_1.0.3  
+[21] compiler_4.3.1    htmlwidgets_1.6.2 pkgconfig_2.0.3   rstudioapi_0.15.0
+[25] digest_0.6.33     R6_2.5.1          tidyselect_1.2.0  readr_2.1.4      
+[29] utf8_1.2.3        curl_5.0.1        parallel_4.3.1    vroom_1.6.3      
+[33] pillar_1.9.0      magrittr_2.0.3    tools_4.3.1       bit64_4.0.5      </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>My darling white plastic MacBook would have melted horribly if set on fire.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>To be fair, Mick has taught <em>a lot</em> of R classes in his time.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Especially because Geodude is made of rock and Koffing is basically just made of gas.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

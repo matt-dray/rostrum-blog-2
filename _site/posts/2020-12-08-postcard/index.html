@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2020-12-08">
+
+<title>rostrum.blog - Sending {postcards} with Netlify and Namecheap</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Sending {postcards} with Netlify and Namecheap</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">github</div>
+                <div class="quarto-category">namecheap</div>
+                <div class="quarto-category">netlify</div>
+                <div class="quarto-category">postcards</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">website</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">December 8, 2020</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#domain-driven-development" id="toc-domain-driven-development" class="nav-link" data-scroll-target="#domain-driven-development">Domain-driven development</a></li>
+  <li><a href="#write-a-postcard" id="toc-write-a-postcard" class="nav-link" data-scroll-target="#write-a-postcard">Write a postcard</a></li>
+  <li><a href="#pop-it-in-the-post" id="toc-pop-it-in-the-post" class="nav-link" data-scroll-target="#pop-it-in-the-post">Pop it in the post</a></li>
+  <li><a href="#address-it-properly" id="toc-address-it-properly" class="nav-link" data-scroll-target="#address-it-properly">Address it properly</a></li>
+  <li><a href="#post-postcard-postscript" id="toc-post-postcard-postscript" class="nav-link" data-scroll-target="#post-postcard-postscript">Post-postcard postscript</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/postcard.png" class="img-fluid figure-img" style="width:100.0%" alt="Screenshot of my personal webpage made with the postcards package by Sean Kross, showing a photo, name, short personal bio and buttons to my blog, Twitter and GitHub."></p>
+<figcaption class="figure-caption">Sleek. Minimal. Bearded.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<blockquote class="blockquote">
+<p>Dearest ma and pa,</p>
+<p>The food here is okay. Mostly I’ve been setting up <a href="https://www.matt-dray.com/">a single-page personal site</a> with the <a href="https://github.com/seankross/postcards">{postcards}</a> package for R, deploying it with <a href="https://www.netlify.com/">Netlify</a> and setting up a custom domain with <a href="https://www.namecheap.com/">Namecheap</a>. More rain is forecast for tomorrow.</p>
+<p>Wish you were here,</p>
+<p>Matthew</p>
+</blockquote>
+</section>
+<section id="domain-driven-development" class="level2">
+<h2 class="anchored" data-anchor-id="domain-driven-development">Domain-driven development</h2>
+<p>A hobby of mine is to look for funny domain names and to not buy them.</p>
+<p>Eventually I realised that <a href="https://www.matt-dray.com"><code>matt-dray.com</code></a> wasn’t taken, so I figured I might as well squat it and do something pseudo-useful with it.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>Yes, I could write some HTML<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and CSS to make a complicated shrine to self-absorption, but why bother trying to center divs when <a href="https://twitter.com/seankross">Sean Kross</a> has just announced <a href="https://github.com/seankross/postcards">the {postcards} R package</a> to create nice, minimal landing pages?</p>
+<p>This post is a short self-reminder of how to:</p>
+<ol type="1">
+<li>Generate a webpage with {postcards}</li>
+<li>Deploy it with <a href="https://www.netlify.com/">Netlify</a></li>
+<li>Point to it with a custom domain from <a href="https://www.namecheap.com/">Namecheap</a></li>
+</ol>
+<p>This post isn’t about the tubes and wires of the internet. It’s more the how than the why.</p>
+</section>
+<section id="write-a-postcard" class="level2">
+<h2 class="anchored" data-anchor-id="write-a-postcard">Write a postcard</h2>
+<p>{postcards} provides some R Markdown templates that contain space for a photo, a mini-bio and some buttons to link out to your profiles elsewhere. See <a href="https://github.com/seankross/postcards/blob/main/README.md">the package’s readme</a> for examples.</p>
+<p>You can install the development version from GitHub:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"seankross/postcards"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I generated an R Markdown file with <a href="https://seankross.com/postcards-templates/jolla/">the ‘Jolla’ template</a> using the following line:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rmarkdown<span class="sc">::</span><span class="fu">draft</span>(<span class="st">"index.Rmd"</span>, <span class="st">"Jolla"</span>, <span class="at">package =</span> <span class="st">"postcards"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note that the file is called <code>index.Rmd</code> and will thus render to <code>index.html</code>. This is the default file that gets read when a site is visited.</p>
+<p>In the YAML header of the template you can specify a <code>title</code>, which is likely to be your name; the <code>output</code> format, which is the name for our chosen {postcards} template; <code>links</code>, where you specify the wording and underlying links for the page’s buttons; <code>image</code> for your bokeh-rich professional headshot and <code>favicon</code> for the little image that will appear alongside your page title in a browser tab. <img src="resources/favicon.gif" alt="A 16-by-16 pixel favicon gif of the author, whose eyebrows are bobbing up and down."></p>
+<pre><code>---
+title: "Matt Dray"
+image: "matt.jpg"
+links:
+  - Blog: "https://www.rostrum.blog/"
+  - Twitter: "https://twitter.com/mattdray/"
+  - GitHub: "https://github.com/matt-dray/"
+output:
+  postcards::jolla
+favicon: favicon.gif
+---</code></pre>
+<p>You can then write your mini bio in the body text of the document. I garnished mine with emoji via <a href="https://github.com/hadley/emo">Hadley Wickham’s {emo} package</a>.</p>
+<p>The {postcards} templates are ready to go out of the box but you can still tinker with the style. I decided to pull in a font, <a href="https://github.com/belluzj/fantasque-sans">Fantasque Sans Mono by Jany Belluz</a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, and put a CSS chunk in the R Markdown to specify it.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/jolla.png" class="img-fluid figure-img" style="width:100.0%" alt="Screenshot showing the 'Jolla' template filled with dummy information: a photo, a mini bio and some buttons that link to social media."></p>
+<figcaption class="figure-caption">A preview of the ‘Jolla’ template. Tobi seems nice.</figcaption>
+</figure>
+</div>
+<p>The content and design of my page may change at any time, but I purposefully want it to be minimal and have a clean and simple appearance. The {postcards} package is also in development, so I look forward to testing out any new features that appear in future.</p>
+</section>
+<section id="pop-it-in-the-post" class="level2">
+<h2 class="anchored" data-anchor-id="pop-it-in-the-post">Pop it in the post</h2>
+<p>You could put your site’s files in a GitHub repo and <a href="https://docs.github.com/en/enterprise-server@2.22/github/working-with-github-pages/getting-started-with-github-pages">serve it with GitHub Pages</a>. Upside: it’s free. Downside: your URL will be in the form <code>username.github.io/your-postcard-repo</code>, which isn’t particularly sleek.</p>
+<p>Instead you could use a free service like <a href="https://www.netlify.com/">Netlify</a> to deploy a site from a GitHub/GitLab/BitBucket repository and set up a custom domain to point at it. I’ve had prior success with Netlify for this blog, so that’s why I’m using it here.</p>
+<p>A bonus of this approach is <a href="https://www.netlify.com/blog/2015/09/17/continuous-deployment/">continuous deployment</a>: pushing changes to your repo causes Netlify to rebuild and deploy your site automatically, so you don’t need to worry about it.</p>
+<p>To set up my page, I signed into Netlify and I:</p>
+<ul>
+<li>clicked the ‘New site from Git’ button</li>
+<li>clicked ‘GitHub’ in section ‘1. Connect to Git provider’, because that’s where <a href="https://github.com/matt-dray/postcard">my {postcards} repo</a> is stored</li>
+<li>selected my <code>github.com/matt-dray/postcard/</code> repo in section ‘2. Pick a repository’ after authorising Netlify to connect to to it</li>
+<li>left the ‘build command’ empty in section ‘3. Build options and deploy!’ and set the ‘publish directory’ to ‘/’ (because I want to serve <code>index.html</code> from the root of the repo)</li>
+<li>clicked ‘deploy site’</li>
+</ul>
+<p>Netlify takes a moment to build and serve the site after you click ‘deploy site’. It’s served automatically from a URL in the form <code>random-name.netlify.app</code><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> but, as mentioned, you can configure a privately-owned domain name instead.</p>
+<p>For more on these steps, including screenshots, see <a href="https://www.netlify.com/blog/2016/10/27/a-step-by-step-guide-deploying-a-static-site-or-single-page-app/">Netlify’s step-by-step guidance on deploying static and single-page sites</a>.</p>
+<p>It’s also worth mentioning <a href="https://app.netlify.com/drop">Netlify Drop</a>: a service that lets you simply drag and drop your site’s files to deploy them, rather than needing to authorise Netlify to connect to your Git-based repo. This is quick and technically easier, but you’ll have to drag and drop each time you want to update the site.</p>
+</section>
+<section id="address-it-properly" class="level2">
+<h2 class="anchored" data-anchor-id="address-it-properly">Address it properly</h2>
+<p>There’s a whole bunch of domain-name providers. I’m focusing here on <a href="https://www.namecheap.com/">Namecheap</a>, which is what I used to for this blog. After buying a domain, there’s a little bit of back-and-forth required between Netlify and Namecheap.</p>
+<p>In brief:</p>
+<ol type="1">
+<li>In your Namecheap account, click the ‘Manage’ button for your domain and set the dropdown in the ‘Nameservers’ section to ‘Custom DNS’</li>
+<li>In your Namecheap account, click ‘Set up a custom domain’, type it in and confirm</li>
+<li>Click ‘Set up Netlify DNS’ alongside the domain and click through until you’re provided a handful of nameserver strings</li>
+<li>Back on Namecheap, copy-paste each of these into the ‘Nameservers’ section from step 1 and click the check mark to confirm</li>
+<li>Wait.</li>
+</ol>
+<p>It’ll take a short while, but there’ll be a sort of high-five between your domain and your site and then it’ll be ready for viewing.</p>
+<p>See <a href="https://www.blog.ezekielekunola.com/setting-up-domain-with-namecheap-and-netlify">Ezekiel Ekunola’s excellent blog post for a more thorough guide, which includes screenshots</a>.</p>
+<p>Note also that Netlify provides HTTPS for free too, which is <a href="https://docs.netlify.com/domains-https/https-ssl/#certificate-service-types">good for a number of reasons</a>, though the certificate can take a few hours to generate.</p>
+<p>You can check your domain settings in Netlify at any time by clicking the site name in your account and then clicking the ‘Domain settings’ button.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/domain-settings.png" class="img-fluid figure-img" style="width:100.0%" alt="Screenshot of Netlify domain settings for a web page."></p>
+<figcaption class="figure-caption">Netlify’s domain settings after successful set-up.</figcaption>
+</figure>
+</div>
+</section>
+<section id="post-postcard-postscript" class="level2">
+<h2 class="anchored" data-anchor-id="post-postcard-postscript">Post-postcard postscript</h2>
+<p>So this is a relatively quick way of generating up a single-page site with {postcards}; hosting the source on GitHub; deploying it with Netlify; and serving it via a custom domain bought from from Namecheap.</p>
+<p>This seems to work fine for me for now. Let me know if you have a better approach to generating and deploying simple single-page sites.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-18 19:03:40 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
+[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+<p>
+</p>
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Dear other-Matt-Drays: you should know that we’re in direct competition and I have to do what it takes to maximise my SEO and become the top Matt Dray globally.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Free advice for your personal site: a liberal sprinkling of the <code>&lt;marquee&gt;</code> tag should definitely grab people’s attention.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>I learnt about this via a GitHub star by <a href="https://twitter.com/apreshill">Alison Presmanes Hill</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>You can change the random element to be more meaningful. For example, I changed it to <a href="https://www.matt-dray.netlify.app/"><code>matt-dray.netlify.app</code></a>. You could stop there, but the whole point of using Netlify in this example is to set up a custom domain instead.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

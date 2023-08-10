@@ -1,0 +1,198 @@
+---
+title: Waggle dance with {ggbeeswarm} and {emoGG}
+date: 2018-11-21
+slug: waggle-dance
+categories:
+  - dataviz
+  - emoGG
+  - emoji
+  - ggbeeswarm
+  - magick
+  - r
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+## tl;dr
+
+Beeswarm plots are a thing. Duncan made a beswarm plot that looks like a beeswarm and I animated it.
+
+## How to plot grouped continuous data?
+
+A [boxplot](https://en.wikipedia.org/wiki/Box_plot) lets you show continuous data split by categories, but it hides the data points and doesn't tell you much about distribution. A [violin chart](https://en.wikipedia.org/wiki/Violin_plot) will show the distribution but you still don't know about the density of data.
+
+[Stripcharts](https://www.datamentor.io/r-programming/strip-chart/) show the data for each category as individual points. The points can be layered on top of each other where they take the same Y value and can be stretched arbitrarily along the X axis.
+
+If you don't have too much data, or if you sample it, you can stop the data points in a stripchart from overlapping and instead line them up side by side where they take the same Y value. This is called a ['beeswarm'](http://www.cbs.dtu.dk/~eklund/beeswarm/). Why? Probably because the cloud of data you're plotting looks a bit like a swarm of bees.
+
+Below is how the plots look side by side.
+
+```{r chart-types, message=FALSE, eval=TRUE}
+library(ggplot2)     # for plotting
+library(ggbeeswarm)  # more on this later
+library(cowplot)     # arrange plots
+
+# Create data set
+data <- data.frame(
+  "variable" = rep(c("runif", "rnorm"), each = 100),
+  "value" = c(runif(100, min = -3, max = 3), rnorm(100))
+)
+
+# Generate different plot types
+canvas <- ggplot(data, aes(variable, value)) 
+box <- canvas + geom_boxplot() + ggtitle("Boxplot")
+violin <- canvas + geom_violin() + ggtitle("Violin")
+strip <- canvas + geom_jitter(width = 0.2)  + ggtitle("Stripchart")
+bee <- canvas + geom_quasirandom()  + ggtitle("Beeswarm")
+
+# Arrange plots
+grid <- plot_grid(box, violin, strip, bee)
+
+print(grid)
+```
+
+## Obvious next step
+
+We can test this theory by plotting the points as *actual bees*, *lol*. Well, *emoji* bees. Duncan (of [{tidyxl}](https://nacnudus.github.io/tidyxl/) and [{unpivotr}](https://nacnudus.github.io/unpivotr/) fame) did exactly this and [tweeted the plot and code](https://twitter.com/nacnudus/status/1063147043861000193).
+
+![Duncan's original plot.](resources/duncan.jpg){fig-alt="Duncan's original plot, showing emoji bees used as points so that the whole cloud of points looks like a beeswarm." width="75%" fig-align="left"}
+
+To summarise, Duncan did this by hacking [emojis via {emoGG}](https://github.com/dill/emoGG) into [{ggbeeswarm}'s `geom_beeswarm()` function](https://github.com/eclarke/ggbeeswarm) to create `gg_beeswarm_emoji()`. Patent pending, presumably.
+
+## Obvious next next step
+
+Wouldn't it be great if the little emoji bees moved around a little bit? Almost like a [waggle dance](https://en.wikipedia.org/wiki/Waggle_dance)?
+
+I cheated a little bit and recoded the `geom_quasirandom()` function from {ggbeeswarm} instead of `geom_beeswarm()`. Why? Beeswarm plots have an inherent 'neatness' to them. That is not becoming of a beeswarm. Instead, `geom_quasirandom()` gives you some 'random' jitter each time you plot the data. 
+
+So we can plot the same data several times and stack the images into a gif. One easy way to do this is via [the {magick} package](https://cran.r-project.org/web/packages/magick/vignettes/intro.html), a re-engineering of [the open-source ImageMagick sute of tools](https://www.imagemagick.org/script/index.php) from [Jeroen Ooms](https://twitter.com/opencpu) at [rOpenSci](https://ropensci.org/).
+
+## Code
+
+Attach the packages.
+
+```{r packages}
+library(ggplot2)
+library(ggbeeswarm)
+library(emoGG)  # remotes::install_github("dill/emoGG")
+library(magick)
+```
+
+Recode the `geom_quasirandom()` to display emoji, as per [Duncan's tweet](https://twitter.com/nacnudus/status/1063147214124580866).
+
+```{r geom_quasirandom}
+geom_quasi_emoji <- function (
+  mapping = NULL, data = NULL, width = NULL, varwidth = FALSE, 
+  bandwidth = 0.5, nbins = NULL, method = "quasirandom", groupOnX = NULL, 
+  dodge.width = 0, stat = "identity", position = "quasirandom", 
+  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, emoji = "1f4l1d", ...
+) {
+  
+  img <- emoji_get(emoji)[[1]]
+  
+  position <- position_quasirandom(
+    width = width, varwidth = varwidth, 
+    bandwidth = bandwidth, nbins = nbins, method = method, 
+    groupOnX = groupOnX, dodge.width = dodge.width
+  )
+  
+  ggplot2::layer(
+    data = data, mapping = mapping, stat = stat, 
+    geom = emoGG:::GeomEmoji, position = position, show.legend = show.legend, 
+    inherit.aes = inherit.aes, params = list(na.rm = na.rm, img = img, ...)
+  )
+}
+```
+
+It makes sense to use the data that Duncan generated so we can compare the static plot to the animated one.
+
+```{r data}
+swarm <- data.frame(
+  "variable" = rep(c("runif", "rnorm"), each = 100),
+  "value" = c(runif(100, min = -3, max = 3), rnorm(100))
+)
+```
+
+Let's define what our plot should look like. `method = "pseudorandom"` is the bit that gives us the jittering.
+
+```{r ggplot}
+plot <- ggplot(swarm, aes(variable, value)) +
+  geom_quasi_emoji(emoji = "1f41d", method = "pseudorandom") +
+  theme(panel.background = element_rect(fill = "skyblue")) +
+  ggtitle("WAGGLE DANCE")
+```
+
+Now we can create a few versions of this plot with different jittering. The plots are magick-class objects made with `image_graph()` from the {magick} package.
+
+```{r plot_panels, eval=FALSE, echo=FALSE}
+my_res = 10
+my_width = 500
+my_height = 500
+time_point <- paste0("t", 1:4)
+
+for (i in seq_along(time_point)) {
+
+  plot_object <- image_graph(width = my_width, height = my_height, res = my_res)
+  
+  assign(time_point[i], plot_object)
+  
+  ggplot(swarm, aes(variable, value)) +
+    geom_quasi_emoji(emoji = "1f41d", method = "pseudorandom") +
+    theme(panel.background = element_rect(fill = "skyblue")) +
+    ggtitle("WAGGLE DANCE")
+  
+  dev.off()
+  
+}
+```
+
+We can loop through a few plots, each representing a frame in the final gif. 
+
+```{r plot_create, echo=FALSE}
+my_res = 100
+my_width = 500
+my_height = 500
+time_point <- paste0("t", 1:4)
+
+for (i in seq_along(time_point)) {
+  fig_name <- time_point[i]
+  assign(
+    fig_name,  # set name
+    image_graph(width = my_width, height = my_height, res = my_res)
+  )
+  print(
+    ggplot(swarm, aes(variable, value)) +
+      geom_quasi_emoji(emoji = "1f41d", method = "pseudorandom") +
+      theme(panel.background = element_rect(fill = "skyblue")) +
+      ggtitle("WAGGLE DANCE")
+  )
+  dev.off()
+}
+```
+
+And now `image_animate()` can be used to combine those magick objects into a gif.
+
+```{r animate}
+waggle_dance <- image_animate(c(t1, t2, t3, t4))
+waggle_dance
+```
+
+![](resources/animate-1.gif){fig-alt="An update to Duncan's original plot, showing emoji bees used as points so that the whole cloud of points looks like a beeswarm. The points are jittered between animation frames." width="75%" fig-align="left"}
+
+And we can save this with `image_write()`.
+
+```{r save, eval=FALSE}
+image_write(waggle_dance, "waggle_dance.gif")
+```
+
+Well done, we got through this without any bee puns.
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>

@@ -1,0 +1,109 @@
+---
+title: Engifification in R with {gifski}
+date: 2018-07-26
+slug: engifification-in-r-with-gifski
+categories:
+  - gif
+  - gifski
+  - r
+---
+
+![I personally don't evolve Lotad, because it's already perfect.](resources/lotad.gif){fig-alt="Gif of the evolution chain of the Pokemon Lotad. It shows a picture of Lotad, Lombre and Ludicolo with their name and Pokedex. The final frame is zoomed into Ludicolo's face." width="40%" fig-align="left"}
+
+## tl;dr
+
+Use [{gifski}](https://cran.r-project.org/web/packages/gifski/index.html) to make gifs—real quickly!—using R.
+
+## Intergalactic pizza sloths
+
+You and I both know that the world needs more gifs of sloths riding through space on a slice of pizza, for example.
+
+Great news: 'the fastest gif encoder in the universe' has come to R via the [{gifski} package](https://cran.r-project.org/web/packages/gifski/index.html) built by Jeroen Ooms for rOpenSci. It's built on [Gifski package for Rust](https://gif.ski/), hence the speed.
+
+The obvious analytical application is for creating gifs from plots, as in the following example from [the rOpenSci announcement](https://ropensci.org/technotes/2018/07/23/gifski-release/), which shows life expectancy by GDP per capita with a different year for each frame of the gif.
+
+![](resources/life.gif){fig-alt="An animated plot of gapminder data which shows life expectancy on the y axis and GDP per capita on the x axis. Each frame shows data for the next year in the sequence."}
+
+But no-one can stop us having fun with it too.
+
+## Engifification proclamation
+
+So I've made a quick function that takes a folder of PNGs and stitches them into a gif using the `gifski::gifski()` function. I've called it `make_gif()` because it... makes gifs. It's not optimised because it's just for fun, okay?
+
+```{r make-gif}
+make_gif <- function(png_dir, gif_path, ...) {
+  
+  png_dir_is_char  <- inherits(png_dir, "character")
+  gif_path_is_char <- inherits(gif_path, "character")
+  
+  if (!png_dir_is_char | !gif_dir_exists) {
+    stop("png_dir and gif_path must be character class.", call. = FALSE)
+  }
+  
+  png_dir_exists <- dir.exists(png_dir)
+  gif_dir_exists <- dir.exists(dirname(gif_path))
+  
+  
+  if (!png_dir_exists | !gif_path_is_char) {
+    stop("png_dir and gif_path directories must exist.", call. = FALSE)
+  }
+  
+  path_is_gif <- tools::file_ext(gif_path) == "gif"
+  
+  if (!path_is_gif) {
+    stop("gif_path must be a file path ending with .gif.", call. = FALSE)
+  }
+  
+  files <- list.files(
+    path = png_folder,
+    pattern = ".png$|.PNG$",
+    full.names = TRUE
+  )
+  
+  if (length(files) < 2) {
+    stop("You need two or more PNGs to make a gif.", call. = FALSE)
+  }
+  
+  png("frame%03d.png")
+  
+  par(ask = FALSE)
+  
+  dev.off()
+  
+  gifski::gifski(png_files = files, gif_file = gif_path)
+  
+}
+```
+
+Basically, you must supply two things:
+
+1. A path to a folder containing the images (.png or .PNG only).
+2. A path for where the gif should be written (including the '.gif' extension).
+
+Optionally you can provide a third: use the dots (`...`) to pass further arguments to `gifski::gifski()` (see `?gifski` for details).
+
+Note that you should make sure your PNGs are ordered alphabetically or numerically in the named directory so that they're engiffed[^engif] in the desired sequence. Don't worry if your folder has other filetypes; `make_gif()` only extracts PNGs.
+
+## Hexapod lilypad-frog evolution
+
+I used the `make_gif()` function to create the important gif at the top of this post, featuring the evolution chain of Lotad, the best and most special Pokémon.
+
+```{r lotad, eval=FALSE}
+make_gif(
+  png_folder = "~/Documents/pokemon/lotad/images",  # folder of images
+  gif_path   = "~/Desktop/lotad.gif"                # path to save gif
+)
+```
+
+Maybe you'll find the function useful too. So get out there and get engiffing![^engif2]
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^engif]: I am endorsing the phrase 'to engif', as in 'I am engiffing a bunch of PNGs'. There's no way this doesn't take off.
+[^engif2]: Actually, it doesn't sound right does it?

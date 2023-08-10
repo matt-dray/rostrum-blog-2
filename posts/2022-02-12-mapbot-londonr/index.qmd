@@ -1,0 +1,93 @@
+---
+title: londonmapbot at LondonR
+date: 2022-02-12
+slug: mapbot-londonr
+categories:
+  - event
+  - github-actions
+  - londonmapbot
+  - mapbox
+  - r
+  - rtweet
+  - talk
+  - twitter
+---
+
+![](resources/mapbotverse.jpg){fig-alt="A satellite image of Hyde Park in London, with an emoji robot placed in the centre." width="100%"}
+
+## tl;dr
+
+[I spoke at a LondonR hootenanny](https://ti.to/londonr/londonr-february-2022)[^timing] (in-person!) about how to create your own simple Twitter bot powered by GitHub Actions and {rtweet}, just like [my \@londonmapbot creation](https://www.twitter.com/londonmapbot).
+
+<div class="tip"> `r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+The bot no longer runs on Twitter. You can read about how [I ported it to Mastodon](https://www.rostrum.blog/2023/02/09/londonmapbotstodon/) at [\@londonmapbot@botsin.space](https://fosstodon.org/@londonmapbot@botsin.space).
+
+</div>
+
+## The mapbotverse
+
+I created [a Twitter bot called \@londonmapbot](https://www.twitter.com/londonmapbot). It uses [the {rtweet} package by Mike Kearney](https://docs.ropensci.org/rtweet/) to tweet out a random satellite image of Greater London [via Mapbox](https://www.mapbox.com/), scheduled and executed by [GitHub Actions](https://github.com/features/actions).
+
+I've written about this before:
+
+* [A Twitter bot with {rtweet} and GitHub Actions](https://www.rostrum.blog/2020/09/21/londonmapbot/) (original post)
+* [Mapping londonmapbot tweets with {leaflet}](https://www.rostrum.blog/2020/12/20/londonmapbot-leaflet/)
+* [What colour is London?](https://www.rostrum.blog/2021/07/23/london-colour/)
+
+I've noticed a number of other projects have used or developed [the londonmapbot code](https://github.com/matt-dray/londonmapbot), or else are inspired by it. I've created [a Twitter List containing the ones I know about](https://twitter.com/i/lists/1492559073287581707), which---in earnest---I've called 'the mapbotverse'.
+
+It includes bots that tweet maps more cleverly, or do something else, like:
+
+* [Roberto Jiménez's \@esmapbot](https://twitter.com/esmapbot), which tweets images of Spain sampled from within a geojson of the country's borders
+* [Matt Kerlogue's \@narrowbotR](https://twitter.com/narrowbotR), which tweets canal and river locations with geographically-coincident Flickr images, which have been rated for photo quality (!)
+* [Oscar Baruffa's \@BigBookofR](https://twitter.com/BigBookofR), which tweets out a random section of [the excellent Big Book of R resource](https://www.bigbookofr.com/)
+
+[I talked at LondonR](https://ti.to/londonr/londonr-february-2022) about how you can be at least as cool as these folks. 
+
+Yes, you too can fork [the source for londonmapbot on GitHub](https://github.com/matt-dray/londonmapbot), or click the green 'use this template' button in the repo to begin your own mapbot. Or you can can create something from scratch. Let me know what you get up to.
+
+## Slides
+
+Obviously I created some slides for the event. Consider them a more up-to-date (and simpler) version of [my original blogpost](https://www.twitter.com/londonmapbot).
+
+Below is the presentation embedded[^future], but you can also [visit the slides online](https://matt-dray.github.io/mapbot-londonr/#1), or [go to the source on GitHub](https://github.com/matt-dray/mapbot-londonr).
+
+<div class="tip"> `r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+{rtweet} version 1.0 was [released with breaking changes in July 2022](https://ropensci.org/blog/2022/07/21/rtweet-1-0-0/) and so I've tweaked the slides to reflect this. You [can read a separate blogpost](https://www.rostrum.blog/2022/07/22/mapbot-rtweet-v1/) about these changes.
+
+</div>
+
+```{r slides, echo=FALSE}
+xaringanExtra::embed_xaringan(
+  "https://matt-dray.github.io/mapbot-londonr/",
+  ratio = "4:3",
+  border = "none"
+)
+```
+
+With the slides selected, press the left and right keys to navigate, <kbd>F</kbd> to go fullscreen and <kbd>P</kbd> to see the presenter notes.
+
+## Bonus
+
+Just after the talk, I found out I could mark the bot as 'automated' from Twitter settings at: More > Settings and Privacy > Your account > Account information > Automation. I just had to log in as the 'managing account' (i.e. my personal account) to connect the two profiles. This is now required as per terms of service, I believe.
+
+![](resources/automated.png){fig-alt="The profile information section of the londonmapbot Twitter profile, with a small robot icon to show that it's an automated account." width="100%"}
+
+So now the profile has a little robot icon and the phrase 'automated by @mattdray'.
+
+## Inevitable bot uprising
+
+It's another maybe two-or-so years until all of Twitter (Earth?) is just a bot singularity, so I suggest you get in early. I reckon a mapbot is a pretty cheap way to get in on the hype.
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^timing]: Past tense, unless you are reading this before 2022-02-17, in which case you are very keen. Well done, 10 points to Hufflepuff!f
+[^future]: Hi again to folks reading this before the event has happened. The slides are basically finished, but I may tweak them before the actual event. In which case what you see here may change slightly before the big day. Another 10 points to Hufflepuff!

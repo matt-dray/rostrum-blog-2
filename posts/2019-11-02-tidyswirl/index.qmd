@@ -1,0 +1,76 @@
+---
+title: 'Tidyswirl: a tidyverse Swirl course'
+date: 2019-11-02
+slug: tidyswirl
+categories:
+  - r
+  - swirl
+  - swirlify
+  - tidyverse
+  - tidyswirl
+---
+
+![Starting Swirl and selecting the tidyverse course.](resources/tidyswirl.gif){fig-alt="Gif showing the Swirl package being started from a terminal window." width="75%" fig-align="left"}
+
+## tl;dr
+
+Contribute to [Tidyswirl](https://github.com/matt-dray/tidyswirl): a [Swirl](https://swirlstats.com/) course that lets people learn [the tidyverse](https://www.tidyverse.org/) from within R.
+
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+I never got around to developing this and so I archived the GitHub repo. You should take a look at [swirl-tidy by Seo-young Silvia Kim](https://github.com/sysilviakim/swirl-tidy) instead.
+</div><p>
+
+## Swirl
+
+[Swirl](https://swirlstats.com/) is a framework for [learning R from within R itself](https://swirlstats.com/students.html). You can install it with `install.packages("swirl")`. Swirl courses can be created by anyone and installed from nearly anywhere, though the [Swirl course repository](https://swirlstats.com/scn/title.html) is the 'official' source.
+
+I've [written before](https://www.rostrum.blog/2019/05/10/swirlify/) about how [the {swirlify} package](http://swirlstats.com/swirlify/) makes it easier to create Swirl packages.
+
+## Tidyswirl
+
+I didn't talk much in my previous Swirl post about [a course I started to develop on GitHub: Tidyswirl](https://github.com/matt-dray/tidyswirl). Its purpose is to teach the packages of [the tidyverse](https://www.tidyverse.org/).
+
+![Placeholder logo with apologies to the tidyverse team.](resources/tidyswirl.jpg){fig-alt="A yellow post-it note with a design for a hexagonal sticker with 'tidyswirl' written on it, surrounded by small swirly shapes of different colours." width="25%" fig-align="left"}
+
+At the time of publication, there are two useable lessons in Tidyswirl: one for [{tibble}](https://tibble.tidyverse.org/) and one for [{tidyr}](https://tidyr.tidyverse.org/). I've updated these to correct some errors and to improve the experience. In particular, I've updated the `gather()` and `spread()` functions to `pivot_longer()` and `pivot_wider()`, given [the update in {tidyr} 1.0.0](https://www.tidyverse.org/articles/2019/09/tidyr-1-0-0/).
+
+I started with these packages because of the relatively limited number of functions compared to other packages and because they're involved typically in the early stages of a data analysis workflow.
+
+Try it by installing Swirl and Tidyswirl:
+
+```{r install-and-run, eval=FALSE}
+# Install Swirl
+install.packages("swirl")
+library(swirl)
+
+# Install the Tidyswirl course
+install_course_github("matt-dray", "tidyswirl")
+
+# Start Swirl
+# Tidyswirl will be one of the course options
+swirl()
+```
+
+## Lesson format
+
+For each lesson, the focal package is introduced and its roles and relationships in a tidyverse workflow are explained.
+
+Selected functions are introduced and explained in conceptual groups, before test questions are asked to let the learner try it out and test their understanding.
+
+Lessons end with a reminder of the package's purpose and with links to useful external materials.
+
+You can take a look at the lesson files for the [{tibble}](https://github.com/matt-dray/tidyswirl/blob/master/tibble/lesson.yaml) and [{tidyr}](https://github.com/matt-dray/tidyswirl/blob/master/tidyr/lesson.yaml) lessons as examples, though I've also added [a template lesson](https://github.com/matt-dray/tidyswirl/blob/master/template/lesson.yaml) too.
+
+## Help!
+
+Tidyswirl is unlikely to be finished anytime soon but it seems worth letting people know it exists. It'd be great for you to [contribute to a lesson](https://github.com/matt-dray/tidyswirl/blob/master/CONTRIBUTING.md)—which includes writing a new one for any of the other tidyverse packages—or [report any issues or bugs](https://github.com/matt-dray/tidyswirl/issues) you find when using it.
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>

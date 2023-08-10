@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2020-07-11">
+
+<title>rostrum.blog - Set up R on Raspberry Pi for blogging</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Set up R on Raspberry Pi for blogging</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">blogdown</div>
+                <div class="quarto-category">hugo</div>
+                <div class="quarto-category">neovim</div>
+                <div class="quarto-category">nvim-r</div>
+                <div class="quarto-category">pandoc</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">r4pi</div>
+                <div class="quarto-category">raspberry-pi</div>
+                <div class="quarto-category">snapcraft</div>
+                <div class="quarto-category">vim</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 11, 2020</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#a-delicious-raspberry-pi" id="toc-a-delicious-raspberry-pi" class="nav-link" data-scroll-target="#a-delicious-raspberry-pi">A delicious Raspberry Pi</a>
+  <ul class="collapse">
+  <li><a href="#the-hardware" id="toc-the-hardware" class="nav-link" data-scroll-target="#the-hardware">The hardware</a></li>
+  <li><a href="#raspberry-pi-os" id="toc-raspberry-pi-os" class="nav-link" data-scroll-target="#raspberry-pi-os">Raspberry Pi OS</a></li>
+  </ul></li>
+  <li><a href="#installing-software" id="toc-installing-software" class="nav-link" data-scroll-target="#installing-software">Installing software</a>
+  <ul class="collapse">
+  <li><a href="#ride" id="toc-ride" class="nav-link" data-scroll-target="#ride">1. Install R and an IDE</a></li>
+  <li><a href="#blogreq" id="toc-blogreq" class="nav-link" data-scroll-target="#blogreq">2. Install blogging requirements</a></li>
+  </ul></li>
+  <li><a href="#a-blogging-workflow" id="toc-a-blogging-workflow" class="nav-link" data-scroll-target="#a-blogging-workflow">A blogging workflow</a></li>
+  <li><a href="#blow-a-raspberry" id="toc-blow-a-raspberry" class="nav-link" data-scroll-target="#blow-a-raspberry">Blow a raspberry</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/pi.jpg" class="img-fluid figure-img" alt="My Raspberry Pi 2 Model B housed in a white plastic case with a rostrum.blog sticker on the top."></p>
+<figcaption class="figure-caption">Raspberry Pi 2 Model B (rostrum.blog limited edition)</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I installed R on a Raspberry Pi and set it up to use {blogdown}. This post was written from my Pi.</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>Since I wrote this post it’s become much easier to get started with R on the Raspberry Pi <a href="https://r4pi.org/">with r4pi.org</a> by <a href="https://blog.sellorm.com/">Mark Sellors</a>, along with <a href="https://code.visualstudio.com/docs/setup/raspberry-pi">VS Code</a>. Read on for a more terminal-based experience.</p>
+</div>
+</section>
+<section id="a-delicious-raspberry-pi" class="level2">
+<h2 class="anchored" data-anchor-id="a-delicious-raspberry-pi">A delicious Raspberry Pi</h2>
+<section id="the-hardware" class="level3">
+<h3 class="anchored" data-anchor-id="the-hardware">The hardware</h3>
+<p>The <a href="https://www.raspberrypi.org/">Raspberry Pi</a> is a small, inexpensive, single-board computer designed to make computing and coding accessible to all. It’s also popular in the maker community given its support for various peripherals like cameras and sensors.</p>
+<p>The Pi was first released in 2012 and is now in its fourth generation of hardware. I was gifted a <a href="https://en.wikipedia.org/wiki/Raspberry_Pi#Generations">Pi 2 Model B</a> in 2015 and have used it intermittently as a secondary computer and a video game <a href="https://retropie.org.uk/">emulation machine</a>.</p>
+<p>I decided to pull my Pi out of retirement to explore how well it could run R, and more specifically, be used as a machine for blogging.</p>
+</section>
+<section id="raspberry-pi-os" class="level3">
+<h3 class="anchored" data-anchor-id="raspberry-pi-os">Raspberry Pi OS</h3>
+<p>The Raspberry Pi is capable of running <a href="https://www.raspberrypi.org/downloads/">a large number of operating systems</a>. The go-to is <a href="https://en.wikipedia.org/wiki/Raspberry_Pi_OS">Raspberry Pi OS</a> (formerly Raspbian), built on the open-source Debian Linux distribution.</p>
+<p>You need to install the OS onto a micro-SD card<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> via a second computer and then insert it into your Pi. Installing <a href="https://www.raspberrypi.org/blog/raspberry-pi-imager-imaging-utility/">the Raspberry Pi Imager</a> to your second computer will help you format (clean) the card and install the OS. At the time of writing, this was the May 2020 release.</p>
+<p>There’s <a href="https://projects.raspberrypi.org/en/projects/raspberry-pi-setting-up">a full walkthrough for setting up your machine</a> on the Raspberry Pi website.</p>
+</section>
+</section>
+<section id="installing-software" class="level2">
+<h2 class="anchored" data-anchor-id="installing-software">Installing software</h2>
+<p>With the Pi set up, we can get on with installing the software we need to get blogging. Things may change over time, but the sections below describe what worked at time of writing. I’ve added software version numbers below for posterity.</p>
+<p>You can click to jump to each section:</p>
+<ul>
+<li><a href="#ride">1. Install R and an IDE</a>
+<ul>
+<li><a href="#r">1a. Install R</a></li>
+<li><a href="#neovim">1b. Install Neovim</a></li>
+<li><a href="#nvimr">1c. Install Nvim-R</a></li>
+</ul></li>
+<li><a href="#blogreq">2. Install blogging requirements</a>
+<ul>
+<li><a href="#blogdown">2a. Install {blogdown}</a></li>
+<li><a href="#pandoc">2b. Install Pandoc</a></li>
+<li><a href="#hugo">2c. Install Hugo</a></li>
+</ul></li>
+</ul>
+<p>In each case, we’ll be running commands from the Terminal to install what we need.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p>Before installing things, it’s a good idea to run the update command so that <a href="https://askubuntu.com/questions/222348/what-does-sudo-apt-get-update-do">the latest package versions are installed</a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get update</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="ride" class="level3">
+<h3 class="anchored" data-anchor-id="ride">1. Install R and an IDE</h3>
+<p>It’s not too tricky to get hold of R, but what coding environment can we use?</p>
+<p>I typically use the RStudio integrated development environment (IDE), but it isn’t available on this platform<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. You could just run R from the Terminal, but it’s tedious to work entirely from the command line or copy-paste commands to it from a text editor.</p>
+<p>This is where <a href="https://github.com/jalvesaq/Nvim-R">Nvim-R</a> comes in. It turns your Terminal into an IDE.<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<section id="r" class="level4">
+<h4 class="anchored" data-anchor-id="r">1a. Install R</h4>
+<p>R can be installed from the command line with:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install r-base r-base-core r-base-dev</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This grabs the latest R version that’s available for the platform, which is 3.5. At time of writing, version 4.0 has been released on other platforms, so we’ll miss out on the latest advancements like <code>stringsAsFactors=FALSE</code> by default, sadly.</p>
+</section>
+<section id="neovim" class="level4">
+<h4 class="anchored" data-anchor-id="neovim">1b. Install Neovim</h4>
+<p>A prerequisite for Nvim-R is either <a href="https://www.vim.org/">Vim</a> or <a href="https://neovim.io/">Neovim</a>. Nvim-R is a plugin for these tools.</p>
+<p>But what are they, actually? Vim is <a href="https://en.wikipedia.org/wiki/Vim_(text_editor)">a powerful text editor</a> for the command line and Neovim is <a href="https://en.wikipedia.org/wiki/Vim_(text_editor)#Neovim">effectively a more extensible version of it</a>.</p>
+<p>I’ve been using Neovim, which can be installed with:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install neovim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>At time of writing, this installs version 0.3.4. You can enter Neovim by opening a terminal and running <code>nvim</code>. This puts you into a text editor interface.</p>
+</section>
+<section id="nvimr" class="level4">
+<h4 class="anchored" data-anchor-id="nvimr">1c. Install Nvim-R</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/nvimr.png" class="img-fluid figure-img" alt="Terminal window showing the R Markdown for this post in Nvim-R."></p>
+<figcaption class="figure-caption">Nvim-R running in Terminal. Script up top, console below.</figcaption>
+</figure>
+</div>
+<p>There are a whole bunch of plugins available for Neovim to help extend it. You can see these at <a href="https://vimawesome.com/">the VimAwesome site</a>.</p>
+<p><a href="https://github.com/jalvesaq/Nvim-R">Nvim-R</a> by <a href="https://posgradsoc.ufc.br/en/professors/jakson-aquino/">Jakson Alves de Aquino</a> is <a href="https://vimawesome.com/plugin/nvim-r">one such plugin</a>.</p>
+<p>At the simplest level, Nvim-R turns your terminal into an R IDE by allowing for a concurrent script editor and console (along with many other features). This means you can write R code and send it to the console without having to copy-paste or write directly into the console. This is analagous to something like RStudio without the point-and-click features.</p>
+<section id="vim-plug-and-nvim-r" class="level5">
+<h5 class="anchored" data-anchor-id="vim-plug-and-nvim-r">vim-plug and Nvim-R</h5>
+<p>We can install a plugin manager to help install and manage Nvim-R and other Neovim extensions: <a href="https://github.com/junegunn/vim-plug">vim-plug</a> by Junegunn Choi.</p>
+<p>Having installed Neovim, you can get vim-plug by running this via Terminal:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sh</span> <span class="at">-c</span> <span class="st">'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You specify your plugins in a special <code>init.vim</code> file. Run the following line to create the file and open it in Neovim in the Terminal so you can begin editing:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">nvim</span> ~/.config/nvim/init.vim</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can then toggle into Neovim’s ‘insert’ mode (press <kbd>i</kbd>) and paste (<kbd>ctrl</kbd> + <kbd>shift</kbd> + <kbd>V</kbd>) this in:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="st">" Specify a directory for plugins</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="st">"</span> <span class="at">-</span> Avoid using standard Vim directory names like <span class="st">'plugin'</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="ex">call</span> plug#begin<span class="er">(</span><span class="st">'~/.vim/plugged'</span><span class="kw">)</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="st">" List of plugins.</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="st">"</span> Make sure you use single quotes</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="st">" Shorthand notation</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="st">Plug 'jalvesaq/Nvim-R', {'branch': 'stable'}</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="st">"</span> Initialize plugin system</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="ex">call</span> plug#end<span class="er">(</span><span class="kw">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Where <code>Plug 'jalvesaq/Nvim-R'</code> is the part where <a href="https://vimawesome.com/plugin/nvim-r">the Nvim-R plugin</a> is specified.</p>
+<p>This is a super minimal <code>init.vim</code> example. You can add a whole bunch of other plugins to this list that will allow for things like code autocompletion and themes. You can also add lines to this file to modify various settings within Neovim.</p>
+<p>Enter ‘normal’ mode (press <kbd>Esc</kbd>) and then type the following and hit <kbd>Enter</kbd>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">:PluginInstall</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This triggers the installation of the plugins you specified in the <code>init.vim</code> file. For me, this installed the latest Nvim-R version, 0.9.14.</p>
+<p>I found <a href="https://www.youtube.com/watch?v=nm45WagtV3w">a YouTube video</a> and a <a href="https://gist.github.com/rohitfarmer/68cdadeaeeb196e8a6ecdebdee6e76a5">GitHub gist</a> by <a href="https://rohitfarmer.github.io/">Rohit Farmer</a> really useful for doing these steps. Rohit provides some good examples of additional plugins that will improve your experience of Nvim-R.</p>
+</section>
+<section id="using-nvim-r" class="level5">
+<h5 class="anchored" data-anchor-id="using-nvim-r">Using Nvim-R</h5>
+<p>A full run-through of how to use Neovim and Nvim-R are out of scope for this post, but it’s worth a quick aside here.</p>
+<p>To open an .R or .Rmd script for editing in Nvim-R, you can:</p>
+<ul>
+<li>type <code>nvim</code> and the path to your file, like <code>nvim ~/path/to/file.R</code>, from a Terminal</li>
+<li>right-click the file in the explorer and select ‘Nvim-R’, which will open that file in Nvim-R in a Terminal window</li>
+</ul>
+<p>The important thing to know is that Neovim and Nvim-R are keyboard-driven; there’s no pointing-and-clicking like in RStudio. You’ll need to remember a bunch of non-obvious key presses to get around, although these are all configurable.</p>
+<p>See <a href="https://neovim.io/doc/user/">Neovim’s docs</a> for its key bindings (i.e.&nbsp;key presses that result in something happening), but here’s some useful ones:</p>
+<ul>
+<li><kbd>i</kbd> to enter ‘insert’ mode and begin typing text</li>
+<li><kbd>Esc</kbd> to exit insert mode and enter ‘normal’ mode</li>
+<li><kbd>:w</kbd> and <kbd>Enter</kbd> to write (save)</li>
+<li><kbd>:q</kbd> and <kbd>Enter</kbd> to quit (<a href="https://stackoverflow.com/questions/11828270/how-do-i-exit-the-vim-editor">the most searched-for command in history?</a>) or <kbd>:q!</kbd> to quit without saving</li>
+<li><kbd>:wq</kbd> and <kbd>Enter</kbd> to save and quit</li>
+<li><kbd>^W</kbd> and one of <kbd>l</kbd>, <kbd>k</kbd>, <kbd>j</kbd> or <kbd>h</kbd> to move focus around the ‘panes’ (e.g.&nbsp;script to console)</li>
+</ul>
+<p>As for Nvim-R, see <a href="https://raw.githubusercontent.com/jalvesaq/Nvim-R/master/doc/Nvim-R.txt">Section 4 of the docs</a> for a full set of key bindings. Here’s some important default ones:</p>
+<ul>
+<li><kbd>\rf</kbd> opens a console</li>
+<li><kbd>\l</kbd> sends the current line to the console</li>
+<li><kbd>\cc</kbd> to send the current R Markdown chunk</li>
+<li><kbd>\ro</kbd> to open and close the object browser</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="blogreq" class="level3">
+<h3 class="anchored" data-anchor-id="blogreq">2. Install blogging requirements</h3>
+<p>Now we’ve got everything we need to use R on the Raspberry Pi. My use case involves blogging, so now to install the requirements for that.</p>
+<section id="blogdown" class="level4">
+<h4 class="anchored" data-anchor-id="blogdown">2a. Install {blogdown}</h4>
+<p>I used <a href="https://yihui.org/">Yihui Xie</a>’s <a href="https://bookdown.org/yihui/rmarkdown/">{blogdown} package</a> to build this blog and post to it.</p>
+<p>You can install the package (currently v0.20) from CRAN. I found that I had to install {httpuv} separately first to prevent errors.</p>
+<p>You can run this from Nvim-R or you can run <kbd>R</kbd> to start R from a Terminal window.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"httpuv"</span>, <span class="st">"blogdown"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Of course, you can go ahead and install any other packages you might need to write your posts.</p>
+<p>But we also need two further things that aren’t R packages: Pandoc and Hugo.</p>
+</section>
+<section id="pandoc" class="level4">
+<h4 class="anchored" data-anchor-id="pandoc">2b. Install Pandoc</h4>
+<p>{blogdown} is based on turning R Markdown files into HTML files to be served as a website. A crucial element of this conversion process is a document converter called <a href="https://pandoc.org/">Pandoc</a>. It can be installed via the Terminal with:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-get install pandoc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This installed version 2.2.1 at time of writing.</p>
+</section>
+<section id="hugo" class="level4">
+<h4 class="anchored" data-anchor-id="hugo">2c. Install Hugo</h4>
+<p>Hugo is a static-site generator that builds your posts into a website, like the one you’re looking at now.</p>
+<p>You can install Hugo from within R with <code>blogdown::install_hugo()</code>, but this failed for me because it tries to install a 64-bit version and Raspberry Pi OS is 32-bit.</p>
+<p>Instead, I used <a href="https://snapcraft.io/">snapcraft</a>, which describes itself as ‘the app store for Linux’. It bundles up everything you need for a given installation, including dependencies. This is great for a noob like me.</p>
+<p>To enable the installation of ‘snaps’, you first need to run:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt install snapd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After a reboot, <a href="https://snapcraft.io/install/hugo/raspbian">install the Hugo snap</a>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> snap install hugo</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This installed version 0.73.0 for me at time of writing.</p>
+</section>
+</section>
+</section>
+<section id="a-blogging-workflow" class="level2">
+<h2 class="anchored" data-anchor-id="a-blogging-workflow">A blogging workflow</h2>
+<p>So now we have everything installed, what’s the workflow for blogging?</p>
+<p>Setting up a blog is out of scope for this post, but you can find instructions for this in the <a href="https://bookdown.org/yihui/blogdown/">blogdown companion book</a> by Yihui Xie, Amber Thomas and Alison Presmanes Hill.</p>
+<p>The flow could be something like:</p>
+<ol type="1">
+<li>Create a new <code>YYYY-MM-DD-post-name.Rmd</code> file for the post in <code>content/post/</code></li>
+<li>Open this file with Neovim-R and begin writing, including the YAML metadata and R Markdown chunks as usual (remembering that you can send R Markdown chunks to the console with the <code>\\cc</code> default key binding)</li>
+<li>Use <code>blogdown::serve_site()</code> from the console to render the site and serve it locally (it’ll open in your browser)</li>
+<li>Commit and push your changes to GitHub as normal (Git is preinstalled with Raspberry Pi OS<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>)</li>
+</ol>
+<p>For images or other files you wan to embed in your post, create <code>static/post/YYYY-MM-DD-post-name_files</code> and refer to it from your post in the form <code>/post/2020-07-07-post-name_files/image.jpg</code>.</p>
+<p>Typically I would use the {blogdown} RStudio addin to help set up the YAML and put the files in the right place, but it isn’t a big deal to do this ‘manually’.</p>
+<p>This approach works for me: you’re currently looking at a post made from my Raspberry Pi!</p>
+</section>
+<section id="blow-a-raspberry" class="level2">
+<h2 class="anchored" data-anchor-id="blow-a-raspberry">Blow a raspberry</h2>
+<p>I set up my Pi before thinking about writing a post about it, so I may have missed or misremembered a step here or there. Let me know if I’ve made an obvious error or if you run into problems if you’re following along.</p>
+<p>Bear in mind that I have very little experience of Linux and Vim, but eager to learn. I’d also be grateful for any useful plugins or anything else you’d like to share.</p>
+<p>Ultimately I’ve written this post so I can remember what to do when the time comes to upgrade to a newer, more delicious Raspberry Pi.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-25 15:18:27 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
+[13] digest_0.6.33     rlang_1.1.1       fontawesome_0.5.1 evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>I’m using a spare card that’s only 16 GB. The OS will take up something like 2.5 GB.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>You can open the Terminal from the taskbar (the icon with ’&gt;_’ on it) or via the Pi start menu under Accessories.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Though you could use <a href="https://rstudio.com/products/cloud/">RStudio Cloud</a> via the browser.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Not <a href="https://www.nvimr.com/">Nevadans for Informed Marijuana Regulation</a> (NVIMR).<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>I recommend you <a href="https://happygitwithr.com/hello-git.html">introduce yourself to Git</a> and <a href="https://happygitwithr.com/ssh-keys.html">set up keys for SSH</a> to make this process seamless (these links go to Happy Git With R by Jenny Bryan, the STAT 545 TAs and Jim Hester).<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

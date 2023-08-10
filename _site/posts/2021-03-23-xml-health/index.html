@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2021-03-23">
+
+<title>rostrum.blog - Apple Health and Nike Run Club with {xml2}</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Apple Health and Nike Run Club with {xml2}</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">apple</div>
+                <div class="quarto-category">health</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">sport</div>
+                <div class="quarto-category">xml2</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 23, 2021</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#app-storage" id="toc-app-storage" class="nav-link" data-scroll-target="#app-storage">App storage</a></li>
+  <li><a href="#warm-up" id="toc-warm-up" class="nav-link" data-scroll-target="#warm-up">Warm up</a></li>
+  <li><a href="#x-tract" id="toc-x-tract" class="nav-link" data-scroll-target="#x-tract">X-tract</a></li>
+  <li><a href="#step-to-it" id="toc-step-to-it" class="nav-link" data-scroll-target="#step-to-it">Step to it</a>
+  <ul class="collapse">
+  <li><a href="#on-a-walkabout" id="toc-on-a-walkabout" class="nav-link" data-scroll-target="#on-a-walkabout">On a walkabout</a></li>
+  </ul></li>
+  <li><a href="#jog-on" id="toc-jog-on" class="nav-link" data-scroll-target="#jog-on">Jog on</a>
+  <ul class="collapse">
+  <li><a href="#high-vis-apparel" id="toc-high-vis-apparel" class="nav-link" data-scroll-target="#high-vis-apparel">High-vis apparel</a></li>
+  </ul></li>
+  <li><a href="#cool-down" id="toc-cool-down" class="nav-link" data-scroll-target="#cool-down">Cool down</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/barcode.png" class="img-fluid figure-img" style="width:100.0%" alt="A one-dimensional plot of days represented by vertical lines, with run distance coloured on a scale of white to black."></p>
+<figcaption class="figure-caption">Run barcode: one year of runs, darker bands are longer distances.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>You can export your <a href="https://www.apple.com/uk/ios/health/">Apple Health</a> data as an XML file. This includes workouts linked from other apps, like <a href="https://www.nike.com/nrc-app">Nike Run Club</a>. I used the R packages <a href="https://xml2.r-lib.org/index.html">{xml2}</a> and <a href="https://www.tidyverse.org/">the tidyverse</a> to extract and clean my step counts and running activity.</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>I revisited the theme of this post in 2023, but the format of the Apple Health download had changed. I updated the code needed to analyse the data and wrote <a href="https://www.rostrum.blog/2023/06/11/apple-health-redux/">a new post</a>.</p>
+</div>
+</section>
+<section id="app-storage" class="level2">
+<h2 class="anchored" data-anchor-id="app-storage">App storage</h2>
+<p>My healthcare provider peeks at <a href="https://www.apple.com/uk/ios/health/">the Apple Health app</a> and rewards me if I meet daily step-count targets. I know my usual pattern of steps has been disrupted since the start of COVID-19 lockdowns, <a href="https://fullfact.org/health/coronavirus-lockdown-hancock-claim/">which began in the UK a year ago today</a>.</p>
+<p>To keep the step counter ticking over, I took up a new hobby on lockdown day one: running. I’ve recorded this activity on <a href="https://www.nike.com/nrc-app">the Nike Run Club app</a>, which I’ve linked to Apple Health.</p>
+<p>I’ve in excess of 99 problems and at least two of them are related specifically to these health data:</p>
+<ol type="1">
+<li>I don’t think my healthcare supplier is rewarding my step counts correctly and I need evidence<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+<li>It’s not easy to get data out of the Nike Run Club app for further analysis</li>
+</ol>
+<p>Luckily, you can export the data—which is stored locally on your iPhone—including any workouts linked from other apps. It’s provided as XML, which is a sensible, structured storage format, but not necessarily that familiar to the general R user.</p>
+<p>This post looks at how to extract the data of interest and do something useful with it.</p>
+</section>
+<section id="warm-up" class="level2">
+<h2 class="anchored" data-anchor-id="warm-up">Warm up</h2>
+<p>To export activity data from the Health app (iOS 14.4):</p>
+<ol type="1">
+<li>Open the Health app and tap your icon in the top right corner</li>
+<li>Scroll down and tap ‘Export All Health Data’</li>
+<li>Tap ‘Export’ in the pop-up and the sharing tray will slide up for you to choose where to send the data</li>
+</ol>
+<p>You’ll get a zipped folder containing two XML files, <code>export_cda.xml</code> and <code>export.xml</code>, the latter of which contains your data. I stored and unzipped my folder locally for the purposes of this post.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>temp <span class="ot">&lt;-</span> <span class="fu">tempdir</span>()</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">unzip</span>(<span class="at">zipfile =</span> <span class="st">"~/Downloads/export.zip"</span>, <span class="at">exdir =</span> temp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>My unzipped folder was about 140 MB and contained about 5 years of data.</p>
+<p>We’ll also need a few R packages. <a href="https://xml2.r-lib.org/index.html">The {xml2} package</a> is on CRAN<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and has the tools you need to read and reshape XML files. It may be familiar if you’ve ever done any webscraping with R.<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
+<p>We’ll also iterate to accumulate with <a href="https://purrr.tidyverse.org/">the {purrr} package</a> and do the ol’ wrangle-jangle with some <a href="https://www.tidyverse.org/">other tidyverse packages</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xml2)       <span class="co"># read and wrangle XML</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)  <span class="co"># {purrr}, {dplyr}, {ggplot2}, {forcats}</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lubridate)  <span class="co"># date/time handling</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="x-tract" class="level2">
+<h2 class="anchored" data-anchor-id="x-tract">X-tract</h2>
+<p>The aptly named <code>xml2::read_xml()</code> function will let you read your <code>export.xml</code> file.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>xml_in <span class="ot">&lt;-</span> <span class="fu">read_xml</span>(<span class="fu">file.path</span>(temp, <span class="st">"apple_health_export/export.xml"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here’s a truncated view of the file’s structure:</p>
+<div class="cell" data-out.lines="7">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>xml_in</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{xml_document}
+&lt;HealthData locale="en_GB"&gt;
+ [1] &lt;ExportDate value="2021-03-21 17:03:31 +0000"/&gt;
+ [2] &lt;Me HKCharacteristicTypeIdentifierDateOfBirth="" HKCharacteristicTypeIde ...
+ [3] &lt;Record type="HKQuantityTypeIdentifierStepCount" sourceName="MD’s phone" ...
+ [4] &lt;Record type="HKQuantityTypeIdentifierStepCount" sourceName="MD’s phone" ...
+ [5] &lt;Record type="HKQuantityTypeIdentifierStepCount" sourceName="MD’s phone" ...
+....</code></pre>
+</div>
+</div>
+<p>The object has the class <code>xml_document</code>. You can see metadata in the first few rows and then you can see the actual data is stored in a series of ‘nodes’. Each record is an individual entry in our activity log and has attributes like <code>type</code> (e.g.&nbsp;step count), <code>sourceName</code> (i.e.&nbsp;the device name) and <code>unit</code> (e.g.&nbsp;a count).</p>
+<p>We’re interested in extracting data from two types of node:</p>
+<ul>
+<li><code>Record</code> for the step counts, as previewed above</li>
+<li><code>Workouts</code>, which is where the Nike Run Club app data is stored</li>
+</ul>
+<p>You can extract specific parts of an XML file by reference to their <a href="https://www.w3schools.com/xml/xpath_intro.asp">xpaths</a>, which are special regex-like strings that point to specific places in the document. The function <code>xml2::xml_find_all()</code> takes an xpath and returns the matching information.</p>
+<p>We need only supply the simple high-level xpaths <code>//Record</code> and <code>//Workouts</code> for our needs. The forward slashes <a href="https://www.w3schools.com/xml/xpath_syntax.asp">read like</a> ‘select all the nodes in the document with the following name’.</p>
+<p>Once extracted, we can get the attributes—like <code>type</code>, <code>sourceName</code>, etc—of each node using <code>xml2::xml_attr()</code>.</p>
+</section>
+<section id="step-to-it" class="level2">
+<h2 class="anchored" data-anchor-id="step-to-it">Step to it</h2>
+<p>So, let’s grab all the ‘record’ nodes and preview the first one.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>records <span class="ot">&lt;-</span> <span class="fu">xml_find_all</span>(xml_in, <span class="st">"//Record"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>records[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{xml_node}
+&lt;Record type="HKQuantityTypeIdentifierStepCount" sourceName="MD’s phone" unit="count" creationDate="2015-06-21 16:57:31 +0000" startDate="2015-06-21 16:31:17 +0000" endDate="2015-06-21 16:33:00 +0000" value="28"&gt;</code></pre>
+</div>
+</div>
+<p>Each record is a single ‘bout’ of activity as perceived by the app. You can see the first record is a step count from my phone on 21 June 2015, which lasted about two minutes and consisted of 28 steps.</p>
+<p>For my purposes I only care about three attributes: the date<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, the type of activity and the associated value. We can pass a named vector of each attribute to <code>xml2::xml_attr()</code> using <code>purrr::map_dfr()</code> to collate the output into a tidy rectangle.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>records_df <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(  <span class="co"># rowbind to dataframe</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">date =</span> <span class="st">"creationDate"</span>, <span class="at">type =</span> <span class="st">"type"</span>, <span class="at">steps =</span> <span class="st">"value"</span>),</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span><span class="fu">xml_attr</span>(records, .x)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(records_df)  <span class="co"># preview</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 487,590
+Columns: 3
+$ date  &lt;chr&gt; "2015-06-21 16:57:31 +0000", "2015-06-21 16:57:31 +0000", "2015-…
+$ type  &lt;chr&gt; "HKQuantityTypeIdentifierStepCount", "HKQuantityTypeIdentifierSt…
+$ steps &lt;chr&gt; "28", "15", "44", "69", "80", "95", "1", "33", "41", "15", "24",…</code></pre>
+</div>
+</div>
+<p>So what <code>type</code> of activity has been logged in the <code>Record</code> nodes?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pull</span>(<span class="fu">distinct</span>(records_df, type))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "HKQuantityTypeIdentifierStepCount"                     
+ [2] "HKQuantityTypeIdentifierDistanceWalkingRunning"        
+ [3] "HKQuantityTypeIdentifierActiveEnergyBurned"            
+ [4] "HKQuantityTypeIdentifierFlightsClimbed"                
+ [5] "HKQuantityTypeIdentifierHeadphoneAudioExposure"        
+ [6] "HKQuantityTypeIdentifierWalkingDoubleSupportPercentage"
+ [7] "HKQuantityTypeIdentifierWalkingSpeed"                  
+ [8] "HKQuantityTypeIdentifierWalkingStepLength"             
+ [9] "HKQuantityTypeIdentifierWalkingAsymmetryPercentage"    
+[10] "HKCategoryTypeIdentifierSleepAnalysis"                 
+[11] "HKCategoryTypeIdentifierMindfulSession"                </code></pre>
+</div>
+</div>
+<p>I’m interested in step counts, so I’ll isolate <code>HKQuantityTypeIdentifierStepCount</code>, convert the date to datetime class and then summarise the number of steps per day.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>records_out <span class="ot">&lt;-</span> records_df <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">"HKQuantityTypeIdentifierStepCount"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">date =</span> <span class="fu">as.Date</span>(date), <span class="at">steps =</span> <span class="fu">as.integer</span>(steps)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(date) <span class="sc">%&gt;%</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">steps =</span> <span class="fu">sum</span>(steps), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">points =</span> <span class="fu">case_when</span>(</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>      steps <span class="sc">&gt;</span> <span class="dv">12500</span> <span class="sc">~</span> 8L, steps <span class="sc">&gt;</span> <span class="dv">10000</span> <span class="sc">~</span> 5L, steps <span class="sc">&gt;</span> <span class="dv">7000</span> <span class="sc">~</span> 3L,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> 0L</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(records_out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 2,094
+Columns: 3
+$ date   &lt;date&gt; 2015-06-21, 2015-06-22, 2015-06-23, 2015-06-24, 2015-06-25, 20…
+$ steps  &lt;int&gt; 647, 11273, 10071, 3586, 5206, 10362, 19036, 3980, 11850, 15937…
+$ points &lt;int&gt; 0, 5, 5, 0, 0, 5, 8, 0, 5, 8, 3, 5, 5, 0, 0, 5, 5, 3, 0, 8, 8, …</code></pre>
+</div>
+</div>
+<p>I also created a new column that generates a ‘points’ value that my healthcare provider assigns to meeting certain step-count thresholds. Now I, tiny David, can sling this evidence into the eye of the behemoth cyclops that is my healthcare provider.</p>
+<p>I recommend checking first if the data look sensible, because my highest step count was apparently 10,692,175. I don’t recall walking to Chicago and back to London on that day.</p>
+<section id="on-a-walkabout" class="level3">
+<h3 class="anchored" data-anchor-id="on-a-walkabout">On a walkabout</h3>
+<p>There’s so many ways you could investigate the step count data, like how frequency changes by day of the week or time of year, for example.</p>
+<p>Here’s a quick exploration: how did my step-count frequency change in the year up to 23 March 2020—the announcement of the UK’s first lockdown—and in the year since?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>records_out <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">covid_year =</span> <span class="fu">case_when</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>      date <span class="sc">&gt;=</span> <span class="st">"2020-03-23"</span> <span class="sc">&amp;</span> date <span class="sc">&lt;</span> <span class="st">"2021-03-23"</span> <span class="sc">~</span> <span class="st">"Year post-lockdown"</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>      date <span class="sc">&gt;=</span> <span class="st">"2019-03-23"</span> <span class="sc">&amp;</span> date <span class="sc">&lt;</span> <span class="st">"2020-03-23"</span> <span class="sc">~</span> <span class="st">"Year pre-lockdown"</span>, </span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>      <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA_character_</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(covid_year)) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(steps <span class="sc">/</span> <span class="dv">1000</span>), <span class="at">binwidth =</span> <span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span><span class="fu">fct_rev</span>(covid_year)) <span class="sc">+</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Steps (thousands)"</span>, <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/wo-plot-1.png" class="img-fluid" alt="Side-by-side histograms of step counts before and after lockdown. Before lockdown, a bimodal distribution with peaks at about 3 and 10 km steps. After lockdown, a big peak at about 1 km and a peak at about 6 km with a tail to about 20 km." width="672"></p>
+</div>
+</div>
+<p>Ha, not a surprise, but interesting to see it visually: there’s been a far higher proportion of days with a very small number of steps in the lockdown year. The second peak of the bimodal distribution has also fallen to a lower value with a more gradual tail. This is understandable: I used to walk on parts of my commute and lunchtimes, whereas my lockdown days have involved running or basically nothing.</p>
+</section>
+</section>
+<section id="jog-on" class="level2">
+<h2 class="anchored" data-anchor-id="jog-on">Jog on</h2>
+<p>Now let’s look at the year’s worth of running data from the <code>Workout</code> nodes of the XML.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>workouts <span class="ot">&lt;-</span> <span class="fu">xml_find_all</span>(xml_in, <span class="st">"//Workout"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>workouts[[<span class="dv">1</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{xml_node}
+&lt;Workout workoutActivityType="HKWorkoutActivityTypeRunning" duration="24.81425000031789" durationUnit="min" totalDistance="5.043024469383905" totalDistanceUnit="km" totalEnergyBurned="384.382" totalEnergyBurnedUnit="kcal" sourceName="Nike Run Club" sourceVersion="2003161908" creationDate="2020-03-23 08:01:39 +0000" startDate="2020-03-23 07:36:45 +0000" endDate="2020-03-23 08:01:39 +0000"&gt;
+[1] &lt;MetadataEntry key="HKIndoorWorkout" value="0"/&gt;
+[2] &lt;WorkoutEvent type="HKWorkoutEventTypePause" date="2020-03-23 08:01:34 +0 ...</code></pre>
+</div>
+</div>
+<p>The attributes are slightly different for workouts compared to records. This time I care about the activity type (just runs), the date, the distance and the time taken. Unfortunately there isn’t any data on split times in this file, which means I can’t calculate record times, nor is there other detail like altitude gained.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>workouts_df <span class="ot">&lt;-</span> <span class="fu">map_dfr</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">date =</span> <span class="st">"creationDate"</span>, <span class="at">type =</span> <span class="st">"workoutActivityType"</span>,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">km =</span> <span class="st">"totalDistance"</span>, <span class="at">dur =</span> <span class="st">"duration"</span>),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="sc">~</span><span class="fu">xml_attr</span>(workouts, .x)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(workouts_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 215
+Columns: 4
+$ date &lt;chr&gt; "2020-03-23 08:01:39 +0000", "2020-03-25 08:14:38 +0000", "2020-0…
+$ type &lt;chr&gt; "HKWorkoutActivityTypeRunning", "HKWorkoutActivityTypeRunning", "…
+$ km   &lt;chr&gt; "5.043024469383905", "5.0160254470843", "5.014558848776319", "5.0…
+$ dur  &lt;chr&gt; "24.81425000031789", "24.46356666882833", "24.37278333504995", "2…</code></pre>
+</div>
+</div>
+<p>We can do a bit of light wrangling to convert ‘decimal minutes’ to seconds, compute a rough pace, and round the values for readability. I used <code>lubridate::seconds_to_period()</code> to generate a <code>period</code>-class value that presents the data in days, hours, minutes and seconds.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>workouts_out <span class="ot">&lt;-</span> workouts_df <span class="sc">%&gt;%</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">"HKWorkoutActivityTypeRunning"</span>, km <span class="sc">&gt;</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">date =</span> <span class="fu">as.Date</span>(date),</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">c</span>(dur, km), as.numeric), <span class="at">dur =</span> <span class="fu">round</span>(dur, <span class="dv">3</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(<span class="at">col =</span> dur, <span class="at">into =</span> <span class="fu">c</span>(<span class="st">"mins"</span>, <span class="st">"mins_dec"</span>), <span class="at">sep =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    date, km,</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">s =</span> (<span class="fu">as.numeric</span>(mins) <span class="sc">*</span> <span class="dv">60</span>) <span class="sc">+</span> ((<span class="fu">as.numeric</span>(mins_dec) <span class="sc">/</span> <span class="dv">1000</span>) <span class="sc">*</span> <span class="dv">60</span>),</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">mins =</span> <span class="fu">seconds_to_period</span>(<span class="fu">round</span>(s)),</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_pace =</span> <span class="fu">seconds_to_period</span>(<span class="fu">round</span>(s <span class="sc">/</span> km)),</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">s =</span> <span class="fu">round</span>(s), <span class="at">km =</span> <span class="fu">round</span>(km, <span class="dv">2</span>)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(workouts_out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 164
+Columns: 5
+$ date     &lt;date&gt; 2020-03-23, 2020-03-25, 2020-03-27, 2020-03-29, 2020-03-31, …
+$ km       &lt;dbl&gt; 5.04, 5.02, 5.01, 5.03, 5.03, 5.02, 5.02, 5.02, 5.01, 5.02, 5…
+$ s        &lt;dbl&gt; 1489, 1468, 1462, 1545, 1476, 1435, 1414, 1468, 1410, 1366, 1…
+$ mins     &lt;Period&gt; 24M 49S, 24M 28S, 24M 22S, 25M 45S, 24M 36S, 23M 55S, 23M …
+$ avg_pace &lt;Period&gt; 4M 55S, 4M 53S, 4M 52S, 5M 7S, 4M 53S, 4M 46S, 4M 42S, 4M …</code></pre>
+</div>
+</div>
+<section id="high-vis-apparel" class="level3">
+<h3 class="anchored" data-anchor-id="high-vis-apparel">High-vis apparel</h3>
+<p>The data are now quite rich and there’s many ways to explore it. As a starter, here’s some basic summaries for the year to 23 March 2021:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>workouts_out <span class="sc">%&gt;%</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Total runs</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">n</span>(),</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Total distance (km)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">sum</span>(km)),</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Total time</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">seconds_to_period</span>(<span class="fu">sum</span>(s)),</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Days per run</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>((<span class="fu">max</span>(date) <span class="sc">-</span> <span class="fu">min</span>(date)) <span class="sc">/</span> <span class="st">`</span><span class="at">Total runs</span><span class="st">`</span>, <span class="dv">1</span>),</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Best average pace</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">seconds_to_period</span>(<span class="fu">min</span>(<span class="fu">round</span>(s <span class="sc">/</span> km))),</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Total runs of 5 to 10 km</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">nrow</span>(<span class="fu">filter</span>(., km <span class="sc">&gt;=</span> <span class="dv">5</span> <span class="sc">&amp;</span> km <span class="sc">&lt;</span> <span class="dv">10</span>)),</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Total runs of 10 to 21.1 km</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">nrow</span>(<span class="fu">filter</span>(., km <span class="sc">&gt;=</span> <span class="dv">10</span> <span class="sc">&amp;</span> km <span class="sc">&lt;</span> <span class="fl">21.1</span>)),</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Total runs of over 21.1 km</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">nrow</span>(<span class="fu">filter</span>(., km <span class="sc">&gt;</span> <span class="fl">21.1</span>))</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), as.character)) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">"Summary"</span>, <span class="at">values_to =</span> <span class="st">"Value"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Summary</th>
+<th style="text-align: left;">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Total runs</td>
+<td style="text-align: left;">164</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Total distance (km)</td>
+<td style="text-align: left;">1306</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total time</td>
+<td style="text-align: left;">4d 14H 39M 15S</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Days per run</td>
+<td style="text-align: left;">2.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Best average pace</td>
+<td style="text-align: left;">4M 22S</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Total runs of 5 to 10 km</td>
+<td style="text-align: left;">98</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total runs of 10 to 21.1 km</td>
+<td style="text-align: left;">62</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Total runs of over 21.1 km</td>
+<td style="text-align: left;">3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>In terms of visualisation, I’m interested in what my pattern of run distance looks like. The code below produces plots for run distances by date (top left), cumulative distance by date (bottom left), and a histogram of run distances in 1 km bins (right).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(workouts_out) <span class="sc">+</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(date, km), <span class="at">shape =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">"Distance (km)"</span>) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>()</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> workouts_out <span class="sc">%&gt;%</span> </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">km_cum =</span> <span class="fu">cumsum</span>(km)) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(date, km_cum)) <span class="sc">+</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">""</span>, <span class="at">y =</span> <span class="st">"Cumulative distance (km)"</span>) <span class="sc">+</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>()</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(workouts_out) <span class="sc">+</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(km), <span class="at">binwidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Distance (1 km bins)"</span>, <span class="at">y =</span> <span class="st">"Frequency"</span>) <span class="sc">+</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_light</span>()</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)  <span class="co"># easy plot layouts</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>(p1 <span class="sc">/</span> p2) <span class="sc">|</span> p3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/wo-plots-1.png" class="img-fluid" alt="Three plots: distance over time scatterplot, cumulative distance over time line chart, and a histogram of run distance. Patterns show high frequency of 5 and 10 km runs and consistency of run days over time." width="672"></p>
+</div>
+</div>
+<p>You can see I started with a lot of 5 km runs in April and May 2020, before branching out to 10 km or more. I’ve been pretty consistent in running every two or three days and that’s reflected in the chart of cumulative distance. The histogram shows that most runs have been just above 5 km, with another peak just above 10 km. That makes sense: I intentionally set out to run at least these distances.</p>
+<p>Another idea is that you you could use <a href="https://github.com/R-CoderDotCom/calendR">the {calendR} package</a> to plot a calendar of your activity.<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> Or you could do something more abstract: here’s a ‘run barcode’ with a line per run for the full year. The darker the line, the further the distance travelled.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>run_days <span class="ot">&lt;-</span> <span class="fu">left_join</span>(</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tibble</span>(<span class="at">date =</span> <span class="fu">as_date</span>(<span class="fu">ymd</span>(<span class="st">"2020-03-23"</span>)<span class="sc">:</span><span class="fu">ymd</span>(<span class="st">"2021-03-22"</span>))),</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  workouts_out <span class="sc">%&gt;%</span> </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(date <span class="sc">&gt;=</span> <span class="st">"2020-03-23"</span> <span class="sc">&amp;</span> date <span class="sc">&lt;</span> <span class="st">"2021-03-23"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(date) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">km =</span> <span class="fu">sum</span>(km), <span class="at">.groups =</span> <span class="st">"drop"</span>),</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">"date"</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">replace_na</span>(<span class="fu">list</span>(<span class="at">run =</span> <span class="dv">0</span>))</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">4</span>))</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="fu">image</span>(<span class="fu">matrix</span>(run_days<span class="sc">$</span>km), <span class="at">col =</span> <span class="fu">grey.colors</span>(<span class="dv">11</span>, <span class="fl">0.8</span>, <span class="dv">0</span>))</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="fu">box</span>(<span class="at">col =</span> <span class="st">"white"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/wo-barcode-1.png" class="img-fluid" alt="A one-dimensional plot of days represented by vertical lines, with run distance coloured on a scale of white to black." width="960"></p>
+</div>
+</div>
+<p>A few things stick out to me when scanning this barcode. The three black bands are the half-marathons; the white space (i.e.&nbsp;no runs) after the first of these indicates the rest my knees needed afterwards. There’s a thick grey band after halfway, which is when I tried to run seven days in a row (the app is gamified and you get a special badge for doing that). You can also see how the pattern was more regular at the start, but I’ve since settled into a routine of just trying to fit in three runs and about 25 km per week.</p>
+</section>
+</section>
+<section id="cool-down" class="level2">
+<h2 class="anchored" data-anchor-id="cool-down">Cool down</h2>
+<p>So the premise was quite simple: download your Apple Health data, read the XML file, extract the nodes of interest, wrangle lightly and present it. I’ve only done a basic exploration of the data, but there’s so much more you could do.</p>
+<p>After starting this post, I noticed that <a href="http://www.markwk.com/data-analysis-for-apple-health.html">Mark Koester has written an in-depth post</a> about Apple Health data, with a focus on Python code for achieving a similar goal. It notes third-party tools like <a href="https://apps.apple.com/gb/app/qs-access/id920297614">QS Access</a> for extracting data into a friendlier CSV format, for example.</p>
+<p>It’ll be interesting to revisit this in another year’s time to see how a ‘return to normality’ (whatever that means) might impact these patterns of activity.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-07-21 19:29:14 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] patchwork_1.1.2 lubridate_1.9.2 forcats_1.0.0   stringr_1.5.0  
+ [5] dplyr_1.1.2     purrr_1.0.1     readr_2.1.4     tidyr_1.3.0    
+ [9] tibble_3.2.1    ggplot2_3.4.2   tidyverse_2.0.0 xml2_1.3.5     
+
+loaded via a namespace (and not attached):
+ [1] gtable_0.3.3      jsonlite_1.8.7    compiler_4.3.1    tidyselect_1.2.0 
+ [5] scales_1.2.1      yaml_2.3.7        fastmap_1.1.1     R6_2.5.1         
+ [9] labeling_0.4.2    generics_0.1.3    knitr_1.43.1      htmlwidgets_1.6.2
+[13] munsell_0.5.0     pillar_1.9.0      tzdb_0.4.0        rlang_1.1.1      
+[17] utf8_1.2.3        stringi_1.7.12    xfun_0.39         timechange_0.2.0 
+[21] cli_3.6.1         withr_2.5.0       magrittr_2.0.3    digest_0.6.33    
+[25] grid_4.3.1        rstudioapi_0.15.0 fontawesome_0.5.1 hms_1.1.3        
+[29] lifecycle_1.0.3   vctrs_0.6.3       evaluate_0.21     glue_1.6.2       
+[33] farver_2.1.1      fansi_1.0.4       colorspace_2.1-0  rmarkdown_2.23   
+[37] tools_4.3.1       pkgconfig_2.0.3   htmltools_0.5.5  </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>In this vein, you can also <a href="https://nacnudus.github.io/duncangarmonsway/posts/2019-04-22-get-me-to-the-church-on-time-with-r-spatial/">use your Google Maps data to convince the church to marry you</a>, as per Duncan Garmonsway.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>‘2’ because it’s a binding to <a href="http://xmlsoft.org/">libxml2</a>, but perhaps also because it’s the spiritual successor to <a href="https://CRAN.R-project.org/package=XML">{XML}</a>, which is R’s veteran package for XML handling.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>For example, see previous posts about <a href="https://www.rostrum.blog/2018/12/24/nba-travel/">travelling the NBA</a> and <a href="https://www.rostrum.blog/2019/03/04/polite-webscrape/">polite webscraping</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Luckily, I live at +0000, so no time-related data wrangling is required for me.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Another reference to <a href="https://nacnudus.github.io/duncangarmonsway/posts/2019-04-22-get-me-to-the-church-on-time-with-r-spatial/">Duncan’s post</a>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2023-05-07">
+
+<title>rostrum.blog - Automate {blogdown} to Quarto</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Automate {blogdown} to Quarto</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">bd2q</div>
+                <div class="quarto-category">blog-meta</div>
+                <div class="quarto-category">blogdown</div>
+                <div class="quarto-category">quarto</div>
+                <div class="quarto-category">r</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 7, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#upside-blogdown" id="toc-upside-blogdown" class="nav-link" data-scroll-target="#upside-blogdown">Upside blogdown</a></li>
+  <li><a href="#when-in-doubt-make-a-package" id="toc-when-in-doubt-make-a-package" class="nav-link" data-scroll-target="#when-in-doubt-make-a-package">When in doubt, make a package</a>
+  <ul class="collapse">
+  <li><a href="#quarto-blog-template" id="toc-quarto-blog-template" class="nav-link" data-scroll-target="#quarto-blog-template">1. Quarto blog template</a></li>
+  <li><a href="#transfer-posts-and-resources" id="toc-transfer-posts-and-resources" class="nav-link" data-scroll-target="#transfer-posts-and-resources">2. Transfer posts and resources</a></li>
+  <li><a href="#tweak-post-content" id="toc-tweak-post-content" class="nav-link" data-scroll-target="#tweak-post-content">3. Tweak post content</a></li>
+  </ul></li>
+  <li><a href="#actually-use-the-package-pfft" id="toc-actually-use-the-package-pfft" class="nav-link" data-scroll-target="#actually-use-the-package-pfft">Actually use the package? Pfft!</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="resources/rostrum-blog-2.png" class="img-fluid figure-img" style="width:100.0%" alt="A screenshot of a version of this blog designed with Quarto. The style is very similar, using green and black and the blog logo, which is a 16 by 16 pixel picture of an insect. There are new sections for 'About', 'RSS' and 'Source', as well as s search button. The posts are displayed as 'cards' rather than in a list."></p>
+<figcaption class="figure-caption">gRaPhIc DeSiGn Is My PaSsIoN.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I’ve written a quick R package, <a href="https://github.com/matt-dray/bd2q">{bd2q}</a>, to help me convert my <a href="https://pkgs.rstudio.com/blogdown/">{blogdown}</a> blog to <a href="https://quarto.org/">Quarto</a>. Whether I’ll actually complete the conversion is another story.</p>
+</section>
+<section id="upside-blogdown" class="level2">
+<h2 class="anchored" data-anchor-id="upside-blogdown">Upside blogdown</h2>
+<p>It is destiny: no-one is ever completely happy with their blog.</p>
+<p>This site was built five years ago<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> with <a href="https://pkgs.rstudio.com/blogdown/">{blogdown}</a>, which lets you write R Markdown files and have them knitted into a blog. I ignored <a href="https://rstudio.github.io/distill/">the newer {distill} package</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, but <a href="https://quarto.org/">Quarto</a> may be worth the switch. It’ll let me simplify the blog’s structure<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> and take advantage of Quarto’s snazzy features<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
+<p>But I didn’t fancy transferring and editing ~150 posts by hand, so I’ve written a few functions to help out.</p>
+</section>
+<section id="when-in-doubt-make-a-package" class="level2">
+<h2 class="anchored" data-anchor-id="when-in-doubt-make-a-package">When in doubt, make a package</h2>
+<p>And so the {bd2q} R package<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> is <a href="https://github.com/matt-dray/bd2q">available from GitHub</a>. It does what I need it to do for now, but note it only has basic error checking, has no unit tests, etc. Use at own risk, etc. It’s likely to remain unpolished forever, but feel free to add issues or pull requests. To install:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)  <span class="co"># if not yet installed</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"matt-dray/bd2q"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Three things were in scope for this package:</p>
+<ol type="1">
+<li>Create a template Quarto blog.</li>
+<li>Create the necessary Quarto folder structure for posts, then transfer posts and resources from the old {blogdown} blog.</li>
+<li>Tweak the posts to remove or replace selected lines.</li>
+</ol>
+<section id="quarto-blog-template" class="level3">
+<h3 class="anchored" data-anchor-id="quarto-blog-template">1. Quarto blog template</h3>
+<p>I assume someone has already written a version of <code>usethis::create_project()</code> for creating a Quarto blog. Regardless, I’ve written <code>bd2q::create_template()</code> to generate a folder with the minimal structure required, which makes my life easier for testing purposes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>bd2q<span class="sc">::</span><span class="fu">create_template</span>(<span class="at">q_path =</span> <span class="st">"~/new-quarto-blog"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>✔ Created template Quarto blog at /Users/mattdray/new-quarto-blog</code></pre>
+<p>The skeleton content is opinionated and differs a bit to the one generated through RStudio’s ‘new project’ menu, for example, but the structure is the same:</p>
+<pre><code>blog
+├── about.qmd
+├── index.qmd
+├── posts/
+│   └── metadata.yml
+├── styles.css
+└── blog.rproj</code></pre>
+<p>Of course, now we need to pull in the posts from the old {blogdown} blog.</p>
+</section>
+<section id="transfer-posts-and-resources" class="level3">
+<h3 class="anchored" data-anchor-id="transfer-posts-and-resources">2. Transfer posts and resources</h3>
+<p>Typically in a {blogdown} blog, all R Markdown posts and their rendered HTML files are stored together in <code>content/post/</code> in the form <code>YYYY-MM-DD-post-name.Rmd</code> and <code>YYYY-MM-DD-post-name.html</code>. Resources, like images, live separately in <code>static/post/</code> with a folder per post in the form <code>YYYY-MM-DD-post-name_files/</code>.</p>
+<p>Here’s a simplified folder structure that focuses on a single post and its resources:</p>
+<pre><code>blog/
+├── content/
+│   └── post/
+│       ├── YYYY-MM-DD-post-name.Rmd
+│       └── YYYY-MM-DD-post-name.html
+└── static/
+    └── post/
+        └── YYYY-MM-DD-post-name_files/
+            └── image.png</code></pre>
+<p>Quarto simplifies this structure. Each post gets its own folder in <code>posts/</code>, like <code>YYYY-MM-DD-post-name</code>, which contains the post as <code>index.qmd</code> and a folder of resources. This means the post and all its content are stored together in one containing folder.</p>
+<pre><code>blog/
+└── posts/
+    └── YYYY-MM-DD-post-name/
+        ├── index.qmd
+        └── resources/
+            └── image.png</code></pre>
+<p>To do the conversion, <code>bd2q::transfer_posts()</code> copies posts from a {blogdown} blog structure to a Quarto blog structure, setting up the required folders and renaming each post to <code>index.qmd</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">transfer_posts</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">bd_path =</span> <span class="st">"~/old-blogdown-blog"</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">q_path =</span> <span class="st">"~/new-quarto-blog"</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>✔ Created posts/ directory structure.
+ℹ Copying posts.
+✔ Copied 148 posts to /Users/mattdray/new-quarto-blog.</code></pre>
+<p>Once that’s been run, <code>bd2q::transfer_resources()</code> can copy each post’s resources into an accompanying subfolder, which defaults to the name ‘resources’. You can choose which file types you want transfer with the <code>exts_keep</code> argument.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">transfer_resources</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">bd_path =</span> <span class="st">"~/old-blogdown-blog"</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">q_path =</span> <span class="st">"~/new-quarto-blog"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">resources_dir =</span> <span class="st">"resources"</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">exts_keep =</span> <span class="fu">c</span>(<span class="st">"gif"</span>, <span class="st">"jpg"</span>, <span class="st">"jpeg"</span>, <span class="st">"png"</span>, <span class="st">"svg"</span>, <span class="st">"wav"</span>),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>ℹ Copying resources.
+✔ Copied 455 resources to each post's resources/ folder in Users/mattdray/new-quarto-blog/posts.</code></pre>
+<p>Of course this doesn’t account for everything, like bits of JavaScript and CSS related to the use of <a href="https://www.htmlwidgets.org/">htmlwidgets</a>. I’m not really bothered about this, because these should be recreated when I re-render each post.</p>
+<p>Note that you can use <code>bd2q::create_and_transfer()</code> if you want to run <code>create_template()</code>, <code>transfer_posts()</code> and <code>transfer_resources()</code> all at once. Regardless, once you’ve got the structure sorted, you can begin to adjust the posts if you need to.</p>
+</section>
+<section id="tweak-post-content" class="level3">
+<h3 class="anchored" data-anchor-id="tweak-post-content">3. Tweak post content</h3>
+<p>There’s content in the body of each post that I want to get rid of or make more Quarto-like. I made a few functions that iterate over all the <code>index.qmd</code> files and replace or remove certain content.</p>
+<p>One obvious necessity is to rebuild the resource paths (to images, sound files, etc), which can be done specifically with <code>bd2q::update_resource_paths()</code>. It defaults to creating paths to each post’s ‘resources’ subfolder, as generated by <code>bd2q::transfer_resources()</code>. For example, you could use a regular expression to match rows you know will contain a resource path and have them updated for the new Quarto folder structure (I tend to insert images with HTML rather than Markdown, hence the <code>&lt;img&gt;</code> tag in the example below).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">update_resource_paths</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q_path =</span> <span class="st">"~/new-quarto-blog"</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">resources_dir =</span> <span class="st">"resources"</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">resource_rx =</span> <span class="st">"&lt;img src="</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>ℹ Updating posts.
+✔ 148 posts updated.  </code></pre>
+<p>I also added two replace/remove functions that are a little more generic.</p>
+<p>The first is <code>bd2q::remove_line()</code>, which deletes a single line from each post based on a provided regular expression. When I was messing around with converting the blog to Quarto manually, I found that the presence of the ‘draft’ status in the YAML header would prevent the post from appearing on the homepage, even if was set to ‘no’. As a result, you can run something like this to find and remove the lines that start with ‘draft’:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>bd2q<span class="sc">::</span><span class="fu">remove_line</span>(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">q_path =</span> <span class="st">"~/new-quarto-blog"</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">detect_rx =</span> <span class="st">"^draft:"</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>ℹ Making corrections.
+✔ Removed lines matching the regular expression '^draft:' from 128 out of 148 posts.</code></pre>
+<p>That’s fine for individual lines, but what if you have a sequence of <em>consecutive</em> lines that you want to find and remove, or replace with some other text?</p>
+<p>That’s what <code>bd2q::replace_lines()</code> does. Provide a vector of strings that exactly match some consecutive lines in each post, then provide a vector of strings to replace them with (or NULL to simply remove them)<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
+<p>This addresses another specific problem I was having. I wanted to update my custom session-info blocks at the bottom of each post so that they instead appear as <a href="https://quarto.org/docs/authoring/appendices.html">a Quarto ‘appendix’</a>. That can be done like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>old_lines <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"---"</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"&lt;details&gt;&lt;summary&gt;Session info&lt;/summary&gt;"</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"```{r eval=TRUE, sessioninfo, echo=FALSE}"</span>,</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"sessioninfo::session_info()"</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"```"</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"&lt;/details&gt;"</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>new_lines <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"## Details {.appendix}"</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"&lt;details&gt;&lt;summary&gt;Session info&lt;/summary&gt;"</span>,</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">"```{r}"</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">"#' eval = TRUE,"</span>,</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"#' echo = FALSE"</span>,</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">'cat("Date:", cat(format(Sys.time(), format = "%Y-%m-%d")), "</span><span class="sc">\n\n</span><span class="st">"); sessionInfo()'</span>,</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">"```"</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>bd2q<span class="sc">::</span><span class="fu">replace_lines</span>(</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">q_path =</span> <span class="st">"~/new-quarto-blog"</span>,</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">match_str =</span> old_lines,</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">replacement_str =</span> new_lines</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>ℹ Making corrections.
+✔ Removed lines matching the provided string vector from 9 out of 148 posts.   </code></pre>
+<p>Haha, uhoh, I was expecting to have fixed more posts than that! Looks like I might have written my custom session-info block slightly differently in each post (maybe an extra space or empty line?), so I’ll have to run the <code>bd2q::replace_lines()</code> multiple times to make sure I can replace it in each post that it appears.</p>
+</section>
+</section>
+<section id="actually-use-the-package-pfft" class="level2">
+<h2 class="anchored" data-anchor-id="actually-use-the-package-pfft">Actually use the package? Pfft!</h2>
+<p>So, is {bd2q} objectively good? No.&nbsp;Does it do what I personally want it to do? Absolutely. Mostly. Yeah?</p>
+<p>Of course, transferring files into a new structure is the easy part. The hard part is to see if each post will still re-render after all these years. It’s unlikely! There’s no dependency management in this blog because there was no easy easy to do it. Quarto, meanwhile, has <a href="https://quarto.org/docs/projects/code-execution.html#freeze">the ability to ‘freeze’ posts</a> and <a href="https://albert-rapp.de/posts/13_quarto_blog_writing_guide/13_quarto_blog_writing_guide.html#make-posts-robust-with-renv">link each post to a {renv} lockfile</a> (thanks Albert) that captures each post’s package dependencies.</p>
+<p>There are some other dependencies outside of packages though. For example, I have posts that use <a href="https://docs.ropensci.org/rtweet/">the {rtweet} package</a> to fetch tweets from Twitter, but Twitter is a garbage fire and I may never be able to fetch tweets from the API in future. I may have to just copy-paste the outputs that were created when the post was originally rendered, oh well.</p>
+<p>To be clear: this is hard work. I may not be brave enough to do it any time soon. I’ve set up <a href="https://github.com/matt-dray/rostrum-blog-2">a GitHub repo for ‘rostrum-blog-2’</a> where I’ve been experimenting with styles and structure, so if I ever get round to this task then that’s where the fireworks will be happening.</p>
+<p>And hey, at worst I got more familiar with the <a href="https://fs.r-lib.org/">{fs}</a> and <a href="https://cli.r-lib.org/">{cli}</a> packages when making {bd2q}, which are for ‘tidy’ path handling and nice user interfaces. A convoluted way to learn!</p>
+<p>But that’s what this blog is all about, amirite.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-06-29 15:25:33 CEST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/Zurich
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] bd2q_0.0.0.9000
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.14   yaml_2.3.7       
+ [9] rmarkdown_2.22    knitr_1.43.1      jsonlite_1.8.5    xfun_0.39        
+[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Actually, we began this blog on WordPress in 2013. But WordPress doesn’t evaluate R code, so code outputs had to be pasted in manually. The original blog was meant to be more about general ecology, hence the name ‘rostrum’, which refers to the snouty bit of an insect and also the platform a speaker talks from. Seemed like a neat pun at the time, but the joke is kinda lost on an audience that’s no longer comprised mostly of entomologists. But the audience is mostly me, so I can live with it.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Although I did use it to <a href="https://www.rostrum.blog/2022/03/15/renv-profiles/">investigate a method with {renv}</a> for managing dependencies on a post-by-post basis.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>In particular, {blogdown} <a href="https://gohugo.io/">depends on Hugo</a>, a ‘framework for building websites’. Quarto blogs are just… built on Quarto.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Especially things like <a href="https://github.com/coatless/quarto-webr">WebR for Quarto</a> that helps you embed interactive R chunks into your posts, which <a href="https://www.rostrum.blog/2023/03/16/webr-quarto/">I wrote about recently</a>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>‘bd2q’ as in ‘{blogdown} to Quarto’. Which is a boring name, I know.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>This was actually more painful than I was hoping. There’s no easy way to match consecutive strings between vectors. In other words, try to extract the sequence <code>c("a", "b", "c")</code>, in that order, from the vector <code>c("a", "b", "d", "a", "b", "c", "d")</code>. Surely there’s an R function that will do this? Anyway, I fudged it by collapsing all the lines of a post into a single string and then finding the matching (collapsed) string provided by the user. Of course, the string will have to be ‘uncollapsed’ to get a string per line, so you can use <code>paste()</code> with a string provide to the <code>collapse</code> argument. But this separator will need to be a string that doesn’t appear in any of your posts, otherwise the uncollapsing process will break a line that you didn’t intend to be broken! I went with <code>///</code> by default, but the user can change this with the <code>collapse_str</code> argument in <code>bd2q::replace_lines()</code>. Sheesh.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

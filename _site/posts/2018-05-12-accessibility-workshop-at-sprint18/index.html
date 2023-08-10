@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.176">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2018-05-12">
+
+<title>rostrum.blog - Accessibility workshop at #Sprint18</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "keyboard-shortcut": [
+    null
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default toc-left page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Accessibility workshop at #Sprint18</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">accessibility</div>
+                <div class="quarto-category">design</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">May 12, 2018</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tldr" id="toc-tldr" class="nav-link active" data-scroll-target="#tldr">tl;dr</a></li>
+  <li><a href="#sprinting" id="toc-sprinting" class="nav-link" data-scroll-target="#sprinting">Sprinting</a></li>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link" data-scroll-target="#motivation">Motivation</a></li>
+  <li><a href="#presenters" id="toc-presenters" class="nav-link" data-scroll-target="#presenters">Presenters</a></li>
+  <li><a href="#what-is-accessibility" id="toc-what-is-accessibility" class="nav-link" data-scroll-target="#what-is-accessibility">What is accessibility?</a></li>
+  <li><a href="#were-all-only-temporarily-not-disabled" id="toc-were-all-only-temporarily-not-disabled" class="nav-link" data-scroll-target="#were-all-only-temporarily-not-disabled">We’re all only temporarily not disabled</a></li>
+  <li><a href="#achieving-digital-accessibility" id="toc-achieving-digital-accessibility" class="nav-link" data-scroll-target="#achieving-digital-accessibility">Achieving digital accessibility</a></li>
+  <li><a href="#the-law" id="toc-the-law" class="nav-link" data-scroll-target="#the-law">The law</a></li>
+  <li><a href="#we-can-improve" id="toc-we-can-improve" class="nav-link" data-scroll-target="#we-can-improve">We can improve</a></li>
+  <li><a href="#culture-change" id="toc-culture-change" class="nav-link" data-scroll-target="#culture-change">Culture change</a></li>
+  <li><a href="#posters" id="toc-posters" class="nav-link" data-scroll-target="#posters">Posters</a></li>
+  <li><a href="#questions-and-answers" id="toc-questions-and-answers" class="nav-link" data-scroll-target="#questions-and-answers">Questions and answers</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><img src="resources/accessibility.jpg" class="img-fluid" style="width:100.0%" alt="Pages of the delegate pack stating 'accessibility' and 'helping government work better for everyone'."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I went to a public-sector accessibility workshop. Designing for accessibility can make products and services better for everyone.</p>
+</section>
+<section id="sprinting" class="level2">
+<h2 class="anchored" data-anchor-id="sprinting">Sprinting</h2>
+<p>Sprint events are a chance for the government digital, data, design and technology community to:</p>
+<blockquote class="blockquote">
+<p>look back on the work we’ve been doing to transform government and to look forward at what we need to do</p>
+</blockquote>
+<p>Kevin Cunnington, Director General of the Government Digital Service (GDS), outlined this in <a href="https://gds.blog.gov.uk/2018/03/01/sprint-18-talking-about-the-future-of-transformation/">a recent blog post</a>.</p>
+<p>This year’s major themes were transformation, innovation and collaboration. The event was held at the Southbank Centre and Royal Festival Hall in London, with 40 speakers, 19 workshops and over 700 delegates representing 40 departments and agencies.</p>
+<p>The event was captured in a <a href="https://gds.blog.gov.uk/2018/05/10/10-may-2018-sprint-18-live-blog/">live blog</a> and with <a href="https://twitter.com/search?q=%23sprint18&amp;src=typd">the Twitter hashtag #Sprint18</a>. <a href="https://youtu.be/LJ__aKE75UM">A round-up video</a> is also available.</p>
+</section>
+<section id="motivation" class="level2">
+<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
+<p>The analytical community in my department has been producing a range of self-service tools for colleagues, but we’ve generally got little experience of how to incorporate accessibility into our work. Often we have a small pool of users internally who can tell us their needs directly, but we can’t always know whether our creations will be passed on to users that we aren’t aware of.</p>
+<p>I went to the accessibility workshop at Sprint 18 to get an insight into what’s being done across government and what we can learn. This blog post provides a record of the session and will hopefully help to start a conversation.</p>
+</section>
+<section id="presenters" class="level2">
+<h2 class="anchored" data-anchor-id="presenters">Presenters</h2>
+<p>The session was presented by:</p>
+<ul>
+<li>Alistair Duggin (<a href="http://twitter.com/dugboticus">@dugboticus</a>), head of accessibility at GDS and organiser of <a href="https://www.meetup.com/en-AU/London-Accessibility-Meetup/">The London Accessibility Meetup Group</a> (<a href="https://twitter.com/a11yLondon">@a11ylondon</a>)</li>
+<li><a href="http://jbuller.com/">James Buller</a> (<a href="http://twitter.com/jbuller">@jbuller</a>), Access Needs Lead at <a href="https://hodigital.blog.gov.uk/">Home Office Digital, Data and Technology</a> (<a href="https://twitter.com/HODigital">@HODigital</a>)</li>
+</ul>
+</section>
+<section id="what-is-accessibility" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-accessibility">What is accessibility?</h2>
+<p>Alistair opened by explaining that:</p>
+<blockquote class="blockquote">
+<p>accessibility means making sure there are no barriers that might prevent someone from accessing or using something</p>
+</blockquote>
+<p>Users may have needs related to vision, hearing, motor skills and cognitive skills, among many others. It’s important to take these into account to maximise inclusivity.</p>
+<p>This is hugely relevant for governments because their users are all of the citizens in the country. That’s a lot of people with a lot of accessibility needs to consider.</p>
+</section>
+<section id="were-all-only-temporarily-not-disabled" class="level2">
+<h2 class="anchored" data-anchor-id="were-all-only-temporarily-not-disabled">We’re all only temporarily not disabled</h2>
+<p>Designing for accessibility can improve the user experience for everyone.</p>
+<p>This is because impairments exist along a scale of permanent to situational. For example, consider the needs of users:</p>
+<ul>
+<li>who are deaf (permanent)</li>
+<li>have an ear infection (situational)</li>
+<li>are in a noisy location (situational)</li>
+</ul>
+<p>Designing for the permanently deaf could benefit everyone on the continuum. For example, captions on video content make the content accessible for all of these people.</p>
+<p>It’s worth remembering that the prevalence of disability rises with age and we’re all likely to face impairment at some point. Don’t forget that you’re planning and building services for your future self as well.</p>
+<p><img src="resources/james-buller.jpg" class="img-fluid" style="width:100.0%" alt="James Buller presenting a slide showing colleagues wearing devices to simulate impairment."></p>
+</section>
+<section id="achieving-digital-accessibility" class="level2">
+<h2 class="anchored" data-anchor-id="achieving-digital-accessibility">Achieving digital accessibility</h2>
+<p>Simply putting something online doesn’t make it accessible by default.</p>
+<p>Four things are required to achieve digital accessibility, as outlined in the ‘<a href="https://accessibility.blog.gov.uk/2016/05/16/what-we-mean-when-we-talk-about-accessibility-2/">what we mean when we talk about accessibility</a>’ blog post on GOV.UK. Your content must be:</p>
+<ul>
+<li>perceivable to at least one of the user’s senses (a webpage that can be interpreted by a screen reader, for example)</li>
+<li>understandable so that it makes sense to the user (it’s not enough for it to be perceived, it must also be interpretable)</li>
+<li>operable so users can interact with it (support for keyboard-only input, for example)</li>
+<li>robust so that it works as expected with the technology that users have access to</li>
+</ul>
+<p>If any of these are broken, then the thing is probably unusable.</p>
+</section>
+<section id="the-law" class="level2">
+<h2 class="anchored" data-anchor-id="the-law">The law</h2>
+<p>Designing for accessibility goes beyond being helpful. The flyer for the workshop stated:</p>
+<blockquote class="blockquote">
+<p>Considering the needs of a diverse range of people helps us design better services and products. Making services accessible is a also a legal requirement.</p>
+</blockquote>
+<p><a href="https://www.gov.uk/guidance/equality-act-2010-guidance">The Equality Act 2010</a> means government must not discriminate against people. In addition, a new EU directive is being brought into UK law later this year that will create new rules for public sector bodies to abide by when presenting content.</p>
+<p>This means that government is actually obliged to take steps to reduce barriers and improve inclusivity of its services.</p>
+<p>Note that <a href="https://www.gov.uk/government/consultations/accessibility-of-public-sector-websites-and-apps-new-duties-and-regulations">a consultation on the accessibility of public sector websites and apps</a> is currently open for comment until 28 May 2018.</p>
+</section>
+<section id="we-can-improve" class="level2">
+<h2 class="anchored" data-anchor-id="we-can-improve">We can improve</h2>
+<p>Alistair described some discovery work by GDS to investigate how accessibility was being considered across government departments. In general, experience was low and people were unsure what they should be doing.</p>
+<p>Help and advice are available. Service designers should:</p>
+<ul>
+<li>plan for accessibility early; don’t wait until a project is nearly finished</li>
+<li>get impaired users involved in user research to ensure needs are being met</li>
+<li>consult <a href="https://www.gov.uk/service-manual/helping-people-to-use-your-service">the accessibility and assisted digital</a> pages of the <a href="https://www.gov.uk/service-manual">Service Manual</a> to help meet <a href="https://www.gov.uk/service-manual/service-standard">the Digital Service Standard</a></li>
+<li>make use of the <a href="https://www.gov.uk/service-manual/design#find-patterns">Service Manual’s patterns</a> and <a href="https://govuk-elements.herokuapp.com/">reusable elements</a> to help build consistent services (these are currently being consolidated into the upcoming <a href="https://gds.blog.gov.uk/2017/10/30/building-the-gov-uk-design-system/">GOV.UK Design System</a>)</li>
+<li>take a look at the <a href="https://www.gov.uk/government/publications/understanding-disabilities-and-impairments-user-profiles">user profiles for understanding disabilities and impairments</a></li>
+<li>make use of the assistive technology workbench at GDS’s office</li>
+</ul>
+</section>
+<section id="culture-change" class="level2">
+<h2 class="anchored" data-anchor-id="culture-change">Culture change</h2>
+<p>James acknowledged that it’s not just about having the right tools in place. Departments may need to change their ethos to make sure that accessibility is baked into design from day one.</p>
+<p>There should be a mentality that’s it’s everyone’s responsibility. Everyone should always ask ‘is this accessible?’ when building something. If not, then why not?</p>
+<p>But it’s not just about generating interest. Assigning and meeting goals for accessibility will help to make sure that you’re accountable for improving your services.</p>
+<p>A big part of this is getting the support of senior leaders, who can help move things along and help to ensure that emphasis is in the right place.</p>
+</section>
+<section id="posters" class="level2">
+<h2 class="anchored" data-anchor-id="posters">Posters</h2>
+<p>One part of culture change is raising awareness. The Home Office have done this by creating <a href="https://accessibility.blog.gov.uk/2016/09/02/dos-and-donts-on-designing-for-accessibility/">a series of posters on the dos and dont’s of designing for accessibility</a>.</p>
+<p>These are available for <a href="https://github.com/UKHomeOffice/posters">download from GitHub</a>.</p>
+<p><img src="resources/a11y-posters.png" class="img-fluid" style="width:100.0%" alt="Thumbnail views of example posters including designing for users on the autistic spectrum, for users of screen readers and for users with low vision."></p>
+</section>
+<section id="questions-and-answers" class="level2">
+<h2 class="anchored" data-anchor-id="questions-and-answers">Questions and answers</h2>
+<p>I’ve paraphrased answers to audience questions.</p>
+<blockquote class="blockquote">
+<p>Sometimes accessibility is seen as pass/fail thing. But can you actually make services accessible for <em>everyone</em>?</p>
+</blockquote>
+<p>It’s hard to make things 100 per cent accessible for everyone. You just need to make progress and remove exclusionary barriers. The goal is to stop accidental exclusion.</p>
+<p>This is why user research is important; the guidelines might not actually be relevant for your particular users.</p>
+<p>Consider the passports pages of GOV.UK: putting the information on a single page made it difficult for people with Attention Deficit Disorder to focus, but spreading it across multiple pages was an issue for people with memory problems. Two versions were required.</p>
+<blockquote class="blockquote">
+<p>Does government have a relationship with producers of assistive technology</p>
+</blockquote>
+<p>There’s not been a relationship historically, but we’re starting to form them with vendors. It would be great for them to help us with issues like browser compatibility and assistive technologies. We also raise bug reports where we can.</p>
+<blockquote class="blockquote">
+<p>What things can we focus on immediately?</p>
+</blockquote>
+<p>Use <a href="https://www.gov.uk/guidance/content-design/writing-for-gov-uk">plain language</a>. The text of hyperlinks must make sense on their own, since a screen reader will read the text to users. It’s not enough to write ‘click here’. Images should have good alt-text so that screen readers can describe an image to visually impaired users. Videos should be captioned.</p>
+<p>Follow good practice as usual, but take it to the next level.</p>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<p>The workshop made me think about what I can do to make sure that the tools I create are accessible to our users. I’ll certainly be reporting back on this workshop to my team and I hope that others find this summary useful. At very worst, here are three things you can do:</p>
+<ol type="1">
+<li>Easy: read <a href="https://accessibility.blog.gov.uk/">the Accessibility blog on GOV.UK</a>.</li>
+<li>Review your practices: consult <a href="https://www.gov.uk/service-manual/helping-people-to-use-your-service">the Accessibility and assisted digital</a> pages of the <a href="https://www.gov.uk/service-manual">Service Manual</a> to help meet <a href="https://www.gov.uk/service-manual/service-standard">the Digital Service Standard</a>.</li>
+<li>Get involved: join <a href="https://www.gov.uk/service-manual/communities/assisted-digital-and-digital-take-up-community">the cross-government accessibility community</a>, who share resources and hold meetups.</li>
+</ol>
+<p>Finally, Alistair and James finished with three take-away messages:</p>
+<ul>
+<li>Make accessibility everyone’s responsibility and get the support of seniors in your department</li>
+<li>Check your services for accessibility and get plenty of user feedback</li>
+<li>Set targets for fixing the issues and achieving the standards</li>
+</ul>
+<p><img src="resources/sprint18-stage.jpg" class="img-fluid" style="width:100.0%" alt="#Sprint18 logo projected onto the screen in the auditorium"></p>
+<p>See you at Sprint 19.</p>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-08-09 21:21:31 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
+[13] digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    if (id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        for (let i = 0; i < 2; i++) {
+          container.appendChild(note.children[i].cloneNode(true));
+        }
+        return container.innerHTML
+      } else {
+        return note.innerHTML;
+      }
+    } else {
+      return note.innerHTML;
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      try { hash = new URL(url).hash; } catch {}
+      const id = hash.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note !== null) {
+        try {
+          const html = processXRef(id, note);
+          instance.setContent(html);
+        } finally {
+          instance.enable();
+          instance.show();
+        }
+      } else {
+        // See if we can fetch this
+        fetch(url.split('#')[0])
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.getElementById(id);
+          if (note !== null) {
+            const html = processXRef(id, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
