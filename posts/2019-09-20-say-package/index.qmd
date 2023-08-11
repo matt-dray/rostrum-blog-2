@@ -7,6 +7,10 @@ categories:
   - audio
   - bash
   - r
+resources:
+  - resources/say_cran_random.wav
+  - resources/say_cran.wav
+  - resources/say_tidy.wav
 ---
 
 ![Public Domain via wpclipart.com.](resources/pharynx.png){fig-alt="A line-drawing of a human larynx cross-section labelled with 'dee', 'ply', 'arr' and a question mark." width="40%" fig-align="left"}
@@ -34,7 +38,7 @@ I used [the `say` command](https://ss64.com/osx/say.html) at the command line to
 You can add flags to the command to read text from an input file (`-f`) and then store the audio output (`-o`):
 
 ```{bash say, eval=FALSE}
-say -f input.txt -o output.aiff
+say -f input.txt -o output.wav
 ```
 
 I generated some audio of package names being read via `say` and embedded them in the sections below. These were:
@@ -43,7 +47,7 @@ I generated some audio of package names being read via `say` and embedded them i
 * the top 20 downloads from CRAN
 * 20 random CRAN packages
 
-You can [download all the text and audio files as a zip file](https://rostrum.blog/datasets/say.zip) (note that the audio is in .aiff format).
+You can [download all the text and audio files as a zip file](https://rostrum.blog/datasets/say.zip) (note that the audio is in .wav format).
 
 ### Tidyverse
 
@@ -67,7 +71,7 @@ write.table(
 )
 
 # Get say command to read from text file and output an audio file
-system("say -f say_tidy.txt -o say_tidy.aiff")
+system("say -f say_tidy.txt -o say_tidy.wav")
 ```
 
 </details>
@@ -78,7 +82,7 @@ system("say -f say_tidy.txt -o say_tidy.aiff")
 "tidyr" "xml2" "tidyverse"
 ```
 
-<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/684095929&color=%23247f1f&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
+<html><audio controls><source src="resources/say_tidy.wav" type="audio/wav"></audio></html>
 
 ### CRAN top 20
 
@@ -101,7 +105,7 @@ write.table(
 )
 
 # Get say command to read from text file and output an audio file
-system("say -f say_cran_top.txt -o say_cran_top.aiff")
+system("say -f say_cran_top.txt -o say_cran_top.wav")
 ```
 </details>
 ```
@@ -110,7 +114,7 @@ system("say -f say_cran_top.txt -o say_cran_top.aiff")
 "backports" "stringr" "markdown" "fansi" "stringi"
 ```
 
-<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/684095949&color=%23247f1f&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
+<html><audio controls><source src="resources/say_cran.wav" type="audio/wav"></audio></html>
 
 ### Random CRAN packages
 
@@ -137,7 +141,7 @@ write.table(
 )
 
 # Get say command to read from text file and output an audio file
-system("say -f ~/Desktop/say_cran_random.txt -o ~/Desktop/say_cran_random.aiff")
+system("say -f ~/Desktop/say_cran_random.txt -o ~/Desktop/say_cran_random.wav")
 ```
 </details>
 ```
@@ -146,7 +150,7 @@ system("say -f ~/Desktop/say_cran_random.txt -o ~/Desktop/say_cran_random.aiff")
 "aqfig" "Voss" "tidymv" "gogarch" "erp.easy"
 ```
 
-<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/684095945&color=%23247f1f&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
+<html><audio controls><source src="resources/say_cran_random.wav" type="audio/wav"></audio></html>
 
 ## Results
 

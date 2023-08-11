@@ -234,7 +234,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>I used <a href="https://ss64.com/osx/say.html">the <code>say</code> command</a> at the command line to test this out. For example, you can type <code>say dplyr</code> to get your machine to interpret and vocalise ‘dplyr’.</p>
 <p>You can add flags to the command to read text from an input file (<code>-f</code>) and then store the audio output (<code>-o</code>):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">say</span> <span class="at">-f</span> input.txt <span class="at">-o</span> output.aiff</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">say</span> <span class="at">-f</span> input.txt <span class="at">-o</span> output.wav</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>I generated some audio of package names being read via <code>say</code> and embedded them in the sections below. These were:</p>
 <ul>
@@ -242,7 +242,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>the top 20 downloads from CRAN</li>
 <li>20 random CRAN packages</li>
 </ul>
-<p>You can <a href="https://rostrum.blog/datasets/say.zip">download all the text and audio files as a zip file</a> (note that the audio is in .aiff format).</p>
+<p>You can <a href="https://rostrum.blog/datasets/say.zip">download all the text and audio files as a zip file</a> (note that the audio is in .wav format).</p>
 <section id="tidyverse" class="level3">
 <h3 class="anchored" data-anchor-id="tidyverse">Tidyverse</h3>
 <p>You can get the tidyverse packages with the <code>tidyverse_packages()</code> function from the {tidyverse} package.</p>
@@ -267,15 +267,18 @@ Click for code
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Get say command to read from text file and output an audio file</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span>(<span class="st">"say -f say_tidy.txt -o say_tidy.aiff"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span>(<span class="st">"say -f say_tidy.txt -o say_tidy.wav"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </details>
 <pre><code>"broom" "cli" "crayon" "dplyr" "dbplyr" "forcats" "ggplot2" "haven"
 "hms" "httr" "jsonlite" "lubridate" "magrittr" "modelr" "purrr" "readr"
 "readxl" "reprex" "rlang" "rstudioapi" "rvest" "stringr" "tibble"
 "tidyr" "xml2" "tidyverse"</code></pre>
-<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/684095929&amp;color=%23247f1f&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=true">
-</iframe>
+
+<audio controls="">
+<source src="resources/say_tidy.wav" type="audio/wav">
+</audio>
+
 </section>
 <section id="cran-top-20" class="level3">
 <h3 class="anchored" data-anchor-id="cran-top-20">CRAN top 20</h3>
@@ -300,14 +303,17 @@ Click for code
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Get say command to read from text file and output an audio file</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span>(<span class="st">"say -f say_cran_top.txt -o say_cran_top.aiff"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span>(<span class="st">"say -f say_cran_top.txt -o say_cran_top.wav"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </details>
 <pre><code>"magrittr" "aws.s3" "aws.ec2metadata" "rsconnect" "rlang" "Rcpp" "dplyr"
 "ggplot2" "ellipsis" "vctrs" "tibble" "digest" "glue" "pillar" "zeallot"
 "backports" "stringr" "markdown" "fansi" "stringi"</code></pre>
-<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/684095949&amp;color=%23247f1f&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=true">
-</iframe>
+
+<audio controls="">
+<source src="resources/say_cran.wav" type="audio/wav">
+</audio>
+
 </section>
 <section id="random-cran-packages" class="level3">
 <h3 class="anchored" data-anchor-id="random-cran-packages">Random CRAN packages</h3>
@@ -336,14 +342,17 @@ Click for code
 <span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Get say command to read from text file and output an audio file</span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span>(<span class="st">"say -f ~/Desktop/say_cran_random.txt -o ~/Desktop/say_cran_random.aiff"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="fu">system</span>(<span class="st">"say -f ~/Desktop/say_cran_random.txt -o ~/Desktop/say_cran_random.wav"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </details>
 <pre><code>"NScluster" "nlnet" "Bivariate.Pareto" "lisa" "homtest" "glarma" "ttdo"
 "flock" "equSA" "coreCT" "WEE" "xtable" "shinyKGode" "DiffNet" "WGCNA"
 "aqfig" "Voss" "tidymv" "gogarch" "erp.easy"</code></pre>
-<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/684095945&amp;color=%23247f1f&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;show_teaser=true">
-</iframe>
+
+<audio controls="">
+<source src="resources/say_cran_random.wav" type="audio/wav">
+</audio>
+
 </section>
 </section>
 <section id="results" class="level2">
@@ -373,7 +382,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-24 20:19:17 BST</code></pre>
+<pre><code>Last rendered: 2023-08-11 23:35:18 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
