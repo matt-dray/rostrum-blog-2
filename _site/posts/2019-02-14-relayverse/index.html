@@ -99,6 +99,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="../../site_libs/fitvids-2.1.1/fitvids.min.js"></script>
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -700,7 +701,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visInteraction</span>(<span class="at">navigationButtons =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span>  <span class="co"># add naviagation buttons</span></span>
 <span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addFontAwesome</span>()  <span class="co"># makes sure that FontAwesome dependency is in place</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>I recommend you <a href="https://www.rostrum.blog/output/relayverse.html">view the network in its own window</a>. There’s a gif at the top of the blog for a preview.</p>
+<p>And that outputs the graph below. You can:</p>
 <ul>
 <li>use the navigation buttons or your trackpad/mouse to navigate the network</li>
 <li>click a node to highlight a host and their co-hosts (single hosts loop back to themselves)</li>
@@ -708,6 +709,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>select a host from the dropdown menu to highlight them and their co-hosts</li>
 <li>click and drag a node to move it</li>
 </ul>
+<div class="cell">
+<div class="cell-output-display">
+<div class="shareagain" style="min-width:300px;margin:1em auto;" data-exeternal="1">
+<iframe src="resources/relayverse.html" width="345" height="300" style="border:2px solid currentColor;" loading="lazy" allowfullscreen=""></iframe>
+<script>fitvids('.shareagain', {players: 'iframe'});</script>
+</div>
+</div>
+</div>
+<p>You can also <a href="resources/relayverse.html">view the network in its own window</a>.</p>
 <p>This is a very simple example, but <a href="https://datastorm-open.github.io/visNetwork/">lots of other {visNetwork} options are available</a>.</p>
 </section>
 </section>
@@ -726,7 +736,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-08-04 08:28:48 BST</code></pre>
+<pre><code>Last rendered: 2023-08-14 08:53:33 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -747,10 +757,12 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
- [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
-[13] digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
+ [1] htmlwidgets_1.6.2   compiler_4.3.1      fastmap_1.1.1      
+ [4] cli_3.6.1           tools_4.3.1         htmltools_0.5.5    
+ [7] xaringanExtra_0.7.0 rstudioapi_0.15.0   yaml_2.3.7         
+[10] rmarkdown_2.23      knitr_1.43.1        jsonlite_1.8.7     
+[13] xfun_0.39           digest_0.6.33       rlang_1.1.1        
+[16] evaluate_0.21      </code></pre>
 </div>
 </div>
 </details>

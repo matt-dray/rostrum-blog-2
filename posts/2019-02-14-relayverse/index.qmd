@@ -9,6 +9,8 @@ categories:
   - rvest
   - tidygraph
   - visNetwork
+resources:
+  - resources/relayverse.html
 ---
 
 ```{r setup, echo=FALSE}
@@ -373,13 +375,22 @@ visNetwork(  # add main features
   addFontAwesome()  # makes sure that FontAwesome dependency is in place
 ```
 
-I recommend you [view the network in its own window](https://www.rostrum.blog/output/relayverse.html). There's a gif at the top of the blog for a preview.
+And that outputs the graph below. You can:
 
 * use the navigation buttons or your trackpad/mouse to navigate the network
 * click a node to highlight a host and their co-hosts (single hosts loop back to themselves)
 * hover over an edge to show a label with the show name
 * select a host from the dropdown menu to highlight them and their co-hosts
 * click and drag a node to move it
+
+```{r embed-slides, echo=FALSE, eval=TRUE}
+xaringanExtra::embed_xaringan(
+  "resources/relayverse.html",
+  ratio = 1.15
+)
+```
+
+You can also [view the network in its own window](resources/relayverse.html).
 
 This is a very simple example, but [lots of other {visNetwork} options are available](https://datastorm-open.github.io/visNetwork/). 
 
