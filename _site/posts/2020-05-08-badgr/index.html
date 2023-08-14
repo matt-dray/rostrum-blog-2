@@ -210,7 +210,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://media.giphy.com/media/ieUMCm9IJhTX4oHqIF/giphy.gif" class="img-fluid figure-img" style="width:100.0%" alt="Badger from children's TV show Bodger &amp; Badger making a mess with instant mashed potato."></p>
+<p><img src="resources/bodger.png" class="img-fluid figure-img" style="width:100.0%" alt="Badger from children's TV show Bodger &amp; Badger making a mess with instant mashed potato."></p>
 <figcaption class="figure-caption">The {badgr} package is no bodge, I assure you!</figcaption>
 </figure>
 </div>
@@ -234,7 +234,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>You’ll see badges in the README files of code repositories on sites like GitHub and GitLab. They communicate something about the code at-a-glance and usually contain metadata or a link to further information.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="resources/data-table-badges.png" class="img-fluid figure-img" alt="Part of the README for the data.table package showing a number of badges, including test checks and download count."></p>
+<p><img src="resources/data-table-badges.png" class="img-fluid figure-img" style="width:100.0%" alt="Part of the README for the data.table package showing a number of badges, including test checks and download count."></p>
 <figcaption class="figure-caption">Examples of badges in the repo README for {data.table}.</figcaption>
 </figure>
 </div>
@@ -258,9 +258,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>You could build on this by providing an alternative style and an image from <a href="https://simpleicons.org/">Simple Icons</a>.</p>
 <p>For example, <code>![](https://img.shields.io/badge/label-message-181717?style=for-the-badge&amp;logo=github)</code> results in this:</p>
+<!--![](https://img.shields.io/badge/label-message-181717?style=for-the-badge&logo=github){fig-align="left"}-->
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="https://img.shields.io/badge/label-message-181717?style=for-the-badge&amp;logo=github.png" class="img-fluid figure-img"></p>
+<p><img src="resources/badge2.png" height="28" class="figure-img"></p>
 </figure>
 </div>
 <p>So you can see that additional ‘arguments’ to the basic call are added after a <code>?</code> and then additional parts added with an <code>&amp;</code>.</p>
@@ -311,16 +312,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[1] "[![](https://img.shields.io/badge/rostrum.blog-post-008900?style=flat&amp;labelColor=black&amp;logo=data:image/gif;base64,R0lGODlhEAAQAPEAAAAAABWCBAAAAAAAACH5BAlkAAIAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAEAAQAAAC55QkISIiEoQQQgghRBBCiCAIgiAIgiAIQiAIgSAIgiAIQiAIgRAEQiAQBAQCgUAQEAQEgYAgIAgIBAKBQBAQCAKBQEAgCAgEAoFAIAgEBAKBIBAQCAQCgUAgEAgCgUBAICAgICAgIBAgEBAgEBAgEBAgECAgICAgECAQIBAQIBAgECAgICAgICAgECAQECAQICAgICAgICAgEBAgEBAgEBAgICAgICAgECAQIBAQIBAgECAgICAgIBAgECAQECAQIBAgICAgIBAgIBAgEBAgECAgECAgICAgICAgECAgECAgQIAAAQIKAAAh+QQJZAACACwAAAAAEAAQAAAC55QkIiESIoQQQgghhAhCBCEIgiAIgiAIQiAIgSAIgiAIQiAIgRAEQiAQBAQCgUAQEAQEgYAgIAgIBAKBQBAQCAKBQEAgCAgEAoFAIAgEBAKBIBAQCAQCgUAgEAgCgUBAICAgICAgIBAgEBAgEBAgEBAgECAgICAgECAQIBAQIBAgECAgICAgICAgECAQECAQICAgICAgICAgEBAgEBAgEBAgICAgICAgECAQIBAQIBAgECAgICAgIBAgECAQECAQIBAgICAgIBAgIBAgEBAgECAgECAgICAgICAgECAgECAgQIAAAQIKAAA7)](https://www.rostrum.blog/)"</code></pre>
 </div>
 </div>
-<p>This is a shields.io-valid URL encased in some Markdown that allows it to be pasted directly into a GitHub README, for example.</p>
+<p>This is a shields.io-valid URL encased in some Markdown that allows it to be pasted directly into a GitHub README, for example. See how the Markdown contains the <code>![]()</code> image declaration, which itself is wrapped in the <code>[]()</code> link declaration. This means that clicking the link will take you to the URL specified by the <code>md_link</code> argument to <code>get_badge()</code>.</p>
 <p>It looks like this when rendered:</p>
-<div class="quarto-figure quarto-figure-left">
-<figure class="figure">
-<p><a href="https://www.rostrum.blog/"><img src="https://img.shields.io/badge/rostrum.blog-post-008900?style=flat&amp;labelColor=black&amp;logo=data:image/gif;base64,R0lGODlhEAAQAPEAAAAAABWCBAAAAAAAACH5BAlkAAIAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAEAAQAAAC55QkISIiEoQQQgghRBBCiCAIgiAIgiAIQiAIgSAIgiAIQiAIgRAEQiAQBAQCgUAQEAQEgYAgIAgIBAKBQBAQCAKBQEAgCAgEAoFAIAgEBAKBIBAQCAQCgUAgEAgCgUBAICAgICAgIBAgEBAgEBAgEBAgECAgICAgECAQIBAQIBAgECAgICAgICAgECAQECAQICAgICAgICAgEBAgEBAgEBAgICAgICAgECAQIBAQIBAgECAgICAgIBAgECAQECAQIBAgICAgIBAgIBAgEBAgECAgECAgICAgICAgECAgECAgQIAAAQIKAAAh+QQJZAACACwAAAAAEAAQAAAC55QkIiESIoQQQgghhAhCBCEIgiAIgiAIQiAIgSAIgiAIQiAIgRAEQiAQBAQCgUAQEAQEgYAgIAgIBAKBQBAQCAKBQEAgCAgEAoFAIAgEBAKBIBAQCAQCgUAgEAgCgUBAICAgICAgIBAgEBAgEBAgEBAgECAgICAgECAQIBAQIBAgECAgICAgICAgECAQECAQICAgICAgICAgEBAgEBAgEBAgICAgICAgECAQIBAQIBAgECAgICAgIBAgECAQECAQIBAgICAgIBAgIBAgEBAgECAgECAgICAgICAgECAgECAgQIAAAQIKAAA7.png" class="img-fluid figure-img"></a></p>
-</figure>
-</div>
-<p>Note that clicking the badge in a README will link to wherever you set in the <code>md_link</code> argument.</p>
+<!-- [![](https://img.shields.io/badge/rostrum.blog-post-008900?style=flat&labelColor=black&logo=data:image/gif;base64,R0lGODlhEAAQAPEAAAAAABWCBAAAAAAAACH5BAlkAAIAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAEAAQAAAC55QkISIiEoQQQgghRBBCiCAIgiAIgiAIQiAIgSAIgiAIQiAIgRAEQiAQBAQCgUAQEAQEgYAgIAgIBAKBQBAQCAKBQEAgCAgEAoFAIAgEBAKBIBAQCAQCgUAgEAgCgUBAICAgICAgIBAgEBAgEBAgEBAgECAgICAgECAQIBAQIBAgECAgICAgICAgECAQECAQICAgICAgICAgEBAgEBAgEBAgICAgICAgECAQIBAQIBAgECAgICAgIBAgECAQECAQIBAgICAgIBAgIBAgEBAgECAgECAgICAgICAgECAgECAgQIAAAQIKAAAh+QQJZAACACwAAAAAEAAQAAAC55QkIiESIoQQQgghhAhCBCEIgiAIgiAIQiAIgSAIgiAIQiAIgRAEQiAQBAQCgUAQEAQEgYAgIAgIBAKBQBAQCAKBQEAgCAgEAoFAIAgEBAKBIBAQCAQCgUAgEAgCgUBAICAgICAgIBAgEBAgEBAgEBAgECAgICAgECAQIBAQIBAgECAgICAgICAgECAQECAQICAgICAgICAgEBAgEBAgEBAgICAgICAgECAQIBAQIBAgECAgICAgIBAgECAQECAQIBAgICAgIBAgIBAgEBAgECAgECAgICAgICAgECAgECAgQIAAAQIKAAA7){fig-align="left"}](https://www.rostrum.blog/) -->
+<p><img src="resources/rostrum-badge.png" height="20"></p>
 <p>Note that the icon is subtly animated (the bug antennae open and close) because the source image was a gif.</p>
 <div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>When I re-rendered this post with Quarto in 2023, the logos in the rostrum.blog badge and the GitHub ‘label message’ badge were inexplicably missing (but not in the Shiny badge below). I’ve temporarily replaced these badges with screenshots until I can understand and fix the problem.</p>
+</div>
+<p>
+</p><div class="tip">
 <p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
 <p>More recently I’ve realised that it would be handy to have a README badge to indicate that one of my repos contains a Shiny app and whether it’s available on the internet. The right-hand side of the badge can point out whether the app is live (e.g.&nbsp;on shinyapps.io) or ‘not hosted’. For example:</p>
 <p><img src="https://img.shields.io/badge/Shiny-shinyapps.io-blue?style=flat&amp;labelColor=white&amp;logo=RStudio&amp;logoColor=blue" class="img-fluid"></p>
@@ -339,7 +341,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-22 11:32:29 BST</code></pre>
+<pre><code>Last rendered: 2023-08-14 22:04:55 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)

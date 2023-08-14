@@ -7,7 +7,7 @@ categories:
   - r
 ---
 
-![The {badgr} package is no bodge, I assure you!](https://media.giphy.com/media/ieUMCm9IJhTX4oHqIF/giphy.gif){fig-alt="Badger from children's TV show Bodger & Badger making a mess with instant mashed potato." width="100%"}
+![The {badgr} package is no bodge, I assure you!](resources/bodger.png){fig-alt="Badger from children's TV show Bodger & Badger making a mess with instant mashed potato." width="100%"}
 
 ## tl;dr
 
@@ -26,7 +26,7 @@ As of 2023, there's also [{badgen} by Jeroen Ooms](https://github.com/jeroen/bad
 
 You'll see badges in the README files of code repositories on sites like GitHub and GitLab. They communicate something about the code at-a-glance and usually contain metadata or a link to further information.
 
-![Examples of badges in the repo README for {data.table}.](resources/data-table-badges.png){fig-alt="Part of the README for the data.table package showing a number of badges, including test checks and download count." width="NA"}
+![Examples of badges in the repo README for {data.table}.](resources/data-table-badges.png){fig-alt="Part of the README for the data.table package showing a number of badges, including test checks and download count." width="100%"}
 
 Dynamic metadata badges help you judge the status of the repo. For example, a common badge is one that indicates whether the code has passed testing via a continuous integration service like Travis. So 'build passing' means that the code in the latest update is working. Clicking the badge will take you to the associated site to get more information.
 
@@ -54,7 +54,8 @@ You could build on this by providing an alternative style and an image from [Sim
 
 For example, `![](https://img.shields.io/badge/label-message-181717?style=for-the-badge&logo=github)` results in this:
 
-![](https://img.shields.io/badge/label-message-181717?style=for-the-badge&logo=github){fig-align="left"}
+<!--![](https://img.shields.io/badge/label-message-181717?style=for-the-badge&logo=github){fig-align="left"}-->
+![](resources/badge2.png){height="28" fig-align="left"}
 
 So you can see that additional 'arguments' to the basic call are added after a `?` and then additional parts added with an `&`.
 
@@ -110,15 +111,21 @@ That results in the following string output:
 blog_badge
 ```
 
-This is a shields.io-valid URL encased in some Markdown that allows it to be pasted directly into a GitHub README, for example.
+This is a shields.io-valid URL encased in some Markdown that allows it to be pasted directly into a GitHub README, for example. See how the Markdown contains the `![]()` image declaration, which itself is wrapped in the `[]()` link declaration. This means that clicking the link will take you to the URL specified by the `md_link` argument to `get_badge()`.
 
 It looks like this when rendered:
 
-[![](https://img.shields.io/badge/rostrum.blog-post-008900?style=flat&labelColor=black&logo=data:image/gif;base64,R0lGODlhEAAQAPEAAAAAABWCBAAAAAAAACH5BAlkAAIAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAEAAQAAAC55QkISIiEoQQQgghRBBCiCAIgiAIgiAIQiAIgSAIgiAIQiAIgRAEQiAQBAQCgUAQEAQEgYAgIAgIBAKBQBAQCAKBQEAgCAgEAoFAIAgEBAKBIBAQCAQCgUAgEAgCgUBAICAgICAgIBAgEBAgEBAgEBAgECAgICAgECAQIBAQIBAgECAgICAgICAgECAQECAQICAgICAgICAgEBAgEBAgEBAgICAgICAgECAQIBAQIBAgECAgICAgIBAgECAQECAQIBAgICAgIBAgIBAgEBAgECAgECAgICAgICAgECAgECAgQIAAAQIKAAAh+QQJZAACACwAAAAAEAAQAAAC55QkIiESIoQQQgghhAhCBCEIgiAIgiAIQiAIgSAIgiAIQiAIgRAEQiAQBAQCgUAQEAQEgYAgIAgIBAKBQBAQCAKBQEAgCAgEAoFAIAgEBAKBIBAQCAQCgUAgEAgCgUBAICAgICAgIBAgEBAgEBAgEBAgECAgICAgECAQIBAQIBAgECAgICAgICAgECAQECAQICAgICAgICAgEBAgEBAgEBAgICAgICAgECAQIBAQIBAgECAgICAgIBAgECAQECAQIBAgICAgIBAgIBAgEBAgECAgECAgICAgICAgECAgECAgQIAAAQIKAAA7){fig-align="left"}](https://www.rostrum.blog/)
+<!-- [![](https://img.shields.io/badge/rostrum.blog-post-008900?style=flat&labelColor=black&logo=data:image/gif;base64,R0lGODlhEAAQAPEAAAAAABWCBAAAAAAAACH5BAlkAAIAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAEAAQAAAC55QkISIiEoQQQgghRBBCiCAIgiAIgiAIQiAIgSAIgiAIQiAIgRAEQiAQBAQCgUAQEAQEgYAgIAgIBAKBQBAQCAKBQEAgCAgEAoFAIAgEBAKBIBAQCAQCgUAgEAgCgUBAICAgICAgIBAgEBAgEBAgEBAgECAgICAgECAQIBAQIBAgECAgICAgICAgECAQECAQICAgICAgICAgEBAgEBAgEBAgICAgICAgECAQIBAQIBAgECAgICAgIBAgECAQECAQIBAgICAgIBAgIBAgEBAgECAgECAgICAgICAgECAgECAgQIAAAQIKAAAh+QQJZAACACwAAAAAEAAQAAAC55QkIiESIoQQQgghhAhCBCEIgiAIgiAIQiAIgSAIgiAIQiAIgRAEQiAQBAQCgUAQEAQEgYAgIAgIBAKBQBAQCAKBQEAgCAgEAoFAIAgEBAKBIBAQCAQCgUAgEAgCgUBAICAgICAgIBAgEBAgEBAgEBAgECAgICAgECAQIBAQIBAgECAgICAgICAgECAQECAQICAgICAgICAgEBAgEBAgEBAgICAgICAgECAQIBAQIBAgECAgICAgIBAgECAQECAQIBAgICAgIBAgIBAgEBAgECAgECAgICAgICAgECAgECAgQIAAAQIKAAA7){fig-align="left"}](https://www.rostrum.blog/) -->
 
-Note that clicking the badge in a README will link to wherever you set in the `md_link` argument.
+![](resources/rostrum-badge.png){height="20"}
 
 Note that the icon is subtly animated (the bug antennae open and close) because the source image was a gif.
+
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+When I re-rendered this post with Quarto in 2023, the logos in the rostrum.blog badge and the GitHub 'label message' badge were inexplicably missing (but not in the Shiny badge below). I've temporarily replaced these badges with screenshots until I can understand and fix the problem.
+</div><p>
 
 <div class="tip"> 
 `r fontawesome::fa("exclamation-circle")` <b>Note</b>
