@@ -135,6 +135,12 @@ You can see why I chose this particular route for the demo; it really shows off 
 
 Might have made a nice print if I'd been gifted a 3D printer for Christmas!
 
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+I was originally able to embed the interactive 3D graphic in this post, but it failed to work when I ported this blog over to Quarto in 2023. Maybe I'll try to fix it one day.
+</div>
+
 ## A romance of many dimensions
 
 I've made {gpx3d} entirely for my own amusement, so your kilometreage may vary. At this point I can't make any guarantees about whether it will even work on your machine, but hopefully I'll find time in future to make sure it does. It might also be nice to include more user options for adjusting the output so you aren't stuck with 'ggplot grey' and the same defaults mikefc used in a vignette showing a {ggrgl} [version of Minard's famous visulisation of Napoleon's march](https://coolbutuseless.github.io/package/ggrgl/articles/geom-path-3d.html).[^rayshader]
@@ -153,7 +159,6 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 [^rayshader]: I also realised later that [Tyler Morgan-Wall already did something like this with {rayshader}](https://twitter.com/tylermorganwall/status/1024996007094968320?s=20). I should have guessed.
 [^df]: Or you can return a simpler data.frame without the sf-class by passing `sf_out = FALSE` to `extract_gpx3d()`.
 [^demo]: You could try using the demo GPX file that's included in the package, using `file <- system.file("extdata", "segment.gpx", package = "gpx3d")`
-[^lick]: I originally wrote 'mouselick' instead of 'mouseclick', which is a very different thing.
 [^location]: In a place I do not live, so minimal opsec-leaking here.
 [^embed]: I originally managed to embed the interactive object in the blog itself after [peeking at mikefc's vignettes for {ggrgl}](https://github.com/coolbutuseless/ggrgl/blob/main/vignettes/geom-path-3d.Rmd), but this seemed to fail when I later tried to re-render the post. I've left the code I used to do this in the source of this post (in the hidden chunks labelled 'plot-unused' and 'rglwidget-unused') if you want to check it out yourself.
 [^route-only]: Note that you can also set the argument `route_only` to `TRUE` to get rid of all the chart elements and leave behind the path only.
