@@ -9,7 +9,7 @@
 <link>https://whimsical-wisp-30974e.netlify.app/index.html</link>
 <atom:link href="https://whimsical-wisp-30974e.netlify.app/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
-<generator>quarto-1.4.176</generator>
+<generator>quarto-1.3.450</generator>
 <lastBuildDate>Fri, 18 Aug 2023 23:00:00 GMT</lastBuildDate>
 <item>
   <title>Object of type closure can shut up</title>
@@ -41,7 +41,7 @@ font-style: inherit;">1</span>, ]</span></code></pre></div>
 </div>
 </div>
 <p>Oh, silly me, I tried to subset a dataframe called <code>data</code> without actually, y’know, creating it first.</p>
-<p>This is <a href="https://stackoverflow.com/search?q=%22object+of+type+%27closure%27+is+not+subsettable%22+%5Br%5D">a classic stumbling block</a> in R. In short, there’s already a function in base R called <code>data</code> and so ended up trying subset it. But you can’t subset a function, hence the error.</p>
+<p>This is <a href="https://stackoverflow.com/search?q=%22object+of+type+%27closure%27+is+not+subsettable%22+%5Br%5D">a classic stumbling block</a> in R. In short, there’s already a function in base R called <code>data</code> and I ended up trying subset it. But you can’t subset a function, hence the error.</p>
 <p>Here’s what happens if you subset a non-existent object that has a name that’s different to any existing functions:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">x[x<span class="sc" style="color: #5E5E5E;
@@ -337,7 +337,7 @@ font-style: inherit;">get_base_functions</span>())</span></code></pre></div>
 [6] "zip"       </code></pre>
 </div>
 </div>
-<p>Aside: this function uses a little hack. It specificaloy grabs the attached base packages from the <code>sessionInfo()</code> listing. There are other base and ‘recommended’ packages that are actually not attached from the start of your session; see the <code>Priority</code> value from the output of <code>installed.packages()</code>.</p>
+<p>Aside: this function uses a little hack. It specifically grabs the attached base packages from the <code>sessionInfo()</code> listing. There are other base and ‘recommended’ packages that are actually not attached from the start of your session; see the <code>Priority</code> value from the output of <code>installed.packages()</code>.</p>
 <p>Now we can run the function to check the code for the list of function names.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">naughty_words <span class="ot" style="color: #003B4F;
@@ -399,7 +399,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-08-19 22:17:52 BST</code></pre>
+<pre><code>Last rendered: 2023-08-20 10:48:58 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -429,7 +429,7 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>Please note that this post is not a subtweet! I’ve read a bunch of code recently—including my own!—that uses variable names in this way.↩︎</p></li>
@@ -439,7 +439,7 @@ loaded via a namespace (and not attached):
 <li id="fn5"><p>I’ll have to update this in future to work with <a href="https://www.rostrum.blog/2022/06/07/assign-down/">down-assignment arrows</a>.↩︎</p></li>
 <li id="fn6"><p>This is an ‘R string’, introduced in R version 4.0.0. It deals with escaping certain characters and quotes within quotes so that you don’t have to. So <code>"x &lt;- "y""</code> will error but <code>r"(x &lt;- "y")"</code> will return <code>"x &lt;- \"y\""</code>. You can use symbols other than parentheses, such as curly braces, if your expression already contains parentheses itself.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>r</category>
   <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-08-19-find-bad-names/index.html</guid>
   <pubDate>Fri, 18 Aug 2023 23:00:00 GMT</pubDate>
@@ -626,7 +626,7 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>Curious why they all start with ‘S’? It’s in deference to ‘R’, which comes first in the alphabet and in being really cool.↩︎</p></li>
@@ -634,7 +634,7 @@ loaded via a namespace (and not attached):
 <li id="fn3"><p>Don’t.↩︎</p></li>
 <li id="fn4"><p>I consider this my hattrick of posts on <code>R_user_dir()</code>. I wrote about it as a way to <a href="https://rostrum.blog2023/02/02/trapinch">cache data from the PokéAPI in {trapinch}</a> and <a href="https://rostrum.blog/2022/11/13/tamrgo">store cyber pet blueprints in {tamRgo}</a>, the latter of which led to a post on <a href="https://rostrum.blog/2023/07/15/hiscore">saving high-score data with {hiscore}</a>.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>monetize</category>
   <category>r</category>
   <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-08-01-monetize/index.html</guid>
@@ -878,12 +878,12 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>As in ‘high score’ not as in ‘his core’.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>hiscore</category>
   <category>r</category>
   <category>videogames</category>
@@ -1086,7 +1086,7 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>Wrangling Word content with R is certainly a Herculean labour, amirite, classics fans? I know there are classicists who write R. Own up. There’s no shame. Adriana is one of you.↩︎</p></li>
@@ -1096,7 +1096,7 @@ loaded via a namespace (and not attached):
 <li id="fn5"><p>There are pre-existing functions that can parse numbers containing strings, like <code>readr::parse_number("10%")</code> returns <code>10</code>. But this particular function can’t handle arbitrary strings in your number, like the placeholder <code>[c]</code> used to represent suppressed values.↩︎</p></li>
 <li id="fn6"><p>I think you might be used to that by now if you’ve read this blog more than once.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>clipr</category>
   <category>markdown</category>
   <category>ms-office</category>
@@ -1193,12 +1193,12 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>I get that it’s not always possible to share things because of sensitivity issues. If you can’t open it up to the world, then what’s the highest level that you can release it? Organisation, division, team? If you can’t share the tool, then what can you tell people about the experience of developing and using it?↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>a11ytables</category>
   <category>event</category>
   <category>public-sector</category>
@@ -1858,12 +1858,12 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>{lubridate} is handy for time handling for many reasons. Here it’s helpful because it can resolve minutes and seconds (e.g.&nbsp;<code>21M 30S</code>) instead of the decimal minutes (e.g.&nbsp;<code>21.5</code>) in a difftime object.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>apple</category>
   <category>r</category>
   <category>sport</category>
@@ -2805,7 +2805,7 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>Related: I have some experience with R-to-Excel: <a href="https://co-analysis.github.io/a11ytables/">my {a11ytables} package</a> generates best-practice spreadsheets <a href="https://ycphs.github.io/openxlsx/">using {openxlsx}</a>.↩︎</p></li>
@@ -2814,7 +2814,7 @@ loaded via a namespace (and not attached):
 <li id="fn4"><p>I did this for my own curiosity, really. Just like everything else on this blog! As mentioned, check out <a href="https://github.com/hrbrmstr/docxtractr">{docxtractr}</a> and <a href="https://elipousson.github.io/officerExtras">{officerExtras}</a> for better implementations.↩︎</p></li>
 <li id="fn5"><p>What a handy function. This was useful enough that Eli has now added it to <a href="https://elipousson.github.io/officerExtras/reference/officer_tables.html">{officerExtras}</a>.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>ms-office</category>
   <category>officer</category>
   <category>officerExtras</category>
@@ -3500,12 +3500,12 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>At least I don’t think so. I can’t find it by searching on the website, anyway. Also, enough time has passed that certain bits of the original code have since been deprecated in {ggplot2}, lol.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>data-viz</category>
   <category>history</category>
   <category>ggplot2</category>
@@ -3858,7 +3858,7 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>Actually, we began this blog on WordPress in 2013. But WordPress doesn’t evaluate R code, so code outputs had to be pasted in manually. The original blog was meant to be more about general ecology, hence the name ‘rostrum’, which refers to the snouty bit of an insect and also the platform a speaker talks from. Seemed like a neat pun at the time, but the joke is kinda lost on an audience that’s no longer comprised mostly of entomologists. But the audience is mostly me, so I can live with it.↩︎</p></li>
@@ -3868,7 +3868,7 @@ loaded via a namespace (and not attached):
 <li id="fn5"><p>‘bd2q’ as in ‘{blogdown} to Quarto’. Which is a boring name, I know.↩︎</p></li>
 <li id="fn6"><p>This was actually more painful than I was hoping. There’s no easy way to match consecutive strings between vectors. In other words, try to extract the sequence <code>c("a", "b", "c")</code>, in that order, from the vector <code>c("a", "b", "d", "a", "b", "c", "d")</code>. Surely there’s an R function that will do this? Anyway, I fudged it by collapsing all the lines of a post into a single string and then finding the matching (collapsed) string provided by the user. Of course, the string will have to be ‘uncollapsed’ to get a string per line, so you can use <code>paste()</code> with a string provide to the <code>collapse</code> argument. But this separator will need to be a string that doesn’t appear in any of your posts, otherwise the uncollapsing process will break a line that you didn’t intend to be broken! I went with <code>///</code> by default, but the user can change this with the <code>collapse_str</code> argument in <code>bd2q::replace_lines()</code>. Sheesh.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>bd2q</category>
   <category>blog-meta</category>
   <category>blogdown</category>
@@ -4322,7 +4322,7 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>This is a Pokémon joke. I could have gone with <a href="https://bulbapedia.bulbagarden.net/wiki/Type:_Null_(Pok%C3%A9mon)">Type: Null</a>, but it’s too hard to draw.↩︎</p></li>
@@ -4330,7 +4330,7 @@ loaded via a namespace (and not attached):
 <li id="fn3"><p>You can dismiss these warning markers in the Excel GUI, but I don’t think it’s possible to suppress these markers programmatically and proactively in {a11ytables}. Note also that {a11ytables} cheats a bit here for sake of presentation. The <code>generate_workbook()</code> function guesses that the column was intended to be numeric and adds style information to right-align the values in the output xlsx, which is how numeric values are normally treated in Excel.↩︎</p></li>
 <li id="fn4"><p>Turns out there’s literally such a thing as <a href="https://en.wikipedia.org/wiki/Type_punning">type punning</a>.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>a11ytables</category>
   <category>base</category>
   <category>ms-office</category>
@@ -4468,7 +4468,7 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>I originally labelled the GitHub repo as <a href="https://github.com/sindresorhus/awesome">an ‘awesome’ repo</a>, which I later learned has <a href="https://github.com/matt-dray/splendid-r-games/issues/4#issuecomment-1205015274">a very specific meaning</a>. You might have seen awesome lists before, like the <a href="https://github.com/mcanouil/awesome-quarto">awesome-quarto repo</a> by <a href="https://github.com/mcanouil">Mickaël</a>, or the new <a href="https://github.com/nanxstats/awesome-webr">awesome-webr list</a> by <a href="https://nanx.me/">Nan Xiao</a>. ‘Splendid’ is much more of a Bri’ish word than ‘awesome’, so it feels more natural anyway.↩︎</p></li>
@@ -4476,7 +4476,7 @@ loaded via a namespace (and not attached):
 <li id="fn3"><p>See the <a href="https://coolbutuseless.github.io/package/nara/index.html">{nara}</a> and <a href="https://coolbutuseless.github.io/package/eventloop/index.html">{eventloop}</a> packages in particular.↩︎</p></li>
 <li id="fn4"><p>I like YouTube devlogs by folks like <a href="https://www.youtube.com/c/SebastianLague">Seb Lague</a>, <a href="https://www.youtube.com/@ThinMatrix">ThinMatrix</a>, <a href="https://www.youtube.com/@SquidGodDev">SquidGod</a>, <a href="https://www.youtube.com/c/jonastyroller">Jonas</a>, <a href="https://www.youtube.com/@Tantandev">TanTan</a> and others. R can never achieve what they’re up to, but I like listening through the logic of what they’re doing.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>r</category>
   <category>shiny</category>
   <category>videogames</category>
@@ -4580,7 +4580,7 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>A nice example of this in a teaching context is W3 Schools, who have a <a href="https://www.w3schools.com/html/tryit.asp?filename=tryhtml_intro">‘Try It Yourself’</a> space that lets you take code from the lessons and tinker with it yourself in the browser.↩︎</p></li>
@@ -4589,7 +4589,7 @@ loaded via a namespace (and not attached):
 <li id="fn4"><p>Originally I tried to embed the Quarto demo in an iframe, but WebR failed to load inside it when the blog was rendered. That’s interesting.↩︎</p></li>
 <li id="fn5"><p>But came close when I thought I’d found <a href="https://www.rostrum.blog/2022/03/15/renv-profiles/">a system for making individual posts reproducible</a>.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>quarto</category>
   <category>r</category>
   <category>webr</category>
@@ -4685,7 +4685,7 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>On the same day as train and public sector strikes, oof.↩︎</p></li>
@@ -4693,7 +4693,7 @@ loaded via a namespace (and not attached):
 <li id="fn3"><p>A reference of, course, to my little toy <a href="https://github.com/matt-dray/r.oguelike">{r.oguelike}</a> project. This is an R package I wrote to achieve some learning goals and also to have some fun; it contains a novelty tile- and turn-based game that the player interacts with in the console. This also fit the themes of the conference—connectivity and patterns—because it contains <a href="https://www.rostrum.blog/2022/05/01/dungeon/">a procedural dungeon generator</a> and <a href="https://www.rostrum.blog/2022/06/10/basic-search/">enemy pathfinding</a>.↩︎</p></li>
 <li id="fn4"><p>Would’ve been smarter to bring, y’know, actual evidence rather than anecdotes to a data science conference, eh?↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>event</category>
   <category>r</category>
   <category>r.oguelike</category>
@@ -5068,7 +5068,7 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>You too <a href="https://www.rostrum.blog/2021/11/07/deepfry/">can use R to deep fry a meme</a>.↩︎</p></li>
@@ -5081,7 +5081,7 @@ loaded via a namespace (and not attached):
 <li id="fn8"><p>A package with one of my favourite names and <a href="https://lobstr.r-lib.org/logo.png">hex logos</a>. The ‘str’ is from ‘structure’, as in ‘the structure of code’. The logo is a lobster snipping apart the ‘lob’ from ‘str’ text. I mean, *(lobster) chef’s kiss* on that one. 🦞↩︎</p></li>
 <li id="fn9"><p>Yeah, I’m hoping you didn’t read this far. Obviously I didn’t know how to end the post, sorry.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>lobstr</category>
   <category>r</category>
   <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-03-03-getparsedata/index.html</guid>
@@ -5858,7 +5858,7 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>‘Useless’ is an extremely relative term with regard to this blog.↩︎</p></li>
@@ -5866,7 +5866,7 @@ loaded via a namespace (and not attached):
 <li id="fn3"><p><a href="https://github.com/hadley/emo">{emo}</a> is dead, long live <a href="https://emilhvitfeldt.github.io/emoji/">{emoji}</a>. Haha, joke’s on you, emo will never die. I know this because ‘emo’ was in my top 5 genres on Spotify Wrapped 2022, lololol.↩︎</p></li>
 <li id="fn4"><p>Why <code>L</code>? <a href="https://stackoverflow.com/questions/22191324/clarification-of-l-in-r/22192378#22192378">Shrug</a>. Just take the L.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>oop</category>
   <category>r</category>
   <category>r6</category>
@@ -6127,7 +6127,7 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>Happy Valentine’s to all my fellow monetisable users.↩︎</p></li>
@@ -6137,7 +6137,7 @@ loaded via a namespace (and not attached):
 <li id="fn5"><p>Did I mention I made <a href="https://github.com/matt-dray/dialga">the R package {dialga}</a> to convert R to cron to English, lol?↩︎</p></li>
 <li id="fn6"><p>I <a href="https://en.wikipedia.org/wiki/Evisceration_(autotomy)">fact-checked myself on Wikipedia</a> and read this brand new sentence: ‘[evisceration] causes the wall of the cloaca to tear and the anus to gape.’↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>api</category>
   <category>github-actions</category>
   <category>londonmapbot</category>
@@ -6537,7 +6537,7 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>There’s <a href="https://github.com/public-apis/public-apis">a GitHub repo with a big long list of free APIs</a> that you can try out.↩︎</p></li>
@@ -6549,7 +6549,7 @@ loaded via a namespace (and not attached):
 <li id="fn7"><p>I have history with this: <a href="https://www.rostrum.blog/2021/04/10/dialga/">my {dialga} package</a> is named for <a href="https://bulbapedia.bulbagarden.net/wiki/Dialga_(Pok%C3%A9mon)">the legendary ‘temporal’ Pokémon</a> from the <em>Diamond</em> and <em>Pearl</em> games, which is fitting because the package converts between R code, <a href="https://en.wikipedia.org/wiki/Cron">cron strings</a> and English.↩︎</p></li>
 <li id="fn8"><p>Repokémon-Driven Development.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>api</category>
   <category>httr2</category>
   <category>httptest2</category>
@@ -6827,7 +6827,7 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>This post is not guerilla marketing for Opta. It would be <em>extremely</em> guerilla if they wanted to advertise on <em>this</em> blog.↩︎</p></li>
@@ -6835,7 +6835,7 @@ loaded via a namespace (and not attached):
 <li id="fn3"><p>Hint: it’s a very ‘boring’ footballer, lol.↩︎</p></li>
 <li id="fn4"><p>By which I mean I lost 1-0.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>r</category>
   <category>soccercolleagues</category>
   <category>sport</category>
@@ -7047,7 +7047,7 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>Which completes my hattrick of ‘R translation’ packages, I suppose. <a href="https://www.rostrum.blog/2020/11/14/hello-r2eng/">The {r2eng} package</a> attempts to <a href="https://www.rostrum.blog/2020/11/14/hello-r2eng/">translate R code to spoken English and have your computer speak it out loud</a>. <a href="https://www.github.com/matt-dray/dialga/">The {dialga} package</a> takes R code and <a href="https://www.rostrum.blog/2021/04/10/dialga/">translates it to cron strings and those cron strings to English</a>.↩︎</p></li>
@@ -7055,7 +7055,7 @@ loaded via a namespace (and not attached):
 <li id="fn3"><p>Personally I’d rather see <a href="https://en.wikipedia.org/wiki/Telegraphy">telegraphy</a> make a comeback.↩︎</p></li>
 <li id="fn4"><p>Wow, how edgy, maybe he’s had a bad run in with the CRAN maintainers, or perhaps he’s read the bit of <a href="https://cran.r-project.org/web/packages/policies.html">the CRAN repository policy</a> that says ‘a package’s contribution has to be non-trivial’ (<a href="https://fosstodon.org/@mattdray/109644645694966586">whatever that means</a>). Or he’s just lazy.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>r</category>
   <category>remorse</category>
   <category>sonify</category>
@@ -7893,13 +7893,13 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
 <li id="fn1"><p>Meanwhile, I’m looking forward to what <a href="https://twitter.com/coolbutuseless/status/1561664096860524545">Mike (coolbutuseless) is up to with audio for games in R</a>.↩︎</p></li>
 <li id="fn2"><p>Find some actual real R games in <a href="https://github.com/matt-dray/awesome-r-games">this list I’ve put together</a>.↩︎</p></li>
 </ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>gamedev</category>
   <category>r</category>
   <category>r.oguelike</category>
