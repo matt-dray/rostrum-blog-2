@@ -10,7 +10,440 @@
 <atom:link href="https://whimsical-wisp-30974e.netlify.app/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.4.176</generator>
-<lastBuildDate>Mon, 31 Jul 2023 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 18 Aug 2023 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Object of type closure can shut up</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://whimsical-wisp-30974e.netlify.app/posts/2023-08-19-find-bad-names/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2023-08-19-find-bad-names/resources/paste.png" class="img-fluid" style="width:100.0%" alt="A string of R code written in Comic Sans that says 'paste <- paste(paste)'."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I wrote an R function to help identify variable names that already exist as function names, like in <code>c &lt;- 1</code> or <code>head &lt;- "x"</code>.</p>
+</section>
+<section id="naming-and-shaming" class="level2">
+<h2 class="anchored" data-anchor-id="naming-and-shaming">Naming and shaming</h2>
+<p>Naming things is hard, yes, but <code>data</code> is a short and sensible choice for a dataframe, right?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">data[data<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>column <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, ]</span></code></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in data$column: object of type 'closure' is not subsettable</code></pre>
+</div>
+</div>
+<p>Oh, silly me, I tried to subset a dataframe called <code>data</code> without actually, y’know, creating it first.</p>
+<p>This is <a href="https://stackoverflow.com/search?q=%22object+of+type+%27closure%27+is+not+subsettable%22+%5Br%5D">a classic stumbling block</a> in R. In short, there’s already a function in base R called <code>data</code> and so ended up trying subset it. But you can’t subset a function, hence the error.</p>
+<p>Here’s what happens if you subset a non-existent object that has a name that’s different to any existing functions:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">x[x<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>column <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, ]</span></code></pre></div>
+<div class="cell-output cell-output-error">
+<pre><code>Error in eval(expr, envir, enclos): object 'x' not found</code></pre>
+</div>
+</div>
+<p>‘Object not found’ is a much more helpful error message.</p>
+</section>
+<section id="whats-in-a-name" class="level2">
+<h2 class="anchored" data-anchor-id="whats-in-a-name">What’s in a name?</h2>
+<p>So it’s not a big deal, but using existing function names as variable names is a <a href="https://en.wikipedia.org/wiki/Code_smell">code smell</a>. Especially if they’re frequently used functions from base R like <code>head</code>, <code>str</code>, <code>paste</code>, etc<sup>1</sup>.</p>
+<p>But R doesn’t stop you from using these names. In general, R is pretty loose with variable naming, though you can’t use a small set of <a href="https://search.r-project.org/R/refmans/base/html/Reserved.html">reserved words</a> like <code>TRUE</code>, <code>if</code> or <code>NA</code>.</p>
+<p>For example, here we can call the <code>c()</code> function to see its (very short) definition. But using it as a variable name obscures the function definition.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">c  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># this refers to the function</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>function (...)  .Primitive("c")</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">c <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb7-2">c  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># this now refers to the variable!</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rm</span>(c)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># tidy up by removing variable</span></span></code></pre></div>
+</div>
+<p>Can we write a generic function to identify if some code contains ‘bad’ variable names in this way?</p>
+</section>
+<section id="symbolic-gesture" class="level2">
+<h2 class="anchored" data-anchor-id="symbolic-gesture">Symbolic gesture</h2>
+<p>Of course. I’ve made a function called <code>find_var_names()</code>. I’m certain the functionality already exists; consider this a thought experiment.</p>
+<p>You provide (a) a string of code to evaluate<sup>2</sup> and (b) a vector of names to avoid. The code is parsed with <code>getparsedata(parse())</code> to identify variable names<sup>3</sup>. It checks for a <code>SYMBOL</code> token followed by the assignment operators <code>&lt;-</code> or <code>=</code><sup>4</sup>, or preceded by an assignment operator in the case of <code>-&gt;</code><sup>5</sup> (i.e.&nbsp;<code>*_ASSIGN</code> tokens). These variable names are then compared to the set of names provided.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">find_var_names <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(code_string, names_to_find) {</span>
+<span id="cb10-2">  </span>
+<span id="cb10-3">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Parse the string of code to identify R 'tokens'</span></span>
+<span id="cb10-4">  parsed <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">getParseData</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">parse</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text =</span> code_string, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">keep.source =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>))</span>
+<span id="cb10-5">  parsed <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> parsed[parsed<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>text <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>, ]</span>
+<span id="cb10-6">  </span>
+<span id="cb10-7">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Identify subsequent tokens (to help find 'x' in x &lt;- 1 and x = 1)</span></span>
+<span id="cb10-8">  parsed<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>next_token <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> </span>
+<span id="cb10-9">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(parsed<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>token[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">nrow</span>(parsed)], <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA_character_</span>)</span>
+<span id="cb10-10">  </span>
+<span id="cb10-11">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Identify prior token (to help find 'x' in 1 -&gt; x)</span></span>
+<span id="cb10-12">  parsed<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>last_token <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> </span>
+<span id="cb10-13">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA_character_</span>, parsed<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>token[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">nrow</span>(parsed) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>])</span>
+<span id="cb10-14">  </span>
+<span id="cb10-15">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Identify variable names with left-assignment</span></span>
+<span id="cb10-16">  lassign <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> </span>
+<span id="cb10-17">    parsed[parsed<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>token <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"SYMBOL"</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grepl</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ASSIGN"</span>, parsed<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>next_token), ]</span>
+<span id="cb10-18">  </span>
+<span id="cb10-19">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Identify row index for variable names following right-assignment</span></span>
+<span id="cb10-20">  rassign_i <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> </span>
+<span id="cb10-21">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">which</span>(parsed<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>token <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"RIGHT_ASSIGN"</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;</span> parsed<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>next_token <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"SYMBOL"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb10-22">  </span>
+<span id="cb10-23">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Filter for right-assigned variable names</span></span>
+<span id="cb10-24">  rassign <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> parsed[rassign_i, ]</span>
+<span id="cb10-25">  </span>
+<span id="cb10-26">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Combine the results and sort by location</span></span>
+<span id="cb10-27">  var_names <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rbind</span>(lassign, rassign)</span>
+<span id="cb10-28">  var_names <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> var_names[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sort</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">row.names</span>(var_names)), ]</span>
+<span id="cb10-29">  </span>
+<span id="cb10-30">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Filter for variable names that are in the provided names list</span></span>
+<span id="cb10-31">  var_names[var_names<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>text <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%in%</span> names_to_find, <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grepl</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"_token"</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(var_names))]</span>
+<span id="cb10-32">  </span>
+<span id="cb10-33">}</span></code></pre></div>
+</div>
+<p>So, let’s say we have this snippet of R code<sup>6</sup> below. It uses some variable names that are already function names, as well as each flavour of assignment.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">demo_code <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> r<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"{data &lt;- "</span>x<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb11-2"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">head = head(chickwts)</span></span>
+<span id="cb11-3"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>y<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">" -&gt; df</span></span>
+<span id="cb11-4"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">a &lt;- beaver1[1:3]</span></span>
+<span id="cb11-5"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">b &lt;- 2 -&gt; c}"</span></span></code></pre></div>
+</div>
+<p>And here’s a function that grabs the base packages and the function names within. This is what we’ll use as our ‘no-go’ variable names. You could expand this to include other names, like function names from the tidyverse, for example.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">get_base_functions <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>() {</span>
+<span id="cb12-2">  base_names <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sessionInfo</span>()<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>basePkgs</span>
+<span id="cb12-3">  base_pkgs <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste0</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"package:"</span>, base_names)</span>
+<span id="cb12-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(base_pkgs, ls) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unlist</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unique</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sort</span>()</span>
+<span id="cb12-5">}</span>
+<span id="cb12-6"></span>
+<span id="cb12-7"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tail</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_base_functions</span>())</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "xyTable"    "xyz.coords" "xzfile"     "yinch"      "zapsmall"  
+[6] "zip"       </code></pre>
+</div>
+</div>
+<p>Aside: this function uses a little hack. It specificaloy grabs the attached base packages from the <code>sessionInfo()</code> listing. There are other base and ‘recommended’ packages that are actually not attached from the start of your session; see the <code>Priority</code> value from the output of <code>installed.packages()</code>.</p>
+<p>Now we can run the function to check the code for the list of function names.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">naughty_words <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">find_var_names</span>(</span>
+<span id="cb14-2">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">code_string =</span> demo_code,</span>
+<span id="cb14-3">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">names_to_find =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">get_base_functions</span>()</span>
+<span id="cb14-4">)</span>
+<span id="cb14-5"></span>
+<span id="cb14-6">naughty_words</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   line1 col1 line2 col2 id parent  token terminal text
+1      1    1     1    4  1      3 SYMBOL     TRUE data
+10     2    1     2    4 10     12 SYMBOL     TRUE head
+31     3    8     3    9 31     33 SYMBOL     TRUE   df
+64     5   11     5   11 64     66 SYMBOL     TRUE    c</code></pre>
+</div>
+</div>
+<p>The output is what you normally get from <code>getparsedata(parse())</code>, filtered for the illegal names. Helpfully it shows you the exact row and column indices for where the string exists in the code you provided.</p>
+<p>And of course you can just isolate the offenders.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">naughty_words<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>text <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unique</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sort</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "c"    "data" "df"   "head"</code></pre>
+</div>
+</div>
+</section>
+<section id="seeking-closure" class="level2">
+<h2 class="anchored" data-anchor-id="seeking-closure">Seeking closure</h2>
+<p>I probably won’t use this function in real life, but maybe the concepts are interesting to you or you can tell me about a linter that does this already.</p>
+<p>At least for now, object of type ‘Matthew’ is not upsettable.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-08-19 22:17:52 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
+[13] digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Please note that this post is not a subtweet! I’ve read a bunch of code recently—including my own!—that uses variable names in this way.↩︎</p></li>
+<li id="fn2"><p>Exercise for the reader: have the function accept script files from a connection, not just as a string. I didn’t bother for this silly demo.↩︎</p></li>
+<li id="fn3"><p>If you can be parsed, I’ve <a href="https://www.rostrum.blog/2023/03/03/getparsedata/">written about this</a> before.↩︎</p></li>
+<li id="fn4"><p>If you haven’t already <a href="https://www.rostrum.blog/2021/03/13/assign/">expunged</a> any files containing equals assignment.↩︎</p></li>
+<li id="fn5"><p>I’ll have to update this in future to work with <a href="https://www.rostrum.blog/2022/06/07/assign-down/">down-assignment arrows</a>.↩︎</p></li>
+<li id="fn6"><p>This is an ‘R string’, introduced in R version 4.0.0. It deals with escaping certain characters and quotes within quotes so that you don’t have to. So <code>"x &lt;- "y""</code> will error but <code>r"(x &lt;- "y")"</code> will return <code>"x &lt;- \"y\""</code>. You can use symbols other than parentheses, such as curly braces, if your expression already contains parentheses itself.↩︎</p></li>
+</ol>
+</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>r</category>
+  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-08-19-find-bad-names/index.html</guid>
+  <pubDate>Fri, 18 Aug 2023 23:00:00 GMT</pubDate>
+</item>
 <item>
   <title>One weird trick to {monetize} your R package</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -7474,260 +7907,6 @@ loaded via a namespace (and not attached):
   <category>videogames</category>
   <guid>https://whimsical-wisp-30974e.netlify.app/posts/2023-01-04-rogue-sfx/index.html</guid>
   <pubDate>Wed, 04 Jan 2023 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Animate sprites in R with {pixeltrix}</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://whimsical-wisp-30974e.netlify.app/posts/2022-12-11-pixeltrix-animate/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-12-11-pixeltrix-animate/resources/mario.gif" class="img-fluid" style="width:32.0%" alt="The walk cycle of the Mario sprite from the original Super Mario Bros game"> <img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-12-11-pixeltrix-animate/resources/mario.gif" class="img-fluid" style="width:32.0%"> <img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-12-11-pixeltrix-animate/resources/mario.gif" class="img-fluid" style="width:32.0%"></p>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I’ve updated <a href="https://github.com/matt-dray/pixeltrix">the {pixeltrix} package</a> so you can create animated sprite gifs with a simple, interactive pixel editor from within R’s plot window.</p>
-</section>
-<section id="pix-all-the-right-boxes" class="level2">
-<h2 class="anchored" data-anchor-id="pix-all-the-right-boxes">Pix all the right boxes</h2>
-<p>The {pixeltrix} package—which I’ve <a href="https://www.rostrum.blog/2022/09/24/pixeltrix/">written about before</a>—lets you open an interactive R plot that you can click to turn ‘pixels’ on and off.</p>
-<p>I created it for one purpose: to quickly create simple, blocky sprites for <a href="https://github.com/matt-dray/tamRgo">my {tamRgo} package</a>, which lets you keep a persistent cyberpet on your computer (<a href="https://www.rostrum.blog/2022/11/13/tamrgo/">yes, really</a>).</p>
-<p>But wouldn’t it be nice if {pixeltrix} were more… general? Read on for a couple of improvements to the package that might help.</p>
-<div class="tip">
-<p> <b>Note</b></p>
-<p>The package has been updated again since this post. From version 0.2 you:</p>
-<ul>
-<li>can provide colours as input to <code>click_pixels()</code> and <code>frame_pixels()</code></li>
-<li>receive a <code>colours</code> attribute with the output matrices, which encodes the state and colour values</li>
-</ul>
-</div>
-</section>
-<section id="pixellate-to-accumulate" class="level2">
-<h2 class="anchored" data-anchor-id="pixellate-to-accumulate">Pixellate to accumulate</h2>
-<p>First, you can <a href="https://github.com/matt-dray/pixeltrix">install the updated package from GitHub</a>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">remotes<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"matt-dray/pixeltrix"</span>)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># v0.1.2 in this post</span></span>
-<span id="cb1-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(pixeltrix)</span></code></pre></div>
-</div>
-<p>Now the improvements: plotting with colour, and creating gif animations.</p>
-<section id="plot" class="level3">
-<h3 class="anchored" data-anchor-id="plot">1. Plot</h3>
-<p>The <code>click_pixel()</code> function opens an interactive plot. If <code>n_state = 3</code>, for example, then each pixel will cycle through three states as you keep clicking it. You’re returned a matrix of these values when you hit <kbd>Esc</kbd>.</p>
-<p>That was enough for {tamRgo}: I turned a binary matrix into a 1-bit sprite. But wouldn’t it be good—fundamental!—to be able to plot the matrix as an image with user-specified colours? So I made <code>draw_pixels()</code>.</p>
-<p>I’ve added a three-state matrix, <code>blue</code>, into the package as an example dataset. Let’s plot it with simple colours:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">draw_pixels</span>(</span>
-<span id="cb2-2">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">m =</span> pixeltrix<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span>blue, </span>
-<span id="cb2-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">colours =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"white"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"#879afb"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"gray20"</span>)</span>
-<span id="cb2-4">)</span></code></pre></div>
-</div>
-<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-12-11-pixeltrix-animate/resources/blue_draw.png" class="img-fluid" style="width:33.0%" alt="A 14 by 16 pixel grid with a sprite of the main character from the first generation of Pokemon games for the Game Boy. The background is white, the outlines are dark grey and the highlights are light blue."></p>
-<p>Of course, it’s the subtly-coloured player character from <em>Pokémon Blue</em> (1996) as seen on the Nintendo Game Boy Color.</p>
-</section>
-<section id="animate" class="level3">
-<h3 class="anchored" data-anchor-id="animate">2. Animate</h3>
-<p>Naturally, you could use <code>click_pixels()</code> and <code>draw_pixels()</code> to generate several images and combine them as ‘frames’ of an animation. Why not have a function that does this automatically?</p>
-<p>So that’s what I did:</p>
-<ul>
-<li><code>frame_pixels()</code> calls <code>click_pixels()</code> and adds the output as the first element of a list, then it passes that matrix into <code>edit_pixels()</code> as the template for the next frame (and so on until you choose to stop making frames)</li>
-<li><code>gif_pixels()</code> takes the list of matrices created by <code>frame_pixels()</code> and draws, combines and writes them to a gif</li>
-</ul>
-<p>I’ve prepared <code>pixeltrix::mario</code> as an example of an output from <code>frame_pixels()</code>. It contains each of three frames that comprise Mario’s walk cycle from <em>Super Mario Bros</em> on the NES.</p>
-<p>Here’s what the console output looked like when I made <code>mario</code>:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">mario <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">frame_pixels</span>(</span>
-<span id="cb3-2">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">n_rows   =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">16</span>,</span>
-<span id="cb3-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">n_cols   =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">16</span>,</span>
-<span id="cb3-4">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">n_states =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># background + 3 colours</span></span>
-<span id="cb3-5">)</span></code></pre></div>
-</div>
-<pre><code>Click squares in the plot window. Press &lt;Esc&gt; to end.
-Add a frame? y/n: y
-Click squares in the plot window. Press &lt;Esc&gt; to end.
-Current frame count: 2
-Add a frame? y/n: y
-Click squares in the plot window. Press &lt;Esc&gt; to end.
-Current frame count: 3
-Add a frame? y/n: n
-Final frame count: 3</code></pre>
-<p>You can see there’s interactivity; the user is prompted to add another frame with <code>Add a frame? y/n:</code>, where <code>y</code> will let you create a new frame and <code>n</code> will stop the process and return the list of matrices.</p>
-<p>And so you can see it’s a list of three matrices:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">str</span>(mario)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>List of 3
- $ : int [1:16, 1:16] 0 0 0 0 0 0 0 0 1 1 ...
- $ : int [1:16, 1:16] 0 0 0 0 0 0 0 0 0 0 ...
- $ : int [1:16, 1:16] 0 0 0 0 0 0 0 0 0 0 ...</code></pre>
-</div>
-</div>
-<p>You can then convert the list to a gif with <code>gif_pixels()</code>, which engifs the frames using <a href="https://cloud.r-project.org/web/packages/gifski/index.html">{gifski}</a>.<sup>1</sup></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">gif_pixels</span>(</span>
-<span id="cb7-2">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">frames =</span> mario,</span>
-<span id="cb7-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">colours =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(</span>
-<span id="cb7-4">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"white"</span>,    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># background</span></span>
-<span id="cb7-5">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"#FDA428"</span>,  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># skin (yellowish)</span></span>
-<span id="cb7-6">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"#FC0D1B"</span>,  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># overalls/hat (red)</span></span>
-<span id="cb7-7">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"#A32B2E"</span>   <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># hair, eyes, shirt, boots (brown)</span></span>
-<span id="cb7-8">  ),</span>
-<span id="cb7-9">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">file =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"mario.gif"</span>,</span>
-<span id="cb7-10">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">delay =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.15</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># passed via dots to gifski::save_gif()</span></span>
-<span id="cb7-11">)</span></code></pre></div>
-</div>
-<pre><code>Inserting image 3 at 0.30s (100%)...
-Encoding to gif... done!
-[1] "mario.gif"</code></pre>
-<p>And if we open that file:</p>
-<p><img src="https://whimsical-wisp-30974e.netlify.app/posts/2022-12-11-pixeltrix-animate/resources/mario.gif" class="img-fluid" style="width:33.0%" alt="An animated 16 by 16 pixel grid with a coloured sprite of Mario from the original Super Mario Bros for the NES. There are three frames that each show a step in Mario's walk cycle."></p>
-<p>Yahoooooo, created entirely with R. Noice.</p>
-</section>
-<section id="pix-n-mix" class="level3">
-<h3 class="anchored" data-anchor-id="pix-n-mix">Pix n mix</h3>
-<p>So {pixeltrix} finally got a couple of nice-to-have (well, must-have) functions. This is enough for me to continue just messing around with it as a novelty<sup>2</sup>.</p>
-<p>I mean, come on: animated pixelart created in an interactive R plot window? Why? I mean, er… wow!</p>
-</section>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-17 18:10:37 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
-[1] pixeltrix_0.2.1.9000
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
- [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
-[13] digest_0.6.31     rlang_1.1.1       fontawesome_0.5.1 evaluate_0.21    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><aside id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>The {pixeltrix} package has no dependencies and I didn’t want to force a user to install {gifski} if they weren’t going to use <code>gif_pixels()</code>. It’s therefore up to the user to install it. <a href="https://github.com/matt-dray/pixeltrix/issues/15">I also wonder</a> if I should provide an argument for the user to name a ‘gif engine’ of choice, e.g.&nbsp;{gifski} or {magick}, depending on what they’ve got installed on their machine.↩︎</p></li>
-<li id="fn2"><p>It’s never, ever going to have the features and quality of a premium pixel-art program like <a href="https://www.aseprite.org/">Aseprite</a>, obviously.↩︎</p></li>
-</ol>
-</aside><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>art</category>
-  <category>gifski</category>
-  <category>locator</category>
-  <category>pixeltrix</category>
-  <category>r</category>
-  <category>videogames</category>
-  <guid>https://whimsical-wisp-30974e.netlify.app/posts/2022-12-11-pixeltrix-animate/index.html</guid>
-  <pubDate>Sun, 11 Dec 2022 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
