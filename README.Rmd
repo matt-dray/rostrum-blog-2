@@ -1,0 +1,142 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
+```
+
+```{r attach-pkgs, message=FALSE}
+# Attach packages
+suppressPackageStartupMessages({
+  library(ggplot2)
+  library(lubridate)
+  library(knitr)
+  library(emoji)
+})
+```
+
+```{r fetch-post-names}
+# Get all the internal post paths
+post_paths <- 
+  list.files("posts", pattern = ".qmd$", full.names = TRUE, recursive = TRUE)
+
+# Extract title and date from each post
+get_post_info <- function(post_path) {
+  
+  post_lines <- readLines(post_path, warn = FALSE)
+  
+  title_rx <- "title:"
+  date_rx <- "date:"
+  
+  title_i <- grep(title_rx, post_lines)[1]
+  date_i <- grep(date_rx, post_lines)[1]
+  
+  post_title <- trimws(gsub(title_rx, "", post_lines[title_i]))
+  post_title <- gsub("^\'|\'$|^\"|\"$", "", post_title)
+  post_date <- trimws(gsub(date_rx, "", post_lines[date_i]))
+  
+  data.frame(
+    title = post_title,
+    publish_date = lubridate::ymd(post_date)
+  )
+  
+}
+
+# Get title and date of every post
+post_info <- lapply(post_paths, function(path) get_post_info(path))
+posts <- do.call(rbind, post_info)
+
+# Generate a web link to each post
+posts$link <- gsub("posts", "https://www.rostrum.blog", post_paths)
+
+# Invert order, so latest is at the top
+posts <- posts[rev(row.names(posts)), ]
+```
+
+```{r date-bin}
+# A dataframe with one row per day since the blog's first post
+all_dates <- data.frame(
+  publish_date = lubridate::as_date(
+    lubridate::ymd(min(posts$publish_date)):lubridate::today()
+  )
+)
+
+# Left join posts to dates
+post_timeline <- merge(all_dates, posts, by = "publish_date", all.x = TRUE)
+
+# Add a 'binary' column: 1 if there was a post that day, NA if not
+post_timeline$bin <- ifelse(is.na(post_timeline$title), NA_real_, 1)
+date_bin_wth_dupes <- post_timeline[, c("publish_date", "bin")]
+
+# Remove duplicates because sometimes there's more than one post per day
+date_bin <- date_bin_wth_dupes[!duplicated(date_bin_wth_dupes), ]
+```
+
+
+```{r}
+# Create plot object
+p <- ggplot(date_bin) +
+  geom_point(  # marker for today's date
+    aes(x = Sys.Date(), y = 1),
+    shape = "|", size = 10, stroke = 1, color = "grey95"
+  ) +
+  geom_point(  # markers for publishing dates
+    aes(x = publish_date, y = bin),
+    shape = "|", size = 10, stroke = 1, color = "#1D8016", alpha = 0.7
+  ) +
+  theme(
+    legend.position = "none",
+    panel.grid = element_blank(),
+    axis.title = element_blank(),
+    axis.text.x = element_text(colour = "#1D8016"),
+    axis.text.y = element_blank(),
+    axis.ticks = element_blank(),
+    panel.background = element_blank()
+  ) 
+```
+
+<img src="images/logo-hex.png" alt="Bright green hexagon with the blog's logo of a 16-bit insect in black." width="150" align="right">
+
+# rostrum-blog
+
+<!-- badges: start -->
+[![rostrum.blog
+post](https://img.shields.io/badge/rostrum-blog-008900?style=flat&labelColor=black&logo=data:image/gif;base64,R0lGODlhEAAQAPEAAAAAABWCBAAAAAAAACH5BAlkAAIAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAEAAQAAAC55QkISIiEoQQQgghRBBCiCAIgiAIgiAIQiAIgSAIgiAIQiAIgRAEQiAQBAQCgUAQEAQEgYAgIAgIBAKBQBAQCAKBQEAgCAgEAoFAIAgEBAKBIBAQCAQCgUAgEAgCgUBAICAgICAgIBAgEBAgEBAgEBAgECAgICAgECAQIBAQIBAgECAgICAgICAgECAQECAQICAgICAgICAgEBAgEBAgEBAgICAgICAgECAQIBAQIBAgECAgICAgIBAgECAQECAQIBAgICAgIBAgIBAgEBAgECAgECAgICAgICAgECAgECAgQIAAAQIKAAAh+QQJZAACACwAAAAAEAAQAAAC55QkIiESIoQQQgghhAhCBCEIgiAIgiAIQiAIgSAIgiAIQiAIgRAEQiAQBAQCgUAQEAQEgYAgIAgIBAKBQBAQCAKBQEAgCAgEAoFAIAgEBAKBIBAQCAQCgUAgEAgCgUBAICAgICAgIBAgEBAgEBAgEBAgECAgICAgECAQIBAQIBAgECAgICAgICAgECAQECAQICAgICAgICAgEBAgEBAgEBAgICAgICAgECAQIBAQIBAgECAgICAgIBAgECAQECAQIBAgICAgIBAgIBAgEBAgECAgECAgICAgICAgECAgECAgQIAAAQIKAAA7)](https://www.rostrum.blog/)
+[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ebfbdae4-a903-43e8-9f53-75becd95b42e/deploy-status)](https://app.netlify.com/sites/rostrum/deploys)
+<!-- badges: end -->
+
+Source files for [rostrum.blog](https://www.rostrum.blog/): fun and learning with the R language. 
+
+Built with [Quarto](https://quarto.org/) and deployed with [Netlify](https://www.netlify.com/).
+
+## Stats
+
+`r emoji("1234")` There have been `r nrow(posts)` posts on [the blog](https://www.rostrum.blog/) since `r min(posts$publish_date)`. `r if (format(today(), "%m-%d") == format(min(posts$publish_date), "%m-%d")) emoji::emoji("balloon")`
+
+`r emoji("date")` That's a post roughly every `r round((as.numeric(today() - min(posts$publish_date))) / nrow(posts))` days, or about `r round(((nrow(posts) / (as.numeric(today() - min(posts$publish_date)))) * 30), 1)` posts per month.
+
+`r emoji("new")` The latest post was published `r today() - max(posts$publish_date)` day(s) ago: [`r posts$title[1]`](`r posts$link[1]`).
+
+`r emoji("chart_with_upwards_trend")` Posts over time:
+
+```{r plot-out, fig.height=1, fig.width=10, fig.alt="A 2D chart where each point represents a published blog post on a Y axis of time spanning from 2018 to the present. There are some gaps, but posts have been relatively consistent over time."}
+p
+```
+
+<details><summary>`r emoji("open_file_folder")` Click to expand a full list of posts</summary>
+```{r posts-table}
+posts_table <- posts[, "publish_date", drop = FALSE]
+posts_table[["title_url"]] <- 
+  paste0("[", posts[["title"]], "](", posts[["link"]], ")")
+names(posts_table) <- c("Date", "Title")
+kable(posts_table)
+```
+</details><div>
+
+##
+
+Updated on `r format(Sys.time(), "%Y-%m-%d at %H:%M")`.
