@@ -11,10 +11,10 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE)
 ```{r attach-pkgs, message=FALSE}
 # Attach packages
 suppressPackageStartupMessages({
-  library(ggplot2)
-  library(lubridate)
-  library(knitr)
   library(emoji)
+  library(ggplot2)
+  library(knitr)
+  library(lubridate)
 })
 ```
 
@@ -38,10 +38,7 @@ get_post_info <- function(post_path) {
   post_title <- gsub("^\'|\'$|^\"|\"$", "", post_title)
   post_date <- trimws(gsub(date_rx, "", post_lines[date_i]))
   
-  data.frame(
-    title = post_title,
-    publish_date = lubridate::ymd(post_date)
-  )
+  data.frame(title = post_title, publish_date = ymd(post_date))
   
 }
 
@@ -59,8 +56,8 @@ posts <- posts[rev(row.names(posts)), ]
 ```{r date-bin}
 # A dataframe with one row per day since the blog's first post
 all_dates <- data.frame(
-  publish_date = lubridate::as_date(
-    lubridate::ymd(min(posts$publish_date)):lubridate::today()
+  publish_date = as_date(
+    ymd(min(posts$publish_date)):today()
   )
 )
 
