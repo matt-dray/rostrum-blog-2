@@ -17,3 +17,11 @@ title-block-banner: false
 ---
 
 <!-- https://quarto.org/docs/websites/website-listings.html -->
+
+```{r copy-redirects, echo=FALSE, results=FALSE}
+file.copy(
+  here::here("_redirects"),
+  here::here("_site", "_redirects"),
+  overwrite = TRUE
+)
+```
