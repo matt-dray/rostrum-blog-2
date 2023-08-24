@@ -66,7 +66,7 @@ glimpse(pkmn_summary)
 
 Accept your fate.
 
-```{r cloud_pie, warnings=FALSE}
+```{r cloud_pie, warnings=FALSE, message=FALSE}
 dray::cloud_pie(
   data = pkmn_summary,
   name_col = "pokemon",
@@ -75,6 +75,8 @@ dray::cloud_pie(
 ```
 
 Did I forget to mention that the typeface is gothic and colours are selected randomly from the named colours that R knows about? The words and pie slices are sized by frequency and match up by colour. Sensational.
+
+Oh, and, haha, sometimes the wordcloud will miss out some words if they don't fit nicely. Doesn't matter: people will be so overawed by the plot's overall beauty that they won't notice a few missing values, amirite.
 
 ## You know what to do
 
