@@ -76,10 +76,10 @@ date_bin <- date_bin_wth_dupes[!duplicated(date_bin_wth_dupes), ]
 ```{r}
 # Create plot object
 p <- ggplot(date_bin) +
-  geom_point(  # marker for today's date
-    aes(x = Sys.Date(), y = 1),
-    shape = "|", size = 10, stroke = 1, color = "grey95"
-  ) +
+  # geom_point(  # marker for today's date
+  #   aes(x = Sys.Date(), y = 1),
+  #   shape = "|", size = 10, stroke = 1, color = "grey95"
+  # ) +
   geom_point(  # markers for publishing dates
     aes(x = publish_date, y = bin),
     shape = "|", size = 10, stroke = 1, color = "#1D8016", alpha = 0.7
@@ -106,17 +106,15 @@ post](https://img.shields.io/badge/rostrum-blog-008900?style=flat&labelColor=bla
 [![Netlify Status](https://api.netlify.com/api/v1/badges/09af3502-e7fc-4abb-b370-ca71214bea50/deploy-status)](https://app.netlify.com/sites/rostrum-blog/deploys)
 <!-- badges: end -->
 
-Source files for [rostrum.blog](https://www.rostrum.blog/): fun and learning with the R language. 
+`r emoji("floppy_disk")` Source files for [rostrum.blog](https://www.rostrum.blog/): fun and learning with the R language. 
 
-Built with [Quarto](https://quarto.org/) and deployed with [Netlify](https://www.netlify.com/).
+`r emoji("hammer_and_wrench")` Built with [Quarto](https://quarto.org/) and deployed with [Netlify](https://www.netlify.com/).
 
-## Stats
+`r emoji("1234")` There have been `r nrow(posts)` posts on [the blog](https://www.rostrum.blog/) between `r min(posts$publish_date)` (first) to `r max(posts$publish_date)` (latest). `r if (format(today(), "%m-%d") == format(min(posts$publish_date), "%m-%d")) emoji::emoji("balloon")`
 
-`r emoji("1234")` There have been `r nrow(posts)` posts on [the blog](https://www.rostrum.blog/) since `r min(posts$publish_date)`. `r if (format(today(), "%m-%d") == format(min(posts$publish_date), "%m-%d")) emoji::emoji("balloon")`
+`r emoji("date")` That's a post roughly every `r round((as.numeric(max(posts$publish_date) - min(posts$publish_date))) / nrow(posts))` days, or about `r round(((nrow(posts) / (as.numeric(max(posts$publish_date) - min(posts$publish_date)))) * 30), 1)` posts per month.
 
-`r emoji("date")` That's a post roughly every `r round((as.numeric(today() - min(posts$publish_date))) / nrow(posts))` days, or about `r round(((nrow(posts) / (as.numeric(today() - min(posts$publish_date)))) * 30), 1)` posts per month.
-
-`r emoji("new")` The latest post was published `r today() - max(posts$publish_date)` day(s) ago: [`r posts$title[1]`](`r posts$link[1]`)`r ifelse(grepl("[!|?|\\.|]$", posts$link[1]), "", ".")`
+`r emoji("new")` The latest post: [`r posts$title[1]`](`r posts$link[1]`)`r ifelse(grepl("[!|?|\\.|]$", posts$link[1]), "", ".")`
 
 `r emoji("chart_with_upwards_trend")` Posts over time:
 
@@ -134,6 +132,6 @@ kable(posts_table)
 ```
 </details><div>
 
-##
+---
 
-Updated on `r format(Sys.time(), "%Y-%m-%d at %H:%M")`.
+`r emoji("three_o_clock")` Last updated: `r format(Sys.time(), "%Y-%m-%d at %H:%M")`.

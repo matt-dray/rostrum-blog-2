@@ -12,24 +12,22 @@ post](https://img.shields.io/badge/rostrum-blog-008900?style=flat&labelColor=bla
 [![License: CC BY-NC-SA
 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 [![Netlify
-Status](https://api.netlify.com/api/v1/badges/ebfbdae4-a903-43e8-9f53-75becd95b42e/deploy-status)](https://app.netlify.com/sites/rostrum/deploys)
+Status](https://api.netlify.com/api/v1/badges/09af3502-e7fc-4abb-b370-ca71214bea50/deploy-status)](https://app.netlify.com/sites/rostrum-blog/deploys)
 <!-- badges: end -->
 
-Source files for [rostrum.blog](https://www.rostrum.blog/): fun and
+💾 Source files for [rostrum.blog](https://www.rostrum.blog/): fun and
 learning with the R language.
 
-Built with [Quarto](https://quarto.org/) and deployed with
+🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-## Stats
-
 🔢 There have been 154 posts on [the blog](https://www.rostrum.blog/)
-since 2018-04-14.
+between 2018-04-14 (first) to 2023-08-19 (latest).
 
 📅 That’s a post roughly every 13 days, or about 2.4 posts per month.
 
-🆕 The latest post was published 5 day(s) ago: [Object of type closure
-can shut up](https://www.rostrum.blog/2023-08-19-find-bad-names).
+🆕 The latest post: [Object of type closure can shut
+up](https://www.rostrum.blog/2023-08-19-find-bad-names).
 
 📈 Posts over time:
 
@@ -200,6 +198,6 @@ can shut up](https://www.rostrum.blog/2023-08-19-find-bad-names).
 </details>
 <div>
 
-## 
+------------------------------------------------------------------------
 
-Updated on 2023-08-24 at 21:18.
+🕒 Last updated: 2023-08-26 at 18:52.
