@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 154 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2023-08-19 (latest).
+🔢 There have been 155 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2023-08-26 (latest).
 
 📅 That’s a post roughly every 13 days, or about 2.4 posts per month.
 
-🆕 The latest post: [Object of type closure can shut
-up](https://www.rostrum.blog/2023-08-19-find-bad-names).
+🆕 The latest post: [Conscious uncoupling with
+{blogdown}](https://www.rostrum.blog/2023-08-26-cheerio-blogdown).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ up](https://www.rostrum.blog/2023-08-19-find-bad-names).
 
 |     | Date       | Title                                                                                                                    |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------|
+| 155 | 2023-08-26 | [Conscious uncoupling with {blogdown}](https://www.rostrum.blog/2023-08-26-cheerio-blogdown)                             |
 | 154 | 2023-08-19 | [Object of type closure can shut up](https://www.rostrum.blog/2023-08-19-find-bad-names)                                 |
 | 153 | 2023-08-01 | [One weird trick to {monetize} your R package](https://www.rostrum.blog/2023-08-01-monetize)                             |
 | 152 | 2023-07-15 | [Save high scores for your R game](https://www.rostrum.blog/2023-07-15-hiscore)                                          |
@@ -200,4 +201,4 @@ up](https://www.rostrum.blog/2023-08-19-find-bad-names).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2023-08-26 at 18:17.
+🕒 Last updated: 2023-08-26 at 21:31.
