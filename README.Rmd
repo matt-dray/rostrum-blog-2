@@ -47,7 +47,7 @@ post_info <- lapply(post_paths, function(path) get_post_info(path))
 posts <- do.call(rbind, post_info)
 
 # Generate a web link to each post
-posts$link <- gsub("posts", "https://www.rostrum.blog", post_paths)
+posts$link <- gsub("posts", "https://www.rostrum.blog", dirname(post_paths))
 
 # Invert order, so latest is at the top
 posts <- posts[rev(row.names(posts)), ]
@@ -116,7 +116,7 @@ Built with [Quarto](https://quarto.org/) and deployed with [Netlify](https://www
 
 `r emoji("date")` That's a post roughly every `r round((as.numeric(today() - min(posts$publish_date))) / nrow(posts))` days, or about `r round(((nrow(posts) / (as.numeric(today() - min(posts$publish_date)))) * 30), 1)` posts per month.
 
-`r emoji("new")` The latest post was published `r today() - max(posts$publish_date)` day(s) ago: [`r posts$title[1]`](`r posts$link[1]`).
+`r emoji("new")` The latest post was published `r today() - max(posts$publish_date)` day(s) ago: [`r posts$title[1]`](`r posts$link[1]`)`r ifelse(grepl("[!|?|\\.|]$", posts$link[1]), "", ".")`
 
 `r emoji("chart_with_upwards_trend")` Posts over time:
 
