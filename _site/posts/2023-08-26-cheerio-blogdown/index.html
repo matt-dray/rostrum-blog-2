@@ -187,7 +187,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p><img src="resources/bdq-overlay.png" class="img-fluid" style="width:100.0%" alt="A browser window containing the new Quarto version of this blog, overlaying a window with the old blogdown version."></p>
+<p><img src="resources/bdq-homepages.png" class="img-fluid" style="width:100.0%" alt="A browser window containing the new Quarto version of this blog, overlaying a window with the old blogdown version."></p>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
 <p>Here you go, the customary ‘i PoRtEd My R bLoG’ meta-post.</p>
@@ -196,14 +196,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="quartoh-no">Quartoh-no</h2>
 <p>Yes, wow, porting {blogdown} to Quarto, such bravery.</p>
 <p>The <a href="https://github.com/matt-dray/rostrum-blog">old source code</a> is now archived on GitHub. The new source code is in a <a href="https://github.com/matt-dray/rostrum-blog-2">separate repo</a>. There’s still <a href="https://github.com/matt-dray/rostrum-blog-2/issues">some issues</a> to sort out, but the site is now live on the worldwide web at <a href="https://www.rostrum.blog">doubleyoo double-doubleyoo rostrum full-stop blog</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
-<p>This post is not a tutorial and is not exhaustive; it’s just some notes for when I (absolutely inevitably) forget how I did certain things. I may add some other things later if there’s teething issues I haven’t uncovered yet.</p>
+<p>This post is not a tutorial and is not exhaustive; it’s just a grab-bag of notes for when I (absolutely inevitably) forget how I did certain things. I may add some other things later if there’s teething issues I haven’t uncovered yet.</p>
 </section>
 <section id="the-struggle-is-real" class="level2">
 <h2 class="anchored" data-anchor-id="the-struggle-is-real">The struggle is real</h2>
 <p>Things went pretty well, basically. It was just boring and slow<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> to go through over 150 posts and perform (mostly) little corrections here and there. Herefollows some minor struggles.</p>
 <section id="load-bearing-posts" class="level3">
 <h3 class="anchored" data-anchor-id="load-bearing-posts">Load-bearing posts</h3>
-<p>You could copy-paste your old {blogdown} source code to the structure and style required by Quarto. But why spend 10 minutes doing that when I could spend many more minutes creating a package to do it<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>? I <a href="https://www.rostrum.blog/posts/2023-05-07-bd2q/">wrote before</a> about <a href="https://github.com/matt-dray/bd2q">{bd2q}</a>, which was useful given the number of posts. This is a little manoeuvre I call ‘procrastination-driven development’.</p>
+<p>You could copy-paste your old {blogdown} source code to the structure and style required by Quarto. But why spend 10 minutes doing that when I could spend many more minutes creating a package to do it?<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> This is a little manoeuvre I call ‘procrastination-driven development’. The outcome was my helper package <a href="https://github.com/matt-dray/bd2q">{bd2q}</a>, which I <a href="https://www.rostrum.blog/posts/2023-05-07-bd2q/">wrote about before</a>. It was useful given the number of posts and changes I wanted to make.</p>
 </section>
 <section id="twtters-ex-api" class="level3">
 <h3 class="anchored" data-anchor-id="twtters-ex-api">Tw*tter’s ex-API</h3>
@@ -215,11 +215,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="trough-of-a-wav" class="level3">
 <h3 class="anchored" data-anchor-id="trough-of-a-wav">Trough of a WAV</h3>
-<p>I have some little HTML audio whatsits on some pages, like the one about <a href="https://www.rostrum.blog/posts/2021-02-02-sonify-covid/">sonifying covid data</a>. Despite putting .wav files in the appropriate directory, the sounds simply wouldn’t play. It’s because you need to specify <code>resources:</code> in your <a href="https://github.com/matt-dray/rostrum-blog-2/blob/main/posts/2021-02-02-sonify-covid/index.qmd#L10-L14">YAML header</a> and then list the path to each one (for me this would be like <code>- resources/roblox-oof.wav</code>).</p>
+<p>I have some little HTML audio whatsits on some pages, like the one about <a href="https://www.rostrum.blog/posts/2021-02-02-sonify-covid/">sonifying covid data</a>. Despite putting .wav files in the appropriate directory, the sounds simply wouldn’t play. It’s because you need to specify <code>resources:</code> in your <a href="https://github.com/matt-dray/rostrum-blog-2/blob/main/posts/2021-02-02-sonify-covid/index.qmd#L10-L14">YAML header</a> and then list the path to each one (for me this would be like <code>- resources/roblox-oof.wav</code>). The file is then correctly copied over to the <code>_site/</code> folder for deployment.</p>
 </section>
 <section id="misdirection" class="level3">
 <h3 class="anchored" data-anchor-id="misdirection">Misdirection</h3>
-<p>The old blog had URLs in the form <code>rostrum.blog/YYYY/MM/DD/postname</code>. Quarto does it like <code>rostrum.blog/YYYY-MM-DD-postname</code>. I thought each Quarto post might need to be placed in a folder structure like <code>YYYY/MM/DD/postname.qmd</code> to achieve the old URL style. This is much more awkward than just putting posts in <code>posts/</code>.</p>
+<p>The old blog had URLs in the form <code>rostrum.blog/YYYY/MM/DD/postname</code>. Quarto does it like <code>rostrum.blog/posts/YYYY-MM-DD-postname</code>. I thought each Quarto post might need to be placed in a folder structure like <code>/YYYY/MM/DD/postname.qmd</code> to achieve the old URL style. This would be awkward to work with.</p>
 <p>Aha, actually you can write <a href="https://github.com/matt-dray/rostrum-blog-2/blob/main/_redirects">a little <code>_redirects</code> text file</a> with a line for each old-to-new path. Given the number of posts, I wrote a little script to generate this file<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>redirect_to <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"/"</span>, <span class="fu">list.dirs</span>(<span class="st">"posts"</span>, <span class="at">recursive =</span> <span class="cn">FALSE</span>))</span>
@@ -244,11 +244,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(mapping, <span class="at">file =</span> <span class="st">"_redirects"</span>)  <span class="co"># dyk cat() can save files?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Originally I failed to include the leading slash in the <code>redirect_from</code> string, which would result in trying to redirect from the nonsense <code>rostrum.blogYYYY/MM/DD/postname</code> instead of <code>rostrum.blog/YYYY/MM/DD/postname</code>. Subtle.</p>
-<p>In <a href="https://github.com/matt-dray/rostrum-blog-2/blob/main/index.qmd">the site’s <code>index.qmd</code></a> I added a snippet to copy over the <code>_redirects</code> file into the <code>site/</code> folder, ready for deployment.</p>
+<p>In <a href="https://github.com/matt-dray/rostrum-blog-2/blob/main/index.qmd">the new site’s <code>index.qmd</code></a> I also added a snippet to copy over the <code>_redirects</code> file into the <code>_site/</code> folder on render, ready for deployment.</p>
 </section>
 <section id="cat-egg-or-rice" class="level3">
 <h3 class="anchored" data-anchor-id="cat-egg-or-rice">Cat egg or rice?</h3>
-<p>As I went through each old post, I removed all the ‘tags’ from the YAML and consolidated some of them into ‘categories’. I am still not happy with these categories. How can I extract all the categories to review them? I’m sure there’s an easier way than regexing<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> them out, but this works:</p>
+<p>As I went through each old post, I removed all the ‘tags’ from the YAML and consolidated some of them into ‘categories’. I am still not happy with these categories. How can I extract them all for review? I’m sure there’s an easier way than regexing<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> them out, but this hacky thing works:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>posts <span class="ot">&lt;-</span> </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list.files</span>(<span class="st">"posts"</span>, <span class="at">pattern =</span> <span class="st">".qmd"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
@@ -257,13 +257,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  post_lines <span class="ot">&lt;-</span> <span class="fu">readLines</span>(post_path, <span class="at">warn =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Categories are listed between the YAML header and closing fence</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract between the 'categories' YAML section and closing fence</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  cats_start <span class="ot">&lt;-</span> <span class="fu">which</span>(post_lines <span class="sc">==</span> <span class="st">"categories:"</span>) <span class="sc">+</span> <span class="dv">1</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  cats_end <span class="ot">&lt;-</span> <span class="fu">which</span>(post_lines <span class="sc">==</span> <span class="st">"---"</span>)[<span class="dv">2</span>] <span class="sc">-</span> <span class="dv">1</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  cats <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ignore other YAML headers and content after the categories</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ignore other YAML sections and content after the categories</span></span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(cats_start) <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> <span class="fu">length</span>(cats_end) <span class="sc">==</span> <span class="dv">1</span>) {</span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    cats <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"  - "</span>, <span class="st">""</span>, post_lines[cats_start<span class="sc">:</span>cats_end])</span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    cats <span class="ot">&lt;-</span> cats[<span class="sc">!</span><span class="fu">grepl</span>(ignore_rx, cats)]</span>
@@ -280,14 +280,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(all_cats) <span class="sc">|&gt;</span> <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Mostly just an excuse to use ‘cats’ as a variable name I think, but maybe this would be easier with some Quarto command or with the {yaml} package or something?</p>
+<p>Oof, mostly just an excuse to use ‘cats’ as a variable name I think, but maybe this would be easier with some Quarto command or with the {yaml} package or something?</p>
+</section>
+<section id="goated-netlify" class="level3">
+<h3 class="anchored" data-anchor-id="goated-netlify">Goated Netlify</h3>
+<p>I remember struggling a bit when setting up <a href="https://www.netlify.com/">Netlify</a> to deploy the blog five years ago, but it seemed easier when I later <a href="https://www.rostrum.blog/posts/2020-12-08-postcard/">set up my personal page</a>. I dithered a little before setting up this new Quarto version of the blog, though. What if I click the wrong thing and the site disappears forever? Ah well.</p>
+<p>But actually it was straightforward. The old and new blog are separate sites in my Netlify account and I just had to remove the ‘rostrum.blog’ domain from the old one and activate it on the new, which is under Site configuration &gt; Domain management &gt; Domains.</p>
+<p>It was also easy to re-add <a href="https://www.rostrum.blog/posts/2020-09-16-goatcounter-blogdown/">Goatcounter</a>—which counts but doesn’t track visitors—under Site configuration &gt; Build and deploy &gt; Post processing &gt; Snippet injection. I pasted in a Goatcounter-provided snippet so it’s injected before <code>&lt;/body&gt;</code>.</p>
 </section>
 </section>
 <section id="selling-out" class="level2">
 <h2 class="anchored" data-anchor-id="selling-out">Selling out</h2>
-<p>Above all, thank you Yihui and contributors for {blogdown}. It felt cool to be a hipster {blogdown} user<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. I held out for over five years. Now I feel.. mainstream, like part of the corporate machine. <em>Man</em>.</p>
+<p>Above all, thank you Yihui and contributors for {blogdown}. It felt cool to be a hipster {blogdown} user<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. I held out for over five years. Now I feel… mainstream, like part of the corporate machine. <em>Man</em>.</p>
 <p>How can I complain? A mid-life crisis precipitated by a blog transition is exactly where I saw this going, to be honest.</p>
-<p>Of course, I’ve always pre-ported my posts from my brain to the blog. Perhaps you agree that the next platform change should be to cut out the last step and simply keep the posts inside my head? You’re preemptively welcome.</p>
+<p>Hopefully I won’t be changing platforms again any time soon. But since the posts are always ported first from my brain into the blog, you could argue that I could simplify my set up by just… keeping them in my head. You’re preemptively welcome.</p>
 </section>
 
 
@@ -300,7 +306,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-08-27 00:23:07 BST</code></pre>
+<pre><code>Last rendered: 2023-08-27 08:51:55 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
