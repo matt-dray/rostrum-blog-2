@@ -180,7 +180,7 @@ First, a function that reads the active Quarto doc in the RStudio source pane an
 }
 ```
 
-The output from `is_revealjs()` could then be used in a modified `stamp_tabset()`, where `TRUE` inserts a level 3 header, otherwise a level 2 header.
+The output from `.check_revealjs()` could then be used in a modified `stamp_tabset()`, where `TRUE` inserts a level 3 header, otherwise a level 2 header.
 
 ```{r stamp, eval=FALSE}
 stamp_tabset <- function() {
