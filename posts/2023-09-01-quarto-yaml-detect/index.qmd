@@ -1,0 +1,242 @@
+---
+title: Autodetect Quarto formats with {quartostamp}. Or not.
+date: 2023-09-01
+slug: quarto-yaml-detect
+categories:
+  - quarto
+  - quartostamp
+  - r
+  - yaml
+---
+
+![](resources/uno.png){fig-alt="Uno meme. On left, a card says 'think for 2 seccs before coding of draw 25'. On the right is a man, labelled 'me' holding a huge number of cards." width="60%" fig-align="left"}
+
+## tl;dr
+
+I wrote a cunning solution to fix an issue in [the {quartostamp} R package](https://matt-dray.github.io/quartostamp/). Spoiler: it was completely unnecessary. A lesson!
+
+## Put it on my tab
+
+{quartostamp} is [an R package](https://matt-dray.github.io/quartostamp/) that contains an RStudio Addin to [help insert and modify code](https://www.rostrum.blog/posts/2022-08-11-quartostamp-snorkel/) in Quarto documents. I originally made it to help me write [Quarto presentations](https://quarto.org/docs/presentations/): I kept forgetting the correct syntax for things like inserting speaker notes and column layouts.[^features]
+
+Zoë made a great, subtle point [in a GitHub issue](https://github.com/matt-dray/quartostamp/issues/10): the 'Insert Tabset' function uses level-3 Markdown headers (`###`) for its tab titles, but [shouldn't they be level 2](https://quarto.org/docs/interactive/layout.html#tabset-panel) (`##`)? 
+
+To illustrate, here's what {quartostamp} was inserting for a tabset:
+
+```
+::: {.panel-tabset}
+
+### Tab A
+
+Content for Tab A
+
+### Tab B
+
+Content for Tab B
+
+:::
+```
+
+Which would render like this:
+
+::: {.panel-tabset}
+
+### Tab A
+
+Content for Tab A
+
+### Tab B
+
+Content for Tab B
+
+:::
+
+I think I'd used level 3 headers because level 2 headers demarcate new slides in a Quarto presentation and [the specific guidance for presentations](https://quarto.org/docs/presentations/revealjs/#tabsets) appears to suggest level 3.
+
+So, obviously, an instance of `##` in a tabset header could break someone's slides, right? (This is a literary technique called 'foreshadowing', dear reader.)
+
+## A stab at the tabs
+
+So, what to do? It seemed as though there were three options:
+
+1. Have two versions of the tabset function that insert `##` or `###`.
+2. Switch to `##` only .
+3. Retain only `###`.
+
+Each is a relatively easy change. But number 1 is a non-starter because it's confusing from a user's perspective. Number 2 would disrupt people making presentations; they'd have to manually add the extra `#` each time. Number 3 is probably the least worst, but might be surprising for general Quarto users.
+
+So, a bonus idea:
+
+4. Adapt the heading level automatically, based on the document format.
+
+That sounds complicated. Is it?
+
+## A dash to hash
+
+Kinda. You have to somehow read the YAML header of the Quarto file you're working on and then extract its format to see if it's a presentation or not.
+
+So I ended up doing this:
+
+1. Detect information about the active Quarto document in the RStudio script pane with `rstudioapi::getActiveDocumentContext()`.
+2. Isolate the text content.
+3. Detect the lower limit of the document's YAML header (i.e. the second instance of a YAML fence, `---`).
+4. Use `yaml::yaml.load()` to parse the YAML header.
+5. Detect if a `format` key-value pair is present
+6. Detect if at least one listed format is `revealjs` (the Javascript library Quarto uses to make presentations).
+7. If yes, construct a level 3 header (`###`), otherwise level 2 (`##`).
+8. Insert the tabset code into the Quarto file.
+
+## Hash in the trash
+
+Except guess what? The presence of `##` inside tabset code actually doesn't create a new slide. I should've tested this before I started writing a solution. I think Quarto checks context: if Markdown is provided within `:::` fences then it's evaluated in that context. That makes sense!
+
+<details><summary>Click for a Quarto reprex</summary>
+
+Pop this in a qmd file and hit 'render'.
+
+```
+---
+title: "Testing tabset titles"
+format: revealjs
+---
+
+## Using level 3
+
+::: {.panel-tabset}
+
+### Tab A
+
+Content for Tab A
+
+### Tab B
+
+Content for Tab B
+
+:::
+
+## Using level 2
+
+::: {.panel-tabset}
+
+## Tab A
+
+Content for Tab A
+
+## Tab B
+
+Content for Tab B
+
+:::
+
+```
+
+</details>
+
+On the plus side, I had fun solving the 'problem' and thinking creatively to extract and parse the YAML and write logic to handle each case. For posterity, I've added my code here.
+
+<details><summary>Click to expand function definitions</summary>
+
+First, a function that reads the active Quarto doc in the RStudio source pane and outputs `TRUE` if it's a revealjs presentation.
+
+```{r solution, eval=FALSE}
+.check_revealjs <- function() {
+
+  # Fetch lines from the source
+  active_doc <- rstudioapi::getActiveDocumentContext()
+  contents <- active_doc[["contents"]]
+
+  # Identify the lines that compose the YAML header
+  yaml_end_index <- which(contents == "---")[2]
+  yaml_only <- contents[seq(yaml_end_index)]
+
+  # Parse the YAML header, detect 'format' key
+  yaml_parsed <- yaml::yaml.load(yaml_only)
+  has_format <- "format" %in% names(yaml_parsed)
+
+  # Detect if the format is revealjs
+  
+  is_revealjs <- FALSE  # default
+
+  if (has_format) {
+
+    formats <- yaml_parsed[["format"]]
+
+    # Format structure could differ, depends on YAML nesting
+    formats_is_vec <- inherits(formats, "character")
+    formats_is_list <- inherits(formats, "list")
+
+    if (formats_is_vec) {
+      is_revealjs <- "revealjs" %in% formats
+    }
+
+    if (formats_is_list) {
+      is_revealjs <- "revealjs" %in% names(formats)
+    }
+
+  }
+
+  return(is_revealjs)
+
+}
+```
+
+The output from `is_revealjs()` could then be used in a modified `stamp_tabset()`, where `TRUE` inserts a level 3 header, otherwise a level 2 header.
+
+```{r stamp, eval=FALSE}
+stamp_tabset <- function() {
+
+  is_revealjs <- .check_revealjs()
+
+  # Headers will be level 2 by default
+  heading_level <- 2
+
+  # Or level 3 if the active doc is a revealjs presentation
+  if (is_revealjs) {
+    heading_level <- 3
+  }
+
+  # Generate tabset header Markdown depending on doc format
+  tabset_heading_md <- paste(rep("#", heading_level), collapse = "")
+
+  # Insert tabset code with appropriate heading level
+  .replace_text(
+    pre = paste0(
+      "::: {.panel-tabset}\n",
+      "\n",
+      paste(tabset_heading_md, "Tab A\n"),
+      "\n"
+    ),
+    body = "Content for Tab A\n",
+    post = paste0(
+      "\n",
+      paste(tabset_heading_md, "Tab B\n"),
+      "\n",
+      "Content for Tab B\n",
+      "\n",
+      ":::\n"
+    )
+  )
+}
+```
+
+You can see the current state of the code in [the matt-dray/quartostamp GitHub repo](https://github.com/matt-dray/quartostamp), which also has the source for the `.replace_text()` function show at the code block above.
+
+</details>
+
+Which leads us to a bonus bonus idea:
+
+5. Merge Zoë's pull request that simply changes `###` to `##`.
+
+And so {quartostamp} version 1.1 is now available!
+
+I look forward to further developments in future. But less so for 'antidevelopments' like these, lol.
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^features]: The package got some great feature requests: [Indrajeet asked](https://github.com/matt-dray/quartostamp/issues/1) for callout boxes and [Zoë suggested](https://github.com/matt-dray/quartostamp/issues/6) that the package could modify existing text as well as insert skeleton code.
