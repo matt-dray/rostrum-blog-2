@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 155 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2023-08-26 (latest).
+🔢 There have been 156 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2023-09-01 (latest).
 
 📅 That’s a post roughly every 13 days, or about 2.4 posts per month.
 
-🆕 The latest post: [Conscious uncoupling with
-{blogdown}](https://www.rostrum.blog/2023-08-26-cheerio-blogdown).
+🆕 The latest post: [Autodetect Quarto formats with {quartostamp}. Or
+not.](https://www.rostrum.blog/2023-09-01-quarto-yaml-detect).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ between 2018-04-14 (first) to 2023-08-26 (latest).
 
 |     | Date       | Title                                                                                                                    |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------|
+| 156 | 2023-09-01 | [Autodetect Quarto formats with {quartostamp}. Or not.](https://www.rostrum.blog/2023-09-01-quarto-yaml-detect)          |
 | 155 | 2023-08-26 | [Conscious uncoupling with {blogdown}](https://www.rostrum.blog/2023-08-26-cheerio-blogdown)                             |
 | 154 | 2023-08-19 | [Object of type closure can shut up](https://www.rostrum.blog/2023-08-19-find-bad-names)                                 |
 | 153 | 2023-08-01 | [One weird trick to {monetize} your R package](https://www.rostrum.blog/2023-08-01-monetize)                             |
@@ -201,4 +202,4 @@ between 2018-04-14 (first) to 2023-08-26 (latest).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2023-08-28 at 11:51.
+🕒 Last updated: 2023-09-01 at 22:16.
