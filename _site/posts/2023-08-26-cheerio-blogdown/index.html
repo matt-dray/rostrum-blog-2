@@ -217,70 +217,88 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="trough-of-a-wav">Trough of a WAV</h3>
 <p>I have some little HTML audio whatsits on some pages, like the one about <a href="https://www.rostrum.blog/posts/2021-02-02-sonify-covid/">sonifying covid data</a>. Despite putting .wav files in the appropriate directory, the sounds simply wouldn’t play. It’s because you need to specify <code>resources:</code> in your <a href="https://github.com/matt-dray/rostrum-blog-2/blob/main/posts/2021-02-02-sonify-covid/index.qmd#L10-L14">YAML header</a> and then list the path to each one (for me this would be like <code>- resources/roblox-oof.wav</code>). The file is then correctly copied over to the <code>_site/</code> folder for deployment.</p>
 </section>
+</section>
+<section id="environmental-disaster" class="level2">
+<h2 class="anchored" data-anchor-id="environmental-disaster">Environmental disaster</h2>
+<p>To appease nerds, each post on the old blog had a record of the R and package versions used to render it. I did this by calling the session info in an expandable <code>&lt;details&gt;</code> block after a page divider (<code>---</code>). This looked a bit awkward when I tried it in Quarto.</p>
+<p>Took me a while to realise: you can add arbitrary sections to each post’s appendix section with <code>{.appendix}</code> next to its heading. By default, my Quarto appendices have license information and footnotes, but I added an ‘environment’ section with the clickable session info in it. It’s written like this<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Environment {.appendix}</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;details&gt;&lt;summary&gt;</span>Session info<span class="kw">&lt;/summary&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="in">```{r sessioninfo, eval=TRUE, echo=FALSE}</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Last rendered:"</span>, <span class="fu">format</span>(<span class="fu">Sys.time</span>(), <span class="at">usetz =</span> <span class="cn">TRUE</span>)); <span class="fu">sessionInfo</span>()</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>I also introduced a ‘last rendered’ time before the session info. You can add this to the top of the post along with the author and publish date, but I didn’t want to put so much emphasis on it.</p>
+<p>You can see an example of this at the bottom of this post, of course.</p>
 <section id="misdirection" class="level3">
 <h3 class="anchored" data-anchor-id="misdirection">Misdirection</h3>
 <p>The old blog had URLs in the form <code>rostrum.blog/YYYY/MM/DD/postname</code>. Quarto does it like <code>rostrum.blog/posts/YYYY-MM-DD-postname</code>. I thought each Quarto post might need to be placed in a folder structure like <code>/YYYY/MM/DD/postname.qmd</code> to achieve the old URL style. This would be awkward to work with.</p>
-<p>Aha, actually you can write <a href="https://github.com/matt-dray/rostrum-blog-2/blob/main/_redirects">a little <code>_redirects</code> text file</a> with a line for each old-to-new path. Given the number of posts, I wrote a little script to generate this file<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>:</p>
+<p>Aha, actually you can write <a href="https://github.com/matt-dray/rostrum-blog-2/blob/main/_redirects">a little <code>_redirects</code> text file</a> with a line for each old-to-new path. Given the number of posts, I wrote a little script to generate this file<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>redirect_to <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"/"</span>, <span class="fu">list.dirs</span>(<span class="st">"posts"</span>, <span class="at">recursive =</span> <span class="cn">FALSE</span>))</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>date_rx <span class="ot">&lt;-</span> <span class="st">"</span><span class="sc">\\</span><span class="st">d{4}-</span><span class="sc">\\</span><span class="st">d{2}-</span><span class="sc">\\</span><span class="st">d{2}"</span>  <span class="co"># YYYY-MM-DD format</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract date from path to Quarto post</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>date_portion <span class="ot">&lt;-</span> <span class="fu">regexpr</span>(date_rx, redirect_to) <span class="sc">|&gt;</span> </span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">regmatches</span>(redirect_to, <span class="at">m =</span> _) <span class="sc">|&gt;</span> </span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gsub</span>(<span class="st">"/"</span>, <span class="st">"-"</span>, <span class="at">x =</span> _)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>name_portion <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="fu">paste0</span>(<span class="st">"posts/"</span>, date_rx, <span class="st">"-"</span>), <span class="st">""</span>, redirect_to)</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>redirect_from <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"/"</span>, date_portion, name_portion)</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 'From' and 'to' paths on same line, separated by a space</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>mapping <span class="ot">&lt;-</span> <span class="fu">paste0</span>(</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(redirect_from, redirect_to, <span class="at">sep =</span> <span class="st">" "</span>),</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(mapping, <span class="at">file =</span> <span class="st">"_redirects"</span>)  <span class="co"># dyk cat() can save files?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>redirect_to <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"/"</span>, <span class="fu">list.dirs</span>(<span class="st">"posts"</span>, <span class="at">recursive =</span> <span class="cn">FALSE</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>date_rx <span class="ot">&lt;-</span> <span class="st">"</span><span class="sc">\\</span><span class="st">d{4}-</span><span class="sc">\\</span><span class="st">d{2}-</span><span class="sc">\\</span><span class="st">d{2}"</span>  <span class="co"># YYYY-MM-DD format</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract date from path to Quarto post</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>date_portion <span class="ot">&lt;-</span> <span class="fu">regexpr</span>(date_rx, redirect_to) <span class="sc">|&gt;</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">regmatches</span>(redirect_to, <span class="at">m =</span> _) <span class="sc">|&gt;</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gsub</span>(<span class="st">"/"</span>, <span class="st">"-"</span>, <span class="at">x =</span> _)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>name_portion <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="fu">paste0</span>(<span class="st">"posts/"</span>, date_rx, <span class="st">"-"</span>), <span class="st">""</span>, redirect_to)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>redirect_from <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"/"</span>, date_portion, name_portion)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 'From' and 'to' paths on same line, separated by a space</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>mapping <span class="ot">&lt;-</span> <span class="fu">paste0</span>(</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste</span>(redirect_from, redirect_to, <span class="at">sep =</span> <span class="st">" "</span>),</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">collapse =</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(mapping, <span class="at">file =</span> <span class="st">"_redirects"</span>)  <span class="co"># dyk cat() can save files?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Originally I failed to include the leading slash in the <code>redirect_from</code> string, which would result in trying to redirect from the nonsense <code>rostrum.blogYYYY/MM/DD/postname</code> instead of <code>rostrum.blog/YYYY/MM/DD/postname</code>. Subtle.</p>
 <p>In <a href="https://github.com/matt-dray/rostrum-blog-2/blob/main/index.qmd">the new site’s <code>index.qmd</code></a> I also added a snippet to copy over the <code>_redirects</code> file into the <code>_site/</code> folder on render, ready for deployment.</p>
 </section>
 <section id="cat-egg-or-rice" class="level3">
 <h3 class="anchored" data-anchor-id="cat-egg-or-rice">Cat egg or rice?</h3>
-<p>As I went through each old post, I removed all the ‘tags’ from the YAML and consolidated some of them into ‘categories’. I am still not happy with these categories. How can I extract them all for review? I’m sure there’s an easier way than regexing<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> them out, but this hacky thing works:</p>
+<p>As I went through each old post, I removed all the ‘tags’ from the YAML and consolidated some of them into ‘categories’. I am still not happy with these categories. How can I extract them all for review? I’m sure there’s an easier way than regexing<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> them out, but this hacky thing works:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>posts <span class="ot">&lt;-</span> </span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list.files</span>(<span class="st">"posts"</span>, <span class="at">pattern =</span> <span class="st">".qmd"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>get_categories <span class="ot">&lt;-</span> <span class="cf">function</span>(post_path, <span class="at">ignore_rx =</span> <span class="st">"resources"</span>) {</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  post_lines <span class="ot">&lt;-</span> <span class="fu">readLines</span>(post_path, <span class="at">warn =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract between the 'categories' YAML section and closing fence</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  cats_start <span class="ot">&lt;-</span> <span class="fu">which</span>(post_lines <span class="sc">==</span> <span class="st">"categories:"</span>) <span class="sc">+</span> <span class="dv">1</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  cats_end <span class="ot">&lt;-</span> <span class="fu">which</span>(post_lines <span class="sc">==</span> <span class="st">"---"</span>)[<span class="dv">2</span>] <span class="sc">-</span> <span class="dv">1</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  cats <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ignore other YAML sections and content after the categories</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(cats_start) <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> <span class="fu">length</span>(cats_end) <span class="sc">==</span> <span class="dv">1</span>) {</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    cats <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"  - "</span>, <span class="st">""</span>, post_lines[cats_start<span class="sc">:</span>cats_end])</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    cats <span class="ot">&lt;-</span> cats[<span class="sc">!</span><span class="fu">grepl</span>(ignore_rx, cats)]</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(cats)</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>cats_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(posts, \(post) <span class="fu">get_categories</span>(post)) <span class="sc">|&gt;</span> </span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNames</span>(<span class="fu">dirname</span>(post_names))</span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>all_cats <span class="ot">&lt;-</span> <span class="fu">unlist</span>(cats_list)</span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(all_cats) <span class="sc">|&gt;</span> <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>posts <span class="ot">&lt;-</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list.files</span>(<span class="st">"posts"</span>, <span class="at">pattern =</span> <span class="st">".qmd"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>get_categories <span class="ot">&lt;-</span> <span class="cf">function</span>(post_path, <span class="at">ignore_rx =</span> <span class="st">"resources"</span>) {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  post_lines <span class="ot">&lt;-</span> <span class="fu">readLines</span>(post_path, <span class="at">warn =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Extract between the 'categories' YAML section and closing fence</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  cats_start <span class="ot">&lt;-</span> <span class="fu">which</span>(post_lines <span class="sc">==</span> <span class="st">"categories:"</span>) <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  cats_end <span class="ot">&lt;-</span> <span class="fu">which</span>(post_lines <span class="sc">==</span> <span class="st">"---"</span>)[<span class="dv">2</span>] <span class="sc">-</span> <span class="dv">1</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  cats <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Ignore other YAML sections and content after the categories</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(cats_start) <span class="sc">==</span> <span class="dv">1</span> <span class="sc">&amp;</span> <span class="fu">length</span>(cats_end) <span class="sc">==</span> <span class="dv">1</span>) {</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    cats <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"  - "</span>, <span class="st">""</span>, post_lines[cats_start<span class="sc">:</span>cats_end])</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    cats <span class="ot">&lt;-</span> cats[<span class="sc">!</span><span class="fu">grepl</span>(ignore_rx, cats)]</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(cats)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>cats_list <span class="ot">&lt;-</span> <span class="fu">lapply</span>(posts, \(post) <span class="fu">get_categories</span>(post)) <span class="sc">|&gt;</span> </span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNames</span>(<span class="fu">dirname</span>(post_names))</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>all_cats <span class="ot">&lt;-</span> <span class="fu">unlist</span>(cats_list)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(all_cats) <span class="sc">|&gt;</span> <span class="fu">sort</span>(<span class="at">decreasing =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Oof, mostly just an excuse to use ‘cats’ as a variable name I think, but maybe this would be easier with some Quarto command or with the {yaml} package or something?</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>Indeed. In <a href="https://www.rostrum.blog/posts/2023-09-01-quarto-yaml-detect/">a more recent blogpost</a> I ended up using {yaml} for extracting a Quarto doc’s format from its YAML.</p>
+</div>
 </section>
 <section id="goated-netlify" class="level3">
 <h3 class="anchored" data-anchor-id="goated-netlify">Goated Netlify</h3>
@@ -291,9 +309,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="selling-out" class="level2">
 <h2 class="anchored" data-anchor-id="selling-out">Selling out</h2>
-<p>Above all, thank you Yihui and contributors for {blogdown}. It felt cool to be a hipster {blogdown} user<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. I held out for over five years. Now I feel… mainstream, like part of the corporate machine. <em>Man</em>.</p>
-<p>How can I complain? A mid-life crisis precipitated by a blog transition is exactly where I saw this going, to be honest.</p>
-<p>Hopefully I won’t be changing platforms again any time soon. But since the posts are always ported first from my brain into the blog, you could argue that I could simplify my set up by just… keeping them in my head. You’re preemptively welcome.</p>
+<p>I picked up a lot of miscellaneous tips and tricks from <a href="https://blog.djnavarro.net/posts/2022-04-20_porting-to-quarto/">Danielle Navarro</a>, <a href="https://albert-rapp.de/posts/13_quarto_blog_writing_guide/13_quarto_blog_writing_guide.html">Albert Rapp</a> and <a href="https://quarto.org/docs/websites/website-blog.html">the Quarto docs</a> themselves. Cheers.</p>
+<p>And above all, thank you Yihui and contributors for {blogdown}. It felt cool to be a hipster {blogdown} user<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>. I held out for over five years, but the time has come and I have become… mainstream. The horror.</p>
+<p>But how can I complain? A mid-life crisis precipitated by a blog transition is exactly where I saw this going, to be honest.</p>
+<p>Hopefully I won’t be changing platforms again any time soon. But the posts are always ported first from my brain to the blog, so I could simplify the process by just… keeping them in my head? You’re preemptively welcome.</p>
 </section>
 
 
@@ -306,7 +325,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-08-27 11:22:04 BST</code></pre>
+<pre><code>Last rendered: 2023-09-02 22:59:52 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -330,7 +349,7 @@ loaded via a namespace (and not attached):
  [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
  [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
  [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
-[13] digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
+[13] digest_0.6.33     rlang_1.1.1       fontawesome_0.5.1 evaluate_0.21    </code></pre>
 </div>
 </div>
 </details>
@@ -342,9 +361,10 @@ loaded via a namespace (and not attached):
 <li id="fn1"><p><a href="https://youtu.be/1NjTWvl8x-U?feature=shared&amp;t=119">CALL NOW</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>I began <a href="https://github.com/matt-dray/rostrum-blog-2/commits/main">in April 2023</a>. I took my sweet time because I knew it would be dull, but also because I recently fell down an <a href="https://www.youtube.com/@ActionButton">Action Button</a> YouTube rabbit hole. I also got into the geocaching scene, both IRL (9 caches found, legend) and digitally, in the form of Zelda TOTK (‘YA-HA!’).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>Also check out Antoine’s <a href="https://github.com/moodymudskipper/editor">{editor} package</a> that can reach into a file and make alterations. I wish I’d had this before I bodged together some similar functionality in {bd2q}.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>I like the ‘modern base’ aesthetic of the <code>date_portion</code> object here. Holdup, brb, just going to add ‘Modern Base Core’ to the <a href="https://aesthetics.fandom.com/wiki/Aesthetics_Wiki">Aesthetics Wiki</a>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>I desperately wanted to spell this ‘regexxing’, but ‘x’ appearing twice makes it look illicit.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>At least that’s how I felt. Please don’t shatter my precious illusions.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>If you’re wondering how to show a verbatim chunk in a Quarto doc without rendering it, there’s <a href="https://quarto.org/docs/computations/execution-options.html#unexecuted-blocks">some documentation</a>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>I like the ‘modern base’ aesthetic of the <code>date_portion</code> object here. Holdup, brb, just going to add ‘Modern Base Core’ to the <a href="https://aesthetics.fandom.com/wiki/Aesthetics_Wiki">Aesthetics Wiki</a>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>I desperately wanted to spell this ‘regexxing’, but ‘x’ appearing twice makes it look illicit.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>At least that’s how I felt. Please don’t shatter my precious illusions.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

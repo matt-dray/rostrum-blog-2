@@ -42,6 +42,26 @@ I have [a dynamic, stats-laden README](https://github.com/matt-dray/rostrum-blog
 
 I have some little HTML audio whatsits on some pages, like the one about [sonifying covid data](https://www.rostrum.blog/posts/2021-02-02-sonify-covid/). Despite putting .wav files in the appropriate directory, the sounds simply wouldn't play. It's because you need to specify `resources:` in your [YAML header](https://github.com/matt-dray/rostrum-blog-2/blob/main/posts/2021-02-02-sonify-covid/index.qmd#L10-L14) and then list the path to each one (for me this would be like `- resources/roblox-oof.wav`). The file is then correctly copied over to the `_site/` folder for deployment.
 
+## Environmental disaster
+
+To appease nerds, each post on the old blog had a record of the R and package versions used to render it. I did this by calling the session info in an expandable `<details>` block after a page divider (`---`). This looked a bit awkward when I tried it in Quarto.
+
+Took me a while to realise: you can add arbitrary sections to each post's appendix section with `{.appendix}` next to its heading. By default, my Quarto appendices have license information and footnotes, but I added an 'environment' section with the clickable session info in it. It's written like this[^verbatim]:
+
+````
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{{r sessioninfo, eval=TRUE, echo=FALSE}}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+````
+
+I also introduced a 'last rendered' time before the session info. You can add this to the top of the post along with the author and publish date, but I didn't want to put so much emphasis on it.
+
+You can see an example of this at the bottom of this post, of course.
+
 ### Misdirection
 
 The old blog had URLs in the form `rostrum.blog/YYYY/MM/DD/postname`. Quarto does it like `rostrum.blog/posts/YYYY-MM-DD-postname`. I thought each Quarto post might need to be placed in a folder structure like `/YYYY/MM/DD/postname.qmd` to achieve the old URL style. This would be awkward to work with.
@@ -113,6 +133,12 @@ table(all_cats) |> sort(decreasing = TRUE)
 
 Oof, mostly just an excuse to use 'cats' as a variable name I think, but maybe this would be easier with some Quarto command or with the {yaml} package or something?
 
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+Indeed.  In [a more recent blogpost](https://www.rostrum.blog/posts/2023-09-01-quarto-yaml-detect/) I ended up using {yaml} for extracting a Quarto doc's format from its YAML.
+</div>
+
 ### Goated Netlify
 
 I remember struggling a bit when setting up [Netlify](https://www.netlify.com/) to deploy the blog five years ago, but it seemed easier when I later [set up my personal page](https://www.rostrum.blog/posts/2020-12-08-postcard/). I dithered a little before setting up this new Quarto version of the blog, though. What if I click the wrong thing and the site disappears forever? Ah well. 
@@ -123,11 +149,13 @@ It was also easy to re-add [Goatcounter](https://www.rostrum.blog/posts/2020-09-
 
 ## Selling out
 
-Above all, thank you Yihui and contributors for {blogdown}. It felt cool to be a hipster {blogdown} user[^feelings]. I held out for over five years. Now I feel... mainstream, like part of the corporate machine. _Man_.
+I picked up a lot of miscellaneous tips and tricks from [Danielle Navarro](https://blog.djnavarro.net/posts/2022-04-20_porting-to-quarto/), [Albert Rapp](https://albert-rapp.de/posts/13_quarto_blog_writing_guide/13_quarto_blog_writing_guide.html) and [the Quarto docs](https://quarto.org/docs/websites/website-blog.html) themselves. Cheers.
 
-How can I complain? A mid-life crisis precipitated by a blog transition is exactly where I saw this going, to be honest. 
+And above all, thank you Yihui and contributors for {blogdown}. It felt cool to be a hipster {blogdown} user[^feelings]. I held out for over five years, but the time has come and I have become... mainstream. The horror.
 
-Hopefully I won't be changing platforms again any time soon. But since the posts are always ported first from my brain into the blog, you could argue that I could simplify my set up by just... keeping them in my head. You're preemptively welcome.
+But how can I complain? A mid-life crisis precipitated by a blog transition is exactly where I saw this going, to be honest. 
+
+Hopefully I won't be changing platforms again any time soon. But the posts are always ported first from my brain to the blog, so I could simplify the process by just... keeping them in my head? You're preemptively welcome.
 
 ## Environment {.appendix}
 
@@ -143,3 +171,4 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 [^call]: [CALL NOW](https://youtu.be/1NjTWvl8x-U?feature=shared&t=119).
 [^rx]: I desperately wanted to spell this 'regexxing', but 'x' appearing twice makes it look illicit.
 [^feelings]: At least that's how I felt. Please don't shatter my precious illusions.
+[^verbatim]: If you're wondering how to show a verbatim chunk in a Quarto doc without rendering it, there's [some documentation](https://quarto.org/docs/computations/execution-options.html#unexecuted-blocks).
