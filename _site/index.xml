@@ -77,12 +77,28 @@ Content for Tab B
 </section>
 <section id="a-dash-to-hash" class="level2">
 <h2 class="anchored" data-anchor-id="a-dash-to-hash">A dash to hash</h2>
-<p>Kinda. You have to somehow read the YAML header of the Quarto file you’re working on and then extract its format to see if it’s a presentation or not.</p>
+<p>Quarto docs start with a text-based ‘YAML header’. This contains a bunch of key-value metadata like the document title, author, etc, between ‘fences’ given by triple hyphens (<code>---</code>). At simplest:</p>
+<pre><code>---
+format: revealjs
+---</code></pre>
+<p>Or more likely, something nested like this:</p>
+<pre><code>---
+title: Chocolate Hobnobs
+subtitle: The best biscuits
+author: Matt Dray
+format:
+  revealjs: 
+    theme: [default, biscuits.scss]
+    menu: false
+title-slide-attributes:
+  data-background-image: hobnob.png
+---</code></pre>
+<p>So we have to somehow read the YAML header of the Quarto file we’re working on and then extract the format information to see if it’s a presentation or not.</p>
 <p>So I ended up doing this:</p>
 <ol type="1">
 <li>Detect information about the active Quarto document in the RStudio script pane with <code>rstudioapi::getActiveDocumentContext()</code>.</li>
 <li>Isolate the text content.</li>
-<li>Detect the lower limit of the document’s YAML header (i.e.&nbsp;the second instance of a YAML fence, <code>---</code>).</li>
+<li>Detect the lower limit of the document’s YAML header (i.e.&nbsp;the second, closing instance of the <code>---</code> YAML fence).</li>
 <li>Use <code>yaml::yaml.load()</code> to parse the YAML header.</li>
 <li>Detect if a <code>format</code> key-value pair is present</li>
 <li>Detect if at least one listed format is <code>revealjs</code> (the Javascript library Quarto uses to make presentations).</li>
@@ -135,32 +151,32 @@ Content for Tab B
 <p>On the plus side, I had fun solving the ‘problem’ and thinking creatively to extract and parse the YAML and write logic to handle each case. I don’t claim it’s optimised, but I’ve added it below for posterity.</p>
 <p>First, a function that uses {rstudioapi} to read the active Quarto doc in the RStudio source pane and outputs <code>TRUE</code> if it’s a revealjs presentation.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">.check_revealjs <span class="ot" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">.check_revealjs <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">function</span>() {</span>
-<span id="cb3-2"></span>
-<span id="cb3-3">  <span class="co" style="color: #5E5E5E;
+<span id="cb5-2"></span>
+<span id="cb5-3">  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Fetch lines from the source</span></span>
-<span id="cb3-4">  active_doc <span class="ot" style="color: #003B4F;
+<span id="cb5-4">  active_doc <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> rstudioapi<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">getActiveDocumentContext</span>()</span>
-<span id="cb3-5">  contents <span class="ot" style="color: #003B4F;
+<span id="cb5-5">  contents <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> active_doc[[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"contents"</span>]]</span>
-<span id="cb3-6"></span>
-<span id="cb3-7">  <span class="co" style="color: #5E5E5E;
+<span id="cb5-6"></span>
+<span id="cb5-7">  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Identify the lines that compose the YAML header</span></span>
-<span id="cb3-8">  yaml_end_index <span class="ot" style="color: #003B4F;
+<span id="cb5-8">  yaml_end_index <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -171,23 +187,23 @@ background-color: null;
 font-style: inherit;">"---"</span>)[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">2</span>]</span>
-<span id="cb3-9">  yaml_only <span class="ot" style="color: #003B4F;
+<span id="cb5-9">  yaml_only <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> contents[<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">seq</span>(yaml_end_index)]</span>
-<span id="cb3-10"></span>
-<span id="cb3-11">  <span class="co" style="color: #5E5E5E;
+<span id="cb5-10"></span>
+<span id="cb5-11">  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Parse the YAML header, detect 'format' key</span></span>
-<span id="cb3-12">  yaml_parsed <span class="ot" style="color: #003B4F;
+<span id="cb5-12">  yaml_parsed <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> yaml<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">yaml.load</span>(yaml_only)</span>
-<span id="cb3-13">  has_format <span class="ot" style="color: #003B4F;
+<span id="cb5-13">  has_format <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
 background-color: null;
@@ -196,63 +212,63 @@ background-color: null;
 font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">names</span>(yaml_parsed)</span>
-<span id="cb3-14"></span>
-<span id="cb3-15">  <span class="co" style="color: #5E5E5E;
+<span id="cb5-14"></span>
+<span id="cb5-15">  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Detect if the format is revealjs</span></span>
-<span id="cb3-16">  </span>
-<span id="cb3-17">  is_revealjs <span class="ot" style="color: #003B4F;
+<span id="cb5-16">  </span>
+<span id="cb5-17">  is_revealjs <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">FALSE</span>  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># default</span></span>
-<span id="cb3-18"></span>
-<span id="cb3-19">  <span class="cf" style="color: #003B4F;
+<span id="cb5-18"></span>
+<span id="cb5-19">  <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">if</span> (has_format) {</span>
-<span id="cb3-20"></span>
-<span id="cb3-21">    formats <span class="ot" style="color: #003B4F;
+<span id="cb5-20"></span>
+<span id="cb5-21">    formats <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> yaml_parsed[[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"format"</span>]]</span>
-<span id="cb3-22"></span>
-<span id="cb3-23">    <span class="co" style="color: #5E5E5E;
+<span id="cb5-22"></span>
+<span id="cb5-23">    <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Format structure could differ, depends on YAML nesting</span></span>
-<span id="cb3-24">    formats_is_vec <span class="ot" style="color: #003B4F;
+<span id="cb5-24">    formats_is_vec <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">inherits</span>(formats, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"character"</span>)</span>
-<span id="cb3-25">    formats_is_list <span class="ot" style="color: #003B4F;
+<span id="cb5-25">    formats_is_list <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">inherits</span>(formats, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"list"</span>)</span>
-<span id="cb3-26"></span>
-<span id="cb3-27">    <span class="cf" style="color: #003B4F;
+<span id="cb5-26"></span>
+<span id="cb5-27">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">if</span> (formats_is_vec) {</span>
-<span id="cb3-28">      is_revealjs <span class="ot" style="color: #003B4F;
+<span id="cb5-28">      is_revealjs <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"revealjs"</span> <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%in%</span> formats</span>
-<span id="cb3-29">    }</span>
-<span id="cb3-30"></span>
-<span id="cb3-31">    <span class="cf" style="color: #003B4F;
+<span id="cb5-29">    }</span>
+<span id="cb5-30"></span>
+<span id="cb5-31">    <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">if</span> (formats_is_list) {</span>
-<span id="cb3-32">      is_revealjs <span class="ot" style="color: #003B4F;
+<span id="cb5-32">      is_revealjs <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
 background-color: null;
@@ -261,56 +277,56 @@ background-color: null;
 font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">names</span>(formats)</span>
-<span id="cb3-33">    }</span>
-<span id="cb3-34"></span>
-<span id="cb3-35">  }</span>
-<span id="cb3-36"></span>
-<span id="cb3-37">  <span class="fu" style="color: #4758AB;
+<span id="cb5-33">    }</span>
+<span id="cb5-34"></span>
+<span id="cb5-35">  }</span>
+<span id="cb5-36"></span>
+<span id="cb5-37">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">return</span>(is_revealjs)</span>
-<span id="cb3-38"></span>
-<span id="cb3-39">}</span></code></pre></div>
+<span id="cb5-38"></span>
+<span id="cb5-39">}</span></code></pre></div>
 </div>
 <p>The output from <code>.check_revealjs()</code> could then be used in a modified <code>stamp_tabset()</code> (the function that powers the ‘Insert Tabset’ option from the Addins menu) where <code>TRUE</code> inserts a level 3 header, otherwise a level 2 header.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">stamp_tabset <span class="ot" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">stamp_tabset <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">function</span>() {</span>
-<span id="cb4-2"></span>
-<span id="cb4-3">  is_revealjs <span class="ot" style="color: #003B4F;
+<span id="cb6-2"></span>
+<span id="cb6-3">  is_revealjs <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">.check_revealjs</span>()</span>
-<span id="cb4-4"></span>
-<span id="cb4-5">  <span class="co" style="color: #5E5E5E;
+<span id="cb6-4"></span>
+<span id="cb6-5">  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Set headers to level 2 by default</span></span>
-<span id="cb4-6">  heading_level <span class="ot" style="color: #003B4F;
+<span id="cb6-6">  heading_level <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">2</span></span>
-<span id="cb4-7"></span>
-<span id="cb4-8">  <span class="co" style="color: #5E5E5E;
+<span id="cb6-7"></span>
+<span id="cb6-8">  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Set as level 3 if the active doc is a revealjs presentation</span></span>
-<span id="cb4-9">  <span class="cf" style="color: #003B4F;
+<span id="cb6-9">  <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">if</span> (is_revealjs) {</span>
-<span id="cb4-10">    heading_level <span class="ot" style="color: #003B4F;
+<span id="cb6-10">    heading_level <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">3</span></span>
-<span id="cb4-11">  }</span>
-<span id="cb4-12"></span>
-<span id="cb4-13">  <span class="co" style="color: #5E5E5E;
+<span id="cb6-11">  }</span>
+<span id="cb6-12"></span>
+<span id="cb6-13">  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Generate tabset header Markdown depending on doc format</span></span>
-<span id="cb4-14">  tabset_heading_md <span class="ot" style="color: #003B4F;
+<span id="cb6-14">  tabset_heading_md <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -323,33 +339,33 @@ background-color: null;
 font-style: inherit;">collapse =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">""</span>)</span>
-<span id="cb4-15"></span>
-<span id="cb4-16">  <span class="co" style="color: #5E5E5E;
+<span id="cb6-15"></span>
+<span id="cb6-16">  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Insert tabset code with appropriate heading level</span></span>
-<span id="cb4-17">  <span class="fu" style="color: #4758AB;
+<span id="cb6-17">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">.replace_text</span>(</span>
-<span id="cb4-18">    <span class="at" style="color: #657422;
+<span id="cb6-18">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">pre =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">paste0</span>(</span>
-<span id="cb4-19">      <span class="st" style="color: #20794D;
+<span id="cb6-19">      <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"::: {.panel-tabset}</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">\n</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>,</span>
-<span id="cb4-20">      <span class="st" style="color: #20794D;
+<span id="cb6-20">      <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">\n</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>,</span>
-<span id="cb4-21">      <span class="fu" style="color: #4758AB;
+<span id="cb6-21">      <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">paste</span>(tabset_heading_md, <span class="st" style="color: #20794D;
 background-color: null;
@@ -358,15 +374,15 @@ background-color: null;
 font-style: inherit;">\n</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>),</span>
-<span id="cb4-22">      <span class="st" style="color: #20794D;
+<span id="cb6-22">      <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">\n</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span></span>
-<span id="cb4-23">    ),</span>
-<span id="cb4-24">    <span class="at" style="color: #657422;
+<span id="cb6-23">    ),</span>
+<span id="cb6-24">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">body =</span> <span class="st" style="color: #20794D;
 background-color: null;
@@ -375,19 +391,19 @@ background-color: null;
 font-style: inherit;">\n</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>,</span>
-<span id="cb4-25">    <span class="at" style="color: #657422;
+<span id="cb6-25">    <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">post =</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">paste0</span>(</span>
-<span id="cb4-26">      <span class="st" style="color: #20794D;
+<span id="cb6-26">      <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">\n</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>,</span>
-<span id="cb4-27">      <span class="fu" style="color: #4758AB;
+<span id="cb6-27">      <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">paste</span>(tabset_heading_md, <span class="st" style="color: #20794D;
 background-color: null;
@@ -396,37 +412,37 @@ background-color: null;
 font-style: inherit;">\n</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>),</span>
-<span id="cb4-28">      <span class="st" style="color: #20794D;
+<span id="cb6-28">      <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">\n</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>,</span>
-<span id="cb4-29">      <span class="st" style="color: #20794D;
+<span id="cb6-29">      <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Content for Tab B</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">\n</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>,</span>
-<span id="cb4-30">      <span class="st" style="color: #20794D;
+<span id="cb6-30">      <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">\n</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span>,</span>
-<span id="cb4-31">      <span class="st" style="color: #20794D;
+<span id="cb6-31">      <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">":::</span><span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">\n</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span></span>
-<span id="cb4-32">    )</span>
-<span id="cb4-33">  )</span>
-<span id="cb4-34">}</span></code></pre></div>
+<span id="cb6-32">    )</span>
+<span id="cb6-33">  )</span>
+<span id="cb6-34">}</span></code></pre></div>
 </div>
 <p>You can see the actual current state of the code in <a href="https://github.com/matt-dray/quartostamp">the matt-dray/quartostamp GitHub repo</a>, which also has the source for the <code>.replace_text()</code> function show in the code block above.</p>
 </section>
@@ -450,7 +466,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-09-02 09:46:09 BST</code></pre>
+<pre><code>Last rendered: 2023-09-02 10:17:38 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)

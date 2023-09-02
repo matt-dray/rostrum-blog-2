@@ -73,13 +73,37 @@ That sounds complicated. Is it?
 
 ## A dash to hash
 
-Kinda. You have to somehow read the YAML header of the Quarto file you're working on and then extract its format to see if it's a presentation or not.
+Quarto docs start with a text-based 'YAML header'. This contains a bunch of key-value metadata like the document title, author, etc, between 'fences' given by triple hyphens (`---`). At simplest:
+
+```
+---
+format: revealjs
+---
+```
+
+Or more likely, something nested like this:
+
+```
+---
+title: Chocolate Hobnobs
+subtitle: The best biscuits
+author: Matt Dray
+format:
+  revealjs: 
+    theme: [default, biscuits.scss]
+    menu: false
+title-slide-attributes:
+  data-background-image: hobnob.png
+---
+```
+
+So we have to somehow read the YAML header of the Quarto file we're working on and then extract the format information to see if it's a presentation or not.
 
 So I ended up doing this:
 
 1. Detect information about the active Quarto document in the RStudio script pane with `rstudioapi::getActiveDocumentContext()`.
 2. Isolate the text content.
-3. Detect the lower limit of the document's YAML header (i.e. the second instance of a YAML fence, `---`).
+3. Detect the lower limit of the document's YAML header (i.e. the second, closing instance of the `---` YAML fence).
 4. Use `yaml::yaml.load()` to parse the YAML header.
 5. Detect if a `format` key-value pair is present
 6. Detect if at least one listed format is `revealjs` (the Javascript library Quarto uses to make presentations).

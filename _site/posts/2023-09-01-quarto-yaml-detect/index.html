@@ -245,12 +245,28 @@ Content for Tab B
 </section>
 <section id="a-dash-to-hash" class="level2">
 <h2 class="anchored" data-anchor-id="a-dash-to-hash">A dash to hash</h2>
-<p>Kinda. You have to somehow read the YAML header of the Quarto file you’re working on and then extract its format to see if it’s a presentation or not.</p>
+<p>Quarto docs start with a text-based ‘YAML header’. This contains a bunch of key-value metadata like the document title, author, etc, between ‘fences’ given by triple hyphens (<code>---</code>). At simplest:</p>
+<pre><code>---
+format: revealjs
+---</code></pre>
+<p>Or more likely, something nested like this:</p>
+<pre><code>---
+title: Chocolate Hobnobs
+subtitle: The best biscuits
+author: Matt Dray
+format:
+  revealjs: 
+    theme: [default, biscuits.scss]
+    menu: false
+title-slide-attributes:
+  data-background-image: hobnob.png
+---</code></pre>
+<p>So we have to somehow read the YAML header of the Quarto file we’re working on and then extract the format information to see if it’s a presentation or not.</p>
 <p>So I ended up doing this:</p>
 <ol type="1">
 <li>Detect information about the active Quarto document in the RStudio script pane with <code>rstudioapi::getActiveDocumentContext()</code>.</li>
 <li>Isolate the text content.</li>
-<li>Detect the lower limit of the document’s YAML header (i.e.&nbsp;the second instance of a YAML fence, <code>---</code>).</li>
+<li>Detect the lower limit of the document’s YAML header (i.e.&nbsp;the second, closing instance of the <code>---</code> YAML fence).</li>
 <li>Use <code>yaml::yaml.load()</code> to parse the YAML header.</li>
 <li>Detect if a <code>format</code> key-value pair is present</li>
 <li>Detect if at least one listed format is <code>revealjs</code> (the Javascript library Quarto uses to make presentations).</li>
@@ -303,82 +319,82 @@ Content for Tab B
 <p>On the plus side, I had fun solving the ‘problem’ and thinking creatively to extract and parse the YAML and write logic to handle each case. I don’t claim it’s optimised, but I’ve added it below for posterity.</p>
 <p>First, a function that uses {rstudioapi} to read the active Quarto doc in the RStudio source pane and outputs <code>TRUE</code> if it’s a revealjs presentation.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>.check_revealjs <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fetch lines from the source</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  active_doc <span class="ot">&lt;-</span> rstudioapi<span class="sc">::</span><span class="fu">getActiveDocumentContext</span>()</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  contents <span class="ot">&lt;-</span> active_doc[[<span class="st">"contents"</span>]]</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Identify the lines that compose the YAML header</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  yaml_end_index <span class="ot">&lt;-</span> <span class="fu">which</span>(contents <span class="sc">==</span> <span class="st">"---"</span>)[<span class="dv">2</span>]</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  yaml_only <span class="ot">&lt;-</span> contents[<span class="fu">seq</span>(yaml_end_index)]</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Parse the YAML header, detect 'format' key</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  yaml_parsed <span class="ot">&lt;-</span> yaml<span class="sc">::</span><span class="fu">yaml.load</span>(yaml_only)</span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  has_format <span class="ot">&lt;-</span> <span class="st">"format"</span> <span class="sc">%in%</span> <span class="fu">names</span>(yaml_parsed)</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Detect if the format is revealjs</span></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  is_revealjs <span class="ot">&lt;-</span> <span class="cn">FALSE</span>  <span class="co"># default</span></span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (has_format) {</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    formats <span class="ot">&lt;-</span> yaml_parsed[[<span class="st">"format"</span>]]</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Format structure could differ, depends on YAML nesting</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    formats_is_vec <span class="ot">&lt;-</span> <span class="fu">inherits</span>(formats, <span class="st">"character"</span>)</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    formats_is_list <span class="ot">&lt;-</span> <span class="fu">inherits</span>(formats, <span class="st">"list"</span>)</span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (formats_is_vec) {</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>      is_revealjs <span class="ot">&lt;-</span> <span class="st">"revealjs"</span> <span class="sc">%in%</span> formats</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (formats_is_list) {</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>      is_revealjs <span class="ot">&lt;-</span> <span class="st">"revealjs"</span> <span class="sc">%in%</span> <span class="fu">names</span>(formats)</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(is_revealjs)</span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>.check_revealjs <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fetch lines from the source</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  active_doc <span class="ot">&lt;-</span> rstudioapi<span class="sc">::</span><span class="fu">getActiveDocumentContext</span>()</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  contents <span class="ot">&lt;-</span> active_doc[[<span class="st">"contents"</span>]]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Identify the lines that compose the YAML header</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  yaml_end_index <span class="ot">&lt;-</span> <span class="fu">which</span>(contents <span class="sc">==</span> <span class="st">"---"</span>)[<span class="dv">2</span>]</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  yaml_only <span class="ot">&lt;-</span> contents[<span class="fu">seq</span>(yaml_end_index)]</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Parse the YAML header, detect 'format' key</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  yaml_parsed <span class="ot">&lt;-</span> yaml<span class="sc">::</span><span class="fu">yaml.load</span>(yaml_only)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  has_format <span class="ot">&lt;-</span> <span class="st">"format"</span> <span class="sc">%in%</span> <span class="fu">names</span>(yaml_parsed)</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Detect if the format is revealjs</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  is_revealjs <span class="ot">&lt;-</span> <span class="cn">FALSE</span>  <span class="co"># default</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (has_format) {</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    formats <span class="ot">&lt;-</span> yaml_parsed[[<span class="st">"format"</span>]]</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Format structure could differ, depends on YAML nesting</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>    formats_is_vec <span class="ot">&lt;-</span> <span class="fu">inherits</span>(formats, <span class="st">"character"</span>)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>    formats_is_list <span class="ot">&lt;-</span> <span class="fu">inherits</span>(formats, <span class="st">"list"</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (formats_is_vec) {</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>      is_revealjs <span class="ot">&lt;-</span> <span class="st">"revealjs"</span> <span class="sc">%in%</span> formats</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (formats_is_list) {</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>      is_revealjs <span class="ot">&lt;-</span> <span class="st">"revealjs"</span> <span class="sc">%in%</span> <span class="fu">names</span>(formats)</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(is_revealjs)</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The output from <code>.check_revealjs()</code> could then be used in a modified <code>stamp_tabset()</code> (the function that powers the ‘Insert Tabset’ option from the Addins menu) where <code>TRUE</code> inserts a level 3 header, otherwise a level 2 header.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>stamp_tabset <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  is_revealjs <span class="ot">&lt;-</span> <span class="fu">.check_revealjs</span>()</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set headers to level 2 by default</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  heading_level <span class="ot">&lt;-</span> <span class="dv">2</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set as level 3 if the active doc is a revealjs presentation</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (is_revealjs) {</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    heading_level <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate tabset header Markdown depending on doc format</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  tabset_heading_md <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">rep</span>(<span class="st">"#"</span>, heading_level), <span class="at">collapse =</span> <span class="st">""</span>)</span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Insert tabset code with appropriate heading level</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.replace_text</span>(</span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">pre =</span> <span class="fu">paste0</span>(</span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>      <span class="st">"::: {.panel-tabset}</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>      <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">paste</span>(tabset_heading_md, <span class="st">"Tab A</span><span class="sc">\n</span><span class="st">"</span>),</span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>      <span class="st">"</span><span class="sc">\n</span><span class="st">"</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">body =</span> <span class="st">"Content for Tab A</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">post =</span> <span class="fu">paste0</span>(</span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>      <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>      <span class="fu">paste</span>(tabset_heading_md, <span class="st">"Tab B</span><span class="sc">\n</span><span class="st">"</span>),</span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>      <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Content for Tab B</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>      <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>      <span class="st">":::</span><span class="sc">\n</span><span class="st">"</span></span>
-<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>stamp_tabset <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  is_revealjs <span class="ot">&lt;-</span> <span class="fu">.check_revealjs</span>()</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set headers to level 2 by default</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  heading_level <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Set as level 3 if the active doc is a revealjs presentation</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (is_revealjs) {</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    heading_level <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Generate tabset header Markdown depending on doc format</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  tabset_heading_md <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">rep</span>(<span class="st">"#"</span>, heading_level), <span class="at">collapse =</span> <span class="st">""</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Insert tabset code with appropriate heading level</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.replace_text</span>(</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">pre =</span> <span class="fu">paste0</span>(</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>      <span class="st">"::: {.panel-tabset}</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>      <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">paste</span>(tabset_heading_md, <span class="st">"Tab A</span><span class="sc">\n</span><span class="st">"</span>),</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>      <span class="st">"</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">body =</span> <span class="st">"Content for Tab A</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">post =</span> <span class="fu">paste0</span>(</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>      <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>      <span class="fu">paste</span>(tabset_heading_md, <span class="st">"Tab B</span><span class="sc">\n</span><span class="st">"</span>),</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>      <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Content for Tab B</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>      <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>      <span class="st">":::</span><span class="sc">\n</span><span class="st">"</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>You can see the actual current state of the code in <a href="https://github.com/matt-dray/quartostamp">the matt-dray/quartostamp GitHub repo</a>, which also has the source for the <code>.replace_text()</code> function show in the code block above.</p>
 </section>
@@ -402,7 +418,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-09-02 09:46:09 BST</code></pre>
+<pre><code>Last rendered: 2023-09-02 10:17:38 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
