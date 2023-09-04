@@ -203,7 +203,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Things went pretty well, basically. It was just boring and slow<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> to go through over 150 posts and perform (mostly) little corrections here and there. Herefollows some minor struggles.</p>
 <section id="load-bearing-posts" class="level3">
 <h3 class="anchored" data-anchor-id="load-bearing-posts">Load-bearing posts</h3>
-<p>You could copy-paste your old {blogdown} source code to the structure and style required by Quarto. But why spend 10 minutes doing that when I could spend many more minutes creating a package to do it?<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> This is a little manoeuvre I call ‘procrastination-driven development’. The outcome was my helper package <a href="https://github.com/matt-dray/bd2q">{bd2q}</a>, which I <a href="https://www.rostrum.blog/posts/2023-05-07-bd2q/">wrote about before</a>. It was useful given the number of posts and changes I wanted to make.</p>
+<p>You could copy-paste your old {blogdown} source code into the structure and style required by Quarto. But why spend 10 minutes doing that when I could spend many more minutes creating a package to do it?<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> This is a little manoeuvre I call ‘procrastination-driven development’. The outcome was my helper package <a href="https://github.com/matt-dray/bd2q">{bd2q}</a>, which I <a href="https://www.rostrum.blog/posts/2023-05-07-bd2q/">wrote about before</a>. It was useful for some big structural changes and also some specific line edits to the large number of posts I wanted to port and re-render.</p>
 </section>
 <section id="twtters-ex-api" class="level3">
 <h3 class="anchored" data-anchor-id="twtters-ex-api">Tw*tter’s ex-API</h3>
@@ -217,9 +217,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="trough-of-a-wav">Trough of a WAV</h3>
 <p>I have some little HTML audio whatsits on some pages, like the one about <a href="https://www.rostrum.blog/posts/2021-02-02-sonify-covid/">sonifying covid data</a>. Despite putting .wav files in the appropriate directory, the sounds simply wouldn’t play. It’s because you need to specify <code>resources:</code> in your <a href="https://github.com/matt-dray/rostrum-blog-2/blob/main/posts/2021-02-02-sonify-covid/index.qmd#L10-L14">YAML header</a> and then list the path to each one (for me this would be like <code>- resources/roblox-oof.wav</code>). The file is then correctly copied over to the <code>_site/</code> folder for deployment.</p>
 </section>
-</section>
-<section id="environmental-disaster" class="level2">
-<h2 class="anchored" data-anchor-id="environmental-disaster">Environmental disaster</h2>
+<section id="environmental-disaster" class="level3">
+<h3 class="anchored" data-anchor-id="environmental-disaster">Environmental disaster</h3>
 <p>To appease nerds, each post on the old blog had a record of the R and package versions used to render it. I did this by calling the session info in an expandable <code>&lt;details&gt;</code> block after a page divider (<code>---</code>). This looked a bit awkward when I tried it in Quarto.</p>
 <p>Took me a while to realise: you can add arbitrary sections to each post’s appendix section with <code>{.appendix}</code> next to its heading. By default, my Quarto appendices have license information and footnotes, but I added an ‘environment’ section with the clickable session info in it. It’s written like this<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">## Environment {.appendix}</span></span>
@@ -231,6 +230,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">&lt;/details&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>I also introduced a ‘last rendered’ time before the session info. You can add this to the top of the post along with the author and publish date, but I didn’t want to put so much emphasis on it.</p>
 <p>You can see an example of this at the bottom of this post, of course.</p>
+</section>
 <section id="misdirection" class="level3">
 <h3 class="anchored" data-anchor-id="misdirection">Misdirection</h3>
 <p>The old blog had URLs in the form <code>rostrum.blog/YYYY/MM/DD/postname</code>. Quarto does it like <code>rostrum.blog/posts/YYYY-MM-DD-postname</code>. I thought each Quarto post might need to be placed in a folder structure like <code>/YYYY/MM/DD/postname.qmd</code> to achieve the old URL style. This would be awkward to work with.</p>
@@ -309,8 +309,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="selling-out" class="level2">
 <h2 class="anchored" data-anchor-id="selling-out">Selling out</h2>
-<p>I picked up a lot of miscellaneous tips and tricks from <a href="https://blog.djnavarro.net/posts/2022-04-20_porting-to-quarto/">Danielle Navarro</a>, <a href="https://albert-rapp.de/posts/13_quarto_blog_writing_guide/13_quarto_blog_writing_guide.html">Albert Rapp</a> and <a href="https://quarto.org/docs/websites/website-blog.html">the Quarto docs</a> themselves. Cheers.</p>
-<p>And above all, thank you Yihui and contributors for {blogdown}. It felt cool to be a hipster {blogdown} user<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>. I held out for over five years, but the time has come and I have become… mainstream. The horror.</p>
+<p>I picked up a lot of miscellaneous tips and tricks from <a href="https://blog.djnavarro.net/posts/2022-04-20_porting-to-quarto/">Danielle Navarro</a>, <a href="https://albert-rapp.de/posts/13_quarto_blog_writing_guide/13_quarto_blog_writing_guide.html">Albert Rapp</a> and <a href="https://quarto.org/docs/websites/website-blog.html">the Quarto docs</a> themselves. Do check those out.</p>
+<p>Above all, thank you Yihui and contributors for {blogdown}. It felt cool to be a hipster {blogdown} user<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>. I held out for over five years, but the time has come and I have become… mainstream. The horror.</p>
 <p>But how can I complain? A mid-life crisis precipitated by a blog transition is exactly where I saw this going, to be honest.</p>
 <p>Hopefully I won’t be changing platforms again any time soon. But the posts are always ported first from my brain to the blog, so I could simplify the process by just… keeping them in my head? You’re preemptively welcome.</p>
 </section>
@@ -325,7 +325,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-09-02 22:59:52 BST</code></pre>
+<pre><code>Last rendered: 2023-09-04 11:59:19 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)

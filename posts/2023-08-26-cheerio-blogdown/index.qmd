@@ -28,7 +28,7 @@ Things went pretty well, basically. It was just boring and slow[^actionbutton] t
 
 ### Load-bearing posts
 
-You could copy-paste your old {blogdown} source code to the structure and style required by Quarto. But why spend 10 minutes doing that when I could spend many more minutes creating a package to do it?[^editor] This is a little manoeuvre I call 'procrastination-driven development'. The outcome was my helper package [{bd2q}](https://github.com/matt-dray/bd2q), which I [wrote about before](https://www.rostrum.blog/posts/2023-05-07-bd2q/). It was useful given the number of posts and changes I wanted to make.
+You could copy-paste your old {blogdown} source code into the structure and style required by Quarto. But why spend 10 minutes doing that when I could spend many more minutes creating a package to do it?[^editor] This is a little manoeuvre I call 'procrastination-driven development'. The outcome was my helper package [{bd2q}](https://github.com/matt-dray/bd2q), which I [wrote about before](https://www.rostrum.blog/posts/2023-05-07-bd2q/). It was useful for some big structural changes and also some specific line edits to the large number of posts I wanted to port and re-render.
 
 ### Tw*tter's ex-API
 
@@ -42,7 +42,7 @@ I have [a dynamic, stats-laden README](https://github.com/matt-dray/rostrum-blog
 
 I have some little HTML audio whatsits on some pages, like the one about [sonifying covid data](https://www.rostrum.blog/posts/2021-02-02-sonify-covid/). Despite putting .wav files in the appropriate directory, the sounds simply wouldn't play. It's because you need to specify `resources:` in your [YAML header](https://github.com/matt-dray/rostrum-blog-2/blob/main/posts/2021-02-02-sonify-covid/index.qmd#L10-L14) and then list the path to each one (for me this would be like `- resources/roblox-oof.wav`). The file is then correctly copied over to the `_site/` folder for deployment.
 
-## Environmental disaster
+### Environmental disaster
 
 To appease nerds, each post on the old blog had a record of the R and package versions used to render it. I did this by calling the session info in an expandable `<details>` block after a page divider (`---`). This looked a bit awkward when I tried it in Quarto.
 
@@ -149,9 +149,9 @@ It was also easy to re-add [Goatcounter](https://www.rostrum.blog/posts/2020-09-
 
 ## Selling out
 
-I picked up a lot of miscellaneous tips and tricks from [Danielle Navarro](https://blog.djnavarro.net/posts/2022-04-20_porting-to-quarto/), [Albert Rapp](https://albert-rapp.de/posts/13_quarto_blog_writing_guide/13_quarto_blog_writing_guide.html) and [the Quarto docs](https://quarto.org/docs/websites/website-blog.html) themselves. Cheers.
+I picked up a lot of miscellaneous tips and tricks from [Danielle Navarro](https://blog.djnavarro.net/posts/2022-04-20_porting-to-quarto/), [Albert Rapp](https://albert-rapp.de/posts/13_quarto_blog_writing_guide/13_quarto_blog_writing_guide.html) and [the Quarto docs](https://quarto.org/docs/websites/website-blog.html) themselves. Do check those out.
 
-And above all, thank you Yihui and contributors for {blogdown}. It felt cool to be a hipster {blogdown} user[^feelings]. I held out for over five years, but the time has come and I have become... mainstream. The horror.
+Above all, thank you Yihui and contributors for {blogdown}. It felt cool to be a hipster {blogdown} user[^feelings]. I held out for over five years, but the time has come and I have become... mainstream. The horror.
 
 But how can I complain? A mid-life crisis precipitated by a blog transition is exactly where I saw this going, to be honest. 
 

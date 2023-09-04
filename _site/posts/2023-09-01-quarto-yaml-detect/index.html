@@ -152,6 +152,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
                 <div class="quarto-category">quarto</div>
                 <div class="quarto-category">quartostamp</div>
                 <div class="quarto-category">r</div>
+                <div class="quarto-category">rstudio-addins</div>
                 <div class="quarto-category">yaml</div>
               </div>
                   </div>
@@ -225,8 +226,9 @@ Content for Tab B
 </div>
 </div>
 </div>
+<p>So <code>### Tab A</code> in the YAML should be <code>## Tab A</code>, for example.</p>
 <p>I think I’d used level 3 headers because second-level headers demarcate new slides in a Quarto presentation and <a href="https://quarto.org/docs/presentations/revealjs/#tabsets">the specific guidance for presentations</a> appears to suggest <code>###</code>.</p>
-<p>So, obviously, an instance of <code>##</code> in a tabset header could break someone’s slides, right? (This is a literary technique called ‘foreshadowing’, dear reader.)</p>
+<p>So, obviously, an instance of <code>##</code> in a tabset header could break someone’s slides and I should come up with some convoluted solution, right? What could go wrong? (This is a literary technique called ‘foreshadowing’, dear reader.)</p>
 </section>
 <section id="a-stab-at-the-tabs" class="level2">
 <h2 class="anchored" data-anchor-id="a-stab-at-the-tabs">A stab at the tabs</h2>
@@ -418,7 +420,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-09-02 10:17:38 BST</code></pre>
+<pre><code>Last rendered: 2023-09-04 12:03:31 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
