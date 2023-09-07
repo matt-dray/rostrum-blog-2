@@ -10,7 +10,643 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Thu, 31 Aug 2023 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 08 Sep 2023 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Take a look at my garbage</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2023-09-09-offcuts/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>Three little R things I never finished. Or are useless.</p>
+</section>
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section"></h2>
+<p>This is a little curio shop of bits and bobs that I sketched out at some point, but never finished or never found a use for. Nothing here is going to change your life; I just wanted to set them free for purposes of spiritual atonement.</p>
+<p>For fun toys and R noodlings you can always check out anything by Mike (coolbutuseless), or stuff like Tomaz’s ‘Little Useless-Useful’ series. Far more fruitful.</p>
+<p>Having said this, this may be the first in a series. I’ve got a lot of zombie code moping about.</p>
+</section>
+<section id="plunderplot" class="level2">
+<h2 class="anchored" data-anchor-id="plunderplot">1. {plunderplot}</h2>
+<p><code>locator()</code> is <a href="https://rdrr.io/r/graphics/locator.html">a funny base R function</a> that lets you click a point on a plot to retrieve its coordinates.</p>
+<p>I had a little <code>locator()</code> phase on this blog: I used it to make <a href="https://www.rostrum.blog/index.html#category=pixeltrix">the {pixeltrix} package</a> for point-and-click editing of ‘pixel art’ and wrote a post about <a href="https://www.rostrum.blog/posts/2021-11-04-kanto-locator/">extracting coordinates from fictitious maps</a>.</p>
+<p><a href="https://github.com/matt-dray/plunderplot">The {plunderplot} package</a> was an extension of the ‘data extraction’ idea, really. Given a plotted image, you’re asked to calibrate by clicking on the axis extents and providing their values, then to click points on the image and optionally name them, before you’re finally returned a dataframe of the results.</p>
+<p>So you’re plundering coordindates from a plot, right? Hence the name. Consequently, the package README uses some piratespeak to explain how it works. I won’t subject you to that here.</p>
+<p>You provide the path to an image, which <code>plunder()</code> will plot and then ask you to click on. The image here is a simple treasure map with treasure markers.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">treasure <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> plunderplot<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plunder</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"resources/treasure.png"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">labels =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span></code></pre></div>
+</div>
+<p><img src="https://www.rostrum.blog/posts/2023-09-09-offcuts/resources/treasure.png" class="img-fluid" style="width:100.0%" alt="Chart titled 'Treasure locations on Rectangle Island'. It's a plot with x limits of 0 to 100 and y limits of 0 to 50. There are concentric rectangles that look like an island in the sea. There are three red crosses on the island."></p>
+<p>In the console you’ll be instructed to do certain things, one after the other. You calibrate the plot, select the points and optionally label them.</p>
+<pre><code>Click x axis min
+Click x axis max
+Click y axis min
+Click y axis max
+Type value at x axis min: 0
+Type value at x axis max: 100
+Type value at y axis min: 0
+Type value at y axis max: 50
+Click points on the chart, press ESC when finished
+Type a label for point 1: west
+Type a label for point 2: centre
+Type a label for point 3: east
+Done</code></pre>
+<p>And so you get your coordinates back:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">treasure</span></code></pre></div>
+</div>
+<pre><code>         x        y labels
+1 35.97651 32.19178   west
+2 55.94714 23.15068 centre
+3 61.96769 26.16438   east</code></pre>
+<p>Except, well, this has done before. I was aware of <a href="https://github.com/mjlajeunesse/juicr">the {juicr} package</a>, which contains an interactive GUI for extracting data out of plots in scientific PDFs and that sort of thing, but there’s already CRAN packages with {plunderplot}’s functionality: <a href="https://CRAN.R-project.org/package=digitize">{digitize}</a> and <a href="https://cran.r-project.org/package=metaDigitise">{metaDigitise}</a>, which have been around for years.</p>
+<p>So it’s not more useful than other tools but I had fun coding it and I’ve used it myself for ‘real’ applications more than once.</p>
+</section>
+<section id="perlin-dungeon" class="level2">
+<h2 class="anchored" data-anchor-id="perlin-dungeon">2. Perlin dungeon</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">print_perlin_dungeon <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(</span>
+<span id="cb5-2">    m,  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># matrix of perlin noise via ambient::noise_perlin()</span></span>
+<span id="cb5-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">invert =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># flips tile positions (use set.seed before generating noise)</span></span>
+<span id="cb5-4">) {</span>
+<span id="cb5-5">  </span>
+<span id="cb5-6">  tile_wall <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#"</span></span>
+<span id="cb5-7">  tile_floor <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">" "</span></span>
+<span id="cb5-8">  </span>
+<span id="cb5-9">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Standardise noise values from 0 to 1</span></span>
+<span id="cb5-10">  m_bin <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">round</span>((m <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">min</span>(m)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> (<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">max</span>(m) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">min</span>(m)))</span>
+<span id="cb5-11">  </span>
+<span id="cb5-12">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Lay floor and wall tiles, flip if invert = TRUE</span></span>
+<span id="cb5-13">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span>invert) {</span>
+<span id="cb5-14">    m_tiled <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ifelse</span>(m_bin <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, tile_wall, tile_floor)</span>
+<span id="cb5-15">  } <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">else</span> {</span>
+<span id="cb5-16">    m_tiled <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ifelse</span>(m_bin <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, tile_wall, tile_floor)</span>
+<span id="cb5-17">  }</span>
+<span id="cb5-18">  </span>
+<span id="cb5-19">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Block off edges with wall tiles</span></span>
+<span id="cb5-20">  m_tiled[, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> tile_wall</span>
+<span id="cb5-21">  m_tiled[, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ncol</span>(m_tiled)] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> tile_wall</span>
+<span id="cb5-22">  m_tiled[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, ] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> tile_wall</span>
+<span id="cb5-23">  m_tiled[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">nrow</span>(m_tiled), ] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> tile_wall</span>
+<span id="cb5-24">  </span>
+<span id="cb5-25">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Print to console, line-by-line</span></span>
+<span id="cb5-26">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">nrow</span>(m_tiled))) {</span>
+<span id="cb5-27">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cat</span>(m_tiled[i, ], <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb5-28">  }</span>
+<span id="cb5-29">  </span>
+<span id="cb5-30">}</span></code></pre></div>
+</div>
+<p>The <code>noise_perlin()</code> function in the ambient {ambient} package has lots of twiddly knobs for arguments.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">m <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> ambient<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">noise_perlin</span>(</span>
+<span id="cb6-2">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">dim =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">42</span>),</span>
+<span id="cb6-3">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">frequency =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.2</span>,</span>
+<span id="cb6-4">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">interpolator =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"linear"</span>,</span>
+<span id="cb6-5">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fractal =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"fbm"</span>,</span>
+<span id="cb6-6">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">octaves =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>,</span>
+<span id="cb6-7">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">lacunarity =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>,</span>
+<span id="cb6-8">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">gain =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.5</span>,</span>
+<span id="cb6-9">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pertubation =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"none"</span>,</span>
+<span id="cb6-10">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pertubation_amplitude =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb6-11">)</span></code></pre></div>
+</div>
+<p>You can pass the matrix output from <code>noise_perlin()</code> to the <code>print_perlin_dungeon()</code> to print the map to the console.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print_perlin_dungeon</span>(m)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+#         # # # # #                     # # # # #     # # #             # # # #   # 
+# # # # # #   #                         # # # # #         # #           # # #     # 
+# # # #   #                             # # # # #         # #           # # #     # 
+#     #   #               # #             # # # #           # #         # # #     # 
+#                     # # # #             # # #               #         # # #     # 
+#                     # # # # # #         # # # # #           # # # # # # # #     # 
+#                     # # # # # #               #               # # # # # # #     # 
+#                     # # # # # #         # # # #                   # # # # #     # 
+#                 #     # # # #           # # # #         #         # #           # 
+#           #     #                       # # #     #     #                       # 
+#               # #                         # # # # #                   #   #   # # 
+#           # # # #             #       # # # # # # # # #   # #                 # # 
+#           # # # #             # # # # # #     # # # # #   # #                 # # 
+#           # # # #                 # #         # # #         # #   #     #   # # # 
+#           # # # #               # # #                   #   # # # #             # 
+#   # # #   # # # #               # # #                       # # # #       # #   # 
+#   # # # # # # # # #           # # #               #         # # # # # # # # #   # 
+#   # # # # # # # # #           # # #               #         # # # # # # # # #   # 
+# # # # # # # # # # #           # # # #                       # # # # # # # # #   # 
+# # # #     # # #                 # # #                       # # # #   #     #   # 
+#             # # #                   #                       # #                 # 
+#   # # #                       # # # #                     # #                   # 
+#   # # #               #         # #                       # #                   # 
+# # # #               # # # #     # # #                       # #                 # 
+# # # #               # # # #             #                   # # #               # 
+# #                   # # # #   # #   #   #                     # #               # 
+# # # # #           # # # # #   # # # #         # #           # # # #     # #     # 
+# # # # #           # # # # #   # # # #       # # #             # # #     # #     # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # </code></pre>
+</div>
+</div>
+<p>The code is <a href="https://gist.github.com/matt-dray/fd5bf4b6560638e154353e4ec5c8b98a">in a gist</a>. It might even have been in a tweet once.</p>
+</section>
+<section id="droplet-physics" class="level2">
+<h2 class="anchored" data-anchor-id="droplet-physics">3. Droplet ‘physics’</h2>
+<p>I experimented with this in support of a different project that may never finish.</p>
+<p>It’s a cross between the physics of water flowing under gravity and a pathfinding system. Except that description is way too grandiose. You provide a ‘map’ as a matrix and a little droplet (<code>o</code>) passes from top to bottom ‘under gravity’, depending on hazards (<code>X</code>). This manifests as a little animation in your console.</p>
+<!-- TODO: improve map -->
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">block <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#"</span></span>
+<span id="cb9-2">empty <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">" "</span></span>
+<span id="cb9-3">drop  <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"o"</span></span>
+<span id="cb9-4"></span>
+<span id="cb9-5">m <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">matrix</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(empty, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span>), <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>)</span>
+<span id="cb9-6">m[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>)] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> block</span>
+<span id="cb9-7">m[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>]         <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> block</span>
+<span id="cb9-8">m[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>]       <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> block</span>
+<span id="cb9-9">m[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>]         <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> drop</span>
+<span id="cb9-10"></span>
+<span id="cb9-11"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(m)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,] " "  " "  " "  "o"  " "  " " 
+[2,] " "  " "  " "  " "  " "  " " 
+[3,] " "  "#"  " "  " "  " "  " " 
+[4,] " "  "#"  "#"  "#"  " "  "#" 
+[5,] " "  " "  " "  "#"  "#"  "#" </code></pre>
+</div>
+</div>
+<p>You can make this more or less complicated. You can even use {pixeltrix} to make a map by interactively clicking squares in a plot window to receive back a matrix.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">repeat</span> {</span>
+<span id="cb11-2">  </span>
+<span id="cb11-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cat</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\014</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>)</span>
+<span id="cb11-4">  </span>
+<span id="cb11-5">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (row <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">nrow</span>(m))) {</span>
+<span id="cb11-6">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">cat</span>(m[row, ], <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">sep =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>)</span>
+<span id="cb11-7">  }</span>
+<span id="cb11-8">  </span>
+<span id="cb11-9">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">Sys.sleep</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb11-10">  </span>
+<span id="cb11-11">  droplet_i      <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">which</span>(m <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> drop)</span>
+<span id="cb11-12">  droplet_i_save <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> droplet_i</span>
+<span id="cb11-13">  below_i        <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> droplet_i <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb11-14">  </span>
+<span id="cb11-15">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (m[below_i] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> empty) {</span>
+<span id="cb11-16">    m[droplet_i] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> empty</span>
+<span id="cb11-17">    m[below_i]   <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> drop</span>
+<span id="cb11-18">  }</span>
+<span id="cb11-19">  </span>
+<span id="cb11-20">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (m[below_i] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> block) {</span>
+<span id="cb11-21">    </span>
+<span id="cb11-22">    left_i  <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> droplet_i <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">nrow</span>(m)</span>
+<span id="cb11-23">    right_i <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> droplet_i <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">nrow</span>(m)</span>
+<span id="cb11-24">    </span>
+<span id="cb11-25">    is_left_open  <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span></span>
+<span id="cb11-26">    is_right_open <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span></span>
+<span id="cb11-27">    </span>
+<span id="cb11-28">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (m[left_i] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> empty)  is_left_open  <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span></span>
+<span id="cb11-29">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (m[right_i] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> empty) is_right_open <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span></span>
+<span id="cb11-30">    </span>
+<span id="cb11-31">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (is_left_open <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;</span> is_right_open) {</span>
+<span id="cb11-32">      sampled_direction_i <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sample</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(left_i, right_i), <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb11-33">      m[droplet_i] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> empty</span>
+<span id="cb11-34">      m[sampled_direction_i]   <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> drop</span>
+<span id="cb11-35">    }</span>
+<span id="cb11-36">    </span>
+<span id="cb11-37">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (is_left_open <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span>is_right_open) {</span>
+<span id="cb11-38">      m[droplet_i] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> empty</span>
+<span id="cb11-39">      m[left_i]    <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> drop</span>
+<span id="cb11-40">    }</span>
+<span id="cb11-41">    </span>
+<span id="cb11-42">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span>is_left_open <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;</span> is_right_open) {</span>
+<span id="cb11-43">      m[droplet_i] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> empty</span>
+<span id="cb11-44">      m[right_i]   <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> drop</span>
+<span id="cb11-45">    }</span>
+<span id="cb11-46">    </span>
+<span id="cb11-47">  }</span>
+<span id="cb11-48"></span>
+<span id="cb11-49">  droplet_i <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">which</span>(m <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> drop)</span>
+<span id="cb11-50">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (droplet_i <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> droplet_i_save) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">break</span></span>
+<span id="cb11-51">  </span>
+<span id="cb11-52">}</span></code></pre></div>
+</div>
+<!-- TODO: insert gif -->
+<p>So it’s a bit weird. The droplet will scooch left and right forever on a flat surface until there’s a lower point for it to drop into. The animation stops once the droplet is trapped at the lowest point.</p>
+<p>I think I wanted to try introducing tiles with different properties (e.g.&nbsp;angled, like <code>\</code> and <code>/</code>) and the ability to add more than one droplet at a time.</p>
+<p>The code is <a href="https://gist.github.com/matt-dray/0f4fba9a7e57bdb093d0b9433a983c61">in a gist</a>.</p>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-09-07 22:18:43 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     ambient_1.0.2    
+ [5] cli_3.6.1         tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0
+ [9] yaml_2.3.7        rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7   
+[13] xfun_0.39         digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>r</category>
+  <guid>https://www.rostrum.blog/posts/2023-09-09-offcuts/index.html</guid>
+  <pubDate>Fri, 08 Sep 2023 23:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Autodetect Quarto formats with {quartostamp}. Or not.</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -7515,290 +8151,6 @@ loaded via a namespace (and not attached):
   <category>trapinch</category>
   <guid>https://www.rostrum.blog/posts/2023-02-02-trapinch/index.html</guid>
   <pubDate>Thu, 02 Feb 2023 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Stiliyan Petrov: Jesus?</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-01-08-petrov/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><img src="https://www.rostrum.blog/posts/2023-01-08-petrov/resources/petrov.jpg" class="img-fluid" style="width:100.0%" alt="Close up of former footballer Stiliyan Petrov playing for Bulgaria. Text around his head says 'Stan Petrov', 'am jebus?', 'nativity' and 'get rekt opta' in Comic Sans font."></p>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>In which I prove wrong a tweeted <a href="https://en.wikipedia.org/wiki/Opta_Sports">Opta</a> football statistic, using R and Transfermarkt data. Oh wait, actually Opta were right. Ah, heck.</p>
-</section>
-<section id="petrov-rescue" class="level2">
-<h2 class="anchored" data-anchor-id="petrov-rescue">Petrov Rescue</h2>
-<p>Basically, for little reason, I dislike the style of the tweets on <a href="https://twitter.com/OptaJoe/">the Twitter feed for Opta</a><sup>1</sup> (the company who do all the football stats).</p>
-<p>What is so outrageous? Each tweet always ends in a single, summary word that makes me cringe.</p>
-<p>Wait, what? Let’s take a look at <a href="https://twitter.com/OptaJoe/status/1611735498233622534?s=20">their most recent tweet</a> at time of writing:</p>
-<blockquote class="blockquote">
-<p>14 - Harry Kane has scored 14 goals in his last 14 appearances in the FA Cup, averaging a goal every 63 minutes in the competition in this period. Guarantee.</p>
-</blockquote>
-<p>‘Guarantee’. Gah.</p>
-<p>Or <a href="https://twitter.com/OptaJoe/status/1611722890298404866?s=20">this tweet</a>:</p>
-<blockquote class="blockquote">
-<p>16 - Since his first appearance in the competition in January 2016, Leicester’s Kelechi Iheanacho has scored more FA Cup goals than any other player (16). Specialist.</p>
-</blockquote>
-<p>‘Specialist’. Sigh.</p>
-<p>A completely small and pointless thing to be annoyed by, right?</p>
-<p>But here’s the scenario. Over the yuletide period (on Christmas day!) they ran <a href="https://twitter.com/OptaJoe/status/1607028528289030144?s=20">this tweet</a>:</p>
-<blockquote class="blockquote">
-<p>1 - Stiliyan Petrov (<span class="citation" data-cites="StanPetrov19">@StanPetrov19</span>) is the only player to have played in the Premier League whose name contains all the letters in the word ‘Nativity’. Star.</p>
-</blockquote>
-<p>Obviously, I have absolutely nothing against <a href="https://en.wikipedia.org/wiki/Stiliyan_Petrov">‘Big Stan’</a>. He’s a legend; a ‘star’, if you will. Captain of Aston Villa! Bulgaria! Battled leukaemia and still made it to nearly 600 games. One of the best Bulgarian/Premier League ‘Petrovs’, along with cult legend <a href="https://en.wikipedia.org/wiki/Martin_Petrov">Martin</a>.</p>
-<p>But could this stat possibly be true? Surely there’s at least one other player. Perhaps a window of opportunity for me to avenge my feelings of cringe?</p>
-<p>Oh, and obviously you can ignore the candid dismissals in the tweet’s replies, <a href="https://twitter.com/duke_smyles/status/1607052807680524289?s=20">for example</a>:</p>
-<blockquote class="blockquote">
-<p>What are we supposed to do with this information? [Picture of wryly-smiling duck.]</p>
-</blockquote>
-<p>No, this is more important than any Opta tweet ever: what if it’s… <em>wrong</em>?</p>
-</section>
-<section id="stan-in-r-but-not-rstan" class="level2">
-<h2 class="anchored" data-anchor-id="stan-in-r-but-not-rstan">Stan in R, but not {rstan}</h2>
-<p>So I looked into it using R, of course.</p>
-<p>Turns out it’s pretty straightforward with <a href="https://jaseziv.github.io/worldfootballR/">the excellent {worldfootballR} package by Jason Zivkovic</a>, which helps fetch player data from <a href="https://www.transfermarkt.com/">Transfermarkt</a> (among other suppliers).</p>
-<p>Basically, we can fetch data about footballers from every team in a given league’s season since its inception. So, aha, you cannot escape, Opta!</p>
-<p>My little <a href="https://github.com/matt-dray/soccercolleagues">{soccercolleagues} package</a> that <a href="https://www.rostrum.blog/2022/02/04/soccercolleagues/">I wrote about in early 2022</a> is built heavily (heavily!) around {worldfootballR} and has a convenience function we can use.</p>
-<p>The niche<sup>2</sup> primary objective of {soccercolleagues} is to let you <a href="https://www.rostrum.blog/2022/02/04/soccercolleagues/">find pairs of football players that were colleagues at some point</a>. Like: ‘which current Premier League footballer has been team mates with each of the following: Kevin Phillips, Mark Viduka, Dejan Lovren, Danny Ings and Nicky Butt?’<sup>3</sup></p>
-<p>Follow along. As ever, you can install the {soccercolleagues} package from GitHub:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span>(<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">require</span>(remotes)) <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"remotes"</span>)</span>
-<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"matt-dray/soccercolleagues"</span>)</span></code></pre></div>
-</div>
-<p>We’ll also use the {tidyverse} for wrangling.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(soccercolleagues)</span>
-<span id="cb2-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(tidyverse)</span></code></pre></div>
-</div>
-<p>So we can ask Transfermarkt for all the years of the English Premier League, which began in 1992:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># This will take quite a long time...</span></span>
-<span id="cb3-2">epl_players <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> soccercolleagues<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">get_players</span>(</span>
-<span id="cb3-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">seasons =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1992</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2022</span>,</span>
-<span id="cb3-4">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">country =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"England"</span></span>
-<span id="cb3-5">)</span></code></pre></div>
-</div>
-<p>And now we can look for the players whose names contain the letters in ‘nativity’:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">epl_players <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb4-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">distinct</span>(player_name) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb4-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mutate</span>(</span>
-<span id="cb4-4">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">player_name =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">str_remove_all</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tolower</span>(player_name), <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">" "</span>),</span>
-<span id="cb4-5">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">n_count =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">str_count</span>(player_name, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"n"</span>),</span>
-<span id="cb4-6">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">a_count =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">str_count</span>(player_name, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"a"</span>),</span>
-<span id="cb4-7">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">t_count =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">str_count</span>(player_name, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"t"</span>),</span>
-<span id="cb4-8">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">i_count =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">str_count</span>(player_name, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"i"</span>),</span>
-<span id="cb4-9">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">v_count =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">str_count</span>(player_name, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"v"</span>),</span>
-<span id="cb4-10">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">y_count =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">str_count</span>(player_name, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"y"</span>)</span>
-<span id="cb4-11">  ) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb4-12">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">filter</span>(</span>
-<span id="cb4-13">    n_count <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;=</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span></span>
-<span id="cb4-14">      a_count <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;=</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span></span>
-<span id="cb4-15">      t_count <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;=</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span></span>
-<span id="cb4-16">      i_count <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;=</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span></span>
-<span id="cb4-17">      v_count <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;=</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span></span>
-<span id="cb4-18">      y_count <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;=</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span></span>
-<span id="cb4-19">  )</span></code></pre></div>
-</div>
-<pre><code># A tibble: 1 × 7
-  player_name    n_count a_count t_count i_count v_count y_count
-  &lt;chr&gt;            &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;   &lt;int&gt;
-1 stiliyanpetrov       1       1       2       2       1       1</code></pre>
-<p>Oof… they were right. He is the only one.</p>
-<p>Wow, this humble pie is so delicious, thank you so much Opta for unintentionally spoonfeeding it to me.</p>
-<p>To be clear: Opta’s data analysts have a good track record, as far as I know. But I’ve got my eye on you! You’ll slip up one day!</p>
-<p>…But wait. Opta were misnaming Stan as ‘Stylian Petrov’ <a href="https://twitter.com/OptaJoe/status/169439820584714240?s=20">in tweets as late as 2012</a>. Get rekt! You missed the extra ‘i’ you need in ‘nativity’, fools! Put respect on Stiliyan’s name!</p>
-<p>‘Result’.<sup>4</sup></p>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-06 19:27:34 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.14   yaml_2.3.7       
- [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
-[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>This post is not guerilla marketing for Opta. It would be <em>extremely</em> guerilla if they wanted to advertise on <em>this</em> blog.↩︎</p></li>
-<li id="fn2"><p>There is definitely a burgeoning crossover of football stats and R users, see <a href="https://ryo-n7.github.io/">Ryo</a>, <a href="https://torvaney.github.io/">Ben</a> and <a href="https://tonyelhabr.rbind.io/">Tony</a>, for example.↩︎</p></li>
-<li id="fn3"><p>Hint: it’s a very ‘boring’ footballer, lol.↩︎</p></li>
-<li id="fn4"><p>By which I mean I lost 1-0.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>r</category>
-  <category>soccercolleagues</category>
-  <category>sport</category>
-  <guid>https://www.rostrum.blog/posts/2023-01-08-petrov/index.html</guid>
-  <pubDate>Sun, 08 Jan 2023 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

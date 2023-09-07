@@ -1,0 +1,226 @@
+---
+title: Take a look at my garbage
+date: 2023-09-09
+slug: offcuts
+categories:
+  - r
+---
+
+## tl;dr
+
+Three little R things I never finished. Or are useless.
+
+## 
+
+This is a little curio shop of bits and bobs that I sketched out at some point, but never finished or never found a use for. Nothing here is going to change your life; I just wanted to set them free for purposes of spiritual atonement.
+
+For fun toys and R noodlings you can always check out anything by Mike (coolbutuseless), or stuff like Tomaz's 'Little Useless-Useful' series. Far more fruitful.
+
+Having said this, this may be the first in a series. I've got a lot of zombie code moping about.
+
+## 1. {plunderplot}
+
+`locator()` is [a funny base R function](https://rdrr.io/r/graphics/locator.html) that lets you click a point on a plot to retrieve its coordinates.
+
+I had a little `locator()` phase on this blog: I used it to make [the {pixeltrix} package](https://www.rostrum.blog/index.html#category=pixeltrix) for point-and-click editing of 'pixel art' and wrote a post about [extracting coordinates from fictitious maps](https://www.rostrum.blog/posts/2021-11-04-kanto-locator/).
+
+[The {plunderplot} package](https://github.com/matt-dray/plunderplot) was an extension of the 'data extraction' idea, really. Given a plotted image, you're asked to calibrate by clicking on the axis extents and providing their values, then to click points on the image and optionally name them, before you're finally returned a dataframe of the results.
+
+So you're plundering coordindates from a plot, right? Hence the name. Consequently, the package README uses some piratespeak to explain how it works. I won't subject you to that here.
+
+You provide the path to an image, which `plunder()` will plot and then ask you to click on. The image here is a simple treasure map with treasure markers.
+
+```{r plunder, eval=FALSE}
+treasure <- plunderplot::plunder("resources/treasure.png", labels = TRUE)
+```
+
+![](resources/treasure.png){fig-alt="Chart titled 'Treasure locations on Rectangle Island'. It's a plot with x limits of 0 to 100 and y limits of 0 to 50. There are concentric rectangles that look like an island in the sea. There are three red crosses on the island." width="100%"}
+
+In the console you'll be instructed to do certain things, one after the other. You calibrate the plot, select the points and optionally label them.
+
+```
+Click x axis min
+Click x axis max
+Click y axis min
+Click y axis max
+Type value at x axis min: 0
+Type value at x axis max: 100
+Type value at y axis min: 0
+Type value at y axis max: 50
+Click points on the chart, press ESC when finished
+Type a label for point 1: west
+Type a label for point 2: centre
+Type a label for point 3: east
+Done
+```
+
+And so you get your coordinates back:
+
+```{r treasure, eval=FALSE}
+treasure
+```
+```
+         x        y labels
+1 35.97651 32.19178   west
+2 55.94714 23.15068 centre
+3 61.96769 26.16438   east
+```
+
+Except, well, this has done before. I was aware of [the {juicr} package](https://github.com/mjlajeunesse/juicr), which contains an interactive GUI for extracting data out of plots in scientific PDFs and that sort of thing, but there's already CRAN packages with {plunderplot}'s functionality: [{digitize}](https://CRAN.R-project.org/package=digitize ) and [{metaDigitise}](https://cran.r-project.org/package=metaDigitise), which have been around for years.
+
+So it's not more useful than other tools but I had fun coding it and I've used it myself for 'real' applications more than once.
+
+## 2. Perlin dungeon
+
+```{r print-perlin-dungeon}
+print_perlin_dungeon <- function(
+    m,  # matrix of perlin noise via ambient::noise_perlin()
+    invert = FALSE  # flips tile positions (use set.seed before generating noise)
+) {
+  
+  tile_wall = "#"
+  tile_floor = " "
+  
+  # Standardise noise values from 0 to 1
+  m_bin <- round((m - min(m)) / (max(m) - min(m)))
+  
+  # Lay floor and wall tiles, flip if invert = TRUE
+  if (!invert) {
+    m_tiled <- ifelse(m_bin == 1, tile_wall, tile_floor)
+  } else {
+    m_tiled <- ifelse(m_bin == 0, tile_wall, tile_floor)
+  }
+  
+  # Block off edges with wall tiles
+  m_tiled[, 1] <- tile_wall
+  m_tiled[, ncol(m_tiled)] <- tile_wall
+  m_tiled[1, ] <- tile_wall
+  m_tiled[nrow(m_tiled), ] <- tile_wall
+  
+  # Print to console, line-by-line
+  for (i in seq(nrow(m_tiled))) {
+    cat(m_tiled[i, ], "\n")
+  }
+  
+}
+```
+
+The `noise_perlin()` function in the ambient {ambient} package has lots of twiddly knobs for arguments.
+
+```{r noise-perlin}
+m <- ambient::noise_perlin(
+  dim = c(30, 42),
+  frequency = 0.2,
+  interpolator = "linear",
+  fractal = "fbm",
+  octaves = 2,
+  lacunarity = 3,
+  gain = 0.5,
+  pertubation = "none",
+  pertubation_amplitude = 1
+)
+```
+
+You can pass the matrix output from `noise_perlin()` to the `print_perlin_dungeon()` to print the map to the console.
+
+```{r print-perlin}
+print_perlin_dungeon(m)
+```
+
+The code is [in a gist](https://gist.github.com/matt-dray/fd5bf4b6560638e154353e4ec5c8b98a). It might even have been in a tweet once.
+
+## 3. Droplet 'physics'
+
+I experimented with this in support of a different project that may never finish.
+
+It's a cross between the physics of water flowing under gravity and a pathfinding system. Except that description is way too grandiose. You provide a 'map' as a matrix and a little droplet (`o`) passes from top to bottom 'under gravity', depending on hazards (`X`). This manifests as a little animation in your console.
+
+<!-- TODO: improve map -->
+
+```{r droplet-map}
+block <- "#"
+empty <- " "
+drop  <- "o"
+
+m <- matrix(rep(empty, 30), 5, 6)
+m[4, c(2:4, 6)] <- block
+m[3, 2]         <- block
+m[5, 4:6]       <- block
+m[1, 4]         <- drop
+
+print(m)
+```
+
+You can make this more or less complicated. You can even use {pixeltrix} to make a map by interactively clicking squares in a plot window to receive back a matrix.
+
+```{r droplet-run, eval=FALSE}
+repeat {
+  
+  cat("\014")
+  
+  for (row in seq(nrow(m))) {
+    cat(m[row, ], "\n", sep = "")
+  }
+  
+  Sys.sleep(1)
+  
+  droplet_i      <- which(m == drop)
+  droplet_i_save <- droplet_i
+  below_i        <- droplet_i + 1
+  
+  if (m[below_i] == empty) {
+    m[droplet_i] <- empty
+    m[below_i]   <- drop
+  }
+  
+  if (m[below_i] == block) {
+    
+    left_i  <- droplet_i - nrow(m)
+    right_i <- droplet_i + nrow(m)
+    
+    is_left_open  <- FALSE
+    is_right_open <- FALSE
+    
+    if (m[left_i] == empty)  is_left_open  <- TRUE
+    if (m[right_i] == empty) is_right_open <- TRUE
+    
+    if (is_left_open & is_right_open) {
+      sampled_direction_i <- sample(c(left_i, right_i), 1)
+      m[droplet_i] <- empty
+      m[sampled_direction_i]   <- drop
+    }
+    
+    if (is_left_open & !is_right_open) {
+      m[droplet_i] <- empty
+      m[left_i]    <- drop
+    }
+    
+    if (!is_left_open & is_right_open) {
+      m[droplet_i] <- empty
+      m[right_i]   <- drop
+    }
+    
+  }
+
+  droplet_i <- which(m == drop)
+  if (droplet_i == droplet_i_save) break
+  
+}
+
+```
+
+<!-- TODO: insert gif -->
+
+So it's a bit weird. The droplet will scooch left and right forever on a flat surface until there's a lower point for it to drop into. The animation stops once the droplet is trapped at the lowest point.
+
+I think I wanted to try introducing tiles with different properties (e.g. angled, like `\` and `/`) and the ability to add more than one droplet at a time.
+
+The code is [in a gist](https://gist.github.com/matt-dray/0f4fba9a7e57bdb093d0b9433a983c61).
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
