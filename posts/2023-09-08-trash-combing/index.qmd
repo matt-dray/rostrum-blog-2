@@ -14,7 +14,7 @@ categories:
 
 Three little R things I never finished. Or are useless. Or both?
 
-## Refuse
+## Flotsam and jetsam
 
 It'll not surprise you that after all these years of blogging and farting around with R that I have a huge [floating garbage patch](https://en.wikipedia.org/wiki/Great_Pacific_garbage_patch) of odds and sods that I sketched out at some point, but never finished or never found a use for.
 
@@ -24,15 +24,15 @@ Join me, fellow trash pandas, as we carouse through the accumulated bilge to dig
 2. Infinite abandoned dungeons.
 3. An underwhelming 'physics' 'simulation' for 'secret' purposes.
 
-## 1. {plunderplot}
+### 1. {plunderplot}
 
 `locator()` is [a funny base R function](https://rdrr.io/r/graphics/locator.html) that lets you click a point on a plot to retrieve its coordinates.
 
 I had a little `locator()` phase on this blog: I used it to make [the {pixeltrix} package](https://www.rostrum.blog/index.html#category=pixeltrix) for point-and-click editing of 'pixel art' and wrote a post about [extracting coordinates from fictitious maps](https://www.rostrum.blog/posts/2021-11-04-kanto-locator/).
 
-[The {plunderplot} package](https://github.com/matt-dray/plunderplot) was an extension of the 'data extraction' idea, really. The `plunder()` function plots your image (e.g. a [map of Sodor](https://en.wikipedia.org/wiki/Sodor_(fictional_island)) or a plot of [Thomas the Tank mods](https://www.youtube.com/watch?v=yNaTZV8qS1I) in popular videogames over time) and asks you to click and label the axes for calibration. Then you're invited you to click points on the plot and get in return a dataframe of the coordinates.
+[The {plunderplot} package](https://github.com/matt-dray/plunderplot) was an extension of the 'data extraction' idea, really. The `plunder()` function plots your image[^thomas] and asks you to click and label the axes for calibration. Then you're invited you to click points on the plot and get in return a dataframe of the coordinates.
 
-So you're plundering coordindates from a plot, right? Hence the name. Consequently, the package README uses some piratespeak to explain how it works. I won't subject you to that here.
+So you're plundering coordindates from a plot, right? Hence the name. Consequently, [the package README](https://github.com/matt-dray/plunderplot/blob/main/README.md) uses some piratespeak to explain how it works. I won't subject you to that here.
 
 To keep with the theme, the example image here is a simple treasure map with treasure markers[^windwaker].
 
@@ -72,11 +72,11 @@ x        y labels
 3 61.96769 26.16438   east
 ```
 
-Except, well, this has done before. More than once. I was aware of [the {juicr} package](https://github.com/mjlajeunesse/juicr), which contains an interactive GUI for extracting data out of plots in scientific PDFs and that sort of thing, but there's already CRAN packages with {plunderplot}'s functionality: [{digitize}](https://CRAN.R-project.org/package=digitize ) and [{metaDigitise}](https://cran.r-project.org/package=metaDigitise), which have been around for years.
+Except, well, this package has done before[^before]. More than once. I was aware of [the {juicr} package](https://github.com/mjlajeunesse/juicr), which contains an interactive GUI for extracting data out of plots in scientific PDFs and that sort of thing, but there's already CRAN packages with {plunderplot}'s functionality: [{digitize}](https://CRAN.R-project.org/package=digitize ) and [{metaDigitise}](https://cran.r-project.org/package=metaDigitise), which have been around for years.
 
-So it's not more useful than other tools but I had fun coding it and I've used it myself for 'real' applications more than once.[^copium]
+So it's not more useful than other tools... but I had fun coding it and I've used it myself for 'real' applications more than once.[^copium]
 
-## 2. Perlin dungeon
+### 2. Perlin dungeon
 
 I made a toy [roguelike](https://en.wikipedia.org/wiki/Roguelike) 'game' in [the {r.oguelike} package](https://www.rostrum.blog/index.html#category=r.oguelike)[^games]. An important feature of games in this genre is a procedurally-generated tile-based dungeon map for your character to do an adventure in. 
 
@@ -143,7 +143,7 @@ Of course, this will generate a new map every time you run it. I would say it's 
 
 A version of this code is [in a GitHub Gist](https://gist.github.com/matt-dray/fd5bf4b6560638e154353e4ec5c8b98a). It might even have been in a tweet once.
 
-## 3. Droplet 'physics'
+### 3. Droplet 'physics'
 
 I experimented with this in support of a different (secret!) project that may never finish.
 
@@ -239,7 +239,7 @@ Here's a little gif showing how this basic example looks in the console:
 
 Alas, I am an untrustworthy narrator! The droplet will scooch left and right forever on a flat surface. The animation only stops if the droplet is trapped at the lowest point, like in the gif above. No one really understands physics though, right, so it's basically fine.
 
-I think I wanted to have the droplet travel diagonally instead of across and down; try introducing tiles with different properties (e.g. angled, like `\` and `/`); and have the ability to add more than one droplet at a time. I'll probably explain eventually about why I made this subpar toy.
+I think I wanted to have the droplet travel diagonally instead of across and down; try introducing tiles with different properties (e.g. angled, like `\` and `/`); and have the ability to add more than one droplet at a time. I'll probably explain eventually about why I made this subpar toy[^not].
 
 You can find a version of this code [in a GitHub gist](https://gist.github.com/matt-dray/0f4fba9a7e57bdb093d0b9433a983c61) if you really must.
 
@@ -249,7 +249,7 @@ Nothing here is going to change your life; I just wanted to set these ideas free
 
 For fun toys and proper R noodlings you can always check out anything by Mike ([coolbutuseless](https://coolbutuseless.github.io/)), or stuff like [Tomaz](https://tomaztsql.wordpress.com/)'s 'Little Useless-Useful' series. Far more fruitful.
 
-Having said this, this may be the first post in a series. I'm not afraid to put my hand back in the waste disposal unit. Are you?
+Beware: this may be the first post in a series. I'm not afraid to put my hand back in the waste disposal unit. Are you?
 
 ## Environment {.appendix}
 
@@ -262,3 +262,6 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 [^games]: [R is a game engine, fight me](https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/).
 [^copium]: \*Breathes in deep breath of copium.\*
 [^windwaker]: This just looks like a screenshot of treasure locations from _The Legend of Zelda: The Windwaker_, which I assume I was replaying at the time.
+[^thomas]: Such as a fictitious [map of Sodor](https://en.wikipedia.org/wiki/Sodor_(fictional_island)) or a chart over time over [Thomas the Tank mods](https://www.youtube.com/watch?v=yNaTZV8qS1I) in popular videogames. Whatever you like.
+[^before]: I've reinvented the wheel more than once, like for [{coloratio}](https://github.com/matt-dray/coloratio)/[{savonliquide}](https://CRAN.R-project.org/package=savonliquide) and [{badgr}](https://github.com/matt-dray/badgr)/[{badger}](https://CRAN.R-project.org/package=badger).
+[^not]: Or not. You can't tell me what to do.

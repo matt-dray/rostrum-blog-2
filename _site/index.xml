@@ -30,8 +30,8 @@
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
 <p>Three little R things I never finished. Or are useless. Or both?</p>
 </section>
-<section id="refuse" class="level2">
-<h2 class="anchored" data-anchor-id="refuse">Refuse</h2>
+<section id="flotsam-and-jetsam" class="level2">
+<h2 class="anchored" data-anchor-id="flotsam-and-jetsam">Flotsam and jetsam</h2>
 <p>It’ll not surprise you that after all these years of blogging and farting around with R that I have a huge <a href="https://en.wikipedia.org/wiki/Great_Pacific_garbage_patch">floating garbage patch</a> of odds and sods that I sketched out at some point, but never finished or never found a use for.</p>
 <p>Join me, fellow trash pandas, as we carouse through the accumulated bilge to dig up some certified D-rank content. Today I have three things to share:</p>
 <ol type="1">
@@ -39,14 +39,13 @@
 <li>Infinite abandoned dungeons.</li>
 <li>An underwhelming ‘physics’ ‘simulation’ for ‘secret’ purposes.</li>
 </ol>
-</section>
-<section id="plunderplot" class="level2">
-<h2 class="anchored" data-anchor-id="plunderplot">1. {plunderplot}</h2>
+<section id="plunderplot" class="level3">
+<h3 class="anchored" data-anchor-id="plunderplot">1. {plunderplot}</h3>
 <p><code>locator()</code> is <a href="https://rdrr.io/r/graphics/locator.html">a funny base R function</a> that lets you click a point on a plot to retrieve its coordinates.</p>
 <p>I had a little <code>locator()</code> phase on this blog: I used it to make <a href="https://www.rostrum.blog/index.html#category=pixeltrix">the {pixeltrix} package</a> for point-and-click editing of ‘pixel art’ and wrote a post about <a href="https://www.rostrum.blog/posts/2021-11-04-kanto-locator/">extracting coordinates from fictitious maps</a>.</p>
-<p><a href="https://github.com/matt-dray/plunderplot">The {plunderplot} package</a> was an extension of the ‘data extraction’ idea, really. The <code>plunder()</code> function plots your image (e.g.&nbsp;a <a href="https://en.wikipedia.org/wiki/Sodor_(fictional_island)">map of Sodor</a> or a plot of <a href="https://www.youtube.com/watch?v=yNaTZV8qS1I">Thomas the Tank mods</a> in popular videogames over time) and asks you to click and label the axes for calibration. Then you’re invited you to click points on the plot and get in return a dataframe of the coordinates.</p>
-<p>So you’re plundering coordindates from a plot, right? Hence the name. Consequently, the package README uses some piratespeak to explain how it works. I won’t subject you to that here.</p>
-<p>To keep with the theme, the example image here is a simple treasure map with treasure markers<sup>1</sup>.</p>
+<p><a href="https://github.com/matt-dray/plunderplot">The {plunderplot} package</a> was an extension of the ‘data extraction’ idea, really. The <code>plunder()</code> function plots your image<sup>1</sup> and asks you to click and label the axes for calibration. Then you’re invited you to click points on the plot and get in return a dataframe of the coordinates.</p>
+<p>So you’re plundering coordindates from a plot, right? Hence the name. Consequently, <a href="https://github.com/matt-dray/plunderplot/blob/main/README.md">the package README</a> uses some piratespeak to explain how it works. I won’t subject you to that here.</p>
+<p>To keep with the theme, the example image here is a simple treasure map with treasure markers<sup>2</sup>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">treasure <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -85,12 +84,12 @@ Done</code></pre>
 1 35.97651 32.19178   west
 2 55.94714 23.15068 centre
 3 61.96769 26.16438   east</code></pre>
-<p>Except, well, this has done before. More than once. I was aware of <a href="https://github.com/mjlajeunesse/juicr">the {juicr} package</a>, which contains an interactive GUI for extracting data out of plots in scientific PDFs and that sort of thing, but there’s already CRAN packages with {plunderplot}’s functionality: <a href="https://CRAN.R-project.org/package=digitize">{digitize}</a> and <a href="https://cran.r-project.org/package=metaDigitise">{metaDigitise}</a>, which have been around for years.</p>
-<p>So it’s not more useful than other tools but I had fun coding it and I’ve used it myself for ‘real’ applications more than once.<sup>2</sup></p>
+<p>Except, well, this package has done before<sup>3</sup>. More than once. I was aware of <a href="https://github.com/mjlajeunesse/juicr">the {juicr} package</a>, which contains an interactive GUI for extracting data out of plots in scientific PDFs and that sort of thing, but there’s already CRAN packages with {plunderplot}’s functionality: <a href="https://CRAN.R-project.org/package=digitize">{digitize}</a> and <a href="https://cran.r-project.org/package=metaDigitise">{metaDigitise}</a>, which have been around for years.</p>
+<p>So it’s not more useful than other tools… but I had fun coding it and I’ve used it myself for ‘real’ applications more than once.<sup>4</sup></p>
 </section>
-<section id="perlin-dungeon" class="level2">
-<h2 class="anchored" data-anchor-id="perlin-dungeon">2. Perlin dungeon</h2>
-<p>I made a toy <a href="https://en.wikipedia.org/wiki/Roguelike">roguelike</a> ‘game’ in <a href="https://www.rostrum.blog/index.html#category=r.oguelike">the {r.oguelike} package</a><sup>3</sup>. An important feature of games in this genre is a procedurally-generated tile-based dungeon map for your character to do an adventure in.</p>
+<section id="perlin-dungeon" class="level3">
+<h3 class="anchored" data-anchor-id="perlin-dungeon">2. Perlin dungeon</h3>
+<p>I made a toy <a href="https://en.wikipedia.org/wiki/Roguelike">roguelike</a> ‘game’ in <a href="https://www.rostrum.blog/index.html#category=r.oguelike">the {r.oguelike} package</a><sup>5</sup>. An important feature of games in this genre is a procedurally-generated tile-based dungeon map for your character to do an adventure in.</p>
 <p>I came up with <a href="https://www.rostrum.blog/posts/2022-05-01-dungeon/">a basic system</a> to create convincing connected caverns, but there are many ways to create this kind of map. One method is to use <a href="https://en.wikipedia.org/wiki/Perlin_noise">Perlin noise</a>, which <a href="https://CRAN.R-project.org/package=ambient">the {ambient} package</a> can help you generate.</p>
 <p>This <code>print_perlin_dungeon()</code> function never made it into the package, but it’s a pretty straightforward way of creating ‘dungeons’ with good balance between randomness and structure.</p>
 <div class="cell">
@@ -290,42 +289,42 @@ background-color: null;
 font-style: inherit;">print_perlin_dungeon</span>(m)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-# # # # # # . . . . . . . . # . # # # # # . . . . . # # . . . . . . . # # # # # # # 
-# . . # # # # . . . . # . . . # # # # # . . . . . # # # . . . . . # # # # # # # # # 
-# . . . # # # . . . . . . . . # # # # . . . . . . # # # . . . . . # # # # # # # # # 
-# # # # # # # . . . . . # # . # # # # # # . . . . . # . . . . . . # # # . # # # # # 
-# . # # . . # . . # . . # # . . # # # # . . . . . . # . . . . # # # # . . . . . . # 
-# # . . . . . . . . . . . # . . . . . . . . . . . . . . . . # # . . . . . . . . # # 
-# # # # . . . . . . . . . . . . . . . . . . . . . . # # # . . . . . . . . . . . . # 
-# # # . . . . . . . . . . . . . . . . . . . . . . . # . . . . . . . . . . . . # . # 
-# . . . . . . . . . . . . . . . . . . . . . . . . # . . # # . . . . . # . . . # . # 
-# . . . . . # # # . . # # # . . # . . # . . # # . . . # # . . . . . . . # # # # . # 
-# . . . . # # # # # . # # # # # # . # # # # # # # . . . . . . # . . # . . . . # # # 
-# . . # # # . # # # # . # # # # # # # # # # # # . . . . . . # # # . # . . . # # . # 
-# . # # # # . # # # # . . . . # # # # # # # # # . . . . . # # # # # . . . . . # . # 
-# . # # # # # # # # # . . . . # # # # # # # # # # . . . . . # # # # # . . . . . # # 
-# . . . . . . # # . . . . . . . . # # . . # # # # . . . . . . # # # # . . . . . . # 
-# . . . . . . . . . . . . . . . . # . . . # # # # . . . . . . # # # # # . . . . . # 
-# . . . . . . . # # # . . . . . . # # . # # # # # . . . . . . # # # # # . . . . . # 
-# . . . . . . # # # # # . . . . . . # # # # # # # . . . . . . # # # # # # . . . . # 
-# . . . . . . # # . . . . . . # . . . . # . # # # . . . . . # . # # # # # . . . . # 
-# . # # # . . # # . . . . . . . . # # . . . # # . . . . . . . . # # # . . . . . . # 
-# . . # # . . # # # # # # # . . . . . . . . # # # # . . . . . # # # # . . . . # # # 
-# . . . # . . # # # # # # # . # # . . . . # # # # # . . . . # # # # . . # . . . . # 
-# . . . . . # # # # # # # # # # . . . . . # # # # # . . . . # # # # # . . . . . . # 
-# . . . . . # . . . . # # # # # . . . . . . # # # # . . . . # # # # # # # . # . . # 
-# . . . . . . . . # . # # # # . . . . . . # # # # . . . . . . # # # # . # . . . . # 
-# . . . . # . . . # # # # # . . # . . . # # # # # . . . . . . # # # . . . . # # . # 
-# . . . . . . . . # . . # # . . # . . # # # # # # . . . . . . # # # . . . . # # # # 
-# . . . . . . . . . . . . . # . . . # # # # # # # . . . . . . # . . . . . . # # # # 
+# # # # # # # # # # # . . . . . # # # # . . . . . # # # # # # # # # # # . . . # # # 
+# # # # # # # # # # # . # # . # # # # # . . . . . # # # # # # # # . # . . # # # # # 
+# # # # # # # # # # # # # # # # # # # # . . . . . # # # # # # # # . . . # # # . # # 
+# # # # # # # # # # # # # . # . # # # . . . . . . # # # # # # . . . # # # # # # # # 
+# . # # . . # . . . . . . . # . # # # . . . . . . . # # # # . . . . # . # # # # . # 
+# . . . . . . . . . . . . . . . . # # # # # . . . . . # # # . . . . . . . # # # . # 
+# # . . . . . . . . . . . . . . . . # # # . . . # . # . . # . . . . . . . # . . . # 
+# # . . . . . . . . . . . . . . . . # . # # . . # . . # # # . . . . . . . . . . . # 
+# . . . . . . . . . . . . . . # . . . . # # . . . . . # # # . . . . . . . . . . . # 
+# . . . . . # # # # . # # # . . . . . . . . . . # . # # # # . . . . . . . # # . . # 
+# . . . . . # # # # # # # # . . . . . . # . # # # # # # # # # . . . . . # # # # . # 
+# . . . . . # # # # # # . . # . . . . . # # # # # # # # # . . . . . . # # # # # # # 
+# . . . . . # # # # # # . . # . . . . . # # # # # # # # # . . . . . . # # # # # # # 
+# . . . . . # # # # # # # # # # # . . # # . . . . . # # # . . . . . . # # # # # . # 
+# . . . . . . . . # . . # # # . . . . . . . # # . . # # # . . . . . . . # # # # . # 
+# . . . . . . . . # . # # # # . . # . . . . # # # . . # # # # . . . . . . # # # # # 
+# . . . . . # . . # # # # # # # # # # # # . # # # # . # # . # # . . . # # # # . . # 
+# . . . . . . . . # # # # # # # # # # # # # # # # # . . . . # # . . # # # # # . . # 
+# . . . . . . . . . # # # # # # # # # # . # # # # # . . . . # # . . . . # # # # . # 
+# . # # # . . . . . . # . . . . # # # # . . # # # . . . . . . . # # . . # # # # . # 
+# # # # # . . . . . . . . . . . . . . . . . . . # . . . . . . . # # . . # # # # # # 
+# # . . # # . . . . . . . . . . . . . . . . . . # # . . . . # # # # # # # # # # # # 
+# . . # . # . . . . . . . . . . . . . . . . . . . # . . . . # # # # # # # # # # # # 
+# . . . . . . . . . . # . . . . . . . . . . . . . # # # # . # # # # # # # # # # # # 
+# . . . . . . . . . . # # # # . . # # # . . . . . . . # # . . # # # . . # # # # . # 
+# . . . # # # . # # # # # # # . # # # # # # . . # . . . . . . # # . . . # . # # . # 
+# . . # # # # # # # # # # # # # # # # # # # . . . . . # . . . . . . . . . # # # # # 
+# . # # # # # # # # # # # # # # # # # # # # # . . . . . . . . . . . . . . # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # </code></pre>
 </div>
 </div>
 <p>Of course, this will generate a new map every time you run it. I would say it’s major flaw is that it’s missing an open path between all the caverns, but otherwise it looks pretty cavelike to me. If I squint.</p>
 <p>A version of this code is <a href="https://gist.github.com/matt-dray/fd5bf4b6560638e154353e4ec5c8b98a">in a GitHub Gist</a>. It might even have been in a tweet once.</p>
 </section>
-<section id="droplet-physics" class="level2">
-<h2 class="anchored" data-anchor-id="droplet-physics">3. Droplet ‘physics’</h2>
+<section id="droplet-physics" class="level3">
+<h3 class="anchored" data-anchor-id="droplet-physics">3. Droplet ‘physics’</h3>
 <p>I experimented with this in support of a different (secret!) project that may never finish.</p>
 <p>It’s a cross between the physics of water flowing under gravity and a pathfinding system. Except that description is way too grandiose. Basically, a droplet tile (<code>o</code>) ‘flows’ from top to bottom of a matrix defining a ‘map’ that you create, passing through empty tiles (<code>.</code>) and given ‘collisions’ with block tiles (<code>#</code>).</p>
 <p>Here’s a basic map to start, defined as a matrix:</p>
@@ -686,14 +685,15 @@ font-style: inherit;">break</span></span>
 </figure>
 </div>
 <p>Alas, I am an untrustworthy narrator! The droplet will scooch left and right forever on a flat surface. The animation only stops if the droplet is trapped at the lowest point, like in the gif above. No one really understands physics though, right, so it’s basically fine.</p>
-<p>I think I wanted to have the droplet travel diagonally instead of across and down; try introducing tiles with different properties (e.g.&nbsp;angled, like <code>\</code> and <code>/</code>); and have the ability to add more than one droplet at a time. I’ll probably explain eventually about why I made this subpar toy.</p>
+<p>I think I wanted to have the droplet travel diagonally instead of across and down; try introducing tiles with different properties (e.g.&nbsp;angled, like <code>\</code> and <code>/</code>); and have the ability to add more than one droplet at a time. I’ll probably explain eventually about why I made this subpar toy<sup>6</sup>.</p>
 <p>You can find a version of this code <a href="https://gist.github.com/matt-dray/0f4fba9a7e57bdb093d0b9433a983c61">in a GitHub gist</a> if you really must.</p>
+</section>
 </section>
 <section id="now-wash-your-hands" class="level2">
 <h2 class="anchored" data-anchor-id="now-wash-your-hands">Now wash your hands</h2>
 <p>Nothing here is going to change your life; I just wanted to set these ideas free for purposes of spiritual atonement.</p>
 <p>For fun toys and proper R noodlings you can always check out anything by Mike (<a href="https://coolbutuseless.github.io/">coolbutuseless</a>), or stuff like <a href="https://tomaztsql.wordpress.com/">Tomaz</a>‘s ’Little Useless-Useful’ series. Far more fruitful.</p>
-<p>Having said this, this may be the first post in a series. I’m not afraid to put my hand back in the waste disposal unit. Are you?</p>
+<p>Beware: this may be the first post in a series. I’m not afraid to put my hand back in the waste disposal unit. Are you?</p>
 </section>
 
 
@@ -706,7 +706,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-09-08 23:32:07 BST</code></pre>
+<pre><code>Last rendered: 2023-09-09 00:21:19 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -739,9 +739,12 @@ loaded via a namespace (and not attached):
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>This just looks like a screenshot of treasure locations from <em>The Legend of Zelda: The Windwaker</em>, which I assume I was replaying at the time.↩︎</p></li>
-<li id="fn2"><p>*Breathes in deep breath of copium.*↩︎</p></li>
-<li id="fn3"><p><a href="https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/">R is a game engine, fight me</a>.↩︎</p></li>
+<li id="fn1"><p>Such as a fictitious <a href="https://en.wikipedia.org/wiki/Sodor_(fictional_island)">map of Sodor</a> or a chart over time over <a href="https://www.youtube.com/watch?v=yNaTZV8qS1I">Thomas the Tank mods</a> in popular videogames. Whatever you like.↩︎</p></li>
+<li id="fn2"><p>This just looks like a screenshot of treasure locations from <em>The Legend of Zelda: The Windwaker</em>, which I assume I was replaying at the time.↩︎</p></li>
+<li id="fn3"><p>I’ve reinvented the wheel more than once, like for <a href="https://github.com/matt-dray/coloratio">{coloratio}</a>/<a href="https://CRAN.R-project.org/package=savonliquide">{savonliquide}</a> and <a href="https://github.com/matt-dray/badgr">{badgr}</a>/<a href="https://CRAN.R-project.org/package=badger">{badger}</a>.↩︎</p></li>
+<li id="fn4"><p>*Breathes in deep breath of copium.*↩︎</p></li>
+<li id="fn5"><p><a href="https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/">R is a game engine, fight me</a>.↩︎</p></li>
+<li id="fn6"><p>Or not. You can’t tell me what to do.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>plunderplot</category>
