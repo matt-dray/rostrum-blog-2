@@ -12,31 +12,41 @@
 <generator>quarto-1.3.450</generator>
 <lastBuildDate>Fri, 08 Sep 2023 23:00:00 GMT</lastBuildDate>
 <item>
-  <title>Take a look at my garbage</title>
+  <title>Combing through my trash</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-09-09-offcuts/index.html</link>
+  <link>https://www.rostrum.blog/posts/2023-09-08-trash-combing/index.html</link>
   <description><![CDATA[ 
 
 
 
 
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2023-09-08-trash-combing/resources/raccoon.png" class="img-fluid figure-img" style="width:50.0%" alt="A crudely drawn racoon holding some kind of nugget with the litter 'R' on it."></p>
+<figcaption class="figure-caption"><em>Procyon lotor</em>. Released graciously by the author under CC0.</figcaption>
+</figure>
+</div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>Three little R things I never finished. Or are useless.</p>
+<p>Three little R things I never finished. Or are useless. Or both?</p>
 </section>
-<section id="section" class="level2">
-<h2 class="anchored" data-anchor-id="section"></h2>
-<p>This is a little curio shop of bits and bobs that I sketched out at some point, but never finished or never found a use for. Nothing here is going to change your life; I just wanted to set them free for purposes of spiritual atonement.</p>
-<p>For fun toys and R noodlings you can always check out anything by Mike (coolbutuseless), or stuff like Tomaz’s ‘Little Useless-Useful’ series. Far more fruitful.</p>
-<p>Having said this, this may be the first in a series. I’ve got a lot of zombie code moping about.</p>
+<section id="refuse" class="level2">
+<h2 class="anchored" data-anchor-id="refuse">Refuse</h2>
+<p>It’ll not surprise you that after all these years of blogging and farting around with R that I have a huge <a href="https://en.wikipedia.org/wiki/Great_Pacific_garbage_patch">floating garbage patch</a> of odds and sods that I sketched out at some point, but never finished or never found a use for.</p>
+<p>Join me, fellow trash pandas, as we carouse through the accumulated bilge to dig up some certified D-rank content. Today I have three things to share:</p>
+<ol type="1">
+<li>A method for finding treasure.</li>
+<li>Infinite abandoned dungeons.</li>
+<li>An underwhelming ‘physics’ ‘simulation’ for ‘secret’ purposes.</li>
+</ol>
 </section>
 <section id="plunderplot" class="level2">
 <h2 class="anchored" data-anchor-id="plunderplot">1. {plunderplot}</h2>
 <p><code>locator()</code> is <a href="https://rdrr.io/r/graphics/locator.html">a funny base R function</a> that lets you click a point on a plot to retrieve its coordinates.</p>
 <p>I had a little <code>locator()</code> phase on this blog: I used it to make <a href="https://www.rostrum.blog/index.html#category=pixeltrix">the {pixeltrix} package</a> for point-and-click editing of ‘pixel art’ and wrote a post about <a href="https://www.rostrum.blog/posts/2021-11-04-kanto-locator/">extracting coordinates from fictitious maps</a>.</p>
-<p><a href="https://github.com/matt-dray/plunderplot">The {plunderplot} package</a> was an extension of the ‘data extraction’ idea, really. Given a plotted image, you’re asked to calibrate by clicking on the axis extents and providing their values, then to click points on the image and optionally name them, before you’re finally returned a dataframe of the results.</p>
+<p><a href="https://github.com/matt-dray/plunderplot">The {plunderplot} package</a> was an extension of the ‘data extraction’ idea, really. The <code>plunder()</code> function plots your image (e.g.&nbsp;a <a href="https://en.wikipedia.org/wiki/Sodor_(fictional_island)">map of Sodor</a> or a plot of <a href="https://www.youtube.com/watch?v=yNaTZV8qS1I">Thomas the Tank mods</a> in popular videogames over time) and asks you to click and label the axes for calibration. Then you’re invited you to click points on the plot and get in return a dataframe of the coordinates.</p>
 <p>So you’re plundering coordindates from a plot, right? Hence the name. Consequently, the package README uses some piratespeak to explain how it works. I won’t subject you to that here.</p>
-<p>You provide the path to an image, which <code>plunder()</code> will plot and then ask you to click on. The image here is a simple treasure map with treasure markers.</p>
+<p>To keep with the theme, the example image here is a simple treasure map with treasure markers<sup>1</sup>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">treasure <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -52,8 +62,8 @@ font-style: inherit;">labels =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
 font-style: inherit;">TRUE</span>)</span></code></pre></div>
 </div>
-<p><img src="https://www.rostrum.blog/posts/2023-09-09-offcuts/resources/treasure.png" class="img-fluid" style="width:100.0%" alt="Chart titled 'Treasure locations on Rectangle Island'. It's a plot with x limits of 0 to 100 and y limits of 0 to 50. There are concentric rectangles that look like an island in the sea. There are three red crosses on the island."></p>
-<p>In the console you’ll be instructed to do certain things, one after the other. You calibrate the plot, select the points and optionally label them.</p>
+<p><img src="https://www.rostrum.blog/posts/2023-09-08-trash-combing/resources/treasure.png" class="img-fluid" style="width:100.0%" alt="Chart titled 'Treasure locations on Rectangle Island'. It's a plot with x limits of 0 to 100 and y limits of 0 to 50. There are concentric rectangles that look like an island in the sea. There are three red crosses on the island."></p>
+<p>The console will talk to you during the process. You’ll be instructed to do things, one after the other. You calibrate the plot, select the points and optionally label them.</p>
 <pre><code>Click x axis min
 Click x axis max
 Click y axis min
@@ -67,19 +77,22 @@ Type a label for point 1: west
 Type a label for point 2: centre
 Type a label for point 3: east
 Done</code></pre>
-<p>And so you get your coordinates back:</p>
+<p>And then you get your coordinates back:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">treasure</span></code></pre></div>
 </div>
-<pre><code>         x        y labels
+<pre><code>x        y labels
 1 35.97651 32.19178   west
 2 55.94714 23.15068 centre
 3 61.96769 26.16438   east</code></pre>
-<p>Except, well, this has done before. I was aware of <a href="https://github.com/mjlajeunesse/juicr">the {juicr} package</a>, which contains an interactive GUI for extracting data out of plots in scientific PDFs and that sort of thing, but there’s already CRAN packages with {plunderplot}’s functionality: <a href="https://CRAN.R-project.org/package=digitize">{digitize}</a> and <a href="https://cran.r-project.org/package=metaDigitise">{metaDigitise}</a>, which have been around for years.</p>
-<p>So it’s not more useful than other tools but I had fun coding it and I’ve used it myself for ‘real’ applications more than once.</p>
+<p>Except, well, this has done before. More than once. I was aware of <a href="https://github.com/mjlajeunesse/juicr">the {juicr} package</a>, which contains an interactive GUI for extracting data out of plots in scientific PDFs and that sort of thing, but there’s already CRAN packages with {plunderplot}’s functionality: <a href="https://CRAN.R-project.org/package=digitize">{digitize}</a> and <a href="https://cran.r-project.org/package=metaDigitise">{metaDigitise}</a>, which have been around for years.</p>
+<p>So it’s not more useful than other tools but I had fun coding it and I’ve used it myself for ‘real’ applications more than once.<sup>2</sup></p>
 </section>
 <section id="perlin-dungeon" class="level2">
 <h2 class="anchored" data-anchor-id="perlin-dungeon">2. Perlin dungeon</h2>
+<p>I made a toy <a href="https://en.wikipedia.org/wiki/Roguelike">roguelike</a> ‘game’ in <a href="https://www.rostrum.blog/index.html#category=r.oguelike">the {r.oguelike} package</a><sup>3</sup>. An important feature of games in this genre is a procedurally-generated tile-based dungeon map for your character to do an adventure in.</p>
+<p>I came up with <a href="https://www.rostrum.blog/posts/2022-05-01-dungeon/">a basic system</a> to create convincing connected caverns, but there are many ways to create this kind of map. One method is to use <a href="https://en.wikipedia.org/wiki/Perlin_noise">Perlin noise</a>, which <a href="https://CRAN.R-project.org/package=ambient">the {ambient} package</a> can help you generate.</p>
+<p>This <code>print_perlin_dungeon()</code> function never made it into the package, but it’s a pretty straightforward way of creating ‘dungeons’ with good balance between randomness and structure.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">print_perlin_dungeon <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -107,7 +120,7 @@ font-style: inherit;">"#"</span></span>
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">" "</span></span>
+font-style: inherit;">"."</span></span>
 <span id="cb5-8">  </span>
 <span id="cb5-9">  <span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -210,7 +223,7 @@ font-style: inherit;">"</span>)</span>
 <span id="cb5-29">  </span>
 <span id="cb5-30">}</span></code></pre></div>
 </div>
-<p>The <code>noise_perlin()</code> function in the ambient {ambient} package has lots of twiddly knobs for arguments.</p>
+<p>The <code>noise_perlin()</code> function in the {ambient} package has lots of twiddly knobs for arguments. I can’t profess any science behind my choices here:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">m <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -277,44 +290,45 @@ background-color: null;
 font-style: inherit;">print_perlin_dungeon</span>(m)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-#         # # # # #                     # # # # #     # # #             # # # #   # 
-# # # # # #   #                         # # # # #         # #           # # #     # 
-# # # #   #                             # # # # #         # #           # # #     # 
-#     #   #               # #             # # # #           # #         # # #     # 
-#                     # # # #             # # #               #         # # #     # 
-#                     # # # # # #         # # # # #           # # # # # # # #     # 
-#                     # # # # # #               #               # # # # # # #     # 
-#                     # # # # # #         # # # #                   # # # # #     # 
-#                 #     # # # #           # # # #         #         # #           # 
-#           #     #                       # # #     #     #                       # 
-#               # #                         # # # # #                   #   #   # # 
-#           # # # #             #       # # # # # # # # #   # #                 # # 
-#           # # # #             # # # # # #     # # # # #   # #                 # # 
-#           # # # #                 # #         # # #         # #   #     #   # # # 
-#           # # # #               # # #                   #   # # # #             # 
-#   # # #   # # # #               # # #                       # # # #       # #   # 
-#   # # # # # # # # #           # # #               #         # # # # # # # # #   # 
-#   # # # # # # # # #           # # #               #         # # # # # # # # #   # 
-# # # # # # # # # # #           # # # #                       # # # # # # # # #   # 
-# # # #     # # #                 # # #                       # # # #   #     #   # 
-#             # # #                   #                       # #                 # 
-#   # # #                       # # # #                     # #                   # 
-#   # # #               #         # #                       # #                   # 
-# # # #               # # # #     # # #                       # #                 # 
-# # # #               # # # #             #                   # # #               # 
-# #                   # # # #   # #   #   #                     # #               # 
-# # # # #           # # # # #   # # # #         # #           # # # #     # #     # 
-# # # # #           # # # # #   # # # #       # # #             # # #     # #     # 
+# . . . . . . . . . # # # . # # # . . . . # # # # # # # # # # # # # # # . . # # # # 
+# . . . . . . . # # # # # # # # # # # # # # # # # # # # # # # # # # # . . # # # # # 
+# . . . . . . . # # # # # # # # . . # . # # # # # # # # # # # # # # # . # # # . # # 
+# . . . . . . . . # # # # # # # . . . . # # # # # # # # # # # # . . # . # # # # # # 
+# . . . # . . . . # . # # # # . . . . . . . # # . . . # # . . # . . . . # # # # . # 
+# . . . # . # # # # # # # . # . . . . . . . . . . . . . . . . . . . . # # . . . . # 
+# . . . . # # # # # . # . . . . . . . . . . . . . . . . . . . . . . . . # # # . . # 
+# . . . # # # # # # . # . . . . . . . . . . . . . . . . . . . . . . . . . # # . . # 
+# . . . . # # # # # . . . . # . . . . # # . . . . . . . . . . . . . . . . . # . . # 
+# . . . . . # # # # . # . . # . . . . # . . . . . . . . . . . # . . # . # # # # . # 
+# . . . . # # # # # # . . . . # . . # . . . . . . # # # # . # # # # # # # # # # # # 
+# . . . . # . # # # . . . . . . . # # . # # . . . # . . # # # # # # . . # # # # # # 
+# . . . . # # # # # . . . . . . # . . # # # . . # # . . . # # # # # # . . # # # # # 
+# . . . . . . # # # . . . . . . # # . . # # # # # . . . . # # # # # # . . . . . # # 
+# . . . . . # # # # . . . . . . # # # . . # # # # . . . . . . # # # # . . . . . . # 
+# . . . # # # # # # . . . . . . . . . . . # # # # . # . . . . # # # # . . . . . . # 
+# . . . # # # # # . . . . . . . . . # . . # # # # # # . . . . # . . # # . . . . # # 
+# . . . # # # # # . . . . . . . # . # . . # # # # # # . . . . . . . # # . . . # # # 
+# # . . # # # . . . . . . # # . # . . . . # # # # # # . . . . . . . . . . # # # . # 
+# . . . . . # . . . . # # # # . # . . # . . . . # . . . . . . . . . . . # # # # . # 
+# . . . . . . . . . . # # # # # # # # # # . . . . . . . . # # . . . . # # # # . . # 
+# . . . . . . . . . # . # # # # # # # # # . . . . . . # # # # . . . . . . . . . . # 
+# . . . . . . . . . # . # # # # . # # # # . . . . . . # # # # # . . . . . . . . . # 
+# . # # . . . # # # . . # # # . . # . . . . . . . . # # # # # . . . . . . . . . . # 
+# # # # # . . # # # . . # # . . . . . . . . . . . . # # # # . . # # . . . . . # . # 
+# # # # # # # # # # # # # . . # . . . . . . . . . # # # # . . . . . . # . # . . # # 
+# # # # # # # # # # # # . . . . . . . . . . . . . # # # . . . . . . . . . # # . . # 
+# # # # # # # # # # # # . . . . . . . . . . . . . # # . . . . . . . . . . # # # . # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # </code></pre>
 </div>
 </div>
-<p>The code is <a href="https://gist.github.com/matt-dray/fd5bf4b6560638e154353e4ec5c8b98a">in a gist</a>. It might even have been in a tweet once.</p>
+<p>Of course, this will generate a new map every time you run it. I would say it’s major flaw is that it’s missing an open path between all the caverns, but otherwise it looks pretty cavelike to me. If I squint.</p>
+<p>A version of this code is <a href="https://gist.github.com/matt-dray/fd5bf4b6560638e154353e4ec5c8b98a">in a GitHub Gist</a>. It might even have been in a tweet once.</p>
 </section>
 <section id="droplet-physics" class="level2">
 <h2 class="anchored" data-anchor-id="droplet-physics">3. Droplet ‘physics’</h2>
-<p>I experimented with this in support of a different project that may never finish.</p>
-<p>It’s a cross between the physics of water flowing under gravity and a pathfinding system. Except that description is way too grandiose. You provide a ‘map’ as a matrix and a little droplet (<code>o</code>) passes from top to bottom ‘under gravity’, depending on hazards (<code>X</code>). This manifests as a little animation in your console.</p>
-<!-- TODO: improve map -->
+<p>I experimented with this in support of a different (secret!) project that may never finish.</p>
+<p>It’s a cross between the physics of water flowing under gravity and a pathfinding system. Except that description is way too grandiose. Basically, a droplet tile (<code>o</code>) ‘flows’ from top to bottom of a matrix defining a ‘map’ that you create, passing through empty tiles (<code>.</code>) and given ‘collisions’ with block tiles (<code>#</code>).</p>
+<p>Here’s a basic map to start, defined as a matrix:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">block <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -325,7 +339,7 @@ font-style: inherit;">"#"</span></span>
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">" "</span></span>
+font-style: inherit;">"."</span></span>
 <span id="cb9-3">drop  <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
@@ -336,69 +350,138 @@ font-style: inherit;">"o"</span></span>
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">matrix</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rep</span>(empty, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">30</span>), <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">6</span>)</span>
-<span id="cb9-6">m[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>, <span class="fu" style="color: #4758AB;
+font-style: inherit;">matrix</span>(</span>
+<span id="cb9-6">  <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">4</span>, <span class="dv" style="color: #AD0000;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">6</span>)] <span class="ot" style="color: #003B4F;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">&lt;-</span> block</span>
-<span id="cb9-7">m[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>]         <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> block</span>
-<span id="cb9-8">m[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">6</span>]       <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> block</span>
-<span id="cb9-9">m[<span class="dv" style="color: #AD0000;
+font-style: inherit;">0</span>,</span>
+<span id="cb9-7">    <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">4</span>]         <span class="ot" style="color: #003B4F;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,</span>
+<span id="cb9-8">    <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,</span>
+<span id="cb9-9">    <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,</span>
+<span id="cb9-10">    <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,</span>
+<span id="cb9-11">    <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>,</span>
+<span id="cb9-12">    <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>),</span>
+<span id="cb9-13">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">nrow =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">7</span>,</span>
+<span id="cb9-14">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">byrow =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span></span>
+<span id="cb9-15">)</span>
+<span id="cb9-16"></span>
+<span id="cb9-17">m[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">which</span>(m <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> block</span>
+<span id="cb9-18">m[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">which</span>(m <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>)] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> empty</span>
+<span id="cb9-19">m[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">8</span>] <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> drop</span>
-<span id="cb9-10"></span>
-<span id="cb9-11"><span class="fu" style="color: #4758AB;
+<span id="cb9-20"></span>
+<span id="cb9-21"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">print</span>(m)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>     [,1] [,2] [,3] [,4] [,5] [,6]
-[1,] " "  " "  " "  "o"  " "  " " 
-[2,] " "  " "  " "  " "  " "  " " 
-[3,] " "  "#"  " "  " "  " "  " " 
-[4,] " "  "#"  "#"  "#"  " "  "#" 
-[5,] " "  " "  " "  "#"  "#"  "#" </code></pre>
+<pre><code>     [,1] [,2] [,3] [,4] [,5]
+[1,] "#"  "o"  "."  "."  "." 
+[2,] "#"  "#"  "."  "."  "." 
+[3,] "#"  "#"  "#"  "."  "." 
+[4,] "."  "."  "."  "."  "#" 
+[5,] "."  "."  "."  "#"  "#" 
+[6,] "#"  "."  "#"  "#"  "#" 
+[7,] "#"  "#"  "#"  "#"  "#" </code></pre>
 </div>
 </div>
-<p>You can make this more or less complicated. You can even use {pixeltrix} to make a map by interactively clicking squares in a plot window to receive back a matrix.</p>
+<p>You can make this map more or less complicated. You can even use <a href="https://github.com/matt-dray/pixeltrix">{pixeltrix}</a> to make a map by interactively clicking squares in a plot window to receive back a matrix.</p>
+<p>The code to run ‘the simulation’ is just a <code>repeat</code> loop that wipes and draws to the console following some basic <code>if</code>s. It will <code>break</code> when the droplet comes to a stop.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="cf" style="color: #003B4F;
 background-color: null;
@@ -435,7 +518,7 @@ font-style: inherit;">"</span>, <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">sep =</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">""</span>)</span>
+font-style: inherit;">" "</span>)</span>
 <span id="cb11-7">  }</span>
 <span id="cb11-8">  </span>
 <span id="cb11-9">  <span class="fu" style="color: #4758AB;
@@ -540,10 +623,10 @@ background-color: null;
 font-style: inherit;">c</span>(left_i, right_i), <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span>)</span>
-<span id="cb11-33">      m[droplet_i] <span class="ot" style="color: #003B4F;
+<span id="cb11-33">      m[droplet_i]           <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> empty</span>
-<span id="cb11-34">      m[sampled_direction_i]   <span class="ot" style="color: #003B4F;
+<span id="cb11-34">      m[sampled_direction_i] <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> drop</span>
 <span id="cb11-35">    }</span>
@@ -579,7 +662,7 @@ font-style: inherit;">&lt;-</span> drop</span>
 <span id="cb11-45">    }</span>
 <span id="cb11-46">    </span>
 <span id="cb11-47">  }</span>
-<span id="cb11-48"></span>
+<span id="cb11-48">  </span>
 <span id="cb11-49">  droplet_i <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
@@ -594,14 +677,25 @@ background-color: null;
 font-style: inherit;">==</span> droplet_i_save) <span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">break</span></span>
-<span id="cb11-51">  </span>
-<span id="cb11-52">}</span></code></pre></div>
+<span id="cb11-51">}</span></code></pre></div>
 </div>
-<!-- TODO: insert gif -->
-<p>So it’s a bit weird. The droplet will scooch left and right forever on a flat surface until there’s a lower point for it to drop into. The animation stops once the droplet is trapped at the lowest point.</p>
-<p>I think I wanted to try introducing tiles with different properties (e.g.&nbsp;angled, like <code>\</code> and <code>/</code>) and the ability to add more than one droplet at a time.</p>
-<p>The code is <a href="https://gist.github.com/matt-dray/0f4fba9a7e57bdb093d0b9433a983c61">in a gist</a>.</p>
+<p>Here’s a little gif showing how this basic example looks in the console:</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2023-09-08-trash-combing/resources/droplet.gif" class="img-fluid figure-img" style="width:25.0%" alt="Animation showing a text matrix of tiles representing empty space (a period mark), a block (a hashmark) or a droplet (the letter 'o'), which is falling from the top to the bottom of the matrix, given collisions with the block tiles. It coimes to rest near the bottom in a well made of surrounding blocks."></p>
+</figure>
+</div>
+<p>Alas, I am an untrustworthy narrator! The droplet will scooch left and right forever on a flat surface. The animation only stops if the droplet is trapped at the lowest point, like in the gif above. No one really understands physics though, right, so it’s basically fine.</p>
+<p>I think I wanted to have the droplet travel diagonally instead of across and down; try introducing tiles with different properties (e.g.&nbsp;angled, like <code>\</code> and <code>/</code>); and have the ability to add more than one droplet at a time. I’ll probably explain eventually about why I made this subpar toy.</p>
+<p>You can find a version of this code <a href="https://gist.github.com/matt-dray/0f4fba9a7e57bdb093d0b9433a983c61">in a GitHub gist</a> if you really must.</p>
 </section>
+<section id="now-wash-your-hands" class="level2">
+<h2 class="anchored" data-anchor-id="now-wash-your-hands">Now wash your hands</h2>
+<p>Nothing here is going to change your life; I just wanted to set these ideas free for purposes of spiritual atonement.</p>
+<p>For fun toys and proper R noodlings you can always check out anything by Mike (<a href="https://coolbutuseless.github.io/">coolbutuseless</a>), or stuff like <a href="https://tomaztsql.wordpress.com/">Tomaz</a>‘s ’Little Useless-Useful’ series. Far more fruitful.</p>
+<p>Having said this, this may be the first post in a series. I’m not afraid to put my hand back in the waste disposal unit. Are you?</p>
+</section>
+
 
 
 <div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
@@ -612,7 +706,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-09-07 22:18:43 BST</code></pre>
+<pre><code>Last rendered: 2023-09-08 22:58:16 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -642,9 +736,18 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>This just looks like a screenshot of treasure locations from <em>The Legend of Zelda: The Windwaker</em>, which I assume I was replaying at the time.↩︎</p></li>
+<li id="fn2"><p>*Breathes in deep breath of copium.*↩︎</p></li>
+<li id="fn3"><p><a href="https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/">R is a game engine, fight me</a>.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>plunderplot</category>
   <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2023-09-09-offcuts/index.html</guid>
+  <category>r.oguelike</category>
+  <guid>https://www.rostrum.blog/posts/2023-09-08-trash-combing/index.html</guid>
   <pubDate>Fri, 08 Sep 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
