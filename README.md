@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 157 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2023-09-09 (latest).
+🔢 There have been 158 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2023-09-10 (latest).
 
-📅 That’s a post roughly every 13 days, or about 2.4 posts per month.
+📅 That’s a post roughly every 12 days, or about 2.4 posts per month.
 
-🆕 The latest post: [Combing through my
-trash](https://www.rostrum.blog/2023-09-08-trash-combing).
+🆕 The latest post: [The life and death of the
+tidyverse](https://www.rostrum.blog/2023-09-10-lifecycle).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ trash](https://www.rostrum.blog/2023-09-08-trash-combing).
 
 |     | Date       | Title                                                                                                                    |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------|
+| 158 | 2023-09-10 | [The life and death of the tidyverse](https://www.rostrum.blog/2023-09-10-lifecycle)                                     |
 | 157 | 2023-09-09 | [Combing through my trash](https://www.rostrum.blog/2023-09-08-trash-combing)                                            |
 | 156 | 2023-09-01 | [Autodetect Quarto formats with {quartostamp}. Or not.](https://www.rostrum.blog/2023-09-01-quarto-yaml-detect)          |
 | 155 | 2023-08-26 | [Conscious uncoupling with {blogdown}](https://www.rostrum.blog/2023-08-26-cheerio-blogdown)                             |
@@ -203,4 +204,4 @@ trash](https://www.rostrum.blog/2023-09-08-trash-combing).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2023-09-09 at 09:01.
+🕒 Last updated: 2023-09-10 at 18:43.
