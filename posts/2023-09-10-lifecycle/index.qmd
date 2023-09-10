@@ -1,0 +1,242 @@
+---
+title: The life and death of the tidyverse
+date: 2023-09-10
+slug: lifecycle
+categories:
+  - lifecycle
+  - r
+  - tidyverse
+---
+
+![](resources/name-badge.png){fig-alt="A name badge that says 'Hello, I am...' at the top and 'Deprecated' is written in the space at the bottom." width="50%" fig-align="left"}
+
+## tl;dr
+
+In which I try to work out what functions and arguments in the tidyverse are badged as 'experimental', 'deprecated', 'superseded', etc. You can [jump to the results table](#results).
+
+## Birth
+
+The tidyverse suite of packages develops quickly and there have been many API changes over the years. For example, `gather()` and `spread()` were superseded by `pivot_longer()` and `pivot_wider()` in {tidyr}, and there was a recent introduction of experimental `.by`/`by` arguments in several {dplyr} functions[^ethan].
+
+The tidyverse uses the [{lifecycle} package](https://CRAN.R-project.org/package=lifecycle) to advertise to users the current state of a function or argument. There's a good [explanatory vignette about lifecycles](https://lifecycle.r-lib.org/articles/stages.html) if you want to learn more.
+
+With this in mind, wouldn't it be fun—haha, I mean 'informative'—to try and extract lifecycle information from tidyverse packages?[^assume].
+
+## Life
+
+### Functions
+
+First, we get the names of tidyverse packages from within {tidyverse} itself. Preparing these as e.g. `package:tidyr` will help us later to `ls()` (list functions) and `detach()` (remove the package from the search path).
+
+```{r tidyverse-pkgs}
+# Package names in the tidyverse
+pkg_names <- tidyverse::tidyverse_packages(include_self = FALSE)
+pkg_envs <- paste0("package:", pkg_names)
+pkg_names
+```
+
+### Badges
+
+Then we need the badge strings and some regular expression versions that will help with string handling later. 'Stable' shouldn't need to be indicated, but I thought I'd add it for completeness. 'Maturing' and 'Questioning' have been superseded (lol, so meta), but there might still be some badges in the wild, maybe. I found at least one instance of 'Soft-deprecated' as well, which isn't part of the r-lib lifecycle, so I included it too.
+
+```{r badge-strings}
+# Badge strings in Rd
+life_names <- c(
+  "Deprecated", "Experimental", "Superseded",
+  "Stable",
+  "Maturing", "Questioning",
+  "Soft-deprecated"
+)
+
+# Regex to help detect lifecycle stages
+life_names_rx <- paste(life_names, collapse = "|")
+
+# Regex to help detect lifecycle badge format: '*[Experimental]*'
+badges_rx <-
+  paste0("\\*\\[(", life_names_rx, ")\\]\\*")
+```
+
+### Help files
+
+I went down rabbitholes trying to extract help files for each function, but [a Stackoverflow solution by MrFlick](https://stackoverflow.com/a/51330864) is exactly what I was looking for. It grabs a function's underlying Rd ('R documentation') help file and outputs it to a vector with one element per string, thanks to a couple of functions from {tools}: the most underrated R package (prove me wrong).
+
+```{r get-help-text}
+# Function to extract function help file from Rd
+get_help_text <- function(fn, pkg) {
+  
+  # Prepare paths to package directory
+  file <- help(fn, (pkg))
+  path <- dirname(file)
+  dirpath <- dirname(path)
+  rd_db <- file.path(path, pkg)
+  
+  # Read rendered function docs (Rd)
+  rd <- tools:::fetchRdDB(rd_db, basename(file))  # unexported function (':::')
+  
+  # Convert raw Rd to text and capture it as strings
+  capture.output(
+    tools::Rd2txt(rd, out = "", options = list(underline_titles = FALSE))
+  )
+  
+}
+```
+
+Here's a demo showing the description block of the function documentation for `tidyr::gather()`, which was superseded by `tidyr::pivot_longer()`. You can see how the 'Superseded' badge is represented: surrounded by square brackets and asterisks. That's the pattern what we'll need to search for.
+
+```{r gather-desc}
+get_help_text("gather", "tidyr")[3:13]
+```
+
+### Loop-de-loop
+
+So, the premise is to iterate over each package and, within each one, iterate through the functions to read their help pages and find any lifecycle badges. This'll output a list (with an element per package) of lists (an element per function).
+
+There's always discourse in the R community about `for` loops. So, as a special surprise, I decided to put a `for` loop in a `for` loop (yo dawg)[^loop]. I even pre-allocated my vectors, which is [for nerds](https://www.mm218.dev/posts/2023-08-29-allocations/).
+
+```{r loop-de-loop, message=FALSE}
+# Prepare 'outer' list, where each element is a package
+pkg_badges <- vector(mode = "list", length = length(pkg_names))
+names(pkg_badges) <- pkg_names
+
+# Iterate over each package to get lifecycle badge usage
+for (pkg in pkg_names) {
+  
+  # Extract package function names
+  library(pkg, character.only = TRUE)
+  pkg_env <- paste0("package:", pkg)
+  fn_names <- ls(pkg_env)
+  
+  # Ignore these particular functions, which caused errors, lol
+  if (pkg == "lubridate") {
+    fn_names <- fn_names[!fn_names %in% c("Arith", "Compare", "show")]
+  }
+  
+  # Prepare 'inner' list, where each element is a function
+  fn_badges <- vector(mode = "list", length = length(fn_names))
+  names(fn_badges) <- fn_names
+  
+  # Iterate over each function to get lifecycle badge usage
+  for (fn in fn_names) {
+    
+    message(pkg, "::",  fn)
+    
+    txt <- get_help_text(fn, pkg)  # fetch help file
+    lines_with_badges <- grep(badges_rx, txt)  # find rows that contain badges
+    
+    badge_lines <- NA  # default to no badges
+    
+    # If lines with badges exist, then extract the text
+    if (length(badge_lines) > 0) {
+      badge_lines <- trimws(txt[lines_with_badges])
+      badge_lines <- sub("\\*[^\\*]+$", "", badge_lines)
+    }
+    
+    fn_badges[[fn]] <- badge_lines  # add to inner list of functions
+    
+  }
+  
+  pkg_badges[[pkg]] <- fn_badges  # add to outer list of packages
+  
+  detach(pkg_env, character.only = TRUE)  # unclutter the search path
+  
+}
+```
+
+So here's `gather()` again, with that 'Superseded' badge extracted, as expected. The list element will be empty if there's no badge.
+
+```{r pkg-badges-gather}
+pkg_badges$tidyr$gather
+```
+
+And here's how the badge for an argument looks in that `.by` example:
+
+```{r pkg-badges-by}
+pkg_badges$dplyr$mutate
+```
+
+## Entabulate
+
+We can convert this to a dataframe for presentational and manipulational purposes. I'm choosing to do that with `stack(unlist())`, mostly because I haven't had a chance to use `stack()` in this blog yet. Handily, this approach also removes all the empty list elements for us.
+
+```{r stack-unlist}
+life_df <- stack(unlist(pkg_badges))  # stack is a nice function
+head(life_df)
+```
+
+Then we can do a bit of awkward string manipulation to get each package name, function name, argument names (if relevant) and the associated lifecycle badge(s).
+
+```{r df-manipulation}
+# Uncouple 'tidyr.gather' to 'tidyr' and 'gather'
+life_df$Package <- sub("\\..*", "", life_df$ind)
+life_df$Function <- sub(".*\\.", "", life_df$ind)
+
+# Clean off the '*[]*' from the lifecycle badge text
+life_df$values <- gsub("(\\[|\\]|\\*)", "", life_df$values)
+
+# Arg names are captured as a string before the lifecycle badge
+life_df$Args <- gsub(life_names_rx, "", life_df$values)
+life_df$Args <- trimws(gsub(":", "", life_df$Args))
+life_df$Args[life_df$Args == ""] <- NA
+
+# Badges appear after args (if any)
+life_df$Badges <- trimws(sub(".*\\:", "", life_df$values))
+life_df$Badges <- gsub(" ", ", ", life_df$Badges)
+
+# Select and reorder
+life_df <- life_df[, c("Package", "Function", "Args", "Badges")]
+```
+
+So now we have a table with one row per package and function:
+
+```{r preview-life}
+head(life_df)
+```
+
+### Results
+
+Here's an interactive table of the results.
+
+```{r reactable}
+# Convert character to factor for dropdown search in {DT}
+life_df[names(life_df)] <- lapply(life_df[names(life_df)], as.factor)
+
+# Build interactive table
+DT::datatable(
+  life_df, 
+  filter = "top",
+  options = list(autoWidth = TRUE, dom = "t")
+)
+```
+
+## Death
+
+You can see a few patterns. For example:
+
+* some packages are not represented here at all, while others appear a lot (e.g. {googledrive} has a large number of deprecated functions, maybe due to a change to the API, or overhaul of package design?)
+* 'Questioning' is still being used in {rlang}, despite not being part of the {lifecycle} system
+* {rlang} curiously has functions that are both 'Experimental' _and_ 'Soft-deprecated' (perhaps an example of trying something and realising it wasn't the right fit?)
+* sometimes it's more than one argument that gets a badge, which can happen when the same help page is being used by multiple functions (e.g. `slice()` and family's help page has 'Experimental' for `.by, by`[^dot-by], use of which differ depending on the exact function)
+
+Plus some other stuff I'm sure you can fathom out yourself.
+
+Of course, this all assumes that the badges are used consistently by developers across the suite of tidyverse packages. The method I used may also miss badges I'm not aware of, like the 'Soft-deprecated' example mentioned earlier.
+
+Regardless, the general approach outlined in this post might be useful for exploring other aspects of help pages, like the use of certain terms, grammar or writing styles. [Documentation was a theme](https://contributor.r-project.org/r-project-sprint-2023/projects/documentation/) of the recent R Project Sprint 2023, after all.
+
+Of course, it helps to keep badged functions around so that people's code remains reproducible. The downside is the potential for clutter and confusion, though the tidyverse packages sometimes warn you when something is old hat and suggest the preferred new method[^grumble].
+
+But I think it's an even better idea to keep these vestiges around to remind us that we all make mistakes. Oh, and, of course, that ✨ nothing is permanent ✨.
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^ethan]: Ethan White [wondered aloud](https://hachyderm.io/@ethanwhite/111012724465096811) recently if people are teaching learners to `ungroup()` then `summarise()`, or to use the 'experimental' `.by` argument within `summarise()` itself. Opinion: typically I prefer to avoid 'deprecated' or 'superseded' functions when teaching, like the `mutate_*()` suite that became `mutate(across())`. I'm a little wary of anything 'experimental' for teaching, for similarish reasons. But I do personally use them.
+[^loop]: Yeah, this approach is pretty awkward. Basically I was noodling around with some code and then realised I don't really care to refactor it. That could be a nice treat for you instead.
+[^dot-by]: Having mentioned teaching earlier, could this be awkward for learners? How do you teach that sometimes it's `by` and sometimes its `.by`, especially when the same family of functions (like `slice()`) is inconsistent? You should teach people to look at help files, sure, but it would be nice if it was always predictable.
+[^grumble]: I'll leave the grumbling to you about whether all this chopping and changing of functions and arguments is A Good Thing or not; that's not what this post is about.
+[^assume]: I assume a running list of these functions/args must already exist, or this has already been explored by a third party. But forget them; we're here to have fun!
