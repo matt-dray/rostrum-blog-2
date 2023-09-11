@@ -47,7 +47,7 @@ post_info <- lapply(post_paths, function(path) get_post_info(path))
 posts <- do.call(rbind, post_info)
 
 # Generate a web link to each post
-posts$link <- gsub("posts", "https://www.rostrum.blog", dirname(post_paths))
+posts$link <- paste0("https://www.rostrum.blog/", dirname(post_paths))
 
 # Invert order, so latest is at the top
 posts <- posts[rev(row.names(posts)), ]
@@ -73,7 +73,7 @@ date_bin <- date_bin_wth_dupes[!duplicated(date_bin_wth_dupes), ]
 ```
 
 
-```{r}
+```{r plot}
 # Create plot object
 p <- ggplot(date_bin) +
   # geom_point(  # marker for today's date
