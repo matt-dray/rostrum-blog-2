@@ -18,7 +18,7 @@ In which I try to work out what functions and arguments in the tidyverse are bad
 
 The tidyverse suite of packages develops quickly and there have been many API changes over the years. For example, `gather()` and `spread()` were superseded by `pivot_longer()` and `pivot_wider()` in {tidyr}, and there was a recent introduction of experimental `.by`/`by` arguments in several {dplyr} functions[^ethan].
 
-The tidyverse uses the [{lifecycle} package](https://CRAN.R-project.org/package=lifecycle) to advertise to users the current state of a function or argument. There's a good [explanatory vignette about lifecycles](https://lifecycle.r-lib.org/articles/stages.html) if you want to learn more.
+The tidyverse uses the [{lifecycle} package](https://CRAN.R-project.org/package=lifecycle) to advertise to users the current state of a function or argument, via a badge in the help files. There's a good [explanatory vignette about lifecycles](https://lifecycle.r-lib.org/articles/stages.html) if you want to learn more. The badges look like this: [![](https://img.shields.io/badge/lifecycle-deprecated-orange?style=flat&labelColor=#4E4E4E){fig-align="left"}](https://lifecycle.r-lib.org/articles/stages.html#deprecated)
 
 With this in mind, wouldn't it be fun—haha, I mean 'informative'—to try and extract lifecycle information from tidyverse packages?[^assume].
 
@@ -85,6 +85,12 @@ Here's a demo showing the description block of the function documentation for `t
 
 ```{r gather-desc}
 get_help_text("gather", "tidyr")[3:13]
+```
+
+And here's how that it's laid out for an argument:
+
+```{r mutate-desc}
+get_help_text("mutate", "dplyr")[46:50]
 ```
 
 ### Loop-de-loop
