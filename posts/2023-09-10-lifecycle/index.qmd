@@ -97,6 +97,8 @@ get_help_text("mutate", "dplyr")[46:50]
 
 So, the premise is to iterate over each package and, within each one, iterate through the functions to read their help pages and find any lifecycle badges. This'll output a list (with an element per package) of lists (an element per function).
 
+Note that I'm retrieving help files from my local computer, having already downloaded the tidyverse packages with `install.packages("tidyverse")`.
+
 There's always discourse in the R community about `for` loops. So, as a special surprise, I decided to put a `for` loop in a `for` loop (yo dawg)[^loop]. I even pre-allocated my vectors, which is [for nerds](https://www.mm218.dev/posts/2023-08-29-allocations/).
 
 ```{r loop-de-loop, message=FALSE}
@@ -200,17 +202,25 @@ head(life_df)
 
 ### Results
 
-Here's an interactive table of the results.
+Here's an interactive table of the results. You can click the function name to be taken to the rdrr.io website, which hosts package help files in HTML on the web. Note that this won't always resolve to a functioning URL for various reasons! If you've installed the tidyverse packages, you can of course see a function's help page by running e.g. `?tidyr::gather`.
 
-```{r reactable}
-# Convert character to factor for dropdown search in {DT}
+```{r dt-table}
+# Factors allow dropdown search in {DT}
 life_df[names(life_df)] <- lapply(life_df[names(life_df)], as.factor)
+
+# Build URL path to rdrr.io docs
+life_df$Function <- paste0(
+  "<a href='https://rdrr.io/cran/", 
+  life_df$Package, "/man/", life_df$Function, ".html'>",
+  life_df$Function, "</a>"
+)
 
 # Build interactive table
 DT::datatable(
   life_df, 
   filter = "top",
-  options = list(autoWidth = TRUE, dom = "t")
+  options = list(autoWidth = TRUE, dom = "tp"),
+  esc = FALSE
 )
 ```
 
