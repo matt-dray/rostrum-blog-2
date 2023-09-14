@@ -1,0 +1,169 @@
+---
+title: Unhinged R Markdown chunk-option parsing
+date: 2023-09-16
+slug: chunktop
+categories:
+  - parsermd
+  - r
+  - r-markdown
+---
+
+## tl;dr
+
+Parsing chunk options out of an R Markdown document. In a single base R pipe chain. To skirt around, but not solve, a problem.
+
+## Problem
+
+John asked about [parsing chunk options](https://fosstodon.org/@johnmackintosh/111047625054222865) from R Markdown files, passing the content to editors, then reincorporating the edited text back into the chunk whence it came.
+
+Well, John, have I got the solution for you. Oh wait, I absolutely don't. Rather I've looked into {parsermd} and then messed around. C'est la vie.
+
+## The leading candidate
+
+First place to start for parsing RMarkdown files is absolutely [the {parsermd} package](https://CRAN.R-project.org/package=parsermd ). It even has a specific function for extracting chunk options: `rmd_get_options()`.
+
+For demo purposes, I'll first create a temporary demo Rmd doc. For test purposes it has three chunks: the first has a single logical option; the second has an option with a string and an option with a numeric; and the last chunk has no options. All chunks use the R engine and they all have a name.
+
+```{r demo-rmd}
+rmd_lines <- c(
+  "---",
+  "title: Test",
+  "---",
+  "",
+  "# A header",
+  "",
+  "```{r chunk1, warning=FALSE}",
+  "1 + 1",
+  "```",
+  "",
+  "## A subheader",
+  "",
+  '```{r chunk2, fig.cap="I am a fig caption.", fig.height=4}',
+  "plot(mtcars$mpg, mtcars$cyl)",
+  "```",
+  "",
+  "Some text.",
+  "",
+  "```{r chunk3}",
+  "plot(mtcars$mpg, mtcars$cyl)",
+  "```"
+)
+
+demo_rmd_file <- tempfile("rmd-demo", fileext = ".Rmd")
+writeLines(rmd_lines, demo_rmd_file)
+```
+
+You can read in this file with `parse_rmd()`, which is actually a little abstract syntax (AST) tree that demonstrates the hierarchy of the page and contains all the data.
+
+```{r parsermd-chunks}
+if (!require("parsermd")) install.packages(parsermd)
+(rmd <- parse_rmd(demo_rmd_file))
+```
+
+
+
+```{r rmd-get-options}
+opt <- "fig.cap"
+chunk_with_opt <- rmd_select(rmd, has_option(opt))
+chunk_names <- rmd_node_label(chunk_with_opt)
+chunk_opts <- rmd_node_options(chunk_with_opt)
+names(chunk_opts) <- chunk_names
+lapply(chunk_opts, `[[`, opt)
+```
+
+```{r}
+parsermd::rmd_set_options()
+```
+
+
+
+Job done? Well kinda. because we're not solving the second half of the problem. Maybe you can provide this to an editor in some form of text file (YAML?) and then read it back into R. But then you need to reintegrate that updated code back into the Rmd. Maybe's there a package with a programmatic method that I don't know about?
+
+## 
+
+I wondered if I could just... extract the chunk options myself, dependency-free. For 'fun'.
+
+So I've turned this into a sort of unhinged code golf. Well, maybe 'code wild-goose-chase'.
+
+## The function
+
+I've got a few input checks that I've put into a `.check_inputs()` so that it causes less clutter.
+
+<details><summary>Click for function to check inputs</summary>
+```{r checks}
+.check_inputs <- function(rmd_lines, engine, yaml_out) {
+
+  if (!inherits(rmd_lines, "character")) {
+    stop("Argument 'rmd_lines' must be a character vector.", call. = FALSE)
+  }
+
+  if (engine != "r") {
+    stop("For now, argument 'engine' must be 'r'.", call. = FALSE)
+  }
+
+  if (!is.null(yaml_out) & !inherits(yaml_out, "character")) {
+    stop("Argument 'yaml_out' must be NULL or character.", call. = FALSE)
+  }
+
+  if (!is.null(yaml_out)) {
+
+    if (tools::file_ext(yaml_out) != "yaml") {
+      stop("Argument 'yaml_out' must have extension '.yaml'.", call. = FALSE)
+    }
+
+    if (!dir.exists(dirname(yaml_out))) {
+      stop("The directory in 'yaml_out' does not exist.", call. = FALSE)
+    }
+
+  }
+
+}
+```
+</details>
+
+And I'll let you look at the main `chunktop2yaml()` function before we dissect it a bit. 
+
+As mentioned, it's exclusively base R, apart from using {yaml} to save the file (I know, what a cop out). Note the use of `|>` base pipe, `_` placeholder, `\()` anonymous function and `()()` 'dog's balls'. Welcome to base R circa 2023.
+
+```{r chunktop2yaml}
+
+chunktop2yaml <- function(rmd_lines, engine = "r", yaml_out = NULL) {
+
+  .check_inputs(rmd_lines, engine, yaml_out)
+
+  chunktop_list <-
+    rmd_lines[grep("```\\{", rmd_lines)] |>
+    gsub(paste0("```\\{", engine , " |\\}$"), "", x = _) |>
+    strsplit(", ") |>
+    (\(chunk_str) setNames(object = chunk_str, sapply(chunk_str, "[[", 1)))() |>
+    sapply("[", -1) |>
+    lapply(
+      \(opt_str) {
+        str_split(opt_str, "=") |>
+          (\(opt_str) setNames(object = opt_str, sapply(opt_str, "[[", 1)))() |>
+          sapply("[", -1) |>
+          as.list() |>
+          lapply(\(val) gsub(r"{^\"|\"$}", "", x = val)) |>
+          type.convert(as.is = TRUE)
+      }
+    )
+
+  if (!is.null(yaml_out)) {
+    yaml::write_yaml(chunktop_list, yaml_out)
+    message("Wrote YAML to ", path_out)
+  }
+
+  return(chunktop_list)
+
+}
+```
+
+Does the function name `chunktops2yaml()` imply the existence of a `yaml2chunktops()` function. Yes, but I leave that as a task for you, dear reader. See if you can set yourself some other ridiculous constraint in your function; maybe you'll try to only use functions that don't contain the letter 'a', or something.
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>

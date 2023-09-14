@@ -10,7 +10,567 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Sat, 09 Sep 2023 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 15 Sep 2023 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Unhinged R Markdown chunk-option parsing</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2023-09-16-chunktop/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>Parsing chunk options out of an R Markdown document. In a single base R pipe chain. To skirt around, but not solve, a problem.</p>
+</section>
+<section id="problem" class="level2">
+<h2 class="anchored" data-anchor-id="problem">Problem</h2>
+<p>John asked about <a href="https://fosstodon.org/@johnmackintosh/111047625054222865">parsing chunk options</a> from R Markdown files. Well, John, have I got the solution for you. Oh wait, I absolutely don’t.</p>
+</section>
+<section id="the-leading-candidate" class="level2">
+<h2 class="anchored" data-anchor-id="the-leading-candidate">The leading candidate</h2>
+<p>First place to start for parsing RMarkdown files is absolutely <a href="https://CRAN.R-project.org/package=parsermd">the {parsermd} package</a>. It even has a specific function for extracting chunk options: <code>rmd_get_options()</code>.</p>
+<p>For demo purposes, I’ll first create a temporary demo Rmd doc. For test purposes it has three chunks: the first has a single logical option; the second has an option with a string and an option with a numeric; and the last chunk has no options. ALl chunks use the R engine and they all have a name.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">rmd_lines <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(</span>
+<span id="cb1-2">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"---"</span>,</span>
+<span id="cb1-3">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"title: Test"</span>,</span>
+<span id="cb1-4">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"---"</span>,</span>
+<span id="cb1-5">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>,</span>
+<span id="cb1-6">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"# A header"</span>,</span>
+<span id="cb1-7">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>,</span>
+<span id="cb1-8">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"```{r chunk1, warning=FALSE}"</span>,</span>
+<span id="cb1-9">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"1 + 1"</span>,</span>
+<span id="cb1-10">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"```"</span>,</span>
+<span id="cb1-11">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>,</span>
+<span id="cb1-12">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"## A subheader"</span>,</span>
+<span id="cb1-13">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>,</span>
+<span id="cb1-14">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'```{r chunk2, fig.cap="I am a fig caption.", fig.height=4}'</span>,</span>
+<span id="cb1-15">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"plot(mtcars$mpg, mtcars$cyl)"</span>,</span>
+<span id="cb1-16">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"```"</span>,</span>
+<span id="cb1-17">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>,</span>
+<span id="cb1-18">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Some text."</span>,</span>
+<span id="cb1-19">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>,</span>
+<span id="cb1-20">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"```{r chunk3}"</span>,</span>
+<span id="cb1-21">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"plot(mtcars$mpg, mtcars$cyl)"</span>,</span>
+<span id="cb1-22">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"```"</span></span>
+<span id="cb1-23">)</span>
+<span id="cb1-24"></span>
+<span id="cb1-25">demo_rmd_file <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tempfile</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"rmd-demo"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".Rmd"</span>)</span>
+<span id="cb1-26"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">writeLines</span>(rmd_lines, demo_rmd_file)</span></code></pre></div>
+</div>
+<p>You can read in this file with <code>parse_rmd()</code>, which is actually a little abstract syntax (AST) tree that demonstrates the hierarchy of the page and contains all the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">require</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"parsermd"</span>)) <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(parsermd)</span></code></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: parsermd</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">rmd_parsed <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">parse_rmd</span>(demo_rmd_file)</span>
+<span id="cb4-2">rmd_parsed</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>├── YAML [1 lines]
+└── Heading [h1] - A header
+    ├── Chunk [r, 1 opt, 1 lines] - chunk1
+    └── Heading [h2] - A subheader
+        ├── Chunk [r, 2 opts, 1 lines] - chunk2
+        ├── Markdown [2 lines]
+        └── Chunk [r, 1 lines] - chunk3</code></pre>
+</div>
+</div>
+<p>And then <code>rmd_get_options()</code> can pull out the options for us as a list of lists.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">rmd_opts <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rmd_get_options</span>(rmd_parsed)</span>
+<span id="cb6-2">rmd_opts[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lengths</span>(rmd_opts) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">str</span>()</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 2
+ $ :List of 1
+  ..$ warning: chr "FALSE"
+ $ :List of 2
+  ..$ fig.cap   : chr "\"I am a fig caption.\""
+  ..$ fig.height: chr "4"</code></pre>
+</div>
+</div>
+<p>Job done? Well, it still requires some juggling and there also needs to be a sort of ‘reverse’ method to return the options back into the Rmd chunk options. So, kinda.</p>
+<p>I have three ‘problems’ from my persepctive:</p>
+<ol start="2" type="1">
+<li>Wouldn’t it be more ‘fun’ to try and ‘parse’ chunk options from scratch?</li>
+<li>Wouldn’t it be more ‘fun’ to do it by using a single chain of base pipes (<code>|&gt;</code>)?</li>
+<li>Wouldn’t it be ‘fun’ to make each chunk’s name the name of its list element?</li>
+</ol>
+<p>So I’ve turned this into a sort of unhinged code golf. Except we’re making things more complicated. And it’s totally unnecessary. But it’s for fun. So maybe it’s more like ‘code bumpre cars’ than code golf.</p>
+</section>
+<section id="the-function" class="level2">
+<h2 class="anchored" data-anchor-id="the-function">The function</h2>
+<p>I’ve got a few input checks that I’ve put into a <code>.check_inputs()</code> so that it causes less clutter.</p>
+<details>
+<summary>
+Click for function to check inputs
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">.check_inputs <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(rmd_lines, engine, yaml_out) {</span>
+<span id="cb8-2"></span>
+<span id="cb8-3">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">inherits</span>(rmd_lines, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"character"</span>)) {</span>
+<span id="cb8-4">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">stop</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Argument 'rmd_lines' must be a character vector."</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">call. =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)</span>
+<span id="cb8-5">  }</span>
+<span id="cb8-6"></span>
+<span id="cb8-7">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (engine <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"r"</span>) {</span>
+<span id="cb8-8">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">stop</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"For now, argument 'engine' must be 'r'."</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">call. =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)</span>
+<span id="cb8-9">  }</span>
+<span id="cb8-10"></span>
+<span id="cb8-11">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">is.null</span>(yaml_out) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">inherits</span>(yaml_out, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"character"</span>)) {</span>
+<span id="cb8-12">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">stop</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Argument 'yaml_out' must be NULL or character."</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">call. =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)</span>
+<span id="cb8-13">  }</span>
+<span id="cb8-14"></span>
+<span id="cb8-15">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">is.null</span>(yaml_out)) {</span>
+<span id="cb8-16"></span>
+<span id="cb8-17">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (tools<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">file_ext</span>(yaml_out) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"yaml"</span>) {</span>
+<span id="cb8-18">      <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">stop</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Argument 'yaml_out' must have extension '.yaml'."</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">call. =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)</span>
+<span id="cb8-19">    }</span>
+<span id="cb8-20"></span>
+<span id="cb8-21">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">dir.exists</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">dirname</span>(yaml_out))) {</span>
+<span id="cb8-22">      <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">stop</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"The directory in 'yaml_out' does not exist."</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">call. =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>)</span>
+<span id="cb8-23">    }</span>
+<span id="cb8-24"></span>
+<span id="cb8-25">  }</span>
+<span id="cb8-26"></span>
+<span id="cb8-27">}</span></code></pre></div>
+</div>
+</details>
+<p>And I’ll let you look at the main <code>chunktop2yaml()</code> function before we dissect it a bit.</p>
+<p>As mentioned, it’s exclusively base R, apart from using {yaml} to save the file (I know, what a cop out). Note the use of <code>|&gt;</code> base pipe, <code>_</code> placeholder, <code>\()</code> anonymous function and <code>()()</code> ‘dog’s balls’. Welcome to base R circa 2023.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1">chunktop2yaml <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(rmd_lines, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">engine =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"r"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">yaml_out =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NULL</span>) {</span>
+<span id="cb9-2"></span>
+<span id="cb9-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">.check_inputs</span>(rmd_lines, engine, yaml_out)</span>
+<span id="cb9-4"></span>
+<span id="cb9-5">  chunktop_list <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span></span>
+<span id="cb9-6">    rmd_lines[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grep</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"```</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\\</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">{"</span>, rmd_lines)] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb9-7">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">gsub</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste0</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"```</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\\</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">{"</span>, engine , <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">" |</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\\</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">}$"</span>), <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> _) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb9-8">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">strsplit</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> _, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">", "</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb9-9">    (\(chunk_str) <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">setNames</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">object =</span> chunk_str, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sapply</span>(chunk_str, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"[["</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)))() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb9-10">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sapply</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">X =</span> _, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"["</span>, <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb9-11">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(</span>
+<span id="cb9-12">      <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">X =</span> _,</span>
+<span id="cb9-13">      \(opt_str) {</span>
+<span id="cb9-14">        <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">str_split</span>(opt_str, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"="</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb9-15">          (\(opt_str) <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">setNames</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">object =</span> opt_str, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sapply</span>(opt_str, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"[["</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)))() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb9-16">          <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sapply</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">X =</span> _, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"["</span>, <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb9-17">          <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.list</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb9-18">          <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">X =</span> _, \(val) <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">gsub</span>(r<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"{^</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\"</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">|</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\"</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">$}"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> val)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb9-19">          <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">type.convert</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">as.is =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb9-20">      }</span>
+<span id="cb9-21">    )</span>
+<span id="cb9-22"></span>
+<span id="cb9-23">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">is.null</span>(yaml_out)) {</span>
+<span id="cb9-24">    yaml<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">write_yaml</span>(chunktop_list, yaml_out)</span>
+<span id="cb9-25">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">message</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Wrote YAML to "</span>, path_out)</span>
+<span id="cb9-26">  }</span>
+<span id="cb9-27"></span>
+<span id="cb9-28">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">return</span>(chunktop_list)</span>
+<span id="cb9-29"></span>
+<span id="cb9-30">}</span></code></pre></div>
+</div>
+<p>Does the function name <code>chunktops2yaml()</code> imply the existence of a <code>yaml2chunktops()</code> function. Yes, but I leave that as a task for you, dear reader. See if you can set yourself some other ridiculous constraint in your function; maybe you’ll try to only use functions that don’t contain the letter ‘a’, or something.</p>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-09-13 22:33:10 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] parsermd_0.1.2
+
+loaded via a namespace (and not attached):
+ [1] vctrs_0.6.3       cli_3.6.1         knitr_1.43.1      rlang_1.1.1      
+ [5] xfun_0.39         purrr_1.0.1       jsonlite_1.8.7    glue_1.6.2       
+ [9] backports_1.4.1   htmltools_0.5.5   hms_1.1.3         fansi_1.0.4      
+[13] rmarkdown_2.23    evaluate_0.21     tibble_3.2.1      tzdb_0.4.0       
+[17] fastmap_1.1.1     yaml_2.3.7        lifecycle_1.0.3   compiler_4.3.1   
+[21] htmlwidgets_1.6.2 Rcpp_1.0.11       pkgconfig_2.0.3   rstudioapi_0.15.0
+[25] digest_0.6.33     R6_2.5.1          readr_2.1.4       utf8_1.2.3       
+[29] pillar_1.9.0      magrittr_2.0.3    checkmate_2.2.0   tools_4.3.1      </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>parsermd</category>
+  <category>r</category>
+  <category>r-markdown</category>
+  <guid>https://www.rostrum.blog/posts/2023-09-16-chunktop/index.html</guid>
+  <pubDate>Fri, 15 Sep 2023 23:00:00 GMT</pubDate>
+</item>
 <item>
   <title>The life and death of the tidyverse</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -8466,279 +9026,6 @@ loaded via a namespace (and not attached):
   <category>videogames</category>
   <guid>https://www.rostrum.blog/posts/2023-02-26-nook-s7/index.html</guid>
   <pubDate>Sun, 26 Feb 2023 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Porting a Twitter bot to Mastodon</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-02-09-londmapbotstodon/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><img src="https://www.rostrum.blog/posts/2023-02-09-londmapbotstodon/resources/toot-hyde.jpg" class="img-fluid" style="width:100.0%" alt="Aerial image of Hyde Park, London, with three emoji mammoths overlaid, each one tooting on an emoji trumpet, with the word 'toot' coming out the end of the trumpet."></p>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I’ve (finally) ported the <a href="https://github.com/matt-dray/londonmapbot">londonmapbot</a> <a href="https://twitter.com/londonmapbot">Twitter</a> bot to <a href="https://botsin.space/@londonmapbot">Mastodon</a>. Like a mammoth rising from the ashes.</p>
-</section>
-<section id="tooooooot" class="level2">
-<h2 class="anchored" data-anchor-id="tooooooot">TOOOOOOOT</h2>
-<p>Twitter is burning to the ground, yada yada.</p>
-<p>For example, it appears that the free API tier will disappear soon. Soon like… <a href="https://twitter.com/TwitterDev/status/1621026986784337922">today</a>. Oh wait, <a href="https://twitter.com/TwitterDev/status/1623467615539859456">maybe not yet</a>?<sup>1</sup> Cool customer communication, brah.</p>
-<p>Anyway, this news will obviously devastate contributors and fans of <a href="https://mobile.twitter.com/i/lists/1492559073287581707">the mapbotverse Twitter list</a>.</p>
-<p>You don’t know what the mapbotverse is? Oof. It’s a collection of 25 bot accounts that take some inspiration from <a href="https://twitter.com/londonmapbot">my londonmapbot account</a>, which uses <a href="https://github.com/features/actions">GitHub Actions</a> and <a href="https://docs.ropensci.org/rtweet/">the {rtweet} package</a> to tweet on schedule a picture of a random spot in Greater London via <a href="https://www.mapbox.com/">MapBox</a>.</p>
-<p>And so it’s time to update <a href="https://github.com/matt-dray/londonmapbot">the code behind londonmapbot</a> so that it continues to <a href="https://twitter.com/londonmapbot">post to Twitter</a> for as long as it survives. But also so that it lives on by <a href="https://botsin.space/@londonmapbot">posting to Mastodon</a> via <a href="https://schochastics.github.io/rtoot/">the {rtoot} package</a> as well.</p>
-<p>Mastowhat? Something something <a href="https://en.wikipedia.org/wiki/Mastodon_(social_network)">federated Twitter-replacement</a> sort of thing. Tooooooot tooooooot.</p>
-<div class="tip">
-<p> <b>Note</b></p>
-<p>I finally turned off londonmapbot on Twitter in May 2023.</p>
-</div>
-</section>
-<section id="masto-do-or-masto-do-not" class="level2">
-<h2 class="anchored" data-anchor-id="masto-do-or-masto-do-not">Masto-do or masto-do-not</h2>
-<p>I’m slightly behind the curve on this: <a href="https://lapsedgeographer.london/">Matt Kerlogue</a> has already ported his <a href="https://t.co/gP6YeqHzAL">narrowbotR</a> (‘narrow boater’) bot from <a href="https://twitter.com/narrowbotR">Twitter</a> to <a href="https://fosstodon.org/@narrowbotr@botsin.space">Mastodon</a> and <a href="https://lapsedgeographer.london/2022-11/mastodon-switch/">written about it</a>.</p>
-<p>The fix was fairly rudimentary in the end, thanks to standing on the shoulder of mammoths. Particularly the creators of <a href="https://schochastics.github.io/rtoot/">the {rtoot} R package</a>.</p>
-<p>{rtoot} lets you interact with the <a href="https://docs.joinmastodon.org/api/">Mastodon API</a>. It’s a sort-of analogue to <a href="https://docs.ropensci.org/rtweet/">the {rtweet} package</a> for <a href="https://developer.twitter.com/en/docs/twitter-api">the Twitter API</a>. {rtoot} was stood up very quickly by <a href="https://www.mr.schochastics.net/">David Schoch</a> (with co-author <a href="http://www.chainsawriot.com/">Chung-hong Chan</a> and contributor <a href="https://www.johannesbgruber.eu/">Johannes Gruber</a>) when it became clear that Mastodon was becoming the platform-du-jour for nerds.</p>
-<section id="set-up-mastodon" class="level3">
-<h3 class="anchored" data-anchor-id="set-up-mastodon">Set up Mastodon</h3>
-<p>It’s easier to set yourself up with API access for Mastodon compared to Twitter:</p>
-<ol type="1">
-<li>Set up a Mastodon account on the dedicated bot server <a href="https://botsin.space/">botsin.space</a> (londonmapbot is <a href="https://botsin.space/@londonmapbot"><span class="citation" data-cites="londonmapbot">@londonmapbot</span><span class="citation" data-cites="botsin.space">@botsin.space</span></a>).<sup>2</sup></li>
-<li>Install the {rtoot} package.</li>
-<li>Authorise yourself with Mastodon and get an API token.</li>
-<li>???</li>
-<li>Absolutely do not profit whatsoever.</li>
-</ol>
-<p>Steps 2 and 3 look like this:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"rtoot"</span>)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># on CRAN</span></span>
-<span id="cb1-2"></span>
-<span id="cb1-3">rtoot<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">auth_setup</span>(</span>
-<span id="cb1-4">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">instance  =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"botsin.space"</span>,  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># the Mastodon server the account is on</span></span>
-<span id="cb1-5">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">type      =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"user"</span>,          <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># i.e. for posting from R</span></span>
-<span id="cb1-6">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">name      =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"londonmapbot"</span>,  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># name the token file</span></span>
-<span id="cb1-7">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">clipboard =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>             <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># copy to clipboard</span></span>
-<span id="cb1-8">)</span></code></pre></div>
-</div>
-<p>This process interrupts you to interactively authorise the {rtoot} package in a browser window and copy a big long code to a dialogue box that appears in your R session.</p>
-<p><img src="https://www.rostrum.blog/posts/2023-02-09-londmapbotstodon/resources/rtoot-permission.png" class="img-fluid" style="width:75.0%" alt="A prompt on the Mastodon website that asks the user to provide authorisation for the rtoot package to have permission for read and write access. There's a big blue button that says 'authorise' and a big red one that says 'deny'."></p>
-<p>It’ll then return:</p>
-<pre><code>Token of type "user" for instance botsin.space is valid
-Token (in environment variable format) has been copied to clipboard.
-&lt;mastodon bearer token&gt; for instance: botsin.space of type: user </code></pre>
-<p>I pasted this API token to a safe place and also stored it as <a href="https://docs.github.com/en/rest/actions/secrets">a GitHub repo secret</a> in the londonmapbot GitHub repo so it could be referred to while the GitHub Action was running.</p>
-</section>
-<section id="post-to-mastodon" class="level3">
-<h3 class="anchored" data-anchor-id="post-to-mastodon">Post to Mastodon</h3>
-<p>Now we can use the <code>post_toot()</code> function to… toot a post. Publish a toot? Entoot a noote. It requires a <code>token</code> argument that takes a special ‘bearer token’ with a particular structure that’s not too dissimilar from what the rtweet package expects of the object passed to its own <code>token</code> function.</p>
-<p>Aside: token setup is made easy in {rtweet} thanks to the <code>rtweet_bot()</code> function, to which you can pass your API keys and secrets. It’s a little less obvious in {rtoot}, which was initially built with the intention of running API calls from your personal machine, so you could just store your keys in your .Renviron file or whatever.</p>
-<p>But actually you can just mimic how {rtweet} accepts the token. To do this, I did not use my brain at all and simply ripped-off <a href="https://lapsedgeographer.london/">Matt Kerlogue’s post</a>.<sup>3</sup> <a href="https://github.com/matt-dray/londonmapbot/blob/main/post-image.R">My updated R script</a> now contains this:<sup>4</sup></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">mastodon_token <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">structure</span>(</span>
-<span id="cb3-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># it's just a list</span></span>
-<span id="cb3-3">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">bearer   =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">Sys.getenv</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"RTOOT_DEFAULT_TOKEN"</span>),</span>
-<span id="cb3-4">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">type     =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"user"</span>,  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># i.e. to post from R</span></span>
-<span id="cb3-5">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">instance =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"botsin.space"</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># the server</span></span>
-<span id="cb3-6">  ),</span>
-<span id="cb3-7">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">class =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"rtoot_bearer"</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># special token class</span></span>
-<span id="cb3-8">)</span></code></pre></div>
-</div>
-<p>Where <code>RTOOT_DEFAULT_TOKEN</code> is that API token from earlier, which is required for accessing Mastodon. As mentioned, it’s stored as <a href="https://docs.github.com/en/rest/actions/secrets">a GitHub repo secret</a> and called into the GitHub Action environment thanks to the <code>${{ secrets.RTOOT_DEFAULT_TOKEN }}</code> call in <a href="https://github.com/matt-dray/londonmapbot/blob/main/.github/workflows/post-image.yml">the YAML file</a>.</p>
-<p>This object can be passed quite happily to the <code>post_toot()</code> function.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">rtoot<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">post_toot</span>(</span>
-<span id="cb4-2">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">status   =</span> latlon_details,</span>
-<span id="cb4-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">media    =</span> temp_file,</span>
-<span id="cb4-4">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">alt_text =</span> alt_text,</span>
-<span id="cb4-5">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">token    =</span> mastodon_token</span>
-<span id="cb4-6">)</span></code></pre></div>
-</div>
-<p>Where the <code>status</code> (body text), <code>media</code> (image file) and <code>alt_text</code> (alternative text for the image) objects have been generated already (<a href="https://github.com/matt-dray/londonmapbot/blob/main/post-image.R">see the R script</a> for details).</p>
-<p>This is then executed on schedule according to the <a href="https://en.wikipedia.org/wiki/Cron">cron string</a><sup>5</sup> specified in <a href="https://github.com/matt-dray/londonmapbot/blob/main/.github/workflows/post-image.yml">the YAML file</a> (currently twice a day at 0914 and 1714) to publish stuff like this:</p>
-<p><img src="https://www.rostrum.blog/posts/2023-02-09-londmapbotstodon/resources/londonmapbot-mastodon.png" class="img-fluid" style="width:100.0%" alt="Example of a toot on Mastodon from the londonmapbot account. The image is an aerial image of London. The text provides the latitude and longitude of the centre of the image and also an OpenStreetMap link."></p>
-</section>
-<section id="await-twitter-implosion" class="level3">
-<h3 class="anchored" data-anchor-id="await-twitter-implosion">Await Twitter implosion</h3>
-<p>I want the bot to keep posting to Twitter for as long as I’m allowed to. In other words, we should <em>try</em> to post a tweet and <em>catch</em> any error silently, without disrupting the GitHub Action. So naturally I wrapped <code>post_tweet()</code> in a <code>tryCatch()</code> statement, yes? No, actually I used <code>purrr::possibly()</code> instead.</p>
-<p>Why? Basically because the syntax is easy to remember, lol. And what difference does it make to have one extra dependency for this task? To use it, you wrap your function of interest in <code>possibly()</code> and then it can fail without erroring-out the whole function.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">possibly_post_tweet <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> purrr<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">possibly</span>(rtweet<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span>post_tweet)</span>
-<span id="cb5-2"></span>
-<span id="cb5-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">possibly_post_tweet</span>(</span>
-<span id="cb5-4">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">status         =</span> latlon_details,</span>
-<span id="cb5-5">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">media          =</span> temp_file,</span>
-<span id="cb5-6">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">media_alt_text =</span> alt_text,</span>
-<span id="cb5-7">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">token          =</span> twitter_token</span>
-<span id="cb5-8">)</span></code></pre></div>
-</div>
-</section>
-<section id="fiddle-while-frisco-burns" class="level3">
-<h3 class="anchored" data-anchor-id="fiddle-while-frisco-burns">Fiddle while Frisco burns</h3>
-<p>While I was messing about with the londonmapbot code, I made a few things in the repo a bit more generic. For example, I altered the name of the GitHub Actions YAML file and the R script to be called ‘post-image’. This is more descriptive and it removes the need for someone forking the repo to have to manually change the name away from ‘londonmapbot’. You are so welcome.</p>
-</section>
-</section>
-<section id="parp" class="level2">
-<h2 class="anchored" data-anchor-id="parp">Parp</h2>
-<p>Farewell, until the next time we have to port londonmapot to another API-enabled microblogging site. We’ve had bird- and mammal-themed sites; my prediction is that the next site will be called ‘Seacucumber’ and we won’t ‘tweet’ or ‘toot’, we’ll ‘eviscerate’.<sup>6</sup></p>
-<p>I mean, inverting one’s stomach is a daily reaction on Twitter anyway, amirite?</p>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-17 18:09:04 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
- [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
-[13] digest_0.6.31     rlang_1.1.1       fontawesome_0.5.1 evaluate_0.21    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>Happy Valentine’s to all my fellow monetisable users.↩︎</p></li>
-<li id="fn2"><p>During this process you have to explain why you want to set up the account. Don’t forget to say the magic word in your application, wink wink.↩︎</p></li>
-<li id="fn3"><p>‘Matt hivemind prerogative’, this is called.↩︎</p></li>
-<li id="fn4"><p>Kerlogue influenced the {rtoot} team to <a href="https://github.com/schochastics/rtoot/issues/68">update the package</a> to handle environmental variables, but I could not get this to work, alas.↩︎</p></li>
-<li id="fn5"><p>Did I mention I made <a href="https://github.com/matt-dray/dialga">the R package {dialga}</a> to convert R to cron to English, lol?↩︎</p></li>
-<li id="fn6"><p>I <a href="https://en.wikipedia.org/wiki/Evisceration_(autotomy)">fact-checked myself on Wikipedia</a> and read this brand new sentence: ‘[evisceration] causes the wall of the cloaca to tear and the anus to gape.’↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>api</category>
-  <category>github-actions</category>
-  <category>londonmapbot</category>
-  <category>social-media</category>
-  <category>r</category>
-  <category>rtoot</category>
-  <category>rtweet</category>
-  <guid>https://www.rostrum.blog/posts/2023-02-09-londmapbotstodon/index.html</guid>
-  <pubDate>Thu, 09 Feb 2023 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
