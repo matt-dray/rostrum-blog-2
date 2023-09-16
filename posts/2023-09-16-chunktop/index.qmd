@@ -1,5 +1,5 @@
 ---
-title: Unhinged R Markdown chunk-option parsing
+title: Dear John, I'm sorry
 date: 2023-09-16
 slug: chunktop
 categories:
@@ -8,157 +8,185 @@ categories:
   - r-markdown
 ---
 
+![](resources/chunktop.png){fig.alt="Crudely drawn picture of an apologetic face with two documents pointing to each other. One says Rmd on it, one says CSV."}
+
 ## tl;dr
 
-Parsing chunk options out of an R Markdown document. In a single base R pipe chain. To skirt around, but not solve, a problem.
+I developed a convenience function for parsing chunk options out of an R Markdown document for collaborators to edit. But it doesn't work in reverse, which is the whole point. Some notes on failure.
 
-## Problem
+## A very simple problem (?)
 
-John asked about [parsing chunk options](https://fosstodon.org/@johnmackintosh/111047625054222865) from R Markdown files, passing the content to editors, then reincorporating the edited text back into the chunk whence it came.
+John asked about [parsing chunk options](https://fosstodon.org/@johnmackintosh/111047625054222865) from R Markdown files (Rmd), passing the content to editors, then reincorporating the edited text back into the chunk whence it came.
 
-Well, John, have I got the solution for you. Oh wait, I absolutely don't. Rather I've looked into {parsermd} and then messed around. C'est la vie.
+Well, John, have I got the solution for you. Oh wait, I absolutely don't. Rather I've looked into [{parsermd}](https://CRAN.R-project.org/package=parsermd), messed around and... gave up. C'est la vie.
 
-## The leading candidate
+In my hubris, I began the package [{chunktop}](https://github.com/matt-dray/chunktop) to solve John's problem. Goal: parse Rmd chunk options, write them to file, allow for edits, read them back in and reintegrate the strings into the chunks they came from. Then re-write the Rmd with the changes. Boom.
 
-First place to start for parsing RMarkdown files is absolutely [the {parsermd} package](https://CRAN.R-project.org/package=parsermd ). It even has a specific function for extracting chunk options: `rmd_get_options()`.
+Spoiler: I was naïve.
 
-For demo purposes, I'll first create a temporary demo Rmd doc. For test purposes it has three chunks: the first has a single logical option; the second has an option with a string and an option with a numeric; and the last chunk has no options. All chunks use the R engine and they all have a name.
+## A good start
 
-```{r demo-rmd}
-rmd_lines <- c(
-  "---",
-  "title: Test",
-  "---",
-  "",
-  "# A header",
-  "",
-  "```{r chunk1, warning=FALSE}",
-  "1 + 1",
-  "```",
-  "",
-  "## A subheader",
-  "",
-  '```{r chunk2, fig.cap="I am a fig caption.", fig.height=4}',
-  "plot(mtcars$mpg, mtcars$cyl)",
-  "```",
-  "",
-  "Some text.",
-  "",
-  "```{r chunk3}",
-  "plot(mtcars$mpg, mtcars$cyl)",
-  "```"
-)
+My advice: don't install {chunktop}; it's already archived on GitHub.
 
-demo_rmd_file <- tempfile("rmd-demo", fileext = ".Rmd")
-writeLines(rmd_lines, demo_rmd_file)
+```{r install, eval=FALSE}
+install.packages("remotes")  # if not yet installed
+remotes::install_github("matt-dray/chunktop")
 ```
 
-You can read in this file with `parse_rmd()`, which is actually a little abstract syntax (AST) tree that demonstrates the hierarchy of the page and contains all the data.
+It steals functionality from the excellent [{parsermd} package](https://CRAN.R-project.org/package=parsermd) to grab Rmd chunk options using the very appropriate `rmd_get_options()` function.
+
+The package contains a demo Rmd for testing purposes.
+
+```{r path}
+path <- system.file("extdata/demo1.Rmd", package = "chunktop")
+```
+
+You can read in this demo Rmd with `parsermd::parse_rmd()`, which is actually a little abstract syntax tree (AST) that demonstrates the hierarchy of the page and contains all the data.
 
 ```{r parsermd-chunks}
 if (!require("parsermd")) install.packages(parsermd)
-(rmd <- parse_rmd(demo_rmd_file))
+(rmd <- parse_rmd(path))
+```
+And we can take a look at the lines in the Rmd doc.
+
+```{r parsemd-as-doc}
+(rmd_doc <- parsermd::as_document(rmd))
 ```
 
+So it contains a bunch of chunks with various options.
 
+So, here's as far as I got. First off, given our Rmd file, we can use `get_chunktop()` to read the chunk options of interest using {parsermd} and stick them a nice little list. Trivially.
 
-```{r rmd-get-options}
-opt <- "fig.cap"
-chunk_with_opt <- rmd_select(rmd, has_option(opt))
-chunk_names <- rmd_node_label(chunk_with_opt)
-chunk_opts <- rmd_node_options(chunk_with_opt)
-names(chunk_opts) <- chunk_names
-lapply(chunk_opts, `[[`, opt)
+```{r chunktop-list}
+library(chunktop)
+(chunktop_list <- get_chunktop(rmd_file = path, opts = c("fig.cap", "eval")))
 ```
 
-```{r}
-parsermd::rmd_set_options()
+Which is trivially massaged into a data.frame.
+
+```{r chunktop-df}
+(chunktop_df <- chunktop_to_df(chunktop_list))
 ```
 
+Which is trivially written to a CSV to share with your colleagues for editing.
 
+```{r write-csv}
+csv_file <- tempfile(fileext = ".csv")
+write.csv(chunktop_df, csv_file, row.names = FALSE)
+```
 
-Job done? Well kinda. because we're not solving the second half of the problem. Maybe you can provide this to an editor in some form of text file (YAML?) and then read it back into R. But then you need to reintegrate that updated code back into the Rmd. Maybe's there a package with a programmatic method that I don't know about?
+Which is trivially read back into R.
 
-## 
+```{r read-csv}
+(chunktop_df2 <- read.csv(csv_file))
+```
 
-I wondered if I could just... extract the chunk options myself, dependency-free. For 'fun'.
+Which is trivially converted back into a list.
 
-So I've turned this into a sort of unhinged code golf. Well, maybe 'code wild-goose-chase'.
+```{r df-to-chunktop}
+(chunktop_list2 <- df_to_chunktop(chunktop_df2))
+```
 
-## The function
+And then we trivially, um, well, I don't know, actually. I just assumed there would be an elegant way to convert the listed options back into the chunk options. 
 
-I've got a few input checks that I've put into a `.check_inputs()` so that it causes less clutter.
+The function `parsermd::rmd_set_options()` exists, but appears to set options for _all_ chunks, not _selected_ options. Maybe I misunderstood, let me know.
+
+For sure you could do a thing where you parse the strings out of the Rmd and replace them with the new option values. You are welcome to do that, friend.
+
+## Descent into masochism
+
+Anyway, having implied that I am too lazy to do that, I actually tried something much more procastinatory when I hit a brick wall. Enjoy this bonus content.
+
+I wondered if I could just... extract the chunk options from the original Rmd myself, dependency-free. For 'fun'. 
+
+But I turned I into a sort of unhinged [code golf](remotes::install_github("matt-dray/chunktop")
+). Well, maybe 'code wild-goose-chase'. The challenge: is it possible to extract chunk options from an arbitrary Rmd using only base R in a single base-R pipe (`|>`) chain? Haha, of course.
+
+First, I've got a few input checks that I've put into a `.check_inputs()` so that it causes less clutter in the main function.
 
 <details><summary>Click for function to check inputs</summary>
 ```{r checks}
 .check_inputs <- function(rmd_lines, engine, yaml_out) {
-
+  
   if (!inherits(rmd_lines, "character")) {
     stop("Argument 'rmd_lines' must be a character vector.", call. = FALSE)
   }
-
+  
   if (engine != "r") {
     stop("For now, argument 'engine' must be 'r'.", call. = FALSE)
   }
-
+  
   if (!is.null(yaml_out) & !inherits(yaml_out, "character")) {
     stop("Argument 'yaml_out' must be NULL or character.", call. = FALSE)
   }
-
+  
   if (!is.null(yaml_out)) {
-
+    
     if (tools::file_ext(yaml_out) != "yaml") {
       stop("Argument 'yaml_out' must have extension '.yaml'.", call. = FALSE)
     }
-
+    
     if (!dir.exists(dirname(yaml_out))) {
       stop("The directory in 'yaml_out' does not exist.", call. = FALSE)
     }
-
+    
   }
-
+  
 }
 ```
 </details>
 
-And I'll let you look at the main `chunktop2yaml()` function before we dissect it a bit. 
+So here's an overengineered `grab_chunktop()` function that extracts Rmd chunk options.
 
-As mentioned, it's exclusively base R, apart from using {yaml} to save the file (I know, what a cop out). Note the use of `|>` base pipe, `_` placeholder, `\()` anonymous function and `()()` 'dog's balls'. Welcome to base R circa 2023.
-
-```{r chunktop2yaml}
-
-chunktop2yaml <- function(rmd_lines, engine = "r", yaml_out = NULL) {
-
+```{r grab-chunktop}
+grab_chunktop <- function(rmd_lines, engine = "r", yaml_out = NULL) {
+  
   .check_inputs(rmd_lines, engine, yaml_out)
-
-  chunktop_list <-
-    rmd_lines[grep("```\\{", rmd_lines)] |>
-    gsub(paste0("```\\{", engine , " |\\}$"), "", x = _) |>
-    strsplit(", ") |>
-    (\(chunk_str) setNames(object = chunk_str, sapply(chunk_str, "[[", 1)))() |>
-    sapply("[", -1) |>
-    lapply(
+  
+  rmd_lines[grep("```\\{", rmd_lines)] |>  # isolate Rmd chunks
+    gsub(paste0("```\\{", engine , " |\\}$"), "", x = _) |>  # retain options
+    strsplit(", ") |>  # list of chunks, split by comas
+    (\(chunk_str) {
+      setNames(object = chunk_str, sapply(chunk_str, "[[", 1))  # name-value
+    })() |>  # name the list elements after chunks
+    sapply("[", -1) |>  # forget first element (engine)
+    lapply(  # split options/values into nested list under named chunk
       \(opt_str) {
-        str_split(opt_str, "=") |>
-          (\(opt_str) setNames(object = opt_str, sapply(opt_str, "[[", 1)))() |>
-          sapply("[", -1) |>
+        strsplit(opt_str, "=") |>  # "eval=TRUE" to "eval" and "TRUE"
+          (\(opt_str) {  # first element to name
+            setNames(object = opt_str, trimws(sapply(opt_str, "[[", 1)))}
+          )() |>
+          sapply("[", -1) |>  # now remove first element
+          trimws() |> 
           as.list() |>
-          lapply(\(val) gsub(r"{^\"|\"$}", "", x = val)) |>
-          type.convert(as.is = TRUE)
+          type.convert(as.is = TRUE)  # make sure "1" becomes 1
       }
     )
-
-  if (!is.null(yaml_out)) {
-    yaml::write_yaml(chunktop_list, yaml_out)
-    message("Wrote YAML to ", path_out)
-  }
-
-  return(chunktop_list)
-
+  
 }
 ```
 
-Does the function name `chunktops2yaml()` imply the existence of a `yaml2chunktops()` function. Yes, but I leave that as a task for you, dear reader. See if you can set yourself some other ridiculous constraint in your function; maybe you'll try to only use functions that don't contain the letter 'a', or something.
+Absolutely disgusting. But it works!
+
+```{r grab-chunktop-in-action}
+grab_chunktop(rmd_doc)
+```
+
+Note the exclusive use of `|>` base pipe, `_` placeholder, `\()` anonymous function and `()()` 'dog's balls'. Welcome to base R circa 2023.
+
+I'm telling you this works and you can see that's the case. But gosh bless you if you actually try to grok that code by eye.
+
+## Brief grief
+
+Nothing good has come of this. I just have more respect for {parsermd}. But here's a brief timeline of my activites on this task:
+
+* there's no way this isn't trivial (denial)
+* I can't believe I can't batter {parsermd} into doing this (anger)
+* I'll start a package and see where we get (bargaining)
+* what if I simply ignore the package and lark about with base R instead (depression)
+* I'll just write a blog post and move on (acceptance)
+
+Don't worry, you only lost a few braincells reading this. I lost an afternoon, woe is me.
 
 ## Environment {.appendix}
 

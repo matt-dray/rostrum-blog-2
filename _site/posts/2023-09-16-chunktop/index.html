@@ -9,7 +9,7 @@
 <meta name="author" content="Matt Dray">
 <meta name="dcterms.date" content="2023-09-16">
 
-<title>rostrum.blog - Unhinged R Markdown chunk-option parsing</title>
+<title>rostrum.blog - Dear John, I’m sorry</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -147,7 +147,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Unhinged R Markdown chunk-option parsing</h1>
+      <h1 class="title">Dear John, I’m sorry</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">parsermd</div>
                 <div class="quarto-category">r</div>
@@ -187,54 +187,37 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+<p><img src="resources/chunktop.png" class="img-fluid" data-fig.alt="Crudely drawn picture of an apologetic face with two documents pointing to each other. One says Rmd on it, one says CSV."></p>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>Parsing chunk options out of an R Markdown document. In a single base R pipe chain. To skirt around, but not solve, a problem.</p>
+<p>I developed a convenience function for parsing chunk options out of an R Markdown document for collaborators to edit. But it doesn’t work in reverse, which is the whole point. Some notes on failure.</p>
 </section>
-<section id="problem" class="level2">
-<h2 class="anchored" data-anchor-id="problem">Problem</h2>
-<p>John asked about <a href="https://fosstodon.org/@johnmackintosh/111047625054222865">parsing chunk options</a> from R Markdown files. Well, John, have I got the solution for you. Oh wait, I absolutely don’t.</p>
+<section id="a-very-simple-problem" class="level2">
+<h2 class="anchored" data-anchor-id="a-very-simple-problem">A very simple problem (?)</h2>
+<p>John asked about <a href="https://fosstodon.org/@johnmackintosh/111047625054222865">parsing chunk options</a> from R Markdown files (Rmd), passing the content to editors, then reincorporating the edited text back into the chunk whence it came.</p>
+<p>Well, John, have I got the solution for you. Oh wait, I absolutely don’t. Rather I’ve looked into <a href="https://CRAN.R-project.org/package=parsermd">{parsermd}</a>, messed around and… gave up. C’est la vie.</p>
+<p>In my hubris, I began the package <a href="https://github.com/matt-dray/chunktop">{chunktop}</a> to solve John’s problem. Goal: parse Rmd chunk options, write them to file, allow for edits, read them back in and reintegrate the strings into the chunks they came from. Then re-write the Rmd with the changes. Boom.</p>
+<p>Spoiler: I was naïve.</p>
 </section>
-<section id="the-leading-candidate" class="level2">
-<h2 class="anchored" data-anchor-id="the-leading-candidate">The leading candidate</h2>
-<p>First place to start for parsing RMarkdown files is absolutely <a href="https://CRAN.R-project.org/package=parsermd">the {parsermd} package</a>. It even has a specific function for extracting chunk options: <code>rmd_get_options()</code>.</p>
-<p>For demo purposes, I’ll first create a temporary demo Rmd doc. For test purposes it has three chunks: the first has a single logical option; the second has an option with a string and an option with a numeric; and the last chunk has no options. ALl chunks use the R engine and they all have a name.</p>
+<section id="a-good-start" class="level2">
+<h2 class="anchored" data-anchor-id="a-good-start">A good start</h2>
+<p>My advice: don’t install {chunktop}; it’s already archived on GitHub.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rmd_lines <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"---"</span>,</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"title: Test"</span>,</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"---"</span>,</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">""</span>,</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">"# A header"</span>,</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">""</span>,</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">"```{r chunk1, warning=FALSE}"</span>,</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="st">"1 + 1"</span>,</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="st">"```"</span>,</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">""</span>,</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"## A subheader"</span>,</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">""</span>,</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="st">'```{r chunk2, fig.cap="I am a fig caption.", fig.height=4}'</span>,</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">"plot(mtcars$mpg, mtcars$cyl)"</span>,</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="st">"```"</span>,</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="st">""</span>,</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Some text."</span>,</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">""</span>,</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="st">"```{r chunk3}"</span>,</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="st">"plot(mtcars$mpg, mtcars$cyl)"</span>,</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="st">"```"</span></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>demo_rmd_file <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="st">"rmd-demo"</span>, <span class="at">fileext =</span> <span class="st">".Rmd"</span>)</span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(rmd_lines, demo_rmd_file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)  <span class="co"># if not yet installed</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"matt-dray/chunktop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>You can read in this file with <code>parse_rmd()</code>, which is actually a little abstract syntax (AST) tree that demonstrates the hierarchy of the page and contains all the data.</p>
+<p>It steals functionality from the excellent <a href="https://CRAN.R-project.org/package=parsermd">{parsermd} package</a> to grab Rmd chunk options using the very appropriate <code>rmd_get_options()</code> function.</p>
+<p>The package contains a demo Rmd for testing purposes.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"parsermd"</span>)) <span class="fu">install.packages</span>(parsermd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>path <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata/demo1.Rmd"</span>, <span class="at">package =</span> <span class="st">"chunktop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You can read in this demo Rmd with <code>parsermd::parse_rmd()</code>, which is actually a little abstract syntax tree (AST) that demonstrates the hierarchy of the page and contains all the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"parsermd"</span>)) <span class="fu">install.packages</span>(parsermd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Loading required package: parsermd</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>rmd_parsed <span class="ot">&lt;-</span> <span class="fu">parse_rmd</span>(demo_rmd_file)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>rmd_parsed</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(rmd <span class="ot">&lt;-</span> <span class="fu">parse_rmd</span>(path))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>├── YAML [1 lines]
 └── Heading [h1] - A header
@@ -242,103 +225,230 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     └── Heading [h2] - A subheader
         ├── Chunk [r, 2 opts, 1 lines] - chunk2
         ├── Markdown [2 lines]
-        └── Chunk [r, 1 lines] - chunk3</code></pre>
+        ├── Chunk [r, 1 lines] - chunk3
+        └── Chunk [r, 2 opts, 1 lines] - chunk4</code></pre>
 </div>
 </div>
-<p>And then <code>rmd_get_options()</code> can pull out the options for us as a list of lists.</p>
+<p>And we can take a look at the lines in the Rmd doc.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>rmd_opts <span class="ot">&lt;-</span> <span class="fu">rmd_get_options</span>(rmd_parsed)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>rmd_opts[<span class="fu">lengths</span>(rmd_opts) <span class="sc">&gt;</span> <span class="dv">0</span>] <span class="sc">|&gt;</span> <span class="fu">str</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(rmd_doc <span class="ot">&lt;-</span> parsermd<span class="sc">::</span><span class="fu">as_document</span>(rmd))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>List of 2
- $ :List of 1
-  ..$ warning: chr "FALSE"
- $ :List of 2
-  ..$ fig.cap   : chr "\"I am a fig caption.\""
-  ..$ fig.height: chr "4"</code></pre>
+<pre><code> [1] "---"                                                                
+ [2] "title: Test"                                                        
+ [3] "---"                                                                
+ [4] ""                                                                   
+ [5] "# A header"                                                         
+ [6] ""                                                                   
+ [7] "```{r chunk1, eval = FALSE}"                                        
+ [8] "1 + 1"                                                              
+ [9] "```"                                                                
+[10] ""                                                                   
+[11] "## A subheader"                                                     
+[12] ""                                                                   
+[13] "```{r chunk2, fig.cap = \"I am a fig caption.\", fig.height = 4}"   
+[14] "plot(mtcars$mpg, mtcars$cyl)"                                       
+[15] "```"                                                                
+[16] ""                                                                   
+[17] "Some text."                                                         
+[18] ""                                                                   
+[19] ""                                                                   
+[20] "```{r chunk3}"                                                      
+[21] "plot(mtcars$mpg, mtcars$disp"                                       
+[22] "```"                                                                
+[23] ""                                                                   
+[24] "```{r chunk4, fig.cap = \"I am another fig caption.\", eval = TRUE}"
+[25] "plot(mtcars$mpg, mtcars$drat)"                                      
+[26] "```"                                                                
+[27] ""                                                                   </code></pre>
 </div>
 </div>
-<p>Job done? Well, it still requires some juggling and there also needs to be a sort of ‘reverse’ method to return the options back into the Rmd chunk options. So, kinda.</p>
-<p>I have three ‘problems’ from my persepctive:</p>
-<ol start="2" type="1">
-<li>Wouldn’t it be more ‘fun’ to try and ‘parse’ chunk options from scratch?</li>
-<li>Wouldn’t it be more ‘fun’ to do it by using a single chain of base pipes (<code>|&gt;</code>)?</li>
-<li>Wouldn’t it be ‘fun’ to make each chunk’s name the name of its list element?</li>
-</ol>
-<p>So I’ve turned this into a sort of unhinged code golf. Except we’re making things more complicated. And it’s totally unnecessary. But it’s for fun. So maybe it’s more like ‘code bumpre cars’ than code golf.</p>
+<p>So it contains a bunch of chunks with various options.</p>
+<p>So, here’s as far as I got. First off, given our Rmd file, we can use <code>get_chunktop()</code> to read the chunk options of interest using {parsermd} and stick them a nice little list. Trivially.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(chunktop)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>(chunktop_list <span class="ot">&lt;-</span> <span class="fu">get_chunktop</span>(<span class="at">rmd_file =</span> path, <span class="at">opts =</span> <span class="fu">c</span>(<span class="st">"fig.cap"</span>, <span class="st">"eval"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$chunk1
+$chunk1$eval
+[1] "FALSE"
+
+
+$chunk2
+$chunk2$fig.cap
+[1] "\"I am a fig caption.\""
+
+
+$chunk4
+$chunk4$fig.cap
+[1] "\"I am another fig caption.\""
+
+$chunk4$eval
+[1] "TRUE"</code></pre>
+</div>
+</div>
+<p>Which is trivially massaged into a data.frame.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>(chunktop_df <span class="ot">&lt;-</span> <span class="fu">chunktop_to_df</span>(chunktop_list))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  chunk_name option_name                option_value
+1     chunk1        eval                       FALSE
+2     chunk2     fig.cap       "I am a fig caption."
+3     chunk4     fig.cap "I am another fig caption."
+4     chunk4        eval                        TRUE</code></pre>
+</div>
+</div>
+<p>Which is trivially written to a CSV to share with your colleagues for editing.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>csv_file <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".csv"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(chunktop_df, csv_file, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Which is trivially read back into R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>(chunktop_df2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(csv_file))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  chunk_name option_name                option_value
+1     chunk1        eval                       FALSE
+2     chunk2     fig.cap       "I am a fig caption."
+3     chunk4     fig.cap "I am another fig caption."
+4     chunk4        eval                        TRUE</code></pre>
+</div>
+</div>
+<p>Which is trivially converted back into a list.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>(chunktop_list2 <span class="ot">&lt;-</span> <span class="fu">df_to_chunktop</span>(chunktop_df2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$chunk1
+$chunk1$eval
+[1] "FALSE"
+
+
+$chunk2
+$chunk2$fig.cap
+[1] "\"I am a fig caption.\""
+
+
+$chunk4
+$chunk4$fig.cap
+[1] "\"I am another fig caption.\""
+
+$chunk4$eval
+[1] "TRUE"</code></pre>
+</div>
+</div>
+<p>And then we trivially, um, well, I don’t know, actually. I just assumed there would be an elegant way to convert the listed options back into the chunk options.</p>
+<p>The function <code>parsermd::rmd_set_options()</code> exists, but appears to set options for <em>all</em> chunks, not <em>selected</em> options. Maybe I misunderstood, let me know.</p>
+<p>For sure you could do a thing where you parse the strings out of the Rmd and replace them with the new option values. You are welcome to do that, friend.</p>
 </section>
-<section id="the-function" class="level2">
-<h2 class="anchored" data-anchor-id="the-function">The function</h2>
-<p>I’ve got a few input checks that I’ve put into a <code>.check_inputs()</code> so that it causes less clutter.</p>
+<section id="descent-into-masochism" class="level2">
+<h2 class="anchored" data-anchor-id="descent-into-masochism">Descent into masochism</h2>
+<p>Anyway, having implied that I am too lazy to do that, I actually tried something much more procastinatory when I hit a brick wall. Enjoy this bonus content.</p>
+<p>I wondered if I could just… extract the chunk options from the original Rmd myself, dependency-free. For ‘fun’.</p>
+<p>But I turned I into a sort of unhinged <a href="remotes::install_github(%22matt-dray/chunktop%22)">code golf</a>. Well, maybe ‘code wild-goose-chase’. The challenge: is it possible to extract chunk options from an arbitrary Rmd using only base R in a single base-R pipe (<code>|&gt;</code>) chain? Haha, of course.</p>
+<p>First, I’ve got a few input checks that I’ve put into a <code>.check_inputs()</code> so that it causes less clutter in the main function.</p>
 <details>
 <summary>
 Click for function to check inputs
 </summary>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>.check_inputs <span class="ot">&lt;-</span> <span class="cf">function</span>(rmd_lines, engine, yaml_out) {</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">inherits</span>(rmd_lines, <span class="st">"character"</span>)) {</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"Argument 'rmd_lines' must be a character vector."</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (engine <span class="sc">!=</span> <span class="st">"r"</span>) {</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"For now, argument 'engine' must be 'r'."</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(yaml_out) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">inherits</span>(yaml_out, <span class="st">"character"</span>)) {</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"Argument 'yaml_out' must be NULL or character."</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(yaml_out)) {</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (tools<span class="sc">::</span><span class="fu">file_ext</span>(yaml_out) <span class="sc">!=</span> <span class="st">"yaml"</span>) {</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"Argument 'yaml_out' must have extension '.yaml'."</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="fu">dirname</span>(yaml_out))) {</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"The directory in 'yaml_out' does not exist."</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>.check_inputs <span class="ot">&lt;-</span> <span class="cf">function</span>(rmd_lines, engine, yaml_out) {</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">inherits</span>(rmd_lines, <span class="st">"character"</span>)) {</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"Argument 'rmd_lines' must be a character vector."</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (engine <span class="sc">!=</span> <span class="st">"r"</span>) {</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"For now, argument 'engine' must be 'r'."</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(yaml_out) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">inherits</span>(yaml_out, <span class="st">"character"</span>)) {</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"Argument 'yaml_out' must be NULL or character."</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(yaml_out)) {</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (tools<span class="sc">::</span><span class="fu">file_ext</span>(yaml_out) <span class="sc">!=</span> <span class="st">"yaml"</span>) {</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"Argument 'yaml_out' must have extension '.yaml'."</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(<span class="fu">dirname</span>(yaml_out))) {</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"The directory in 'yaml_out' does not exist."</span>, <span class="at">call. =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </details>
-<p>And I’ll let you look at the main <code>chunktop2yaml()</code> function before we dissect it a bit.</p>
-<p>As mentioned, it’s exclusively base R, apart from using {yaml} to save the file (I know, what a cop out). Note the use of <code>|&gt;</code> base pipe, <code>_</code> placeholder, <code>\()</code> anonymous function and <code>()()</code> ‘dog’s balls’. Welcome to base R circa 2023.</p>
+<p>So here’s an overengineered <code>grab_chunktop()</code> function that extracts Rmd chunk options.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>chunktop2yaml <span class="ot">&lt;-</span> <span class="cf">function</span>(rmd_lines, <span class="at">engine =</span> <span class="st">"r"</span>, <span class="at">yaml_out =</span> <span class="cn">NULL</span>) {</span>
-<span id="cb9-2"><a href="#cb9-2"></a></span>
-<span id="cb9-3"><a href="#cb9-3"></a>  <span class="fu">.check_inputs</span>(rmd_lines, engine, yaml_out)</span>
-<span id="cb9-4"><a href="#cb9-4"></a></span>
-<span id="cb9-5"><a href="#cb9-5"></a>  chunktop_list <span class="ot">&lt;-</span></span>
-<span id="cb9-6"><a href="#cb9-6"></a>    rmd_lines[<span class="fu">grep</span>(<span class="st">"```</span><span class="sc">\\</span><span class="st">{"</span>, rmd_lines)] <span class="sc">|&gt;</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a>    <span class="fu">gsub</span>(<span class="fu">paste0</span>(<span class="st">"```</span><span class="sc">\\</span><span class="st">{"</span>, engine , <span class="st">" |</span><span class="sc">\\</span><span class="st">}$"</span>), <span class="st">""</span>, <span class="at">x =</span> _) <span class="sc">|&gt;</span></span>
-<span id="cb9-8"><a href="#cb9-8"></a>    <span class="fu">strsplit</span>(<span class="at">x =</span> _, <span class="st">", "</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-9"><a href="#cb9-9"></a>    (\(chunk_str) <span class="fu">setNames</span>(<span class="at">object =</span> chunk_str, <span class="fu">sapply</span>(chunk_str, <span class="st">"[["</span>, <span class="dv">1</span>)))() <span class="sc">|&gt;</span></span>
-<span id="cb9-10"><a href="#cb9-10"></a>    <span class="fu">sapply</span>(<span class="at">X =</span> _, <span class="st">"["</span>, <span class="sc">-</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-11"><a href="#cb9-11"></a>    <span class="fu">lapply</span>(</span>
-<span id="cb9-12"><a href="#cb9-12"></a>      <span class="at">X =</span> _,</span>
-<span id="cb9-13"><a href="#cb9-13"></a>      \(opt_str) {</span>
-<span id="cb9-14"><a href="#cb9-14"></a>        <span class="fu">str_split</span>(opt_str, <span class="st">"="</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-15"><a href="#cb9-15"></a>          (\(opt_str) <span class="fu">setNames</span>(<span class="at">object =</span> opt_str, <span class="fu">sapply</span>(opt_str, <span class="st">"[["</span>, <span class="dv">1</span>)))() <span class="sc">|&gt;</span></span>
-<span id="cb9-16"><a href="#cb9-16"></a>          <span class="fu">sapply</span>(<span class="at">X =</span> _, <span class="st">"["</span>, <span class="sc">-</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb9-17"><a href="#cb9-17"></a>          <span class="fu">as.list</span>() <span class="sc">|&gt;</span></span>
-<span id="cb9-18"><a href="#cb9-18"></a>          <span class="fu">lapply</span>(<span class="at">X =</span> _, \(val) <span class="fu">gsub</span>(r<span class="st">"{^</span><span class="sc">\"</span><span class="st">|</span><span class="sc">\"</span><span class="st">$}"</span>, <span class="st">""</span>, <span class="at">x =</span> val)) <span class="sc">|&gt;</span></span>
-<span id="cb9-19"><a href="#cb9-19"></a>          <span class="fu">type.convert</span>(<span class="at">as.is =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb9-20"><a href="#cb9-20"></a>      }</span>
-<span id="cb9-21"><a href="#cb9-21"></a>    )</span>
-<span id="cb9-22"><a href="#cb9-22"></a></span>
-<span id="cb9-23"><a href="#cb9-23"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(yaml_out)) {</span>
-<span id="cb9-24"><a href="#cb9-24"></a>    yaml<span class="sc">::</span><span class="fu">write_yaml</span>(chunktop_list, yaml_out)</span>
-<span id="cb9-25"><a href="#cb9-25"></a>    <span class="fu">message</span>(<span class="st">"Wrote YAML to "</span>, path_out)</span>
-<span id="cb9-26"><a href="#cb9-26"></a>  }</span>
-<span id="cb9-27"><a href="#cb9-27"></a></span>
-<span id="cb9-28"><a href="#cb9-28"></a>  <span class="fu">return</span>(chunktop_list)</span>
-<span id="cb9-29"><a href="#cb9-29"></a></span>
-<span id="cb9-30"><a href="#cb9-30"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>grab_chunktop <span class="ot">&lt;-</span> <span class="cf">function</span>(rmd_lines, <span class="at">engine =</span> <span class="st">"r"</span>, <span class="at">yaml_out =</span> <span class="cn">NULL</span>) {</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.check_inputs</span>(rmd_lines, engine, yaml_out)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  rmd_lines[<span class="fu">grep</span>(<span class="st">"```</span><span class="sc">\\</span><span class="st">{"</span>, rmd_lines)] <span class="sc">|&gt;</span>  <span class="co"># isolate Rmd chunks</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gsub</span>(<span class="fu">paste0</span>(<span class="st">"```</span><span class="sc">\\</span><span class="st">{"</span>, engine , <span class="st">" |</span><span class="sc">\\</span><span class="st">}$"</span>), <span class="st">""</span>, <span class="at">x =</span> _) <span class="sc">|&gt;</span>  <span class="co"># retain options</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">strsplit</span>(<span class="st">", "</span>) <span class="sc">|&gt;</span>  <span class="co"># list of chunks, split by comas</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    (\(chunk_str) {</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>      <span class="fu">setNames</span>(<span class="at">object =</span> chunk_str, <span class="fu">sapply</span>(chunk_str, <span class="st">"[["</span>, <span class="dv">1</span>))  <span class="co"># name-value</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    })() <span class="sc">|&gt;</span>  <span class="co"># name the list elements after chunks</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sapply</span>(<span class="st">"["</span>, <span class="sc">-</span><span class="dv">1</span>) <span class="sc">|&gt;</span>  <span class="co"># forget first element (engine)</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lapply</span>(  <span class="co"># split options/values into nested list under named chunk</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>      \(opt_str) {</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>        <span class="fu">strsplit</span>(opt_str, <span class="st">"="</span>) <span class="sc">|&gt;</span>  <span class="co"># "eval=TRUE" to "eval" and "TRUE"</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>          (\(opt_str) {  <span class="co"># first element to name</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>            <span class="fu">setNames</span>(<span class="at">object =</span> opt_str, <span class="fu">trimws</span>(<span class="fu">sapply</span>(opt_str, <span class="st">"[["</span>, <span class="dv">1</span>)))}</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>          )() <span class="sc">|&gt;</span></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>          <span class="fu">sapply</span>(<span class="st">"["</span>, <span class="sc">-</span><span class="dv">1</span>) <span class="sc">|&gt;</span>  <span class="co"># now remove first element</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>          <span class="fu">trimws</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>          <span class="fu">as.list</span>() <span class="sc">|&gt;</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>          <span class="fu">type.convert</span>(<span class="at">as.is =</span> <span class="cn">TRUE</span>)  <span class="co"># make sure "1" becomes 1</span></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Does the function name <code>chunktops2yaml()</code> imply the existence of a <code>yaml2chunktops()</code> function. Yes, but I leave that as a task for you, dear reader. See if you can set yourself some other ridiculous constraint in your function; maybe you’ll try to only use functions that don’t contain the letter ‘a’, or something.</p>
+<p>Absolutely disgusting. But it works!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grab_chunktop</span>(rmd_doc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$chunk1
+$chunk1$eval
+[1] FALSE
+
+
+$chunk2
+$chunk2$fig.cap
+[1] "\"I am a fig caption.\""
+
+$chunk2$fig.height
+[1] 4
+
+
+$chunk3
+list()
+
+$chunk4
+$chunk4$fig.cap
+[1] "\"I am another fig caption.\""
+
+$chunk4$eval
+[1] TRUE</code></pre>
+</div>
+</div>
+<p>Note the exclusive use of <code>|&gt;</code> base pipe, <code>_</code> placeholder, <code>\()</code> anonymous function and <code>()()</code> ‘dog’s balls’. Welcome to base R circa 2023.</p>
+<p>I’m telling you this works and you can see that’s the case. But gosh bless you if you actually try to grok that code by eye.</p>
+</section>
+<section id="brief-grief" class="level2">
+<h2 class="anchored" data-anchor-id="brief-grief">Brief grief</h2>
+<p>Nothing good has come of this. I just have more respect for {parsermd}. But here’s a brief timeline of my activites on this task:</p>
+<ul>
+<li>there’s no way this isn’t trivial (denial)</li>
+<li>I can’t believe I can’t batter {parsermd} into doing this (anger)</li>
+<li>I’ll start a package and see where we get (bargaining)</li>
+<li>what if I simply ignore the package and lark about with base R instead (depression)</li>
+<li>I’ll just write a blog post and move on (acceptance)</li>
+</ul>
+<p>Don’t worry, you only lost a few braincells reading this. I lost an afternoon, woe is me.</p>
 </section>
 
 
@@ -350,7 +460,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-09-13 22:33:10 BST</code></pre>
+<pre><code>Last rendered: 2023-09-16 23:24:51 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -371,7 +481,7 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] parsermd_0.1.2
+[1] chunktop_0.0.0.9000 parsermd_0.1.2     
 
 loaded via a namespace (and not attached):
  [1] vctrs_0.6.3       cli_3.6.1         knitr_1.43.1      rlang_1.1.1      
@@ -380,8 +490,9 @@ loaded via a namespace (and not attached):
 [13] rmarkdown_2.23    evaluate_0.21     tibble_3.2.1      tzdb_0.4.0       
 [17] fastmap_1.1.1     yaml_2.3.7        lifecycle_1.0.3   compiler_4.3.1   
 [21] htmlwidgets_1.6.2 Rcpp_1.0.11       pkgconfig_2.0.3   rstudioapi_0.15.0
-[25] digest_0.6.33     R6_2.5.1          readr_2.1.4       utf8_1.2.3       
-[29] pillar_1.9.0      magrittr_2.0.3    checkmate_2.2.0   tools_4.3.1      </code></pre>
+[25] digest_0.6.33     R6_2.5.1          tidyselect_1.2.0  readr_2.1.4      
+[29] utf8_1.2.3        pillar_1.9.0      magrittr_2.0.3    checkmate_2.2.0  
+[33] withr_2.5.0       tools_4.3.1      </code></pre>
 </div>
 </div>
 </details>
