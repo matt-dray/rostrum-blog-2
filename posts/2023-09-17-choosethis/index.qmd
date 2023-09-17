@@ -3,6 +3,7 @@ title: Click to execute code in the R console!
 date: 2023-09-17
 slug: choosethis
 categories:
+  - choosethis
   - cli
   - r
 ---
@@ -15,7 +16,7 @@ categories:
 
 ## Error!
 
-Have you noticed that tidyverse error messages are both helpful and pretty? This is in part due to [Gabor's {cli} package](https://cli.r-lib.org/index.html). Sometimes I make errors on purpose just to see these messages (that's what I tell my colleagues, anyway). 
+Have you noticed that tidyverse error messages are both helpful and pretty? This is in part due to [Gabor's {cli} package](https://cli.r-lib.org/index.html), which helps to style command-line output. Sometimes I make errors on purpose just to see these messages (that's what I tell my colleagues, anyway). 
 
 Have you noticed that sometimes the error message will include a link that, when clicked, will execute some code to help explore the bug? When you hover over the link, you get a popup in RStudio showing you showing a green 'play' arrow, the name and description of the function and the phrase 'click to run'.
 
@@ -23,9 +24,9 @@ That's curious isn't it?
 
 ## How?
 
-Functionally, {cli} functions accept {glue} strings that begin with a `.run` keyword and contain a Markdown hyperlink. Something like this: `"{.run [function](package::function())}"`. The outcome is a link in the console that will execute the code when clicked. 
+{cli} functions like `cli_text()` accept {glue} strings that begin with a `.run` keyword and contain a Markdown hyperlink. Something like this: `"{.run [function](package::function())}"`. The outcome is a link in the console with the text 'function' that will execute `package::function()` when clicked. 
 
-You can read more about hyperlinks [in the {cli} docs](https://cli.r-lib.org/reference/links.html). There's some limitations, including that your terminal must be capable of supporting this type of hyperlink (RStudio is capable). Note also that links are 'experimental'.
+You can read more about hyperlinks [in the {cli} docs](https://cli.r-lib.org/reference/links.html). There's some limitations, including that your terminal must be capable of supporting this type of hyperlink (RStudio is capable). Note also that links are 'experimental' in {cli}.
 
 You might be wondering if a bad actor could exploit this to execute arbitrary code. As per [the {cli} docs](https://cli.r-lib.org/reference/links.html?q=run#security-considerations), there are several restrictions in place:
 
@@ -71,7 +72,7 @@ I made a tiny demo of this anyway. The user runs `choosethis::ask_col_means()` w
 
 ![](resources/mean.gif){fig-alt="Gif of the R console. The 'ask_col_mean' function is run from the 'choosethis' package. The Palmer penguins dataset is passed as the only argument. The user is then prompted with the message 'what column would you like the mean of' and it presents a number of clickable column names. 'bill_depth_mm' is clicked and the console outputs the answer. This is repeated for the column 'body_mass_g'." width="75%" fig-align="left"}
 
-Yes, due to the limitations of `.run`, we need a separate function in the package to calculate the mean for us! You can see how tedious it would be to wrap loads of potential summary functions.
+Yes, due (I think) to the limitations of `.run`, we need a separate function in the package to calculate the mean for us (at least I think that's the case). You can see how tedious it would be to wrap loads of potential summary functions using this approach.
 
 ### 3. Bonus: de-linkification
 

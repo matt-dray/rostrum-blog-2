@@ -27,14 +27,14 @@
 </section>
 <section id="error" class="level2">
 <h2 class="anchored" data-anchor-id="error">Error!</h2>
-<p>Have you noticed that tidyverse error messages are both helpful and pretty? This is in part due to <a href="https://cli.r-lib.org/index.html">Gabor’s {cli} package</a>. Sometimes I make errors on purpose just to see these messages (that’s what I tell my colleagues, anyway).</p>
+<p>Have you noticed that tidyverse error messages are both helpful and pretty? This is in part due to <a href="https://cli.r-lib.org/index.html">Gabor’s {cli} package</a>, which helps to style command-line output. Sometimes I make errors on purpose just to see these messages (that’s what I tell my colleagues, anyway).</p>
 <p>Have you noticed that sometimes the error message will include a link that, when clicked, will execute some code to help explore the bug? When you hover over the link, you get a popup in RStudio showing you showing a green ‘play’ arrow, the name and description of the function and the phrase ‘click to run’.</p>
 <p>That’s curious isn’t it?</p>
 </section>
 <section id="how" class="level2">
 <h2 class="anchored" data-anchor-id="how">How?</h2>
-<p>Functionally, {cli} functions accept {glue} strings that begin with a <code>.run</code> keyword and contain a Markdown hyperlink. Something like this: <code>"{.run [function](package::function())}"</code>. The outcome is a link in the console that will execute the code when clicked.</p>
-<p>You can read more about hyperlinks <a href="https://cli.r-lib.org/reference/links.html">in the {cli} docs</a>. There’s some limitations, including that your terminal must be capable of supporting this type of hyperlink (RStudio is capable). Note also that links are ‘experimental’.</p>
+<p>{cli} functions like <code>cli_text()</code> accept {glue} strings that begin with a <code>.run</code> keyword and contain a Markdown hyperlink. Something like this: <code>"{.run [function](package::function())}"</code>. The outcome is a link in the console with the text ‘function’ that will execute <code>package::function()</code> when clicked.</p>
+<p>You can read more about hyperlinks <a href="https://cli.r-lib.org/reference/links.html">in the {cli} docs</a>. There’s some limitations, including that your terminal must be capable of supporting this type of hyperlink (RStudio is capable). Note also that links are ‘experimental’ in {cli}.</p>
 <p>You might be wondering if a bad actor could exploit this to execute arbitrary code. As per <a href="https://cli.r-lib.org/reference/links.html?q=run#security-considerations">the {cli} docs</a>, there are several restrictions in place:</p>
 <blockquote class="blockquote">
 <p>To make <code>.run</code> hyperlinks more secure, RStudio [will] not run code</p>
@@ -89,7 +89,7 @@ font-style: inherit;">"matt-dray/choosethis"</span>)</span></code></pre></div>
 <p><img src="https://www.rostrum.blog/posts/2023-09-17-choosethis/resources/mean.gif" class="img-fluid figure-img" style="width:75.0%" alt="Gif of the R console. The 'ask_col_mean' function is run from the 'choosethis' package. The Palmer penguins dataset is passed as the only argument. The user is then prompted with the message 'what column would you like the mean of' and it presents a number of clickable column names. 'bill_depth_mm' is clicked and the console outputs the answer. This is repeated for the column 'body_mass_g'."></p>
 </figure>
 </div>
-<p>Yes, due to the limitations of <code>.run</code>, we need a separate function in the package to calculate the mean for us! You can see how tedious it would be to wrap loads of potential summary functions.</p>
+<p>Yes, due (I think) to the limitations of <code>.run</code>, we need a separate function in the package to calculate the mean for us (at least I think that’s the case). You can see how tedious it would be to wrap loads of potential summary functions using this approach.</p>
 </section>
 <section id="bonus-de-linkification" class="level3">
 <h3 class="anchored" data-anchor-id="bonus-de-linkification">3. Bonus: de-linkification</h3>
@@ -125,7 +125,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-09-17 14:38:55 BST</code></pre>
+<pre><code>Last rendered: 2023-09-17 15:27:37 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -161,6 +161,7 @@ loaded via a namespace (and not attached):
 <li id="fn1"><p>Thanks to <a href="https://fosstodon.org/@_TimTaylor">Tim</a> for suggesting a method for using options in this function.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>choosethis</category>
   <category>cli</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-09-17-choosethis/index.html</guid>
