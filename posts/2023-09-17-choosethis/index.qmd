@@ -7,25 +7,27 @@ categories:
   - r
 ---
 
-![](resources/virus.png){fig-alt="Text saying 'definitely not a virus' with a clickable link underneath that says 'not a virus'. The mouse hovers and has a popup saying 'virus!'."}
+![](resources/virus.png){fig-alt="Text saying 'definitely not a virus' with a clickable link underneath that says 'not a virus'. The mouse hovers and has a popup saying 'virus!'"}
 
 ## tl;dr
 
-[The {cli} R package](https://cli.r-lib.org/index.html) puts hyperlinks in the console that can execute code to help solve errors. Of course, I used this functionality for japes.
+[The {cli} R package](https://cli.r-lib.org/index.html) can help build clickable hyperlinks in the R console. Of course, I used this functionality for japes.
 
 ## Error!
 
-Have you noticed that tidyverse error messages are both helpful and pretty? This is due to [Gabor's {cli} package](https://cli.r-lib.org/index.html). Sometimes I make errors on purpose just to see these messages (that's what I tell my colleagues, anyway). 
+Have you noticed that tidyverse error messages are both helpful and pretty? This is in part due to [Gabor's {cli} package](https://cli.r-lib.org/index.html). Sometimes I make errors on purpose just to see these messages (that's what I tell my colleagues, anyway). 
 
-Have you noticed that sometimes the error message will include a link that, when clicked, will execute some code to help explore the bug? That's curious isn't it?
+Have you noticed that sometimes the error message will include a link that, when clicked, will execute some code to help explore the bug? When you hover over the link, you get a popup in RStudio showing you showing a green 'play' arrow, the name and description of the function and the phrase 'click to run'.
+
+That's curious isn't it?
 
 ## How?
 
 Functionally, {cli} functions accept {glue} strings that begin with a `.run` keyword and contain a Markdown hyperlink. Something like this: `"{.run [function](package::function())}"`. The outcome is a link in the console that will execute the code when clicked. 
 
-You can read more about hyperlinks [in the docs](https://cli.r-lib.org/reference/links.html). There's some limitations, including how your terminal must be capable of supporting this type of hyperlink (RStudio is capable). Note also that links are 'experimental'.
+You can read more about hyperlinks [in the {cli} docs](https://cli.r-lib.org/reference/links.html). There's some limitations, including that your terminal must be capable of supporting this type of hyperlink (RStudio is capable). Note also that links are 'experimental'.
 
-You might be wondering if a bad actor could exploit this to execute arbitrary code. As per [the {cli} documentation](https://cli.r-lib.org/reference/links.html?q=run#security-considerations), there are several restrictions in place:
+You might be wondering if a bad actor could exploit this to execute arbitrary code. As per [the {cli} docs](https://cli.r-lib.org/reference/links.html?q=run#security-considerations), there are several restrictions in place:
 
 >To make `.run` hyperlinks more secure, RStudio [will] not run code
 >
@@ -38,7 +40,7 @@ Note that this doesn't stop nerd hobbyists like me from going off-piste.
 
 ## Demos
 
-I've got two quick sketches that use {cli}'s `.run`-enabled links. I've put these in [the {choosethis} package](https://github.com/matt-dray/choosethis), which is on GitHub.
+I've made two quick sketches that use {cli}'s `.run`-enabled links. I've put these in [the {choosethis} package](https://github.com/matt-dray/choosethis), which is on GitHub.
 
 ```{r eval=FALSE}
 install.packages("remotes")  # if not yet installed
@@ -55,7 +57,7 @@ You can set up a narrative in the console that prompts the user for an action to
 
 In other words, a classic text adventure in with the flavour of a '[Choose Your Own Adventure](https://en.wikipedia.org/wiki/Choose_Your_Own_Adventure)' book.
 
-This works by setting up a function for each option. Click a link and it will run that function, which itself will present more clickable options with their own underlying function. And so on. In this demo, the chain starts when the user runs `choosethis::begin()`.
+This works by setting up a function for each option. Click a link and it will run that function, which itself will present more clickable options with their own underlying functions. And so on. In this demo, the chain starts when the user runs `choosethis::begin()`.
 
 Of course, the more complicated the story, the more functions there are to create and maintain.
 
@@ -75,7 +77,7 @@ Yes, due to the limitations of `.run`, we need a separate function in the packag
 
 It feels a bit mean to write an exciting text adventure that people can't play if their terminal doesn't support hyperlinks. So you can check the user's console and either provide them an executable link, or otherwise print the underlying expression to copy-paste.
 
-To perform this check, you can use `cli::ansi_has_hyperlink_support()`. I added the argument `show_links` to the `choosethis::begin()` function that defaults to this:
+To perform this check, you can use `cli::ansi_has_hyperlink_support()`[^tim]. I added the argument `show_links` to the `choosethis::begin()` function that defaults to this:
 
 ```{r show-links, eval=FALSE}
 getOption("choosethis.show_links", cli::ansi_has_hyperlink_support())
@@ -96,3 +98,5 @@ I'd be interested to know if anyone is already using {cli}-enacted links in thei
 cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 ```
 </details>
+
+[^tim]: Thanks to [Tim](https://fosstodon.org/@_TimTaylor) for suggesting a method for using options in this function.

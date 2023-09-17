@@ -186,21 +186,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p><img src="resources/virus.png" class="img-fluid" alt="Text saying 'definitely not a virus' with a clickable link underneath that says 'not a virus'. The mouse hovers and has a popup saying 'virus!'."></p>
+<p><img src="resources/virus.png" class="img-fluid" alt="Text saying 'definitely not a virus' with a clickable link underneath that says 'not a virus'. The mouse hovers and has a popup saying 'virus!'"></p>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p><a href="https://cli.r-lib.org/index.html">The {cli} R package</a> puts hyperlinks in the console that can execute code to help solve errors. Of course, I used this functionality for japes.</p>
+<p><a href="https://cli.r-lib.org/index.html">The {cli} R package</a> can help build clickable hyperlinks in the R console. Of course, I used this functionality for japes.</p>
 </section>
 <section id="error" class="level2">
 <h2 class="anchored" data-anchor-id="error">Error!</h2>
-<p>Have you noticed that tidyverse error messages are both helpful and pretty? This is due to <a href="https://cli.r-lib.org/index.html">Gabor’s {cli} package</a>. Sometimes I make errors on purpose just to see these messages (that’s what I tell my colleagues, anyway).</p>
-<p>Have you noticed that sometimes the error message will include a link that, when clicked, will execute some code to help explore the bug? That’s curious isn’t it?</p>
+<p>Have you noticed that tidyverse error messages are both helpful and pretty? This is in part due to <a href="https://cli.r-lib.org/index.html">Gabor’s {cli} package</a>. Sometimes I make errors on purpose just to see these messages (that’s what I tell my colleagues, anyway).</p>
+<p>Have you noticed that sometimes the error message will include a link that, when clicked, will execute some code to help explore the bug? When you hover over the link, you get a popup in RStudio showing you showing a green ‘play’ arrow, the name and description of the function and the phrase ‘click to run’.</p>
+<p>That’s curious isn’t it?</p>
 </section>
 <section id="how" class="level2">
 <h2 class="anchored" data-anchor-id="how">How?</h2>
 <p>Functionally, {cli} functions accept {glue} strings that begin with a <code>.run</code> keyword and contain a Markdown hyperlink. Something like this: <code>"{.run [function](package::function())}"</code>. The outcome is a link in the console that will execute the code when clicked.</p>
-<p>You can read more about hyperlinks <a href="https://cli.r-lib.org/reference/links.html">in the docs</a>. There’s some limitations, including how your terminal must be capable of supporting this type of hyperlink (RStudio is capable). Note also that links are ‘experimental’.</p>
-<p>You might be wondering if a bad actor could exploit this to execute arbitrary code. As per <a href="https://cli.r-lib.org/reference/links.html?q=run#security-considerations">the {cli} documentation</a>, there are several restrictions in place:</p>
+<p>You can read more about hyperlinks <a href="https://cli.r-lib.org/reference/links.html">in the {cli} docs</a>. There’s some limitations, including that your terminal must be capable of supporting this type of hyperlink (RStudio is capable). Note also that links are ‘experimental’.</p>
+<p>You might be wondering if a bad actor could exploit this to execute arbitrary code. As per <a href="https://cli.r-lib.org/reference/links.html?q=run#security-considerations">the {cli} docs</a>, there are several restrictions in place:</p>
 <blockquote class="blockquote">
 <p>To make <code>.run</code> hyperlinks more secure, RStudio [will] not run code</p>
 <ul>
@@ -214,7 +215,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="demos" class="level2">
 <h2 class="anchored" data-anchor-id="demos">Demos</h2>
-<p>I’ve got two quick sketches that use {cli}’s <code>.run</code>-enabled links. I’ve put these in <a href="https://github.com/matt-dray/choosethis">the {choosethis} package</a>, which is on GitHub.</p>
+<p>I’ve made two quick sketches that use {cli}’s <code>.run</code>-enabled links. I’ve put these in <a href="https://github.com/matt-dray/choosethis">the {choosethis} package</a>, which is on GitHub.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)  <span class="co"># if not yet installed</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"matt-dray/choosethis"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -229,7 +230,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </figure>
 </div>
 <p>In other words, a classic text adventure in with the flavour of a ‘<a href="https://en.wikipedia.org/wiki/Choose_Your_Own_Adventure">Choose Your Own Adventure</a>’ book.</p>
-<p>This works by setting up a function for each option. Click a link and it will run that function, which itself will present more clickable options with their own underlying function. And so on. In this demo, the chain starts when the user runs <code>choosethis::begin()</code>.</p>
+<p>This works by setting up a function for each option. Click a link and it will run that function, which itself will present more clickable options with their own underlying functions. And so on. In this demo, the chain starts when the user runs <code>choosethis::begin()</code>.</p>
 <p>Of course, the more complicated the story, the more functions there are to create and maintain.</p>
 </section>
 <section id="an-r-gui" class="level3">
@@ -247,7 +248,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="bonus-de-linkification" class="level3">
 <h3 class="anchored" data-anchor-id="bonus-de-linkification">3. Bonus: de-linkification</h3>
 <p>It feels a bit mean to write an exciting text adventure that people can’t play if their terminal doesn’t support hyperlinks. So you can check the user’s console and either provide them an executable link, or otherwise print the underlying expression to copy-paste.</p>
-<p>To perform this check, you can use <code>cli::ansi_has_hyperlink_support()</code>. I added the argument <code>show_links</code> to the <code>choosethis::begin()</code> function that defaults to this:</p>
+<p>To perform this check, you can use <code>cli::ansi_has_hyperlink_support()</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. I added the argument <code>show_links</code> to the <code>choosethis::begin()</code> function that defaults to this:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getOption</span>(<span class="st">"choosethis.show_links"</span>, cli<span class="sc">::</span><span class="fu">ansi_has_hyperlink_support</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -261,6 +262,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 
 
+
 <div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
 
 <details>
@@ -269,7 +271,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-09-17 13:06:12 BST</code></pre>
+<pre><code>Last rendered: 2023-09-17 14:38:55 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -299,7 +301,12 @@ loaded via a namespace (and not attached):
 </details>
 
 
-</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Thanks to <a href="https://fosstodon.org/@_TimTaylor">Tim</a> for suggesting a method for using options in this function.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
