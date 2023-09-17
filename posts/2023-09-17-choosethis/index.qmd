@@ -1,0 +1,98 @@
+---
+title: Executing R code with clickable console links
+date: 2023-09-17
+slug: choosethis
+categories:
+  - cli
+  - r
+---
+
+![](resources/virus.png){fig-alt="Text saying 'definitely not a virus' with a clickable link underneath that says 'not a virus'. The mouse hovers and has a popup saying 'virus!'."}
+
+## tl;dr
+
+[The {cli} R package](https://cli.r-lib.org/index.html) puts hyperlinks in the console that can execute code to help solve errors. Of course, I used this functionality for japes.
+
+## Error!
+
+Have you noticed that tidyverse error messages are both helpful and pretty? This is due to [Gabor's {cli} package](https://cli.r-lib.org/index.html). Sometimes I make errors on purpose just to see these messages (that's what I tell my colleagues, anyway). 
+
+Have you noticed that sometimes the error message will include a link that, when clicked, will execute some code to help explore the bug? That's curious isn't it?
+
+## How?
+
+Functionally, {cli} functions accept {glue} strings that begin with a `.run` keyword and contain a Markdown hyperlink. Something like this: `"{.run [function](package::function())}"`. The outcome is a link in the console that will execute the code when clicked. 
+
+You can read more about hyperlinks [in the docs](https://cli.r-lib.org/reference/links.html). There's some limitations, including how your terminal must be capable of supporting this type of hyperlink (RStudio is capable). Note also that links are 'experimental'.
+
+You might be wondering if a bad actor could exploit this to execute arbitrary code. As per [the {cli} documentation](https://cli.r-lib.org/reference/links.html?q=run#security-considerations), there are several restrictions in place:
+
+>To make `.run` hyperlinks more secure, RStudio [will] not run code
+>
+>* that is not in the `pkg::fun(args)` form,
+>* if args contains `(`, `)` or `;`,
+>* if it calls a core package (base, stats, etc.),
+>* if it calls a package that is not loaded, and it is not one of testthat, devtools, usethis, or rlang, which are explicitly allowed.
+
+Note that this doesn't stop nerd hobbyists like me from going off-piste.
+
+## Demos
+
+I've got two quick sketches that use {cli}'s `.run`-enabled links. I've put these in [the {choosethis} package](https://github.com/matt-dray/choosethis), which is on GitHub.
+
+```{r eval=FALSE}
+install.packages("remotes")  # if not yet installed
+remotes::install_github("matt-dray/choosethis")
+```
+
+These nonserious demos are pretty minimal and only exist to prove the point. Maybe you can take these ideas and run with them?
+
+### 1. A clickable text adventure
+
+You can set up a narrative in the console that prompts the user for an action to advance the story. Clicking a link takes you down a story branch and prompts you with a new set of options.
+
+![](resources/adventure.gif){fig-alt="A gif of the R console. The function 'begin' is run from the 'choosethis' package, which prints the message 'you reach a fork in the road'. Two clickable options are presented: go left or go right. The user clicks 'go right' and this automatically runs the 'right' function and outputs the text 'you died'." width="50%" fig-align="left"}
+
+In other words, a classic text adventure in with the flavour of a '[Choose Your Own Adventure](https://en.wikipedia.org/wiki/Choose_Your_Own_Adventure)' book.
+
+This works by setting up a function for each option. Click a link and it will run that function, which itself will present more clickable options with their own underlying function. And so on. In this demo, the chain starts when the user runs `choosethis::begin()`.
+
+Of course, the more complicated the story, the more functions there are to create and maintain.
+
+### 2. An R GUI
+
+[Adriana](https://www.rostrum.blog/about#adriana-de-palma) suggested that `.run` could be used to create a sort-of 'clickable R interface' to do away with all that pesky typing and emulate superior statistical packages like SPSS (lol).
+
+But this is... tricky. First there's the limitations of `.run` itself, but the user prompts could also become overwhelming. For example, if you want to summarise a data.frame. Which columns should be summarised? Do you want the sum or mean or something else? Should NAs be ignored? And so on.
+
+I made a tiny demo of this anyway. The user runs `choosethis::ask_col_means()` with a data.frame and they're presented the names of any numeric columns as clickable links. The dataframe and selected column name are passed to `choosethis::get_mean()`, a bespoke function for calculating the summary.
+
+![](resources/mean.gif){fig-alt="Gif of the R console. The 'ask_col_mean' function is run from the 'choosethis' package. The Palmer penguins dataset is passed as the only argument. The user is then prompted with the message 'what column would you like the mean of' and it presents a number of clickable column names. 'bill_depth_mm' is clicked and the console outputs the answer. This is repeated for the column 'body_mass_g'." width="75%" fig-align="left"}
+
+Yes, due to the limitations of `.run`, we need a separate function in the package to calculate the mean for us! You can see how tedious it would be to wrap loads of potential summary functions.
+
+### 3. Bonus: de-linkification
+
+It feels a bit mean to write an exciting text adventure that people can't play if their terminal doesn't support hyperlinks. So you can check the user's console and either provide them an executable link, or otherwise print the underlying expression to copy-paste.
+
+To perform this check, you can use `cli::ansi_has_hyperlink_support()`. I added the argument `show_links` to the `choosethis::begin()` function that defaults to this:
+
+```{r show-links, eval=FALSE}
+getOption("choosethis.show_links", cli::ansi_has_hyperlink_support())
+```
+
+By making this an option, the user can set `options(choosethis.show_links = FALSE)` to avoid seeing links even if their terminal supports them.
+
+## Hype man
+
+So yeah, hyperlinks are 'experimental' in {cli} and—quite rightly—they're limited to prevent nefarious activity. Everything I've created here might stop working tomorrow. And of course, the intent for links is to help people with errors, not mess around. But it is fun isn't it?
+
+I'd be interested to know if anyone is already using {cli}-enacted links in their packages, or if the ideas in {choosethis} spark some inspiration.
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
