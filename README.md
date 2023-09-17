@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 159 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2023-09-16 (latest).
+🔢 There have been 160 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2023-09-17 (latest).
 
 📅 That’s a post roughly every 12 days, or about 2.4 posts per month.
 
-🆕 The latest post: [Dear John, I’m
-sorry](https://www.rostrum.blog/posts/2023-09-16-chunktop).
+🆕 The latest post: [Executing R code with clickable console
+links](https://www.rostrum.blog/posts/2023-09-17-choosethis).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ sorry](https://www.rostrum.blog/posts/2023-09-16-chunktop).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 160 | 2023-09-17 | [Executing R code with clickable console links](https://www.rostrum.blog/posts/2023-09-17-choosethis)                          |
 | 159 | 2023-09-16 | [Dear John, I’m sorry](https://www.rostrum.blog/posts/2023-09-16-chunktop)                                                     |
 | 158 | 2023-09-10 | [The life and death of the tidyverse](https://www.rostrum.blog/posts/2023-09-10-lifecycle)                                     |
 | 157 | 2023-09-09 | [Combing through my trash](https://www.rostrum.blog/posts/2023-09-08-trash-combing)                                            |
@@ -205,4 +206,4 @@ sorry](https://www.rostrum.blog/posts/2023-09-16-chunktop).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2023-09-16 at 23:52.
+🕒 Last updated: 2023-09-17 at 12:06.
