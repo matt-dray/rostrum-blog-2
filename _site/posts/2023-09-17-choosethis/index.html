@@ -9,7 +9,7 @@
 <meta name="author" content="Matt Dray">
 <meta name="dcterms.date" content="2023-09-17">
 
-<title>rostrum.blog - Click to execute code in the R console!</title>
+<title>rostrum.blog - Click links to execute code in the R console!</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -147,7 +147,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Click to execute code in the R console!</h1>
+      <h1 class="title">Click links to execute code in the R console!</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">choosethis</div>
                 <div class="quarto-category">cli</div>
@@ -190,12 +190,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="resources/virus.png" class="img-fluid" alt="Text saying 'definitely not a virus' with a clickable link underneath that says 'not a virus'. The mouse hovers and has a popup saying 'virus!'"></p>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p><a href="https://cli.r-lib.org/index.html">The {cli} R package</a> can help build clickable hyperlinks in the R console. Of course, I used this functionality for japes.</p>
+<p><a href="https://cli.r-lib.org/index.html">The {cli} R package</a> can help build clickable hyperlinks in the R console, which you can use to execute functions. Of course, I used this for japes.</p>
 </section>
 <section id="error" class="level2">
 <h2 class="anchored" data-anchor-id="error">Error!</h2>
-<p>Have you noticed that tidyverse error messages are both helpful and pretty? This is in part due to <a href="https://cli.r-lib.org/index.html">Gabor’s {cli} package</a>, which helps to style command-line output. Sometimes I make errors on purpose just to see these messages (that’s what I tell my colleagues, anyway).</p>
-<p>Have you noticed that sometimes the error message will include a link that, when clicked, will execute some code to help explore the bug? When you hover over the link, you get a popup in RStudio showing you showing a green ‘play’ arrow, the name and description of the function and the phrase ‘click to run’.</p>
+<p>Have you noticed that tidyverse error messages are both helpful and pretty? This is in part due to <a href="https://cli.r-lib.org/index.html">Gabor’s {cli} package</a>, which helps to style command-line output. Sometimes I make errors on purpose just to see these messages (that’s how I explain my mistakes to colleagues, anyway).</p>
+<p>Have you noticed that sometimes the error message will include a link that, when clicked, will execute some code to help explore the bug? When you hover over the link, you get a popup in RStudio showing you a green ‘play’ arrow, the name and description of the function and the phrase ‘click to run’.</p>
+<p>For example, if we ask {dplyr}’s <code>select()</code> to retain a column that doesn’t exist and then hover over the link in the error message:</p>
+<p><img src="resources/cli.png" class="img-fluid" data-fig.alt="The function 'select' from the 'dplyr' package has been run in the RStudio console with the 'mtcars' dataset and passing the column name 'x'. This column doesn't exist in the dataset, so there's a warning: 'can't subset columns that don't exist'. Beneath that is a clickable link to run the function 'rlang::last_trace', which on hover shows a popup that describes the function and says 'click to run'."></p>
 <p>That’s curious isn’t it?</p>
 </section>
 <section id="how" class="level2">
@@ -227,7 +229,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>You can set up a narrative in the console that prompts the user for an action to advance the story. Clicking a link takes you down a story branch and prompts you with a new set of options.</p>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="resources/adventure.gif" class="img-fluid figure-img" style="width:50.0%" alt="A gif of the R console. The function 'begin' is run from the 'choosethis' package, which prints the message 'you reach a fork in the road'. Two clickable options are presented: go left or go right. The user clicks 'go right' and this automatically runs the 'right' function and outputs the text 'you died'."></p>
+<p><img src="resources/adventure.gif" class="img-fluid figure-img" style="width:75.0%" alt="A gif of the R console. The function 'begin' is run from the 'choosethis' package, which prints the message 'you reach a fork in the road'. Two clickable options are presented: go left or go right. The user clicks 'go right' and this automatically runs the 'right' function and outputs the text 'you died'."></p>
 </figure>
 </div>
 <p>In other words, a classic text adventure in with the flavour of a ‘<a href="https://en.wikipedia.org/wiki/Choose_Your_Own_Adventure">Choose Your Own Adventure</a>’ book.</p>
@@ -236,12 +238,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="an-r-gui" class="level3">
 <h3 class="anchored" data-anchor-id="an-r-gui">2. An R GUI</h3>
-<p><a href="https://www.rostrum.blog/about#adriana-de-palma">Adriana</a> suggested that <code>.run</code> could be used to create a sort-of ‘clickable R interface’ to do away with all that pesky typing and emulate superior statistical packages like SPSS (lol).</p>
+<p><a href="https://www.rostrum.blog/about#adriana-de-palma">Adriana</a> suggested that <code>.run</code> could be used to create a sort-of ‘clickable R interface’ to do away with all that pesky typing and emulate superior statistical packages like SPSS, lol. She was definitely joking<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, but like, you <em>could</em> do something like that, right?<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
 <p>But this is… tricky. First there’s the limitations of <code>.run</code> itself, but the user prompts could also become overwhelming. For example, if you want to summarise a data.frame. Which columns should be summarised? Do you want the sum or mean or something else? Should NAs be ignored? And so on.</p>
 <p>I made a tiny demo of this anyway. The user runs <code>choosethis::ask_col_means()</code> with a data.frame and they’re presented the names of any numeric columns as clickable links. The dataframe and selected column name are passed to <code>choosethis::get_mean()</code>, a bespoke function for calculating the summary.</p>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="resources/mean.gif" class="img-fluid figure-img" style="width:75.0%" alt="Gif of the R console. The 'ask_col_mean' function is run from the 'choosethis' package. The Palmer penguins dataset is passed as the only argument. The user is then prompted with the message 'what column would you like the mean of' and it presents a number of clickable column names. 'bill_depth_mm' is clicked and the console outputs the answer. This is repeated for the column 'body_mass_g'."></p>
+<p><img src="resources/mean.gif" class="img-fluid figure-img" style="width:100.0%" alt="Gif of the R console. The 'ask_col_mean' function is run from the 'choosethis' package. The Palmer penguins dataset is passed as the only argument. The user is then prompted with the message 'what column would you like the mean of' and it presents a number of clickable column names. 'bill_depth_mm' is clicked and the console outputs the answer. This is repeated for the column 'body_mass_g'."></p>
 </figure>
 </div>
 <p>Yes, due (I think) to the limitations of <code>.run</code>, we need a separate function in the package to calculate the mean for us (at least I think that’s the case). You can see how tedious it would be to wrap loads of potential summary functions using this approach.</p>
@@ -249,7 +251,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="bonus-de-linkification" class="level3">
 <h3 class="anchored" data-anchor-id="bonus-de-linkification">3. Bonus: de-linkification</h3>
 <p>It feels a bit mean to write an exciting text adventure that people can’t play if their terminal doesn’t support hyperlinks. So you can check the user’s console and either provide them an executable link, or otherwise print the underlying expression to copy-paste.</p>
-<p>To perform this check, you can use <code>cli::ansi_has_hyperlink_support()</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. I added the argument <code>show_links</code> to the <code>choosethis::begin()</code> function that defaults to this:</p>
+<p>To perform this check, you can use <code>cli::ansi_has_hyperlink_support()</code><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. I added the argument <code>show_links</code> to the <code>choosethis::begin()</code> function that defaults to this:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getOption</span>(<span class="st">"choosethis.show_links"</span>, cli<span class="sc">::</span><span class="fu">ansi_has_hyperlink_support</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -272,7 +274,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-09-17 15:27:37 BST</code></pre>
+<pre><code>Last rendered: 2023-09-17 19:18:32 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -305,7 +307,9 @@ loaded via a namespace (and not attached):
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>Thanks to <a href="https://fosstodon.org/@_TimTaylor">Tim</a> for suggesting a method for using options in this function.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>My lawyers have insisted I must clarify that, unequivocally, she definitely does not want R to be corrupted into an SPSS-like thing.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Doesn’t mean you should, amirite.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Thanks to <a href="https://fosstodon.org/@_TimTaylor">Tim</a> for suggesting a method for using options in this function.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

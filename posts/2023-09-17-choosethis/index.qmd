@@ -1,5 +1,5 @@
 ---
-title: Click to execute code in the R console!
+title: Click links to execute code in the R console!
 date: 2023-09-17
 slug: choosethis
 categories:
@@ -12,13 +12,17 @@ categories:
 
 ## tl;dr
 
-[The {cli} R package](https://cli.r-lib.org/index.html) can help build clickable hyperlinks in the R console. Of course, I used this functionality for japes.
+[The {cli} R package](https://cli.r-lib.org/index.html) can help build clickable hyperlinks in the R console, which you can use to execute functions. Of course, I used this for japes.
 
 ## Error!
 
-Have you noticed that tidyverse error messages are both helpful and pretty? This is in part due to [Gabor's {cli} package](https://cli.r-lib.org/index.html), which helps to style command-line output. Sometimes I make errors on purpose just to see these messages (that's what I tell my colleagues, anyway). 
+Have you noticed that tidyverse error messages are both helpful and pretty? This is in part due to [Gabor's {cli} package](https://cli.r-lib.org/index.html), which helps to style command-line output. Sometimes I make errors on purpose just to see these messages (that's how I explain my mistakes to colleagues, anyway). 
 
-Have you noticed that sometimes the error message will include a link that, when clicked, will execute some code to help explore the bug? When you hover over the link, you get a popup in RStudio showing you showing a green 'play' arrow, the name and description of the function and the phrase 'click to run'.
+Have you noticed that sometimes the error message will include a link that, when clicked, will execute some code to help explore the bug? When you hover over the link, you get a popup in RStudio showing you a green 'play' arrow, the name and description of the function and the phrase 'click to run'.
+
+For example, if we ask {dplyr}'s `select()` to retain a column that doesn't exist and then hover over the link in the error message:
+
+![](resources/cli.png){fig.alt="The function 'select' from the 'dplyr' package has been run in the RStudio console with the 'mtcars' dataset and passing the column name 'x'. This column doesn't exist in the dataset, so there's a warning: 'can't subset columns that don't exist'. Beneath that is a clickable link to run the function 'rlang::last_trace', which on hover shows a popup that describes the function and says 'click to run'."}
 
 That's curious isn't it?
 
@@ -54,7 +58,7 @@ These nonserious demos are pretty minimal and only exist to prove the point. May
 
 You can set up a narrative in the console that prompts the user for an action to advance the story. Clicking a link takes you down a story branch and prompts you with a new set of options.
 
-![](resources/adventure.gif){fig-alt="A gif of the R console. The function 'begin' is run from the 'choosethis' package, which prints the message 'you reach a fork in the road'. Two clickable options are presented: go left or go right. The user clicks 'go right' and this automatically runs the 'right' function and outputs the text 'you died'." width="50%" fig-align="left"}
+![](resources/adventure.gif){fig-alt="A gif of the R console. The function 'begin' is run from the 'choosethis' package, which prints the message 'you reach a fork in the road'. Two clickable options are presented: go left or go right. The user clicks 'go right' and this automatically runs the 'right' function and outputs the text 'you died'." width="75%" fig-align="left"}
 
 In other words, a classic text adventure in with the flavour of a '[Choose Your Own Adventure](https://en.wikipedia.org/wiki/Choose_Your_Own_Adventure)' book.
 
@@ -64,13 +68,13 @@ Of course, the more complicated the story, the more functions there are to creat
 
 ### 2. An R GUI
 
-[Adriana](https://www.rostrum.blog/about#adriana-de-palma) suggested that `.run` could be used to create a sort-of 'clickable R interface' to do away with all that pesky typing and emulate superior statistical packages like SPSS (lol).
+[Adriana](https://www.rostrum.blog/about#adriana-de-palma) suggested that `.run` could be used to create a sort-of 'clickable R interface' to do away with all that pesky typing and emulate superior statistical packages like SPSS, lol. She was definitely joking[^lawyers], but like, you _could_ do something like that, right?[^should]
 
 But this is... tricky. First there's the limitations of `.run` itself, but the user prompts could also become overwhelming. For example, if you want to summarise a data.frame. Which columns should be summarised? Do you want the sum or mean or something else? Should NAs be ignored? And so on.
 
 I made a tiny demo of this anyway. The user runs `choosethis::ask_col_means()` with a data.frame and they're presented the names of any numeric columns as clickable links. The dataframe and selected column name are passed to `choosethis::get_mean()`, a bespoke function for calculating the summary.
 
-![](resources/mean.gif){fig-alt="Gif of the R console. The 'ask_col_mean' function is run from the 'choosethis' package. The Palmer penguins dataset is passed as the only argument. The user is then prompted with the message 'what column would you like the mean of' and it presents a number of clickable column names. 'bill_depth_mm' is clicked and the console outputs the answer. This is repeated for the column 'body_mass_g'." width="75%" fig-align="left"}
+![](resources/mean.gif){fig-alt="Gif of the R console. The 'ask_col_mean' function is run from the 'choosethis' package. The Palmer penguins dataset is passed as the only argument. The user is then prompted with the message 'what column would you like the mean of' and it presents a number of clickable column names. 'bill_depth_mm' is clicked and the console outputs the answer. This is repeated for the column 'body_mass_g'." width="100%" fig-align="left"}
 
 Yes, due (I think) to the limitations of `.run`, we need a separate function in the package to calculate the mean for us (at least I think that's the case). You can see how tedious it would be to wrap loads of potential summary functions using this approach.
 
@@ -101,3 +105,5 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 </details>
 
 [^tim]: Thanks to [Tim](https://fosstodon.org/@_TimTaylor) for suggesting a method for using options in this function.
+[^should]: Doesn't mean you should, amirite.
+[^lawyers]: My lawyers have insisted I must clarify that, unequivocally, she definitely does not want R to be corrupted into an SPSS-like thing.
