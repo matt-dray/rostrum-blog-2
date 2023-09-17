@@ -218,7 +218,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="demos" class="level2">
 <h2 class="anchored" data-anchor-id="demos">Demos</h2>
-<p>I’ve made two quick sketches that use {cli}’s <code>.run</code>-enabled links. I’ve put these in <a href="https://github.com/matt-dray/choosethis">the {choosethis} package</a>, which is on GitHub.</p>
+<p>I’ve made two quick sketches that use {cli}’s <code>.run</code>-enabled links. I’ve put these in <a href="https://github.com/matt-dray/choosethis">the {choosethis} package</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, which is on GitHub.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)  <span class="co"># if not yet installed</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"matt-dray/choosethis"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -238,7 +238,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="an-r-gui" class="level3">
 <h3 class="anchored" data-anchor-id="an-r-gui">2. An R GUI</h3>
-<p><a href="https://www.rostrum.blog/about#adriana-de-palma">Adriana</a> suggested that <code>.run</code> could be used to create a sort-of ‘clickable R interface’ to do away with all that pesky typing and emulate superior statistical packages like SPSS, lol. She was definitely joking<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, but like, you <em>could</em> do something like that, right?<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+<p><a href="https://www.rostrum.blog/about#adriana-de-palma">Adriana</a> suggested that <code>.run</code> could be used to create a sort-of ‘clickable R interface’ to do away with all that pesky typing and emulate superior statistical packages like SPSS, lol. She was definitely joking<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, but like, you <em>could</em> do something like that, right?<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a></p>
 <p>But this is… tricky. First there’s the limitations of <code>.run</code> itself, but the user prompts could also become overwhelming. For example, if you want to summarise a data.frame. Which columns should be summarised? Do you want the sum or mean or something else? Should NAs be ignored? And so on.</p>
 <p>I made a tiny demo of this anyway. The user runs <code>choosethis::ask_col_means()</code> with a data.frame and they’re presented the names of any numeric columns as clickable links. The dataframe and selected column name are passed to <code>choosethis::get_mean()</code>, a bespoke function for calculating the summary.</p>
 <div class="quarto-figure quarto-figure-left">
@@ -251,7 +251,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="bonus-de-linkification" class="level3">
 <h3 class="anchored" data-anchor-id="bonus-de-linkification">3. Bonus: de-linkification</h3>
 <p>It feels a bit mean to write an exciting text adventure that people can’t play if their terminal doesn’t support hyperlinks. So you can check the user’s console and either provide them an executable link, or otherwise print the underlying expression to copy-paste.</p>
-<p>To perform this check, you can use <code>cli::ansi_has_hyperlink_support()</code><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. I added the argument <code>show_links</code> to the <code>choosethis::begin()</code> function that defaults to this:</p>
+<p>To perform this check, you can use <code>cli::ansi_has_hyperlink_support()</code><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. I added the argument <code>show_links</code> to the <code>choosethis::begin()</code> function that defaults to this:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getOption</span>(<span class="st">"choosethis.show_links"</span>, cli<span class="sc">::</span><span class="fu">ansi_has_hyperlink_support</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -274,7 +274,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-09-17 19:18:32 BST</code></pre>
+<pre><code>Last rendered: 2023-09-17 19:21:07 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -307,9 +307,10 @@ loaded via a namespace (and not attached):
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>My lawyers have insisted I must clarify that, unequivocally, she definitely does not want R to be corrupted into an SPSS-like thing.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Doesn’t mean you should, amirite.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Thanks to <a href="https://fosstodon.org/@_TimTaylor">Tim</a> for suggesting a method for using options in this function.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Yes, a very clever pun on {usethis}, but infinitely less useful than that package.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>My lawyers have insisted I must clarify that, unequivocally, she definitely does not want R to be corrupted into an SPSS-like thing.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Doesn’t mean you should, amirite.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Thanks to <a href="https://fosstodon.org/@_TimTaylor">Tim</a> for suggesting a method for using options in this function.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
