@@ -24,7 +24,7 @@ For example, if we ask {dplyr}'s `select()` to retain a column that doesn't exis
 
 ![](resources/cli.png){fig.alt="The function 'select' from the 'dplyr' package has been run in the RStudio console with the 'mtcars' dataset and passing the column name 'x'. This column doesn't exist in the dataset, so there's a warning: 'can't subset columns that don't exist'. Beneath that is a clickable link to run the function 'rlang::last_trace', which on hover shows a popup that describes the function and says 'click to run'."}
 
-That's curious isn't it?
+That's curious isn't it? It also appears in other scenarios and sometimes even links to specific lines in specific scripts.
 
 ## How?
 
@@ -47,7 +47,7 @@ Note that this doesn't stop nerd hobbyists like me from going off-piste.
 
 I've made two quick sketches that use {cli}'s `.run`-enabled links. I've put these in [the {choosethis} package](https://github.com/matt-dray/choosethis)[^usethis], which is on GitHub.
 
-```{r eval=FALSE}
+```{r install, eval=FALSE}
 install.packages("remotes")  # if not yet installed
 remotes::install_github("matt-dray/choosethis")
 ```
