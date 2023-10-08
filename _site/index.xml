@@ -10,7 +10,115 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Sat, 16 Sep 2023 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 07 Oct 2023 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Govspeakify tables with {shinylive}</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables/resources/govspeakify-tables.gif" class="img-fluid figure-img" alt="Gif of an app called 'Govspeakify Tables'. A table is pasted into a text box, then a checkbox is ticked to say that the table has row titles and the number 4 is written into a text box that asks for row numbers that contain totals. The 'convert to Govspeak' button is clicked and a special Markdown version of the pasted table is printed. A 'copy' button underneath it is clicked."></p>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I made <a href="https://matt-dray.github.io/govspeakify-tables/">a demo Shiny app</a> that’s hosted with GitHub Pages but runs serverless in the browser, thanks to <a href="https://github.com/posit-dev/shinylive">{shinylive}</a>. It converts a copied table to Govspeak Markdown, the format required for publishing reports by the UK’s government.</p>
+</section>
+<section id="rise" class="level2">
+<h2 class="anchored" data-anchor-id="rise">Rise</h2>
+<p>Stastistical reports in the UK public sector are often prepared as Word documents. However, they need to be uploaded to the UK government’s publishing system as a special, simplified flavour of Markdown called ‘<a href="https://govspeak-preview.publishing.service.gov.uk/guide">Govspeak</a>’. There’s <a href="https://govspeak-preview.publishing.service.gov.uk/">an online tool</a> to help with this, but it doesn’t yet handle the conversion of tables.</p>
+<p><a href="https://www.rostrum.blog/posts/2023-06-21-wordup-tables/">I wrote recently</a> about a little function I made to transform Word tables to Govspeak. It suits me to run the function within R, but this approach isn’t ideal for colleagues who aren’t R users (imagine!).</p>
+<p>A Shiny app could be useful here. But that’s a bit of a faff; where would I serve it from? I don’t have access to a server and all my free slots on shinyapps.io are taken up.</p>
+<p>But! Thanks to recent developments<sup>1</sup> in <a href="https://github.com/posit-dev/shinylive">Shinylive</a> and <a href="https://docs.r-wasm.org/webr/latest/">{webR}</a>, I can serve the app from GitHub pages and have all the computation happen in the user’s browser.</p>
+</section>
+<section id="and-shine" class="level2">
+<h2 class="anchored" data-anchor-id="and-shine">And shine</h2>
+<p>The first step was to create a Shiny app to ‘govspeakify’ a table. Nothing fancy, I just wanted:</p>
+<ol type="1">
+<li>A text field to receive a copied table.</li>
+<li>Some interactive options for additional Govspeak formatting (to mark-up row titles and totals rows, and provide a regular expression for characters to ignore when evaluating numeric columns so that they’ll end up right-aligned).</li>
+<li>A button to convert the table to Govspeak.</li>
+<li>The Govspeak output printed to the screen.</li>
+<li>A button to copy the output to the clipboard.</li>
+</ol>
+<p>So, a button-click triggers the conversion of the pasted table via <code>eventReactive()</code>, given the user-supplied formatting options. The output is presented back to the user, along with a button to copy it, thanks to <a href="https://CRAN.R-project.org/package=rclipboard">{rclipboard}</a>.</p>
+<p>You can find the app code in <a href="https://github.com/matt-dray/govspeakify-tables">a GitHub repo</a>. I prepared the app in a single <code>app.R</code> file, along with an <code>R/conversion.R</code> file with bespoke functions. I housed these in a <code>govspeakify-tables</code> subfolder.</p>
+<p>There’s a number of things I want to add or improve to this proof of concept. For example, some more defensive programming to protect against invalid inputs and perhaps some more explanations and styling. You will be able to break it very easily. For now it does what I need it to do.</p>
+</section>
+<section id="and-live" class="level2">
+<h2 class="anchored" data-anchor-id="and-live">And live!</h2>
+<p>So, I have the Shiny app; how do we prepare it? The <a href="https://posit-dev.github.io/r-shinylive/">{shinylive}</a> package has a one-liner function that will generate a single folder containing your app and all the necessary bits and bobs from <a href="https://github.com/posit-dev/shinylive">the Shinylive project</a> so it can be served by GitHub Pages but perform computations in the user’s browser.</p>
+<p>The steps are:</p>
+<ol type="1">
+<li>Run <code>shinylive::export("govspeakify-tables", "docs")</code> to take the Shiny app and assets from the <code>govspeakify-tables</code> folder and generate a deployable version of it in a folder called <code>docs/</code> (since this is a folder name that GitHub Pages can serve from).</li>
+<li>Run <code>httpuv::runStaticServer("docs")</code> to launch the app in a local static server and check that it works as intended (this requires the development version of {httpuv} at the time of writing, which you can install <a href="https://github.com/rstudio/httpuv">from GitHub</a>).</li>
+<li>Push to your GitHub repo and set up GitHub Pages to serve the <code>docs/</code> folder (from the repo, go to the ‘Settings’ tab, click ‘Pages’ in the sidebar, select the ‘main’ branch and ‘/docs’ folder from the dropdowns, then click the ‘Save’ button).</li>
+</ol>
+<p>GitHub will take a moment to ready your app, but it’s then available on the web via a URL in the form ‘https://username.github.io/repo-name’. The Govspeakify Tables app can be found here: <a href="https://matt-dray.github.io/govspeakify-tables">https://matt-dray.github.io/govspeakify-tables</a> (may take a sec to load).</p>
+<p>Some of these instructions may change as tools like Shinylive (the asset-preparation system), {shinylive} (the package) and {webR} continue to develop. I realised later that Rami has also <a href="https://github.com/RamiKrispin/shinylive-r">recorded these steps in a README</a>, so you may want to look there in future for more up-to-date information.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-10-08 18:38:43 CEST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/Rome
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
+ [5] tools_4.3.1       htmltools_0.5.6.1 rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.25    knitr_1.44        jsonlite_1.8.7    xfun_0.40        
+[13] digest_0.6.33     rlang_1.1.1       evaluate_0.22    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Joe Cheng <a href="https://jcheng5.github.io/posit-conf-2023-shinylive/">spoke about Shinylive</a> at the recent Posit conference.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>govspeak</category>
+  <category>markdown</category>
+  <category>public-sector</category>
+  <category>r</category>
+  <category>shiny</category>
+  <category>shinylive</category>
+  <category>wordup</category>
+  <guid>https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables/index.html</guid>
+  <pubDate>Sat, 07 Oct 2023 22:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Click links to execute code in the R console!</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -170,7 +278,7 @@ loaded via a namespace (and not attached):
   <category>cli</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-09-17-choosethis/index.html</guid>
-  <pubDate>Sat, 16 Sep 2023 23:00:00 GMT</pubDate>
+  <pubDate>Sat, 16 Sep 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Dear John, I’m sorry</title>
@@ -821,7 +929,7 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>r-markdown</category>
   <guid>https://www.rostrum.blog/posts/2023-09-16-chunktop/index.html</guid>
-  <pubDate>Fri, 15 Sep 2023 23:00:00 GMT</pubDate>
+  <pubDate>Fri, 15 Sep 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>The life and death of the tidyverse</title>
@@ -1713,7 +1821,7 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>tidyverse</category>
   <guid>https://www.rostrum.blog/posts/2023-09-10-lifecycle/index.html</guid>
-  <pubDate>Sat, 09 Sep 2023 23:00:00 GMT</pubDate>
+  <pubDate>Sat, 09 Sep 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Combing through my trash</title>
@@ -2455,7 +2563,7 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>r.oguelike</category>
   <guid>https://www.rostrum.blog/posts/2023-09-08-trash-combing/index.html</guid>
-  <pubDate>Fri, 08 Sep 2023 23:00:00 GMT</pubDate>
+  <pubDate>Fri, 08 Sep 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Autodetect Quarto formats with {quartostamp}. Or not.</title>
@@ -2955,7 +3063,7 @@ loaded via a namespace (and not attached):
   <category>rstudio-addins</category>
   <category>yaml</category>
   <guid>https://www.rostrum.blog/posts/2023-09-01-quarto-yaml-detect/index.html</guid>
-  <pubDate>Thu, 31 Aug 2023 23:00:00 GMT</pubDate>
+  <pubDate>Thu, 31 Aug 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Conscious uncoupling with {blogdown}</title>
@@ -3404,7 +3512,7 @@ loaded via a namespace (and not attached):
   <category>quarto</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-08-26-cheerio-blogdown/index.html</guid>
-  <pubDate>Fri, 25 Aug 2023 23:00:00 GMT</pubDate>
+  <pubDate>Fri, 25 Aug 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Object of type closure can shut up</title>
@@ -3845,7 +3953,7 @@ loaded via a namespace (and not attached):
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-08-19-find-bad-names/index.html</guid>
-  <pubDate>Fri, 18 Aug 2023 23:00:00 GMT</pubDate>
+  <pubDate>Fri, 18 Aug 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>One weird trick to {monetize} your R package</title>
@@ -4041,7 +4149,7 @@ loaded via a namespace (and not attached):
   <category>monetize</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-08-01-monetize/index.html</guid>
-  <pubDate>Mon, 31 Jul 2023 23:00:00 GMT</pubDate>
+  <pubDate>Mon, 31 Jul 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Save high scores for your R game</title>
@@ -4291,7 +4399,7 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>videogames</category>
   <guid>https://www.rostrum.blog/posts/2023-07-15-hiscore/index.html</guid>
-  <pubDate>Fri, 14 Jul 2023 23:00:00 GMT</pubDate>
+  <pubDate>Fri, 14 Jul 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Convert a Word table to Markdown</title>
@@ -4508,7 +4616,7 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>wordup</category>
   <guid>https://www.rostrum.blog/posts/2023-06-21-wordup-tables/index.html</guid>
-  <pubDate>Tue, 20 Jun 2023 23:00:00 GMT</pubDate>
+  <pubDate>Tue, 20 Jun 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Panic! In The Toolshed</title>
@@ -4608,7 +4716,7 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>talk</category>
   <guid>https://www.rostrum.blog/posts/2023-06-13-panic-in-the-toolshed/index.html</guid>
-  <pubDate>Mon, 12 Jun 2023 23:00:00 GMT</pubDate>
+  <pubDate>Mon, 12 Jun 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Extract run data from Apple Health (redux)</title>
@@ -5273,7 +5381,7 @@ loaded via a namespace (and not attached):
   <category>xml</category>
   <category>xml2</category>
   <guid>https://www.rostrum.blog/posts/2023-06-11-apple-health-redux/index.html</guid>
-  <pubDate>Sat, 10 Jun 2023 23:00:00 GMT</pubDate>
+  <pubDate>Sat, 10 Jun 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Rectangularise Word tables extracted by {officer}</title>
@@ -6224,7 +6332,7 @@ loaded via a namespace (and not attached):
   <category>public-sector</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-06-07-rectangular-officer/index.html</guid>
-  <pubDate>Tue, 06 Jun 2023 23:00:00 GMT</pubDate>
+  <pubDate>Tue, 06 Jun 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Recreating a dataviz with {ggplot2}</title>
@@ -6914,7 +7022,7 @@ loaded via a namespace (and not attached):
   <category>ggplot2</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-05-10-spear-ggplot2/index.html</guid>
-  <pubDate>Tue, 09 May 2023 23:00:00 GMT</pubDate>
+  <pubDate>Tue, 09 May 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Automate {blogdown} to Quarto</title>
@@ -7278,7 +7386,7 @@ loaded via a namespace (and not attached):
   <category>quarto</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-05-07-bd2q/index.html</guid>
-  <pubDate>Sat, 06 May 2023 23:00:00 GMT</pubDate>
+  <pubDate>Sat, 06 May 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Matt Dray Teaches (Data) Typing</title>
@@ -7739,7 +7847,7 @@ loaded via a namespace (and not attached):
   <category>ms-office</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-04-23-type-convert/index.html</guid>
-  <pubDate>Sat, 22 Apr 2023 23:00:00 GMT</pubDate>
+  <pubDate>Sat, 22 Apr 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>R is a game engine, fight me</title>
@@ -7884,7 +7992,7 @@ loaded via a namespace (and not attached):
   <category>shiny</category>
   <category>videogames</category>
   <guid>https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/index.html</guid>
-  <pubDate>Sat, 01 Apr 2023 23:00:00 GMT</pubDate>
+  <pubDate>Sat, 01 Apr 2023 22:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Playgrounds with WebR and Quarto</title>
@@ -7997,7 +8105,7 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>webr</category>
   <guid>https://www.rostrum.blog/posts/2023-03-16-webr-quarto/index.html</guid>
-  <pubDate>Thu, 16 Mar 2023 00:00:00 GMT</pubDate>
+  <pubDate>Wed, 15 Mar 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Fun and learning. In a dungeon!</title>
@@ -8102,393 +8210,7 @@ loaded via a namespace (and not attached):
   <category>r.oguelike</category>
   <category>talk</category>
   <guid>https://www.rostrum.blog/posts/2023-03-15-in-a-dungeon/index.html</guid>
-  <pubDate>Wed, 15 Mar 2023 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>I can’t be parsed, mate</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-03-03-getparsedata/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2023-03-03-getparsedata/resources/handegg.png" class="img-fluid figure-img" style="width:100.0%" alt="An American football quarterback about to pass the ball. He has the R logo on his shirt. Text above says 'pass the ball', text below is R code reading 'parse(text = 'the('ball')')'. The format is a 'deep-fried', highly pixellated meme where the centre of the iumage bloats out. A wide-eyed, smiling and crying emoji is in the corner."></p>
-<figcaption class="figure-caption">Image by <a href="https://pixabay.com/users/keithjj-2328014/">Keith Johnston</a> from <a href="https://pixabay.com">Pixabay</a>. Deep fried by Matt Dray.<sup>1</sup></figcaption>
-</figure>
-</div>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>R is capable of reading R code. Obviously. You can use <code>getParseData(parse())</code> to see what’s going on. A very naive intro.</p>
-</section>
-<section id="at-an-imparse" class="level2">
-<h2 class="anchored" data-anchor-id="at-an-imparse">At an imparse</h2>
-<p>There’s many things that delight me about R coding.<sup>2</sup> One meta thing I like is the idea that R has to recognise the code that you give it as… R code.</p>
-<p>For example, does <code>x&lt;-1</code> mean ‘x is less than minus-one’? Hm, actually R recognises <code>&lt;-</code> as a ‘left-assignment operator’—a special ‘token’—that gives the name <code>x</code> the value of <code>1</code>. Subtle, but important.</p>
-<p>Another example: the tokens <code>&lt;-</code> and <code>=</code> have an equivalent role in <code>x &lt;- 1</code> and <code>x = 1</code>. For style reasons, you’ll probably want to replace <code>=</code> with <code>&lt;-</code>.<sup>3</sup> But don’t just ‘find and replace’ because <code>=</code> is context dependent. Consider:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">x <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">subset</span>(mtcars, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">subset =</span> carb <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">8</span>)</span></code></pre></div>
-</div>
-<p>Here, <code>=</code> is used to assign (<code>=</code>), to set a function argument (<code>=</code>) and as part of the equivalence operator (<code>==</code>). Oof.</p>
-<p>How can a mere human understand this better?</p>
-</section>
-<section id="parsed-tense" class="level2">
-<h2 class="anchored" data-anchor-id="parsed-tense">Parsed tense</h2>
-<p>The cool (‘cool’) thing is that R gives you tools to be able to see the world as R sees it.</p>
-<p>This is sometimes called ‘static code analysis’, in that you can interrogate the code for syntax errors <em>before</em> it executes. Packages like <a href="https://lintr.r-lib.org/">{lintr}</a> can even help tidy up (‘lint’) your code by adjusting or replacing the tokens.<sup>4</sup></p>
-<p>I’ve used this approach before to:</p>
-<ul>
-<li><a href="https://www.rostrum.blog/2020/11/14/hello-r2eng/">create the {r2eng} package</a>, which matches tokens against words so an expression can be translated to English (e.g.&nbsp;<code>&lt;-</code> is matched to the word ‘gets’)</li>
-<li><a href="https://www.rostrum.blog/2021/08/31/add-biscuits/">write an RStudio addin that auto-labels closing parentheses</a> with the name of the function they belong to (known cutely as a ‘biscuit’)</li>
-<li><a href="https://www.rostrum.blog/2021/03/13/assign/">identify and destroy files that contain equals assignment</a> (<code>x = 1</code>), rather than the superior assignment arrow (<code>x &lt;- 1</code>)</li>
-</ul>
-<p>How might you tinker about with this yourself? Read on for a quickstart.</p>
-</section>
-<section id="parse-the-parcel" class="level2">
-<h2 class="anchored" data-anchor-id="parse-the-parcel">Parse the parcel</h2>
-<p>I’ll talk about two main functions: <code>parse()</code> and <code>getParseData()</code>, which are both part of base R.</p>
-<p>You can pass a string of R code to <code>parse()</code> for it to be recognised as an ‘expression’. Let’s use the equals-rich <code>subset()</code> example from above.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">code_str <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"x = subset(mtcars, subset = carb == 8)"</span></span>
-<span id="cb2-2">code_expr <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">parse</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text =</span> code_str)</span>
-<span id="cb2-3">code_expr</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>expression(x = subset(mtcars, subset = carb == 8))</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">class</span>(code_expr)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "expression"</code></pre>
-</div>
-</div>
-<p>So the string is recognised as R code at this point, which will allow us to break it down into its individual tokens. You could jump ahead here and just <code>eval()</code>uate this expression object.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">eval</span>(code_expr)</span>
-<span id="cb6-2">x</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>              mpg cyl disp  hp drat   wt qsec vs am gear carb
-Maserati Bora  15   8  301 335 3.54 3.57 14.6  0  1    5    8</code></pre>
-</div>
-</div>
-<p>As a result, the dataframe <code>x</code> is now in our environment and, as expected, contains only rows of the <code>mtcars</code> that have 8 <code>carb</code>uretors.<sup>5</sup></p>
-<p>So we have the power to delay code execution, like some kind of wizard. Jeepers! That’s great, but now lets pick apart the frozen expression into its constituent tokens. This is where <code>getParseData()</code> comes in.</p>
-<p>The function takes an expression object as the input and returns a dataframe with one token per row and several columns of handy information related to positioning and the relatedness between the tokens.</p>
-<p>For now I’m going to simplify the output to show only the units of <code>text</code> that have been recognised as tokens, along with the name that R gives to each <code>token</code> under the hood (e.g.&nbsp;<code>&lt;-</code> is recognised as <code>LEFT_ASSIGN</code>).<sup>6</sup></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">code_parsed <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">getParseData</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">parse</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text =</span> code_str, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">keep.source =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>))</span>
-<span id="cb8-2">code_parsed[code_parsed<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>text <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">""</span>, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"token"</span>)]</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>     text                token
-1       x               SYMBOL
-2       =            EQ_ASSIGN
-5  subset SYMBOL_FUNCTION_CALL
-6       (                  '('
-8  mtcars               SYMBOL
-9       ,                  ','
-14 subset           SYMBOL_SUB
-15      =               EQ_SUB
-16   carb               SYMBOL
-17     ==                   EQ
-19      8            NUM_CONST
-21      )                  ')'</code></pre>
-</div>
-</div>
-<p>Oh neato, so you can see <code>=</code> is indeed recognised as the token <code>EQ_ASSIGN</code> (‘equals assign’), <code>=</code> as <code>EQ_SUB</code> (equals in the context of supplying function arguments) and <code>==</code> as in <code>EQ</code> (the equivalence operator).</p>
-<p>If you’re wondering, the <code>keep.source = TRUE</code> bit was needed to encourage <code>parse()</code> to return its output, which is a necessary step within this non-interactive blog post.</p>
-</section>
-<section id="parseltongue" class="level2">
-<h2 class="anchored" data-anchor-id="parseltongue">Parseltongue</h2>
-<p>Want to take a look at the tokens in a given string of R code yourself? You can use this little function that contains <code>parse()</code> and <code>getParseData()</code> and returns you the simplified dataframe I showed above if <code>simplify = TRUE</code>, otherwise it gives the full read out.<sup>7</sup></p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">parse_out <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(string, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">simplify =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>) {</span>
-<span id="cb10-2">  p <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">parse</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text =</span> string, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">keep.source =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>)</span>
-<span id="cb10-3">  pd <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">getParseData</span>(p)</span>
-<span id="cb10-4">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (simplify) {</span>
-<span id="cb10-5">    keep_cols <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"token"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text"</span>)</span>
-<span id="cb10-6">    pd <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> pd[pd<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>text <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">""</span>, keep_cols]</span>
-<span id="cb10-7">  }</span>
-<span id="cb10-8">  pd</span>
-<span id="cb10-9">}</span></code></pre></div>
-</div>
-<p>So you could use it like:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">parse_out</span>(</span>
-<span id="cb11-2">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"mean(CO2[CO2$Plant == 'Qn1', CO2$uptake]) -&gt; mean_uptake"</span></span>
-<span id="cb11-3">)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                  token        text
-1  SYMBOL_FUNCTION_CALL        mean
-2                   '('           (
-4                SYMBOL         CO2
-5                   '['           [
-7                SYMBOL         CO2
-8                   '$'           $
-10               SYMBOL       Plant
-12                   EQ          ==
-13            STR_CONST       'Qn1'
-14                  ','           ,
-20               SYMBOL         CO2
-21                  '$'           $
-23               SYMBOL      uptake
-25                  ']'           ]
-30                  ')'           )
-35         RIGHT_ASSIGN          -&gt;
-36               SYMBOL mean_uptake</code></pre>
-</div>
-</div>
-<div class="tip">
-<p> <b>Note</b></p>
-<p>Since I wrote this post, it’s become possible to <a href="https://github.com/coatless/quarto-webr">include editable R blocks in a rendered Quarto document</a>, which can be run in the browser thanks to <a href="https://docs.r-wasm.org/webr/latest/">WebR</a>(!). <a href="https://webr-parse-test.netlify.app/">I’ve made a quick demo</a> and <a href="https://www.rostrum.blog/2023/03/16/webr-quarto/">post</a> so you can play around with a simplified version of the parsing function above.</p>
-</div>
-</section>
-<section id="lateral-parse" class="level2">
-<h2 class="anchored" data-anchor-id="lateral-parse">Lateral parse</h2>
-<p>I’ll leave you with another interesting thing that shows you the inner workings of R, which you might not realise as you run your code. We can look at how the code is actually executed, not just the tokens that it’s composed of.</p>
-<p>Consider how the {magrittr} pipe <code>%&gt;%</code> is used. Here I’ve slightly adjusted the input to filter for 6 and 8 <code>carb</code>uretors; you’ll see why in a second.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">parse_out</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"mtcars %&gt;% subset(carb %in% c(6, 8))"</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                  token   text
-1                SYMBOL mtcars
-2               SPECIAL    %&gt;%
-4  SYMBOL_FUNCTION_CALL subset
-5                   '('      (
-7                SYMBOL   carb
-8               SPECIAL   %in%
-10 SYMBOL_FUNCTION_CALL      c
-11                  '('      (
-13            NUM_CONST      6
-15                  ','      ,
-19            NUM_CONST      8
-21                  ')'      )
-26                  ')'      )</code></pre>
-</div>
-</div>
-<p>Okay yeah, <code>%&gt;%</code> is recognised as a token called <code>SPECIAL</code> between the left-hand side of <code>mtcars</code> and the right-hand side of <code>subset(carb %in% c(6, 8))</code>. Notice also that <code>%in%</code> is also recognised as <code>SPECIAL</code>.</p>
-<p>In fact, this is how R recognises <a href="https://adv-r.hadley.nz/functions.html?q=infix%20operator#infix-functions">‘infix operators’</a> that are bound by percent symbols. This is some special syntactical magic that lets you put the function name <em>between</em> two arguments. So <code>x %&gt;% head</code> is equivalent to <code>`%&gt;%`(mtcars, head)</code>. Perhaps <code>SPECIAL</code> instead of a more specific name because infix operators can be created on the fly?</p>
-<p>If <code>%&gt;%</code> is <code>SPECIAL</code>, how do you think the base pipe is recognised in this simpler example?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">parse_out</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"mtcars |&gt; head()"</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                 token   text
-1               SYMBOL mtcars
-2                 PIPE     |&gt;
-4 SYMBOL_FUNCTION_CALL   head
-5                  '('      (
-7                  ')'      )</code></pre>
-</div>
-</div>
-<p>Not that surprising: it’s recognised as <code>PIPE</code> and not a <code>SPECIAL</code>, since it’s a proper base R token in its own right (<a href="https://www.rostrum.blog/2022/06/01/try-r/">as of R v4.1</a>) .</p>
-<p>Okay, so we’ve seen how R parses these tokens, what about how it actually executes the code? One way to see this is to look at an ‘abstract syntax tree’ with <a href="https://lobstr.r-lib.org/">the {lobstr} package</a>.<sup>8</sup> A ‘tree’ to show the nested structure of code and variables and so on.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(lobstr)    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># install from CRAN</span></span>
-<span id="cb17-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(magrittr)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># install from CRAN</span></span>
-<span id="cb17-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ast</span>(mtcars <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%&gt;%</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">head</span>())</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>█─`%&gt;%` 
-├─mtcars 
-└─█─head </code></pre>
-</div>
-</div>
-<p>Yeah, like I said: <code>x %&gt;% head()</code> is ultimately executed by R like a normal function (block symbol in the output from <code>ast()</code> above), in the form <code>`%&gt;%`(mtcars, head)</code>. You can see how the <code>`%&gt;%`</code> is a parent to <code>mtcars</code> and <code>head()</code> below it.</p>
-<p>So the same happens for the base pipe, right?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ast</span>(mtcars <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">head</span>())</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>█─head 
-└─mtcars </code></pre>
-</div>
-</div>
-<p>Surprise! <code>mtcars |&gt; head</code> is not executed like <code>`|&gt;`(mtcars, head)</code>. It’s literally executed like <code>head(mtcars)</code>. The base pipe is so special because it’s baked right into the R source code as a separate type of token that is recognised to have a job distinct from a basic <code>SPECIAL</code>. This should make it a little faster to run compared to <code>%&gt;%</code> as well.</p>
-</section>
-<section id="parse-away" class="level2">
-<h2 class="anchored" data-anchor-id="parse-away">Parse away</h2>
-<p>Well, ‘cool’ I guess. Now it’s up to you: you can either parse on this knowledge, or leave it in the parsed.<sup>9</sup></p>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-17 18:08:02 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
-[1] magrittr_2.0.3 lobstr_1.1.2  
-
-loaded via a namespace (and not attached):
- [1] digest_0.6.31     fastmap_1.1.1     xfun_0.39         fontawesome_0.5.1
- [5] knitr_1.43.1      htmltools_0.5.5   rmarkdown_2.23    cli_3.6.1        
- [9] compiler_4.3.1    rstudioapi_0.15.0 tools_4.3.1       evaluate_0.21    
-[13] yaml_2.3.7        crayon_1.5.2      rlang_1.1.1       jsonlite_1.8.7   
-[17] htmlwidgets_1.6.2</code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>You too <a href="https://www.rostrum.blog/2021/11/07/deepfry/">can use R to deep fry a meme</a>.↩︎</p></li>
-<li id="fn2"><p>Things that I’m sure are quite trivial to gatekeepers. I learnt minimal amounts of R to help me wrangle ecological data and ‘do statistics’. I’m not a computer scientist, nor was I trained as a programmer.↩︎</p></li>
-<li id="fn3"><p>Of course, I’m not mentioning right assignment (<code>-&gt;</code>) here, nor the plucky upstart of <a href="https://www.rostrum.blog/2022/06/07/assign-down/">down-asignment</a>, which is certain to be the future for assignment in R.↩︎</p></li>
-<li id="fn4"><p>You may also enjoy <a href="https://renkun.me/2020/11/08/using-parse-data-to-analyze-r-code/">a post by Kun Ren</a> about how this approach is useful for static analysis in <a href="https://github.com/REditorSupport/languageserver">the {languageserver} package</a>, which is a handy download for using R in VS Code.↩︎</p></li>
-<li id="fn5"><p>Not <code>carb</code>ohydrates. ‘Non-car people’ should take a look at the ‘Format’ section of <code>?mtcars</code>. I mean, <code>drat</code> means ‘rear axle ratio’, what?↩︎</p></li>
-<li id="fn6"><p>You can <a href="https://github.com/wch/r-source/blob/0ee550ff68f22b8a1807377e728f99f2775cc43c/src/main/gram.y#L2312-L2350">see a list of these with English translations</a> in Winston Chang’s GitHub copy of R’s source code. So <code>NUM_CONST</code> is ‘numeric constant’, for example.↩︎</p></li>
-<li id="fn7"><p>An exercise for the reader is to alter this function to accept an R script file rather than a string (hint: <code>parse()</code> takes a <code>file</code> argument).↩︎</p></li>
-<li id="fn8"><p>A package with one of my favourite names and <a href="https://lobstr.r-lib.org/logo.png">hex logos</a>. The ‘str’ is from ‘structure’, as in ‘the structure of code’. The logo is a lobster snipping apart the ‘lob’ from ‘str’ text. I mean, *(lobster) chef’s kiss* on that one. 🦞↩︎</p></li>
-<li id="fn9"><p>Yeah, I’m hoping you didn’t read this far. Obviously I didn’t know how to end the post, sorry.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>lobstr</category>
-  <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2023-03-03-getparsedata/index.html</guid>
-  <pubDate>Fri, 03 Mar 2023 00:00:00 GMT</pubDate>
+  <pubDate>Tue, 14 Mar 2023 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
