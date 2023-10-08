@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 160 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2023-09-17 (latest).
+🔢 There have been 161 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2023-10-08 (latest).
 
 📅 That’s a post roughly every 12 days, or about 2.4 posts per month.
 
-🆕 The latest post: [Click links to execute code in the R
-console!](https://www.rostrum.blog/posts/2023-09-17-choosethis).
+🆕 The latest post: [Govspeakify tables with
+{shinylive}](https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ console!](https://www.rostrum.blog/posts/2023-09-17-choosethis).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 161 | 2023-10-08 | [Govspeakify tables with {shinylive}](https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables)                            |
 | 160 | 2023-09-17 | [Click links to execute code in the R console!](https://www.rostrum.blog/posts/2023-09-17-choosethis)                          |
 | 159 | 2023-09-16 | [Dear John, I’m sorry](https://www.rostrum.blog/posts/2023-09-16-chunktop)                                                     |
 | 158 | 2023-09-10 | [The life and death of the tidyverse](https://www.rostrum.blog/posts/2023-09-10-lifecycle)                                     |
@@ -206,4 +207,4 @@ console!](https://www.rostrum.blog/posts/2023-09-17-choosethis).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2023-09-25 at 18:02.
+🕒 Last updated: 2023-10-08 at 16:43.
