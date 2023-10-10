@@ -16,24 +16,24 @@ categories:
 
 ## tl;dr
 
-I made [a demo Shiny app](https://matt-dray.github.io/govspeakify-tables/) that's hosted with GitHub Pages but runs serverless in the browser, thanks to [{shinylive}](https://github.com/posit-dev/shinylive). It converts a copied table to Govspeak Markdown, the format required for publishing reports by the UK's government.
+I made [a demo Shiny app](https://matt-dray.github.io/govspeakify-tables/) that's hosted with GitHub Pages but runs serverless in the browser, thanks to [{shinylive}](https://posit-dev.github.io/r-shinylive/). It converts a copied table to Govspeak Markdown, the format required for publishing reports by the UK's government.
 
 ## Rise
 
-Stastistical reports in the UK public sector are often prepared as Word documents. However, they need to be uploaded to the UK government's publishing system as a special, simplified flavour of Markdown called '[Govspeak](https://govspeak-preview.publishing.service.gov.uk/guide)'. There's [an online tool](https://govspeak-preview.publishing.service.gov.uk/) to help with this, but it doesn't yet handle the conversion of tables.
+Statistical reports in the UK public sector are often prepared as Word documents. However, they need to be uploaded to the UK government's publishing system as a special, simplified flavour of Markdown called '[Govspeak](https://govspeak-preview.publishing.service.gov.uk/guide)'. There's [an online tool](https://govspeak-preview.publishing.service.gov.uk/) to help with this, but it doesn't yet handle the conversion of tables.
 
 [I wrote recently](https://www.rostrum.blog/posts/2023-06-21-wordup-tables/) about a little function I made to transform Word tables to Govspeak. It suits me to run the function within R, but this approach isn't ideal for colleagues who aren't R users (imagine!). 
 
 A Shiny app could be useful here. But that's a bit of a faff; where would I serve it from? I don't have access to a server and all my free slots on shinyapps.io are taken up. 
 
-But! Thanks to recent developments[^joe] in [Shinylive](https://github.com/posit-dev/shinylive) and [{webR}](https://docs.r-wasm.org/webr/latest/), I can serve the app from GitHub pages and have all the computation happen in the user's browser. 
+But! Thanks to recent developments[^joe] in [Shinylive](https://github.com/posit-dev/shinylive) and [{webR}](https://docs.r-wasm.org/webr/latest/), I can serve the app from GitHub pages and have all the computation happen in the user's browser. This is a gamechanger.
 
 ## And shine
 
 The first step was to create a Shiny app to 'govspeakify' a table. Nothing fancy, I just wanted:
 
 1. A text field to receive a copied table.
-2. Some interactive options for additional Govspeak formatting (to mark-up row titles and totals rows, and provide a regular expression for characters to ignore when evaluating numeric columns so that they'll end up right-aligned).
+2. Some interactive options for additional Govspeak formatting[^format].
 3. A button to convert the table to Govspeak.
 4. The Govspeak output printed to the screen.
 5. A button to copy the output to the clipboard.
@@ -42,7 +42,9 @@ So, a button-click triggers the conversion of the pasted table via `eventReactiv
 
 You can find the app code in [a GitHub repo](https://github.com/matt-dray/govspeakify-tables). I prepared the app in a single `app.R` file, along with an `R/conversion.R` file with bespoke functions. I housed these in a `govspeakify-tables` subfolder.
 
-There's a number of things I want to add or improve to this proof of concept. For example, some more defensive programming to protect against invalid inputs and perhaps some more explanations and styling. You will be able to break it very easily. For now it does what I need it to do.
+There's a number of things I want to add or improve to this proof of concept. For example, some more defensive programming to protect against invalid inputs and perhaps some more explanations and styling. Also the ability to upload a full docx file, extract and 'govspeakify' all tables and return them in a text file. 
+
+You'll be able to break the app very easily, but it does what I need it to do for now.
 
 ## And live!
 
@@ -56,7 +58,9 @@ The steps are:
 
 GitHub will take a moment to ready your app, but it's then available on the web via a URL in the form 'https://username.github.io/repo-name'. The Govspeakify Tables app can be found here: [https://matt-dray.github.io/govspeakify-tables](https://matt-dray.github.io/govspeakify-tables) (may take a sec to load).
 
-Some of these instructions may change as tools like Shinylive (the asset-preparation system), {shinylive} (the package) and {webR} continue to develop. I realised later that Rami has also [recorded these steps in a README](https://github.com/RamiKrispin/shinylive-r), so you may want to look there in future for more up-to-date information.
+Some of these instructions and links may change as tools like Shinylive (the asset-preparation system), {shinylive} (the package) and {webR} continue to develop. I realised later that Rami has also [recorded these steps in a README](https://github.com/RamiKrispin/shinylive-r), so you may want to look there in future for more up-to-date information.
+
+Bottom line: Shinylive is a huge deal for creating small, nimble apps that are free from the tyranny of server management.
 
 ## Environment {.appendix}
 
@@ -66,4 +70,5 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 ```
 </details>
 
-[^joe]: Joe Cheng [spoke about Shinylive](https://jcheng5.github.io/posit-conf-2023-shinylive/) at the recent Posit conference.
+[^joe]: Thanks to George Stagg, Winston Chang, Barret Schloerke and many others! See Joe Cheng's [slides from Shinylive](https://jcheng5.github.io/posit-conf-2023-shinylive/) at the 2023 Posit conference.
+[^format]: To mark-up row titles (i.e. content in the first column is suffixed with `#`) and totals rows (all content in the row is emboldened between asterisks), and to provide a regular expression for characters to ignore when evaluating numeric columns (e.g. recognise that `"75%"` is 75 and `"1,000"` is 1000) so that they'll be marked-up as right-aligned in the output.

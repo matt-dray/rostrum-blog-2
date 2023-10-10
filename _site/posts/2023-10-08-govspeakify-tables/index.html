@@ -164,28 +164,29 @@ ul.task-list li input[type="checkbox"] {
 </div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I made <a href="https://matt-dray.github.io/govspeakify-tables/">a demo Shiny app</a> that’s hosted with GitHub Pages but runs serverless in the browser, thanks to <a href="https://github.com/posit-dev/shinylive">{shinylive}</a>. It converts a copied table to Govspeak Markdown, the format required for publishing reports by the UK’s government.</p>
+<p>I made <a href="https://matt-dray.github.io/govspeakify-tables/">a demo Shiny app</a> that’s hosted with GitHub Pages but runs serverless in the browser, thanks to <a href="https://posit-dev.github.io/r-shinylive/">{shinylive}</a>. It converts a copied table to Govspeak Markdown, the format required for publishing reports by the UK’s government.</p>
 </section>
 <section id="rise" class="level2">
 <h2 class="anchored" data-anchor-id="rise">Rise</h2>
-<p>Stastistical reports in the UK public sector are often prepared as Word documents. However, they need to be uploaded to the UK government’s publishing system as a special, simplified flavour of Markdown called ‘<a href="https://govspeak-preview.publishing.service.gov.uk/guide">Govspeak</a>’. There’s <a href="https://govspeak-preview.publishing.service.gov.uk/">an online tool</a> to help with this, but it doesn’t yet handle the conversion of tables.</p>
+<p>Statistical reports in the UK public sector are often prepared as Word documents. However, they need to be uploaded to the UK government’s publishing system as a special, simplified flavour of Markdown called ‘<a href="https://govspeak-preview.publishing.service.gov.uk/guide">Govspeak</a>’. There’s <a href="https://govspeak-preview.publishing.service.gov.uk/">an online tool</a> to help with this, but it doesn’t yet handle the conversion of tables.</p>
 <p><a href="https://www.rostrum.blog/posts/2023-06-21-wordup-tables/">I wrote recently</a> about a little function I made to transform Word tables to Govspeak. It suits me to run the function within R, but this approach isn’t ideal for colleagues who aren’t R users (imagine!).</p>
 <p>A Shiny app could be useful here. But that’s a bit of a faff; where would I serve it from? I don’t have access to a server and all my free slots on shinyapps.io are taken up.</p>
-<p>But! Thanks to recent developments<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> in <a href="https://github.com/posit-dev/shinylive">Shinylive</a> and <a href="https://docs.r-wasm.org/webr/latest/">{webR}</a>, I can serve the app from GitHub pages and have all the computation happen in the user’s browser.</p>
+<p>But! Thanks to recent developments<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> in <a href="https://github.com/posit-dev/shinylive">Shinylive</a> and <a href="https://docs.r-wasm.org/webr/latest/">{webR}</a>, I can serve the app from GitHub pages and have all the computation happen in the user’s browser. This is a gamechanger.</p>
 </section>
 <section id="and-shine" class="level2">
 <h2 class="anchored" data-anchor-id="and-shine">And shine</h2>
 <p>The first step was to create a Shiny app to ‘govspeakify’ a table. Nothing fancy, I just wanted:</p>
 <ol type="1">
 <li>A text field to receive a copied table.</li>
-<li>Some interactive options for additional Govspeak formatting (to mark-up row titles and totals rows, and provide a regular expression for characters to ignore when evaluating numeric columns so that they’ll end up right-aligned).</li>
+<li>Some interactive options for additional Govspeak formatting<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</li>
 <li>A button to convert the table to Govspeak.</li>
 <li>The Govspeak output printed to the screen.</li>
 <li>A button to copy the output to the clipboard.</li>
 </ol>
 <p>So, a button-click triggers the conversion of the pasted table via <code>eventReactive()</code>, given the user-supplied formatting options. The output is presented back to the user, along with a button to copy it, thanks to <a href="https://CRAN.R-project.org/package=rclipboard">{rclipboard}</a>.</p>
 <p>You can find the app code in <a href="https://github.com/matt-dray/govspeakify-tables">a GitHub repo</a>. I prepared the app in a single <code>app.R</code> file, along with an <code>R/conversion.R</code> file with bespoke functions. I housed these in a <code>govspeakify-tables</code> subfolder.</p>
-<p>There’s a number of things I want to add or improve to this proof of concept. For example, some more defensive programming to protect against invalid inputs and perhaps some more explanations and styling. You will be able to break it very easily. For now it does what I need it to do.</p>
+<p>There’s a number of things I want to add or improve to this proof of concept. For example, some more defensive programming to protect against invalid inputs and perhaps some more explanations and styling. Also the ability to upload a full docx file, extract and ‘govspeakify’ all tables and return them in a text file.</p>
+<p>You’ll be able to break the app very easily, but it does what I need it to do for now.</p>
 </section>
 <section id="and-live" class="level2">
 <h2 class="anchored" data-anchor-id="and-live">And live!</h2>
@@ -197,7 +198,8 @@ ul.task-list li input[type="checkbox"] {
 <li>Push to your GitHub repo and set up GitHub Pages to serve the <code>docs/</code> folder (from the repo, go to the ‘Settings’ tab, click ‘Pages’ in the sidebar, select the ‘main’ branch and ‘/docs’ folder from the dropdowns, then click the ‘Save’ button).</li>
 </ol>
 <p>GitHub will take a moment to ready your app, but it’s then available on the web via a URL in the form ‘https://username.github.io/repo-name’. The Govspeakify Tables app can be found here: <a href="https://matt-dray.github.io/govspeakify-tables">https://matt-dray.github.io/govspeakify-tables</a> (may take a sec to load).</p>
-<p>Some of these instructions may change as tools like Shinylive (the asset-preparation system), {shinylive} (the package) and {webR} continue to develop. I realised later that Rami has also <a href="https://github.com/RamiKrispin/shinylive-r">recorded these steps in a README</a>, so you may want to look there in future for more up-to-date information.</p>
+<p>Some of these instructions and links may change as tools like Shinylive (the asset-preparation system), {shinylive} (the package) and {webR} continue to develop. I realised later that Rami has also <a href="https://github.com/RamiKrispin/shinylive-r">recorded these steps in a README</a>, so you may want to look there in future for more up-to-date information.</p>
+<p>Bottom line: Shinylive is a huge deal for creating small, nimble apps that are free from the tyranny of server management.</p>
 </section>
 
 
@@ -210,7 +212,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-10-08 18:38:43 CEST</code></pre>
+<pre><code>Last rendered: 2023-10-10 22:01:08 CEST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -243,7 +245,8 @@ loaded via a namespace (and not attached):
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>Joe Cheng <a href="https://jcheng5.github.io/posit-conf-2023-shinylive/">spoke about Shinylive</a> at the recent Posit conference.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Thanks to George Stagg, Winston Chang, Barret Schloerke and many others! See Joe Cheng’s <a href="https://jcheng5.github.io/posit-conf-2023-shinylive/">slides from Shinylive</a> at the 2023 Posit conference.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>To mark-up row titles (i.e.&nbsp;content in the first column is suffixed with <code>#</code>) and totals rows (all content in the row is emboldened between asterisks), and to provide a regular expression for characters to ignore when evaluating numeric columns (e.g.&nbsp;recognise that <code>"75%"</code> is 75 and <code>"1,000"</code> is 1000) so that they’ll be marked-up as right-aligned in the output.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
