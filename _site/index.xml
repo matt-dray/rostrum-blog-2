@@ -63,6 +63,15 @@
 <p>GitHub will take a moment to ready your app, but it’s then available on the web via a URL in the form ‘https://username.github.io/repo-name’. The Govspeakify Tables app can be found here: <a href="https://matt-dray.github.io/govspeakify-tables">https://matt-dray.github.io/govspeakify-tables</a> (may take a sec to load).</p>
 <p>Some of these instructions and links may change as tools like Shinylive (the asset-preparation system), {shinylive} (the package) and {webR} continue to develop. I realised later that Rami has also <a href="https://github.com/RamiKrispin/shinylive-r">recorded these steps in a README</a>, so you may want to look there in future for more up-to-date information.</p>
 <p>Bottom line: Shinylive is a huge deal for creating small, nimble apps that are free from the tyranny of server management.</p>
+<div class="tip">
+<p> <b>Note</b></p>
+<p>It occurred to me that the arrival of Shinylive might finally be the death knell for <a href="https://rstudio.github.io/crosstalk/">{crosstalk}</a>. {crosstalk} allows for certain <a href="https://rstudio.github.io/crosstalk/widgets.html">htmlwidgets</a> to speak to each other so that, for example, you can select from a dropdown and the points displayed on a graph or table will get filtered. In other words, you get a Shiny-like experience without {shiny} and without a server. I <a href="https://www.rostrum.blog/posts/2018-09-12-crosstalk-memes/">spoke about {crosstalk} in 2018</a> and it hasn’t really developed sinece then. I think I’ll probably use Shinylive in Quarto from now on.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables/resources/crosstalk.png" class="img-fluid figure-img" style="width:100.0%" alt="Meme. First line says 'mom, can we have serverless Shiny?' with a screenshot of the Shinylive R package website. Second line says 'No, there is serverless Shiny at home'. Third line says 'serverless Shiny at home' and has a screenshot of the crosstalk R package website."></p>
+</figure>
+</div>
+</div>
 </section>
 
 
@@ -75,7 +84,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-10-10 22:01:08 CEST</code></pre>
+<pre><code>Last rendered: 2023-10-11 11:42:58 CEST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -99,7 +108,7 @@ loaded via a namespace (and not attached):
  [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
  [5] tools_4.3.1       htmltools_0.5.6.1 rstudioapi_0.15.0 yaml_2.3.7       
  [9] rmarkdown_2.25    knitr_1.44        jsonlite_1.8.7    xfun_0.40        
-[13] digest_0.6.33     rlang_1.1.1       evaluate_0.22    </code></pre>
+[13] digest_0.6.33     rlang_1.1.1       fontawesome_0.5.2 evaluate_0.22    </code></pre>
 </div>
 </div>
 </details>
