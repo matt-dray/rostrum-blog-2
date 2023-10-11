@@ -53,7 +53,7 @@ So, I have the Shiny app; how do we prepare it? The [{shinylive}](https://posit-
 The steps are:
 
 1. Run `shinylive::export("govspeakify-tables", "docs")` to take the Shiny app and assets from the `govspeakify-tables` folder and generate a deployable version of it in a folder called `docs/` (since this is a folder name that GitHub Pages can serve from).
-2. Run `httpuv::runStaticServer("docs")` to launch the app in a local static server and check that it works as intended (this requires the development version of {httpuv} at the time of writing, which you can install [from GitHub](https://github.com/rstudio/httpuv)).
+2. Run `httpuv::runStaticServer("docs")` to launch the app in a local static server and check that it works as intended (this requires the development version of {httpuv} at the time of writing, which you can install [from GitHub](https://github.com/rstudio/httpuv)). You could also test it out by pasting code into [the online Shinylive editor](https://shinylive.io/r/editor/).
 3. Push to your GitHub repo and set up GitHub Pages to serve the `docs/` folder (from the repo, go to the 'Settings' tab, click 'Pages' in the sidebar, select the 'main' branch and '/docs' folder from the dropdowns, then click the 'Save' button).
 
 GitHub will take a moment to ready your app, but it's then available on the web via a URL in the form 'https://username.github.io/repo-name'. The Govspeakify Tables app can be found here: [https://matt-dray.github.io/govspeakify-tables](https://matt-dray.github.io/govspeakify-tables) (may take a sec to load).
@@ -61,6 +61,12 @@ GitHub will take a moment to ready your app, but it's then available on the web 
 Some of these instructions and links may change as tools like Shinylive (the asset-preparation system), {shinylive} (the package) and {webR} continue to develop. I realised later that Rami has also [recorded these steps in a README](https://github.com/RamiKrispin/shinylive-r), so you may want to look there in future for more up-to-date information.
 
 Bottom line: Shinylive is a huge deal for creating small, nimble apps that are free from the tyranny of server management.
+
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+I later saw Nicola Rennie's [TidyTuesday Shinylive app](https://nrennie.github.io/tidytuesday-shiny-app/) and Veerle van Leemput's post about a [Hangman Shinylive app](https://hypebright.nl/index.php/en/2023/10/02/run-a-shiny-app-in-the-browser-with-shinylive-for-r/) that are worth checking out too.
+</div>
 
 <div class="tip"> 
 `r fontawesome::fa("exclamation-circle")` <b>Note</b>

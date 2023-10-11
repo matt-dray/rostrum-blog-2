@@ -194,12 +194,16 @@ ul.task-list li input[type="checkbox"] {
 <p>The steps are:</p>
 <ol type="1">
 <li>Run <code>shinylive::export("govspeakify-tables", "docs")</code> to take the Shiny app and assets from the <code>govspeakify-tables</code> folder and generate a deployable version of it in a folder called <code>docs/</code> (since this is a folder name that GitHub Pages can serve from).</li>
-<li>Run <code>httpuv::runStaticServer("docs")</code> to launch the app in a local static server and check that it works as intended (this requires the development version of {httpuv} at the time of writing, which you can install <a href="https://github.com/rstudio/httpuv">from GitHub</a>).</li>
+<li>Run <code>httpuv::runStaticServer("docs")</code> to launch the app in a local static server and check that it works as intended (this requires the development version of {httpuv} at the time of writing, which you can install <a href="https://github.com/rstudio/httpuv">from GitHub</a>). You could also test it out by pasting code into <a href="https://shinylive.io/r/editor/">the online Shinylive editor</a>.</li>
 <li>Push to your GitHub repo and set up GitHub Pages to serve the <code>docs/</code> folder (from the repo, go to the ‘Settings’ tab, click ‘Pages’ in the sidebar, select the ‘main’ branch and ‘/docs’ folder from the dropdowns, then click the ‘Save’ button).</li>
 </ol>
 <p>GitHub will take a moment to ready your app, but it’s then available on the web via a URL in the form ‘https://username.github.io/repo-name’. The Govspeakify Tables app can be found here: <a href="https://matt-dray.github.io/govspeakify-tables">https://matt-dray.github.io/govspeakify-tables</a> (may take a sec to load).</p>
 <p>Some of these instructions and links may change as tools like Shinylive (the asset-preparation system), {shinylive} (the package) and {webR} continue to develop. I realised later that Rami has also <a href="https://github.com/RamiKrispin/shinylive-r">recorded these steps in a README</a>, so you may want to look there in future for more up-to-date information.</p>
 <p>Bottom line: Shinylive is a huge deal for creating small, nimble apps that are free from the tyranny of server management.</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>I later saw Nicola Rennie’s <a href="https://nrennie.github.io/tidytuesday-shiny-app/">TidyTuesday Shinylive app</a> and Veerle van Leemput’s post about a <a href="https://hypebright.nl/index.php/en/2023/10/02/run-a-shiny-app-in-the-browser-with-shinylive-for-r/">Hangman Shinylive app</a> that are worth checking out too.</p>
+</div>
 <div class="tip">
 <p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
 <p>It occurred to me that the arrival of Shinylive might finally be the death knell for <a href="https://rstudio.github.io/crosstalk/">{crosstalk}</a>. {crosstalk} allows for certain <a href="https://rstudio.github.io/crosstalk/widgets.html">htmlwidgets</a> to speak to each other so that, for example, you can select from a dropdown and the points displayed on a graph or table will get filtered. In other words, you get a Shiny-like experience without {shiny} and without a server. I <a href="https://www.rostrum.blog/posts/2018-09-12-crosstalk-memes/">spoke about {crosstalk} in 2018</a> and it hasn’t really been developed since then. I think I’ll probably use Shinylive in Quarto from now on.</p>
@@ -221,7 +225,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-10-11 11:49:39 CEST</code></pre>
+<pre><code>Last rendered: 2023-10-11 17:12:59 CEST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
