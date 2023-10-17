@@ -6,15 +6,16 @@ categories:
   - base
   - public-sector
   - r
+  - talk
 ---
 
 ## tl;dr
 
-I'm giving [a quick talk](https://matt-dray.github.io/nhs-r-2023/) at the NHS-R Conference 2023 about base R. I think there'll be a video; I'll link to it here when it's released.
+I'm giving [a lightning talk](https://matt-dray.github.io/nhs-r-2023/) at the [NHS-R](https://nhsrcommunity.com/) Conference 2023 about base R.
 
 ## Slides
 
-The slides are embedded below. Click on them and press <kbd>→</kbd> to advance, <kbd>F</kbd> to go fullscreen, and <kbd>S</kbd> to pop-out the speaker notes.
+The slides are embedded below[^talk] or they can be [opened in a dedicated tab](https://matt-dray.github.io/nhs-r-2023/). Click on them and press <kbd>→</kbd> to advance, <kbd>F</kbd> to go fullscreen, and <kbd>S</kbd> to pop-out the speaker notes.
 
 ```{r embed-slides, echo=FALSE, eval=TRUE}
 xaringanExtra::embed_xaringan(
@@ -27,43 +28,49 @@ The source is [on GitHub](https://github.com/matt-dray/nhs-r-2023). The slides a
 
 ## Premise
 
-The content of the talk is neither new nor earth-shattering. The basic premise is 'base R is pretty neat, remember it exists'.
+The abstract for the talk:
 
-I have a narrow window of experience. I work in the public sector, mostly with people who publish statistical reports. The default for this purpose is often the tidyverse. That's fine, for many reasons.
+> Did you hear? Base R is dead! Or is it? I’ve spent most of my time in the public sector using the tidyverse, but I started learning R before the tidyverse existed (to be polite, you could call me ‘seasoned’). Recently I’ve started to write more base R code again. Why? I'll talk about how base R can do loads of neat stuff out of the box without you needing to install and update any packages (dependencies aren’t bad things per se, but can cause trouble if not managed appropriately). I'll also tell you about some recent additions, like the base pipe and lambda function notation, which demonstrate how base R is responding to the needs of the modern coder. Oh, and you can also do wacky stuff like make an interactive pixel-art creator, a persistent Tamagotchi pet, or a procedural dungeon-crawler. Note that this talk does not constitute a ‘base versus tidyverse' flamewar. It’s purely to appreciate the elegance of good ol’ base R and to highlight some things it can do that you might not have realised (or like me, you forgot a long time ago).
 
-But—in my opinion, with my limited experience—people default to using `library(tidyverse)` without a second thought. At best, this may be overkill for small projects, at worst, reproducibility may be jeopardised.
+In other words, the content of the talk is neither new nor earth-shattering. The basic premise is 'base R is pretty neat, eh?' I hope R users of all skill levels will learn something, no matter how small.
 
-The bottom line: consider if base R can do it alone. It might not, but maybe you can think about it. If it helps (it absolutely won't), you can imagine me standing over your shoulder, stroking my beard, every time you do `library(tidyverse)`.
+I have a narrow window of experience. I work in the public sector, mostly with people who publish statistical reports. The default for this purpose is often the tidyverse. That's fine, for many reasons, but it may be overkill for small projects. At worst, reproducibility may be jeopardised.
 
-But to be clear: I don't think you should 'just replace all your code with base R code'. There's very few examples of where that would make sense. But is it worth importing all of {dplyr} if you just want to `select()`, `filter()` and `mutate()` a data.frame?
+The bottom line: use your tool of choice, but consider if base R can do it alone[^clear].
 
 ## Content
 
-The talk mentions three things:
+The talk mentions three beneficial things related to base R:
 
-1. Stability: vanilla R has changed little over time and will (likely) continue to run for a long time into the future[^julia].
-2. Dependency: R's extensibility is one of its greatest strengths, but simplifying dependencies could help improve the reproducibility of your work.
-3. Modernity: high stability hasn't stopped base R from adapting to the expectation of a modern R coder (e.g. inclusion of a base pipe operator).
+1. Stability.
+2. Dependency.
+3. Modernity.
 
-Re stability, I contend that R is a horseshoe crab. And that R users are Milhouse (you know this to be true).
+Re stability, vanilla R has changed little over time and will (likely) be executable for a long time into the future[^julia]. I contend that R is a horseshoe crab (unchanged for aeons, cryptically beautiful). And that R users are Milhouse in this relevant gif (look deep inside yourself, you know R users are Milhouse).
 
 ![](resources/nice-doggie.gif){fig-alt="Milhouse from the Simpsons pats a happy horseshoe crab on the head. Milhouse is not wearig his glasses. He thinks the crab is a dog." width="50%"}
 
-Re dependency, I use an obligatory (adapted) xkcd.
+Re dependency, R's extensibility is one of its greatest strengths, but reducing the dependency count could help improve reproducibility and reduce headaches[^depend]. I use an obligatory (adapted) [xkcd comic](https://xkcd.com/2347/), where base R is the literal, unyielding base of the teetering tower of packages used by your project.
 
 ![](resources/xkcd.png){fig-alt="Comic from xkcd. Lots of blocks are stacked on top of each other. One small block near the bottom is indicated. The implication is that removing the one small block will bring the whole thing down. The stack is labelled 'your project', the small block is labelled 'some dependency' and the big stable blocks underneath it at the bottom are labelled 'base'." width="50%"}
 
-Re modernity, I morph the janky old R logo to the (perhaps already-outdated, lol) contemporary 'flat' design of the new logo.
+Re modernity, high stability hasn't stopped base R from adapting to the expectation of a modern R coder. I morph the janky old R logo to the (perhaps already-outdated, lol) contemporary 'flat' design of the new logo[^jeroen] and explain the 'modern base aesthetic' of pipes, lambdas and string literals.
 
-![](resources/logo.gif){fig-alt="The old R logo morphs into the new R logo. The old has bevels, highlights and shadows. The new one is simpler with peak 'flat' design." width="25%"}
-
-## Bonus
+![](resources/logo.gif){fig-alt="The old R logo morphs into the new R logo. The old has bevels, highlights and shadows. The new one is simpler with peak 'flat' design." width="50%"}
 
 And, as a bonus fourth point raised in the talk:
 
-4. 'Oddity': base R has some hidden-gem functions like `locator()` to click a plot and have coordinates returned (e.g. [my experimental {pixeltrix} package](https://github.com/matt-dray/pixeltrix) for interactive pixel art), `readline()` to accept user input interactively (e.g. [my experimental {r.oguelike} package](https://github.com/matt-dray/r.oguelike) for a 'procedural dungeon-crawler' in the R console), and `R-user-dir()` as a location for storing user data (e.g. [my experimental {tamRgo} package](https://github.com/matt-dray/tamRgo) for a persistent cyber pet in the R console).
+4. 'Oddity'.
 
-But ultimately, I just wanted to do this terrible 'base slaps' pun because like, slap bass is a guitar technique and, like, zoomers say something 'slaps' to mean 'cool'. I think. Oh dear, this was a flimsy premise for a talk. Cringe-driven development?
+Re oddity, base R has some hidden-gem functions like:
+
+* `locator()` to click a plot and have coordinates returned (e.g. [my experimental {pixeltrix} package](https://github.com/matt-dray/pixeltrix) for interactive pixel art)
+* `readline()` to accept user input interactively (e.g. [my experimental {r.oguelike} package](https://github.com/matt-dray/r.oguelike) for a 'procedural dungeon-crawler' in the R console)
+* `R_user_dir()` as a location for storing user data (e.g. [my experimental {tamRgo} package](https://github.com/matt-dray/tamRgo) for a persistent cyber pet in the R console)
+
+Of course, base R isn't perfect for every situation[^wishlist]. Base _flaps_ sometimes. You can argue it's more terse and less readable than the verb-driven tidyverse, for example. But we have a duty in the public sector to think about long-term code survival. And high employee turnover rates mean we should perhaps default to the most vanilla tool.
+
+But ultimately, I just wanted to do this terrible 'base slaps'/'slap bass' pun because like. But also, like, zoomers say 'slaps' to mean 'cool'. I think. Oh dear, this was a flimsy premise for a talk. Cringe-driven development?
 
 ## Environment {.appendix}
 
@@ -74,3 +81,8 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 </details>
 
 [^julia]: Until we all switch to the Julia and/or Rust languages, amirite.
+[^depend]: Bearing in mind that tools like {renv}, Docker and Nix can help coordinate dependencies. But that's yet another tool to manage.
+[^clear]: But to be clear: I don't think you should 'just replace all your code with base R code'. There's very few examples of where that would make sense. But is it worth importing all of {dplyr} if you just want to `select()`, `filter()` and `mutate()` a data.frame? Maybe, maybe not.
+[^talk]: I think there'll be a video; I'll link to it here when it's released.
+[^wishlist]: See [the wishlist](https://github.com/HenrikBengtsson/Wishlist-for-R/issues) that Henrick Bengtsson has been hosting.
+[^jeroen]: I think this was incepted into my brain by Jeroen in [the {magick} docs](https://docs.ropensci.org/magick/articles/intro.html).

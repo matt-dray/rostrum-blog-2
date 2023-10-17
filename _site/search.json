@@ -8299,21 +8299,21 @@
     "href": "posts/2023-10-17-nhs-r-2023/index.html",
     "title": "Base slaps!",
     "section": "",
-    "text": "I’m giving a quick talk at the NHS-R Conference 2023 about base R. I think there’ll be a video; I’ll link to it here when it’s released."
+    "text": "I’m giving a lightning talk at the NHS-R Conference 2023 about base R."
   },
   {
     "objectID": "posts/2023-10-17-nhs-r-2023/index.html#tldr",
     "href": "posts/2023-10-17-nhs-r-2023/index.html#tldr",
     "title": "Base slaps!",
     "section": "",
-    "text": "I’m giving a quick talk at the NHS-R Conference 2023 about base R. I think there’ll be a video; I’ll link to it here when it’s released."
+    "text": "I’m giving a lightning talk at the NHS-R Conference 2023 about base R."
   },
   {
     "objectID": "posts/2023-10-17-nhs-r-2023/index.html#slides",
     "href": "posts/2023-10-17-nhs-r-2023/index.html#slides",
     "title": "Base slaps!",
     "section": "Slides",
-    "text": "Slides\nThe slides are embedded below. Click on them and press → to advance, F to go fullscreen, and S to pop-out the speaker notes.\n\n\n\n\n\n\n\n\nThe source is on GitHub. The slides are written with Quarto, of course."
+    "text": "Slides\nThe slides are embedded below1 or they can be opened in a dedicated tab. Click on them and press → to advance, F to go fullscreen, and S to pop-out the speaker notes.\n\n\n\n\n\n\n\n\nThe source is on GitHub. The slides are written with Quarto, of course."
   },
   {
     "objectID": "posts/2023-10-17-nhs-r-2023/index.html#explanation",
@@ -8334,34 +8334,34 @@
     "href": "posts/2023-10-17-nhs-r-2023/index.html#environment",
     "title": "Base slaps!",
     "section": "Environment",
-    "text": "Environment\n\n\n\nSession info\n\n\n\nLast rendered: 2023-10-11 22:35:26 CEST\n\n\nR version 4.3.1 (2023-06-16)\nPlatform: aarch64-apple-darwin20 (64-bit)\nRunning under: macOS Ventura 13.2.1\n\nMatrix products: default\nBLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib \nLAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0\n\nlocale:\n[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8\n\ntime zone: Europe/Rome\ntzcode source: internal\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nloaded via a namespace (and not attached):\n [1] htmlwidgets_1.6.2   compiler_4.3.1      fastmap_1.1.1      \n [4] cli_3.6.1           tools_4.3.1         htmltools_0.5.6.1  \n [7] xaringanExtra_0.7.0 rstudioapi_0.15.0   yaml_2.3.7         \n[10] rmarkdown_2.25      knitr_1.44          jsonlite_1.8.7     \n[13] xfun_0.40           digest_0.6.33       rlang_1.1.1        \n[16] evaluate_0.22"
+    "text": "Environment\n\n\n\nSession info\n\n\n\nLast rendered: 2023-10-17 21:34:50 BST\n\n\nR version 4.3.1 (2023-06-16)\nPlatform: aarch64-apple-darwin20 (64-bit)\nRunning under: macOS Ventura 13.2.1\n\nMatrix products: default\nBLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib \nLAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0\n\nlocale:\n[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8\n\ntime zone: Europe/London\ntzcode source: internal\n\nattached base packages:\n[1] stats     graphics  grDevices utils     datasets  methods   base     \n\nloaded via a namespace (and not attached):\n [1] htmlwidgets_1.6.2   compiler_4.3.1      fastmap_1.1.1      \n [4] cli_3.6.1           tools_4.3.1         htmltools_0.5.6.1  \n [7] xaringanExtra_0.7.0 rstudioapi_0.15.0   yaml_2.3.7         \n[10] rmarkdown_2.25      knitr_1.44          jsonlite_1.8.7     \n[13] xfun_0.40           digest_0.6.33       rlang_1.1.1        \n[16] evaluate_0.22"
   },
   {
     "objectID": "posts/2023-10-17-nhs-r-2023/index.html#premise",
     "href": "posts/2023-10-17-nhs-r-2023/index.html#premise",
     "title": "Base slaps!",
     "section": "Premise",
-    "text": "Premise\nThe content of the talk is neither new nor earth-shattering. The basic premise is ‘base R is pretty neat, remember it exists’.\nI have a narrow window of experience. I work in the public sector, mostly with people who publish statistical reports. The default for this purpose is often the tidyverse. That’s fine, for many reasons.\nBut—in my opinion, with my limited experience—people default to using library(tidyverse) without a second thought. At best, this may be overkill for small projects, at worst, reproducibility may be jeopardised.\nThe bottom line: consider if base R can do it alone. It might not, but maybe you can think about it. If it helps (it absolutely won’t), you can imagine me standing over your shoulder, stroking my beard, every time you do library(tidyverse).\nBut to be clear: I don’t think you should ‘just replace all your code with base R code’. There’s very few examples of where that would make sense. But is it worth importing all of {dplyr} if you just want to select(), filter() and mutate() a data.frame?"
+    "text": "Premise\nThe abstract for the talk:\n\nDid you hear? Base R is dead! Or is it? I’ve spent most of my time in the public sector using the tidyverse, but I started learning R before the tidyverse existed (to be polite, you could call me ‘seasoned’). Recently I’ve started to write more base R code again. Why? I’ll talk about how base R can do loads of neat stuff out of the box without you needing to install and update any packages (dependencies aren’t bad things per se, but can cause trouble if not managed appropriately). I’ll also tell you about some recent additions, like the base pipe and lambda function notation, which demonstrate how base R is responding to the needs of the modern coder. Oh, and you can also do wacky stuff like make an interactive pixel-art creator, a persistent Tamagotchi pet, or a procedural dungeon-crawler. Note that this talk does not constitute a ‘base versus tidyverse’ flamewar. It’s purely to appreciate the elegance of good ol’ base R and to highlight some things it can do that you might not have realised (or like me, you forgot a long time ago).\n\nIn other words, the content of the talk is neither new nor earth-shattering. The basic premise is ‘base R is pretty neat, eh?’ I hope R users of all skill levels will learn something, no matter how small.\nI have a narrow window of experience. I work in the public sector, mostly with people who publish statistical reports. The default for this purpose is often the tidyverse. That’s fine, for many reasons, but it may be overkill for small projects. At worst, reproducibility may be jeopardised.\nThe bottom line: use your tool of choice, but consider if base R can do it alone2."
   },
   {
     "objectID": "posts/2023-10-17-nhs-r-2023/index.html#content",
     "href": "posts/2023-10-17-nhs-r-2023/index.html#content",
     "title": "Base slaps!",
     "section": "Content",
-    "text": "Content\nThe talk mentions three things:\n\nStability: vanilla R has changed little over time and will (likely) continue to run for a long time into the future1.\nDependency: R’s extensibility is one of its greatest strengths, but simplifying dependencies could help improve the reproducibility of your work.\nModernity: high stability hasn’t stopped base R from adapting to the expectation of a modern R coder (e.g. inclusion of a base pipe operator).\n\nRe stability, I contend that R is a horseshoe crab. And that R users are Milhouse (you know this to be true).\n\nRe dependency, I use an obligatory (adapted) xkcd.\n\nRe modernity, I morph the janky old R logo to the (perhaps already-outdated, lol) contemporary ‘flat’ design of the new logo."
+    "text": "Content\nThe talk mentions three beneficial things related to base R:\n\nStability.\nDependency.\nModernity.\n\nRe stability, vanilla R has changed little over time and will (likely) be executable for a long time into the future3. I contend that R is a horseshoe crab (unchanged for aeons, cryptically beautiful). And that R users are Milhouse in this relevant gif (look deep inside yourself, you know R users are Milhouse).\n\nRe dependency, R’s extensibility is one of its greatest strengths, but reducing the dependency count could help improve reproducibility and reduce headaches4. I use an obligatory (adapted) xkcd comic, where base R is the literal, unyielding base of the teetering tower of packages used by your project.\n\nRe modernity, high stability hasn’t stopped base R from adapting to the expectation of a modern R coder. I morph the janky old R logo to the (perhaps already-outdated, lol) contemporary ‘flat’ design of the new logo5 and explain the ‘modern base aesthetic’ of pipes, lambdas and string literals.\n\nAnd, as a bonus fourth point raised in the talk:\n\n‘Oddity’.\n\nRe oddity, base R has some hidden-gem functions like:\n\nlocator() to click a plot and have coordinates returned (e.g. my experimental {pixeltrix} package for interactive pixel art)\nreadline() to accept user input interactively (e.g. my experimental {r.oguelike} package for a ‘procedural dungeon-crawler’ in the R console)\nR_user_dir() as a location for storing user data (e.g. my experimental {tamRgo} package for a persistent cyber pet in the R console)\n\nOf course, base R isn’t perfect for every situation6. Base flaps sometimes. You can argue it’s more terse and less readable than the verb-driven tidyverse, for example. But we have a duty in the public sector to think about long-term code survival. And high employee turnover rates mean we should perhaps default to the most vanilla tool.\nBut ultimately, I just wanted to do this terrible ‘base slaps’/‘slap bass’ pun because like. But also, like, zoomers say ‘slaps’ to mean ‘cool’. I think. Oh dear, this was a flimsy premise for a talk. Cringe-driven development?"
   },
   {
     "objectID": "posts/2023-10-17-nhs-r-2023/index.html#bonus",
     "href": "posts/2023-10-17-nhs-r-2023/index.html#bonus",
     "title": "Base slaps!",
     "section": "Bonus",
-    "text": "Bonus\nAnd, as a bonus fourth point raised in the talk:\n\n‘Oddity’: base R has some hidden-gem functions like locator() to click a plot and have coordinates returned (e.g. my experimental {pixeltrix} package for interactive pixel art), readline() to accept user input interactively (e.g. my experimental {r.oguelike} package for a ‘procedural dungeon-crawler’ in the R console), and R-user-dir() as a location for storing user data (e.g. my experimental {tamRgo} package for a persistent cyber pet in the R console).\n\nBut ultimately, I just wanted to do this terrible ‘base slaps’ pun because like, slap bass is a guitar technique and, like, zoomers say something ‘slaps’ to mean ‘cool’. I think. Oh dear, this was a flimsy premise for a talk. Cringe-driven development?"
+    "text": "Bonus\nAnd, as a bonus fourth point raised in the talk:\n\n‘Oddity’: base R has some hidden-gem functions like locator() to click a plot and have coordinates returned (e.g. my experimental {pixeltrix} package for interactive pixel art), readline() to accept user input interactively (e.g. my experimental {r.oguelike} package for a ‘procedural dungeon-crawler’ in the R console), and R_user_dir() as a location for storing user data (e.g. my experimental {tamRgo} package for a persistent cyber pet in the R console).\n\nBut ultimately, I just wanted to do this terrible ‘base slaps’ pun because like, slap bass is a guitar technique and, like, zoomers say something ‘slaps’ to mean ‘cool’. I think. Oh dear, this was a flimsy premise for a talk. Cringe-driven development?"
   },
   {
     "objectID": "posts/2023-10-17-nhs-r-2023/index.html#footnotes",
     "href": "posts/2023-10-17-nhs-r-2023/index.html#footnotes",
     "title": "Base slaps!",
     "section": "Footnotes",
-    "text": "Footnotes\n\n\nUntil we all switch to the Julia and/or Rust languages, amirite.↩︎"
+    "text": "Footnotes\n\n\nI think there’ll be a video; I’ll link to it here when it’s released.↩︎\nBut to be clear: I don’t think you should ‘just replace all your code with base R code’. There’s very few examples of where that would make sense. But is it worth importing all of {dplyr} if you just want to select(), filter() and mutate() a data.frame? Maybe, maybe not.↩︎\nUntil we all switch to the Julia and/or Rust languages, amirite.↩︎\nBearing in mind that tools like {renv}, Docker and Nix can help coordinate dependencies. But that’s yet another tool to manage.↩︎\nI think this was incepted into my brain by Jeroen in the {magick} docs.↩︎\nSee the wishlist that Henrick Bengtsson has been hosting.↩︎"
   }
 ]
