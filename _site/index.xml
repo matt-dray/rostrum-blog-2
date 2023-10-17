@@ -10,7 +10,131 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Sat, 07 Oct 2023 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 16 Oct 2023 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Base slaps!</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I’m giving <a href="https://matt-dray.github.io/nhs-r-2023/">a lightning talk</a> at the <a href="https://nhsrcommunity.com/">NHS-R</a> Conference 2023 (tomorrow!) about base R.</p>
+</section>
+<section id="slides" class="level2">
+<h2 class="anchored" data-anchor-id="slides">Slides</h2>
+<p>The slides are embedded below<sup>1</sup> or they can be <a href="https://matt-dray.github.io/nhs-r-2023/">opened in a dedicated tab</a>. Click on them and press <kbd>→</kbd> to advance, <kbd>F</kbd> to go fullscreen, and <kbd>S</kbd> to pop-out the speaker notes.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="shareagain" style="min-width:300px;margin:1em auto;" data-exeternal="1">
+<iframe src="https://matt-dray.github.io/nhs-r-2023/" width="1600" height="900" style="border:2px solid currentColor;" loading="lazy" allowfullscreen=""></iframe>
+<script>fitvids('.shareagain', {players: 'iframe'});</script>
+</div>
+</div>
+</div>
+<p>The source is <a href="https://github.com/matt-dray/nhs-r-2023">on GitHub</a>. The slides are <a href="https://quarto.org/docs/presentations/">written with Quarto</a>, of course.</p>
+</section>
+<section id="premise" class="level2">
+<h2 class="anchored" data-anchor-id="premise">Premise</h2>
+<p>The abstract for the talk:</p>
+<blockquote class="blockquote">
+<p>Did you hear? Base R is dead! Or is it? I’ve spent most of my time in the public sector using the tidyverse, but I started learning R before the tidyverse existed (to be polite, you could call me ‘seasoned’). Recently I’ve started to write more base R code again. Why? I’ll talk about how base R can do loads of neat stuff out of the box without you needing to install and update any packages (dependencies aren’t bad things per se, but can cause trouble if not managed appropriately). I’ll also tell you about some recent additions, like the base pipe and lambda function notation, which demonstrate how base R is responding to the needs of the modern coder. Oh, and you can also do wacky stuff like make an interactive pixel-art creator, a persistent Tamagotchi pet, or a procedural dungeon-crawler. Note that this talk does not constitute a ‘base versus tidyverse’ flamewar. It’s purely to appreciate the elegance of good ol’ base R and to highlight some things it can do that you might not have realised (or like me, you forgot a long time ago).</p>
+</blockquote>
+<p>In other words, the content of the talk is neither new nor earth-shattering. The basic premise is ‘base R is pretty neat, eh?’ I hope R users of all skill levels will learn something, no matter how small.</p>
+<p>I have a narrow window of experience. I work in the public sector, mostly with people who publish statistical reports. The default for this purpose is often the tidyverse. That’s fine, for many reasons, but it may be overkill for small projects. At worst, reproducibility may be jeopardised.</p>
+<p>The bottom line: use your tool of choice, but consider if base R can do it alone<sup>2</sup>.</p>
+</section>
+<section id="content" class="level2">
+<h2 class="anchored" data-anchor-id="content">Content</h2>
+<p>The talk mentions three beneficial things related to base R:</p>
+<ol type="1">
+<li>Stability.</li>
+<li>Dependency.</li>
+<li>Modernity.</li>
+</ol>
+<p>Re stability, vanilla R has changed little over time and will (likely) be executable for a long time into the future<sup>3</sup>. I contend that R is a horseshoe crab (unchanged for aeons, cryptically beautiful). And that R users are Milhouse in this relevant gif (look deep inside yourself, you know R users are Milhouse).</p>
+<p><img src="https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/resources/nice-doggie.gif" class="img-fluid" style="width:50.0%" alt="Milhouse from the Simpsons pats a happy horseshoe crab on the head. Milhouse is not wearig his glasses. He thinks the crab is a dog."></p>
+<p>Re dependency, R’s extensibility is one of its greatest strengths, but reducing the dependency count could help improve reproducibility and reduce headaches<sup>4</sup>. I use an obligatory (adapted) <a href="https://xkcd.com/2347/">xkcd comic</a>, where base R is the literal, unyielding base of the teetering tower of packages used by your project.</p>
+<p><img src="https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/resources/xkcd.png" class="img-fluid" style="width:50.0%" alt="Comic from xkcd. Lots of blocks are stacked on top of each other. One small block near the bottom is indicated. The implication is that removing the one small block will bring the whole thing down. The stack is labelled 'your project', the small block is labelled 'some dependency' and the big stable blocks underneath it at the bottom are labelled 'base'."></p>
+<p>Re modernity, high stability hasn’t stopped base R from adapting to the expectation of a modern R coder. I morph the janky old R logo to the (perhaps already-outdated, lol) contemporary ‘flat’ design of the new logo<sup>5</sup> and explain the ‘modern base aesthetic’ of pipes, lambdas and string literals.</p>
+<p><img src="https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/resources/logo.gif" class="img-fluid" style="width:50.0%" alt="The old R logo morphs into the new R logo. The old has bevels, highlights and shadows. The new one is simpler with peak 'flat' design."></p>
+<p>And, as a bonus fourth point raised in the talk:</p>
+<ol start="4" type="1">
+<li>‘Oddity’.</li>
+</ol>
+<p>Re oddity, base R has some hidden-gem functions like:</p>
+<ul>
+<li><code>locator()</code> to click a plot and have coordinates returned (e.g.&nbsp;in <a href="https://github.com/matt-dray/pixeltrix">my experimental {pixeltrix} package</a> for interactive pixel art)</li>
+<li><code>readline()</code> to accept user input interactively (e.g.&nbsp;i <a href="https://github.com/matt-dray/r.oguelike">my experimental {r.oguelike} package</a> for a ‘procedural dungeon-crawler’ in the R console)</li>
+<li><code>R_user_dir()</code> as a location for storing user data (e.g.&nbsp;in <a href="https://github.com/matt-dray/tamRgo">my experimental {tamRgo} package</a> for a persistent cyber pet in the R console)</li>
+</ul>
+<p>Of course, base R isn’t perfect for every situation<sup>6</sup>. Base <em>flaps</em> sometimes. You can argue it’s more terse and less readable than the verb-driven tidyverse, for example. But we have a duty in the public sector to think about long-term code survival. And high employee turnover rates mean we should perhaps default to the most vanilla tool.</p>
+<p>But ultimately, I just wanted to do this terrible ‘base slaps’/‘slap bass’ pun. But also, like, zoomers say ‘slaps’ to mean ‘cool’. I think. Oh dear, this was a flimsy premise for a talk. Cringe-driven development?</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-10-17 21:38:51 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2   compiler_4.3.1      fastmap_1.1.1      
+ [4] cli_3.6.1           tools_4.3.1         htmltools_0.5.6.1  
+ [7] xaringanExtra_0.7.0 rstudioapi_0.15.0   yaml_2.3.7         
+[10] rmarkdown_2.25      knitr_1.44          jsonlite_1.8.7     
+[13] xfun_0.40           digest_0.6.33       rlang_1.1.1        
+[16] evaluate_0.22      </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>I think there’ll be a video; I’ll link to it here when it’s released.↩︎</p></li>
+<li id="fn2"><p>But to be clear: I don’t think you should ‘just replace all your code with base R code’. There’s very few examples of where that would make sense. But is it worth importing all of {dplyr} if you just want to <code>select()</code>, <code>filter()</code> and <code>mutate()</code> a data.frame? Maybe, maybe not.↩︎</p></li>
+<li id="fn3"><p>Until we all switch to the Julia and/or Rust languages, amirite.↩︎</p></li>
+<li id="fn4"><p>Bearing in mind that tools like {renv}, Docker and Nix can help coordinate dependencies. But that’s yet another tool to manage.↩︎</p></li>
+<li id="fn5"><p>I think this was incepted into my brain by Jeroen in <a href="https://docs.ropensci.org/magick/articles/intro.html">the {magick} docs</a>.↩︎</p></li>
+<li id="fn6"><p>See <a href="https://github.com/HenrikBengtsson/Wishlist-for-R/issues">the wishlist</a> that Henrick Bengtsson has been hosting.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>base</category>
+  <category>public-sector</category>
+  <category>r</category>
+  <category>talk</category>
+  <guid>https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/index.html</guid>
+  <pubDate>Mon, 16 Oct 2023 23:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Govspeakify tables with {shinylive}</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -133,7 +257,7 @@ loaded via a namespace (and not attached):
   <category>shinylive</category>
   <category>wordup</category>
   <guid>https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables/index.html</guid>
-  <pubDate>Sat, 07 Oct 2023 22:00:00 GMT</pubDate>
+  <pubDate>Sat, 07 Oct 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Click links to execute code in the R console!</title>
@@ -294,7 +418,7 @@ loaded via a namespace (and not attached):
   <category>cli</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-09-17-choosethis/index.html</guid>
-  <pubDate>Sat, 16 Sep 2023 22:00:00 GMT</pubDate>
+  <pubDate>Sat, 16 Sep 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Dear John, I’m sorry</title>
@@ -945,7 +1069,7 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>r-markdown</category>
   <guid>https://www.rostrum.blog/posts/2023-09-16-chunktop/index.html</guid>
-  <pubDate>Fri, 15 Sep 2023 22:00:00 GMT</pubDate>
+  <pubDate>Fri, 15 Sep 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>The life and death of the tidyverse</title>
@@ -1837,7 +1961,7 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>tidyverse</category>
   <guid>https://www.rostrum.blog/posts/2023-09-10-lifecycle/index.html</guid>
-  <pubDate>Sat, 09 Sep 2023 22:00:00 GMT</pubDate>
+  <pubDate>Sat, 09 Sep 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Combing through my trash</title>
@@ -2579,7 +2703,7 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>r.oguelike</category>
   <guid>https://www.rostrum.blog/posts/2023-09-08-trash-combing/index.html</guid>
-  <pubDate>Fri, 08 Sep 2023 22:00:00 GMT</pubDate>
+  <pubDate>Fri, 08 Sep 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Autodetect Quarto formats with {quartostamp}. Or not.</title>
@@ -3079,7 +3203,7 @@ loaded via a namespace (and not attached):
   <category>rstudio-addins</category>
   <category>yaml</category>
   <guid>https://www.rostrum.blog/posts/2023-09-01-quarto-yaml-detect/index.html</guid>
-  <pubDate>Thu, 31 Aug 2023 22:00:00 GMT</pubDate>
+  <pubDate>Thu, 31 Aug 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Conscious uncoupling with {blogdown}</title>
@@ -3528,7 +3652,7 @@ loaded via a namespace (and not attached):
   <category>quarto</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-08-26-cheerio-blogdown/index.html</guid>
-  <pubDate>Fri, 25 Aug 2023 22:00:00 GMT</pubDate>
+  <pubDate>Fri, 25 Aug 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Object of type closure can shut up</title>
@@ -3969,7 +4093,7 @@ loaded via a namespace (and not attached):
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-08-19-find-bad-names/index.html</guid>
-  <pubDate>Fri, 18 Aug 2023 22:00:00 GMT</pubDate>
+  <pubDate>Fri, 18 Aug 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>One weird trick to {monetize} your R package</title>
@@ -4165,7 +4289,7 @@ loaded via a namespace (and not attached):
   <category>monetize</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-08-01-monetize/index.html</guid>
-  <pubDate>Mon, 31 Jul 2023 22:00:00 GMT</pubDate>
+  <pubDate>Mon, 31 Jul 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Save high scores for your R game</title>
@@ -4415,7 +4539,7 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>videogames</category>
   <guid>https://www.rostrum.blog/posts/2023-07-15-hiscore/index.html</guid>
-  <pubDate>Fri, 14 Jul 2023 22:00:00 GMT</pubDate>
+  <pubDate>Fri, 14 Jul 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Convert a Word table to Markdown</title>
@@ -4632,7 +4756,7 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>wordup</category>
   <guid>https://www.rostrum.blog/posts/2023-06-21-wordup-tables/index.html</guid>
-  <pubDate>Tue, 20 Jun 2023 22:00:00 GMT</pubDate>
+  <pubDate>Tue, 20 Jun 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Panic! In The Toolshed</title>
@@ -4732,7 +4856,7 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>talk</category>
   <guid>https://www.rostrum.blog/posts/2023-06-13-panic-in-the-toolshed/index.html</guid>
-  <pubDate>Mon, 12 Jun 2023 22:00:00 GMT</pubDate>
+  <pubDate>Mon, 12 Jun 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Extract run data from Apple Health (redux)</title>
@@ -5397,7 +5521,7 @@ loaded via a namespace (and not attached):
   <category>xml</category>
   <category>xml2</category>
   <guid>https://www.rostrum.blog/posts/2023-06-11-apple-health-redux/index.html</guid>
-  <pubDate>Sat, 10 Jun 2023 22:00:00 GMT</pubDate>
+  <pubDate>Sat, 10 Jun 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Rectangularise Word tables extracted by {officer}</title>
@@ -6348,7 +6472,7 @@ loaded via a namespace (and not attached):
   <category>public-sector</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-06-07-rectangular-officer/index.html</guid>
-  <pubDate>Tue, 06 Jun 2023 22:00:00 GMT</pubDate>
+  <pubDate>Tue, 06 Jun 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Recreating a dataviz with {ggplot2}</title>
@@ -7038,7 +7162,7 @@ loaded via a namespace (and not attached):
   <category>ggplot2</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-05-10-spear-ggplot2/index.html</guid>
-  <pubDate>Tue, 09 May 2023 22:00:00 GMT</pubDate>
+  <pubDate>Tue, 09 May 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Automate {blogdown} to Quarto</title>
@@ -7402,7 +7526,7 @@ loaded via a namespace (and not attached):
   <category>quarto</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-05-07-bd2q/index.html</guid>
-  <pubDate>Sat, 06 May 2023 22:00:00 GMT</pubDate>
+  <pubDate>Sat, 06 May 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Matt Dray Teaches (Data) Typing</title>
@@ -7863,7 +7987,7 @@ loaded via a namespace (and not attached):
   <category>ms-office</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-04-23-type-convert/index.html</guid>
-  <pubDate>Sat, 22 Apr 2023 22:00:00 GMT</pubDate>
+  <pubDate>Sat, 22 Apr 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>R is a game engine, fight me</title>
@@ -8009,7 +8133,7 @@ loaded via a namespace (and not attached):
   <category>shiny</category>
   <category>videogames</category>
   <guid>https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/index.html</guid>
-  <pubDate>Sat, 01 Apr 2023 22:00:00 GMT</pubDate>
+  <pubDate>Sat, 01 Apr 2023 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Playgrounds with WebR and Quarto</title>
@@ -8122,112 +8246,7 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>webr</category>
   <guid>https://www.rostrum.blog/posts/2023-03-16-webr-quarto/index.html</guid>
-  <pubDate>Wed, 15 Mar 2023 23:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Fun and learning. In a dungeon!</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-03-15-in-a-dungeon/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2023-03-15-in-a-dungeon/resources/mobile-r.oguelike.png" class="img-fluid figure-img" style="width:100.0%" alt="RStudio running a browser on a mobile phone playing the tile-based game from the r.oguelike package."></p>
-<figcaption class="figure-caption">Learn hard and you too can be a mobile gamedev like me.</figcaption>
-</figure>
-</div>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>Today I spoke at a public sector<sup>1</sup> event for data scientists<sup>2</sup>. I said that learning is best when focused into little projects that are fun.</p>
-</section>
-<section id="to-the-point" class="level2">
-<h2 class="anchored" data-anchor-id="to-the-point">To the point</h2>
-<p>The abstract sums it up, obviously:</p>
-<blockquote class="blockquote">
-<p>Ever done a technical training module and then immediately forgot what you learnt? Do you sometimes feel like you’re ticking boxes instead of actually developing your skills? Yeah, me too. Luckily, more active styles of learning are available. Maybe you can try working on a small, focused project where you can make mistakes and have fun. I’ve had success with this and, as a bonus, accidentally learnt more than I had planned to. I’ll give you an example of my experience and some ideas for how you might be able to do it yourself. The talk will involve a detour to an underground cave, but you won’t need any extra equipment.<sup>3</sup></p>
-</blockquote>
-<p>Yes, a cheeky teaser there to pique the interest. But everyone came to my talk anyway because it was the only one at that timeslot.</p>
-<p>You can just look at the slides below if you want (<a href="https://matt-dray.github.io/in-a-dungeon">direct link</a>, <a href="https://github.com/matt-dray/in-a-dungeon">source</a>). Press ‘s’ to pop out the speaker notes.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div class="shareagain" style="min-width:300px;margin:1em auto;" data-exeternal="1">
-<iframe src="https://matt-dray.github.io/in-a-dungeon" width="1600" height="900" style="border:none;" loading="lazy" allowfullscreen=""></iframe>
-<script>fitvids('.shareagain', {players: 'iframe'});</script>
-</div>
-</div>
-</div>
-<p>These were made with <a href="https://quarto.org/docs/presentations/revealjs/">Revealjs via Quarto</a>, of course.</p>
-</section>
-<section id="on-my-soapbox" class="level2">
-<h2 class="anchored" data-anchor-id="on-my-soapbox">On my soapbox</h2>
-<p>So what incredible insight did I bring to the event?</p>
-<p>Basically, I think ‘module-based’ learning—often passive video walkthroughs with comprehension exercises—are too generic and I usually struggle to remember anything from them.</p>
-<p>I think ‘project-based’ learning is preferable. Think about what you actually want to learn and develop a small-scope, discrete project around it. Make the subject matter fun. Fail meaningfully by be being open, recording what you’ve found, and involving your community.</p>
-<p>My contrived soundbite is that module-based is done <em>to</em> you and project-based is done <em>by</em> you.</p>
-<p>Is this a new thought technology? No.&nbsp;Is it always true and applicable to everyone in every conceivable scenario and with every learning need? No.&nbsp;What’s my expertise? None, really. I’ve just spent a long time in lots of different departments and I can tell you what has worked for me<sup>4</sup> as someone who entered the public sector with little computing or coding ability.</p>
-<p>Am I all too aware of how self-indulgent this all sounds? Yes. Did I need a whole talk to explain this? No, probably not. I’m happy if just one person stops to think about this next time they want to learn something. I’m also content if one person panicked slightly when they realised that R is a game engine now.</p>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-06 19:26:56 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2   compiler_4.3.1      fastmap_1.1.1      
- [4] cli_3.6.1           tools_4.3.1         htmltools_0.5.5    
- [7] xaringanExtra_0.7.0 rstudioapi_0.14     yaml_2.3.7         
-[10] rmarkdown_2.23      knitr_1.43.1        jsonlite_1.8.7     
-[13] xfun_0.39           digest_0.6.31       rlang_1.1.1        
-[16] evaluate_0.21      </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>On the same day as train and public sector strikes, oof.↩︎</p></li>
-<li id="fn2"><p>I’m becoming more convinced that I don’t know what ‘data scientist’ means anymore. ‘Old man yells at cloud (computing)’, etc.↩︎</p></li>
-<li id="fn3"><p>A reference of, course, to my little toy <a href="https://github.com/matt-dray/r.oguelike">{r.oguelike}</a> project. This is an R package I wrote to achieve some learning goals and also to have some fun; it contains a novelty tile- and turn-based game that the player interacts with in the console. This also fit the themes of the conference—connectivity and patterns—because it contains <a href="https://www.rostrum.blog/2022/05/01/dungeon/">a procedural dungeon generator</a> and <a href="https://www.rostrum.blog/2022/06/10/basic-search/">enemy pathfinding</a>.↩︎</p></li>
-<li id="fn4"><p>Would’ve been smarter to bring, y’know, actual evidence rather than anecdotes to a data science conference, eh?↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>event</category>
-  <category>r</category>
-  <category>r.oguelike</category>
-  <category>talk</category>
-  <guid>https://www.rostrum.blog/posts/2023-03-15-in-a-dungeon/index.html</guid>
-  <pubDate>Tue, 14 Mar 2023 23:00:00 GMT</pubDate>
+  <pubDate>Thu, 16 Mar 2023 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
