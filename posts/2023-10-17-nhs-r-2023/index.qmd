@@ -15,7 +15,7 @@ I gave [a lightning talk](https://matt-dray.github.io/nhs-r-2023/) at the [NHS-R
 
 ## Slides
 
-The slides are embedded below[^talk] or they can be [opened in a dedicated tab](https://matt-dray.github.io/nhs-r-2023/). Click on them and press <kbd>→</kbd> to advance, <kbd>F</kbd> to go fullscreen, and <kbd>S</kbd> to pop-out the speaker notes.
+The slides are embedded below[^talk] or they can be [opened in a dedicated tab](https://matt-dray.github.io/nhs-r-2023/). Click on them and press <kbd>→</kbd> to advance, <kbd>F</kbd> to go fullscreen, and <kbd>S</kbd> to pop-out the speaker notes[^notes].
 
 ```{r embed-slides, echo=FALSE, eval=TRUE}
 xaringanExtra::embed_xaringan(
@@ -34,9 +34,9 @@ The abstract for the talk:
 
 In other words, the content of the talk was neither new nor earth-shattering[^brackets]. The basic premise was 'base R is pretty neat, don't forget it exists!'
 
-I have a narrow window of experience. I work in the public sector, mostly with people who publish statistical reports. The default for data preparation and analysis is often the tidyverse. That's fine, for many reasons, but it may be overkill for small projects. Arguably, at worst, reproducibility may be jeopardised, and we [love reproducibility](https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/).
+I have a narrow window of experience. I work in the public sector, mostly with people who publish statistical reports. The default for data preparation and analysis is often the tidyverse. That's fine, for many reasons, but it may be overkill for small projects. Arguably, at worst, reproducibility may be jeopardised. And we [love reproducibility](https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/) in the public sector.
 
-My plea: use your tool of choice, but consider if base R can do it alone[^clear]. Or, at very least, become more acquainted with the built-in functions and (spoiler alert) build some off-piste packages for a laugh.
+My plea to fellow public-sector coders: use your tool of choice, but consider if base R can do it alone[^clear]. Or, at very least, become more acquainted with the built-in functions and (spoiler alert) maybe build some off-piste packages for a laugh.
 
 ## Content
 
@@ -68,9 +68,11 @@ Re oddity, base R has some hidden-gem functions that you can use for serious—o
 * `readline()` to accept user input interactively (e.g. i [my experimental {r.oguelike} package](https://github.com/matt-dray/r.oguelike) for a 'procedural dungeon-crawler' in the R console)
 * `R_user_dir()` as a location for storing user data (e.g. in [my experimental {tamRgo} package](https://github.com/matt-dray/tamRgo) for a persistent cyber pet in the R console)
 
-Despite all this, base R isn't perfect for everyone in every situation[^wishlist]. Base _flaps_ sometimes, that's fine. You can argue it's more terse and less readable than the verb-driven tidyverse, for example. But we have a duty in the public sector to think about long-term code survival. And high employee turnover rates mean we should perhaps default to the most vanilla tool. I like base R for writing functions and code I want to live for a long time, for example.
+Despite all this, base R isn't perfect for everyone in every situation[^wishlist]. Base _flaps_ sometimes, that's fine. You can argue it's more terse and less readable than the verb-driven tidyverse, for example. But we have a duty in the public sector to think about long-term code survival. And high employee turnover rates mean we should perhaps default to the most vanilla tool. 
 
-But ultimately, I just wanted to do this terrible 'base slaps'/'slap bass' pun, sorry. But also, like, zoomers say 'slaps' to mean 'cool'. I think. Oh dear, this was a flimsy premise for a talk. Cringe-driven development?
+I like base R for writing functions and code I want to live for a long time, for example. I use the tidyverse for everyday data wrangling.
+
+But ultimately, I just wanted to do this terrible 'base slaps'/'slap bass' pun, sorry. But also, I hear that zoomers say 'slaps' to mean 'cool'. I think. Oh dear, this was a flimsy premise for a talk. Cringe-driven development?
 
 ## Environment {.appendix}
 
@@ -81,9 +83,10 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 </details>
 
 [^julia]: Until we all switch to the Julia and/or Rust languages, amirite.
-[^depend]: Bearing in mind that tools like {renv}, Docker and Nix can help coordinate dependencies. But that's yet another tool to manage.
+[^depend]: Bearing in mind that tools like {renv}, Docker and Nix (thanks Bruno) can help coordinate dependencies. But that's yet another tool to manage.
 [^clear]: But to be clear: I don't think you should 'just replace all your code with base R code'. There's very few examples of where that would make sense. But is it worth importing all of {dplyr} if you just want to `select()`, `filter()` and `mutate()` a data.frame? Maybe, maybe not.
 [^talk]: I think there'll be a video; I'll link to it here when it's released.
-[^wishlist]: See [the wishlist](https://github.com/HenrikBengtsson/Wishlist-for-R/issues) that Henrick Bengtsson has been hosting.
+[^wishlist]: See [the wishlist](https://github.com/HenrikBengtsson/Wishlist-for-R/issues) that Henrik Bengtsson has been hosting.
 [^jeroen]: I think this was incepted into my brain by Jeroen in [the {magick} docs](https://docs.ropensci.org/magick/articles/intro.html).
-[^brackets]: Although one at least one attendee's mind was blown to discover that you can simultaneously assign and print an expression by wrapping it in brackets, like `(x <- 1)`.
+[^brackets]: Although at least one attendee's mind was blown to discover that you can simultaneously assign and print an expression by wrapping it in brackets, like `(x <- 1)`.
+[^notes]: Amusingly, these notes are absolutely not what I said in the talk itself, lol.
