@@ -1,0 +1,77 @@
+---
+title: Unlock R functions with QR codes
+date: 2023-11-01
+slug: qr-enable-fn
+categories:
+  - opencv
+  - qrcode
+  - r
+---
+
+![Uh uh uh!](resources/uhuhuh.png){fig-alt="Screenshot of the computer from Jurassic Park with repeating monospace text in all caps saying 'you didn't say the magic word' and a photo of the antagonist's (Nedry's) head on a cartoon body wagging his finger."}
+
+## tl;dr
+
+What if (hear me out) you could prevent an R function from operating correctly unless the user presents a specific QR code?
+
+## QR you?
+
+[Jeroen announced](https://ropensci.org/blog/2023/10/30/opencv-qr/) that the latest version of [the {opencv} package](https://ropensci.r-universe.dev/opencv#) is capable of detecting and decoding a QR code.
+
+So this means we could write a function that only returns an answer when you introduce a QR code that encodes the correct 'password'.
+
+```{r function}
+add_one <- function(n) {
+  
+  string_in <- opencv::qr_scanner()
+  password <- RCurl::base64Decode("b3BlbmN2IHNlc2FtZSE=")
+  
+  if (string_in == password) {
+    cat("🔑 Correct password!\n")
+    n + 1
+  } else {
+    stop("Wrong password!", call. = FALSE)
+  }
+  
+}
+```
+
+So `add_one()` uses the `qr_scanner()` function to find and read a QR code from a video image and compare that to a password before giving the answer. You can see in the function body that I've only mildly obfuscated the password, using base64 encoding. Maybe you can do something more secure?
+
+Now to run the function:
+
+```{r output, eval=FALSE}
+add_one(1)
+```
+```
+Starting video window (could be behind this window)
+```
+
+This will activate your device's camera and it will keep looking for a QR code before it runs the rest of the code in the function.
+
+The 'correct' QR code (made with [{qrcode}](https://cran.r-project.org/package=qrcode)) is this one:
+
+![Maybe this is a rickroll, who knows?](resources/qr.png){fig-alt="A QR code." width=25% fig-align="left"}
+
+If you then scan this QR code with your device you'll get an answer:
+
+```
+Correct password!
+[1] 2
+```
+
+Here's a gif of the process:
+
+![Halloween special: the QR code appears like a jumpscare ](resources/add-one-qr.gif){fig-alt="Screengrab gif. An R function called 'add_one' is run in the terminal with the argument '1'. A message is printed saying 'Starting video window (could be behind this window)' and then a video image appears, showing the corner of a room. A phone displaying a QR code flashes briefly in front of the screen. The Terminal window returns and the message 'correct password' is displayed, along with the answer value of '2'." width=75% fig-align="left"}
+
+The `add_one()` function was run, my laptop's camera opened and then I showed it the QR code on my phone. The code was detected super quickly and the correct answer was returned in the console.
+
+I think there's a lot of promise in this approach for helping to [monetise your R package](https://www.rostrum.blog/posts/2023-08-01-monetize/)!
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
