@@ -11,13 +11,9 @@ $theme-primary: #00FF00;
 $theme-secondary: #000;
 $theme-tertiary: #F2F3F5;
 
-// Import Google Fonts
-@import 'https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@300&display=swap';
-@import 'https://fonts.googleapis.com/css2?family=Spline+Sans+Mono:wght@300&display=swap';
-
 // Set font preferences
-$font-family-sans-serif: "IBM Plex Serif", serif;
-$font-family-monospace: "Spline Sans Mono", mono;
+$font-family-sans-serif: "IBMPlexSerif", serif;
+$font-family-monospace: "SplineSansMono", monospace;
 
 // Navbar highlight colour
 $navbar-hl: $theme-primary;
@@ -27,6 +23,18 @@ $footer-bg: $theme-secondary;
 $footer-fg: $theme-primary;
 
 /*-- scss:rules --*/
+
+// Local serif font
+@font-face {
+    font-family: 'IBMPlexSerif'; 
+    src: url('./fonts/IBMPlexSerif-Light.ttf');
+}
+
+// Local mono font
+@font-face {
+    font-family: 'SplineSansMono'; 
+    src: url('./fonts/SplineSansMono-Light.ttf');
+}
 
 // Header and footer bars
 .navbar, .footer {
