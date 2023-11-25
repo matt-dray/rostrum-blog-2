@@ -217,15 +217,15 @@ visNetwork(
   height = "600px",
   main = list(
     text = "Kanto",
-    style = "font-family:'pokemon-font';font-size:30px;color:black;"
+    style = "font-family:pokemon-font,sans;font-size:30px;color:black;"
   ),
   submain = list(
     text = "A graph of locations in PKMN Red<br><br>",
-    style = "font-family:'pokemon-font';font-size:15px;color:black;"
+    style = "font-family:pokemon-font,sans;font-size:15px;color:black;"
   ),
   footer = list(
     text = "Source: Nintendo and Game Freak via the pret/pokered dissassembly project",
-    style = "font-family:'pokemon-font';font-size:8px;color:black;text-align:right;"
+    style = "font-family:pokemon-font,sans;font-size:8px;color:black;text-align:right;"
   )
 ) |>
   visEdges(
@@ -244,7 +244,7 @@ visNetwork(
     nodesIdSelection = list(
       enabled = TRUE,
       main = "Select a location",
-      style = "font-family:'pokemon-font';font-size:15px;color:red;"
+      style = "font-family:pokemon-font,sans;font-size:15px;color:red;"
     )
   ) |>
   visLayout(randomSeed = 150) |>
@@ -253,6 +253,14 @@ visNetwork(
     barnesHut = list(springConstant = 0.1, gravitationalConstant = -10000)
   )
 ```
+
+<br>
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+Hm, I'll have to find out the correct place to put the font file so it can be used in this visualisation. The font should appear in an 8-bit style, like in the screenshot at the top of the post.
+
+</div>
 
 <br>
 It can take a moment to load. You can select a node from the dropdown menu, scroll to zoom, and click on the nodes and edges themselves. The node labels will appear when you zoom in.
