@@ -73,53 +73,47 @@ end_map_header
 
 The headers file is useful to us in another way: it maps location names from the 'PalletTown' format (used in .asm filenames) to the 'PALLET_TOWN' format (as referenced within files). This knowledge will help us to better handle the data as we progress.
 
-## Graph
+## Prepare data
 
 So let's crack open the data and use some base R for corralling. Note that absolutely nothing here is optimised (or even written well in the first place), but regular readers will be used to that.
 
 ### Prepare functions
 
-First we'll prepare some helper functions. To begin, a function that returns the filepaths for all the files we want to read. I saved my copy of the repo to `~/Documents/data/`, so I've set this path as the default.
+To begin, I've made a few helper functions to extract and wrangle the data that we need:
+
+* `get_file_paths()` to return the filepaths for all the Assembly files (.asm) we need
+* `get_warps()` to extract the warps in the text of each objects file
+* `get_connections()` to extract and wrangle all the connections from the headers files
+* `create_names_lookup()` to map the UpperCamelCase and SCREAMING_SNAKE_CASE name variants for each location
+
+<details><summary>Click for function definitions.</summary>
 
 ```{r}
-#| label: get-file-paths
-.get_file_paths <- function(
+#| label: functions
+get_file_paths <- function(
     dir = "~/Documents/data/pokered-master/data/maps",
     type = c("objects", "headers")
 ) {
   path <- file.path(dir, type)
   list.files(path, pattern = ".asm$", full.names = TRUE)
 }
-```
 
-Then a function to extract the warps in the text of each objects file:
-
-```{r}
-#| label: get-warps
-.get_warps <- function(objects_content) {
+get_warps <- function(objects_content) {
   warp_string <- "warp_event "
   warp_events <- objects_content[grepl(warp_string, objects_content)]
-  unique(unlist(lapply(strsplit(warp_events, ", "), `[[`, 3)))
+  warp_events <- strsplit(warp_events, ", ")
+  warp_events <- lapply(warp_events, `[[`, 3)  # third element is warps
+  unique(unlist(warp_events))  # vector of unique locations
 }
-```
 
-For the headers files, we'll need a function to extract all the connections:
-
-```{r}
-#| label: get-connections
-.get_connections <- function(headers_content) {
+get_connections <- function(headers_content) {
   con_string <- "connection"
   con_detected <- headers_content[grepl(con_string, headers_content)]
   con_isolated <- lapply(con_detected, \(x) x[which(grepl(con_string, x))])
   lapply(con_isolated, \(x) unlist(lapply(strsplit(x, ", "), `[[`, 3)))
 }
-```
 
-And also we want a function to extract the UpperCamelCase and SCREAMING_SNAKE_CASE variants of each location:
-
-```{r}
-#| label: create-names-lookup
-.create_names_lookup <- function(headers_content) {
+create_names_lookup <- function(headers_content) {
   headers_split <- strsplit(headers_content, ",")[[1]]
   headers_split <- headers_split[1:2]
   name_pair <- gsub("map_header ", "", trimws(headers_split))
@@ -127,15 +121,17 @@ And also we want a function to extract the UpperCamelCase and SCREAMING_SNAKE_CA
 }
 ```
 
-### Extract connections data
+</details>
+
+### Extract connections
 
 Now down to business. We'll read the text content of each headers file into a list, then name these elements using the SCREAMING_SNAKE_CASE name for each location.
 
 ```{r}
 #| label: headers-file
-headers_files <- .get_file_paths(type = "headers")
+headers_files <- get_file_paths(type = "headers")
 headers_content <- lapply(headers_files, readLines)
-headers_lookup <- unlist(lapply(headers_content, .create_names_lookup))
+headers_lookup <- unlist(lapply(headers_content, create_names_lookup))
 names(headers_content) <- names(headers_lookup)
 ```
 
@@ -150,7 +146,7 @@ Now we can take these lines of text and extract the node pairs that have an edge
 
 ```{r}
 #| label: conns-df
-conns <- .get_connections(headers_content)
+conns <- get_connections(headers_content)
 conns_df <- stack(conns)
 conns_df <- conns_df[, c("ind", "values")]
 names(conns_df) <- c("from", "to")
@@ -158,16 +154,15 @@ conns_df[["from"]] <- as.character(conns_df[["from"]])
 head(conns_df)
 ```
 
-### Extract warp data
+### Extract warps
 
 Similarly, we can get the warp data in a node-pair data frame as well. The first step is to read the text of each objects file into a list.
 
 ```{r}
 #| label: obj-content
-obj_files <- .get_file_paths(type = "objects")
+obj_files <- get_file_paths(type = "objects")
 obj_names <- gsub(".asm", "", basename(obj_files))
-obj_content <- lapply(obj_files, readLines) |>
-  setNames(names(headers_lookup))
+obj_content <- lapply(obj_files, readLines) |> setNames(names(headers_lookup))
 obj_content["PALLET_TOWN"]
 ```
 
@@ -175,10 +170,10 @@ Then we can extract the warps. Note that some warps don't explicitly take you ba
 
 ```{r}
 #| label: warps
-warps <- lapply(obj_content, .get_warps)
-warps <- lapply(warps, \(x) x[x != "LAST_MAP"])
+warps <- lapply(obj_content, get_warps)
+warps <- lapply(warps, \(x) x[x != "LAST_MAP"])  # remove LAST_MAP
 warps <- warps[lengths(warps) > 0]
-warps_df <- stack(warps)
+warps_df <- stack(warps)  # to data.frame
 warps_df <- warps_df[, c("ind", "values")]
 names(warps_df) <- c("from", "to")
 warps_df[["from"]] <- as.character(warps_df[["from"]])
@@ -187,13 +182,12 @@ head(warps_df)
 
 ### Combine all node pairs
 
-Now we can combine all the node pairs that share edges, whether its by a simple connection or a warp. In this example we're interested in combinations, rather than permutations, of node pairs. This means that we can treat A→B and B→A as equivalent and simplify down to just A→B.
+Now we can combine all the node pairs that share edges, whether by simple connections or warps. In this example we're interested in combinations, rather than permutations, of node pairs[^so]. This means that we can treat A→B and B→A as equivalent and simplify down to just A→B.
 
 ```{r}
 #| label: edges
 edges <- rbind(warps_df, conns_df)
 edges <- edges[!duplicated(data.frame(t(apply(edges, 1, sort)))), ]  # https://stackoverflow.com/a/50117582
-tail(edges)
 ```
 
 We also want a full list of the nodes, which will help us to label and filter them in the final visualisation.
@@ -204,9 +198,9 @@ nodes <- data.frame(id = unique(c(edges[["from"]], edges[["to"]])))
 nodes <- nodes[order(nodes[["id"]]), , drop = FALSE]
 ```
 
-### Visualise
+## Visualise
 
-#### Set up
+### Set up
 
 [The {visNetwork} package](https://datastorm-open.github.io/visNetwork/) wraps [the vis.js JavaScript library](https://visjs.org/), which will help output an interactive HTML graph. We just need to feed it our nodes and edges and a bunch of configuration and styling options. 
 
@@ -279,9 +273,9 @@ graph <- visNetwork(
   )
 ```
 
-#### Plot {#visualise-graph}
+### Draw graph {#visualise-graph}
 
-Here we go:
+And here we go:
 
 ```{r}
 #| label: visnetwork-print
@@ -308,3 +302,4 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 [^passion]: Graphic design is my passion, etc. As a colourblind person, I'm just glad they didn't release Red and Green versions simultaneously.
 [^mew]: Not to mention that you can mess about with modding the game, like adjusting the code to [set Mew as one of the starter 'mons](https://www.youtube.com/watch?v=f5R8mcmlbFQ).
 [^font]: I can't actually remember where I got this exact font file from, but I know it's available from [free font sites](https://www.fontspace.com/pokemon-gb-font-f9621).
+[^so]: This wrangling was actually mildly trickier than I thought it was be and so [I 'borrowed' from StackOverflow](https://stackoverflow.com/a/50117582) to save time.
