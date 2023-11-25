@@ -204,49 +204,72 @@ nodes <- data.frame(id = unique(c(edges[["from"]], edges[["to"]])))
 nodes <- nodes[order(nodes[["id"]]), , drop = FALSE]
 ```
 
-### Visualise {#visualise-graph}
+### Visualise
 
-[The {visNetwork} package](https://datastorm-open.github.io/visNetwork/) wraps [the vis.js JavaScript library](https://visjs.org/), which will help output an interactive HTML graph. We just need to feed it our nodes and edges and a bunch of configuration and styling options. For example, I've used the font from the games and a red colour accent to reflect the game variant[^passion].
+#### Set up
+
+[The {visNetwork} package](https://datastorm-open.github.io/visNetwork/) wraps [the vis.js JavaScript library](https://visjs.org/), which will help output an interactive HTML graph. We just need to feed it our nodes and edges and a bunch of configuration and styling options. 
+
+First some CSS to import a font that mimics the font used in the game[^font].
+
+```{css}
+@font-face {
+  font-family: 'pokemon-font';
+  src: url('resources/pokemon-font.ttf');
+}
+```
+
+While we're dealing with font style, we can set up a function to build a CSS style string for when we need it in the visNetwork. Obviously we'll use red as the accent colour, given the data is for the Red version of the game[^passion].
 
 ```{r}
-#| label: visnetwork
+#| label: poke-style
+poke_style <- function(size = 16, colour = "black") {
+  paste0(
+    "font-family:pokemon-font,sans-serif;",
+    "font-size:", size, "px;",
+    "color:", colour, ";"
+  )
+}
+```
+
+Now we can build the visNetwork object with `vis*` functions.
+
+```{r}
+#| label: visnetwork-obj
 library(visNetwork)
 
-visNetwork(
+graph <- visNetwork(
   nodes,
   edges,
   width = "100%",
   height = "600px",
-  main = list(
-    text = "Kanto",
-    style = "font-family:pokemon-font,sans;font-size:30px;color:black;"
-  ),
+  main = list(text = "Kanto", style = poke_style(30)),
   submain = list(
     text = "A graph of locations in PKMN Red<br><br>",
-    style = "font-family:pokemon-font,sans;font-size:15px;color:black;"
+    style = poke_style()
   ),
   footer = list(
     text = "Source: Nintendo and Game Freak via the pret/pokered dissassembly project",
-    style = "font-family:pokemon-font,sans;font-size:8px;color:black;text-align:right;"
+    style = poke_style(8)
   )
 ) |>
   visEdges(
-    color = list(color = "#FF7777", highlight = "#FF0000", opacity = 0.5),
+    color = list(color = "#FF7777", highlight = "red", opacity = 0.5),
     width = 3,
     selectionWidth = 5
   ) |>
   visNodes(
     color = "#FF7777",
-    font = list(face = "pokemon-font", size = 10),
+    font = list(face = "pokemon-font", size = 12),
     borderWidth = 0,
     borderWidthSelected = 3,
   ) |>
   visOptions(
     highlightNearest = TRUE,
     nodesIdSelection = list(
-      enabled = TRUE,
+      enabled = TRUE, 
       main = "Select a location",
-      style = "font-family:pokemon-font,sans;font-size:15px;color:red;"
+      style = poke_style(colour = "red")
     )
   ) |>
   visLayout(randomSeed = 150) |>
@@ -256,18 +279,19 @@ visNetwork(
   )
 ```
 
-<br>
-<div class="tip"> 
-`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+#### Plot {#visualise-graph}
 
-Hm, chances are you won't see the font as intended. I'll have to find out the correct place to put the font file so it can be used in this visualisation. The font should appear in an 8-bit style, like in the screenshot at the top of the post.
+Here we go:
 
-</div>
+```{r}
+#| label: visnetwork-print
+graph
+```
 
 <br>
 It can take a moment to load. You can select a node from the dropdown menu, scroll to zoom, and click on the nodes and edges themselves. The node labels will appear when you zoom in.
 
-It was interesting to see the simple radial networks around each city; the complicated relationships between the nodes of Silph Co; the long 'tail' from Victory Road through the Elite Four to the Hall of Fame; and the hand-like structure of the Safari Zone.
+It's interesting to see the simple radial networks around each city; the complicated relationships between the nodes of Silph Co; the long 'tail' from Victory Road through the Elite Four to the Hall of Fame; and the hand-like structure of the Safari Zone.
 
 Of course, you could spend all day tweaking things like the physics of the relationship between each node, or you could replace each node an images of its in-game sprite. I've chosen to keep things relatively simple because it's bed time and I need to go and [count some Wooloo](https://en.wikipedia.org/wiki/Wooloo).
 
@@ -283,3 +307,4 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 [^blue]: As a diehard Blue-version enjoyer, it pains me slightly that this is the Red version. Red is the bad guy! Blue is the good guy!
 [^passion]: Graphic design is my passion, etc. As a colourblind person, I'm just glad they didn't release Red and Green versions simultaneously.
 [^mew]: Not to mention that you can mess about with modding the game, like adjusting the code to [set Mew as one of the starter 'mons](https://www.youtube.com/watch?v=f5R8mcmlbFQ).
+[^font]: I can't actually remember where I got this exact font file from, but I know it's available from [free font sites](https://www.fontspace.com/pokemon-gb-font-f9621).
