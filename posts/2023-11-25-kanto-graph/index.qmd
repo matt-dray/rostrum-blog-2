@@ -12,7 +12,7 @@ categories:
 
 ## tl;dr
 
-I extracted data from the disassembled code of Pokémon Red to create an interactive graph of the locations and their connections. You can [jump to the graph](#visualise-graph) below.
+I extracted data from the disassembled code of Pokémon Red to create an interactive graph of the game's locations and their connections. You can [jump to the graph](#visualise-graph) below.
 
 ## Kanto
 
@@ -20,13 +20,13 @@ I extracted data from the disassembled code of Pokémon Red to create an interac
 
 Today I'm back with the same map[^ideas], but we're going to be far more methodical and abstract: we're going to extract data from the underlying game files to build a graph that describes all the locations and connections between them.
 
-This is made possible by [the 'pret' collaborative](https://github.com/pret), who have reverse-engineered, or 'disassembled', a number of Pokémon games. This is interesting for digi-archaeological reasons, but also for our frivolous purposes.
+This is made possible by [the 'pret' collaborative](https://github.com/pret), who have reverse-engineered, or 'disassembled', a number of Pokémon games. This is interesting for digi-archaeological reasons[^mew], but also for our frivolous purposes.
 
 ## Assemble
 
 To get a copy of the game's[^blue] disassembled code, go to [the pret/pokered GitHub repo](https://github.com/pret/pokered), click the 'Code' button, then 'Download as zip' and finally unzip the file on your computer. 
 
-We're interested in two subfolders: `/data/maps/objects/` and `/data/maps/headers/`. These both contain one Assembly file per named location in the game, like `AgathasRoom.asm` and `Bikeshop.asm`. We'll be handling these as simple text files.
+We're interested in two subfolders: `/data/maps/objects/` and `/data/maps/headers/`. These both contain one file of [Assembly code](https://en.wikipedia.org/wiki/Assembly_language) per named location in the game, like `AgathasRoom.asm` and `Bikeshop.asm`. We'll be handling these as simple text files.
 
 The 'objects' files contain information required to set up things like sprites and text for each location in the game. The example below is for the starting area: Pallet Town. For our purposes, we care about the `warp_events`, which indicate that you can step on a tile and be warped somewhere else. For example, standing on the door tile at tile location `5, 5` would warp you to `REDS_HOUSE_1F`, i.e. the first floor of the player's house.
 
@@ -271,4 +271,5 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 
 [^ideas]: Oh no! He's running out of ideas!
 [^blue]: As a diehard Blue-version enjoyer, it pains me slightly that this is the Red version. Red is the bad guy! Blue is the good guy!
-[^passion]: Graphic design is my passion, etc. As a colourblind person, I'm just glad they didn't release Red and Green versions simultaneously..
+[^passion]: Graphic design is my passion, etc. As a colourblind person, I'm just glad they didn't release Red and Green versions simultaneously.
+[^mew]: Not to mention that you can mess about with modding the game, like adjusting the code to [set Mew as one of the starter 'mons](https://www.youtube.com/watch?v=f5R8mcmlbFQ).
