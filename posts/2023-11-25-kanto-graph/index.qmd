@@ -1,0 +1,271 @@
+---
+title: An interactive graph of Kanto
+date: 2023-11-25
+slug: kanto-graph
+categories:
+  - r
+  - videogames
+  - visNetwork
+---
+
+![](resources/graph-zoom.png){fig-alt="Screenshot of an interactive graph. The title is 'Kanto' and the subtitle is 'a graph of locations in Pokémon Red'. A dropdown menu has 'Pallet Town' selected and in red text. A node labelled 'Pallet Town' is shown, highlighted in red, as are other labelled nodes like 'Oak's lab' and 'Blue's house' that it's directly connected to. A greyed-out node is also visible, which is not connected by an edge to the 'Pallet Town' node."}
+
+## tl;dr
+
+I extracted data from the disassembled code of Pokémon Red to create an interactive graph of the locations and their connections. You can [jump to the graph](#graph) below.
+
+## Kanto
+
+[I wrote a while back](https://www.rostrum.blog/posts/2021-11-04-kanto-locator/) about using the wonderful `locator()` function to extract coordinates from fictitious maps. In that example I used the Kanto region from [the original Pokémon games](https://en.wikipedia.org/wiki/Pok%C3%A9mon_Red,_Blue,_and_Yellow). 
+
+Today I'm back with the same map, but we're going to be far more methodical and abstract: we're going to extract data from the underlying game files to build a graph that describes all the locations and connections between them.
+
+This is made possible by [the 'pret' collaborative](https://github.com/pret), who have reverse-engineered, or 'disassembled', a number of Pokémon games. This is interesting for digi-archaeological reasons, but also for our frivolous purposes.
+
+## Assemble
+
+To get a copy of the game's disassembled code, go to [the pret/pokered GitHub repo](https://github.com/pret/pokered), click the 'Code' button, then 'Download as zip' and finally unzip the file on your computer. 
+
+We're interested in two subfolders: `/data/maps/objects/` and `/data/maps/headers/`. These both contain one Assembly file per named location in the game, like `AgathasRoom.asm` and `Bikeshop.asm`. We'll be handling these as simple text files.
+
+The 'objects' files contain information required to set up things like sprites and text for each location in the game. The example below is for the starting area: Pallet Town. For our purposes, we care about the `warp_events`, which indicate that you can step on a tile and be warped somewhere else. For example, standing on the door tile at tile location `5, 5` would warp you to `REDS_HOUSE_1F`, i.e. the first floor of the player's house.
+
+```
+object_const_def
+const_export PALLETTOWN_OAK
+const_export PALLETTOWN_GIRL
+const_export PALLETTOWN_FISHER
+
+PalletTown_Object:
+db $b ; border block
+
+def_warp_events
+warp_event  5,  5, REDS_HOUSE_1F, 1
+warp_event 13,  5, BLUES_HOUSE, 1
+warp_event 12, 11, OAKS_LAB, 2
+
+def_bg_events
+bg_event 13, 13, TEXT_PALLETTOWN_OAKSLAB_SIGN
+bg_event  7,  9, TEXT_PALLETTOWN_SIGN
+bg_event  3,  5, TEXT_PALLETTOWN_PLAYERSHOUSE_SIGN
+bg_event 11,  5, TEXT_PALLETTOWN_RIVALSHOUSE_SIGN
+
+def_object_events
+object_event  8,  5, SPRITE_OAK, STAY, NONE, TEXT_PALLETTOWN_OAK
+object_event  3,  8, SPRITE_GIRL, WALK, ANY_DIR, TEXT_PALLETTOWN_GIRL
+object_event 11, 14, SPRITE_FISHER, WALK, ANY_DIR, TEXT_PALLETTOWN_FISHER
+
+def_warps_to PALLET_TOWN
+```
+
+
+Some terminology for graphs: the game's locations are 'nodes' connected by common 'edges'. So Pallet Town and Red's House are nodes that share an edge.
+
+Note that warping isn't the only thing that creates an edge between two nodes. If we look in the 'headers' file for Pallet Town, you can see that some locations have a simple `connection` parameter: you can just walk north of Pallet Town to Route 1 (the road to Viridian City) or approach from the south along Route 21 (from Cinnabar Island). Yes, 'routes' connect two places, but routes themselves act as nodes in this demo.
+
+```
+map_header PalletTown, PALLET_TOWN, OVERWORLD, NORTH | SOUTH
+connection north, Route1, ROUTE_1, 0
+connection south, Route21, ROUTE_21, 0
+end_map_header
+```
+
+The headers file is useful to us in another way: it maps location names from the 'PalletTown' format (used in .asm filenames) to the 'PALLET_TOWN' format (as referenced within files). This knowledge will help us to better handle the data as we progress.
+
+## Graph
+
+So let's crack open the data and use some base R for corralling.
+
+### Prepare functions
+
+First we'll prepare some helper functions. To begin, a function that returns the filepaths for all the files we want to read. I saved my copy of the repo to `~/Documents/data/`, so I've set this path as the default.
+
+```{r}
+#| label: get-file-paths
+.get_file_paths <- function(
+    dir = "~/Documents/data/pokered-master/data/maps",
+    type = c("objects", "headers")
+) {
+  path <- file.path(dir, type)
+  list.files(path, pattern = ".asm$", full.names = TRUE)
+}
+```
+
+Then a function to extract the warps in the text of each objects file:
+
+```{r}
+#| label: get-warps
+.get_warps <- function(objects_content) {
+  warp_string <- "warp_event "
+  warp_events <- objects_content[grepl(warp_string, objects_content)]
+  unique(unlist(lapply(strsplit(warp_events, ", "), `[[`, 3)))
+}
+```
+
+For the headers files, we'll need a function to extract all the connections:
+
+```{r}
+#| label: get-connections
+.get_connections <- function(headers_content) {
+  con_string <- "connection"
+  con_detected <- headers_content[grepl(con_string, headers_content)]
+  con_isolated <- lapply(con_detected, \(x) x[which(grepl(con_string, x))])
+  lapply(con_isolated, \(x) unlist(lapply(strsplit(x, ", "), `[[`, 3)))
+}
+```
+
+And also we want a function to extract the UpperCamelCase and SCREAMING_SNAKE_CASE variants of each location:
+
+```{r}
+#| label: create-names-lookup
+.create_names_lookup <- function(headers_content) {
+  headers_split <- strsplit(headers_content, ",")[[1]]
+  headers_split <- headers_split[1:2]
+  name_pair <- gsub("map_header ", "", trimws(headers_split))
+  setNames(name_pair[1], name_pair[2])
+}
+```
+
+### Extract connections data
+
+Now down to business. We'll read the text content of each headers file into a list, then name these elements using the SCREAMING_SNAKE_CASE name for each location.
+
+```{r}
+#| label: headers-file
+headers_files <- .get_file_paths(type = "headers")
+headers_content <- lapply(headers_files, readLines)
+headers_lookup <- unlist(lapply(headers_content, .create_names_lookup))
+names(headers_content) <- names(headers_lookup)
+```
+
+Here's how Pallet Town looks in this format:
+
+```{r}
+#| label: headers-conent-pallet-town
+headers_content["PALLET_TOWN"]
+```
+
+Now we can take these lines of text and extract the node pairs that have an edge due to a 'connection' between them.
+
+```{r}
+#| label: conns-df
+conns <- .get_connections(headers_content)
+conns_df <- stack(conns)
+conns_df <- conns_df[, c("ind", "values")]
+names(conns_df) <- c("from", "to")
+conns_df[["from"]] <- as.character(conns_df[["from"]])
+head(conns_df)
+```
+
+### Extract warp data
+
+Similarly, we can get the warp data in a node-pair data frame as well. The first step is to read the text of each objects file into a list.
+
+```{r}
+#| label: obj-content
+obj_files <- .get_file_paths(type = "objects")
+obj_names <- gsub(".asm", "", basename(obj_files))
+obj_content <- lapply(obj_files, readLines) |>
+  setNames(names(headers_lookup))
+obj_content["PALLET_TOWN"]
+```
+
+Then we can extract the warps. Note that some warps don't explicitly take you back where you came from. Instead the instruction is to warp to the last location. We can remove this from our data, since `LAST_MAP` isn't a literal location.
+
+```{r}
+#| label: warps
+warps <- lapply(obj_content, .get_warps)
+warps <- lapply(warps, \(x) x[x != "LAST_MAP"])
+warps <- warps[lengths(warps) > 0]
+warps_df <- stack(warps)
+warps_df <- warps_df[, c("ind", "values")]
+names(warps_df) <- c("from", "to")
+warps_df[["from"]] <- as.character(warps_df[["from"]])
+head(warps_df)
+```
+
+### Combine all node pairs
+
+Now we can combine all the node pairs that share edges via either a simple connection or a warp. In this example we're interested in combinations, rather than permutations, of node pairs. This means that we can treat A→B and B→A as equivalent and simplify down to just A→B.
+
+```{r}
+#| label: edges
+edges <- rbind(warps_df, conns_df)
+edges <- edges[!duplicated(data.frame(t(apply(edges, 1, sort)))), ]  # https://stackoverflow.com/a/50117582
+tail(edges)
+```
+
+We also want a full list of the nodes, which will help us to label and filter them in the final visualisation.
+
+```{r}
+#| label: nodes-and-edges
+nodes <- data.frame(id = unique(c(edges[["from"]], edges[["to"]])))
+nodes <- nodes[order(nodes[["id"]]), , drop = FALSE]
+```
+
+### Visualise {#graph}
+
+[The {visNetwork} package](https://datastorm-open.github.io/visNetwork/) wraps [the vis.js JavaScript library](https://visjs.org/), which will help output an interactive HTML graph. We just need to feed it our nodes and edges and a bunch of configuration and styling options. For example, I've used the font from the games and a red colour accent to reflect the game variant. 
+
+```{r}
+#| label: visnetwork
+library(visNetwork)
+
+visNetwork(
+  nodes,
+  edges,
+  width = "100%",
+  height = "420px",
+  main = list(
+    text = "Kanto",
+    style = "font-family:'pokemon-font';font-size:30px;color:black;"
+  ),
+  submain = list(
+    text = "A graph of locations in PKMN Red<br><br>",
+    style = "font-family:'pokemon-font';font-size:15px;color:black;"
+  ),
+  footer = list(
+    text = "Source: Nintendo and Game Freak via the pret/pokered dissassembly project",
+    style = "font-family:'pokemon-font';font-size:8px;color:black;text-align:right;"
+  )
+) |>
+  visEdges(
+    color = list(color = "#FF7777", highlight = "#FF0000", opacity = 0.5),
+    width = 3,
+    selectionWidth = 5
+  ) |>
+  visNodes(
+    color = "#FF7777",
+    font = list(face = "pokemon-font", size = 10),
+    borderWidth = 0,
+    borderWidthSelected = 3,
+  ) |>
+  visOptions(
+    highlightNearest = TRUE,
+    nodesIdSelection = list(
+      enabled = TRUE,
+      main = "Select a location",
+      style = "font-family:'pokemon-font';font-size:15px;color:red;"
+    )
+  ) |>
+  visLayout(randomSeed = 150) |>
+  visPhysics(
+    solver = "barnesHut",
+    barnesHut = list(springConstant = 0.1, gravitationalConstant = -10000)
+  )
+```
+
+<br>
+It can take a moment to load. You can select a node from the dropdown menu, scroll to zoom, and click on the nodes and edges themselves. The node labels will appear when you zoom in.
+
+It was interesting to see the simple radial networks around each city; the complicated relationships between the nodes of Silph Co; the long 'tail' from Victory Road through the Elite Four to the Hall of Fame; and the hand-like structure of the Safari Zone.
+
+Of course, you could spend all day tweaking things like the physics of the relationship between each node, or you could replace each node an images of its in-game sprite. I've chosen to keep things relatively simple.
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>

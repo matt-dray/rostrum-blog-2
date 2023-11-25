@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2023-11-25">
+
+<title>rostrum.blog - An interactive graph of Kanto</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../../site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<link href="../../site_libs/vis-9.1.0/vis-network.min.css" rel="stylesheet">
+<script src="../../site_libs/vis-9.1.0/vis-network.min.js"></script>
+<script src="../../site_libs/visNetwork-binding-2.1.2/visNetwork.js"></script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">An interactive graph of Kanto</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">videogames</div>
+                <div class="quarto-category">visNetwork</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 25, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><img src="resources/graph-zoom.png" class="img-fluid" alt="Screenshot of an interactive graph. The title is 'Kanto' and the subtitle is 'a graph of locations in Pokémon Red'. A dropdown menu has 'Pallet Town' selected and in red text. A node labelled 'Pallet Town' is shown, highlighted in red, as are other labelled nodes like 'Oak's lab' and 'Blue's house' that it's directly connected to. A greyed-out node is also visible, which is not connected by an edge to the 'Pallet Town' node."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I extracted data from the disassembled code of Pokémon Red to create an interactive graph of the locations and their connections. You can <a href="#graph">jump to the graph</a> below.</p>
+</section>
+<section id="kanto" class="level2">
+<h2 class="anchored" data-anchor-id="kanto">Kanto</h2>
+<p><a href="https://www.rostrum.blog/posts/2021-11-04-kanto-locator/">I wrote a while back</a> about using the wonderful <code>locator()</code> function to extract coordinates from fictitious maps. In that example I used the Kanto region from <a href="https://en.wikipedia.org/wiki/Pok%C3%A9mon_Red,_Blue,_and_Yellow">the original Pokémon games</a>.</p>
+<p>Today I’m back with the same map, but we’re going to be far more methodical and abstract: we’re going to extract data from the underlying game files to build a graph that describes all the locations and connections between them.</p>
+<p>This is made possible by <a href="https://github.com/pret">the ‘pret’ collaborative</a>, who have reverse-engineered, or ‘disassembled’, a number of Pokémon games. This is interesting for digi-archaeological reasons, but also for our frivolous purposes.</p>
+</section>
+<section id="assemble" class="level2">
+<h2 class="anchored" data-anchor-id="assemble">Assemble</h2>
+<p>To get a copy of the game’s disassembled code, go to <a href="https://github.com/pret/pokered">the pret/pokered GitHub repo</a>, click the ‘Code’ button, then ‘Download as zip’ and finally unzip the file on your computer.</p>
+<p>We’re interested in two subfolders: <code>/data/maps/objects/</code> and <code>/data/maps/headers/</code>. These both contain one Assembly file per named location in the game, like <code>AgathasRoom.asm</code> and <code>Bikeshop.asm</code>. We’ll be handling these as simple text files.</p>
+<p>The ‘objects’ files contain information required to set up things like sprites and text for each location in the game. The example below is for the starting area: Pallet Town. For our purposes, we care about the <code>warp_events</code>, which indicate that you can step on a tile and be warped somewhere else. For example, standing on the door tile at tile location <code>5, 5</code> would warp you to <code>REDS_HOUSE_1F</code>, i.e.&nbsp;the first floor of the player’s house.</p>
+<pre><code>object_const_def
+const_export PALLETTOWN_OAK
+const_export PALLETTOWN_GIRL
+const_export PALLETTOWN_FISHER
+
+PalletTown_Object:
+db $b ; border block
+
+def_warp_events
+warp_event  5,  5, REDS_HOUSE_1F, 1
+warp_event 13,  5, BLUES_HOUSE, 1
+warp_event 12, 11, OAKS_LAB, 2
+
+def_bg_events
+bg_event 13, 13, TEXT_PALLETTOWN_OAKSLAB_SIGN
+bg_event  7,  9, TEXT_PALLETTOWN_SIGN
+bg_event  3,  5, TEXT_PALLETTOWN_PLAYERSHOUSE_SIGN
+bg_event 11,  5, TEXT_PALLETTOWN_RIVALSHOUSE_SIGN
+
+def_object_events
+object_event  8,  5, SPRITE_OAK, STAY, NONE, TEXT_PALLETTOWN_OAK
+object_event  3,  8, SPRITE_GIRL, WALK, ANY_DIR, TEXT_PALLETTOWN_GIRL
+object_event 11, 14, SPRITE_FISHER, WALK, ANY_DIR, TEXT_PALLETTOWN_FISHER
+
+def_warps_to PALLET_TOWN</code></pre>
+<p>Some terminology for graphs: the game’s locations are ‘nodes’ connected by common ‘edges’. So Pallet Town and Red’s House are nodes that share an edge.</p>
+<p>Note that warping isn’t the only thing that creates an edge between two nodes. If we look in the ‘headers’ file for Pallet Town, you can see that some locations have a simple <code>connection</code> parameter: you can just walk north of Pallet Town to Route 1 (the road to Viridian City) or approach from the south along Route 21 (from Cinnabar Island). Yes, ‘routes’ connect two places, but routes themselves act as nodes in this demo.</p>
+<pre><code>map_header PalletTown, PALLET_TOWN, OVERWORLD, NORTH | SOUTH
+connection north, Route1, ROUTE_1, 0
+connection south, Route21, ROUTE_21, 0
+end_map_header</code></pre>
+<p>The headers file is useful to us in another way: it maps location names from the ‘PalletTown’ format (used in .asm filenames) to the ‘PALLET_TOWN’ format (as referenced within files). This knowledge will help us to better handle the data as we progress.</p>
+</section>
+<section id="graph" class="level2">
+<h2 class="anchored" data-anchor-id="graph">Graph</h2>
+<p>So let’s crack open the data and use some base R for corralling.</p>
+<section id="prepare-functions" class="level3">
+<h3 class="anchored" data-anchor-id="prepare-functions">Prepare functions</h3>
+<p>First we’ll prepare some helper functions. To begin, a function that returns the filepaths for all the files we want to read. I saved my copy of the repo to <code>~/Documents/data/</code>, so I’ve set this path as the default.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>.get_file_paths <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">dir =</span> <span class="st">"~/Documents/data/pokered-master/data/maps"</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">type =</span> <span class="fu">c</span>(<span class="st">"objects"</span>, <span class="st">"headers"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>) {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(dir, type)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list.files</span>(path, <span class="at">pattern =</span> <span class="st">".asm$"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then a function to extract the warps in the text of each objects file:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>.get_warps <span class="ot">&lt;-</span> <span class="cf">function</span>(objects_content) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  warp_string <span class="ot">&lt;-</span> <span class="st">"warp_event "</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  warp_events <span class="ot">&lt;-</span> objects_content[<span class="fu">grepl</span>(warp_string, objects_content)]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>(<span class="fu">unlist</span>(<span class="fu">lapply</span>(<span class="fu">strsplit</span>(warp_events, <span class="st">", "</span>), <span class="st">`</span><span class="at">[[</span><span class="st">`</span>, <span class="dv">3</span>)))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For the headers files, we’ll need a function to extract all the connections:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>.get_connections <span class="ot">&lt;-</span> <span class="cf">function</span>(headers_content) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  con_string <span class="ot">&lt;-</span> <span class="st">"connection"</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  con_detected <span class="ot">&lt;-</span> headers_content[<span class="fu">grepl</span>(con_string, headers_content)]</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  con_isolated <span class="ot">&lt;-</span> <span class="fu">lapply</span>(con_detected, \(x) x[<span class="fu">which</span>(<span class="fu">grepl</span>(con_string, x))])</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">lapply</span>(con_isolated, \(x) <span class="fu">unlist</span>(<span class="fu">lapply</span>(<span class="fu">strsplit</span>(x, <span class="st">", "</span>), <span class="st">`</span><span class="at">[[</span><span class="st">`</span>, <span class="dv">3</span>)))</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And also we want a function to extract the UpperCamelCase and SCREAMING_SNAKE_CASE variants of each location:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>.create_names_lookup <span class="ot">&lt;-</span> <span class="cf">function</span>(headers_content) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  headers_split <span class="ot">&lt;-</span> <span class="fu">strsplit</span>(headers_content, <span class="st">","</span>)[[<span class="dv">1</span>]]</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  headers_split <span class="ot">&lt;-</span> headers_split[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  name_pair <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"map_header "</span>, <span class="st">""</span>, <span class="fu">trimws</span>(headers_split))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNames</span>(name_pair[<span class="dv">1</span>], name_pair[<span class="dv">2</span>])</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="extract-connections-data" class="level3">
+<h3 class="anchored" data-anchor-id="extract-connections-data">Extract connections data</h3>
+<p>Now down to business. We’ll read the text content of each headers file into a list, then name these elements using the SCREAMING_SNAKE_CASE name for each location.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>headers_files <span class="ot">&lt;-</span> <span class="fu">.get_file_paths</span>(<span class="at">type =</span> <span class="st">"headers"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>headers_content <span class="ot">&lt;-</span> <span class="fu">lapply</span>(headers_files, readLines)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>headers_lookup <span class="ot">&lt;-</span> <span class="fu">unlist</span>(<span class="fu">lapply</span>(headers_content, .create_names_lookup))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(headers_content) <span class="ot">&lt;-</span> <span class="fu">names</span>(headers_lookup)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here’s how Pallet Town looks in this format:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>headers_content[<span class="st">"PALLET_TOWN"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$PALLET_TOWN
+[1] "\tmap_header PalletTown, PALLET_TOWN, OVERWORLD, NORTH | SOUTH"
+[2] "\tconnection north, Route1, ROUTE_1, 0"                        
+[3] "\tconnection south, Route21, ROUTE_21, 0"                      
+[4] "\tend_map_header"                                              </code></pre>
+</div>
+</div>
+<p>Now we can take these lines of text and extract the node pairs that have an edge due to a ‘connection’ between them.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>conns <span class="ot">&lt;-</span> <span class="fu">.get_connections</span>(headers_content)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>conns_df <span class="ot">&lt;-</span> <span class="fu">stack</span>(conns)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>conns_df <span class="ot">&lt;-</span> conns_df[, <span class="fu">c</span>(<span class="st">"ind"</span>, <span class="st">"values"</span>)]</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(conns_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"from"</span>, <span class="st">"to"</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>conns_df[[<span class="st">"from"</span>]] <span class="ot">&lt;-</span> <span class="fu">as.character</span>(conns_df[[<span class="st">"from"</span>]])</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(conns_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           from       to
+1  CELADON_CITY ROUTE_16
+2  CELADON_CITY  ROUTE_7
+3 CERULEAN_CITY ROUTE_24
+4 CERULEAN_CITY  ROUTE_5
+5 CERULEAN_CITY  ROUTE_4
+6 CERULEAN_CITY  ROUTE_9</code></pre>
+</div>
+</div>
+</section>
+<section id="extract-warp-data" class="level3">
+<h3 class="anchored" data-anchor-id="extract-warp-data">Extract warp data</h3>
+<p>Similarly, we can get the warp data in a node-pair data frame as well. The first step is to read the text of each objects file into a list.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>obj_files <span class="ot">&lt;-</span> <span class="fu">.get_file_paths</span>(<span class="at">type =</span> <span class="st">"objects"</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>obj_names <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">".asm"</span>, <span class="st">""</span>, <span class="fu">basename</span>(obj_files))</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>obj_content <span class="ot">&lt;-</span> <span class="fu">lapply</span>(obj_files, readLines) <span class="sc">|&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">setNames</span>(<span class="fu">names</span>(headers_lookup))</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>obj_content[<span class="st">"PALLET_TOWN"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$PALLET_TOWN
+ [1] "\tobject_const_def"                                                         
+ [2] "\tconst_export PALLETTOWN_OAK"                                              
+ [3] "\tconst_export PALLETTOWN_GIRL"                                             
+ [4] "\tconst_export PALLETTOWN_FISHER"                                           
+ [5] ""                                                                           
+ [6] "PalletTown_Object:"                                                         
+ [7] "\tdb $b ; border block"                                                     
+ [8] ""                                                                           
+ [9] "\tdef_warp_events"                                                          
+[10] "\twarp_event  5,  5, REDS_HOUSE_1F, 1"                                      
+[11] "\twarp_event 13,  5, BLUES_HOUSE, 1"                                        
+[12] "\twarp_event 12, 11, OAKS_LAB, 2"                                           
+[13] ""                                                                           
+[14] "\tdef_bg_events"                                                            
+[15] "\tbg_event 13, 13, TEXT_PALLETTOWN_OAKSLAB_SIGN"                            
+[16] "\tbg_event  7,  9, TEXT_PALLETTOWN_SIGN"                                    
+[17] "\tbg_event  3,  5, TEXT_PALLETTOWN_PLAYERSHOUSE_SIGN"                       
+[18] "\tbg_event 11,  5, TEXT_PALLETTOWN_RIVALSHOUSE_SIGN"                        
+[19] ""                                                                           
+[20] "\tdef_object_events"                                                        
+[21] "\tobject_event  8,  5, SPRITE_OAK, STAY, NONE, TEXT_PALLETTOWN_OAK"         
+[22] "\tobject_event  3,  8, SPRITE_GIRL, WALK, ANY_DIR, TEXT_PALLETTOWN_GIRL"    
+[23] "\tobject_event 11, 14, SPRITE_FISHER, WALK, ANY_DIR, TEXT_PALLETTOWN_FISHER"
+[24] ""                                                                           
+[25] "\tdef_warps_to PALLET_TOWN"                                                 </code></pre>
+</div>
+</div>
+<p>Then we can extract the warps. Note that some warps don’t explicitly take you back where you came from. Instead the instruction is to warp to the last location. We can remove this from our data, since <code>LAST_MAP</code> isn’t a literal location.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>warps <span class="ot">&lt;-</span> <span class="fu">lapply</span>(obj_content, .get_warps)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>warps <span class="ot">&lt;-</span> <span class="fu">lapply</span>(warps, \(x) x[x <span class="sc">!=</span> <span class="st">"LAST_MAP"</span>])</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>warps <span class="ot">&lt;-</span> warps[<span class="fu">lengths</span>(warps) <span class="sc">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>warps_df <span class="ot">&lt;-</span> <span class="fu">stack</span>(warps)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>warps_df <span class="ot">&lt;-</span> warps_df[, <span class="fu">c</span>(<span class="st">"ind"</span>, <span class="st">"values"</span>)]</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(warps_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"from"</span>, <span class="st">"to"</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>warps_df[[<span class="st">"from"</span>]] <span class="ot">&lt;-</span> <span class="fu">as.character</span>(warps_df[[<span class="st">"from"</span>]])</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(warps_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          from                 to
+1 AGATHAS_ROOM        BRUNOS_ROOM
+2 AGATHAS_ROOM        LANCES_ROOM
+3  BRUNOS_ROOM      LORELEIS_ROOM
+4  BRUNOS_ROOM       AGATHAS_ROOM
+5 CELADON_CITY    CELADON_MART_1F
+6 CELADON_CITY CELADON_MANSION_1F</code></pre>
+</div>
+</div>
+</section>
+<section id="combine-all-node-pairs" class="level3">
+<h3 class="anchored" data-anchor-id="combine-all-node-pairs">Combine all node pairs</h3>
+<p>Now we can combine all the node pairs that share edges via either a simple connection or a warp. In this example we’re interested in combinations, rather than permutations, of node pairs. This means that we can treat A→B and B→A as equivalent and simplify down to just A→B.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">&lt;-</span> <span class="fu">rbind</span>(warps_df, conns_df)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>edges <span class="ot">&lt;-</span> edges[<span class="sc">!</span><span class="fu">duplicated</span>(<span class="fu">data.frame</span>(<span class="fu">t</span>(<span class="fu">apply</span>(edges, <span class="dv">1</span>, sort)))), ]  <span class="co"># https://stackoverflow.com/a/50117582</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(edges)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       from             to
+383 ROUTE_3        ROUTE_4
+388 ROUTE_5   SAFFRON_CITY
+389 ROUTE_6   SAFFRON_CITY
+390 ROUTE_6 VERMILION_CITY
+392 ROUTE_7   SAFFRON_CITY
+393 ROUTE_8   SAFFRON_CITY</code></pre>
+</div>
+</div>
+<p>We also want a full list of the nodes, which will help us to label and filter them in the final visualisation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">id =</span> <span class="fu">unique</span>(<span class="fu">c</span>(edges[[<span class="st">"from"</span>]], edges[[<span class="st">"to"</span>]])))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>nodes <span class="ot">&lt;-</span> nodes[<span class="fu">order</span>(nodes[[<span class="st">"id"</span>]]), , drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="graph" class="level3">
+<h3 class="anchored" data-anchor-id="graph">Visualise</h3>
+<p><a href="https://datastorm-open.github.io/visNetwork/">The {visNetwork} package</a> wraps <a href="https://visjs.org/">the vis.js JavaScript library</a>, which will help output an interactive HTML graph. We just need to feed it our nodes and edges and a bunch of configuration and styling options. For example, I’ve used the font from the games and a red colour accent to reflect the game variant.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(visNetwork)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">visNetwork</span>(</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  nodes,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  edges,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">width =</span> <span class="st">"100%"</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">height =</span> <span class="st">"420px"</span>,</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">main =</span> <span class="fu">list</span>(</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">text =</span> <span class="st">"Kanto"</span>,</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"font-family:'pokemon-font';font-size:30px;color:black;"</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">submain =</span> <span class="fu">list</span>(</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">text =</span> <span class="st">"A graph of locations in PKMN Red&lt;br&gt;&lt;br&gt;"</span>,</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"font-family:'pokemon-font';font-size:15px;color:black;"</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">footer =</span> <span class="fu">list</span>(</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">text =</span> <span class="st">"Source: Nintendo and Game Freak via the pret/pokered dissassembly project"</span>,</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">style =</span> <span class="st">"font-family:'pokemon-font';font-size:8px;color:black;text-align:right;"</span></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visEdges</span>(</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">"#FF7777"</span>, <span class="at">highlight =</span> <span class="st">"#FF0000"</span>, <span class="at">opacity =</span> <span class="fl">0.5</span>),</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">width =</span> <span class="dv">3</span>,</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">selectionWidth =</span> <span class="dv">5</span></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visNodes</span>(</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"#FF7777"</span>,</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">font =</span> <span class="fu">list</span>(<span class="at">face =</span> <span class="st">"pokemon-font"</span>, <span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">borderWidth =</span> <span class="dv">0</span>,</span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">borderWidthSelected =</span> <span class="dv">3</span>,</span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visOptions</span>(</span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">highlightNearest =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>    <span class="at">nodesIdSelection =</span> <span class="fu">list</span>(</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">enabled =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a>      <span class="at">main =</span> <span class="st">"Select a location"</span>,</span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>      <span class="at">style =</span> <span class="st">"font-family:'pokemon-font';font-size:15px;color:red;"</span></span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visLayout</span>(<span class="at">randomSeed =</span> <span class="dv">150</span>) <span class="sc">|&gt;</span></span>
+<span id="cb19-41"><a href="#cb19-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">visPhysics</span>(</span>
+<span id="cb19-42"><a href="#cb19-42" aria-hidden="true" tabindex="-1"></a>    <span class="at">solver =</span> <span class="st">"barnesHut"</span>,</span>
+<span id="cb19-43"><a href="#cb19-43" aria-hidden="true" tabindex="-1"></a>    <span class="at">barnesHut =</span> <span class="fu">list</span>(<span class="at">springConstant =</span> <span class="fl">0.1</span>, <span class="at">gravitationalConstant =</span> <span class="sc">-</span><span class="dv">10000</span>)</span>
+<span id="cb19-44"><a href="#cb19-44" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="htmlwidget-6fed2829bd77aa6ef899" style="width:100%;height:420px;" class="visNetwork html-widget "></div>
+<script type="application/json" data-for="htmlwidget-6fed2829bd77aa6ef899">{"x":{"nodes":{"id":["AGATHAS_ROOM","BIKE_SHOP","BILLS_HOUSE","BLUES_HOUSE","BRUNOS_ROOM","CELADON_CHIEF_HOUSE","CELADON_CITY","CELADON_DINER","CELADON_GYM","CELADON_HOTEL","CELADON_MANSION_1F","CELADON_MANSION_2F","CELADON_MANSION_3F","CELADON_MANSION_ROOF","CELADON_MANSION_ROOF_HOUSE","CELADON_MART_1F","CELADON_MART_2F","CELADON_MART_3F","CELADON_MART_4F","CELADON_MART_5F","CELADON_MART_ELEVATOR","CELADON_MART_ROOF","CELADON_POKECENTER","CERULEAN_BADGE_HOUSE","CERULEAN_CAVE_1F","CERULEAN_CAVE_2F","CERULEAN_CAVE_B1F","CERULEAN_CITY","CERULEAN_GYM","CERULEAN_MART","CERULEAN_POKECENTER","CERULEAN_TRADE_HOUSE","CERULEAN_TRASHED_HOUSE","CHAMPIONS_ROOM","CINNABAR_GYM","CINNABAR_ISLAND","CINNABAR_LAB","CINNABAR_LAB_FOSSIL_ROOM","CINNABAR_LAB_METRONOME_ROOM","CINNABAR_LAB_TRADE_ROOM","CINNABAR_MART","CINNABAR_POKECENTER","COPYCATS_HOUSE_1F","COPYCATS_HOUSE_2F","DAYCARE","DIGLETTS_CAVE","DIGLETTS_CAVE_ROUTE_11","DIGLETTS_CAVE_ROUTE_2","FIGHTING_DOJO","FUCHSIA_BILLS_GRANDPAS_HOUSE","FUCHSIA_CITY","FUCHSIA_GOOD_ROD_HOUSE","FUCHSIA_GYM","FUCHSIA_MART","FUCHSIA_MEETING_ROOM","FUCHSIA_POKECENTER","GAME_CORNER","GAME_CORNER_PRIZE_ROOM","HALL_OF_FAME","INDIGO_PLATEAU","INDIGO_PLATEAU_LOBBY","LANCES_ROOM","LAVENDER_CUBONE_HOUSE","LAVENDER_MART","LAVENDER_POKECENTER","LAVENDER_TOWN","LORELEIS_ROOM","MR_FUJIS_HOUSE","MR_PSYCHICS_HOUSE","MT_MOON_1F","MT_MOON_B1F","MT_MOON_B2F","MT_MOON_POKECENTER","MUSEUM_1F","MUSEUM_2F","NAME_RATERS_HOUSE","OAKS_LAB","PALLET_TOWN","PEWTER_CITY","PEWTER_GYM","PEWTER_MART","PEWTER_NIDORAN_HOUSE","PEWTER_POKECENTER","PEWTER_SPEECH_HOUSE","POKEMON_FAN_CLUB","POKEMON_MANSION_1F","POKEMON_MANSION_2F","POKEMON_MANSION_3F","POKEMON_MANSION_B1F","POKEMON_TOWER_1F","POKEMON_TOWER_2F","POKEMON_TOWER_3F","POKEMON_TOWER_4F","POKEMON_TOWER_5F","POKEMON_TOWER_6F","POKEMON_TOWER_7F","POWER_PLANT","REDS_HOUSE_1F","REDS_HOUSE_2F","ROCK_TUNNEL_1F","ROCK_TUNNEL_B1F","ROCK_TUNNEL_POKECENTER","ROCKET_HIDEOUT_B1F","ROCKET_HIDEOUT_B2F","ROCKET_HIDEOUT_B3F","ROCKET_HIDEOUT_B4F","ROCKET_HIDEOUT_ELEVATOR","ROUTE_1","ROUTE_10","ROUTE_11","ROUTE_11_GATE_1F","ROUTE_11_GATE_2F","ROUTE_12","ROUTE_12_GATE_1F","ROUTE_12_GATE_2F","ROUTE_12_SUPER_ROD_HOUSE","ROUTE_13","ROUTE_14","ROUTE_15","ROUTE_15_GATE_1F","ROUTE_15_GATE_2F","ROUTE_16","ROUTE_16_FLY_HOUSE","ROUTE_16_GATE_1F","ROUTE_16_GATE_2F","ROUTE_17","ROUTE_18","ROUTE_18_GATE_1F","ROUTE_18_GATE_2F","ROUTE_19","ROUTE_2","ROUTE_2_GATE","ROUTE_2_TRADE_HOUSE","ROUTE_20","ROUTE_21","ROUTE_22","ROUTE_22_GATE","ROUTE_23","ROUTE_24","ROUTE_25","ROUTE_3","ROUTE_4","ROUTE_5","ROUTE_5_GATE","ROUTE_6","ROUTE_6_GATE","ROUTE_7","ROUTE_7_GATE","ROUTE_8","ROUTE_8_GATE","ROUTE_9","SAFARI_ZONE_CENTER","SAFARI_ZONE_CENTER_REST_HOUSE","SAFARI_ZONE_EAST","SAFARI_ZONE_EAST_REST_HOUSE","SAFARI_ZONE_GATE","SAFARI_ZONE_NORTH","SAFARI_ZONE_NORTH_REST_HOUSE","SAFARI_ZONE_SECRET_HOUSE","SAFARI_ZONE_WEST","SAFARI_ZONE_WEST_REST_HOUSE","SAFFRON_CITY","SAFFRON_GYM","SAFFRON_MART","SAFFRON_PIDGEY_HOUSE","SAFFRON_POKECENTER","SEAFOAM_ISLANDS_1F","SEAFOAM_ISLANDS_B1F","SEAFOAM_ISLANDS_B2F","SEAFOAM_ISLANDS_B3F","SEAFOAM_ISLANDS_B4F","SILPH_CO_10F","SILPH_CO_11F","SILPH_CO_1F","SILPH_CO_2F","SILPH_CO_3F","SILPH_CO_4F","SILPH_CO_5F","SILPH_CO_6F","SILPH_CO_7F","SILPH_CO_8F","SILPH_CO_9F","SILPH_CO_ELEVATOR","SS_ANNE_1F","SS_ANNE_1F_ROOMS","SS_ANNE_2F","SS_ANNE_2F_ROOMS","SS_ANNE_3F","SS_ANNE_B1F","SS_ANNE_B1F_ROOMS","SS_ANNE_BOW","SS_ANNE_CAPTAINS_ROOM","SS_ANNE_KITCHEN","UNDERGROUND_PATH_NORTH_SOUTH","UNDERGROUND_PATH_ROUTE_5","UNDERGROUND_PATH_ROUTE_6","UNDERGROUND_PATH_ROUTE_7","UNDERGROUND_PATH_ROUTE_8","UNDERGROUND_PATH_WEST_EAST","UNUSED_MAP_ED","VERMILION_CITY","VERMILION_DOCK","VERMILION_GYM","VERMILION_MART","VERMILION_OLD_ROD_HOUSE","VERMILION_PIDGEY_HOUSE","VERMILION_POKECENTER","VERMILION_TRADE_HOUSE","VICTORY_ROAD_1F","VICTORY_ROAD_2F","VICTORY_ROAD_3F","VIRIDIAN_CITY","VIRIDIAN_FOREST","VIRIDIAN_FOREST_NORTH_GATE","VIRIDIAN_FOREST_SOUTH_GATE","VIRIDIAN_GYM","VIRIDIAN_MART","VIRIDIAN_NICKNAME_HOUSE","VIRIDIAN_POKECENTER","VIRIDIAN_SCHOOL_HOUSE","WARDENS_HOUSE"],"label":["AGATHAS_ROOM","BIKE_SHOP","BILLS_HOUSE","BLUES_HOUSE","BRUNOS_ROOM","CELADON_CHIEF_HOUSE","CELADON_CITY","CELADON_DINER","CELADON_GYM","CELADON_HOTEL","CELADON_MANSION_1F","CELADON_MANSION_2F","CELADON_MANSION_3F","CELADON_MANSION_ROOF","CELADON_MANSION_ROOF_HOUSE","CELADON_MART_1F","CELADON_MART_2F","CELADON_MART_3F","CELADON_MART_4F","CELADON_MART_5F","CELADON_MART_ELEVATOR","CELADON_MART_ROOF","CELADON_POKECENTER","CERULEAN_BADGE_HOUSE","CERULEAN_CAVE_1F","CERULEAN_CAVE_2F","CERULEAN_CAVE_B1F","CERULEAN_CITY","CERULEAN_GYM","CERULEAN_MART","CERULEAN_POKECENTER","CERULEAN_TRADE_HOUSE","CERULEAN_TRASHED_HOUSE","CHAMPIONS_ROOM","CINNABAR_GYM","CINNABAR_ISLAND","CINNABAR_LAB","CINNABAR_LAB_FOSSIL_ROOM","CINNABAR_LAB_METRONOME_ROOM","CINNABAR_LAB_TRADE_ROOM","CINNABAR_MART","CINNABAR_POKECENTER","COPYCATS_HOUSE_1F","COPYCATS_HOUSE_2F","DAYCARE","DIGLETTS_CAVE","DIGLETTS_CAVE_ROUTE_11","DIGLETTS_CAVE_ROUTE_2","FIGHTING_DOJO","FUCHSIA_BILLS_GRANDPAS_HOUSE","FUCHSIA_CITY","FUCHSIA_GOOD_ROD_HOUSE","FUCHSIA_GYM","FUCHSIA_MART","FUCHSIA_MEETING_ROOM","FUCHSIA_POKECENTER","GAME_CORNER","GAME_CORNER_PRIZE_ROOM","HALL_OF_FAME","INDIGO_PLATEAU","INDIGO_PLATEAU_LOBBY","LANCES_ROOM","LAVENDER_CUBONE_HOUSE","LAVENDER_MART","LAVENDER_POKECENTER","LAVENDER_TOWN","LORELEIS_ROOM","MR_FUJIS_HOUSE","MR_PSYCHICS_HOUSE","MT_MOON_1F","MT_MOON_B1F","MT_MOON_B2F","MT_MOON_POKECENTER","MUSEUM_1F","MUSEUM_2F","NAME_RATERS_HOUSE","OAKS_LAB","PALLET_TOWN","PEWTER_CITY","PEWTER_GYM","PEWTER_MART","PEWTER_NIDORAN_HOUSE","PEWTER_POKECENTER","PEWTER_SPEECH_HOUSE","POKEMON_FAN_CLUB","POKEMON_MANSION_1F","POKEMON_MANSION_2F","POKEMON_MANSION_3F","POKEMON_MANSION_B1F","POKEMON_TOWER_1F","POKEMON_TOWER_2F","POKEMON_TOWER_3F","POKEMON_TOWER_4F","POKEMON_TOWER_5F","POKEMON_TOWER_6F","POKEMON_TOWER_7F","POWER_PLANT","REDS_HOUSE_1F","REDS_HOUSE_2F","ROCK_TUNNEL_1F","ROCK_TUNNEL_B1F","ROCK_TUNNEL_POKECENTER","ROCKET_HIDEOUT_B1F","ROCKET_HIDEOUT_B2F","ROCKET_HIDEOUT_B3F","ROCKET_HIDEOUT_B4F","ROCKET_HIDEOUT_ELEVATOR","ROUTE_1","ROUTE_10","ROUTE_11","ROUTE_11_GATE_1F","ROUTE_11_GATE_2F","ROUTE_12","ROUTE_12_GATE_1F","ROUTE_12_GATE_2F","ROUTE_12_SUPER_ROD_HOUSE","ROUTE_13","ROUTE_14","ROUTE_15","ROUTE_15_GATE_1F","ROUTE_15_GATE_2F","ROUTE_16","ROUTE_16_FLY_HOUSE","ROUTE_16_GATE_1F","ROUTE_16_GATE_2F","ROUTE_17","ROUTE_18","ROUTE_18_GATE_1F","ROUTE_18_GATE_2F","ROUTE_19","ROUTE_2","ROUTE_2_GATE","ROUTE_2_TRADE_HOUSE","ROUTE_20","ROUTE_21","ROUTE_22","ROUTE_22_GATE","ROUTE_23","ROUTE_24","ROUTE_25","ROUTE_3","ROUTE_4","ROUTE_5","ROUTE_5_GATE","ROUTE_6","ROUTE_6_GATE","ROUTE_7","ROUTE_7_GATE","ROUTE_8","ROUTE_8_GATE","ROUTE_9","SAFARI_ZONE_CENTER","SAFARI_ZONE_CENTER_REST_HOUSE","SAFARI_ZONE_EAST","SAFARI_ZONE_EAST_REST_HOUSE","SAFARI_ZONE_GATE","SAFARI_ZONE_NORTH","SAFARI_ZONE_NORTH_REST_HOUSE","SAFARI_ZONE_SECRET_HOUSE","SAFARI_ZONE_WEST","SAFARI_ZONE_WEST_REST_HOUSE","SAFFRON_CITY","SAFFRON_GYM","SAFFRON_MART","SAFFRON_PIDGEY_HOUSE","SAFFRON_POKECENTER","SEAFOAM_ISLANDS_1F","SEAFOAM_ISLANDS_B1F","SEAFOAM_ISLANDS_B2F","SEAFOAM_ISLANDS_B3F","SEAFOAM_ISLANDS_B4F","SILPH_CO_10F","SILPH_CO_11F","SILPH_CO_1F","SILPH_CO_2F","SILPH_CO_3F","SILPH_CO_4F","SILPH_CO_5F","SILPH_CO_6F","SILPH_CO_7F","SILPH_CO_8F","SILPH_CO_9F","SILPH_CO_ELEVATOR","SS_ANNE_1F","SS_ANNE_1F_ROOMS","SS_ANNE_2F","SS_ANNE_2F_ROOMS","SS_ANNE_3F","SS_ANNE_B1F","SS_ANNE_B1F_ROOMS","SS_ANNE_BOW","SS_ANNE_CAPTAINS_ROOM","SS_ANNE_KITCHEN","UNDERGROUND_PATH_NORTH_SOUTH","UNDERGROUND_PATH_ROUTE_5","UNDERGROUND_PATH_ROUTE_6","UNDERGROUND_PATH_ROUTE_7","UNDERGROUND_PATH_ROUTE_8","UNDERGROUND_PATH_WEST_EAST","UNUSED_MAP_ED","VERMILION_CITY","VERMILION_DOCK","VERMILION_GYM","VERMILION_MART","VERMILION_OLD_ROD_HOUSE","VERMILION_PIDGEY_HOUSE","VERMILION_POKECENTER","VERMILION_TRADE_HOUSE","VICTORY_ROAD_1F","VICTORY_ROAD_2F","VICTORY_ROAD_3F","VIRIDIAN_CITY","VIRIDIAN_FOREST","VIRIDIAN_FOREST_NORTH_GATE","VIRIDIAN_FOREST_SOUTH_GATE","VIRIDIAN_GYM","VIRIDIAN_MART","VIRIDIAN_NICKNAME_HOUSE","VIRIDIAN_POKECENTER","VIRIDIAN_SCHOOL_HOUSE","WARDENS_HOUSE"]},"edges":{"from":["AGATHAS_ROOM","AGATHAS_ROOM","BRUNOS_ROOM","CELADON_CITY","CELADON_CITY","CELADON_CITY","CELADON_CITY","CELADON_CITY","CELADON_CITY","CELADON_CITY","CELADON_CITY","CELADON_CITY","CELADON_CITY","CELADON_MANSION_1F","CELADON_MANSION_2F","CELADON_MANSION_3F","CELADON_MANSION_ROOF","CELADON_MART_1F","CELADON_MART_1F","CELADON_MART_2F","CELADON_MART_2F","CELADON_MART_3F","CELADON_MART_3F","CELADON_MART_4F","CELADON_MART_4F","CELADON_MART_5F","CELADON_MART_5F","CERULEAN_CAVE_1F","CERULEAN_CAVE_1F","CERULEAN_CITY","CERULEAN_CITY","CERULEAN_CITY","CERULEAN_CITY","CERULEAN_CITY","CERULEAN_CITY","CERULEAN_CITY","CERULEAN_CITY","CHAMPIONS_ROOM","CHAMPIONS_ROOM","CINNABAR_ISLAND","CINNABAR_ISLAND","CINNABAR_ISLAND","CINNABAR_ISLAND","CINNABAR_ISLAND","CINNABAR_LAB","CINNABAR_LAB","CINNABAR_LAB","COPYCATS_HOUSE_1F","DIGLETTS_CAVE","DIGLETTS_CAVE","FUCHSIA_CITY","FUCHSIA_CITY","FUCHSIA_CITY","FUCHSIA_CITY","FUCHSIA_CITY","FUCHSIA_CITY","FUCHSIA_CITY","FUCHSIA_CITY","GAME_CORNER","INDIGO_PLATEAU","INDIGO_PLATEAU_LOBBY","LAVENDER_TOWN","LAVENDER_TOWN","LAVENDER_TOWN","LAVENDER_TOWN","LAVENDER_TOWN","LAVENDER_TOWN","MT_MOON_1F","MT_MOON_B1F","MUSEUM_1F","PALLET_TOWN","PALLET_TOWN","PALLET_TOWN","PEWTER_CITY","PEWTER_CITY","PEWTER_CITY","PEWTER_CITY","PEWTER_CITY","PEWTER_CITY","POKEMON_MANSION_1F","POKEMON_MANSION_1F","POKEMON_MANSION_2F","POKEMON_TOWER_1F","POKEMON_TOWER_2F","POKEMON_TOWER_3F","POKEMON_TOWER_4F","POKEMON_TOWER_5F","POKEMON_TOWER_6F","REDS_HOUSE_1F","ROCKET_HIDEOUT_B1F","ROCKET_HIDEOUT_B1F","ROCKET_HIDEOUT_B2F","ROCKET_HIDEOUT_B2F","ROCKET_HIDEOUT_B3F","ROCKET_HIDEOUT_B4F","ROCK_TUNNEL_1F","ROUTE_10","ROUTE_10","ROUTE_10","ROUTE_11","ROUTE_11","ROUTE_11_GATE_1F","ROUTE_12","ROUTE_12","ROUTE_12_GATE_1F","ROUTE_15","ROUTE_15_GATE_1F","ROUTE_16","ROUTE_16","ROUTE_16_GATE_1F","ROUTE_18","ROUTE_18_GATE_1F","ROUTE_2","ROUTE_2","ROUTE_2","ROUTE_2","ROUTE_2","ROUTE_20","ROUTE_22","ROUTE_23","ROUTE_23","ROUTE_23","ROUTE_25","ROUTE_4","ROUTE_4","ROUTE_4","ROUTE_5","ROUTE_5","ROUTE_5","ROUTE_6","ROUTE_6","ROUTE_7","ROUTE_7","ROUTE_8","ROUTE_8","SAFARI_ZONE_CENTER","SAFARI_ZONE_CENTER","SAFARI_ZONE_CENTER","SAFARI_ZONE_CENTER","SAFARI_ZONE_CENTER","SAFARI_ZONE_EAST","SAFARI_ZONE_EAST","SAFARI_ZONE_NORTH","SAFARI_ZONE_NORTH","SAFARI_ZONE_SECRET_HOUSE","SAFARI_ZONE_WEST","SAFFRON_CITY","SAFFRON_CITY","SAFFRON_CITY","SAFFRON_CITY","SAFFRON_CITY","SAFFRON_CITY","SAFFRON_CITY","SAFFRON_CITY","SAFFRON_GYM","SEAFOAM_ISLANDS_1F","SEAFOAM_ISLANDS_B1F","SEAFOAM_ISLANDS_B2F","SEAFOAM_ISLANDS_B3F","SILPH_CO_10F","SILPH_CO_10F","SILPH_CO_10F","SILPH_CO_10F","SILPH_CO_11F","SILPH_CO_11F","SILPH_CO_1F","SILPH_CO_1F","SILPH_CO_1F","SILPH_CO_2F","SILPH_CO_2F","SILPH_CO_2F","SILPH_CO_2F","SILPH_CO_3F","SILPH_CO_3F","SILPH_CO_3F","SILPH_CO_3F","SILPH_CO_3F","SILPH_CO_3F","SILPH_CO_4F","SILPH_CO_4F","SILPH_CO_4F","SILPH_CO_5F","SILPH_CO_5F","SILPH_CO_5F","SILPH_CO_5F","SILPH_CO_6F","SILPH_CO_6F","SILPH_CO_7F","SILPH_CO_7F","SILPH_CO_8F","SILPH_CO_8F","SILPH_CO_8F","SILPH_CO_9F","SILPH_CO_ELEVATOR","SS_ANNE_1F","SS_ANNE_1F","SS_ANNE_1F","SS_ANNE_1F","SS_ANNE_1F","SS_ANNE_2F","SS_ANNE_2F","SS_ANNE_2F","SS_ANNE_3F","SS_ANNE_B1F","UNDERGROUND_PATH_NORTH_SOUTH","UNDERGROUND_PATH_NORTH_SOUTH","UNDERGROUND_PATH_ROUTE_7","UNDERGROUND_PATH_ROUTE_8","VERMILION_CITY","VERMILION_CITY","VERMILION_CITY","VERMILION_CITY","VERMILION_CITY","VERMILION_CITY","VERMILION_CITY","VERMILION_CITY","VICTORY_ROAD_1F","VICTORY_ROAD_2F","VIRIDIAN_CITY","VIRIDIAN_CITY","VIRIDIAN_CITY","VIRIDIAN_CITY","VIRIDIAN_CITY","VIRIDIAN_FOREST","VIRIDIAN_FOREST","CELADON_CITY","CELADON_CITY","CERULEAN_CITY","CERULEAN_CITY","CERULEAN_CITY","CERULEAN_CITY","CINNABAR_ISLAND","CINNABAR_ISLAND","FUCHSIA_CITY","FUCHSIA_CITY","FUCHSIA_CITY","INDIGO_PLATEAU","LAVENDER_TOWN","LAVENDER_TOWN","LAVENDER_TOWN","PALLET_TOWN","PALLET_TOWN","PEWTER_CITY","PEWTER_CITY","ROUTE_1","ROUTE_10","ROUTE_11","ROUTE_11","ROUTE_12","ROUTE_13","ROUTE_14","ROUTE_16","ROUTE_17","ROUTE_19","ROUTE_2","ROUTE_22","ROUTE_22","ROUTE_24","ROUTE_3","ROUTE_5","ROUTE_6","ROUTE_6","ROUTE_7","ROUTE_8"],"to":["BRUNOS_ROOM","LANCES_ROOM","LORELEIS_ROOM","CELADON_MART_1F","CELADON_MANSION_1F","CELADON_POKECENTER","CELADON_GYM","GAME_CORNER","CELADON_MART_5F","GAME_CORNER_PRIZE_ROOM","CELADON_DINER","CELADON_CHIEF_HOUSE","CELADON_HOTEL","CELADON_MANSION_2F","CELADON_MANSION_3F","CELADON_MANSION_ROOF","CELADON_MANSION_ROOF_HOUSE","CELADON_MART_2F","CELADON_MART_ELEVATOR","CELADON_MART_3F","CELADON_MART_ELEVATOR","CELADON_MART_4F","CELADON_MART_ELEVATOR","CELADON_MART_5F","CELADON_MART_ELEVATOR","CELADON_MART_ROOF","CELADON_MART_ELEVATOR","CERULEAN_CAVE_2F","CERULEAN_CAVE_B1F","CERULEAN_TRASHED_HOUSE","CERULEAN_TRADE_HOUSE","CERULEAN_POKECENTER","CERULEAN_GYM","BIKE_SHOP","CERULEAN_MART","CERULEAN_CAVE_1F","CERULEAN_BADGE_HOUSE","LANCES_ROOM","HALL_OF_FAME","POKEMON_MANSION_1F","CINNABAR_GYM","CINNABAR_LAB","CINNABAR_POKECENTER","CINNABAR_MART","CINNABAR_LAB_TRADE_ROOM","CINNABAR_LAB_METRONOME_ROOM","CINNABAR_LAB_FOSSIL_ROOM","COPYCATS_HOUSE_2F","DIGLETTS_CAVE_ROUTE_2","DIGLETTS_CAVE_ROUTE_11","FUCHSIA_MART","FUCHSIA_BILLS_GRANDPAS_HOUSE","FUCHSIA_POKECENTER","WARDENS_HOUSE","SAFARI_ZONE_GATE","FUCHSIA_GYM","FUCHSIA_MEETING_ROOM","FUCHSIA_GOOD_ROD_HOUSE","ROCKET_HIDEOUT_B1F","INDIGO_PLATEAU_LOBBY","LORELEIS_ROOM","LAVENDER_POKECENTER","POKEMON_TOWER_1F","MR_FUJIS_HOUSE","LAVENDER_MART","LAVENDER_CUBONE_HOUSE","NAME_RATERS_HOUSE","MT_MOON_B1F","MT_MOON_B2F","MUSEUM_2F","REDS_HOUSE_1F","BLUES_HOUSE","OAKS_LAB","MUSEUM_1F","PEWTER_GYM","PEWTER_NIDORAN_HOUSE","PEWTER_MART","PEWTER_SPEECH_HOUSE","PEWTER_POKECENTER","POKEMON_MANSION_2F","POKEMON_MANSION_B1F","POKEMON_MANSION_3F","POKEMON_TOWER_2F","POKEMON_TOWER_3F","POKEMON_TOWER_4F","POKEMON_TOWER_5F","POKEMON_TOWER_6F","POKEMON_TOWER_7F","REDS_HOUSE_2F","ROCKET_HIDEOUT_B2F","ROCKET_HIDEOUT_ELEVATOR","ROCKET_HIDEOUT_B3F","ROCKET_HIDEOUT_ELEVATOR","ROCKET_HIDEOUT_B4F","ROCKET_HIDEOUT_ELEVATOR","ROCK_TUNNEL_B1F","ROCK_TUNNEL_POKECENTER","ROCK_TUNNEL_1F","POWER_PLANT","ROUTE_11_GATE_1F","DIGLETTS_CAVE_ROUTE_11","ROUTE_11_GATE_2F","ROUTE_12_GATE_1F","ROUTE_12_SUPER_ROD_HOUSE","ROUTE_12_GATE_2F","ROUTE_15_GATE_1F","ROUTE_15_GATE_2F","ROUTE_16_GATE_1F","ROUTE_16_FLY_HOUSE","ROUTE_16_GATE_2F","ROUTE_18_GATE_1F","ROUTE_18_GATE_2F","DIGLETTS_CAVE_ROUTE_2","VIRIDIAN_FOREST_NORTH_GATE","ROUTE_2_TRADE_HOUSE","ROUTE_2_GATE","VIRIDIAN_FOREST_SOUTH_GATE","SEAFOAM_ISLANDS_1F","ROUTE_22_GATE","ROUTE_22_GATE","VICTORY_ROAD_1F","VICTORY_ROAD_2F","BILLS_HOUSE","MT_MOON_POKECENTER","MT_MOON_1F","MT_MOON_B1F","ROUTE_5_GATE","UNDERGROUND_PATH_ROUTE_5","DAYCARE","ROUTE_6_GATE","UNDERGROUND_PATH_ROUTE_6","ROUTE_7_GATE","UNDERGROUND_PATH_ROUTE_7","ROUTE_8_GATE","UNDERGROUND_PATH_ROUTE_8","SAFARI_ZONE_GATE","SAFARI_ZONE_WEST","SAFARI_ZONE_NORTH","SAFARI_ZONE_EAST","SAFARI_ZONE_CENTER_REST_HOUSE","SAFARI_ZONE_NORTH","SAFARI_ZONE_EAST_REST_HOUSE","SAFARI_ZONE_WEST","SAFARI_ZONE_NORTH_REST_HOUSE","SAFARI_ZONE_WEST","SAFARI_ZONE_WEST_REST_HOUSE","COPYCATS_HOUSE_1F","FIGHTING_DOJO","SAFFRON_GYM","SAFFRON_PIDGEY_HOUSE","SAFFRON_MART","SILPH_CO_1F","SAFFRON_POKECENTER","MR_PSYCHICS_HOUSE","SAFFRON_GYM","SEAFOAM_ISLANDS_B1F","SEAFOAM_ISLANDS_B2F","SEAFOAM_ISLANDS_B3F","SEAFOAM_ISLANDS_B4F","SILPH_CO_9F","SILPH_CO_11F","SILPH_CO_ELEVATOR","SILPH_CO_4F","SILPH_CO_ELEVATOR","SILPH_CO_7F","SILPH_CO_2F","SILPH_CO_ELEVATOR","SILPH_CO_3F","SILPH_CO_3F","SILPH_CO_ELEVATOR","SILPH_CO_8F","SILPH_CO_6F","SILPH_CO_4F","SILPH_CO_ELEVATOR","SILPH_CO_3F","SILPH_CO_5F","SILPH_CO_9F","SILPH_CO_7F","SILPH_CO_5F","SILPH_CO_ELEVATOR","SILPH_CO_6F","SILPH_CO_6F","SILPH_CO_ELEVATOR","SILPH_CO_7F","SILPH_CO_9F","SILPH_CO_7F","SILPH_CO_ELEVATOR","SILPH_CO_8F","SILPH_CO_ELEVATOR","SILPH_CO_9F","SILPH_CO_ELEVATOR","SILPH_CO_8F","SILPH_CO_ELEVATOR","UNUSED_MAP_ED","VERMILION_DOCK","SS_ANNE_1F_ROOMS","SS_ANNE_2F","SS_ANNE_B1F","SS_ANNE_KITCHEN","SS_ANNE_2F_ROOMS","SS_ANNE_3F","SS_ANNE_CAPTAINS_ROOM","SS_ANNE_BOW","SS_ANNE_B1F_ROOMS","UNDERGROUND_PATH_ROUTE_5","UNDERGROUND_PATH_ROUTE_6","UNDERGROUND_PATH_WEST_EAST","UNDERGROUND_PATH_WEST_EAST","VERMILION_POKECENTER","POKEMON_FAN_CLUB","VERMILION_MART","VERMILION_GYM","VERMILION_PIDGEY_HOUSE","VERMILION_DOCK","VERMILION_TRADE_HOUSE","VERMILION_OLD_ROD_HOUSE","VICTORY_ROAD_2F","VICTORY_ROAD_3F","VIRIDIAN_POKECENTER","VIRIDIAN_MART","VIRIDIAN_SCHOOL_HOUSE","VIRIDIAN_NICKNAME_HOUSE","VIRIDIAN_GYM","VIRIDIAN_FOREST_NORTH_GATE","VIRIDIAN_FOREST_SOUTH_GATE","ROUTE_16","ROUTE_7","ROUTE_24","ROUTE_5","ROUTE_4","ROUTE_9","ROUTE_21","ROUTE_20","ROUTE_19","ROUTE_18","ROUTE_15","ROUTE_23","ROUTE_10","ROUTE_12","ROUTE_8","ROUTE_1","ROUTE_21","ROUTE_2","ROUTE_3","VIRIDIAN_CITY","ROUTE_9","VERMILION_CITY","ROUTE_12","ROUTE_13","ROUTE_14","ROUTE_15","ROUTE_17","ROUTE_18","ROUTE_20","VIRIDIAN_CITY","ROUTE_23","VIRIDIAN_CITY","ROUTE_25","ROUTE_4","SAFFRON_CITY","SAFFRON_CITY","VERMILION_CITY","SAFFRON_CITY","SAFFRON_CITY"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","borderWidth":0,"borderWidthSelected":3,"color":"#FF7777","font":{"face":"pokemon-font","size":10}},"manipulation":{"enabled":false},"edges":{"width":3,"selectionWidth":5,"color":{"color":"#FF7777","highlight":"#FF0000","opacity":0.5}},"layout":{"randomSeed":150},"physics":{"solver":"barnesHut","barnesHut":{"springConstant":0.1,"gravitationalConstant":-10000}}},"groups":null,"width":"100%","height":"420px","idselection":{"enabled":true,"style":"font-family:'pokemon-font';font-size:15px;color:red;","useLabels":true,"main":"Select a location"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"Kanto","style":"font-family:'pokemon-font';font-size:30px;color:black;"},"submain":{"text":"A graph of locations in PKMN Red<br><br>","style":"font-family:'pokemon-font';font-size:15px;color:black;"},"footer":{"text":"Source: Nintendo and Game Freak via the pret/pokered dissassembly project","style":"font-family:'pokemon-font';font-size:8px;color:black;text-align:right;"},"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":1,"algorithm":"all","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p><br> It can take a moment to load. You can select a node from the dropdown menu, scroll to zoom, and click on the nodes and edges themselves. The node labels will appear when you zoom in.</p>
+<p>It was interesting to see the simple radial networks around each city; the complicated relationships between the nodes of Silph Co; the long ‘tail’ from Victory Road through the Elite Four to the Hall of Fame; and the hand-like structure of the Safari Zone.</p>
+<p>Of course, you could spend all day tweaking things like the physics of the relationship between each node, or you could replace each node an images of its in-game sprite. I’ve chosen to keep things relatively simple.</p>
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-11-25 00:24:06 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] visNetwork_2.1.2
+
+loaded via a namespace (and not attached):
+ [1] digest_0.6.33     fastmap_1.1.1     xfun_0.41         magrittr_2.0.3   
+ [5] knitr_1.45        htmltools_0.5.6.1 rmarkdown_2.25    cli_3.6.1        
+ [9] compiler_4.3.1    rstudioapi_0.15.0 tools_4.3.1       evaluate_0.23    
+[13] ellipsis_0.3.2    yaml_2.3.7        rlang_1.1.1       jsonlite_1.8.7   
+[17] htmlwidgets_1.6.2</code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -10,7 +10,819 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Wed, 01 Nov 2023 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 25 Nov 2023 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>An interactive graph of Kanto</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2023-11-25-kanto-graph/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p><img src="https://www.rostrum.blog/posts/2023-11-25-kanto-graph/resources/graph-zoom.png" class="img-fluid" alt="Screenshot of an interactive graph. The title is 'Kanto' and the subtitle is 'a graph of locations in Pokémon Red'. A dropdown menu has 'Pallet Town' selected and in red text. A node labelled 'Pallet Town' is shown, highlighted in red, as are other labelled nodes like 'Oak's lab' and 'Blue's house' that it's directly connected to. A greyed-out node is also visible, which is not connected by an edge to the 'Pallet Town' node."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I extracted data from the disassembled code of Pokémon Red to create an interactive graph of the locations and their connections. You can jump to the graph below.</p>
+</section>
+<section id="kanto" class="level2">
+<h2 class="anchored" data-anchor-id="kanto">Kanto</h2>
+<p><a href="https://www.rostrum.blog/posts/2021-11-04-kanto-locator/">I wrote a while back</a> about using the wonderful <code>locator()</code> function to extract coordinates from fictitious maps. In that example I used the Kanto region from <a href="https://en.wikipedia.org/wiki/Pok%C3%A9mon_Red,_Blue,_and_Yellow">the original Pokémon games</a>.</p>
+<p>Today I’m back with the same map, but we’re going to be far more methodical and abstract: we’re going to extract data from the underlying game files to build a graph that describes all the locations and connections between them.</p>
+<p>This is made possible by <a href="https://github.com/pret">the ‘pret’ collaborative</a>, who have reverse-engineered, or ‘disassembled’, a number of Pokémon games. This is interesting for digi-archaeological reasons, but also for our frivolous purposes.</p>
+</section>
+<section id="assemble" class="level2">
+<h2 class="anchored" data-anchor-id="assemble">Assemble</h2>
+<p>To get a copy of the game’s disassembled code, go to <a href="https://github.com/pret/pokered">the pret/pokered GitHub repo</a>, click the ‘Code’ button, then ‘Download as zip’ and finally unzip the file on your computer.</p>
+<p>We’re interested in two subfolders: <code>/data/maps/objects/</code> and <code>/data/maps/headers/</code>. These both contain one Assembly file per named location in the game, like <code>AgathasRoom.asm</code> and <code>Bikeshop.asm</code>. We’ll be handling these as simple text files.</p>
+<p>The ‘objects’ files contain information required to set up things like sprites and text for each location in the game. The example below is for the starting area: Pallet Town. For our purposes, we care about the <code>warp_events</code>, which indicate that you can step on a tile and be warped somewhere else. For example, standing on the door tile at tile location <code>5, 5</code> would warp you to <code>REDS_HOUSE_1F</code>, i.e.&nbsp;the first floor of the player’s house.</p>
+<pre><code>object_const_def
+const_export PALLETTOWN_OAK
+const_export PALLETTOWN_GIRL
+const_export PALLETTOWN_FISHER
+
+PalletTown_Object:
+db $b ; border block
+
+def_warp_events
+warp_event  5,  5, REDS_HOUSE_1F, 1
+warp_event 13,  5, BLUES_HOUSE, 1
+warp_event 12, 11, OAKS_LAB, 2
+
+def_bg_events
+bg_event 13, 13, TEXT_PALLETTOWN_OAKSLAB_SIGN
+bg_event  7,  9, TEXT_PALLETTOWN_SIGN
+bg_event  3,  5, TEXT_PALLETTOWN_PLAYERSHOUSE_SIGN
+bg_event 11,  5, TEXT_PALLETTOWN_RIVALSHOUSE_SIGN
+
+def_object_events
+object_event  8,  5, SPRITE_OAK, STAY, NONE, TEXT_PALLETTOWN_OAK
+object_event  3,  8, SPRITE_GIRL, WALK, ANY_DIR, TEXT_PALLETTOWN_GIRL
+object_event 11, 14, SPRITE_FISHER, WALK, ANY_DIR, TEXT_PALLETTOWN_FISHER
+
+def_warps_to PALLET_TOWN</code></pre>
+<p>Some terminology for graphs: the game’s locations are ‘nodes’ connected by common ‘edges’. So Pallet Town and Red’s House are nodes that share an edge.</p>
+<p>Note that warping isn’t the only thing that creates an edge between two nodes. If we look in the ‘headers’ file for Pallet Town, you can see that some locations have a simple <code>connection</code> parameter: you can just walk north of Pallet Town to Route 1 (the road to Viridian City) or approach from the south along Route 21 (from Cinnabar Island). Yes, ‘routes’ connect two places, but routes themselves act as nodes in this demo.</p>
+<pre><code>map_header PalletTown, PALLET_TOWN, OVERWORLD, NORTH | SOUTH
+connection north, Route1, ROUTE_1, 0
+connection south, Route21, ROUTE_21, 0
+end_map_header</code></pre>
+<p>The headers file is useful to us in another way: it maps location names from the ‘PalletTown’ format (used in .asm filenames) to the ‘PALLET_TOWN’ format (as referenced within files). This knowledge will help us to better handle the data as we progress.</p>
+</section>
+<section id="graph" class="level2">
+<h2 class="anchored" data-anchor-id="graph">Graph</h2>
+<p>So let’s crack open the data and use some base R for corralling.</p>
+<section id="prepare-functions" class="level3">
+<h3 class="anchored" data-anchor-id="prepare-functions">Prepare functions</h3>
+<p>First we’ll prepare some helper functions. To begin, a function that returns the filepaths for all the files we want to read. I saved my copy of the repo to <code>~/Documents/data/</code>, so I’ve set this path as the default.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">.get_file_paths <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(</span>
+<span id="cb3-2">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">dir =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"~/Documents/data/pokered-master/data/maps"</span>,</span>
+<span id="cb3-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">type =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"objects"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"headers"</span>)</span>
+<span id="cb3-4">) {</span>
+<span id="cb3-5">  path <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">file.path</span>(dir, type)</span>
+<span id="cb3-6">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list.files</span>(path, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pattern =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".asm$"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">full.names =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb3-7">}</span></code></pre></div>
+</div>
+<p>Then a function to extract the warps in the text of each objects file:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">.get_warps <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(objects_content) {</span>
+<span id="cb4-2">  warp_string <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"warp_event "</span></span>
+<span id="cb4-3">  warp_events <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> objects_content[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grepl</span>(warp_string, objects_content)]</span>
+<span id="cb4-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unique</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unlist</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">strsplit</span>(warp_events, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">", "</span>), <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">`</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">[[</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">`</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)))</span>
+<span id="cb4-5">}</span></code></pre></div>
+</div>
+<p>For the headers files, we’ll need a function to extract all the connections:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">.get_connections <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(headers_content) {</span>
+<span id="cb5-2">  con_string <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"connection"</span></span>
+<span id="cb5-3">  con_detected <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> headers_content[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grepl</span>(con_string, headers_content)]</span>
+<span id="cb5-4">  con_isolated <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(con_detected, \(x) x[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">which</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grepl</span>(con_string, x))])</span>
+<span id="cb5-5">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(con_isolated, \(x) <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unlist</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">strsplit</span>(x, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">", "</span>), <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">`</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">[[</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">`</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)))</span>
+<span id="cb5-6">}</span></code></pre></div>
+</div>
+<p>And also we want a function to extract the UpperCamelCase and SCREAMING_SNAKE_CASE variants of each location:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">.create_names_lookup <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(headers_content) {</span>
+<span id="cb6-2">  headers_split <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">strsplit</span>(headers_content, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">","</span>)[[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]]</span>
+<span id="cb6-3">  headers_split <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> headers_split[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>]</span>
+<span id="cb6-4">  name_pair <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">gsub</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"map_header "</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">trimws</span>(headers_split))</span>
+<span id="cb6-5">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">setNames</span>(name_pair[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>], name_pair[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>])</span>
+<span id="cb6-6">}</span></code></pre></div>
+</div>
+</section>
+<section id="extract-connections-data" class="level3">
+<h3 class="anchored" data-anchor-id="extract-connections-data">Extract connections data</h3>
+<p>Now down to business. We’ll read the text content of each headers file into a list, then name these elements using the SCREAMING_SNAKE_CASE name for each location.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">headers_files <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">.get_file_paths</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">type =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"headers"</span>)</span>
+<span id="cb7-2">headers_content <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(headers_files, readLines)</span>
+<span id="cb7-3">headers_lookup <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unlist</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(headers_content, .create_names_lookup))</span>
+<span id="cb7-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(headers_content) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(headers_lookup)</span></code></pre></div>
+</div>
+<p>Here’s how Pallet Town looks in this format:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">headers_content[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"PALLET_TOWN"</span>]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$PALLET_TOWN
+[1] "\tmap_header PalletTown, PALLET_TOWN, OVERWORLD, NORTH | SOUTH"
+[2] "\tconnection north, Route1, ROUTE_1, 0"                        
+[3] "\tconnection south, Route21, ROUTE_21, 0"                      
+[4] "\tend_map_header"                                              </code></pre>
+</div>
+</div>
+<p>Now we can take these lines of text and extract the node pairs that have an edge due to a ‘connection’ between them.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">conns <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">.get_connections</span>(headers_content)</span>
+<span id="cb10-2">conns_df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">stack</span>(conns)</span>
+<span id="cb10-3">conns_df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> conns_df[, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ind"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"values"</span>)]</span>
+<span id="cb10-4"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(conns_df) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"from"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"to"</span>)</span>
+<span id="cb10-5">conns_df[[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"from"</span>]] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.character</span>(conns_df[[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"from"</span>]])</span>
+<span id="cb10-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(conns_df)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           from       to
+1  CELADON_CITY ROUTE_16
+2  CELADON_CITY  ROUTE_7
+3 CERULEAN_CITY ROUTE_24
+4 CERULEAN_CITY  ROUTE_5
+5 CERULEAN_CITY  ROUTE_4
+6 CERULEAN_CITY  ROUTE_9</code></pre>
+</div>
+</div>
+</section>
+<section id="extract-warp-data" class="level3">
+<h3 class="anchored" data-anchor-id="extract-warp-data">Extract warp data</h3>
+<p>Similarly, we can get the warp data in a node-pair data frame as well. The first step is to read the text of each objects file into a list.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">obj_files <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">.get_file_paths</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">type =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"objects"</span>)</span>
+<span id="cb12-2">obj_names <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">gsub</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".asm"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">""</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">basename</span>(obj_files))</span>
+<span id="cb12-3">obj_content <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(obj_files, readLines) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb12-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">setNames</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(headers_lookup))</span>
+<span id="cb12-5">obj_content[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"PALLET_TOWN"</span>]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$PALLET_TOWN
+ [1] "\tobject_const_def"                                                         
+ [2] "\tconst_export PALLETTOWN_OAK"                                              
+ [3] "\tconst_export PALLETTOWN_GIRL"                                             
+ [4] "\tconst_export PALLETTOWN_FISHER"                                           
+ [5] ""                                                                           
+ [6] "PalletTown_Object:"                                                         
+ [7] "\tdb $b ; border block"                                                     
+ [8] ""                                                                           
+ [9] "\tdef_warp_events"                                                          
+[10] "\twarp_event  5,  5, REDS_HOUSE_1F, 1"                                      
+[11] "\twarp_event 13,  5, BLUES_HOUSE, 1"                                        
+[12] "\twarp_event 12, 11, OAKS_LAB, 2"                                           
+[13] ""                                                                           
+[14] "\tdef_bg_events"                                                            
+[15] "\tbg_event 13, 13, TEXT_PALLETTOWN_OAKSLAB_SIGN"                            
+[16] "\tbg_event  7,  9, TEXT_PALLETTOWN_SIGN"                                    
+[17] "\tbg_event  3,  5, TEXT_PALLETTOWN_PLAYERSHOUSE_SIGN"                       
+[18] "\tbg_event 11,  5, TEXT_PALLETTOWN_RIVALSHOUSE_SIGN"                        
+[19] ""                                                                           
+[20] "\tdef_object_events"                                                        
+[21] "\tobject_event  8,  5, SPRITE_OAK, STAY, NONE, TEXT_PALLETTOWN_OAK"         
+[22] "\tobject_event  3,  8, SPRITE_GIRL, WALK, ANY_DIR, TEXT_PALLETTOWN_GIRL"    
+[23] "\tobject_event 11, 14, SPRITE_FISHER, WALK, ANY_DIR, TEXT_PALLETTOWN_FISHER"
+[24] ""                                                                           
+[25] "\tdef_warps_to PALLET_TOWN"                                                 </code></pre>
+</div>
+</div>
+<p>Then we can extract the warps. Note that some warps don’t explicitly take you back where you came from. Instead the instruction is to warp to the last location. We can remove this from our data, since <code>LAST_MAP</code> isn’t a literal location.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">warps <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(obj_content, .get_warps)</span>
+<span id="cb14-2">warps <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(warps, \(x) x[x <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"LAST_MAP"</span>])</span>
+<span id="cb14-3">warps <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> warps[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lengths</span>(warps) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]</span>
+<span id="cb14-4">warps_df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">stack</span>(warps)</span>
+<span id="cb14-5">warps_df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> warps_df[, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"ind"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"values"</span>)]</span>
+<span id="cb14-6"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(warps_df) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"from"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"to"</span>)</span>
+<span id="cb14-7">warps_df[[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"from"</span>]] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as.character</span>(warps_df[[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"from"</span>]])</span>
+<span id="cb14-8"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(warps_df)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          from                 to
+1 AGATHAS_ROOM        BRUNOS_ROOM
+2 AGATHAS_ROOM        LANCES_ROOM
+3  BRUNOS_ROOM      LORELEIS_ROOM
+4  BRUNOS_ROOM       AGATHAS_ROOM
+5 CELADON_CITY    CELADON_MART_1F
+6 CELADON_CITY CELADON_MANSION_1F</code></pre>
+</div>
+</div>
+</section>
+<section id="combine-all-node-pairs" class="level3">
+<h3 class="anchored" data-anchor-id="combine-all-node-pairs">Combine all node pairs</h3>
+<p>Now we can combine all the node pairs that share edges via either a simple connection or a warp. In this example we’re interested in combinations, rather than permutations, of node pairs. This means that we can treat A→B and B→A as equivalent and simplify down to just A→B.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">edges <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rbind</span>(warps_df, conns_df)</span>
+<span id="cb16-2">edges <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> edges[<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">duplicated</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.frame</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">t</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">apply</span>(edges, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, sort)))), ]  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># https://stackoverflow.com/a/50117582</span></span>
+<span id="cb16-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tail</span>(edges)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       from             to
+383 ROUTE_3        ROUTE_4
+388 ROUTE_5   SAFFRON_CITY
+389 ROUTE_6   SAFFRON_CITY
+390 ROUTE_6 VERMILION_CITY
+392 ROUTE_7   SAFFRON_CITY
+393 ROUTE_8   SAFFRON_CITY</code></pre>
+</div>
+</div>
+<p>We also want a full list of the nodes, which will help us to label and filter them in the final visualisation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">nodes <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.frame</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">id =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unique</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(edges[[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"from"</span>]], edges[[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"to"</span>]])))</span>
+<span id="cb18-2">nodes <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> nodes[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">order</span>(nodes[[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"id"</span>]]), , drop <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>]</span></code></pre></div>
+</div>
+</section>
+<section id="graph" class="level3">
+<h3 class="anchored" data-anchor-id="graph">Visualise</h3>
+<p><a href="https://datastorm-open.github.io/visNetwork/">The {visNetwork} package</a> wraps <a href="https://visjs.org/">the vis.js JavaScript library</a>, which will help output an interactive HTML graph. We just need to feed it our nodes and edges and a bunch of configuration and styling options. For example, I’ve used the font from the games and a red colour accent to reflect the game variant.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(visNetwork)</span>
+<span id="cb19-2"></span>
+<span id="cb19-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">visNetwork</span>(</span>
+<span id="cb19-4">  nodes,</span>
+<span id="cb19-5">  edges,</span>
+<span id="cb19-6">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">width =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"100%"</span>,</span>
+<span id="cb19-7">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">height =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"420px"</span>,</span>
+<span id="cb19-8">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">main =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(</span>
+<span id="cb19-9">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Kanto"</span>,</span>
+<span id="cb19-10">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"font-family:'pokemon-font';font-size:30px;color:black;"</span></span>
+<span id="cb19-11">  ),</span>
+<span id="cb19-12">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">submain =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(</span>
+<span id="cb19-13">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"A graph of locations in PKMN Red&lt;br&gt;&lt;br&gt;"</span>,</span>
+<span id="cb19-14">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"font-family:'pokemon-font';font-size:15px;color:black;"</span></span>
+<span id="cb19-15">  ),</span>
+<span id="cb19-16">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">footer =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(</span>
+<span id="cb19-17">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Source: Nintendo and Game Freak via the pret/pokered dissassembly project"</span>,</span>
+<span id="cb19-18">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"font-family:'pokemon-font';font-size:8px;color:black;text-align:right;"</span></span>
+<span id="cb19-19">  )</span>
+<span id="cb19-20">) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb19-21">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">visEdges</span>(</span>
+<span id="cb19-22">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#FF7777"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">highlight =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#FF0000"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">opacity =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.5</span>),</span>
+<span id="cb19-23">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">width =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>,</span>
+<span id="cb19-24">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">selectionWidth =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span></span>
+<span id="cb19-25">  ) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb19-26">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">visNodes</span>(</span>
+<span id="cb19-27">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">color =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#FF7777"</span>,</span>
+<span id="cb19-28">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">font =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">face =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"pokemon-font"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>),</span>
+<span id="cb19-29">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">borderWidth =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>,</span>
+<span id="cb19-30">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">borderWidthSelected =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>,</span>
+<span id="cb19-31">  ) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb19-32">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">visOptions</span>(</span>
+<span id="cb19-33">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">highlightNearest =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>,</span>
+<span id="cb19-34">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">nodesIdSelection =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(</span>
+<span id="cb19-35">      <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">enabled =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>,</span>
+<span id="cb19-36">      <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">main =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Select a location"</span>,</span>
+<span id="cb19-37">      <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"font-family:'pokemon-font';font-size:15px;color:red;"</span></span>
+<span id="cb19-38">    )</span>
+<span id="cb19-39">  ) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb19-40">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">visLayout</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">randomSeed =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">150</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb19-41">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">visPhysics</span>(</span>
+<span id="cb19-42">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">solver =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"barnesHut"</span>,</span>
+<span id="cb19-43">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">barnesHut =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">springConstant =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.1</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">gravitationalConstant =</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10000</span>)</span>
+<span id="cb19-44">  )</span></code></pre></div>
+<div class="cell-output-display">
+<div id="htmlwidget-6fed2829bd77aa6ef899" style="width:100%;height:420px;" class="visNetwork html-widget "></div>
+<script type="application/json" data-for="htmlwidget-6fed2829bd77aa6ef899">{"x":{"nodes":{"id":["AGATHAS_ROOM","BIKE_SHOP","BILLS_HOUSE","BLUES_HOUSE","BRUNOS_ROOM","CELADON_CHIEF_HOUSE","CELADON_CITY","CELADON_DINER","CELADON_GYM","CELADON_HOTEL","CELADON_MANSION_1F","CELADON_MANSION_2F","CELADON_MANSION_3F","CELADON_MANSION_ROOF","CELADON_MANSION_ROOF_HOUSE","CELADON_MART_1F","CELADON_MART_2F","CELADON_MART_3F","CELADON_MART_4F","CELADON_MART_5F","CELADON_MART_ELEVATOR","CELADON_MART_ROOF","CELADON_POKECENTER","CERULEAN_BADGE_HOUSE","CERULEAN_CAVE_1F","CERULEAN_CAVE_2F","CERULEAN_CAVE_B1F","CERULEAN_CITY","CERULEAN_GYM","CERULEAN_MART","CERULEAN_POKECENTER","CERULEAN_TRADE_HOUSE","CERULEAN_TRASHED_HOUSE","CHAMPIONS_ROOM","CINNABAR_GYM","CINNABAR_ISLAND","CINNABAR_LAB","CINNABAR_LAB_FOSSIL_ROOM","CINNABAR_LAB_METRONOME_ROOM","CINNABAR_LAB_TRADE_ROOM","CINNABAR_MART","CINNABAR_POKECENTER","COPYCATS_HOUSE_1F","COPYCATS_HOUSE_2F","DAYCARE","DIGLETTS_CAVE","DIGLETTS_CAVE_ROUTE_11","DIGLETTS_CAVE_ROUTE_2","FIGHTING_DOJO","FUCHSIA_BILLS_GRANDPAS_HOUSE","FUCHSIA_CITY","FUCHSIA_GOOD_ROD_HOUSE","FUCHSIA_GYM","FUCHSIA_MART","FUCHSIA_MEETING_ROOM","FUCHSIA_POKECENTER","GAME_CORNER","GAME_CORNER_PRIZE_ROOM","HALL_OF_FAME","INDIGO_PLATEAU","INDIGO_PLATEAU_LOBBY","LANCES_ROOM","LAVENDER_CUBONE_HOUSE","LAVENDER_MART","LAVENDER_POKECENTER","LAVENDER_TOWN","LORELEIS_ROOM","MR_FUJIS_HOUSE","MR_PSYCHICS_HOUSE","MT_MOON_1F","MT_MOON_B1F","MT_MOON_B2F","MT_MOON_POKECENTER","MUSEUM_1F","MUSEUM_2F","NAME_RATERS_HOUSE","OAKS_LAB","PALLET_TOWN","PEWTER_CITY","PEWTER_GYM","PEWTER_MART","PEWTER_NIDORAN_HOUSE","PEWTER_POKECENTER","PEWTER_SPEECH_HOUSE","POKEMON_FAN_CLUB","POKEMON_MANSION_1F","POKEMON_MANSION_2F","POKEMON_MANSION_3F","POKEMON_MANSION_B1F","POKEMON_TOWER_1F","POKEMON_TOWER_2F","POKEMON_TOWER_3F","POKEMON_TOWER_4F","POKEMON_TOWER_5F","POKEMON_TOWER_6F","POKEMON_TOWER_7F","POWER_PLANT","REDS_HOUSE_1F","REDS_HOUSE_2F","ROCK_TUNNEL_1F","ROCK_TUNNEL_B1F","ROCK_TUNNEL_POKECENTER","ROCKET_HIDEOUT_B1F","ROCKET_HIDEOUT_B2F","ROCKET_HIDEOUT_B3F","ROCKET_HIDEOUT_B4F","ROCKET_HIDEOUT_ELEVATOR","ROUTE_1","ROUTE_10","ROUTE_11","ROUTE_11_GATE_1F","ROUTE_11_GATE_2F","ROUTE_12","ROUTE_12_GATE_1F","ROUTE_12_GATE_2F","ROUTE_12_SUPER_ROD_HOUSE","ROUTE_13","ROUTE_14","ROUTE_15","ROUTE_15_GATE_1F","ROUTE_15_GATE_2F","ROUTE_16","ROUTE_16_FLY_HOUSE","ROUTE_16_GATE_1F","ROUTE_16_GATE_2F","ROUTE_17","ROUTE_18","ROUTE_18_GATE_1F","ROUTE_18_GATE_2F","ROUTE_19","ROUTE_2","ROUTE_2_GATE","ROUTE_2_TRADE_HOUSE","ROUTE_20","ROUTE_21","ROUTE_22","ROUTE_22_GATE","ROUTE_23","ROUTE_24","ROUTE_25","ROUTE_3","ROUTE_4","ROUTE_5","ROUTE_5_GATE","ROUTE_6","ROUTE_6_GATE","ROUTE_7","ROUTE_7_GATE","ROUTE_8","ROUTE_8_GATE","ROUTE_9","SAFARI_ZONE_CENTER","SAFARI_ZONE_CENTER_REST_HOUSE","SAFARI_ZONE_EAST","SAFARI_ZONE_EAST_REST_HOUSE","SAFARI_ZONE_GATE","SAFARI_ZONE_NORTH","SAFARI_ZONE_NORTH_REST_HOUSE","SAFARI_ZONE_SECRET_HOUSE","SAFARI_ZONE_WEST","SAFARI_ZONE_WEST_REST_HOUSE","SAFFRON_CITY","SAFFRON_GYM","SAFFRON_MART","SAFFRON_PIDGEY_HOUSE","SAFFRON_POKECENTER","SEAFOAM_ISLANDS_1F","SEAFOAM_ISLANDS_B1F","SEAFOAM_ISLANDS_B2F","SEAFOAM_ISLANDS_B3F","SEAFOAM_ISLANDS_B4F","SILPH_CO_10F","SILPH_CO_11F","SILPH_CO_1F","SILPH_CO_2F","SILPH_CO_3F","SILPH_CO_4F","SILPH_CO_5F","SILPH_CO_6F","SILPH_CO_7F","SILPH_CO_8F","SILPH_CO_9F","SILPH_CO_ELEVATOR","SS_ANNE_1F","SS_ANNE_1F_ROOMS","SS_ANNE_2F","SS_ANNE_2F_ROOMS","SS_ANNE_3F","SS_ANNE_B1F","SS_ANNE_B1F_ROOMS","SS_ANNE_BOW","SS_ANNE_CAPTAINS_ROOM","SS_ANNE_KITCHEN","UNDERGROUND_PATH_NORTH_SOUTH","UNDERGROUND_PATH_ROUTE_5","UNDERGROUND_PATH_ROUTE_6","UNDERGROUND_PATH_ROUTE_7","UNDERGROUND_PATH_ROUTE_8","UNDERGROUND_PATH_WEST_EAST","UNUSED_MAP_ED","VERMILION_CITY","VERMILION_DOCK","VERMILION_GYM","VERMILION_MART","VERMILION_OLD_ROD_HOUSE","VERMILION_PIDGEY_HOUSE","VERMILION_POKECENTER","VERMILION_TRADE_HOUSE","VICTORY_ROAD_1F","VICTORY_ROAD_2F","VICTORY_ROAD_3F","VIRIDIAN_CITY","VIRIDIAN_FOREST","VIRIDIAN_FOREST_NORTH_GATE","VIRIDIAN_FOREST_SOUTH_GATE","VIRIDIAN_GYM","VIRIDIAN_MART","VIRIDIAN_NICKNAME_HOUSE","VIRIDIAN_POKECENTER","VIRIDIAN_SCHOOL_HOUSE","WARDENS_HOUSE"],"label":["AGATHAS_ROOM","BIKE_SHOP","BILLS_HOUSE","BLUES_HOUSE","BRUNOS_ROOM","CELADON_CHIEF_HOUSE","CELADON_CITY","CELADON_DINER","CELADON_GYM","CELADON_HOTEL","CELADON_MANSION_1F","CELADON_MANSION_2F","CELADON_MANSION_3F","CELADON_MANSION_ROOF","CELADON_MANSION_ROOF_HOUSE","CELADON_MART_1F","CELADON_MART_2F","CELADON_MART_3F","CELADON_MART_4F","CELADON_MART_5F","CELADON_MART_ELEVATOR","CELADON_MART_ROOF","CELADON_POKECENTER","CERULEAN_BADGE_HOUSE","CERULEAN_CAVE_1F","CERULEAN_CAVE_2F","CERULEAN_CAVE_B1F","CERULEAN_CITY","CERULEAN_GYM","CERULEAN_MART","CERULEAN_POKECENTER","CERULEAN_TRADE_HOUSE","CERULEAN_TRASHED_HOUSE","CHAMPIONS_ROOM","CINNABAR_GYM","CINNABAR_ISLAND","CINNABAR_LAB","CINNABAR_LAB_FOSSIL_ROOM","CINNABAR_LAB_METRONOME_ROOM","CINNABAR_LAB_TRADE_ROOM","CINNABAR_MART","CINNABAR_POKECENTER","COPYCATS_HOUSE_1F","COPYCATS_HOUSE_2F","DAYCARE","DIGLETTS_CAVE","DIGLETTS_CAVE_ROUTE_11","DIGLETTS_CAVE_ROUTE_2","FIGHTING_DOJO","FUCHSIA_BILLS_GRANDPAS_HOUSE","FUCHSIA_CITY","FUCHSIA_GOOD_ROD_HOUSE","FUCHSIA_GYM","FUCHSIA_MART","FUCHSIA_MEETING_ROOM","FUCHSIA_POKECENTER","GAME_CORNER","GAME_CORNER_PRIZE_ROOM","HALL_OF_FAME","INDIGO_PLATEAU","INDIGO_PLATEAU_LOBBY","LANCES_ROOM","LAVENDER_CUBONE_HOUSE","LAVENDER_MART","LAVENDER_POKECENTER","LAVENDER_TOWN","LORELEIS_ROOM","MR_FUJIS_HOUSE","MR_PSYCHICS_HOUSE","MT_MOON_1F","MT_MOON_B1F","MT_MOON_B2F","MT_MOON_POKECENTER","MUSEUM_1F","MUSEUM_2F","NAME_RATERS_HOUSE","OAKS_LAB","PALLET_TOWN","PEWTER_CITY","PEWTER_GYM","PEWTER_MART","PEWTER_NIDORAN_HOUSE","PEWTER_POKECENTER","PEWTER_SPEECH_HOUSE","POKEMON_FAN_CLUB","POKEMON_MANSION_1F","POKEMON_MANSION_2F","POKEMON_MANSION_3F","POKEMON_MANSION_B1F","POKEMON_TOWER_1F","POKEMON_TOWER_2F","POKEMON_TOWER_3F","POKEMON_TOWER_4F","POKEMON_TOWER_5F","POKEMON_TOWER_6F","POKEMON_TOWER_7F","POWER_PLANT","REDS_HOUSE_1F","REDS_HOUSE_2F","ROCK_TUNNEL_1F","ROCK_TUNNEL_B1F","ROCK_TUNNEL_POKECENTER","ROCKET_HIDEOUT_B1F","ROCKET_HIDEOUT_B2F","ROCKET_HIDEOUT_B3F","ROCKET_HIDEOUT_B4F","ROCKET_HIDEOUT_ELEVATOR","ROUTE_1","ROUTE_10","ROUTE_11","ROUTE_11_GATE_1F","ROUTE_11_GATE_2F","ROUTE_12","ROUTE_12_GATE_1F","ROUTE_12_GATE_2F","ROUTE_12_SUPER_ROD_HOUSE","ROUTE_13","ROUTE_14","ROUTE_15","ROUTE_15_GATE_1F","ROUTE_15_GATE_2F","ROUTE_16","ROUTE_16_FLY_HOUSE","ROUTE_16_GATE_1F","ROUTE_16_GATE_2F","ROUTE_17","ROUTE_18","ROUTE_18_GATE_1F","ROUTE_18_GATE_2F","ROUTE_19","ROUTE_2","ROUTE_2_GATE","ROUTE_2_TRADE_HOUSE","ROUTE_20","ROUTE_21","ROUTE_22","ROUTE_22_GATE","ROUTE_23","ROUTE_24","ROUTE_25","ROUTE_3","ROUTE_4","ROUTE_5","ROUTE_5_GATE","ROUTE_6","ROUTE_6_GATE","ROUTE_7","ROUTE_7_GATE","ROUTE_8","ROUTE_8_GATE","ROUTE_9","SAFARI_ZONE_CENTER","SAFARI_ZONE_CENTER_REST_HOUSE","SAFARI_ZONE_EAST","SAFARI_ZONE_EAST_REST_HOUSE","SAFARI_ZONE_GATE","SAFARI_ZONE_NORTH","SAFARI_ZONE_NORTH_REST_HOUSE","SAFARI_ZONE_SECRET_HOUSE","SAFARI_ZONE_WEST","SAFARI_ZONE_WEST_REST_HOUSE","SAFFRON_CITY","SAFFRON_GYM","SAFFRON_MART","SAFFRON_PIDGEY_HOUSE","SAFFRON_POKECENTER","SEAFOAM_ISLANDS_1F","SEAFOAM_ISLANDS_B1F","SEAFOAM_ISLANDS_B2F","SEAFOAM_ISLANDS_B3F","SEAFOAM_ISLANDS_B4F","SILPH_CO_10F","SILPH_CO_11F","SILPH_CO_1F","SILPH_CO_2F","SILPH_CO_3F","SILPH_CO_4F","SILPH_CO_5F","SILPH_CO_6F","SILPH_CO_7F","SILPH_CO_8F","SILPH_CO_9F","SILPH_CO_ELEVATOR","SS_ANNE_1F","SS_ANNE_1F_ROOMS","SS_ANNE_2F","SS_ANNE_2F_ROOMS","SS_ANNE_3F","SS_ANNE_B1F","SS_ANNE_B1F_ROOMS","SS_ANNE_BOW","SS_ANNE_CAPTAINS_ROOM","SS_ANNE_KITCHEN","UNDERGROUND_PATH_NORTH_SOUTH","UNDERGROUND_PATH_ROUTE_5","UNDERGROUND_PATH_ROUTE_6","UNDERGROUND_PATH_ROUTE_7","UNDERGROUND_PATH_ROUTE_8","UNDERGROUND_PATH_WEST_EAST","UNUSED_MAP_ED","VERMILION_CITY","VERMILION_DOCK","VERMILION_GYM","VERMILION_MART","VERMILION_OLD_ROD_HOUSE","VERMILION_PIDGEY_HOUSE","VERMILION_POKECENTER","VERMILION_TRADE_HOUSE","VICTORY_ROAD_1F","VICTORY_ROAD_2F","VICTORY_ROAD_3F","VIRIDIAN_CITY","VIRIDIAN_FOREST","VIRIDIAN_FOREST_NORTH_GATE","VIRIDIAN_FOREST_SOUTH_GATE","VIRIDIAN_GYM","VIRIDIAN_MART","VIRIDIAN_NICKNAME_HOUSE","VIRIDIAN_POKECENTER","VIRIDIAN_SCHOOL_HOUSE","WARDENS_HOUSE"]},"edges":{"from":["AGATHAS_ROOM","AGATHAS_ROOM","BRUNOS_ROOM","CELADON_CITY","CELADON_CITY","CELADON_CITY","CELADON_CITY","CELADON_CITY","CELADON_CITY","CELADON_CITY","CELADON_CITY","CELADON_CITY","CELADON_CITY","CELADON_MANSION_1F","CELADON_MANSION_2F","CELADON_MANSION_3F","CELADON_MANSION_ROOF","CELADON_MART_1F","CELADON_MART_1F","CELADON_MART_2F","CELADON_MART_2F","CELADON_MART_3F","CELADON_MART_3F","CELADON_MART_4F","CELADON_MART_4F","CELADON_MART_5F","CELADON_MART_5F","CERULEAN_CAVE_1F","CERULEAN_CAVE_1F","CERULEAN_CITY","CERULEAN_CITY","CERULEAN_CITY","CERULEAN_CITY","CERULEAN_CITY","CERULEAN_CITY","CERULEAN_CITY","CERULEAN_CITY","CHAMPIONS_ROOM","CHAMPIONS_ROOM","CINNABAR_ISLAND","CINNABAR_ISLAND","CINNABAR_ISLAND","CINNABAR_ISLAND","CINNABAR_ISLAND","CINNABAR_LAB","CINNABAR_LAB","CINNABAR_LAB","COPYCATS_HOUSE_1F","DIGLETTS_CAVE","DIGLETTS_CAVE","FUCHSIA_CITY","FUCHSIA_CITY","FUCHSIA_CITY","FUCHSIA_CITY","FUCHSIA_CITY","FUCHSIA_CITY","FUCHSIA_CITY","FUCHSIA_CITY","GAME_CORNER","INDIGO_PLATEAU","INDIGO_PLATEAU_LOBBY","LAVENDER_TOWN","LAVENDER_TOWN","LAVENDER_TOWN","LAVENDER_TOWN","LAVENDER_TOWN","LAVENDER_TOWN","MT_MOON_1F","MT_MOON_B1F","MUSEUM_1F","PALLET_TOWN","PALLET_TOWN","PALLET_TOWN","PEWTER_CITY","PEWTER_CITY","PEWTER_CITY","PEWTER_CITY","PEWTER_CITY","PEWTER_CITY","POKEMON_MANSION_1F","POKEMON_MANSION_1F","POKEMON_MANSION_2F","POKEMON_TOWER_1F","POKEMON_TOWER_2F","POKEMON_TOWER_3F","POKEMON_TOWER_4F","POKEMON_TOWER_5F","POKEMON_TOWER_6F","REDS_HOUSE_1F","ROCKET_HIDEOUT_B1F","ROCKET_HIDEOUT_B1F","ROCKET_HIDEOUT_B2F","ROCKET_HIDEOUT_B2F","ROCKET_HIDEOUT_B3F","ROCKET_HIDEOUT_B4F","ROCK_TUNNEL_1F","ROUTE_10","ROUTE_10","ROUTE_10","ROUTE_11","ROUTE_11","ROUTE_11_GATE_1F","ROUTE_12","ROUTE_12","ROUTE_12_GATE_1F","ROUTE_15","ROUTE_15_GATE_1F","ROUTE_16","ROUTE_16","ROUTE_16_GATE_1F","ROUTE_18","ROUTE_18_GATE_1F","ROUTE_2","ROUTE_2","ROUTE_2","ROUTE_2","ROUTE_2","ROUTE_20","ROUTE_22","ROUTE_23","ROUTE_23","ROUTE_23","ROUTE_25","ROUTE_4","ROUTE_4","ROUTE_4","ROUTE_5","ROUTE_5","ROUTE_5","ROUTE_6","ROUTE_6","ROUTE_7","ROUTE_7","ROUTE_8","ROUTE_8","SAFARI_ZONE_CENTER","SAFARI_ZONE_CENTER","SAFARI_ZONE_CENTER","SAFARI_ZONE_CENTER","SAFARI_ZONE_CENTER","SAFARI_ZONE_EAST","SAFARI_ZONE_EAST","SAFARI_ZONE_NORTH","SAFARI_ZONE_NORTH","SAFARI_ZONE_SECRET_HOUSE","SAFARI_ZONE_WEST","SAFFRON_CITY","SAFFRON_CITY","SAFFRON_CITY","SAFFRON_CITY","SAFFRON_CITY","SAFFRON_CITY","SAFFRON_CITY","SAFFRON_CITY","SAFFRON_GYM","SEAFOAM_ISLANDS_1F","SEAFOAM_ISLANDS_B1F","SEAFOAM_ISLANDS_B2F","SEAFOAM_ISLANDS_B3F","SILPH_CO_10F","SILPH_CO_10F","SILPH_CO_10F","SILPH_CO_10F","SILPH_CO_11F","SILPH_CO_11F","SILPH_CO_1F","SILPH_CO_1F","SILPH_CO_1F","SILPH_CO_2F","SILPH_CO_2F","SILPH_CO_2F","SILPH_CO_2F","SILPH_CO_3F","SILPH_CO_3F","SILPH_CO_3F","SILPH_CO_3F","SILPH_CO_3F","SILPH_CO_3F","SILPH_CO_4F","SILPH_CO_4F","SILPH_CO_4F","SILPH_CO_5F","SILPH_CO_5F","SILPH_CO_5F","SILPH_CO_5F","SILPH_CO_6F","SILPH_CO_6F","SILPH_CO_7F","SILPH_CO_7F","SILPH_CO_8F","SILPH_CO_8F","SILPH_CO_8F","SILPH_CO_9F","SILPH_CO_ELEVATOR","SS_ANNE_1F","SS_ANNE_1F","SS_ANNE_1F","SS_ANNE_1F","SS_ANNE_1F","SS_ANNE_2F","SS_ANNE_2F","SS_ANNE_2F","SS_ANNE_3F","SS_ANNE_B1F","UNDERGROUND_PATH_NORTH_SOUTH","UNDERGROUND_PATH_NORTH_SOUTH","UNDERGROUND_PATH_ROUTE_7","UNDERGROUND_PATH_ROUTE_8","VERMILION_CITY","VERMILION_CITY","VERMILION_CITY","VERMILION_CITY","VERMILION_CITY","VERMILION_CITY","VERMILION_CITY","VERMILION_CITY","VICTORY_ROAD_1F","VICTORY_ROAD_2F","VIRIDIAN_CITY","VIRIDIAN_CITY","VIRIDIAN_CITY","VIRIDIAN_CITY","VIRIDIAN_CITY","VIRIDIAN_FOREST","VIRIDIAN_FOREST","CELADON_CITY","CELADON_CITY","CERULEAN_CITY","CERULEAN_CITY","CERULEAN_CITY","CERULEAN_CITY","CINNABAR_ISLAND","CINNABAR_ISLAND","FUCHSIA_CITY","FUCHSIA_CITY","FUCHSIA_CITY","INDIGO_PLATEAU","LAVENDER_TOWN","LAVENDER_TOWN","LAVENDER_TOWN","PALLET_TOWN","PALLET_TOWN","PEWTER_CITY","PEWTER_CITY","ROUTE_1","ROUTE_10","ROUTE_11","ROUTE_11","ROUTE_12","ROUTE_13","ROUTE_14","ROUTE_16","ROUTE_17","ROUTE_19","ROUTE_2","ROUTE_22","ROUTE_22","ROUTE_24","ROUTE_3","ROUTE_5","ROUTE_6","ROUTE_6","ROUTE_7","ROUTE_8"],"to":["BRUNOS_ROOM","LANCES_ROOM","LORELEIS_ROOM","CELADON_MART_1F","CELADON_MANSION_1F","CELADON_POKECENTER","CELADON_GYM","GAME_CORNER","CELADON_MART_5F","GAME_CORNER_PRIZE_ROOM","CELADON_DINER","CELADON_CHIEF_HOUSE","CELADON_HOTEL","CELADON_MANSION_2F","CELADON_MANSION_3F","CELADON_MANSION_ROOF","CELADON_MANSION_ROOF_HOUSE","CELADON_MART_2F","CELADON_MART_ELEVATOR","CELADON_MART_3F","CELADON_MART_ELEVATOR","CELADON_MART_4F","CELADON_MART_ELEVATOR","CELADON_MART_5F","CELADON_MART_ELEVATOR","CELADON_MART_ROOF","CELADON_MART_ELEVATOR","CERULEAN_CAVE_2F","CERULEAN_CAVE_B1F","CERULEAN_TRASHED_HOUSE","CERULEAN_TRADE_HOUSE","CERULEAN_POKECENTER","CERULEAN_GYM","BIKE_SHOP","CERULEAN_MART","CERULEAN_CAVE_1F","CERULEAN_BADGE_HOUSE","LANCES_ROOM","HALL_OF_FAME","POKEMON_MANSION_1F","CINNABAR_GYM","CINNABAR_LAB","CINNABAR_POKECENTER","CINNABAR_MART","CINNABAR_LAB_TRADE_ROOM","CINNABAR_LAB_METRONOME_ROOM","CINNABAR_LAB_FOSSIL_ROOM","COPYCATS_HOUSE_2F","DIGLETTS_CAVE_ROUTE_2","DIGLETTS_CAVE_ROUTE_11","FUCHSIA_MART","FUCHSIA_BILLS_GRANDPAS_HOUSE","FUCHSIA_POKECENTER","WARDENS_HOUSE","SAFARI_ZONE_GATE","FUCHSIA_GYM","FUCHSIA_MEETING_ROOM","FUCHSIA_GOOD_ROD_HOUSE","ROCKET_HIDEOUT_B1F","INDIGO_PLATEAU_LOBBY","LORELEIS_ROOM","LAVENDER_POKECENTER","POKEMON_TOWER_1F","MR_FUJIS_HOUSE","LAVENDER_MART","LAVENDER_CUBONE_HOUSE","NAME_RATERS_HOUSE","MT_MOON_B1F","MT_MOON_B2F","MUSEUM_2F","REDS_HOUSE_1F","BLUES_HOUSE","OAKS_LAB","MUSEUM_1F","PEWTER_GYM","PEWTER_NIDORAN_HOUSE","PEWTER_MART","PEWTER_SPEECH_HOUSE","PEWTER_POKECENTER","POKEMON_MANSION_2F","POKEMON_MANSION_B1F","POKEMON_MANSION_3F","POKEMON_TOWER_2F","POKEMON_TOWER_3F","POKEMON_TOWER_4F","POKEMON_TOWER_5F","POKEMON_TOWER_6F","POKEMON_TOWER_7F","REDS_HOUSE_2F","ROCKET_HIDEOUT_B2F","ROCKET_HIDEOUT_ELEVATOR","ROCKET_HIDEOUT_B3F","ROCKET_HIDEOUT_ELEVATOR","ROCKET_HIDEOUT_B4F","ROCKET_HIDEOUT_ELEVATOR","ROCK_TUNNEL_B1F","ROCK_TUNNEL_POKECENTER","ROCK_TUNNEL_1F","POWER_PLANT","ROUTE_11_GATE_1F","DIGLETTS_CAVE_ROUTE_11","ROUTE_11_GATE_2F","ROUTE_12_GATE_1F","ROUTE_12_SUPER_ROD_HOUSE","ROUTE_12_GATE_2F","ROUTE_15_GATE_1F","ROUTE_15_GATE_2F","ROUTE_16_GATE_1F","ROUTE_16_FLY_HOUSE","ROUTE_16_GATE_2F","ROUTE_18_GATE_1F","ROUTE_18_GATE_2F","DIGLETTS_CAVE_ROUTE_2","VIRIDIAN_FOREST_NORTH_GATE","ROUTE_2_TRADE_HOUSE","ROUTE_2_GATE","VIRIDIAN_FOREST_SOUTH_GATE","SEAFOAM_ISLANDS_1F","ROUTE_22_GATE","ROUTE_22_GATE","VICTORY_ROAD_1F","VICTORY_ROAD_2F","BILLS_HOUSE","MT_MOON_POKECENTER","MT_MOON_1F","MT_MOON_B1F","ROUTE_5_GATE","UNDERGROUND_PATH_ROUTE_5","DAYCARE","ROUTE_6_GATE","UNDERGROUND_PATH_ROUTE_6","ROUTE_7_GATE","UNDERGROUND_PATH_ROUTE_7","ROUTE_8_GATE","UNDERGROUND_PATH_ROUTE_8","SAFARI_ZONE_GATE","SAFARI_ZONE_WEST","SAFARI_ZONE_NORTH","SAFARI_ZONE_EAST","SAFARI_ZONE_CENTER_REST_HOUSE","SAFARI_ZONE_NORTH","SAFARI_ZONE_EAST_REST_HOUSE","SAFARI_ZONE_WEST","SAFARI_ZONE_NORTH_REST_HOUSE","SAFARI_ZONE_WEST","SAFARI_ZONE_WEST_REST_HOUSE","COPYCATS_HOUSE_1F","FIGHTING_DOJO","SAFFRON_GYM","SAFFRON_PIDGEY_HOUSE","SAFFRON_MART","SILPH_CO_1F","SAFFRON_POKECENTER","MR_PSYCHICS_HOUSE","SAFFRON_GYM","SEAFOAM_ISLANDS_B1F","SEAFOAM_ISLANDS_B2F","SEAFOAM_ISLANDS_B3F","SEAFOAM_ISLANDS_B4F","SILPH_CO_9F","SILPH_CO_11F","SILPH_CO_ELEVATOR","SILPH_CO_4F","SILPH_CO_ELEVATOR","SILPH_CO_7F","SILPH_CO_2F","SILPH_CO_ELEVATOR","SILPH_CO_3F","SILPH_CO_3F","SILPH_CO_ELEVATOR","SILPH_CO_8F","SILPH_CO_6F","SILPH_CO_4F","SILPH_CO_ELEVATOR","SILPH_CO_3F","SILPH_CO_5F","SILPH_CO_9F","SILPH_CO_7F","SILPH_CO_5F","SILPH_CO_ELEVATOR","SILPH_CO_6F","SILPH_CO_6F","SILPH_CO_ELEVATOR","SILPH_CO_7F","SILPH_CO_9F","SILPH_CO_7F","SILPH_CO_ELEVATOR","SILPH_CO_8F","SILPH_CO_ELEVATOR","SILPH_CO_9F","SILPH_CO_ELEVATOR","SILPH_CO_8F","SILPH_CO_ELEVATOR","UNUSED_MAP_ED","VERMILION_DOCK","SS_ANNE_1F_ROOMS","SS_ANNE_2F","SS_ANNE_B1F","SS_ANNE_KITCHEN","SS_ANNE_2F_ROOMS","SS_ANNE_3F","SS_ANNE_CAPTAINS_ROOM","SS_ANNE_BOW","SS_ANNE_B1F_ROOMS","UNDERGROUND_PATH_ROUTE_5","UNDERGROUND_PATH_ROUTE_6","UNDERGROUND_PATH_WEST_EAST","UNDERGROUND_PATH_WEST_EAST","VERMILION_POKECENTER","POKEMON_FAN_CLUB","VERMILION_MART","VERMILION_GYM","VERMILION_PIDGEY_HOUSE","VERMILION_DOCK","VERMILION_TRADE_HOUSE","VERMILION_OLD_ROD_HOUSE","VICTORY_ROAD_2F","VICTORY_ROAD_3F","VIRIDIAN_POKECENTER","VIRIDIAN_MART","VIRIDIAN_SCHOOL_HOUSE","VIRIDIAN_NICKNAME_HOUSE","VIRIDIAN_GYM","VIRIDIAN_FOREST_NORTH_GATE","VIRIDIAN_FOREST_SOUTH_GATE","ROUTE_16","ROUTE_7","ROUTE_24","ROUTE_5","ROUTE_4","ROUTE_9","ROUTE_21","ROUTE_20","ROUTE_19","ROUTE_18","ROUTE_15","ROUTE_23","ROUTE_10","ROUTE_12","ROUTE_8","ROUTE_1","ROUTE_21","ROUTE_2","ROUTE_3","VIRIDIAN_CITY","ROUTE_9","VERMILION_CITY","ROUTE_12","ROUTE_13","ROUTE_14","ROUTE_15","ROUTE_17","ROUTE_18","ROUTE_20","VIRIDIAN_CITY","ROUTE_23","VIRIDIAN_CITY","ROUTE_25","ROUTE_4","SAFFRON_CITY","SAFFRON_CITY","VERMILION_CITY","SAFFRON_CITY","SAFFRON_CITY"]},"nodesToDataframe":true,"edgesToDataframe":true,"options":{"width":"100%","height":"100%","nodes":{"shape":"dot","borderWidth":0,"borderWidthSelected":3,"color":"#FF7777","font":{"face":"pokemon-font","size":10}},"manipulation":{"enabled":false},"edges":{"width":3,"selectionWidth":5,"color":{"color":"#FF7777","highlight":"#FF0000","opacity":0.5}},"layout":{"randomSeed":150},"physics":{"solver":"barnesHut","barnesHut":{"springConstant":0.1,"gravitationalConstant":-10000}}},"groups":null,"width":"100%","height":"420px","idselection":{"enabled":true,"style":"font-family:'pokemon-font';font-size:15px;color:red;","useLabels":true,"main":"Select a location"},"byselection":{"enabled":false,"style":"width: 150px; height: 26px","multiple":false,"hideColor":"rgba(200,200,200,0.5)","highlight":false},"main":{"text":"Kanto","style":"font-family:'pokemon-font';font-size:30px;color:black;"},"submain":{"text":"A graph of locations in PKMN Red<br><br>","style":"font-family:'pokemon-font';font-size:15px;color:black;"},"footer":{"text":"Source: Nintendo and Game Freak via the pret/pokered dissassembly project","style":"font-family:'pokemon-font';font-size:8px;color:black;text-align:right;"},"background":"rgba(0, 0, 0, 0)","highlight":{"enabled":true,"hoverNearest":false,"degree":1,"algorithm":"all","hideColor":"rgba(200,200,200,0.5)","labelOnly":true},"collapse":{"enabled":false,"fit":false,"resetHighlight":true,"clusterOptions":null,"keepCoord":true,"labelSuffix":"(cluster)"}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p><br> It can take a moment to load. You can select a node from the dropdown menu, scroll to zoom, and click on the nodes and edges themselves. The node labels will appear when you zoom in.</p>
+<p>It was interesting to see the simple radial networks around each city; the complicated relationships between the nodes of Silph Co; the long ‘tail’ from Victory Road through the Elite Four to the Hall of Fame; and the hand-like structure of the Safari Zone.</p>
+<p>Of course, you could spend all day tweaking things like the physics of the relationship between each node, or you could replace each node an images of its in-game sprite. I’ve chosen to keep things relatively simple.</p>
+</section>
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2023-11-25 00:24:06 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] visNetwork_2.1.2
+
+loaded via a namespace (and not attached):
+ [1] digest_0.6.33     fastmap_1.1.1     xfun_0.41         magrittr_2.0.3   
+ [5] knitr_1.45        htmltools_0.5.6.1 rmarkdown_2.25    cli_3.6.1        
+ [9] compiler_4.3.1    rstudioapi_0.15.0 tools_4.3.1       evaluate_0.23    
+[13] ellipsis_0.3.2    yaml_2.3.7        rlang_1.1.1       jsonlite_1.8.7   
+[17] htmlwidgets_1.6.2</code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>r</category>
+  <category>videogames</category>
+  <category>visNetwork</category>
+  <guid>https://www.rostrum.blog/posts/2023-11-25-kanto-graph/index.html</guid>
+  <pubDate>Sat, 25 Nov 2023 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Unlock R functions with QR codes</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -8156,152 +8968,6 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-04-23-type-convert/index.html</guid>
   <pubDate>Sat, 22 Apr 2023 23:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>R is a game engine, fight me</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><img src="https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/resources/snes-r.png" class="img-fluid" style="width:100.0%" alt="A crudely drawn image of the buttons from a Nintendo SNES controller, but the A, B, X and Y labels have all been changed to R."></p>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>R is ‘<a href="https://www.r-project.org/">a free software environment for statistical computing and graphics</a>’. Ahahaha, no it’s not, it’s a game engine. I’ve created <a href="https://github.com/matt-dray/awesome-r-games">a ‘splendid’ list of games</a> you can play—written in R—to prove it. <a href="https://github.com/matt-dray/splendid-r-games/issues">Help expand it</a>.</p>
-</section>
-<section id="stats-only" class="level2">
-<h2 class="anchored" data-anchor-id="stats-only">Stats only!</h2>
-<p>R is not a general, multi-purpose programming language. It was written to do statistical analysis and make charts. You are literally not allowed to do anything else with it. You should use &lt;LANGUAGE&gt; instead, which is much more suited to your specific use case. R is a joke language for nerds.</p>
-<p>You should not read beyond this point if you think, quite rightly, that mirth and frivolity are unsuited to an R session.</p>
-</section>
-<section id="stats-only-1" class="level2">
-<h2 class="anchored" data-anchor-id="stats-only-1">Stats only?</h2>
-<p>Unity. Unreal. GameMaker. Godot. All of these videogame engines are now obsolete.</p>
-<p>It is R—humble R!—that represents the future of gaming.</p>
-<p>To prove it, I’ve created <a href="https://github.com/matt-dray/awesome-r-games">a list of ‘splendid R games’ in a GitHub repo</a><sup>1</sup> that you are welcome to contribute to.<sup>2</sup></p>
-<p>Yes, R can be used for fun. Do not tell R Core.</p>
-</section>
-<section id="wait-hes-serious" class="level2">
-<h2 class="anchored" data-anchor-id="wait-hes-serious">Wait, he’s serious?</h2>
-<p>I think there’s three kinds of ‘platform’ for games written in R:</p>
-<ol type="1">
-<li>For the console</li>
-<li>In Shiny</li>
-<li>Ported</li>
-</ol>
-<p>Games played in the console are pretty straightforward and probably most common. You can run some code, or a function from a package, to launch some code in the R console that you can interact with. A simple option for this might involve use of <code>readline()</code> to receive user input, for example, like <a href="https://www.giorasimchoni.com/">Giora Simchoni</a>’s excellent text-based puzzler, <a href="https://github.com/gsimchoni/CastleOfR">Castle of R</a>.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/resources/castle.png" class="img-fluid figure-img" style="width:100.0%" alt="Screenshot of R running in the terminal. A text interface asks the user to identify their skill in R. The user has typed option '4', which corresponds to the text 'what is R?'. The resulting text says 'welcome to the Castle of R' and explains its purpose."></p>
-<figcaption class="figure-caption">Giora’s Castle of R running in the terminal.</figcaption>
-</figure>
-</div>
-<p>Shiny can give you a little more flexibility when it comes to graphics and user input, at the expense of needing to host the app and maybe some extra JavaScript skills. A great example of this is <a href="https://www.pedrocsilva.com/">Pedro Silva</a>’s winning entry (<a href="https://sparktuga.shinyapps.io/ShinyDecisions/">app</a>, <a href="https://github.com/pedrocoutinhosilva/shiny.decisions">source</a>) to <a href="https://posit.co/blog/winners-of-the-2nd-shiny-contest/">the Posit Shiny contest in 2020</a>.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/resources/decisions.png" class="img-fluid figure-img" style="width:100.0%" alt="A screenshot of a game that shows a world map with face, building and tree emojis on it. There are meters labelled 'wealth', 'opinion' and 'environment' and another with a halo on one end and devil horns the other. Text at the bottom says 'swipe left or right on the card to start'."></p>
-<figcaption class="figure-caption">A still from Pedro’s Shiny Decisions app.</figcaption>
-</figure>
-</div>
-<p>The third category is a little more boundary-pushing. Imagine if R was powerful enough to let you port existing games. Well, surprise, ya boi <a href="https://coolbutuseless.github.io/">Mike Cheng</a> (aka coolbutuseless) has pushed hard on expanding the capabilities of R to run fast enough and with realtime user input,<sup>3</sup> porting the classic <a href="https://en.wikipedia.org/wiki/Another_World_(video_game)"><em>Another World</em></a> (1991) to R, which was showcased at 2022’s Posit conference (<a href="https://github.com/coolbutuseless/anotherworld">source</a>, <a href="https://www.youtube.com/watch?v=LPotWAJnE_s">video</a>, <a href="https://coolbutuseless.github.io/2022/07/29/anotherworld-game-written-playable-in-r-with-nara-and-eventloop/">blog</a>).</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/resources/another-world.png" class="img-fluid figure-img" style="width:100.0%" alt="A screenshot of the game with the main character apparently waving to a shadowy silhouette in the foreground. The overalid title says 'moonshot' and text at the bottom is a quote by Mike Cheng saying 'i will commit myself to achieving the goal, before the year is out, of writing and playing a videogame in R'."></p>
-<figcaption class="figure-caption">A still from Mike’s rstudio::conf(2022) presentation, featuring Another World.</figcaption>
-</figure>
-</div>
-<p>Of course, within these ‘platforms’ are genres like word games, arcade games, puzzle games, etc. Will you be the first to create an MMORPG (a massively-multiplayer online R-powered game)?</p>
-</section>
-<section id="i-am-an-indie-game-dev-now" class="level2">
-<h2 class="anchored" data-anchor-id="i-am-an-indie-game-dev-now">I am an indie game dev now</h2>
-<p>I’ve always been interested in how videogames are coded,<sup>4</sup> wishing that I could do the same myself. Of course I could simply learn ‘real’ programming languages.</p>
-<p>Except that’s blasphemy. Of course I’d rather break my own mind and spirit in an attempt to make R achieve 0.1% of what might be possible in P*thon.</p>
-<p>Case in point, I’ve made a few R packages containing some little toys (in order of gooddest to baddest):</p>
-<ul>
-<li>{r.oguelike} (<a href="https://github.com/matt-dray/r.oguelike">source</a>, <a href="https://www.rostrum.blog/tags/r.oguelike/">blogs</a>) for a procedural-dungeon explorer with enemy pathfinding and inventory</li>
-<li>{tamRgo} (<a href="https://github.com/matt-dray/tamRgo">source</a>, <a href="https://github.com/matt-dray/tamRgo">blog</a>) for a cyber pet in your R console that persists between sessions</li>
-<li>{safar6} (<a href="https://github.com/matt-dray/safar6">source</a>, <a href="https://github.com/matt-dray/safar6">blog</a>) for a text-based re-make of the Safari Zone from the first generation of Pokémon games</li>
-<li>{ActionSquirrel} (<a href="https://www.rostrum.blog/2021/10/03/squirrel/">source</a>, <a href="https://github.com/matt-dray/ActionSquirrel">blog</a>) for a tile-based, turn-based minigame in the R console</li>
-<li>{hokey} (<a href="https://github.com/matt-dray/hokey">source</a>, <a href="https://www.rostrum.blog/2022/01/19/keypress/">blog</a>) for minigames that use <a href="https://github.com/gaborcsardi/keypress">direct keypress inputs with {keypress}</a></li>
-</ul>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/resources/kevin.png" class="img-fluid figure-img" style="width:100.0%" alt="Screenshot of R running in the terminal. The get_stats and see_pet functions from the tamRgo package have been run. The first prints some output showing characteristics and status of a cyber pet. The latter prints an image of the pet to the browser. The pet is called Kevin and is 139 in age. It appears to be unalive."></p>
-<figcaption class="figure-caption">Hint when playing {tamRgo}: do not forget about your pet for 138 days. RIP Kevin XVIII.</figcaption>
-</figure>
-</div>
-<p>I’ve got something in the pipeline that involves extremely rudimentary physics in the R console. Wow! For release in 2023 (because game launches never go wrong).</p>
-</section>
-<section id="ready-player-2" class="level2">
-<h2 class="anchored" data-anchor-id="ready-player-2">Ready Player 2</h2>
-<p>The splendid list must be missing a bunch of games. Please leave an issue or pull request <a href="https://github.com/matt-dray/splendid-r-games">in the splendid-r-games repo</a> to add more examples.</p>
-<p>Next stop: letting people run R games in the browser without an installed copy of R. This is already possible with a service like <a href="https://mybinder.org/">Binder</a>, which can spin up an instance of RStudio with packages pre-installed <a href="https://github.com/matt-dray/play-r.oguelike">I did this for {r.oguelike}</a>).</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/resources/mobile-r.oguelike.png" class="img-fluid figure-img" style="width:100.0%" alt="RStudio running a browser on a mobile phone playing the tile-based game from the r.oguelike package."></p>
-<figcaption class="figure-caption">Just like <a href="https://en.wikipedia.org/wiki/N-Gage_(device)">the Nokia N-Gage</a>, amirite?</figcaption>
-</figure>
-</div>
-<p>But soon you might be able to <a href="https://github.com/r-wasm/webr">use WebR to play games in the browser</a> without even spinning up RStudio, ooh. So look out for an R version of <a href="https://itch.io/">itch.io</a> in future, lol.</p>
-<p><img src="https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/resources/always-has-been.jpg" class="img-fluid" style="width:100.0%" alt="Meme. Person in spacesuit is looking at Earth from space, saying 'wait, R is a language for making and playing games?' Behind them is another spacesuited person, pointing a gun at them and saying 'always has been'."></p>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-10-11 12:51:08 CEST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/Rome
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.6.1 rstudioapi_0.15.0 yaml_2.3.7       
- [9] rmarkdown_2.25    knitr_1.44        jsonlite_1.8.7    xfun_0.40        
-[13] digest_0.6.33     rlang_1.1.1       evaluate_0.22    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>I originally labelled the GitHub repo as <a href="https://github.com/sindresorhus/awesome">an ‘awesome’ repo</a>, which I later learned has <a href="https://github.com/matt-dray/splendid-r-games/issues/4#issuecomment-1205015274">a very specific meaning</a>. You might have seen awesome lists before, like the <a href="https://github.com/mcanouil/awesome-quarto">awesome-quarto repo</a> by <a href="https://github.com/mcanouil">Mickaël</a>, or the new <a href="https://github.com/nanxstats/awesome-webr">awesome-webr list</a> by <a href="https://nanx.me/">Nan Xiao</a>. ‘Splendid’ is much more of a Bri’ish word than ‘awesome’, so it feels more natural anyway.↩︎</p></li>
-<li id="fn2"><p>Note that I have carefully released this post just after April fool’s day, which means I am super, super serious. As usual.↩︎</p></li>
-<li id="fn3"><p>See the <a href="https://coolbutuseless.github.io/package/nara/index.html">{nara}</a> and <a href="https://coolbutuseless.github.io/package/eventloop/index.html">{eventloop}</a> packages in particular.↩︎</p></li>
-<li id="fn4"><p>I like YouTube devlogs by folks like <a href="https://www.youtube.com/c/SebastianLague">Seb Lague</a>, <a href="https://www.youtube.com/@ThinMatrix">ThinMatrix</a>, <a href="https://www.youtube.com/@SquidGodDev">SquidGod</a>, <a href="https://www.youtube.com/c/jonastyroller">Jonas</a>, <a href="https://www.youtube.com/@Tantandev">TanTan</a> and others. R can never achieve what they’re up to, but I like listening through the logic of what they’re doing.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>r</category>
-  <category>shiny</category>
-  <category>videogames</category>
-  <guid>https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/index.html</guid>
-  <pubDate>Sat, 01 Apr 2023 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
