@@ -62,6 +62,7 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<link href="../../site_libs/vembedr-0.1.5/css/vembedr.css" rel="stylesheet">
 <script src="../../site_libs/fitvids-2.1.1/fitvids.min.js"></script>
 
 
@@ -159,9 +160,22 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
 <p>I gave <a href="https://matt-dray.github.io/nhs-r-2023/">a lightning talk</a> at the <a href="https://nhsrcommunity.com/">NHS-R</a> Conference 2023 about base R.</p>
 </section>
+<section id="video" class="level2">
+<h2 class="anchored" data-anchor-id="video">Video</h2>
+<p>You can choose to <a href="https://youtu.be/q-JZxrDC0ck?feature=shared&amp;t=14298">watch the video on YouTube</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="vembedr">
+<div>
+<iframe src="https://www.youtube.com/embed/q-JZxrDC0ck?start=14298" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
+</div>
+</div>
+</div>
+</div>
+</section>
 <section id="slides" class="level2">
 <h2 class="anchored" data-anchor-id="slides">Slides</h2>
-<p>The slides are embedded below<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> or they can be <a href="https://matt-dray.github.io/nhs-r-2023/">opened in a dedicated tab</a>. Click on them and press <kbd>→</kbd> to advance, <kbd>F</kbd> to go fullscreen, and <kbd>S</kbd> to pop-out the speaker notes<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>The slides are embedded below<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> or they can be <a href="https://matt-dray.github.io/nhs-r-2023/">opened in a dedicated tab</a>. Click on them and press <kbd>→</kbd> to advance, <kbd>F</kbd> to go fullscreen, and <kbd>S</kbd> to pop-out the speaker notes<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div class="shareagain" style="min-width:300px;margin:1em auto;" data-exeternal="1">
@@ -178,9 +192,9 @@ ul.task-list li input[type="checkbox"] {
 <blockquote class="blockquote">
 <p>Did you hear? Base R is dead! Or is it? I’ve spent most of my time in the public sector using the tidyverse, but I started learning R before the tidyverse existed (to be polite, you could call me ‘seasoned’). Recently I’ve started to write more base R code again. Why? I’ll talk about how base R can do loads of neat stuff out of the box without you needing to install and update any packages (dependencies aren’t bad things per se, but can cause trouble if not managed appropriately). I’ll also tell you about some recent additions, like the base pipe and lambda function notation, which demonstrate how base R is responding to the needs of the modern coder. Oh, and you can also do wacky stuff like make an interactive pixel-art creator, a persistent Tamagotchi pet, or a procedural dungeon-crawler. Note that this talk does not constitute a ‘base versus tidyverse’ flamewar. It’s purely to appreciate the elegance of good ol’ base R and to highlight some things it can do that you might not have realised (or like me, you forgot a long time ago).</p>
 </blockquote>
-<p>In other words, the content of the talk was neither new nor earth-shattering<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. The basic premise was ‘base R is pretty neat, don’t forget it exists!’</p>
+<p>In other words, the content of the talk was neither new nor earth-shattering<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. The basic premise was ‘base R is pretty neat, don’t forget it exists!’</p>
 <p>I have a narrow window of experience. I work in the public sector, mostly with people who publish statistical reports. The default for data preparation and analysis is often the tidyverse. That’s fine, for many reasons, but it may be overkill for small projects. Arguably, at worst, reproducibility may be jeopardised. And we <a href="https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/">love reproducibility</a> in the public sector.</p>
-<p>My plea to fellow public-sector coders: use your tool of choice, but consider if base R can do it alone<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. Or, at very least, become more acquainted with the built-in functions and (spoiler alert) maybe build some off-piste packages for a laugh.</p>
+<p>My plea to fellow public-sector coders: use your tool of choice, but consider if base R can do it alone<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>. Or, at very least, become more acquainted with the built-in functions and (spoiler alert) maybe build some off-piste packages for a laugh.</p>
 </section>
 <section id="content" class="level2">
 <h2 class="anchored" data-anchor-id="content">Content</h2>
@@ -190,11 +204,11 @@ ul.task-list li input[type="checkbox"] {
 <li>Dependency.</li>
 <li>Modernity.</li>
 </ol>
-<p>Re stability, vanilla R has changed little over time. Code written a couple of decades ago has a high chance of running now and will (likely) be executable for a long time into the future<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>. As a result, I contend that R is a horseshoe crab (unchanged for aeons, cryptically beautiful). And that R users are Milhouse in this relevant gif (look deep inside yourself, you are Milhouse).</p>
+<p>Re stability, vanilla R has changed little over time. Code written a couple of decades ago has a high chance of running now and will (likely) be executable for a long time into the future<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. As a result, I contend that R is a horseshoe crab (unchanged for aeons, cryptically beautiful). And that R users are Milhouse in this relevant gif (look deep inside yourself, you are Milhouse).</p>
 <p><img src="resources/nice-doggie.gif" class="img-fluid" style="width:50.0%" alt="Milhouse from the Simpsons pats a happy horseshoe crab on the head. Milhouse is not wearig his glasses. He thinks the crab is a dog."></p>
-<p>Re dependencies, R’s extensibility is one of its greatest strengths, but reducing the dependency count could help improve reproducibility and reduce headaches<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. I used an obligatory (adapted) <a href="https://xkcd.com/2347/">xkcd comic</a> to illustrate this. Note that base R is the literal, unyielding base of the teetering tower of packages used by your project (incredible metaphor).</p>
+<p>Re dependencies, R’s extensibility is one of its greatest strengths, but reducing the dependency count could help improve reproducibility and reduce headaches<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>. I used an obligatory (adapted) <a href="https://xkcd.com/2347/">xkcd comic</a> to illustrate this. Note that base R is the literal, unyielding base of the teetering tower of packages used by your project (incredible metaphor).</p>
 <p><img src="resources/xkcd.png" class="img-fluid" style="width:50.0%" alt="Comic from xkcd. Lots of blocks are stacked on top of each other. One small block near the bottom is indicated. The implication is that removing the one small block will bring the whole thing down. The stack is labelled 'your project', the small block is labelled 'some dependency' and the big stable blocks underneath it at the bottom are labelled 'base'."></p>
-<p>Re ‘modernity’, high stability hasn’t stopped base R from also being adapted to meet the expectations of a contemporary coder. R version 4.0 has given us a ‘modern base aesthetic’ (trademark pending) of pipes (<code>|&gt;</code>), lambdas (<code>\()</code>) and string literals (<code>r"{}"</code>). R has morphed, much like the morphing of its janky old logo to the (perhaps already-outdated, lol) contemporary ‘flat’ design of the new logo<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>?</p>
+<p>Re ‘modernity’, high stability hasn’t stopped base R from also being adapted to meet the expectations of a contemporary coder. R version 4.0 has given us a ‘modern base aesthetic’ (trademark pending) of pipes (<code>|&gt;</code>), lambdas (<code>\()</code>) and string literals (<code>r"{}"</code>). R has morphed, much like the morphing of its janky old logo to the (perhaps already-outdated, lol) contemporary ‘flat’ design of the new logo<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>?</p>
 <p><img src="resources/logo.gif" class="img-fluid" style="width:50.0%" alt="The old R logo morphs into the new R logo. The old has bevels, highlights and shadows. The new one is simpler with peak 'flat' design."></p>
 <p>But wait! A bonus thing:</p>
 <ol start="4" type="1">
@@ -206,7 +220,7 @@ ul.task-list li input[type="checkbox"] {
 <li><code>readline()</code> to accept user input interactively (e.g.&nbsp;i <a href="https://github.com/matt-dray/r.oguelike">my experimental {r.oguelike} package</a> for a ‘procedural dungeon-crawler’ in the R console)</li>
 <li><code>R_user_dir()</code> as a location for storing user data (e.g.&nbsp;in <a href="https://github.com/matt-dray/tamRgo">my experimental {tamRgo} package</a> for a persistent cyber pet in the R console)</li>
 </ul>
-<p>Despite all this, base R isn’t perfect for everyone in every situation<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>. Base <em>flaps</em> sometimes, that’s fine. You can argue it’s more terse and less readable than the verb-driven tidyverse, for example. But we have a duty in the public sector to think about long-term code survival. And high employee turnover rates mean we should perhaps default to the most vanilla tool.</p>
+<p>Despite all this, base R isn’t perfect for everyone in every situation<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>. Base <em>flaps</em> sometimes, that’s fine. You can argue it’s more terse and less readable than the verb-driven tidyverse, for example. But we have a duty in the public sector to think about long-term code survival. And high employee turnover rates mean we should perhaps default to the most vanilla tool.</p>
 <p>I like base R for writing functions and code I want to live for a long time, for example. I use the tidyverse for everyday data wrangling.</p>
 <p>But ultimately, I just wanted to do this terrible ‘base slaps’/‘slap bass’ pun, sorry. But also, I hear that zoomers say ‘slaps’ to mean ‘cool’. I think. Oh dear, this was a flimsy premise for a talk. Cringe-driven development?</p>
 </section>
@@ -221,7 +235,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-10-22 21:31:48 BST</code></pre>
+<pre><code>Last rendered: 2023-11-28 23:20:58 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -242,12 +256,15 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2   compiler_4.3.1      fastmap_1.1.1      
- [4] cli_3.6.1           tools_4.3.1         htmltools_0.5.6.1  
- [7] xaringanExtra_0.7.0 rstudioapi_0.15.0   yaml_2.3.7         
-[10] rmarkdown_2.25      knitr_1.44          jsonlite_1.8.7     
-[13] xfun_0.40           digest_0.6.33       rlang_1.1.1        
-[16] evaluate_0.22      </code></pre>
+ [1] assertthat_0.2.1    digest_0.6.33       R6_2.5.1           
+ [4] fastmap_1.1.1       xfun_0.41           magrittr_2.0.3     
+ [7] glue_1.6.2          stringr_1.5.0       knitr_1.45         
+[10] htmltools_0.5.6.1   rmarkdown_2.25      lifecycle_1.0.3    
+[13] cli_3.6.1           vctrs_0.6.4         compiler_4.3.1     
+[16] httr_1.4.7          vembedr_0.1.5       rstudioapi_0.15.0  
+[19] tools_4.3.1         xaringanExtra_0.7.0 curl_5.1.0         
+[22] evaluate_0.23       yaml_2.3.7          rlang_1.1.1        
+[25] jsonlite_1.8.7      htmlwidgets_1.6.2   stringi_1.7.12     </code></pre>
 </div>
 </div>
 </details>
@@ -256,14 +273,15 @@ loaded via a namespace (and not attached):
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>I think there’ll be a video; I’ll link to it here when it’s released.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Amusingly, these notes are absolutely not what I said in the talk itself, lol.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Although at least one attendee’s mind was blown to discover that you can simultaneously assign and print an expression by wrapping it in brackets, like <code>(x &lt;- 1)</code>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>But to be clear: I don’t think you should ‘just replace all your code with base R code’. There’s very few examples of where that would make sense. But is it worth importing all of {dplyr} if you just want to <code>select()</code>, <code>filter()</code> and <code>mutate()</code> a data.frame? Maybe, maybe not.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Until we all switch to the Julia and/or Rust languages, amirite.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>Bearing in mind that tools like {renv}, Docker and Nix (thanks Bruno) can help coordinate dependencies. But that’s yet another tool to manage.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>I think this was incepted into my brain by Jeroen in <a href="https://docs.ropensci.org/magick/articles/intro.html">the {magick} docs</a>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn8"><p>See <a href="https://github.com/HenrikBengtsson/Wishlist-for-R/issues">the wishlist</a> that Henrik Bengtsson has been hosting.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>No Matt Dray presentation is complete without a ‘Dr Dre’ pun at beginning, lol. Only made funnier by my ongoing work with RAP (Reproducible Analytical Pipelines).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>I think there’ll be a video; I’ll link to it here when it’s released.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Amusingly, these notes are absolutely not what I said in the talk itself, lol.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Although at least one attendee’s mind was blown to discover that you can simultaneously assign and print an expression by wrapping it in brackets, like <code>(x &lt;- 1)</code>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>But to be clear: I don’t think you should ‘just replace all your code with base R code’. There’s very few examples of where that would make sense. But is it worth importing all of {dplyr} if you just want to <code>select()</code>, <code>filter()</code> and <code>mutate()</code> a data.frame? Maybe, maybe not.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Until we all switch to the Julia and/or Rust languages, amirite.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Bearing in mind that tools like {renv}, Docker and Nix (thanks Bruno) can help coordinate dependencies. But that’s yet another tool to manage.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>I think this was incepted into my brain by Jeroen in <a href="https://docs.ropensci.org/magick/articles/intro.html">the {magick} docs</a>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>See <a href="https://github.com/HenrikBengtsson/Wishlist-for-R/issues">the wishlist</a> that Henrik Bengtsson has been hosting.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
