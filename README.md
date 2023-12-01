@@ -26,8 +26,8 @@ between 2018-04-14 (first) to 2023-11-25 (latest).
 
 📅 That’s a post roughly every 13 days, or about 2.4 posts per month.
 
-🆕 The latest post: [An interactive graph of
-Kanto](https://www.rostrum.blog/posts/2023-11-25-kanto-graph).
+🆕 The latest post: [An interactive graph of Pokémon Red
+locations](https://www.rostrum.blog/posts/2023-11-25-kanto-graph).
 
 📈 Posts over time:
 
@@ -40,7 +40,7 @@ Kanto](https://www.rostrum.blog/posts/2023-11-25-kanto-graph).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
-| 164 | 2023-11-25 | [An interactive graph of Kanto](https://www.rostrum.blog/posts/2023-11-25-kanto-graph)                                         |
+| 164 | 2023-11-25 | [An interactive graph of Pokémon Red locations](https://www.rostrum.blog/posts/2023-11-25-kanto-graph)                         |
 | 163 | 2023-11-01 | [Unlock R functions with QR codes](https://www.rostrum.blog/posts/2023-11-01-qr-enabled-fn)                                    |
 | 162 | 2023-10-17 | [Base slaps!](https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023)                                                            |
 | 161 | 2023-10-08 | [Govspeakify tables with {shinylive}](https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables)                            |
@@ -210,4 +210,4 @@ Kanto](https://www.rostrum.blog/posts/2023-11-25-kanto-graph).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2023-12-01 at 22:51.
+🕒 Last updated: 2023-12-01 at 23:17.
