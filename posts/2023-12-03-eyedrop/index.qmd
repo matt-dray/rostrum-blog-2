@@ -1,0 +1,123 @@
+---
+title: No tears over missed eyedrops
+date: 2023-12-03
+slug: kanto-graph
+categories:
+  - r
+  - videogames
+  - visNetwork
+resources: 
+  - resources/pokemon-font.ttf
+---
+
+![Lotad: best Pokémon. No contest.](resources/eyedrop-lotad.gif){fig-alt="Screencast. An 'eyedrop' function in the R programming language is executed, with an image path as its only argument. An image of the Pokemon Lotad is plotted. Three points are clicked: a green, yellow and blue area. After each, the hex colour for that point is printed to the R console and a new plotting window opens that's filled with that colour."}
+
+## tl;dr
+
+Use the [{eyedroppeR} package by Dan Oehm](https://gradientdescending.com/select-colours-from-an-image-in-r-with-eyedropper/) if you want to sample a colour from an image using R. You don't need to use my hastily-created function.
+
+## Top of the drops
+
+A colleague on Slack asked about 'eyedropper' tools; where you can click a point on an image and have its colour returned. Very handy.
+
+I couldn't recall seeing an eyedrop tool built with R. How hard could it be to make one?
+
+I thought immediately of the `locator()` function from base R, which lets you click a plot and have its coordinates returned[^locator]. So I went ahead and made a little demo function.
+
+But I figured someone must have done this before, so I [asked on Mastodon](https://fosstodon.org/@mattdray/111513532691302980). And lol, of course: [the {eyedroppeR} package by Dan Oehm](https://gradientdescending.com/select-colours-from-an-image-in-r-with-eyedropper/) already does this (and more).
+
+## Eye, eye
+
+So this is a good lesson about avoiding duplication and wasted effort. I'm glad I asked about it!
+
+But I still had fun. For posterity, here's the sketch I came up with:
+
+```{r eval=FALSE}
+eyedrop <- function(file, swatch = TRUE) {
+  
+  # Check file exists
+  if (!file.exists(file)) stop("File doesn't exist.")
+  
+  # Check file extension
+  file_ext <- tools::file_ext(file)
+  if (!file_ext %in% c("png", "jpeg")) stop("File must be .png or .jpeg.")
+  
+  # Read from path
+  if (file_ext == "png") img <- png::readPNG(file)
+  if (file_ext == "jpeg") img <- jpeg::readJPEG(file)
+  
+  # Plot the image
+  grDevices::dev.new()
+  grid::grid.raster(img)
+  main_dev <- grDevices::dev.cur()
+  
+  # Get the size of the plot window
+  grid_size <- setNames(dev.size("cm"), c("x", "y"))
+  
+  message("Select points on the image to identify colours. Press <Esc> to quit.")
+  
+  # Keep allowing user to click points until they refuse
+  repeat {
+    
+    clicked_point <- grid::grid.locator("cm")  # xy in cm
+    
+    if (is.null(clicked_point)) break  # exit if user is finished
+    
+    # Standardise xy as 0 to 1
+    grid_coords <- unlist(clicked_point)
+    grid_ratios <- grid_coords / grid_size
+    
+    # Find the 'pixel' coords given the image's resolution
+    grid_dim <- setNames(dim(img)[1:2], c("y", "x"))[2:1]
+    pixels <- round(grid_dim * grid_ratios)
+    pixels["y"] <- grid_dim["y"] - pixels["y"]
+    
+    # Extract RGB for given pixel, convert to hex
+    rgb_vals <- img[pixels["y"], pixels["x"], ]
+    hex <- rgb(rgb_vals[1], rgb_vals[2], rgb_vals[3])
+    
+    # Open a window filled with the provided hex colour
+    if (swatch) {
+      dev.new(width = 2, height = 2)
+      par(mar = c(rep(0, 4)))  # remove plot margins
+      image(matrix(1), col = hex)
+      grDevices::dev.set(main_dev)  # return focus to original plot window
+    }
+    
+    message(hex)
+    
+  }
+  
+}
+```
+
+You can see an example of this in action in the gif at the top of this page.
+
+Of course, this is a minimum viable product and has many deficiencies; it is not optimised in any way. I may even have misunderstood some concepts from {grid} graphics. 
+
+Also, importantly, there is some kind of [issue with RStudio](https://github.com/rstudio/rstudio/issues/8559) where grid units are converted incorrectly. Hence why the example shown at the top of this post uses R's vanilla graphical use interface. Given that <large percentage> of people are using RStudio, that isn't ideal.
+
+To explain the basic steps of the function:
+
+1. We get the plot window dimensions with `dev.size()` and coordinates for our clicked point with `grid.locator()`. We can use that to work out how far along each axis that our point is, as a percentage.
+2. We can then check the `dim()`ensions of the image (i.e. its resolution) and locate the 'pixel' that is x% and y% along each axis.
+3. The image is an array object with red, green and blue 'channels', so we can retrieve each one for our pixel and convert to a hex value.
+
+Of course, I welcome your thoughts on how to improve the function. But yeah, y'know, just use {eyedroppeR}.
+
+## Dry your eyes, mate
+
+I'm a big believer in sharing failure. I'm a big believer in recognising when to stop[^dupe]. Regardless of 'success', I'm also a big believer in sharing your ideas and documenting your thought processes.
+
+I'm also a big believer in having a nice time and coding for fun.
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^locator]: I used `locator()` for [the {pixeltrix} 'pixel-art editor' package](https://github.com/matt-dray/pixeltrix) and in a previous post about [getting coordinates from fictitious maps](https://www.rostrum.blog/posts/2021-11-04-kanto-locator/).
+[^dupe]: I've definitely created things in the past that I didn't realise already existed, such as [my {badgr} package](https://github.com/matt-dray/badgr/) and the pre-existing [{badger} package](https://github.com/GuangchuangYu/badger).
