@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 165 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2023-12-03 (latest).
+🔢 There have been 166 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2024-01-12 (latest).
 
-📅 That’s a post roughly every 12 days, or about 2.4 posts per month.
+📅 That’s a post roughly every 13 days, or about 2.4 posts per month.
 
-🆕 The latest post: [No tears over missed
-eyedrops](https://www.rostrum.blog/posts/2023-12-03-eyedrop).
+🆕 The latest post: [Yihui Xie: RAP
+god](https://www.rostrum.blog/posts/2024-01-12-yihui-rap).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ eyedrops](https://www.rostrum.blog/posts/2023-12-03-eyedrop).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 166 | 2024-01-12 | [Yihui Xie: RAP god](https://www.rostrum.blog/posts/2024-01-12-yihui-rap)                                                      |
 | 165 | 2023-12-03 | [No tears over missed eyedrops](https://www.rostrum.blog/posts/2023-12-03-eyedrop)                                             |
 | 164 | 2023-11-25 | [An interactive graph of Pokémon Red locations](https://www.rostrum.blog/posts/2023-11-25-kanto-graph)                         |
 | 163 | 2023-11-01 | [Unlock R functions with QR codes](https://www.rostrum.blog/posts/2023-11-01-qr-enabled-fn)                                    |
@@ -211,4 +212,4 @@ eyedrops](https://www.rostrum.blog/posts/2023-12-03-eyedrop).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2023-12-17 at 12:36.
+🕒 Last updated: 2024-01-12 at 23:28.
