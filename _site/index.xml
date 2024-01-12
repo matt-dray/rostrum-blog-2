@@ -10,7 +10,106 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Sun, 03 Dec 2023 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 12 Jan 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Yihui Xie: RAP god</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2024-01-12-yihui-rap/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>Taking a moment to thank <a href="https://yihui.org/">Yihui</a>, who has unwittingly made possible the rise of <a href="https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/">Reproducible Analytical Pipelines</a> (RAP).</p>
+</section>
+<section id="hooray-for-yihui" class="level2">
+<h2 class="anchored" data-anchor-id="hooray-for-yihui">Hooray for Yihui</h2>
+<p><a href="https://yihui.org/">Yihui Xie</a> is an R legend. He was, however, recently <a href="https://yihui.org/en/2024/01/bye-rstudio/">laid off</a> by his employers at Posit.</p>
+<p>I’ve personally benefited a great deal from Yihui’s work, from writing reproducible presentations with <a href="https://slides.yihui.org/xaringan/#1">{xaringan}</a> to producing the original version of this blog with <a href="https://pkgs.rstudio.com/blogdown/">{blogdown}</a>.</p>
+<p>At a grander scale, Yihui’s contributions to the R ecosystem have had a lasting and transformational impact on how we generate Official Statistics in the UK, where <a href="https://rmarkdown.rstudio.com/">R Markdown</a> and <a href="https://yihui.org/knitr/">{knitr}</a> are essential and ubiquitous tools in particular.</p>
+<p>So much so that we have a custom Yihui Slack emoji.</p>
+</section>
+<section id="thats-a-rap" class="level2">
+<h2 class="anchored" data-anchor-id="thats-a-rap">That’s a RAP</h2>
+<p>Put (far too) simply, a <a href="https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/">Reproducible Analytical Pipeline</a> (RAP) is any code-driven, version-controlled workflow that reads data, processes it and creates consumable outputs, while ensuring that the process can be re-run in the future and by others.</p>
+<p>RAP was birthed from <a href="https://en.wikipedia.org/wiki/DevOps">‘DataOps’ principles</a> with a focus on the production of statistical publications: reports and data files for public consumption, published officially on <a href="https://www.gov.uk/search/research-and-statistics?content_store_document_type=statistics_published&amp;order=updated-newest">the UK government’s website</a>. These files are important for transparency and decision making.</p>
+<p>These days, RAP is so much more: it’s a way of thinking, a community and a movement<sup>1</sup>. Its ethos has spread <a href="https://nhsdigital.github.io/rap-community-of-practice/introduction_to_RAP/history_of_RAP/">across the UK public sector</a> and is gaining traction globally through efforts like <a href="https://raps-with-r.dev/">Bruno Rodrigues’s excdellent book</a>.</p>
+</section>
+<section id="r-is-for-rap" class="level2">
+<h2 class="anchored" data-anchor-id="r-is-for-rap">R is for RAP</h2>
+<p>RAP is language agnostic<sup>2</sup>, but R is the <em>lingua franca</em> for statistical production in the UK’s government and public sector. Why? Possibly because R is a data- and stats-first language<sup>3</sup> and therefore a natural choice for statistics professionals.</p>
+<p>Of course, R can easily cover the whole soup-to-nuts workflow. Not just ingestion and digestion of data, but crucially the ejection of information into written reports. R Markdown and {knitr} are the clear weapons of choice for this kind of document generation, for which we must thank Yihui for his tireless and humble efforts.</p>
+<p>But what makes R Markdown so conducive to RAP, in particular? Well, stats publications are generally periodical (often weekly) and R Markdown is perfect for <a href="https://en.wikipedia.org/wiki/Literate_programming">literate programming</a> at pace: you can create a skeleton document that can be updated dynamically with R code, saving so much time when a new version of the publication needs to be created with fresh data.</p>
+<p>Crucially, R Markdown is relatively simple to learn and use<sup>4</sup>. You write some plain text and mark it up with simple adornments<sup>5</sup>. This suits perfectly the range of skills and abilities in statistical teams across the public sector, where staff are often ‘numbers-people’ first and ‘coders’ second.</p>
+<p>Hence why R Markdown has been a central tenet of RAP since Dr Matt Upson<sup>6</sup>—RAP’s Founding Father—noted it in his <a href="https://dataingovernment.blog.gov.uk/2017/03/27/reproducible-analytical-pipeline/">germinal blog post</a>.</p>
+</section>
+<section id="down-but-not-out" class="level2">
+<h2 class="anchored" data-anchor-id="down-but-not-out">Down, but not out</h2>
+<p>Of course, I’m not alone: many others have talked about their appreciation for Yihui and his work, including Eric and Mike’s discussion on <a href="https://rweekly.fireside.fm/147">the R Weekly podcast</a> and <a href="https://x.com/EmilyRiederer/status/1743672724403241196">Emily’s thread</a>.</p>
+<p>You can also take a look at the incredible number of people who have signed up to <a href="https://github.com/sponsors/yihui">sponsor Yihui on GitHub</a>, which sits just shy of 300 at the time of writing<sup>7</sup>.</p>
+<p>Thank you, Yihui. We look forward to what comes next.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2024-01-12 23:23:36 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.2        
+ [5] tools_4.3.1       htmltools_0.5.6.1 rstudioapi_0.15.0 yaml_2.3.7       
+ [9] rmarkdown_2.25    knitr_1.45        jsonlite_1.8.7    xfun_0.41        
+[13] digest_0.6.33     rlang_1.1.2       evaluate_0.23    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>To the extent that you can use ‘RAP’ as a noun (‘we have many RAPs in our department’) and verb (‘I’m going to RAP this publication’).↩︎</p></li>
+<li id="fn2"><p>Not strictly true. We’re talking here about open source languages like R and Python. Your proprietary tool of choice is not RAP compliant, sorry.↩︎</p></li>
+<li id="fn3"><p>R has grown beyond statistical analysis, of course. You can build apps and websites and so much more without ever ‘doing stats’. Just ask <a href="https://rwithoutstatistics.com/">David Keyes</a>.↩︎</p></li>
+<li id="fn4"><p>Compared to what? Most regular R users these days are unlikely to have encountered Sweave, for example, which is actually built into R. Sweave relies on knowledge of document preparation using LaTeX, which most of us barely know how to pronounce, let alone use.↩︎</p></li>
+<li id="fn5"><p>This becomes even easier with, for example, <a href="https://rstudio.github.io/visual-markdown-editing/">RStudio’s ‘visual’ mode</a> for R Markdown files, which includes a GUI for marking-up to your text without needing to remember how to mark it up in **bold**, for example.↩︎</p></li>
+<li id="fn6"><p>RAP was pioneered in the UK government by Dr Matt Upson and the team at the Government Digital Service (GDS), not limited to Dr Matt Gregory (too many Matts, amirite?) and Duncan Garmonsway, as well as several early adopters like the Department for Culture, Media and Sport.↩︎</p></li>
+<li id="fn7"><p>Disclaimer: I’m one of these people.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>r</category>
+  <category>reproducibility</category>
+  <category>rmarkdown</category>
+  <guid>https://www.rostrum.blog/posts/2024-01-12-yihui-rap/index.html</guid>
+  <pubDate>Fri, 12 Jan 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>No tears over missed eyedrops</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -8671,370 +8770,6 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-05-10-spear-ggplot2/index.html</guid>
   <pubDate>Tue, 09 May 2023 23:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Automate {blogdown} to Quarto</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-05-07-bd2q/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2023-05-07-bd2q/resources/rostrum-blog-2.png" class="img-fluid figure-img" style="width:100.0%" alt="A screenshot of a version of this blog designed with Quarto. The style is very similar, using green and black and the blog logo, which is a 16 by 16 pixel picture of an insect. There are new sections for 'About', 'RSS' and 'Source', as well as s search button. The posts are displayed as 'cards' rather than in a list."></p>
-<figcaption class="figure-caption">gRaPhIc DeSiGn Is My PaSsIoN.</figcaption>
-</figure>
-</div>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I’ve written a quick R package, <a href="https://github.com/matt-dray/bd2q">{bd2q}</a>, to help me convert my <a href="https://pkgs.rstudio.com/blogdown/">{blogdown}</a> blog to <a href="https://quarto.org/">Quarto</a>. Whether I’ll actually complete the conversion is another story.</p>
-</section>
-<section id="upside-blogdown" class="level2">
-<h2 class="anchored" data-anchor-id="upside-blogdown">Upside blogdown</h2>
-<p>It is destiny: no-one is ever completely happy with their blog.</p>
-<p>This site was built five years ago<sup>1</sup> with <a href="https://pkgs.rstudio.com/blogdown/">{blogdown}</a>, which lets you write R Markdown files and have them knitted into a blog. I ignored <a href="https://rstudio.github.io/distill/">the newer {distill} package</a><sup>2</sup>, but <a href="https://quarto.org/">Quarto</a> may be worth the switch. It’ll let me simplify the blog’s structure<sup>3</sup> and take advantage of Quarto’s snazzy features<sup>4</sup>.</p>
-<p>But I didn’t fancy transferring and editing ~150 posts by hand, so I’ve written a few functions to help out.</p>
-</section>
-<section id="when-in-doubt-make-a-package" class="level2">
-<h2 class="anchored" data-anchor-id="when-in-doubt-make-a-package">When in doubt, make a package</h2>
-<p>And so the {bd2q} R package<sup>5</sup> is <a href="https://github.com/matt-dray/bd2q">available from GitHub</a>. It does what I need it to do for now, but note it only has basic error checking, has no unit tests, etc. Use at own risk, etc. It’s likely to remain unpolished forever, but feel free to add issues or pull requests. To install:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"remotes"</span>)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># if not yet installed</span></span>
-<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"matt-dray/bd2q"</span>)</span></code></pre></div>
-</div>
-<p>Three things were in scope for this package:</p>
-<ol type="1">
-<li>Create a template Quarto blog.</li>
-<li>Create the necessary Quarto folder structure for posts, then transfer posts and resources from the old {blogdown} blog.</li>
-<li>Tweak the posts to remove or replace selected lines.</li>
-</ol>
-<section id="quarto-blog-template" class="level3">
-<h3 class="anchored" data-anchor-id="quarto-blog-template">1. Quarto blog template</h3>
-<p>I assume someone has already written a version of <code>usethis::create_project()</code> for creating a Quarto blog. Regardless, I’ve written <code>bd2q::create_template()</code> to generate a folder with the minimal structure required, which makes my life easier for testing purposes.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">bd2q<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">create_template</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">q_path =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"~/new-quarto-blog"</span>)</span></code></pre></div>
-</div>
-<pre><code>✔ Created template Quarto blog at /Users/mattdray/new-quarto-blog</code></pre>
-<p>The skeleton content is opinionated and differs a bit to the one generated through RStudio’s ‘new project’ menu, for example, but the structure is the same:</p>
-<pre><code>blog
-├── about.qmd
-├── index.qmd
-├── posts/
-│   └── metadata.yml
-├── styles.css
-└── blog.rproj</code></pre>
-<p>Of course, now we need to pull in the posts from the old {blogdown} blog.</p>
-</section>
-<section id="transfer-posts-and-resources" class="level3">
-<h3 class="anchored" data-anchor-id="transfer-posts-and-resources">2. Transfer posts and resources</h3>
-<p>Typically in a {blogdown} blog, all R Markdown posts and their rendered HTML files are stored together in <code>content/post/</code> in the form <code>YYYY-MM-DD-post-name.Rmd</code> and <code>YYYY-MM-DD-post-name.html</code>. Resources, like images, live separately in <code>static/post/</code> with a folder per post in the form <code>YYYY-MM-DD-post-name_files/</code>.</p>
-<p>Here’s a simplified folder structure that focuses on a single post and its resources:</p>
-<pre><code>blog/
-├── content/
-│   └── post/
-│       ├── YYYY-MM-DD-post-name.Rmd
-│       └── YYYY-MM-DD-post-name.html
-└── static/
-    └── post/
-        └── YYYY-MM-DD-post-name_files/
-            └── image.png</code></pre>
-<p>Quarto simplifies this structure. Each post gets its own folder in <code>posts/</code>, like <code>YYYY-MM-DD-post-name</code>, which contains the post as <code>index.qmd</code> and a folder of resources. This means the post and all its content are stored together in one containing folder.</p>
-<pre><code>blog/
-└── posts/
-    └── YYYY-MM-DD-post-name/
-        ├── index.qmd
-        └── resources/
-            └── image.png</code></pre>
-<p>To do the conversion, <code>bd2q::transfer_posts()</code> copies posts from a {blogdown} blog structure to a Quarto blog structure, setting up the required folders and renaming each post to <code>index.qmd</code>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">transfer_posts</span>(</span>
-<span id="cb7-2">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">bd_path =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"~/old-blogdown-blog"</span>,</span>
-<span id="cb7-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">q_path =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"~/new-quarto-blog"</span></span>
-<span id="cb7-4">)</span></code></pre></div>
-</div>
-<pre><code>✔ Created posts/ directory structure.
-ℹ Copying posts.
-✔ Copied 148 posts to /Users/mattdray/new-quarto-blog.</code></pre>
-<p>Once that’s been run, <code>bd2q::transfer_resources()</code> can copy each post’s resources into an accompanying subfolder, which defaults to the name ‘resources’. You can choose which file types you want transfer with the <code>exts_keep</code> argument.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">transfer_resources</span>(</span>
-<span id="cb9-2">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">bd_path =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"~/old-blogdown-blog"</span>,</span>
-<span id="cb9-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">q_path =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"~/new-quarto-blog"</span>,</span>
-<span id="cb9-4">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">resources_dir =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"resources"</span>,</span>
-<span id="cb9-5">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">exts_keep =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"gif"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"jpg"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"jpeg"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"png"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"svg"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"wav"</span>),</span>
-<span id="cb9-6">)</span></code></pre></div>
-</div>
-<pre><code>ℹ Copying resources.
-✔ Copied 455 resources to each post's resources/ folder in Users/mattdray/new-quarto-blog/posts.</code></pre>
-<p>Of course this doesn’t account for everything, like bits of JavaScript and CSS related to the use of <a href="https://www.htmlwidgets.org/">htmlwidgets</a>. I’m not really bothered about this, because these should be recreated when I re-render each post.</p>
-<p>Note that you can use <code>bd2q::create_and_transfer()</code> if you want to run <code>create_template()</code>, <code>transfer_posts()</code> and <code>transfer_resources()</code> all at once. Regardless, once you’ve got the structure sorted, you can begin to adjust the posts if you need to.</p>
-</section>
-<section id="tweak-post-content" class="level3">
-<h3 class="anchored" data-anchor-id="tweak-post-content">3. Tweak post content</h3>
-<p>There’s content in the body of each post that I want to get rid of or make more Quarto-like. I made a few functions that iterate over all the <code>index.qmd</code> files and replace or remove certain content.</p>
-<p>One obvious necessity is to rebuild the resource paths (to images, sound files, etc), which can be done specifically with <code>bd2q::update_resource_paths()</code>. It defaults to creating paths to each post’s ‘resources’ subfolder, as generated by <code>bd2q::transfer_resources()</code>. For example, you could use a regular expression to match rows you know will contain a resource path and have them updated for the new Quarto folder structure (I tend to insert images with HTML rather than Markdown, hence the <code>&lt;img&gt;</code> tag in the example below).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">update_resource_paths</span>(</span>
-<span id="cb11-2">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">q_path =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"~/new-quarto-blog"</span>,</span>
-<span id="cb11-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">resources_dir =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"resources"</span>,</span>
-<span id="cb11-4">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">resource_rx =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"&lt;img src="</span></span>
-<span id="cb11-5">)</span></code></pre></div>
-</div>
-<pre><code>ℹ Updating posts.
-✔ 148 posts updated.  </code></pre>
-<p>I also added two replace/remove functions that are a little more generic.</p>
-<p>The first is <code>bd2q::remove_line()</code>, which deletes a single line from each post based on a provided regular expression. When I was messing around with converting the blog to Quarto manually, I found that the presence of the ‘draft’ status in the YAML header would prevent the post from appearing on the homepage, even if was set to ‘no’. As a result, you can run something like this to find and remove the lines that start with ‘draft’:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">bd2q<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">remove_line</span>(</span>
-<span id="cb13-2">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">q_path =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"~/new-quarto-blog"</span>,</span>
-<span id="cb13-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">detect_rx =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"^draft:"</span></span>
-<span id="cb13-4">)</span></code></pre></div>
-</div>
-<pre><code>ℹ Making corrections.
-✔ Removed lines matching the regular expression '^draft:' from 128 out of 148 posts.</code></pre>
-<p>That’s fine for individual lines, but what if you have a sequence of <em>consecutive</em> lines that you want to find and remove, or replace with some other text?</p>
-<p>That’s what <code>bd2q::replace_lines()</code> does. Provide a vector of strings that exactly match some consecutive lines in each post, then provide a vector of strings to replace them with (or NULL to simply remove them)<sup>6</sup>.</p>
-<p>This addresses another specific problem I was having. I wanted to update my custom session-info blocks at the bottom of each post so that they instead appear as <a href="https://quarto.org/docs/authoring/appendices.html">a Quarto ‘appendix’</a>. That can be done like this:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">old_lines <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(</span>
-<span id="cb15-2">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"---"</span>,</span>
-<span id="cb15-3">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"&lt;details&gt;&lt;summary&gt;Session info&lt;/summary&gt;"</span>,</span>
-<span id="cb15-4">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"```{r eval=TRUE, sessioninfo, echo=FALSE}"</span>,</span>
-<span id="cb15-5">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"sessioninfo::session_info()"</span>,</span>
-<span id="cb15-6">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"```"</span>,</span>
-<span id="cb15-7">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"&lt;/details&gt;"</span></span>
-<span id="cb15-8">)</span>
-<span id="cb15-9"></span>
-<span id="cb15-10">new_lines <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(</span>
-<span id="cb15-11">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"## Details {.appendix}"</span>,</span>
-<span id="cb15-12">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"&lt;details&gt;&lt;summary&gt;Session info&lt;/summary&gt;"</span>,</span>
-<span id="cb15-13">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"```{r}"</span>,</span>
-<span id="cb15-14">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"#' eval = TRUE,"</span>,</span>
-<span id="cb15-15">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"#' echo = FALSE"</span>,</span>
-<span id="cb15-16">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">'cat("Date:", cat(format(Sys.time(), format = "%Y-%m-%d")), "</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">\n\n</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"); sessionInfo()'</span>,</span>
-<span id="cb15-17">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"```"</span></span>
-<span id="cb15-18">)</span>
-<span id="cb15-19"></span>
-<span id="cb15-20">bd2q<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">replace_lines</span>(</span>
-<span id="cb15-21">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">q_path =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"~/new-quarto-blog"</span>,</span>
-<span id="cb15-22">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">match_str =</span> old_lines,</span>
-<span id="cb15-23">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">replacement_str =</span> new_lines</span>
-<span id="cb15-24">)</span></code></pre></div>
-</div>
-<pre><code>ℹ Making corrections.
-✔ Removed lines matching the provided string vector from 9 out of 148 posts.   </code></pre>
-<p>Haha, uhoh, I was expecting to have fixed more posts than that! Looks like I might have written my custom session-info block slightly differently in each post (maybe an extra space or empty line?), so I’ll have to run the <code>bd2q::replace_lines()</code> multiple times to make sure I can replace it in each post that it appears.</p>
-</section>
-</section>
-<section id="actually-use-the-package-pfft" class="level2">
-<h2 class="anchored" data-anchor-id="actually-use-the-package-pfft">Actually use the package? Pfft!</h2>
-<p>So, is {bd2q} objectively good? No.&nbsp;Does it do what I personally want it to do? Absolutely. Mostly. Yeah?</p>
-<p>Of course, transferring files into a new structure is the easy part. The hard part is to see if each post will still re-render after all these years. It’s unlikely! There’s no dependency management in this blog because there was no easy easy to do it. Quarto, meanwhile, has <a href="https://quarto.org/docs/projects/code-execution.html#freeze">the ability to ‘freeze’ posts</a> and <a href="https://albert-rapp.de/posts/13_quarto_blog_writing_guide/13_quarto_blog_writing_guide.html#make-posts-robust-with-renv">link each post to a {renv} lockfile</a> (thanks Albert) that captures each post’s package dependencies.</p>
-<p>There are some other dependencies outside of packages though. For example, I have posts that use <a href="https://docs.ropensci.org/rtweet/">the {rtweet} package</a> to fetch tweets from Twitter, but Twitter is a garbage fire and I may never be able to fetch tweets from the API in future. I may have to just copy-paste the outputs that were created when the post was originally rendered, oh well.</p>
-<p>To be clear: this is hard work. I may not be brave enough to do it any time soon. I’ve set up <a href="https://github.com/matt-dray/rostrum-blog-2">a GitHub repo for ‘rostrum-blog-2’</a> where I’ve been experimenting with styles and structure, so if I ever get round to this task then that’s where the fireworks will be happening.</p>
-<p>And hey, at worst I got more familiar with the <a href="https://fs.r-lib.org/">{fs}</a> and <a href="https://cli.r-lib.org/">{cli}</a> packages when making {bd2q}, which are for ‘tidy’ path handling and nice user interfaces. A convoluted way to learn!</p>
-<p>But that’s what this blog is all about, amirite.</p>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-06-29 15:25:33 CEST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/Zurich
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
-[1] bd2q_0.0.0.9000
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.14   yaml_2.3.7       
- [9] rmarkdown_2.22    knitr_1.43.1      jsonlite_1.8.5    xfun_0.39        
-[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>Actually, we began this blog on WordPress in 2013. But WordPress doesn’t evaluate R code, so code outputs had to be pasted in manually. The original blog was meant to be more about general ecology, hence the name ‘rostrum’, which refers to the snouty bit of an insect and also the platform a speaker talks from. Seemed like a neat pun at the time, but the joke is kinda lost on an audience that’s no longer comprised mostly of entomologists. But the audience is mostly me, so I can live with it.↩︎</p></li>
-<li id="fn2"><p>Although I did use it to <a href="https://www.rostrum.blog/2022/03/15/renv-profiles/">investigate a method with {renv}</a> for managing dependencies on a post-by-post basis.↩︎</p></li>
-<li id="fn3"><p>In particular, {blogdown} <a href="https://gohugo.io/">depends on Hugo</a>, a ‘framework for building websites’. Quarto blogs are just… built on Quarto.↩︎</p></li>
-<li id="fn4"><p>Especially things like <a href="https://github.com/coatless/quarto-webr">WebR for Quarto</a> that helps you embed interactive R chunks into your posts, which <a href="https://www.rostrum.blog/2023/03/16/webr-quarto/">I wrote about recently</a>.↩︎</p></li>
-<li id="fn5"><p>‘bd2q’ as in ‘{blogdown} to Quarto’. Which is a boring name, I know.↩︎</p></li>
-<li id="fn6"><p>This was actually more painful than I was hoping. There’s no easy way to match consecutive strings between vectors. In other words, try to extract the sequence <code>c("a", "b", "c")</code>, in that order, from the vector <code>c("a", "b", "d", "a", "b", "c", "d")</code>. Surely there’s an R function that will do this? Anyway, I fudged it by collapsing all the lines of a post into a single string and then finding the matching (collapsed) string provided by the user. Of course, the string will have to be ‘uncollapsed’ to get a string per line, so you can use <code>paste()</code> with a string provide to the <code>collapse</code> argument. But this separator will need to be a string that doesn’t appear in any of your posts, otherwise the uncollapsing process will break a line that you didn’t intend to be broken! I went with <code>///</code> by default, but the user can change this with the <code>collapse_str</code> argument in <code>bd2q::replace_lines()</code>. Sheesh.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>bd2q</category>
-  <category>blog-meta</category>
-  <category>blogdown</category>
-  <category>quarto</category>
-  <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2023-05-07-bd2q/index.html</guid>
-  <pubDate>Sat, 06 May 2023 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

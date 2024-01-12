@@ -1,0 +1,68 @@
+---
+title: "Yihui Xie: RAP god"
+date: 2024-01-12
+slug: yihui-rap
+categories:
+  - r
+  - reproducibility
+  - rmarkdown
+---
+
+
+## tl;dr
+
+Taking a moment to thank [Yihui](https://yihui.org/), who has unwittingly made possible the rise of [Reproducible Analytical Pipelines](https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/) (RAP).
+
+## Hooray for Yihui
+
+[Yihui Xie](https://yihui.org/) is an R legend. He was, however, recently [laid off](https://yihui.org/en/2024/01/bye-rstudio/) by his employers at Posit.
+
+I've personally benefited a great deal from Yihui's work, from writing reproducible presentations with [{xaringan}](https://slides.yihui.org/xaringan/#1) to producing the original version of this blog with [{blogdown}](https://pkgs.rstudio.com/blogdown/).
+
+At a grander scale, Yihui's contributions to the R ecosystem have had a lasting and transformational impact on how we generate Official Statistics in the UK, where [R Markdown](https://rmarkdown.rstudio.com/) and [{knitr}](https://yihui.org/knitr/) are essential and ubiquitous tools in particular.
+
+So much so that we have a custom Yihui Slack emoji.
+
+## That's a RAP
+
+Put (far too) simply, a [Reproducible Analytical Pipeline](https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/) (RAP) is any code-driven, version-controlled workflow that reads data, processes it and creates consumable outputs, while ensuring that the process can be re-run in the future and by others.
+
+RAP was birthed from ['DataOps' principles](https://en.wikipedia.org/wiki/DevOps) with a focus on the production of statistical publications: reports and data files for public consumption, published officially on [the UK government's website](https://www.gov.uk/search/research-and-statistics?content_store_document_type=statistics_published&order=updated-newest). These files are important for transparency and decision making.
+
+These days, RAP is so much more: it's a way of thinking, a community and a movement[^verb]. Its ethos has spread [across the UK public sector](https://nhsdigital.github.io/rap-community-of-practice/introduction_to_RAP/history_of_RAP/) and is gaining traction globally through efforts like [Bruno Rodrigues's excdellent book](https://raps-with-r.dev/).
+
+## R is for RAP
+
+RAP is language agnostic[^agnostic], but R is the _lingua franca_ for statistical production in the UK's government and public sector. Why? Possibly because R is a data- and stats-first language[^nostats] and therefore a natural choice for statistics professionals.
+
+Of course, R can easily cover the whole soup-to-nuts workflow. Not just ingestion and digestion of data, but crucially the ejection of information into written reports. R Markdown and {knitr} are the clear weapons of choice for this kind of document generation, for which we must thank Yihui for his tireless and humble efforts.
+
+But what makes R Markdown so conducive to RAP, in particular? Well, stats publications are generally periodical (often weekly) and R Markdown is perfect for [literate programming](https://en.wikipedia.org/wiki/Literate_programming) at pace: you can create a skeleton document that can be updated dynamically with R code, saving so much time when a new version of the publication needs to be created with fresh data.
+
+Crucially, R Markdown is relatively simple to learn and use[^sweave]. You write some plain text and mark it up with simple adornments[^visual]. This suits perfectly the range of skills and abilities in statistical teams across the public sector, where staff are often 'numbers-people' first and 'coders' second. 
+
+Hence why R Markdown has been a central tenet of RAP since Dr Matt Upson[^originator]—RAP's Founding Father—noted it in his [germinal blog post](https://dataingovernment.blog.gov.uk/2017/03/27/reproducible-analytical-pipeline/).
+
+## Down, but not out
+
+Of course, I'm not alone: many others have talked about their appreciation for Yihui and his work, including Eric and Mike's discussion on [the R Weekly podcast](https://rweekly.fireside.fm/147) and [Emily's thread](https://x.com/EmilyRiederer/status/1743672724403241196).
+
+You can also take a look at the incredible number of people who have signed up to [sponsor Yihui on GitHub](https://github.com/sponsors/yihui), which sits just shy of 300 at the time of writing[^sponsor].
+
+Thank you, Yihui. We look forward to what comes next.
+
+## Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^nostats]: R has grown beyond statistical analysis, of course. You can build apps and websites and so much more without ever 'doing stats'. Just ask [David Keyes](https://rwithoutstatistics.com/).
+[^visual]: This becomes even easier with, for example, [RStudio's 'visual' mode](https://rstudio.github.io/visual-markdown-editing/) for R Markdown files, which includes a GUI for marking-up to your text without needing to remember how to mark it up in \*\*bold\*\*, for example.
+[^sponsor]: Disclaimer: I'm one of these people.
+[^agnostic]: Not strictly true. We're talking here about open source languages like R and Python. Your proprietary tool of choice is not RAP compliant, sorry.
+[^verb]: To the extent that you can use 'RAP' as a noun ('we have many RAPs in our department') and verb ('I'm going to RAP this publication').
+[^originator]: RAP was pioneered in the UK government by Dr Matt Upson and the team at the Government Digital Service (GDS), not limited to Dr Matt Gregory (too many Matts, amirite?) and Duncan Garmonsway, as well as several early adopters like the Department for Culture, Media and Sport.
+[^sweave]: Compared to what? Most regular R users these days are unlikely to have encountered Sweave, for example, which is actually built into R. Sweave relies on knowledge of document preparation using LaTeX, which most of us barely know how to pronounce, let alone use. 
