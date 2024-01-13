@@ -46,7 +46,7 @@ god](https://www.rostrum.blog/posts/2024-01-12-yihui-rap).
 | 163 | 2023-11-01 | [Unlock R functions with QR codes](https://www.rostrum.blog/posts/2023-11-01-qr-enabled-fn)                                    |
 | 162 | 2023-10-17 | [Base slaps!](https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023)                                                            |
 | 161 | 2023-10-08 | [Govspeakify tables with {shinylive}](https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables)                            |
-| 160 | 2023-09-17 | [Click links to execute code in the R console!](https://www.rostrum.blog/posts/2023-09-17-choosethis)                          |
+| 160 | 2023-09-17 | [{cli}ckable hyperlinks in the R console](https://www.rostrum.blog/posts/2023-09-17-choosethis)                                |
 | 159 | 2023-09-16 | [Dear John, I’m sorry](https://www.rostrum.blog/posts/2023-09-16-chunktop)                                                     |
 | 158 | 2023-09-10 | [The life and death of the tidyverse](https://www.rostrum.blog/posts/2023-09-10-lifecycle)                                     |
 | 157 | 2023-09-09 | [Combing through my trash](https://www.rostrum.blog/posts/2023-09-08-trash-combing)                                            |
@@ -212,4 +212,4 @@ god](https://www.rostrum.blog/posts/2024-01-12-yihui-rap).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2024-01-12 at 23:28.
+🕒 Last updated: 2024-01-13 at 11:59.
