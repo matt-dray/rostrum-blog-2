@@ -14,6 +14,13 @@ categories:
 
 I developed a convenience function for parsing chunk options out of an R Markdown document for collaborators to edit. But it doesn't work in reverse, which is the whole point. Some notes on failure.
 
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+Since this was posted, the folks at ThinkR have a pretty good solution with [the {lightparser} package](https://github.com/ThinkR-open/lightparser): 'From Rmd And Qmd To Tibble And Back'. The 'And Back' being the crucial part.
+
+</div>
+
 ## A very simple problem (?)
 
 John asked about [parsing chunk options](https://fosstodon.org/@johnmackintosh/111047625054222865) from R Markdown files (Rmd), passing the content to editors, then reincorporating the edited text back into the chunk whence it came.
@@ -145,7 +152,7 @@ grab_chunktop <- function(rmd_lines, engine = "r", yaml_out = NULL) {
   
   rmd_lines[grep("```\\{", rmd_lines)] |>  # isolate Rmd chunks
     gsub(paste0("```\\{", engine , " |\\}$"), "", x = _) |>  # retain options
-    strsplit(", ") |>  # list of chunks, split by comas
+    strsplit(", ") |>  # list of chunks, split by commas
     (\(chunk_str) {
       setNames(object = chunk_str, sapply(chunk_str, "[[", 1))  # name-value
     })() |>  # name the list elements after chunks

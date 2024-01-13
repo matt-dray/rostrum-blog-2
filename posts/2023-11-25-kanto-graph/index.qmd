@@ -16,6 +16,13 @@ resources:
 
 I extracted data from the disassembled code of Pokémon Red to create an interactive graph of the game's locations and their connections. You can [jump to the graph](#visualise-graph) below.
 
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+Coincidentally, a few days after posting this, someone posted to [Hacker News](https://news.ycombinator.com/item?id=38462318) a non-R [implementation by Peter Hajas](http://peterhajas.com/blog/pokemon_rb_connections.html) from a few years ago. I should've guessed!
+
+</div>
+
 ## Kanto
 
 [I wrote a while back](https://www.rostrum.blog/posts/2021-11-04-kanto-locator/) about using the wonderful `locator()` function to extract coordinates from fictitious maps. In that example I used the Kanto region from [the original Pokémon games](https://en.wikipedia.org/wiki/Pok%C3%A9mon_Red,_Blue,_and_Yellow). 
@@ -288,13 +295,6 @@ It can take a moment to load. You can select a node from the dropdown menu, scro
 It's interesting to see the simple radial networks around each city; the spaghetti and meatballs of Silph Co caused by all the warp tiles (also note [its unused location](https://tcrf.net/Pok%C3%A9mon_Red_and_Blue/Unused_Maps)); the long 'tail' from Victory Road through the Elite Four to the Hall of Fame; and the hand-like structure of the Safari Zone.
 
 Of course, you could spend all day tweaking things like the physics of the relationship between each node, or you could replace each node an images of its in-game sprite. I've chosen to keep things relatively simple because it's bed time and I need to go and [count some Mareep](https://bulbapedia.bulbagarden.net/wiki/Mareep_(Pok%C3%A9mon)).
-
-<div class="tip"> 
-`r fontawesome::fa("exclamation-circle")` <b>Note</b>
-
-Coincidentally, a few days after posting this, someone posted to [Hacker News](https://news.ycombinator.com/item?id=38462318) a non-R [implementation by Peter Hajas](http://peterhajas.com/blog/pokemon_rb_connections.html) from a few years ago. I should've guessed!
-
-</div>
 
 ## Environment {.appendix}
 
