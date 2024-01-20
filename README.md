@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 166 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2024-01-12 (latest).
+🔢 There have been 167 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2024-01-20 (latest).
 
 📅 That’s a post roughly every 13 days, or about 2.4 posts per month.
 
-🆕 The latest post: [Yihui Xie: RAP
-god](https://www.rostrum.blog/posts/2024-01-12-yihui-rap).
+🆕 The latest post: [Pseudo-apps in the browser with WebR and
+Quarto?](https://www.rostrum.blog/posts/2024-01-20-webr-remote).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ god](https://www.rostrum.blog/posts/2024-01-12-yihui-rap).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 167 | 2024-01-20 | [Pseudo-apps in the browser with WebR and Quarto?](https://www.rostrum.blog/posts/2024-01-20-webr-remote)                      |
 | 166 | 2024-01-12 | [Yihui Xie: RAP god](https://www.rostrum.blog/posts/2024-01-12-yihui-rap)                                                      |
 | 165 | 2023-12-03 | [No tears over missed eyedrops](https://www.rostrum.blog/posts/2023-12-03-eyedrop)                                             |
 | 164 | 2023-11-25 | [An interactive graph of Pokémon Red locations](https://www.rostrum.blog/posts/2023-11-25-kanto-graph)                         |
@@ -212,4 +213,4 @@ god](https://www.rostrum.blog/posts/2024-01-12-yihui-rap).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2024-01-13 at 11:59.
+🕒 Last updated: 2024-01-20 at 23:59.
