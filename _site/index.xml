@@ -10,7 +10,265 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Fri, 12 Jan 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 20 Jan 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Pseudo-apps in the browser with WebR and Quarto?</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2024-01-20-webr-remote/index.html</link>
+  <description><![CDATA[ 
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs/loader.js"></script>
+<script type="module" id="qwebr-monaco-editor-init">
+
+  // Configure the Monaco Editor's loader
+  require.config({
+    paths: {
+      'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs'
+    }
+  });
+</script>
+<script type="module">
+// Global dictionary to store Monaco Editor instances
+const qwebrEditorInstances = {};
+
+// Function that builds and registers a Monaco Editor instance    
+globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
+
+  const initialCode = cellData.code;
+  const qwebrCounter = cellData.id;
+
+  // Retrieve the previously created document elements
+  let runButton = document.getElementById(`qwebr-button-run-${qwebrCounter}`);
+  let editorDiv = document.getElementById(`qwebr-editor-${qwebrCounter}`);
+  
+  // Load the Monaco Editor and create an instance
+  let editor;
+  require(['vs/editor/editor.main'], function () {
+    editor = monaco.editor.create(editorDiv, {
+      value: initialCode,
+      language: 'r',
+      theme: 'vs-light',
+      automaticLayout: true,           // Works wonderfully with RevealJS
+      scrollBeyondLastLine: false,
+      minimap: {
+        enabled: false
+      },
+      fontSize: '17.5pt',              // Bootstrap is 1 rem
+      renderLineHighlight: "none",     // Disable current line highlighting
+      hideCursorInOverviewRuler: true  // Remove cursor indictor in right hand side scroll bar
+    });
+
+    // Store the official counter ID to be used in keyboard shortcuts
+    editor.__qwebrCounter = qwebrCounter;
+
+    // Store the official div container ID
+    editor.__qwebrEditorId = `qwebr-editor-${qwebrCounter}`;
+
+    // Store the initial code value
+    editor.__qwebrinitialCode = initialCode;
+
+    // Dynamically modify the height of the editor window if new lines are added.
+    let ignoreEvent = false;
+    const updateHeight = () => {
+      const contentHeight = editor.getContentHeight();
+      // We're avoiding a width change
+      //editorDiv.style.width = `${width}px`;
+      editorDiv.style.height = `${contentHeight}px`;
+      try {
+        ignoreEvent = true;
+
+        // The key to resizing is this call
+        editor.layout();
+      } finally {
+        ignoreEvent = false;
+      }
+    };
+
+    // Helper function to check if selected text is empty
+    function isEmptyCodeText(selectedCodeText) {
+      return (selectedCodeText === null || selectedCodeText === undefined || selectedCodeText === "");
+    }
+
+    // Registry of keyboard shortcuts that should be re-added to each editor window
+    // when focus changes.
+    const addWebRKeyboardShortCutCommands = () => {
+      // Add a keydown event listener for Shift+Enter to run all code in cell
+      editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
+
+        // Retrieve all text inside the editor
+        qwebrExecuteCode(editor.getValue(), editor.__qwebrCounter);
+      });
+
+      // Add a keydown event listener for CMD/Ctrl+Enter to run selected code
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+
+        // Get the selected text from the editor
+        const selectedText = editor.getModel().getValueInRange(editor.getSelection());
+        // Check if no code is selected
+        if (isEmptyCodeText(selectedText)) {
+          // Obtain the current cursor position
+          let currentPosition = editor.getPosition();
+          // Retrieve the current line content
+          let currentLine = editor.getModel().getLineContent(currentPosition.lineNumber);
+
+          // Propose a new position to move the cursor to
+          let newPosition = new monaco.Position(currentPosition.lineNumber + 1, 1);
+
+          // Check if the new position is beyond the last line of the editor
+          if (newPosition.lineNumber > editor.getModel().getLineCount()) {
+            // Add a new line at the end of the editor
+            editor.executeEdits("addNewLine", [{
+            range: new monaco.Range(newPosition.lineNumber, 1, newPosition.lineNumber, 1),
+            text: "\n", 
+            forceMoveMarkers: true,
+            }]);
+          }
+          
+          // Run the entire line of code.
+          qwebrExecuteCode(currentLine, editor.__qwebrCounter,
+            EvalTypes.Interactive);
+
+          // Move cursor to new position
+          editor.setPosition(newPosition);
+        } else {
+          // Code to run when Ctrl+Enter is pressed with selected code
+          qwebrExecuteCode(selectedText, editor.__qwebrCounter, EvalTypes.Interactive);
+        }
+      });
+    }
+
+    // Register an on focus event handler for when a code cell is selected to update
+    // what keyboard shortcut commands should work.
+    // This is a workaround to fix a regression that happened with multiple
+    // editor windows since Monaco 0.32.0 
+    // https://github.com/microsoft/monaco-editor/issues/2947
+    editor.onDidFocusEditorText(addWebRKeyboardShortCutCommands);
+
+    // Register an on change event for when new code is added to the editor window
+    editor.onDidContentSizeChange(updateHeight);
+
+    // Manually re-update height to account for the content we inserted into the call
+    updateHeight();
+
+    // Store the editor instance in the global dictionary
+    qwebrEditorInstances[editor.__qwebrCounter] = editor;
+
+  });
+
+  // Add a click event listener to the run button
+  runButton.onclick = function () {
+    qwebrExecuteCode(editor.getValue(), editor.__qwebrCounter, EvalTypes.Interactive);
+  };
+
+}
+</script>
+
+
+
+
+<p><img src="https://www.rostrum.blog/posts/2024-01-20-webr-remote/resources/browser.png" class="img-fluid" style="width:75.0%" alt="Meme from Super Mario Movie. Top panel is the king penguin from the start of the film labelled 'R Stats' and saying 'do you yield?' Lower panel is Bowser labelled 'the browser', laughing and saying 'I do not', except the 'not' has been censored with a black bar."></p>
+<div id="qwebr-insertion-location-1"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>A demo post to test out embedded <a href="https://docs.r-wasm.org/webr/latest/">WebR chunks</a> that <a href="https://jamesgoldie.dev/writing/your-new-r-package-webr">source a non-CRAN R package</a>. Readers can edit and re-run code later in this blog post, entirely within the browser.</p>
+</section>
+<section id="world-wide-webr" class="level2">
+<h2 class="anchored" data-anchor-id="world-wide-webr">World Wide WebR</h2>
+<p><a href="https://docs.r-wasm.org/webr/latest/">WebR</a> lets you run R code in a browser with no need for a server, thanks in large part to <a href="https://gws.phd/">George Stagg</a>’s efforts. And these days you can embed editable R chunks into Quarto documents, thanks to <a href="https://quarto-webr.thecoatlessprofessor.com/">James Balamuta’s quarto-webr extension</a>.</p>
+<p>I’ve <a href="https://www.rostrum.blog/posts/2023-03-16-webr-quarto/">written before</a> about how powerful this could be for demonstrating how to use code. Readers can adjust the code themselves to better understand the approach without having to install anything.</p>
+<p>This blog has been <a href="https://www.rostrum.blog/posts/2023-08-26-cheerio-blogdown/">ported to Quarto</a> since I wrote that post, so it’s now possible for me to include WebR chunks in my posts directly.</p>
+<p>Even better, it’s now possible to install remote, non-CRAN packages for use in WebR sessions. Thanks to <a href="https://jamesgoldie.dev/writing/your-new-r-package-webr">James Goldie</a> for his excellent blog post on how you can get this set up and running<sup>1</sup>. That post should be your first port of call; I’m not going to repeat all of his advice here because you should read his post in the first instance.</p>
+<p>So much of this blog could have benefited from the inclusion of WebR chunks and I hope to use it a lot more in future. The rest of this post is a chance for me to try out the process of using WebR and installing a GitHub-hosted package.</p>
+</section>
+<section id="a-pseudo-app" class="level2">
+<h2 class="anchored" data-anchor-id="a-pseudo-app">A ‘pseudo-app’?</h2>
+<p>In some cases, WebR helps could help your blog post become a pseudo web app<sup>2</sup>. Load a package and provide some code that performs basic functionality, which readers can then fiddle with. If the package is simple enough, people may not need to install the package at all; they could just visit your blog post.</p>
+<p>I call it a ‘pseudo’ app because of the lack of control: in a Shiny app I can force you to select certain elements from a dropdown, or only show you certain outputs. With WebR and Quarto I can only demo functions and let you adjust the arguments; if you delete all the code, that’s on you.</p>
+<section id="example" class="level3">
+<h3 class="anchored" data-anchor-id="example">Example</h3>
+<p>So here’s an example of what I mean. My <a href="https://www.rostrum.blog/posts/2021-04-10-dialga/">{dialga} package</a> is very focused: its goal is to make it easier to compose <a href="https://en.wikipedia.org/wiki/Cron">cron strings</a> programmatically. Provide numeric values to its arguments, convert them to cron strings and then convert those to an English interpretation.</p>
+<p>The package is not on CRAN, but I’ve added it to <a href="https://matt-dray.r-universe.dev/builds">my R-universe</a>, thanks to the amazing <a href="https://r-universe.dev/search/">R-universe project</a> by rOpenSci and particularly the mighty Jeroen Ooms<sup>3</sup>. This is crucial for sourcing the package with WebR.</p>
+<section id="setup" class="level4">
+<h4 class="anchored" data-anchor-id="setup">Setup</h4>
+<p>So, I added the chunk below to this post<sup>4</sup>, which grabs a WebR-ready version of the package from R-universe. As <a href="https://jamesgoldie.dev/writing/your-new-r-package-webr">James G notes</a>, you then need to add <code>filters: "webr"</code> to your Quarto YAML and use the ‘webr-r’ engine in relevant code chunks.</p>
+<pre><code>```{webr-r}
+#| context: setup
+webr::install("dialga", repos = "https://matt-dray.r-universe.dev")
+```</code></pre>
+<p>How do you know this has worked? You may have noticed when you arrived here that the page briefly showed messages about how it’s loading packages, before ‘WEBR STATUS: 🟡 Loading…’ at the top of the post changes to ‘🟢 Ready!’</p>
+</section>
+<section id="run" class="level4">
+<h4 class="anchored" data-anchor-id="run">Run</h4>
+<p>Now let’s use the {dialga} package.</p>
+<p>Use <code>r2cron()</code> to convert values into a cron string. The integer values for each argument below show the full range of possibilities, which you can adjust. The output will be <code>* * * * *</code>, which means ‘every minute’. Start by running the code with the ‘Run Code’ button.</p>
+<div id="qwebr-insertion-location-2"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<p>Let’s say you wanted ‘every 12 hours’ instead. Change the <code>hours</code> argument to <code>12</code> and press the ‘Run Code’ button again. And so on as you please.</p>
+<p>You can convert the output above nto English with <code>cron2eng()</code>.</p>
+<div id="qwebr-insertion-location-3"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<p>In other words… if you don’t want to install {dialga} you can just visit this page and adjust the WebR chunks!</p>
+<p>That, or you can use one of the already-existing, excellent sites like <a href="https://crontab.guru/">crontab.guru</a>, lol. Your call.</p>
+<p>Regardless, I think this is a good indication of how a WebR post can help readers understand—or simply just use—your package in a demonstrative blog post.</p>
+</section>
+</section>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2024-01-20 23:53:48 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.2        
+ [5] tools_4.3.1       htmltools_0.5.6.1 rstudioapi_0.15.0 yaml_2.3.8       
+ [9] rmarkdown_2.25    knitr_1.45        jsonlite_1.8.7    xfun_0.41        
+[13] digest_0.6.33     rlang_1.1.3       evaluate_0.23    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>I note also that James G has clearly written some CSS on his blog to make the WebR code blocks match the theme of his blog. I haven’t done this yet at time of writing, so the chunks do a look a bit conspicuous.↩︎</p></li>
+<li id="fn2"><p>Although these days you can also use <a href="https://posit-dev.github.io/r-shinylive/">{shinylive}</a> to write a Shiny app that can run entirely in the browser! I wrote about this in <a href="https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables/">a previous post</a>.↩︎</p></li>
+<li id="fn3"><p>There really isn’t enough space in this post to talk about the R-universe, but you can <a href="https://ropensci.org/r-universe/">learn more on the rOpenSci site</a>.↩︎</p></li>
+<li id="fn4"><p>A James G noted, the <code>context: setup</code> specification means that the code will run automatically when the page is opened, so the package will load as soon as the user arrives. It also means the chunk is hidden from the user by default, hence why I’m showing it here explicitly.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>dialga</category>
+  <category>r</category>
+  <category>webR</category>
+  <guid>https://www.rostrum.blog/posts/2024-01-20-webr-remote/index.html</guid>
+  <pubDate>Sat, 20 Jan 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Yihui Xie: RAP god</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -8084,696 +8342,6 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-06-07-rectangular-officer/index.html</guid>
   <pubDate>Tue, 06 Jun 2023 23:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Recreating a dataviz with {ggplot2}</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-05-10-spear-ggplot2/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2023-05-10-spear-ggplot2/resources/corporate.png" class="img-fluid figure-img" style="width:100.0%" alt="The Office meme that says 'corporate needs you to find the difference between these two pictures. A crudely copy-pasted image of an original data visualisation by Mary Eleanor Spear is on the left and a recreation of it is on the right. They look pretty similar."></p>
-<figcaption class="figure-caption">They’re the same picture. Nearly.</figcaption>
-</figure>
-</div>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>Two years ago I won <a href="https://rss.org.uk/news-publication/news-publications/2021/general-news/cottonviz-data-visualisation-challenge-winners-ann/">a data-viz recreation competition run by the Royal Statistical Society</a> (RSS) using base R’s plotting. I wrote a short {ggplot2} how-to for RSS’s ‘Significance’ magazine that was never published<sup>1</sup>, so here it is now.</p>
-</section>
-<section id="recreate" class="level2">
-<h2 class="anchored" data-anchor-id="recreate">Recreate</h2>
-<p>This short code walkthrough will get you started on recreating <a href="https://en.wikipedia.org/wiki/Mary_Eleanor_Spear">Mary Eleanor Spear</a>’s cotton plot (1952), as used in <a href="https://rss.org.uk/news-publication/news-publications/2021/general-news/cottonviz-data-visualisation-challenge-winners-ann/">the Royal Statistical Society’s #CottonViz challenge</a>. We’ll concentrate on the line chart for now.</p>
-<p><img src="https://www.rostrum.blog/posts/2023-05-10-spear-ggplot2/resources/spear.jpg" class="img-fluid" style="width:100.0%" alt="Mary Eleanor Spear's original plot of cotton supplies in 1940s USA. On the left is a line plot showing that carry-over stocks fell from 1942 to 1948, while consumption dropped slightly and exports rose slightly. A bar plot to the right shows the same data as a stacked bar chart. There are titles and captions around the plots."></p>
-<p><a href="https://ggplot2.tidyverse.org/">The {ggplot2} package in R</a> is a good choice, since we can build up the chart in steps: first, we’ll build a basic line chart, remove unneeded elements, fix the axes and finally add the labels. It won’t look perfectly like Spear’s original, but we’ll get close.</p>
-<p>This isn’t a guide to learn {ggplot2}, so you may want to <a href="https://r4ds.had.co.nz/data-visualisation.html">learn the basics first</a>. Alternatively, <a href="https://www.rostrum.blog/2021/06/08/recreate-spear/">I wrote a blog post</a> about building Spear’s entire visualisation using base R only.</p>
-</section>
-<section id="requirements" class="level2">
-<h2 class="anchored" data-anchor-id="requirements">Requirements</h2>
-<p>First, some preparation. If you haven’t already, install the <a href="https://ggplot2.tidyverse.org/">{ggplot2}</a> package for plotting, <a href="https://tidyr.tidyverse.org/">{tidyr}</a> data reshaping and <a href="https://github.com/wch/extrafont">{extrafont}</a> for font handling.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ggplot2"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"tidyr"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"extrafont"</span>)</span></code></pre></div>
-</div>
-<p>You can download for free <a href="https://webonastick.com/fonts/routed-gothic/">the Routed Gothic font by Darren Embry</a>, which is a good approximation of the stencil lettering used by Spear. Installation will depend on your system, but in macOS you can simply drag the font files to the Font Book app. When you attach {extrafont} it’ll fetch automatically your installed fonts (including Routhed Gothic) so you can use them in R.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(extrafont)</span></code></pre></div>
-</div>
-</section>
-<section id="tidying-up" class="level2">
-<h2 class="anchored" data-anchor-id="tidying-up">Tidying up</h2>
-<p>The cotton dataset is quite small, so we can create the dataframe ourselves. It provides information on the supply of cotton in the USA in the 1940s.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">cotton_raw <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">data.frame</span>(</span>
-<span id="cb3-2">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">year           =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1942</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1948</span>,</span>
-<span id="cb3-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">us_consumption =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">11160</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">9993</span>,  <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">9693</span>,  <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">9423</span>,  <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10072</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">9374</span>,  <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">7833</span>),</span>
-<span id="cb3-4">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">exports        =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1480</span>,  <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1139</span>,  <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2007</span>,  <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3613</span>,  <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3545</span>,  <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1968</span>,  <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4785</span>),</span>
-<span id="cb3-5">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">stocks         =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10657</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10744</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">11164</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">7326</span>,  <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2530</span>,  <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3080</span>,  <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5283</span>),</span>
-<span id="cb3-6">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">total_supply   =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">23297</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">21876</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">22864</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">20362</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">16147</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">14422</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">17901</span>)</span>
-<span id="cb3-7">)</span></code></pre></div>
-</div>
-<p>It’s preferable to make the data ‘tidy’ so that there’s one row per year and consumption type, and one column for each variable. The {tidyr} package can help us pivot the data to ‘long’ format from this ‘wide’ format.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(tidyr)</span>
-<span id="cb4-2"></span>
-<span id="cb4-3">cotton <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> cotton_raw <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%&gt;%</span> </span>
-<span id="cb4-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">pivot_longer</span>(</span>
-<span id="cb4-5">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(us_consumption, exports, stocks), </span>
-<span id="cb4-6">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">names_to =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"consumption_type"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">values_to =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"boles"</span></span>
-<span id="cb4-7">  )</span>
-<span id="cb4-8"></span>
-<span id="cb4-9"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">head</span>(cotton, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># preview first few rows</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 4
-   year total_supply consumption_type boles
-  &lt;int&gt;        &lt;dbl&gt; &lt;chr&gt;            &lt;dbl&gt;
-1  1942        23297 us_consumption   11160
-2  1942        23297 exports           1480
-3  1942        23297 stocks           10657
-4  1943        21876 us_consumption    9993</code></pre>
-</div>
-</div>
-</section>
-<section id="how-to" class="level2">
-<h2 class="anchored" data-anchor-id="how-to">How-to</h2>
-<section id="step-1-line-chart" class="level3">
-<h3 class="anchored" data-anchor-id="step-1-line-chart">Step 1: line chart</h3>
-<p>Now we can create a basic line chart of the data with <code>geom_line()</code> and set with <code>scale_linetype_manual()</code> a unique dashed line per group. Further arguments set the title and the typeface to be used throughout the plot, while a small tweak to <code>theme()</code> adjusts the title’s position.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(ggplot2)</span>
-<span id="cb6-2"></span>
-<span id="cb6-3">p1 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ggplot</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb6-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">geom_line</span>(</span>
-<span id="cb6-5">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">data =</span> cotton,</span>
-<span id="cb6-6">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">aes</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x =</span> year, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">y =</span> boles <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1000</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">linetype =</span> consumption_type),</span>
-<span id="cb6-7">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">linewidth =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1.5</span></span>
-<span id="cb6-8">  ) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb6-9">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">scale_linetype_manual</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">values =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"longdash"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"dashed"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"solid"</span>)) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb6-10">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">labs</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">title =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Millions of Boles"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb6-11">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">theme</span>(</span>
-<span id="cb6-12">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">plot.title =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">element_text</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">hjust =</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.05</span>),</span>
-<span id="cb6-13">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">element_text</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">family =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Routed Gothic"</span>)</span>
-<span id="cb6-14">  )</span>
-<span id="cb6-15"></span>
-<span id="cb6-16">p1</span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://www.rostrum.blog/posts/2023-05-10-spear-ggplot2/index_files/figure-html/plot-start-1.png" class="img-fluid" width="480"></p>
-</div>
-</div>
-</section>
-<section id="step-2-remove-features" class="level3">
-<h3 class="anchored" data-anchor-id="step-2-remove-features">Step 2: remove features</h3>
-<p>Let’s clear away the unneeded features: the background panel, the axes titles and the legend. You can empty these with <code>element_blank()</code> in the <code>theme()</code> function.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">p2 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> p1 <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> </span>
-<span id="cb7-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">theme</span>(</span>
-<span id="cb7-3">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">panel.background =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">element_blank</span>(),</span>
-<span id="cb7-4">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">axis.title =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">element_blank</span>(),</span>
-<span id="cb7-5">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">legend.position =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"none"</span></span>
-<span id="cb7-6">  )</span>
-<span id="cb7-7"></span>
-<span id="cb7-8">p2</span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://www.rostrum.blog/posts/2023-05-10-spear-ggplot2/index_files/figure-html/plot-theme-1.png" class="img-fluid" width="480"></p>
-</div>
-</div>
-</section>
-<section id="step-3-correct-the-axes" class="level3">
-<h3 class="anchored" data-anchor-id="step-3-correct-the-axes">Step 3: correct the axes</h3>
-<p>Now we can address the axes. Use the <code>scale_*_continuous()</code> functions to set the axes values, limits, origin and labels. With <code>sec.axis</code> you can create a secondary y-axis that mirrors the first, then remove the tick labels in the <code>theme()</code> function. You can also put a box around the chart area with the <code>panel.border</code> argument.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">p3 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> p2 <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb8-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">scale_x_continuous</span>(</span>
-<span id="cb8-3">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">breaks =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">seq</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1942</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1948</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>),</span>
-<span id="cb8-4">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">labels =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"1942"</span>, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">paste0</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"'"</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">43</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">48</span>)),</span>
-<span id="cb8-5">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">expand =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>)</span>
-<span id="cb8-6">  ) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb8-7">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">scale_y_continuous</span>(</span>
-<span id="cb8-8">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">breaks =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">seq</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">12</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>),</span>
-<span id="cb8-9">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">limits =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">12</span>),</span>
-<span id="cb8-10">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">expand =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>),</span>
-<span id="cb8-11">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">sec.axis =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">dup_axis</span>()</span>
-<span id="cb8-12">  ) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb8-13">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">theme</span>(</span>
-<span id="cb8-14">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">axis.ticks =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">element_line</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">linewidth =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rep</span>(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.5</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5</span>), <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>)),</span>
-<span id="cb8-15">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">axis.ticks.length =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">unit</span>(<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.5</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lines"</span>),</span>
-<span id="cb8-16">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">axis.text.y.right =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">element_blank</span>(),</span>
-<span id="cb8-17">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">panel.border =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">element_rect</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">fill =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">NA</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">linewidth =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>)</span>
-<span id="cb8-18">  )</span>
-<span id="cb8-19"></span>
-<span id="cb8-20">p3</span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://www.rostrum.blog/posts/2023-05-10-spear-ggplot2/index_files/figure-html/plot-axes-1.png" class="img-fluid" width="480"></p>
-</div>
-</div>
-</section>
-<section id="step-4-labels" class="level3">
-<h3 class="anchored" data-anchor-id="step-4-labels">Step 4: labels</h3>
-<p>The only missing features are the labels and arrows, which can be added with the <code>annotate()</code> and <code>geom_segment()</code>, respectively. A bit of trial-and-error will help you find the correct coordinates to place these elements.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">p4 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> p3 <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb9-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">annotate</span>(</span>
-<span id="cb9-3">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">geom =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text"</span>,</span>
-<span id="cb9-4">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1946.1</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1945.9</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1943.75</span>),</span>
-<span id="cb9-5">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">y =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10.8</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">7.1</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3.2</span>),</span>
-<span id="cb9-6">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">label =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"U. S. Consumption"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Carry – over</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">\n</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">Stocks"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Exports"</span>),</span>
-<span id="cb9-7">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">family =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Routed Gothic"</span></span>
-<span id="cb9-8">  ) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span></span>
-<span id="cb9-9">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">geom_segment</span>(</span>
-<span id="cb9-10">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">aes</span>(</span>
-<span id="cb9-11">      <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1945.2</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1945.3</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1944.2</span>),</span>
-<span id="cb9-12">      <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">y =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10.5</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">7.4</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3.1</span>),</span>
-<span id="cb9-13">      <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">xend =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1945</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1945.1</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1944.4</span>), </span>
-<span id="cb9-14">      <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">yend =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">9.7</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">7.1</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2.8</span>)</span>
-<span id="cb9-15">    ),</span>
-<span id="cb9-16">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">arrow =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">arrow</span>(</span>
-<span id="cb9-17">      <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">length =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">unit</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"mm"</span>),</span>
-<span id="cb9-18">      <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">type =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"closed"</span></span>
-<span id="cb9-19">    )</span>
-<span id="cb9-20">  )</span>
-<span id="cb9-21"></span>
-<span id="cb9-22">p4</span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://www.rostrum.blog/posts/2023-05-10-spear-ggplot2/index_files/figure-html/plot-segments-1.png" class="img-fluid" width="480"></p>
-</div>
-</div>
-</section>
-</section>
-<section id="next-steps" class="level2">
-<h2 class="anchored" data-anchor-id="next-steps">Next steps</h2>
-<p>Finally we’ve got a lineplot that looks pretty close to Spear’s visualisation. What subtle differences do you notice, though? Try to find ways to improve them.</p>
-<p>Next, try to recreate the stacked-barchart from Spear’s original and then arrange the plots with a main title and surrounding text labels. <a href="https://coolbutuseless.github.io/package/ggpattern/index.html">The {ggpattern} package</a> may help you recreate the hatchlines on the bars and <a href="https://patchwork.data-imaginist.com/">{patchwork}</a> could help with the arrangement of the plot and text elements.</p>
-</section>
-<section id="full-base-r-alternative" class="level2">
-<h2 class="anchored" data-anchor-id="full-base-r-alternative">Full base R alternative</h2>
-<p>For the original challenge I used only base R’s plotting system rather than {ggplot2}. This is what my submitted image looked like:</p>
-<p><img src="https://www.rostrum.blog/posts/2023-05-10-spear-ggplot2/resources/recreation.png" class="img-fluid" style="width:100.0%" alt="The recreated plot in progress: the recreation is complete, with both the line and bar plots completed and the titles and captions added."></p>
-<p>You can read more about it in <a href="https://www.rostrum.blog/2021/06/08/recreate-spear/">the accompanying blog post</a> and you can find <a href="https://github.com/matt-dray/viz-recreation/tree/main/2021-06-08_cottonviz_spear">the original code on GitHub</a>.</p>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-06 19:27:43 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
-[1] ggplot2_3.4.2 tidyr_1.3.0  
-
-loaded via a namespace (and not attached):
- [1] vctrs_0.6.3       cli_3.6.1         knitr_1.43.1      rlang_1.1.1      
- [5] xfun_0.39         purrr_1.0.1       generics_0.1.3    jsonlite_1.8.7   
- [9] labeling_0.4.2    glue_1.6.2        colorspace_2.1-0  htmltools_0.5.5  
-[13] scales_1.2.1      fansi_1.0.4       rmarkdown_2.23    grid_4.3.1       
-[17] munsell_0.5.0     evaluate_0.21     tibble_3.2.1      fastmap_1.1.1    
-[21] yaml_2.3.7        lifecycle_1.0.3   compiler_4.3.1    dplyr_1.1.2      
-[25] htmlwidgets_1.6.2 pkgconfig_2.0.3   rstudioapi_0.14   farver_2.1.1     
-[29] digest_0.6.31     R6_2.5.1          tidyselect_1.2.0  utf8_1.2.3       
-[33] pillar_1.9.0      magrittr_2.0.3    gtable_0.3.3      tools_4.3.1      
-[37] withr_2.5.0      </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>At least I don’t think so. I can’t find it by searching on the website, anyway. Also, enough time has passed that certain bits of the original code have since been deprecated in {ggplot2}, lol.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>data-viz</category>
-  <category>history</category>
-  <category>ggplot2</category>
-  <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2023-05-10-spear-ggplot2/index.html</guid>
-  <pubDate>Tue, 09 May 2023 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
