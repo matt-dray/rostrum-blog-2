@@ -212,7 +212,7 @@ globalThis.qwebrCustomizedWebROptions = {
 };
 
 // Store cell data
-globalThis.qwebrCellDetails = [{"code":"webr::install(\"dialga\", repos = \"https://matt-dray.r-universe.dev\")","id":1,"options":{"context":"setup"}},{"code":"(cron_string <- dialga::r2cron(\n  minutes    = 0L:59L,\n  hours      = 0L:23L,\n  days_month = 1L:31L,\n  months     = 1L:12L,\n  days_week  = 1L:7L\n))","id":2,"options":{"context":"interactive"}},{"code":"dialga::cron2eng(cron = cron_string)","id":3,"options":{"context":"interactive"}}];
+globalThis.qwebrCellDetails = [{"id":1,"code":"webr::install(\"dialga\", repos = \"https://matt-dray.r-universe.dev\")","options":{"context":"setup"}},{"id":2,"code":"(cron_string <- dialga::r2cron(\n  minutes    = 0L:59L,\n  hours      = 0L:23L,\n  days_month = 1L:31L,\n  months     = 1L:12L,\n  days_week  = 1L:7L\n))","options":{"context":"interactive"}},{"id":3,"code":"dialga::cron2eng(cron = cron_string)","options":{"context":"interactive"}}];
 
 </script>
 <script type="module">
@@ -805,6 +805,19 @@ globalThis.qwebrExecuteCode = async function (
 
 
 <link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="rostrum.blog - Pseudo-apps in the browser with WebR and Quarto?">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://www.rostrum.blog/posts/2024-01-20-webr-remote/resources/browser.png">
+<meta property="og:site-name" content="rostrum.blog">
+<meta property="og:image:height" content="804">
+<meta property="og:image:width" content="974">
+<meta name="twitter:title" content="rostrum.blog - Pseudo-apps in the browser with WebR and Quarto?">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://www.rostrum.blog/posts/2024-01-20-webr-remote/resources/browser.png">
+<meta name="twitter:creator" content="@mattdray">
+<meta name="twitter:image-height" content="804">
+<meta name="twitter:image-width" content="974">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-fixed fullcontent">
@@ -1097,7 +1110,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-01-21 00:07:56 GMT</code></pre>
+<pre><code>Last rendered: 2024-01-21 20:19:51 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)

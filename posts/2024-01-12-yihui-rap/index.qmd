@@ -9,7 +9,6 @@ categories:
   - rmarkdown
 ---
 
-
 ## tl;dr
 
 Taking a moment to thank [Yihui](https://yihui.org/), who has unwittingly made possible the rise of [Reproducible Analytical Pipelines](https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/) (RAP).
@@ -30,19 +29,19 @@ Put (far too) simply, a [Reproducible Analytical Pipeline](https://analysisfunct
 
 RAP was birthed from ['DataOps' principles](https://en.wikipedia.org/wiki/DevOps) with a focus on the production of statistical publications: reports and data files for public consumption, published officially on [the UK government's website](https://www.gov.uk/search/research-and-statistics?content_store_document_type=statistics_published&order=updated-newest). These files are important for transparency and decision making.
 
-These days, RAP is so much more: it's a way of thinking, a community and a movement[^verb]. Its ethos has spread [across the UK public sector](https://nhsdigital.github.io/rap-community-of-practice/introduction_to_RAP/history_of_RAP/) and is gaining traction globally through efforts like [Bruno Rodrigues's excdellent book](https://raps-with-r.dev/).
+These days, RAP is so much more: it's a way of thinking, a community and a movement[^verb]. Its ethos has spread [across the UK public sector](https://nhsdigital.github.io/rap-community-of-practice/introduction_to_RAP/history_of_RAP/) and is gaining traction globally through efforts like [Bruno Rodrigues's excellent book](https://raps-with-r.dev/).
 
 ## R is for RAP
 
-RAP is language agnostic[^agnostic], but R is the _lingua franca_ for statistical production in the UK's government and public sector. Why? Possibly because R is a data- and stats-first language[^nostats] and therefore a natural choice for statistics professionals.
+RAP is language agnostic[^agnostic], but R has emerged as the preferred option for statistical production in the UK's government and public sector. Why? Possibly because R is a data- and stats-first language[^nostats] and therefore a natural choice for statistics professionals.
 
-Of course, R can easily cover the whole soup-to-nuts workflow. Not just ingestion and digestion of data, but crucially the ejection of information into written reports. R Markdown and {knitr} are the clear weapons of choice for this kind of document generation, for which we must thank Yihui for his tireless and humble efforts.
+Of course, R can easily cover the whole 'soup-to-nuts' workflow. Not just ingestion and digestion of data, but also crucially the creation of reports. R Markdown and {knitr} are the obvious tool for this kind of document generation, for which we must thank Yihui for his tireless and humble efforts.
 
 But what makes R Markdown so conducive to RAP, in particular? Well, stats publications are generally periodical (often weekly) and R Markdown is perfect for [literate programming](https://en.wikipedia.org/wiki/Literate_programming) at pace: you can create a skeleton document that can be updated dynamically with R code, saving so much time when a new version of the publication needs to be created with fresh data.
 
 Crucially, R Markdown is relatively simple to learn and use[^sweave]. You write some plain text and mark it up with simple adornments[^visual]. This suits perfectly the range of skills and abilities in statistical teams across the public sector, where staff are often 'numbers-people' first and 'coders' second. 
 
-Hence why R Markdown has been a central tenet of RAP since Dr Matt Upson[^originator]—RAP's Founding Father—noted it in his [germinal blog post](https://dataingovernment.blog.gov.uk/2017/03/27/reproducible-analytical-pipeline/).
+Hence why R Markdown has been a central tenet of RAP since Dr Matt Upson[^originator], RAP's 'Founding Father', noted it in his [germinal blog post](https://dataingovernment.blog.gov.uk/2017/03/27/reproducible-analytical-pipeline/).
 
 ## Down, but not out
 
@@ -65,5 +64,5 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 [^sponsor]: Disclaimer: I'm one of these people.
 [^agnostic]: Not strictly true. We're talking here about open source languages like R and Python. Your proprietary tool of choice is not RAP compliant, sorry.
 [^verb]: To the extent that you can use 'RAP' as a noun ('we have many RAPs in our department') and verb ('I'm going to RAP this publication').
-[^originator]: RAP was pioneered in the UK government by Dr Matt Upson and the team at the Government Digital Service (GDS), not limited to Dr Matt Gregory (too many Matts, amirite?) and Duncan Garmonsway, as well as several early adopters like the Department for Culture, Media and Sport.
+[^originator]: RAP was pioneered in the UK government by Dr Matt Upson and the team at the Government Digital Service (GDS), not limited to Dr Mat Gregory (too many Matts, amirite?) and Duncan Garmonsway, as well as several early adopters like the Department for Culture, Media and Sport.
 [^sweave]: Compared to what? Most regular R users these days are unlikely to have encountered Sweave, for example, which is actually built into R. Sweave relies on knowledge of document preparation using LaTeX, which most of us barely know how to pronounce, let alone use. 
