@@ -212,7 +212,7 @@ globalThis.qwebrCustomizedWebROptions = {
 };
 
 // Store cell data
-globalThis.qwebrCellDetails = [{"id":1,"options":{"context":"setup"},"code":"webr::install(\"dialga\", repos = \"https://matt-dray.r-universe.dev\")"},{"id":2,"options":{"context":"interactive"},"code":"(cron_string <- dialga::r2cron(\n  minutes    = 0L:59L,\n  hours      = 0L:23L,\n  days_month = 1L:31L,\n  months     = 1L:12L,\n  days_week  = 1L:7L\n))"},{"id":3,"options":{"context":"interactive"},"code":"dialga::cron2eng(cron = cron_string)"}];
+globalThis.qwebrCellDetails = [{"code":"webr::install(\"dialga\", repos = \"https://matt-dray.r-universe.dev\")","id":1,"options":{"context":"setup"}},{"code":"(cron_string <- dialga::r2cron(\n  minutes    = 0L:59L,\n  hours      = 0L:23L,\n  days_month = 1L:31L,\n  months     = 1L:12L,\n  days_week  = 1L:7L\n))","id":2,"options":{"context":"interactive"}},{"code":"dialga::cron2eng(cron = cron_string)","id":3,"options":{"context":"interactive"}}];
 
 </script>
 <script type="module">
@@ -1076,8 +1076,8 @@ webr::install("dialga", repos = "https://matt-dray.r-universe.dev")
 <p>Use <code>r2cron()</code> to convert values into a cron string. The integer values for each argument below show the full range of possibilities, which you can adjust. The output will be <code>* * * * *</code>, which means ‘every minute’. Start by running the code with the ‘Run Code’ button.</p>
 <div id="qwebr-insertion-location-2"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Let’s say you wanted ‘every 12 hours’ instead. Change the <code>hours</code> argument to <code>12</code> and press the ‘Run Code’ button again. And so on as you please.</p>
-<p>You can convert the output above nto English with <code>cron2eng()</code>.</p>
+<p>Let’s say you wanted ‘every minute past hour 12’ instead. Change the <code>hours</code> argument to <code>12</code> and press the ‘Run Code’ button again. And so on as you please.</p>
+<p>For completeness, you can convert the output above into English with <code>cron2eng()</code>.</p>
 <div id="qwebr-insertion-location-3"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>In other words… if you don’t want to install {dialga} you can just visit this page and adjust the WebR chunks!</p>
@@ -1097,7 +1097,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-01-20 23:53:48 GMT</code></pre>
+<pre><code>Last rendered: 2024-01-21 00:07:56 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
