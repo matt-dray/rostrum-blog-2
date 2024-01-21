@@ -224,7 +224,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-01-21 00:07:56 GMT</code></pre>
+<pre><code>Last rendered: 2024-01-21 20:19:51 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -268,6 +268,7 @@ loaded via a namespace (and not attached):
   <category>webR</category>
   <guid>https://www.rostrum.blog/posts/2024-01-20-webr-remote/index.html</guid>
   <pubDate>Sat, 20 Jan 2024 00:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2024-01-20-webr-remote/resources/browser.png" medium="image" type="image/png" height="119" width="144"/>
 </item>
 <item>
   <title>Yihui Xie: RAP god</title>
@@ -293,15 +294,15 @@ loaded via a namespace (and not attached):
 <h2 class="anchored" data-anchor-id="thats-a-rap">That’s a RAP</h2>
 <p>Put (far too) simply, a <a href="https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/">Reproducible Analytical Pipeline</a> (RAP) is any code-driven, version-controlled workflow that reads data, processes it and creates consumable outputs, while ensuring that the process can be re-run in the future and by others.</p>
 <p>RAP was birthed from <a href="https://en.wikipedia.org/wiki/DevOps">‘DataOps’ principles</a> with a focus on the production of statistical publications: reports and data files for public consumption, published officially on <a href="https://www.gov.uk/search/research-and-statistics?content_store_document_type=statistics_published&amp;order=updated-newest">the UK government’s website</a>. These files are important for transparency and decision making.</p>
-<p>These days, RAP is so much more: it’s a way of thinking, a community and a movement<sup>1</sup>. Its ethos has spread <a href="https://nhsdigital.github.io/rap-community-of-practice/introduction_to_RAP/history_of_RAP/">across the UK public sector</a> and is gaining traction globally through efforts like <a href="https://raps-with-r.dev/">Bruno Rodrigues’s excdellent book</a>.</p>
+<p>These days, RAP is so much more: it’s a way of thinking, a community and a movement<sup>1</sup>. Its ethos has spread <a href="https://nhsdigital.github.io/rap-community-of-practice/introduction_to_RAP/history_of_RAP/">across the UK public sector</a> and is gaining traction globally through efforts like <a href="https://raps-with-r.dev/">Bruno Rodrigues’s excellent book</a>.</p>
 </section>
 <section id="r-is-for-rap" class="level2">
 <h2 class="anchored" data-anchor-id="r-is-for-rap">R is for RAP</h2>
-<p>RAP is language agnostic<sup>2</sup>, but R is the <em>lingua franca</em> for statistical production in the UK’s government and public sector. Why? Possibly because R is a data- and stats-first language<sup>3</sup> and therefore a natural choice for statistics professionals.</p>
-<p>Of course, R can easily cover the whole soup-to-nuts workflow. Not just ingestion and digestion of data, but crucially the ejection of information into written reports. R Markdown and {knitr} are the clear weapons of choice for this kind of document generation, for which we must thank Yihui for his tireless and humble efforts.</p>
+<p>RAP is language agnostic<sup>2</sup>, but R has emerged as the preferred option for statistical production in the UK’s government and public sector. Why? Possibly because R is a data- and stats-first language<sup>3</sup> and therefore a natural choice for statistics professionals.</p>
+<p>Of course, R can easily cover the whole ‘soup-to-nuts’ workflow. Not just ingestion and digestion of data, but also crucially the creation of reports. R Markdown and {knitr} are the obvious tool for this kind of document generation, for which we must thank Yihui for his tireless and humble efforts.</p>
 <p>But what makes R Markdown so conducive to RAP, in particular? Well, stats publications are generally periodical (often weekly) and R Markdown is perfect for <a href="https://en.wikipedia.org/wiki/Literate_programming">literate programming</a> at pace: you can create a skeleton document that can be updated dynamically with R code, saving so much time when a new version of the publication needs to be created with fresh data.</p>
 <p>Crucially, R Markdown is relatively simple to learn and use<sup>4</sup>. You write some plain text and mark it up with simple adornments<sup>5</sup>. This suits perfectly the range of skills and abilities in statistical teams across the public sector, where staff are often ‘numbers-people’ first and ‘coders’ second.</p>
-<p>Hence why R Markdown has been a central tenet of RAP since Dr Matt Upson<sup>6</sup>—RAP’s Founding Father—noted it in his <a href="https://dataingovernment.blog.gov.uk/2017/03/27/reproducible-analytical-pipeline/">germinal blog post</a>.</p>
+<p>Hence why R Markdown has been a central tenet of RAP since Dr Matt Upson<sup>6</sup>, RAP’s ‘Founding Father’, noted it in his <a href="https://dataingovernment.blog.gov.uk/2017/03/27/reproducible-analytical-pipeline/">germinal blog post</a>.</p>
 </section>
 <section id="down-but-not-out" class="level2">
 <h2 class="anchored" data-anchor-id="down-but-not-out">Down, but not out</h2>
@@ -320,7 +321,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-01-13 09:57:11 GMT</code></pre>
+<pre><code>Last rendered: 2024-01-21 20:19:29 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -358,7 +359,7 @@ loaded via a namespace (and not attached):
 <li id="fn3"><p>R has grown beyond statistical analysis, of course. You can build apps and websites and so much more without ever ‘doing stats’. Just ask <a href="https://rwithoutstatistics.com/">David Keyes</a>.↩︎</p></li>
 <li id="fn4"><p>Compared to what? Most regular R users these days are unlikely to have encountered Sweave, for example, which is actually built into R. Sweave relies on knowledge of document preparation using LaTeX, which most of us barely know how to pronounce, let alone use.↩︎</p></li>
 <li id="fn5"><p>This becomes even easier with, for example, <a href="https://rstudio.github.io/visual-markdown-editing/">RStudio’s ‘visual’ mode</a> for R Markdown files, which includes a GUI for marking-up to your text without needing to remember how to mark it up in **bold**, for example.↩︎</p></li>
-<li id="fn6"><p>RAP was pioneered in the UK government by Dr Matt Upson and the team at the Government Digital Service (GDS), not limited to Dr Matt Gregory (too many Matts, amirite?) and Duncan Garmonsway, as well as several early adopters like the Department for Culture, Media and Sport.↩︎</p></li>
+<li id="fn6"><p>RAP was pioneered in the UK government by Dr Matt Upson and the team at the Government Digital Service (GDS), not limited to Dr Mat Gregory (too many Matts, amirite?) and Duncan Garmonsway, as well as several early adopters like the Department for Culture, Media and Sport.↩︎</p></li>
 <li id="fn7"><p>Disclaimer: I’m one of these people.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
