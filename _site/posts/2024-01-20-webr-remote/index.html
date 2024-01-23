@@ -212,7 +212,7 @@ globalThis.qwebrCustomizedWebROptions = {
 };
 
 // Store cell data
-globalThis.qwebrCellDetails = [{"options":{"context":"setup"},"id":1,"code":"webr::install(\"dialga\", repos = \"https://matt-dray.r-universe.dev\")"},{"options":{"context":"interactive"},"id":2,"code":"(cron_string <- dialga::r2cron(\n  minutes    = 0L:59L,\n  hours      = 0L:23L,\n  days_month = 1L:31L,\n  months     = 1L:12L,\n  days_week  = 1L:7L\n))"},{"options":{"context":"interactive"},"id":3,"code":"dialga::cron2eng(cron = cron_string)"}];
+globalThis.qwebrCellDetails = [{"id":1,"options":{"context":"setup"},"code":"webr::install(\"dialga\", repos = \"https://matt-dray.r-universe.dev\")"},{"id":2,"options":{"context":"interactive"},"code":"(cron_string <- dialga::r2cron(\n  minutes    = 0L:59L,\n  hours      = 0L:23L,\n  days_month = 1L:31L,\n  months     = 1L:12L,\n  days_week  = 1L:7L\n))"},{"id":3,"options":{"context":"interactive"},"code":"dialga::cron2eng(cron = cron_string)"}];
 
 </script>
 <script type="module">
@@ -1076,12 +1076,13 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <p>The package is not on CRAN, but I’ve added it to <a href="https://matt-dray.r-universe.dev/builds">my R-universe</a>, thanks to the amazing <a href="https://r-universe.dev/search/">R-universe project</a> by rOpenSci and particularly the mighty Jeroen Ooms<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. This is crucial for sourcing the package with WebR.</p>
 <section id="setup" class="level4">
 <h4 class="anchored" data-anchor-id="setup">Setup</h4>
-<p>So, I added the chunk below to this post<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, which grabs a WebR-ready version of the package from R-universe. As <a href="https://jamesgoldie.dev/writing/your-new-r-package-webr">James G notes</a>, you then need to add <code>filters: "webr"</code> to your Quarto YAML and use the ‘webr-r’ engine in relevant code chunks.</p>
+<p>Following <a href="https://jamesgoldie.dev/writing/your-new-r-package-webr">James G’s post</a>, I first installed James B’s WebR extension to <a href="https://github.com/matt-dray/rostrum-blog-2">this blog’s source</a> by running <code>quarto add coatless/quarto-webr</code> in the terminal. Within this post I added <code>filters: ["webr"]</code> to the YAML header and specified the <code>webr-r</code> engine for chunks that I wanted to let users interact with.</p>
+<p>I also added the hidden code chunk below, which installs in the background a WebR-ready version of the {dialga} package from R-universe when the page loads (as dictated by the <code>context: setup</code> instruction).</p>
 <pre><code>```{webr-r}
 #| context: setup
 webr::install("dialga", repos = "https://matt-dray.r-universe.dev")
 ```</code></pre>
-<p>How do you know this has worked? You may have noticed when you arrived here that the page briefly showed messages about how it’s loading packages, before ‘WEBR STATUS: 🟡 Loading…’ at the top of the post changes to ‘🟢 Ready!’</p>
+<p>How do you know this has worked? You may have noticed when you arrived that ‘WEBR STATUS: 🟡 Loading…’ was shown at the top of the post before changing to ‘🟢 Ready!’ to indicate that the WebR chunks are ready to use.</p>
 </section>
 <section id="run" class="level4">
 <h4 class="anchored" data-anchor-id="run">Run</h4>
@@ -1110,7 +1111,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-01-21 20:19:51 GMT</code></pre>
+<pre><code>Last rendered: 2024-01-23 11:49:58 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -1146,7 +1147,6 @@ loaded via a namespace (and not attached):
 <li id="fn1"><p>I note also that James G has clearly written some CSS on his blog to make the WebR code blocks match the theme of his blog. I haven’t done this yet at time of writing, so the chunks do a look a bit conspicuous.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Although these days you can also use <a href="https://posit-dev.github.io/r-shinylive/">{shinylive}</a> to write a Shiny app that can run entirely in the browser! I wrote about this in <a href="https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables/">a previous post</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>There really isn’t enough space in this post to talk about the R-universe, but you can <a href="https://ropensci.org/r-universe/">learn more on the rOpenSci site</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>A James G noted, the <code>context: setup</code> specification means that the code will run automatically when the page is opened, so the package will load as soon as the user arrives. It also means the chunk is hidden from the user by default, hence why I’m showing it here explicitly.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

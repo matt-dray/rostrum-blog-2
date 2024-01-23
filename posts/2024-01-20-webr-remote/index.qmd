@@ -48,7 +48,9 @@ The package is not on CRAN, but I've added it to [my R-universe](https://matt-dr
 
 #### Setup
 
-So, I added the chunk below to this post[^context], which grabs a WebR-ready version of the package from R-universe. As [James G notes](https://jamesgoldie.dev/writing/your-new-r-package-webr), you then need to add `filters: "webr"` to your Quarto YAML and use the 'webr-r' engine in relevant code chunks.
+Following [James G's post](https://jamesgoldie.dev/writing/your-new-r-package-webr), I first installed James B's WebR extension to [this blog's source](https://github.com/matt-dray/rostrum-blog-2) by running `quarto add coatless/quarto-webr` in the terminal. Within this post I added `filters: ["webr"]` to the YAML header and specified the `webr-r` engine for chunks that I wanted to let users interact with. 
+
+I also added the hidden code chunk below, which installs in the background a WebR-ready version of the {dialga} package from R-universe when the page loads (as dictated by the `context: setup` instruction).
 
 ````
 ```{webr-r}
@@ -57,7 +59,7 @@ webr::install("dialga", repos = "https://matt-dray.r-universe.dev")
 ```
 ````
 
-How do you know this has worked? You may have noticed when you arrived here that the page briefly showed messages about how it's loading packages, before 'WEBR STATUS: 🟡 Loading...' at the top of the post changes to '🟢 Ready!'
+How do you know this has worked? You may have noticed when you arrived that 'WEBR STATUS: 🟡 Loading...' was shown at the top of the post before changing to '🟢 Ready!' to indicate that the WebR chunks are ready to use.
 
 #### Run
 
@@ -100,4 +102,3 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 [^style]: I note also that James G has clearly written some CSS on his blog to make the WebR code blocks match the theme of his blog. I haven't done this yet at time of writing, so the chunks do a look a bit conspicuous.
 [^shinylive]: Although these days you can also use [{shinylive}](https://posit-dev.github.io/r-shinylive/) to write a Shiny app that can run entirely in the browser! I wrote about this in [a previous post](https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables/).
 [^runiverse]: There really isn't enough space in this post to talk about the R-universe, but you can [learn more on the rOpenSci site](https://ropensci.org/r-universe/).
-[^context]: A James G noted, the `context: setup` specification means that the code will run automatically when the page is opened, so the package will load as soon as the user arrives. It also means the chunk is hidden from the user by default, hence why I'm showing it here explicitly.
