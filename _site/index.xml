@@ -10,7 +10,239 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Sat, 20 Jan 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 27 Jan 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Kill your darlings (but bugfix first)</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p><img src="https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3/resources/a11ytables03.png" class="img-fluid" alt="The text 'a11ytables v0.3' writtten out using cells of a spreadsheet coloured green."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>An update about updates to <a href="https://co-analysis.github.io/a11ytables/index.html">{a11ytables}</a>. Also maybe I should rewrite the whole thing from scratch, lol.</p>
+</section>
+<section id="birth" class="level2">
+<h2 class="anchored" data-anchor-id="birth">Birth</h2>
+<p>Right so, <a href="https://co-analysis.github.io/a11ytables/index.html">I made the {a11ytables} R package</a> to help create government statistics publications that meet <a href="https://analysisfunction.civilservice.gov.uk/policy-store/releasing-statistics-in-spreadsheets/">official best practice standards</a>. You may be interested in <a href="https://www.rostrum.blog/posts/2022-09-07-earl22/">a talk I did about it at EARL 2022</a>.</p>
+<p>I originally made it for me and my team so we could publish accessible spreadsheets to <a href="https://www.gov.uk/search/research-and-statistics">GOV.UK</a>. It seems to have been picked up by a number of other government departments, so I’ve continued to develop it even though I don’t use it myself anymore<sup>1</sup>.</p>
+<p>You can stop reading now if you aren’t one of those 12 users. Go and water your plants maybe.</p>
+</section>
+<section id="life" class="level2">
+<h2 class="anchored" data-anchor-id="life">Life</h2>
+<p>I’ve done two minor updates that add new features. We’re now on version 0.3, please try to keep up.</p>
+<p>Of course, you can read <a href="https://co-analysis.github.io/a11ytables/news/index.html">the package’s NEWS.md file</a> for details on the changes covered by these updates.</p>
+<p>My tests are weak and I’ve no idea of all edge cases, so please do <a href="https://github.com/co-analysis/a11ytables/issues">leave an issue in the repo</a> if you find something bad or embarrassing<sup>2</sup> in the package.</p>
+<section id="version-0.2" class="level3">
+<h3 class="anchored" data-anchor-id="version-0.2">Version 0.2</h3>
+<p>The package was designed to insert a data.frame of data into each sheet. Nice and simple and makes perfect sense for the contents, notes and ‘tables’ sheet types. But not ideal for the cover, actually.</p>
+<p>You used to have to supply a data.frame for the cover that had a row per section and a column each for the section headers and their content. This is obviously restrictive: what if the sections on your cover sheet need more than one row of information?</p>
+<p>For example, you might need a section on the cover sheet called ‘Contact us’ that contains three rows: some preamble, a website link and a contact email address.</p>
+<p>Version 0.2 of the package, which dropped in November 2023, solves this problem. Now you can provide a list object with arbitrary content instead of providing a data.frame. For example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">cover_list <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(</span>
+<span id="cb1-2">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Information"</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"This is a demo spreadsheet cover."</span>,</span>
+<span id="cb1-3">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Contact us"</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(</span>
+<span id="cb1-4">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Find out more by contacting us."</span>,</span>
+<span id="cb1-5">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Website: https://co-analysis.github.io/a11ytables/"</span>,</span>
+<span id="cb1-6">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Email address: fake.address@a11ytables.com"</span></span>
+<span id="cb1-7">  )</span>
+<span id="cb1-8">)</span></code></pre></div>
+</div>
+<p>This will result in a cover sheet with two sections. The first will have one row and the second will have three. This is way better than in before, when you could only supply one row per section.</p>
+<p>But wait! This update made hyperlinks available on the cover page as well. The user supplies these in Markdown format—like <code>[{a11ytables}](https://github.com/co-analysis/a11ytables)</code>—and they’re auto-converted so that the resulting spreadsheet cell contains a hyperlink<sup>3</sup>. For example, the website and email address could be written like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">cover_list <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(</span>
+<span id="cb2-2">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Information"</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"This is a demo spreadsheet cover."</span>,</span>
+<span id="cb2-3">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Contact us"</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(</span>
+<span id="cb2-4">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Find out more by contacting us."</span>,</span>
+<span id="cb2-5">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"[Website](https://co-analysis.github.io/a11ytables/)"</span>,</span>
+<span id="cb2-6">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"[Email address](fake.address@a11ytables.com)"</span></span>
+<span id="cb2-7">  )</span>
+<span id="cb2-8">)</span></code></pre></div>
+</div>
+<p>While I was adding the hyperlink functionality to the cover, I figured I would make it available to the <code>source</code> argument of <code>create_a11ytable()</code> as well, so users can link to the origin for the tables of data in their publication.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">    sources <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(</span>
+<span id="cb3-2">      <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA_character_</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>),</span>
+<span id="cb3-3">      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"[Gorman et al, 2024](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0090081)"</span></span>
+<span id="cb3-4">    ),</span></code></pre></div>
+</div>
+</section>
+<section id="version-0.3" class="level3">
+<h3 class="anchored" data-anchor-id="version-0.3">Version 0.3</h3>
+<p>Arbitrary content was also the theme for version 0.3, which hit shelves earlier this month. Prior to this version, it was assumed there were only going to be certain rows of information above a table: the sheet title (required, provided by the user), a message about the number of tables in the sheet (autogenerated), a message about the presence of notes (autogenerated) and the data source (optional, if provided by the user).</p>
+<p>But {a11ytables} users and other spreadsheet publishers made it clear that sometimes they want to put other, arbitrary rows above tables of data. I can’t think of a good reason why extra rows of text above tables of data would necessarily break best practice guidance. In fact, they’ll probably be helpful to provide needed context.</p>
+<p>So, version 0.3 allows for these arbitrary rows of content. Not just on sheets containing data tables, but also on the contents and notes sheets, just in case. Of course, these can also be provided in the form of Markdown hyperlinks if the user desires.</p>
+<p>The approach to integrating this functionality is a new argument to <code>create_a11ytables()</code>: <code>custom_rows</code>. You provide a character vector where each element is a sheet and each sub-element is a separate custom row for that sheet. Here’s an example of specifying the list argument where the fourth sheet will contain two custom rows, the first of which is a hyperlink:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">    custom_rows <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(</span>
+<span id="cb4-2">      <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA_character_</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>)</span>
+<span id="cb4-3">      <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(</span>
+<span id="cb4-4">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"First custom row [with a hyperlink.](https://co-analysis.github.io/a11ytables/)"</span>,</span>
+<span id="cb4-5">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Second custom row."</span></span>
+<span id="cb4-6">      )</span>
+<span id="cb4-7">    ),</span></code></pre></div>
+</div>
+</section>
+</section>
+<section id="death" class="level2">
+<h2 class="anchored" data-anchor-id="death">Death?</h2>
+<p>These are two fixes that were a long time coming. Time now to ramble and navel-gaze<sup>4</sup> about the future of the package. You can always <a href="https://github.com/co-analysis/a11ytables/issues?q=is%3Aissue+is%3Aclosed">take a look at the outstanding issues</a> to see what’s on the to-do list. For now there’s a couple of things I want to mention.</p>
+<section id="i-like-those-ods" class="level3">
+<h3 class="anchored" data-anchor-id="i-like-those-ods">I like those ODS</h3>
+<p>A big missing piece of the puzzle is to have the option to write to an open-format ODS file, which is the preferred format for publishing on GOV.UK. I’ve had some great chats with the underground cross-government ‘Spreadsheet Club’<sup>5</sup> to consider whether it’s possible to do things like piggyback off a spreadsheet program via the command line<sup>6</sup> or even develop some code to generate the necessary XML files. Ideally I need an {openods} package, or to add functionality into {openxlsx}<sup>7</sup> to convert the Workbook-class object into the necessary XML for an xlsx file or an ODS file. None of these are ‘easy’.</p>
+<p>Another thing: there are plenty of bugfixes and outstanding nice-to-haves as well. Much of the development required is to handle cell-level problems, like setting the number of decimal places to show. This is not that hard in principle; {openxlsx} itself has some <code>options()</code> that you can set. The hard part is that numeric columns are often coerced to text columns in {a11ytables} because strings are often used as placeholder values, like ‘[c]’ for confidential values.</p>
+<p>There’s another reason why this kind of thing is tricky: the ethos of {a11ytables} is to keep the user interface ‘simple’ so an analyst can go from data to spreadsheet as quickly as possible. Adding lots of arguments to control things like decimal places would clutter the interface and could be a headache for backwards-compatibility if more need to be added in future. This makes me think that an <code>options()</code>-led approach would be a decent solution, especially as this is already something that {openxlsx} does.</p>
+</section>
+<section id="a-fateful-journey" class="level3">
+<h3 class="anchored" data-anchor-id="a-fateful-journey">A fateful journey</h3>
+<p>I took the train to spend time with my parents over Christmas. High winds caused a tree to fall on the tracks and I could only make it partway. There was a rail replacement service, but the driver got lost and started heading the wrong way.</p>
+<p>This gave me plenty of time to try out some new ideas for a potential successor to {a11ytables}. I’ve been thinking about building a new package from scratch for a while, now that I know the limitations of the current package and seek to escape the limitations of the skills of me from the past.</p>
+<p>Anyway, while the bus driver was U-turning on a country lane in East Sussex, I fiddled around with alternative input methods. The ‘purity’ of a nice tidy a11ytables-class data.frame is spoiled slightly by having to provide a list rather than a data.frame for the cover sheet and by providing vectors to the new <code>custom_rows</code> argument. This is a minor gripe, but I think it has usability issues and lacks some consistency.</p>
+<p>I was able to spend some time <a href="https://github.com/matt-dray/a11ytables2">enacting some ideas for an ‘{a11ytables2}’ package</a>. The long and the short of it is that it uses <a href="https://janmarvin.github.io/openxlsx2/">{openxlsx2}</a> (note the ‘2’) and you provide input via a nested list, so that arbitrary arguments and argument lengths are more easily handled.</p>
+<p>I also have some earlier work in that repo to explore the idea of supplying a YAML configuration file that contains all the information required for you to construct a compliant spreadsheet.</p>
+</section>
+</section>
+<section id="introspective-conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="introspective-conclusion">Introspective conclusion</h2>
+<p>So, a tale as old as time: I’m trying to fix things when I can; please keep submitting bug fixes and feature requests; I’d love to burn the whole thing down and start again<sup>8</sup>.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2024-01-27 23:08:50 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.2        
+ [5] tools_4.3.1       htmltools_0.5.6.1 rstudioapi_0.15.0 yaml_2.3.8       
+ [9] rmarkdown_2.25    knitr_1.45        jsonlite_1.8.7    xfun_0.41        
+[13] digest_0.6.33     rlang_1.1.3       evaluate_0.23    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>In fact, I don’t work in central government anymore, which means <a href="https://en.wikipedia.org/wiki/Eating_your_own_dog_food">I don’t ‘dogfood’ this work</a>. I can only feed this dogfood (the package) to my dog (package users) and not myself (me), which feels more normal if I’m honest. Weird metaphor.↩︎</p></li>
+<li id="fn2"><p>Like, I don’t know, if you <a href="https://github.com/co-analysis/a11ytables/issues/111">spell the name of your own package wrong</a>. I think this highlights how silly this name was in the first place, but there’s no going back now.↩︎</p></li>
+<li id="fn3"><p>Note that the text of a spreadsheet cell is either entirely a link or not. So <code>Visit [the site](https://github.com/co-analysis) for more information</code> and <code>[Visit the site for more information](https://github.com/co-analysis)</code> will both result in an output cell that is entirely a hyperlink.↩︎</p></li>
+<li id="fn4"><p>This is a guaranteed recipe for accidentally plummeting off a cliff, I don’t recommend it.↩︎</p></li>
+<li id="fn5"><p>u jelly?↩︎</p></li>
+<li id="fn6"><p>See <a href="https://github.com/co-analysis/a11ytables/issues/46">the issue</a>, especially where <a href="https://github.com/department-for-transport-public/dftutils/blob/main/R/convert_ods.R">Fran presents a function</a> she’s already written to do this for the Department for Transport.↩︎</p></li>
+<li id="fn7"><p>I tried asking this of the {openxlsx2} author with <a href="https://github.com/JanMarvin/openxlsx2/discussions/574">predictable results</a>.↩︎</p></li>
+<li id="fn8"><p>ahaha jk. unless..?↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>a11ytables</category>
+  <category>r</category>
+  <guid>https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3/index.html</guid>
+  <pubDate>Sat, 27 Jan 2024 00:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3/resources/a11ytables03.png" medium="image" type="image/png" height="34" width="144"/>
+</item>
 <item>
   <title>Pseudo-apps in the browser with WebR and Quarto?</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -7394,957 +7626,6 @@ loaded via a namespace (and not attached):
   <category>xml2</category>
   <guid>https://www.rostrum.blog/posts/2023-06-11-apple-health-redux/index.html</guid>
   <pubDate>Sat, 10 Jun 2023 23:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Rectangularise Word tables extracted by {officer}</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-06-07-rectangular-officer/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><img src="https://www.rostrum.blog/posts/2023-06-07-rectangular-officer/resources/owl.png" class="img-fluid" style="width:100.0%" alt="The 'draw the rest of the owl' meme. The title is 'how to draw an owl' but it's been scribble dout and replaced with comic sans text that says 'How to extract an R data.frame from a Word table'. There are two steps: 'draw some circles' and then 'draw the rest of the owl'. The text for these has been replaced with Comic Sans that reads 'let officer do all the hard work' and then 'overengineer an unecessary new function.'"></p>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p><a href="https://davidgohel.github.io/officer/">{officer} is an R package</a> that lets you extract elements of a Word document, including tables, into a tidy dataframe. I’ve written a function to ‘re-rectangularise’ extracted Word tables into a list of R dataframes.</p>
-<div class="tip">
-<p> <b>Note</b></p>
-<p>Turns out that <a href="https://elipousson.github.io/">Eli Pousson</a> has written the <a href="https://elipousson.github.io/officerExtras">{officerExtras} package</a> (<a href="https://github.com/elipousson/officerExtras/">install it from GitHub</a>), which already contains this functionality in <a href="https://elipousson.github.io/officerExtras/reference/officer_tables.html">the <code>officer_tables()</code> and <code>officer_table()</code> functions</a>. At least this proves my idea wasn’t too far-fetched!</p>
-<p>Also you can just use <a href="https://github.com/hrbrmstr/docxtractr"><code>docxtractr::docx_extract_all_tbls()</code> by Bob Rudis</a> to extract all the tables in one go, lol.</p>
-</div>
-</section>
-<section id="whats-the-officer-problem" class="level2">
-<h2 class="anchored" data-anchor-id="whats-the-officer-problem">What’s the officer, problem?</h2>
-<p>Someone on Slack asked about some difficulty with scraping a table from a Word document. We’ve all been there.</p>
-<p>My mind immediately went to <a href="https://davidgohel.github.io/officer/">{officer} by David Gohel</a>, which is part of <a href="https://ardata-fr.github.io/officeverse/">the ‘officeverse’</a> for reading, creating and manipulating common Microsoft documents with R<sup>1</sup>.</p>
-<p>In particular, the function <code>officer::docx_summary()</code> extracts all the elements of a Word doc into a tidy dataframe<sup>2</sup>. Each row of that dataframe is a heading, or a paragraph, or the contents of a table cell<sup>3</sup>.</p>
-<p>This means tables are ‘unstacked’, with a row per ‘cell’ of the original Word table. How could you convert these tidy Word tables into dataframes for further use in R? There’s <a href="https://ardata-fr.github.io/officeverse/extract-content.html#word-tables">a suggestion in the docs</a>, but I <a href="https://knowyourmeme.com/memes/how-to-draw-an-owl">drew the rest of the heckin’ owl</a> by creating a slightly overengineered function to do it<sup>4</sup>.</p>
-</section>
-<section id="allo-allo" class="level2">
-<h2 class="anchored" data-anchor-id="allo-allo">’Allo ’allo</h2>
-<p>First, you can download the {officer} package from CRAN:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"officer"</span>) <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># if not yet installed</span></span>
-<span id="cb1-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(officer)</span></code></pre></div>
-</div>
-<p>Let’s create a Word document to test with and save it to a temporary location:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Create a test docx file</span></span>
-<span id="cb2-2">doc_test <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">read_docx</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb2-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">body_add_par</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"This is a test"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"heading 1"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb2-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">body_add_par</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Below is a table."</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Normal"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb2-5">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">body_add_table</span>(mtcars[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5</span>]) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> </span>
-<span id="cb2-6">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">body_add_par</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Below is another table"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">style =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Normal"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb2-7">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">body_add_table</span>(airquality[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5</span>])</span>
-<span id="cb2-8"></span>
-<span id="cb2-9"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Save docx to temp location</span></span>
-<span id="cb2-10">temp_docx <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tempfile</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">".docx"</span>)</span>
-<span id="cb2-11"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">print</span>(doc_test, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">target =</span> temp_docx)</span></code></pre></div>
-</div>
-<p>The package has a nice system of pipeable functions for building up document. This code created a file with a heading, followed by two tables that each have a line of text above them.</p>
-<p>We can read the document with <code>read_docx()</code> and extract the contents into a tidy dataframe:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Read the file from temp path</span></span>
-<span id="cb3-2">doc_path <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list.files</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tempdir</span>(), <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">pattern =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">".docx$"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">full.names =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>)</span>
-<span id="cb3-3">doc_in <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">read_docx</span>(doc_path)</span>
-<span id="cb3-4"></span>
-<span id="cb3-5"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Get the content of the document as a dataframe</span></span>
-<span id="cb3-6">doc_tidy <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">docx_summary</span>(doc_in)</span>
-<span id="cb3-7"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">str</span>(doc_tidy)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>'data.frame':   43 obs. of  11 variables:
- $ doc_index   : int  1 2 3 3 3 3 3 3 3 3 ...
- $ content_type: chr  "paragraph" "paragraph" "table cell" "table cell" ...
- $ style_name  : chr  "heading 1" "Normal" NA NA ...
- $ text        : chr  "This is a test" "Below is a table." "mpg" "21.0" ...
- $ level       : num  NA NA NA NA NA NA NA NA NA NA ...
- $ num_id      : int  NA NA NA NA NA NA NA NA NA NA ...
- $ row_id      : int  NA NA 1 2 3 4 1 2 3 4 ...
- $ is_header   : logi  NA NA TRUE FALSE FALSE FALSE ...
- $ cell_id     : num  NA NA 1 1 1 1 2 2 2 2 ...
- $ col_span    : num  NA NA 1 1 1 1 1 1 1 1 ...
- $ row_span    : int  NA NA 1 1 1 1 1 1 1 1 ...</code></pre>
-</div>
-</div>
-<p>The <code>doc_in</code> object has ‘rdocx’ class that carries the extracted elements and associated style information. Running <code>docx_summary()</code> converts this to the single tidy dataframe that we’re after.</p>
-<p>You can see we have information here about the content of our doc. For purposes of this post, we care about:</p>
-<ul>
-<li><code>text</code>, which is the actual written content</li>
-<li><code>content_type</code>, which can tell us if we’re looking at table cells</li>
-<li><code>doc_index</code>, which assigns an ID value so document elements stay together (e.g.&nbsp;cells of a table will all carry the same <code>doc_index</code>)</li>
-<li><code>cell_id</code> and <code>row_id</code>, which tell us the x and y cell locations in tables</li>
-<li><code>is_header</code>, which can tell us if the row contains a table header.</li>
-</ul>
-<p>Now to extract the table elements and ‘re-rectangularise’ back into a dataframe.</p>
-</section>
-<section id="cop-a-load-of-this" class="level2">
-<h2 class="anchored" data-anchor-id="cop-a-load-of-this">Cop a load of this</h2>
-<p>I’ve made two functions using base R:</p>
-<ol type="1">
-<li><code>rectangularise_tables()</code> (note the plural) takes the dataframe provided by <code>docx_summary()</code> and outputs a list of dataframes, one per table in the original Word file</li>
-<li><code>.rectangularise_table()</code> (not pluralised and starts with a dot for disambiguation), which runs inside <code>rectangularise_tables()</code> to reformat the tidy representation of a single Word table into an R dataframe</li>
-</ol>
-<p>You’ll need to copy both of these into your session and run them. For convenience, <a href="https://gist.github.com/matt-dray/d4837f106bcee80ea39235b6465a7cac">I’ve added them to a GitHub gist</a>. I’ve added commentary so you can see what’s happening in each bit.</p>
-<details>
-<summary>
-Click to expand the <code>rectangularise_tables()</code> definition.
-</summary>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">rectangularise_tables <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(</span>
-<span id="cb5-2">    docx_summary,  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># output dataframe from docx_summary</span></span>
-<span id="cb5-3">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">assume_headers =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>,  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># assume headers in first row?</span></span>
-<span id="cb5-4">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">type_convert =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># try to coerce columns to most likely data type?</span></span>
-<span id="cb5-5">) {</span>
-<span id="cb5-6">  </span>
-<span id="cb5-7">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Check inputs</span></span>
-<span id="cb5-8">  </span>
-<span id="cb5-9">  is_data.frame <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">inherits</span>(docx_summary, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"data.frame"</span>)</span>
-<span id="cb5-10">  </span>
-<span id="cb5-11">  docx_summary_names <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(</span>
-<span id="cb5-12">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"doc_index"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"content_type"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"style_name"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"level"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"num_id"</span>, </span>
-<span id="cb5-13">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"row_id"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"is_header"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"cell_id"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"col_span"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"row_span"</span></span>
-<span id="cb5-14">  )  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># column names we can expect in the output from docx_summary</span></span>
-<span id="cb5-15">  </span>
-<span id="cb5-16">  is_docx_summary <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">all</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">names</span>(docx_summary) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%in%</span> docx_summary_names)</span>
-<span id="cb5-17">  </span>
-<span id="cb5-18">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span>is_data.frame <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span>is_docx_summary) {</span>
-<span id="cb5-19">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">stop</span>(</span>
-<span id="cb5-20">      <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">paste</span>(</span>
-<span id="cb5-21">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Argument 'docx_summary' must be a data.frame created with"</span>,</span>
-<span id="cb5-22">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"'officer::docx_summary'."</span></span>
-<span id="cb5-23">      ),</span>
-<span id="cb5-24">      <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">call. =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span></span>
-<span id="cb5-25">    )</span>
-<span id="cb5-26">  }</span>
-<span id="cb5-27">  </span>
-<span id="cb5-28">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Get only the rows that relate to Word tables</span></span>
-<span id="cb5-29">  docx_summary_tables <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> </span>
-<span id="cb5-30">    docx_summary[docx_summary[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"content_type"</span>]] <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%in%</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"table cell"</span>, ]</span>
-<span id="cb5-31">  </span>
-<span id="cb5-32">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Get the ID value for each Word table</span></span>
-<span id="cb5-33">  doc_indices <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">unique</span>(docx_summary_tables[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"doc_index"</span>]])</span>
-<span id="cb5-34">  </span>
-<span id="cb5-35">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Initiate an empty list to hold dataframe representations of the Word tables</span></span>
-<span id="cb5-36">  tables_out <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">vector</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">mode =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"list"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">length =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">length</span>(doc_indices))</span>
-<span id="cb5-37">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">names</span>(tables_out) <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">paste0</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"doc_index_"</span>, doc_indices)</span>
-<span id="cb5-38">  </span>
-<span id="cb5-39">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># For each Word table, 'rectangularise' into a dataframe and add to the list</span></span>
-<span id="cb5-40">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> (doc_index <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> doc_indices) {</span>
-<span id="cb5-41">    </span>
-<span id="cb5-42">    docx_summary_table <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> </span>
-<span id="cb5-43">      docx_summary_tables[docx_summary_tables[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"doc_index"</span>]] <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> doc_index, ]</span>
-<span id="cb5-44">    </span>
-<span id="cb5-45">    extracted_table <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">.rectangularise_table</span>(docx_summary_table, assume_headers)</span>
-<span id="cb5-46">    </span>
-<span id="cb5-47">    list_element_name <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">paste0</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"doc_index_"</span>, doc_index)</span>
-<span id="cb5-48">    tables_out[[list_element_name]] <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> extracted_table</span>
-<span id="cb5-49">    </span>
-<span id="cb5-50">  }</span>
-<span id="cb5-51">  </span>
-<span id="cb5-52">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Optionally convert columns to appropriate type (integer, etc)</span></span>
-<span id="cb5-53">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (type_convert) {</span>
-<span id="cb5-54">    tables_out <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">lapply</span>(tables_out, type.convert, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">as.is =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>)</span>
-<span id="cb5-55">  }</span>
-<span id="cb5-56">  </span>
-<span id="cb5-57">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">return</span>(tables_out)</span>
-<span id="cb5-58">  </span>
-<span id="cb5-59">}</span></code></pre></div>
-</div>
-</details>
-<details>
-<summary>
-Click to expand the <code>.rectangularise_table()</code> definition.
-</summary>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">.rectangularise_table <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(</span>
-<span id="cb6-2">    table_cells,  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># docx_summary output filtered for 'table cells' only</span></span>
-<span id="cb6-3">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">assume_headers =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># assume headers in first row?</span></span>
-<span id="cb6-4">) {</span>
-<span id="cb6-5">  </span>
-<span id="cb6-6">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Check inputs</span></span>
-<span id="cb6-7">  </span>
-<span id="cb6-8">  is_table_cells <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">all</span>(table_cells[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"content_type"</span>]] <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"table cell"</span>)</span>
-<span id="cb6-9">  is_one_table <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">length</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">unique</span>(table_cells[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"doc_index"</span>]])) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span></span>
-<span id="cb6-10">  </span>
-<span id="cb6-11">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span>is_table_cells <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span>is_one_table) {</span>
-<span id="cb6-12">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">stop</span>(</span>
-<span id="cb6-13">      <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">paste</span>(</span>
-<span id="cb6-14">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Argument 'table_cells' must be a dataframe created with"</span>,</span>
-<span id="cb6-15">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"'officer::docx_summary' where 'content_type' is filtered for"</span>,</span>
-<span id="cb6-16">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"'table cell' only."</span></span>
-<span id="cb6-17">      ),</span>
-<span id="cb6-18">      <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">call. =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span></span>
-<span id="cb6-19">    )</span>
-<span id="cb6-20">  }</span>
-<span id="cb6-21">  </span>
-<span id="cb6-22">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Split each Word table into a list element, isolate headers and cell contents</span></span>
-<span id="cb6-23">  cell_id_split <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">split</span>(table_cells, table_cells[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"cell_id"</span>]])</span>
-<span id="cb6-24">  headers <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">lapply</span>(cell_id_split, <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(x) x[x[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"is_header"</span>]], <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text"</span>])</span>
-<span id="cb6-25">  content <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">lapply</span>(cell_id_split, <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(x) x[<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span>x[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"is_header"</span>]], <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text"</span>])</span>
-<span id="cb6-26">  table_out <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as.data.frame</span>(content)</span>
-<span id="cb6-27">  </span>
-<span id="cb6-28">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Column headers are identified by TRUE in the is_header column, but may not</span></span>
-<span id="cb6-29">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># be marked up as such. Use them as dataframe headers if they exist.</span></span>
-<span id="cb6-30">  has_headers <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">length</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">unlist</span>(headers)) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span></span>
-<span id="cb6-31">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (has_headers) {</span>
-<span id="cb6-32">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">names</span>(table_out) <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> headers</span>
-<span id="cb6-33">  }</span>
-<span id="cb6-34">  </span>
-<span id="cb6-35">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># If headers are not identified by is_header, assume that the first row of the</span></span>
-<span id="cb6-36">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Word table contains the headers. The user can control this behaviour with</span></span>
-<span id="cb6-37">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># the argument assume_headers.</span></span>
-<span id="cb6-38">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span>has_headers <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span> assume_headers) {</span>
-<span id="cb6-39">    headers <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> table_out[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, ]  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># assume first row is headers</span></span>
-<span id="cb6-40">    table_out <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> table_out[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">nrow</span>(table_out), ]  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># rest of table is content</span></span>
-<span id="cb6-41">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">names</span>(table_out) <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> headers</span>
-<span id="cb6-42">  }</span>
-<span id="cb6-43">  </span>
-<span id="cb6-44">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">return</span>(table_out)</span>
-<span id="cb6-45">  </span>
-<span id="cb6-46">}</span></code></pre></div>
-</div>
-</details>
-<p>You’ll notice the <code>assume_headers</code> argument. The headers for a Word table are marked by <code>TRUE</code> in the <code>is_header</code> column of the output from <code>docx_summary()</code>. Except when they aren’t. It’s possible that you’ll read a Word doc where the table headers aren’t identified. Set <code>assume_headers</code> to <code>TRUE</code> (the default) to allow <code>rectangularise_table()</code> to instead use the first row of the table as headers. The setting will apply to all tables; I reckon that it’s all or nothing whether table headers will be marked up in a given Word document.</p>
-<p>You may also have seen the <code>type_convert</code> argument<sup>5</sup>. By default, the <code>text</code> column in the output from <code>docx_summary()</code> will be character class, but the actual data might be integers, for example. <a href="https://www.rostrum.blog/2023/04/23/type-convert/">As explained in a recent blog post</a>, the <code>type.convert()</code> function attempts to coerce a column to the appropriate data type if possible.</p>
-<p>And now we can see that the dataset works using our test document:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">df_list <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rectangularise_tables</span>(doc_tidy)</span>
-<span id="cb7-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">str</span>(df_list)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>List of 2
- $ doc_index_3:'data.frame':    3 obs. of  5 variables:
-  ..$ mpg : num [1:3] 21 21 22.8
-  ..$ cyl : int [1:3] 6 6 4
-  ..$ disp: int [1:3] 160 160 108
-  ..$ hp  : int [1:3] 110 110 93
-  ..$ drat: num [1:3] 3.9 3.9 3.85
- $ doc_index_5:'data.frame':    3 obs. of  5 variables:
-  ..$ Ozone  : int [1:3] 41 36 12
-  ..$ Solar.R: int [1:3] 190 118 149
-  ..$ Wind   : num [1:3] 7.4 8 12.6
-  ..$ Temp   : int [1:3] 67 72 74
-  ..$ Month  : int [1:3] 5 5 5</code></pre>
-</div>
-</div>
-<p>Smashing. We have a list of two dataframes: one for each of the tables in the test document. I took the liberty of naming the list elements like <code>doc_index_*</code> so you can trace which <code>doc_index</code> they were in the original output from <code>docx_summary()</code>.</p>
-</section>
-<section id="prisonr" class="level2">
-<h2 class="anchored" data-anchor-id="prisonr">PrisonR</h2>
-<p>To summarise, this is absolutely not the worst code-related crime I’ve committed on this blog. Sorry guv! I’ll definitely be sentenced to the most severe punishment if caught and tried: several minutes of hard labour, or ‘refactoring’ as they call it on the inside.</p>
-<p>At worst I’ll build an Andy-Dufresne-style tunnel out of my prison cell and hide the entrance behind years of accumulated hex stickers.</p>
-<div class="tip">
-<p> <b>Note</b></p>
-<p>As a bonus, I later wrote a quick reproducible example that part-solves the original reason for this post. Here I’ve used {docxtractr} to extract tables from docx files in separate subfolders and then combine them.</p>
-<details>
-<summary>
-Click to expand code.
-</summary>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Attach packages (all are available from CRAN)</span></span>
-<span id="cb9-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(docxtractr)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># to extract tables from docx files</span></span>
-<span id="cb9-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(officer)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># to create dummy docx files</span></span>
-<span id="cb9-4"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(charlatan)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># to generate fake data</span></span>
-<span id="cb9-5"></span>
-<span id="cb9-6"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Create multiple dummy docx files in separate temporary folders</span></span>
-<span id="cb9-7"></span>
-<span id="cb9-8">my_folder <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tempdir</span>()  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># temporary locations to store the files</span></span>
-<span id="cb9-9">n_files <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">5</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># the number of dummy files to generate</span></span>
-<span id="cb9-10"></span>
-<span id="cb9-11"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">seq</span>(n_files)) {</span>
-<span id="cb9-12">  </span>
-<span id="cb9-13">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Create subfolders</span></span>
-<span id="cb9-14">  subfolder_name <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">paste0</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"subfolder_"</span>, i)</span>
-<span id="cb9-15">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">dir.create</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">file.path</span>(my_folder, subfolder_name))</span>
-<span id="cb9-16">  </span>
-<span id="cb9-17">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Create dummy dataframe</span></span>
-<span id="cb9-18">  </span>
-<span id="cb9-19">  n_fake <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">10</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># number of fake data items to generate</span></span>
-<span id="cb9-20">  </span>
-<span id="cb9-21">  temp_df <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">data.frame</span>(</span>
-<span id="cb9-22">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">name =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ch_name</span>(n_fake),</span>
-<span id="cb9-23">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">job =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ch_job</span>(n_fake),</span>
-<span id="cb9-24">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">phone =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ch_phone_number</span>(n_fake)</span>
-<span id="cb9-25">  )</span>
-<span id="cb9-26">  </span>
-<span id="cb9-27">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Add dummy dataframe to a docx file and save it</span></span>
-<span id="cb9-28">  path <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">file.path</span>(my_folder, subfolder_name, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">paste0</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"df_"</span>, i, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">".docx"</span>))</span>
-<span id="cb9-29">  officer<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">read_docx</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">body_add_table</span>(temp_df) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">print</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">target =</span> path)</span>
-<span id="cb9-30">  </span>
-<span id="cb9-31">}</span>
-<span id="cb9-32"></span>
-<span id="cb9-33"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Get the file paths to all the docx files</span></span>
-<span id="cb9-34">docx_paths <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list.files</span>(</span>
-<span id="cb9-35">  my_folder,</span>
-<span id="cb9-36">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">pattern =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">".docx$"</span>,</span>
-<span id="cb9-37">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">full.names =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>,  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># return full filepaths</span></span>
-<span id="cb9-38">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">recursive =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># look in all subfolders</span></span>
-<span id="cb9-39">)</span>
-<span id="cb9-40"></span>
-<span id="cb9-41"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Preallocate a list to be filled with extracted tables, one element per file</span></span>
-<span id="cb9-42">extracted_tables <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">vector</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"list"</span>, n_files)</span>
-<span id="cb9-43"></span>
-<span id="cb9-44"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Extract tables and add to the list (not tested: I think that read_docx will</span></span>
-<span id="cb9-45"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># read .doc files, but only if you have LibreOffice installed.</span></span>
-<span id="cb9-46"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> docx_paths) {</span>
-<span id="cb9-47">  tables <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> docxtractr<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">read_docx</span>(i) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">docx_extract_all_tbls</span>()</span>
-<span id="cb9-48">  extracted_tables[<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">basename</span>(i)] <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> tables</span>
-<span id="cb9-49">}</span>
-<span id="cb9-50"></span>
-<span id="cb9-51"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># In this simple demo, the dataframes in each list element can be appended</span></span>
-<span id="cb9-52"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># because they all have the same column names and types.</span></span>
-<span id="cb9-53"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">do.call</span>(rbind, extracted_tables)</span></code></pre></div>
-</div>
-</details></div>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-17 18:05:37 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
-[1] officer_0.6.2
-
-loaded via a namespace (and not attached):
- [1] digest_0.6.31     R6_2.5.1          fastmap_1.1.1     xfun_0.39        
- [5] fontawesome_0.5.1 knitr_1.43.1      htmltools_0.5.5   rmarkdown_2.23   
- [9] xml2_1.3.5        cli_3.6.1         zip_2.3.0         askpass_1.1      
-[13] openssl_2.1.0     textshaping_0.3.6 systemfonts_1.0.4 compiler_4.3.1   
-[17] rstudioapi_0.15.0 tools_4.3.1       ragg_1.2.5        evaluate_0.21    
-[21] yaml_2.3.7        rlang_1.1.1       jsonlite_1.8.7    htmlwidgets_1.6.2
-[25] uuid_1.1-0       </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>Related: I have some experience with R-to-Excel: <a href="https://co-analysis.github.io/a11ytables/">my {a11ytables} package</a> generates best-practice spreadsheets <a href="https://ycphs.github.io/openxlsx/">using {openxlsx}</a>.↩︎</p></li>
-<li id="fn2"><p>It would be wrong for me not to point out that you can extract Excel and ODS cells into ‘tidy’ dataframes with <a href="https://nacnudus.github.io/tidyxl/index.html">Duncan Garmonsway’s {tidyxl}</a> and <a href="https://mattkerlogue.github.io/tidyods/">Matt Kerlogue’s {tidyods}</a>. No, they haven’t sponsored this post (invoices in the mail, chaps).↩︎</p></li>
-<li id="fn3"><p>Merged cells in the table end up being unmerged, with the upper- and left-most cells holding the content and the remianing cells being assigned <code>NA</code>.↩︎</p></li>
-<li id="fn4"><p>I did this for my own curiosity, really. Just like everything else on this blog! As mentioned, check out <a href="https://github.com/hrbrmstr/docxtractr">{docxtractr}</a> and <a href="https://elipousson.github.io/officerExtras">{officerExtras}</a> for better implementations.↩︎</p></li>
-<li id="fn5"><p>What a handy function. This was useful enough that Eli has now added it to <a href="https://elipousson.github.io/officerExtras/reference/officer_tables.html">{officerExtras}</a>.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>ms-office</category>
-  <category>officer</category>
-  <category>officerExtras</category>
-  <category>public-sector</category>
-  <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2023-06-07-rectangular-officer/index.html</guid>
-  <pubDate>Tue, 06 Jun 2023 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
