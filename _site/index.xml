@@ -38,7 +38,7 @@
 <p>My tests are weak and I’ve no idea of all edge cases, so please do <a href="https://github.com/co-analysis/a11ytables/issues">leave an issue in the repo</a> if you find something bad or embarrassing<sup>2</sup> in the package.</p>
 <section id="version-0.2" class="level3">
 <h3 class="anchored" data-anchor-id="version-0.2">Version 0.2</h3>
-<p>The package was designed to insert a data.frame of data into each sheet. Nice and simple and makes perfect sense for the contents, notes and ‘tables’ sheet types. But not ideal for the cover, actually.</p>
+<p>The package interface lets you supply a data.frame to insert into each worksheet. Nice and simple and makes perfect sense for the contents, notes and ‘tables’ sheet types. But not ideal for the cover, actually.</p>
 <p>You used to have to supply a data.frame for the cover that had a row per section and a column each for the section headers and their content. This is obviously restrictive: what if the sections on your cover sheet need more than one row of information?</p>
 <p>For example, you might need a section on the cover sheet called ‘Contact us’ that contains three rows: some preamble, a website link and a contact email address.</p>
 <p>Version 0.2 of the package, which dropped in November 2023, solves this problem. Now you can provide a list object with arbitrary content instead of providing a data.frame. For example:</p>
@@ -194,7 +194,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-01-27 23:08:50 GMT</code></pre>
+<pre><code>Last rendered: 2024-01-27 23:16:18 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
