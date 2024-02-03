@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 168 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2024-01-27 (latest).
+🔢 There have been 169 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2024-02-03 (latest).
 
 📅 That’s a post roughly every 13 days, or about 2.4 posts per month.
 
-🆕 The latest post: [Kill your darlings (but bugfix
-first)](https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3).
+🆕 The latest post: [Start an argument with
+R](https://www.rostrum.blog/posts/2024-02-03-base-args).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ first)](https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 169 | 2024-02-03 | [Start an argument with R](https://www.rostrum.blog/posts/2024-02-03-base-args)                                                |
 | 168 | 2024-01-27 | [Kill your darlings (but bugfix first)](https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3)                              |
 | 167 | 2024-01-20 | [Pseudo-apps in the browser with WebR and Quarto?](https://www.rostrum.blog/posts/2024-01-20-webr-remote)                      |
 | 166 | 2024-01-12 | [Yihui Xie: RAP god](https://www.rostrum.blog/posts/2024-01-12-yihui-rap)                                                      |
@@ -214,4 +215,4 @@ first)](https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2024-01-28 at 09:39.
+🕒 Last updated: 2024-02-03 at 17:27.
