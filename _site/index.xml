@@ -10,7 +10,479 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Sat, 27 Jan 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 03 Feb 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Start an argument with R</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2024-02-03-base-args/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p><img src="https://www.rostrum.blog/posts/2024-02-03-base-args/resources/argument.png" class="img-fluid" data-fig.alt="Two poorly drawn angry faces. One says 'str(x)' above it and the other says str(x, max.level = 1)'."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>Some (lesser-known?) arguments to some common base-R functions.</p>
+</section>
+<section id="getting-argumentative" class="level2">
+<h2 class="anchored" data-anchor-id="getting-argumentative">Getting argumentative</h2>
+<p>There’s been a recent glut of posts about useful base-R functions, like the ones by <a href="https://masalmon.eu/2023/10/20/three-neat-functions/">Maëlle</a>, <a href="https://ivelasq.rbind.io/blog/not-so-basic-base-r-functions/">Isabella</a> and <a href="https://yihui.org/en/2023/10/three-functions/">Yihui</a>.</p>
+<p>I bring you a twist on the theme. Four useful <em>arguments</em> from four everyday base functions:</p>
+<ul>
+<li><code>max.level</code> in <code>str()</code></li>
+<li><code>n</code> in <code>print()</code></li>
+<li><code>include.only</code> in <code>library()</code></li>
+<li><code>drop</code> in <code>`[`</code></li>
+</ul>
+<p>Feel free to move on if you know all of these.</p>
+<section id="structural-integrity" class="level3">
+<h3 class="anchored" data-anchor-id="structural-integrity">Structural integrity</h3>
+<p><code>str()</code> prints an object’s structure. It’s especially helpful for viewing lists in a compact hierarchical fashion. Consider this nested list:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">nested_list <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(</span>
+<span id="cb1-2">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x1 =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x2 =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x3 =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">6</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x4 =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">7</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">9</span>)),</span>
+<span id="cb1-3">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y1 =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y2 =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y3 =</span> mtcars))),</span>
+<span id="cb1-4">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">z =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">z1 =</span> CO2, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">z2 =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">z4 =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">z5 =</span> chickwts), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">z3 =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">z5 =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>))</span>
+<span id="cb1-5">)</span></code></pre></div>
+</div>
+<p>Here’s the output we get from a simple <code>str()</code> call:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">str</span>(nested_list)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 3
+ $ x:List of 2
+  ..$ x1: int [1:3] 1 2 3
+  ..$ x2:List of 2
+  .. ..$ x3: int [1:3] 4 5 6
+  .. ..$ x4: int [1:3] 7 8 9
+ $ y:List of 1
+  ..$ y1:List of 1
+  .. ..$ y2:List of 1
+  .. .. ..$ y3:'data.frame':    32 obs. of  11 variables:
+  .. .. .. ..$ mpg : num [1:32] 21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...
+  .. .. .. ..$ cyl : num [1:32] 6 6 4 6 8 6 8 4 4 6 ...
+  .. .. .. ..$ disp: num [1:32] 160 160 108 258 360 ...
+  .. .. .. ..$ hp  : num [1:32] 110 110 93 110 175 105 245 62 95 123 ...
+  .. .. .. ..$ drat: num [1:32] 3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...
+  .. .. .. ..$ wt  : num [1:32] 2.62 2.88 2.32 3.21 3.44 ...
+  .. .. .. ..$ qsec: num [1:32] 16.5 17 18.6 19.4 17 ...
+  .. .. .. ..$ vs  : num [1:32] 0 0 1 1 0 1 0 1 1 1 ...
+  .. .. .. ..$ am  : num [1:32] 1 1 1 0 0 0 0 0 0 0 ...
+  .. .. .. ..$ gear: num [1:32] 4 4 4 3 3 3 3 4 4 4 ...
+  .. .. .. ..$ carb: num [1:32] 4 4 1 1 2 1 4 2 2 4 ...
+ $ z:List of 3
+  ..$ z1:Classes 'nfnGroupedData', 'nfGroupedData', 'groupedData' and 'data.frame': 84 obs. of  5 variables:
+  .. ..$ Plant    : Ord.factor w/ 12 levels "Qn1"&lt;"Qn2"&lt;"Qn3"&lt;..: 1 1 1 1 1 1 1 2 2 2 ...
+  .. ..$ Type     : Factor w/ 2 levels "Quebec","Mississippi": 1 1 1 1 1 1 1 1 1 1 ...
+  .. ..$ Treatment: Factor w/ 2 levels "nonchilled","chilled": 1 1 1 1 1 1 1 1 1 1 ...
+  .. ..$ conc     : num [1:84] 95 175 250 350 500 675 1000 95 175 250 ...
+  .. ..$ uptake   : num [1:84] 16 30.4 34.8 37.2 35.3 39.2 39.7 13.6 27.3 37.1 ...
+  .. ..- attr(*, "formula")=Class 'formula'  language uptake ~ conc | Plant
+  .. .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  .. ..- attr(*, "outer")=Class 'formula'  language ~Treatment * Type
+  .. .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  .. ..- attr(*, "labels")=List of 2
+  .. .. ..$ x: chr "Ambient carbon dioxide concentration"
+  .. .. ..$ y: chr "CO2 uptake rate"
+  .. ..- attr(*, "units")=List of 2
+  .. .. ..$ x: chr "(uL/L)"
+  .. .. ..$ y: chr "(umol/m^2 s)"
+  ..$ z2:List of 2
+  .. ..$ z4: num 100
+  .. ..$ z5:'data.frame':   71 obs. of  2 variables:
+  .. .. ..$ weight: num [1:71] 179 160 136 227 217 168 108 124 143 140 ...
+  .. .. ..$ feed  : Factor w/ 6 levels "casein","horsebean",..: 2 2 2 2 2 2 2 2 2 2 ...
+  ..$ z3:List of 1
+  .. ..$ z5: num 1</code></pre>
+</div>
+</div>
+<p>Oof, that’s a little bit too much information to flood my console with.</p>
+<p>Luckily you can use the <code>max.level</code> argument to restrict the depth to which the list is printed. Here’s the top layer only, which has a depth of 1:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">str</span>(nested_list, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">max.level =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 3
+ $ x:List of 2
+ $ y:List of 1
+ $ z:List of 3</code></pre>
+</div>
+</div>
+<p>Now I have a very high-level overview: this is list containing three list objects of certain lengths.</p>
+<p>Let’s go deeper.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">str</span>(nested_list, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">max.level =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 3
+ $ x:List of 2
+  ..$ x1: int [1:3] 1 2 3
+  ..$ x2:List of 2
+ $ y:List of 1
+  ..$ y1:List of 1
+ $ z:List of 3
+  ..$ z1:Classes 'nfnGroupedData', 'nfGroupedData', 'groupedData' and 'data.frame': 84 obs. of  5 variables:
+  .. ..- attr(*, "formula")=Class 'formula'  language uptake ~ conc | Plant
+  .. .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  .. ..- attr(*, "outer")=Class 'formula'  language ~Treatment * Type
+  .. .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  .. ..- attr(*, "labels")=List of 2
+  .. ..- attr(*, "units")=List of 2
+  ..$ z2:List of 2
+  ..$ z3:List of 1</code></pre>
+</div>
+</div>
+<p>Now we’ve unpacked the next layer of the onion and can see that the contained objects are made up of vectors and more yet more lists.</p>
+<p>For me, this is a nice way to get the sense of structure without seeing the entire content. I think it beats the interactive list <code>View()</code> in RStudio as well, which can’t be opened to an arbitrary depth in one go.</p>
+</section>
+<section id="carriage-feed" class="level3">
+<h3 class="anchored" data-anchor-id="carriage-feed">Carriage feed</h3>
+<p><code>print()</code> is a ubiquitous function across most programming languages. In R, you might just type an object’s name to show it. Here’s a tibble with 21 rows to demonstrate.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">chick_tbl <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> tibble<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">as_tibble</span>(ChickWeight[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">21</span>, ])</span>
+<span id="cb8-2">chick_tbl</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 21 × 4
+   weight  Time Chick Diet 
+    &lt;dbl&gt; &lt;dbl&gt; &lt;ord&gt; &lt;fct&gt;
+ 1     42     0 1     1    
+ 2     51     2 1     1    
+ 3     59     4 1     1    
+ 4     64     6 1     1    
+ 5     76     8 1     1    
+ 6     93    10 1     1    
+ 7    106    12 1     1    
+ 8    125    14 1     1    
+ 9    149    16 1     1    
+10    171    18 1     1    
+# ℹ 11 more rows</code></pre>
+</div>
+</div>
+<p>You might use <code>head()</code> on a data.frame to prevent printing the whole thing, which defaults to showing 6 rows. Tibbles are truncated by default to 10, but a nice feature is that they’ll show a few more if there’s slightly more than 10 rows total. But what if you want more control?</p>
+<p>Well, in both <code>print()</code> and <code>head()</code> is the <code>n</code> argument. No surprise: it lets you select how many rows of your data.frame or tibble get shown in the console.</p>
+<p>I particularly like this when I have a tibble I’d like to inspect the entirety of, but it gets truncated by default. I’ll often find myself doing this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">print</span>(chick_tbl, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">n =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">Inf</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 21 × 4
+   weight  Time Chick Diet 
+    &lt;dbl&gt; &lt;dbl&gt; &lt;ord&gt; &lt;fct&gt;
+ 1     42     0 1     1    
+ 2     51     2 1     1    
+ 3     59     4 1     1    
+ 4     64     6 1     1    
+ 5     76     8 1     1    
+ 6     93    10 1     1    
+ 7    106    12 1     1    
+ 8    125    14 1     1    
+ 9    149    16 1     1    
+10    171    18 1     1    
+11    199    20 1     1    
+12    205    21 1     1    
+13     40     0 2     1    
+14     49     2 2     1    
+15     58     4 2     1    
+16     72     6 2     1    
+17     84     8 2     1    
+18    103    10 2     1    
+19    122    12 2     1    
+20    138    14 2     1    
+21    162    16 2     1    </code></pre>
+</div>
+</div>
+<p>You can set an <code>option()</code> to see more tibble rows by default, but I’m usually okay with its normal truncating behaviour.</p>
+</section>
+<section id="library-check-out" class="level3">
+<h3 class="anchored" data-anchor-id="library-check-out">Library check out</h3>
+<p><code>library()</code> calls are a staple of R scripts. Let’s say I’m attaching the {lme4} package becuase I want to use the famous <code>cake</code> dataset<sup>1</sup>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(lme4, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">quietly =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span></code></pre></div>
+</div>
+<p>Aha, no, it’s not the <code>quietly</code> argument I want to talk about<sup>2</sup>, though it is handy for stopping messages from being printed.</p>
+<p>Of course, what <code>library()</code> does is let you access objects—like functions and datasets—from a named package. How many objects did we attach from {lme4}?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ls</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"package:lme4"</span>))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 102</code></pre>
+</div>
+</div>
+<p>Blimey, all we wanted was <code>cake</code>. But actually, we can be more selective with <code>library()</code> using the <code>include.only</code> argument (note thath you can <code>exclude</code> as well).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">detach</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"package:lme4"</span>)</span>
+<span id="cb15-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(lme4, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">include.only =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"cake"</span>)</span>
+<span id="cb15-3"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ls</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"package:lme4"</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "cake"</code></pre>
+</div>
+</div>
+<p>Why would you want to do this? This can keep your environment tidy—if that’s something you care about—but also helps prevent conflicts between objects that might already exist in your environment.</p>
+<p>It also means you’ve been explicit about the origin of any objects used in your script. If I see <code>cake</code> referenced in your script but can’t see how it was derived, I can take a look at that library call to see that you imported it from {lme4}.</p>
+<p>At worst, this might be a nice thing for Python users, who love to <code>from x import y</code>.</p>
+</section>
+<section id="score-a-drop-goal" class="level3">
+<h3 class="anchored" data-anchor-id="score-a-drop-goal">Score a drop goal</h3>
+<p>The square bracket, <code>`[`</code>, is a function<sup>3</sup> for extracting elements out of objects, like rows and columns of a data.frame. Of course, it’s typically used as a pair of square brackets.</p>
+<p>So the following will give you the first three rows of the <code>cake</code> data.frame for the columns <code>temp</code> and <code>angle</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">cake[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"temp"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"angle"</span>)]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  temp angle
+1  175    42
+2  185    46
+3  195    47</code></pre>
+</div>
+</div>
+<p>What happens when you select a single column? You get one column back, right?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1">cake[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"temp"</span>]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 175 185 195</code></pre>
+</div>
+</div>
+<p>Ha, lol, no. You get a vector. This might be a problem if you’re programmatically passing column names into <code>`[`</code> and you’re always expecting a data.frame as output.</p>
+<p>Luckily, you can guard against this by ensuring the returned doesn’t <code>drop</code> to its simplest dimension.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1">cake[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"angle"</span>, drop <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>]</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  angle
+1    42
+2    46
+3    47</code></pre>
+</div>
+</div>
+<p>I can see how a third argument inside the square brackets may look spooky if you though you could only pass two when working on a data.frame<sup>4</sup>.</p>
+</section>
+</section>
+<section id="mutual-agreement" class="level2">
+<h2 class="anchored" data-anchor-id="mutual-agreement">Mutual agreement</h2>
+<p>These were unlikely to have blown your mind, especially if you’re a seasoned user. But I’ve live-coded recently with some folks who hadn’t seen them before.</p>
+<p>Let me know if you want to argue your case for some other underappreciated arguments.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2024-02-03 17:08:50 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] lme4_1.1-35.1 Matrix_1.6-0 
+
+loaded via a namespace (and not attached):
+ [1] vctrs_0.6.5       nlme_3.1-162      cli_3.6.2         knitr_1.45       
+ [5] rlang_1.1.3       xfun_0.41         minqa_1.2.6       jsonlite_1.8.7   
+ [9] glue_1.7.0        htmltools_0.5.6.1 fansi_1.0.6       rmarkdown_2.25   
+[13] grid_4.3.1        evaluate_0.23     tibble_3.2.1      MASS_7.3-60      
+[17] fastmap_1.1.1     yaml_2.3.8        lifecycle_1.0.4   compiler_4.3.1   
+[21] Rcpp_1.0.11       htmlwidgets_1.6.2 pkgconfig_2.0.3   rstudioapi_0.15.0
+[25] lattice_0.21-8    digest_0.6.33     nloptr_2.0.3      utf8_1.2.4       
+[29] pillar_1.9.0      splines_4.3.1     magrittr_2.0.3    tools_4.3.1      
+[33] boot_1.3-28.1    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Rasmus recently <a href="https://www.sumsar.net/blog/source-of-the-cake-dataset/">did some sleuthing</a> to discover the source of this dataset! A great read.↩︎</p></li>
+<li id="fn2"><p>Note that package startup messages can also be controlled en masse by wrapping library calls in <code>suppressPackageStartupMessages()</code>, which I’ve <a href="https://www.rostrum.blog/posts/2021-08-27-zzz/">talked about before</a>. And also written about <a href="https://www.rostrum.blog/posts/2021-11-27-long-fns/">the sheer length of this function name</a>.↩︎</p></li>
+<li id="fn3"><p>Recall that <code>`[`</code> is actually a function so you can write <code>`[`(mtcars, 1:3, c("cyl", "hp"))</code> to achieve the same things as <code>mtcars[1:3, c("cyl", "hp"]</code>.↩︎</p></li>
+<li id="fn4"><p>Of course, three arguments to <code>[`</code> is bread and butter for {data.table} users!↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>r</category>
+  <guid>https://www.rostrum.blog/posts/2024-02-03-base-args/index.html</guid>
+  <pubDate>Sat, 03 Feb 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Kill your darlings (but bugfix first)</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -194,7 +666,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-01-28 09:36:40 GMT</code></pre>
+<pre><code>Last rendered: 2024-02-03 17:08:17 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -6961,671 +7433,6 @@ loaded via a namespace (and not attached):
   <category>talk</category>
   <guid>https://www.rostrum.blog/posts/2023-06-13-panic-in-the-toolshed/index.html</guid>
   <pubDate>Mon, 12 Jun 2023 23:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Extract run data from Apple Health (redux)</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-06-11-apple-health-redux/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><img src="https://www.rostrum.blog/posts/2023-06-11-apple-health-redux/resources/apple-run.png" class="img-fluid" style="width:100.0%" alt="A badly drawn cartoon apple running along and thinking about some XML data."></p>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>You can use R to extract running details from a downloaded of your Apple Health data. The format of the data has changed since I last tried this, so I re-wrote my code.</p>
-</section>
-<section id="on-your-marks" class="level2">
-<h2 class="anchored" data-anchor-id="on-your-marks">On your marks</h2>
-<p>In 2021 <a href="https://www.rostrum.blog/2021/03/23/xml-health/">I extracted my running activities from my Apple Health data</a> using <a href="https://xml2.r-lib.org/">the {xml2} package</a>. You can read there for some theory and background.</p>
-<p>At that point I’d been running for one year. I’m nearly at 500 runs, so I thought I would re-execute my code with the latest data. Alas, the original code no longer works because Apple seems to have updated the format of the XML file they provide.</p>
-<div class="tip">
-<p> <b>Note</b></p>
-<p>I have since re-rendered this post after passing 500 runs.</p>
-<div>
-
-<p>So I’ve written a new function that takes a path to the zipped download of my Apple Health data and outputs a dataframe of time and distance data, with one row per run.</p>
-</div></div></section>
-<section id="get-set" class="level2">
-<h2 class="anchored" data-anchor-id="get-set">Get set</h2>
-<p>I followed <a href="https://www.rostrum.blog/2021/03/23/xml-health/#warm-up">the same steps as before</a> to get my Apple Health data off my phone.</p>
-<p>I smashed together a quick function to unzip the file to a temporary location and then extract workout data using the <a href="https://xml2.r-lib.org/">the {xml2} package</a>. There’s a bit of base R wrangling to output a dataframe with a row per run workout, focusing on total time and distance.</p>
-<details>
-<summary>
-Click to expand the function definition
-</summary>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">get_run_distances <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(zip_path) {</span>
-<span id="cb1-2">  </span>
-<span id="cb1-3">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Unzip Apple Health export to temporary location</span></span>
-<span id="cb1-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">message</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Unzipping and reading XML"</span>)</span>
-<span id="cb1-5">  temp <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tempdir</span>()</span>
-<span id="cb1-6">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">unzip</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">zipfile =</span> zip_path, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">exdir =</span> temp)</span>
-<span id="cb1-7">  xml_in <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> xml2<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">read_xml</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">file.path</span>(temp, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"apple_health_export"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"export.xml"</span>))</span>
-<span id="cb1-8">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">unlink</span>(temp)</span>
-<span id="cb1-9">  </span>
-<span id="cb1-10">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Isolate workouts only and convert to an R list object</span></span>
-<span id="cb1-11">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">message</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Isolating workouts from XML"</span>)</span>
-<span id="cb1-12">  wo_in <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> xml2<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">xml_find_all</span>(xml_in, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"//Workout"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> xml2<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as_list</span>()</span>
-<span id="cb1-13">  </span>
-<span id="cb1-14">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Pre-allocate a list to be filled with output data</span></span>
-<span id="cb1-15">  wo_total <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">length</span>(wo_in)</span>
-<span id="cb1-16">  wo_out <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">vector</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"list"</span>, wo_total)</span>
-<span id="cb1-17">  </span>
-<span id="cb1-18">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># For each viable workout, extract the details</span></span>
-<span id="cb1-19">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">message</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Iterating over workouts to extract run data"</span>)</span>
-<span id="cb1-20">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">for</span> (wo_n <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">seq</span>(wo_total)) {</span>
-<span id="cb1-21">    </span>
-<span id="cb1-22">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Extract details for current workout</span></span>
-<span id="cb1-23">    wo <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> wo_in[[wo_n]]</span>
-<span id="cb1-24">    wo_attrs <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">attributes</span>(wo)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># the data is stored as attributes</span></span>
-<span id="cb1-25">    is_run <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> </span>
-<span id="cb1-26">      wo_attrs[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"workoutActivityType"</span>]] <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"HKWorkoutActivityTypeRunning"</span></span>
-<span id="cb1-27">    </span>
-<span id="cb1-28">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># If the workout wasn't a run, then skip to the next workout</span></span>
-<span id="cb1-29">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span>is_run) <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">next</span></span>
-<span id="cb1-30">    </span>
-<span id="cb1-31">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># if it is a run, then extract the data to a single-row dataframe</span></span>
-<span id="cb1-32">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (is_run) {</span>
-<span id="cb1-33">      </span>
-<span id="cb1-34">      <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># There can be more than one element named 'WorkoutStatistics'. We want to </span></span>
-<span id="cb1-35">      <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># get the one with distance information and extract the details.</span></span>
-<span id="cb1-36">      wo_stats <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> wo[<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">grep</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"WorkoutStatistics"</span>, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">names</span>(wo))]</span>
-<span id="cb1-37">      wo_stats_types <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">lapply</span>(wo_stats, \(x) <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">attr</span>(x, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"type"</span>)))</span>
-<span id="cb1-38">      dist_type <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"HKQuantityTypeIdentifierDistanceWalkingRunning"</span></span>
-<span id="cb1-39">      dist_index <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">which</span>(wo_stats_types <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> dist_type)</span>
-<span id="cb1-40">      wo_dist <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> wo_stats[[dist_index]]</span>
-<span id="cb1-41">      </span>
-<span id="cb1-42">      <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Prepare single-row dataframe and add to the pre-allocated list</span></span>
-<span id="cb1-43">      wo_details <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">data.frame</span>(</span>
-<span id="cb1-44">        <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">source =</span> wo_attrs[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"sourceName"</span>]],</span>
-<span id="cb1-45">        <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">start =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as.POSIXct</span>(wo_attrs[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"startDate"</span>]]),</span>
-<span id="cb1-46">        <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">end =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as.POSIXct</span>(wo_attrs[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"endDate"</span>]]),</span>
-<span id="cb1-47">        <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">distance_km =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">attr</span>(wo_dist, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"sum"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as.numeric</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">round</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>)</span>
-<span id="cb1-48">      )</span>
-<span id="cb1-49">      wo_details[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"duration_s"</span>]] <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> </span>
-<span id="cb1-50">        <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as.numeric</span>(wo_details[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"end"</span>]] <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> wo_details[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"start"</span>]], <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">units =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"secs"</span>)</span>
-<span id="cb1-51">      wo_out[[wo_n]] <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> wo_details</span>
-<span id="cb1-52">      </span>
-<span id="cb1-53">    }</span>
-<span id="cb1-54">    </span>
-<span id="cb1-55">  }</span>
-<span id="cb1-56">  </span>
-<span id="cb1-57">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Convert to dataframe, select columns</span></span>
-<span id="cb1-58">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">message</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Combining data"</span>)</span>
-<span id="cb1-59">  wo_out_df <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">do.call</span>(rbind, wo_out)</span>
-<span id="cb1-60">  wo_out_df[, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"source"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"start"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"end"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"duration_s"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"distance_km"</span>)]</span>
-<span id="cb1-61">  </span>
-<span id="cb1-62">}</span></code></pre></div>
-</div>
-</details>
-<p>I won’t go through it line by line, but there’s some commentary to explain what’s happening at each step. It does what I need it to do for now, but no doubt there’s some refactoring to be done.</p>
-<p>There’s a few things to note:</p>
-<ul>
-<li>I’m more comfortable handling R objects, so I converted early to a list with <code>xml2::as_list()</code>. Awkwardly, the data in the list object was stored as <a href="https://xml2.r-lib.org/">attributes</a> to each element.</li>
-<li>The distance data is stored in an element called ‘WorkoutStatistics’, but more than one element will have this name. We first have to isolate the element that is of the correct type, which has the name ‘HKQuantityTypeIdentifierDistanceWalkingRunning’.</li>
-<li>I converted the start and end variables to datetime class (POSIXct) and subtracted one from the other to get the duration of the run. This yields the ‘difftime’ class that can be converted to seconds with <code>as.numeric()</code> and the argument <code>units = "secs"</code>.</li>
-<li>There’s no input handling, because this was quick and for ‘fun’, lol.</li>
-</ul>
-</section>
-<section id="go" class="level2">
-<h2 class="anchored" data-anchor-id="go">Go</h2>
-<p>So, to use the function you pass a path to where your zipped Apple Health export lives. Mine is in my ‘Documents’ folder.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">runs <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">get_run_distances</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"~/Documents/data/export.zip"</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Unzipping and reading XML</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Isolating workouts from XML</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Iterating over workouts to extract run data</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Combining data</code></pre>
-</div>
-</div>
-<p>I recorded all my runs with the Nike Run Club app, so I’ll filter out duplicates where I dual-recorded with Apple’s Workout app. I think I accidentally started the app by mistake a couple of times, so we’ll only grab runs of over 1 km. I’ll also convert the seconds to a friendlier-looking ‘period’ class using <a href="https://lubridate.tidyverse.org/">{lubridate}</a><sup>1</sup>.</p>
-<p>Here’s the most recent few:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">runs <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> runs[runs<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>source <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Nike Run Club"</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span> runs<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>distance_km <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, ]</span>
-<span id="cb7-2">runs<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>duration <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> lubridate<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">seconds_to_period</span>(runs<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>duration_s)</span>
-<span id="cb7-3">runs <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> runs[, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"start"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"distance_km"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"duration"</span>)]</span>
-<span id="cb7-4"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">row.names</span>(runs) <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">NULL</span></span>
-<span id="cb7-5"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tail</span>(runs)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>                  start distance_km duration
-497 2023-06-15 08:45:46        6.39  30M 36S
-498 2023-06-17 11:07:03       10.52  50M 58S
-499 2023-06-18 10:36:58       10.42  51M 29S
-500 2023-06-22 08:14:51        6.34  30M 43S
-501 2023-06-24 08:47:05       10.13  48M 43S
-502 2023-06-25 09:20:20       12.12  59M 48S</code></pre>
-</div>
-</div>
-<p>For my own tracking purposes, I’ve run:</p>
-<ul>
-<li>502 times</li>
-<li>for a total distance of 4119 km</li>
-<li>for a total duration of about 14 days</li>
-</ul>
-<p>And I can recreate a couple of the plots from the old post while we’re here. Here’s the ‘run barcode’, with one vertical line per run (the darker it is the greater the distance):</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(dplyr, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">warn.conflicts =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span>)</span>
-<span id="cb9-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(tidyr)</span>
-<span id="cb9-3"></span>
-<span id="cb9-4">run_days <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">left_join</span>(</span>
-<span id="cb9-5">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">data.frame</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">date =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as_date</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ymd</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"2020-03-23"</span>)<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ymd</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"2023-06-25"</span>))),</span>
-<span id="cb9-6">  runs <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb9-7">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">transmute</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">date =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ymd</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as_date</span>(start)), <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">km =</span> distance_km, duration) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb9-8">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">filter</span>(date <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"2020-03-23"</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span> date <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&lt;=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"2023-06-25"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb9-9">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">group_by</span>(date) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> </span>
-<span id="cb9-10">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">summarise</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">km =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sum</span>(km), <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">.groups =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"drop"</span>),</span>
-<span id="cb9-11">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">by =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"date"</span></span>
-<span id="cb9-12">) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb9-13">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">replace_na</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">run =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>))</span>
-<span id="cb9-14"></span>
-<span id="cb9-15"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">par</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">mar =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rep</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>))</span>
-<span id="cb9-16"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">image</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">matrix</span>(run_days<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>km), <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">grey.colors</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">11</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.8</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>))</span>
-<span id="cb9-17"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">box</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"white"</span>)</span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://www.rostrum.blog/posts/2023-06-11-apple-health-redux/index_files/figure-html/barcode-1.png" class="img-fluid" alt="A one-dimensional plot of days represented by vertical lines, with run distance coloured on a scale of white to black." width="960"></p>
-</div>
-</div>
-<p>And of course, a simple distance over time plot:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">plot</span>(</span>
-<span id="cb10-2">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x =</span> runs<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>start, </span>
-<span id="cb10-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">y =</span> runs<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>distance_km, </span>
-<span id="cb10-4">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">las =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>,  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># rotate y-axis labels</span></span>
-<span id="cb10-5">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">main =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Runs captured with Nike Run Club in Apple Health"</span>,</span>
-<span id="cb10-6">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">xlab =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Date"</span>,</span>
-<span id="cb10-7">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">ylab =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Distance (km)"</span></span>
-<span id="cb10-8">)</span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://www.rostrum.blog/posts/2023-06-11-apple-health-redux/index_files/figure-html/plot-1.png" class="img-fluid" alt="Run distance over time scatterplot, which shows a high frequency of 5 and 10 km runs." width="672"></p>
-</div>
-</div>
-<p>Some patterns are obvious. For example, there’s lots of 5 km runs until about mid-2021, when it hops to more like 7 km. That’s when I started running for 30 mins at a time, rather than for 5 km specifically.</p>
-<p>I’m pretty happy at 5 and 10 km, obviously, but maybe I should do more 21.1 km half-marathons. Or a full marathon? No no, that’s foolish: it would expand my y-axis too much and make it harder to observe patterns at shorter distances, amirite.</p>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-21 19:29:55 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
-[1] tidyr_1.3.0     dplyr_1.1.2     lubridate_1.9.2
-
-loaded via a namespace (and not attached):
- [1] vctrs_0.6.3       cli_3.6.1         knitr_1.43.1      rlang_1.1.1      
- [5] xfun_0.39         purrr_1.0.1       generics_0.1.3    jsonlite_1.8.7   
- [9] glue_1.6.2        htmltools_0.5.5   fansi_1.0.4       rmarkdown_2.23   
-[13] evaluate_0.21     tibble_3.2.1      fontawesome_0.5.1 fastmap_1.1.1    
-[17] yaml_2.3.7        lifecycle_1.0.3   compiler_4.3.1    htmlwidgets_1.6.2
-[21] timechange_0.2.0  pkgconfig_2.0.3   rstudioapi_0.15.0 digest_0.6.33    
-[25] R6_2.5.1          tidyselect_1.2.0  utf8_1.2.3        pillar_1.9.0     
-[29] magrittr_2.0.3    tools_4.3.1       xml2_1.3.5       </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>{lubridate} is handy for time handling for many reasons. Here it’s helpful because it can resolve minutes and seconds (e.g.&nbsp;<code>21M 30S</code>) instead of the decimal minutes (e.g.&nbsp;<code>21.5</code>) in a difftime object.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>apple</category>
-  <category>r</category>
-  <category>sport</category>
-  <category>xml</category>
-  <category>xml2</category>
-  <guid>https://www.rostrum.blog/posts/2023-06-11-apple-health-redux/index.html</guid>
-  <pubDate>Sat, 10 Jun 2023 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
