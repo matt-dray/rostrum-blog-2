@@ -99,7 +99,7 @@ You can set an `option()` to see more tibble rows by default, but I'm usually ok
 
 ### Library check out
 
-`library()` calls are a staple of R scripts. Let's say I'm attaching the {lme4} package becuase I want to use the famous `cake` dataset[^baath].
+`library()` calls are a staple of R scripts. Let's say I'm attaching the {lme4} package because I want to use the famous `cake` data set[^Bååth].
 
 ```{r}
 #| label: library
@@ -109,7 +109,7 @@ library(lme4, quietly = TRUE)
 
 Aha, no, it's not the `quietly` argument I want to talk about[^shh], though it is handy for stopping messages from being printed.
 
-Of course, what `library()` does is let you access objects—like functions and datasets—from a named package. How many objects did we attach from {lme4}?
+Of course, what `library()` does is let you access objects—like functions and data sets—from a named package. How many objects did we attach from {lme4}?
 
 ```{r}
 #| label: library-objects
@@ -117,7 +117,7 @@ Of course, what `library()` does is let you access objects—like functions and 
 length(ls("package:lme4"))
 ```
 
-Blimey, all we wanted was `cake`. But actually, we can be more selective with `library()` using the `include.only` argument (note thath you can `exclude` as well).
+Blimey, all we wanted was `cake`. But actually, we can be more selective with `library()` using the `include.only` argument (note that you can `exclude` as well).
 
 ```{r}
 #| label: library-select
@@ -169,7 +169,7 @@ I can see how a third argument inside the square brackets may look spooky if you
 
 These were unlikely to have blown your mind, especially if you're a seasoned user. But I've live-coded recently with some folks who hadn't seen them before.
 
-Let me know if you want to argue your case for some other underappreciated arguments.
+Let me know if you want to argue your case for some other under-appreciated arguments.
 
 ## Environment {.appendix}
 
@@ -182,4 +182,4 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 [^fn]: Recall that `` `[` `` is actually a function so you can write `` `[`(mtcars, 1:3, c("cyl", "hp")) `` to achieve the same things as `mtcars[1:3, c("cyl", "hp"]`.
 [^shh]: Note that package startup messages can also be controlled en masse by wrapping library calls in `suppressPackageStartupMessages()`, which I've [talked about before](https://www.rostrum.blog/posts/2021-08-27-zzz/). And also written about [the sheer length of this function name](https://www.rostrum.blog/posts/2021-11-27-long-fns/).
 [^dt]: Of course, three arguments to `` [` `` is bread and butter for {data.table} users!
-[^baath]: Rasmus recently [did some sleuthing](https://www.sumsar.net/blog/source-of-the-cake-dataset/) to discover the source of this dataset! A great read.
+[^baath]: Rasmus recently [did some sleuthing](https://www.sumsar.net/blog/source-of-the-cake-dataset/) to discover the source of this data set! A great read.
