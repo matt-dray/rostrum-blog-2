@@ -371,11 +371,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="library-check-out" class="level3">
 <h3 class="anchored" data-anchor-id="library-check-out">Library check out</h3>
-<p><code>library()</code> calls are a staple of R scripts. Let’s say I’m attaching the {lme4} package because I want to use the famous <code>cake</code> data set[^Bååth].</p>
+<p><code>library()</code> calls are a staple of R scripts. Let’s say I’m attaching the {lme4} package because I want to use the famous <code>cake</code> data set<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Aha, no, it’s not the <code>quietly</code> argument I want to talk about<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, though it is handy for stopping messages from being printed.</p>
+<p>Aha, no, it’s not the <code>quietly</code> argument I want to talk about<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, though it is handy for stopping messages from being printed.</p>
 <p>Of course, what <code>library()</code> does is let you access objects—like functions and data sets—from a named package. How many objects did we attach from {lme4}?</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">ls</span>(<span class="st">"package:lme4"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -398,7 +398,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="score-a-drop-goal" class="level3">
 <h3 class="anchored" data-anchor-id="score-a-drop-goal">Score a drop goal</h3>
-<p>The square bracket, <code>`[`</code>, is a function<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> for extracting elements out of objects, like rows and columns of a data.frame. Of course, it’s typically used as a pair of square brackets.</p>
+<p>The square bracket, <code>`[`</code>, is a function<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> for extracting elements out of objects, like rows and columns of a data.frame. Of course, it’s typically used as a pair of square brackets.</p>
 <p>So the following will give you the first three rows of the <code>cake</code> data.frame for the columns <code>temp</code> and <code>angle</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>cake[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">c</span>(<span class="st">"temp"</span>, <span class="st">"angle"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -427,7 +427,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 3    47</code></pre>
 </div>
 </div>
-<p>I can see how a third argument inside the square brackets may look spooky if you though you could only pass two when working on a data.frame<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<p>I can see how a third argument inside the square brackets may look spooky if you though you could only pass two when working on a data.frame<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
 </section>
 </section>
 <section id="mutual-agreement" class="level2">
@@ -446,7 +446,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-02-03 17:18:44 GMT</code></pre>
+<pre><code>Last rendered: 2024-02-03 17:21:54 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -487,9 +487,10 @@ loaded via a namespace (and not attached):
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>Note that package startup messages can also be controlled en masse by wrapping library calls in <code>suppressPackageStartupMessages()</code>, which I’ve <a href="https://www.rostrum.blog/posts/2021-08-27-zzz/">talked about before</a>. And also written about <a href="https://www.rostrum.blog/posts/2021-11-27-long-fns/">the sheer length of this function name</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Recall that <code>`[`</code> is actually a function so you can write <code>`[`(mtcars, 1:3, c("cyl", "hp"))</code> to achieve the same things as <code>mtcars[1:3, c("cyl", "hp"]</code>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Of course, three arguments to <code>[`</code> is bread and butter for {data.table} users!<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Rasmus recently <a href="https://www.sumsar.net/blog/source-of-the-cake-dataset/">did some sleuthing</a> to discover the source of this data set! A great read.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Note that package startup messages can also be controlled en masse by wrapping library calls in <code>suppressPackageStartupMessages()</code>, which I’ve <a href="https://www.rostrum.blog/posts/2021-08-27-zzz/">talked about before</a>. And also written about <a href="https://www.rostrum.blog/posts/2021-11-27-long-fns/">the sheer length of this function name</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Recall that <code>`[`</code> is actually a function so you can write <code>`[`(mtcars, 1:3, c("cyl", "hp"))</code> to achieve the same things as <code>mtcars[1:3, c("cyl", "hp"]</code>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Of course, three arguments to <code>[`</code> is bread and butter for {data.table} users!<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
