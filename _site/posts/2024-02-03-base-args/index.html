@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2024-02-03">
+
+<title>rostrum.blog - Start an argument with R</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="rostrum.blog - Start an argument with R">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://www.rostrum.blog/posts/2024-02-03-base-args/resources/argument.png">
+<meta property="og:site-name" content="rostrum.blog">
+<meta property="og:image:height" content="752">
+<meta property="og:image:width" content="1726">
+<meta name="twitter:title" content="rostrum.blog - Start an argument with R">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://www.rostrum.blog/posts/2024-02-03-base-args/resources/argument.png">
+<meta name="twitter:creator" content="@mattdray">
+<meta name="twitter:image-height" content="752">
+<meta name="twitter:image-width" content="1726">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Start an argument with R</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">r</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 3, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<p><img src="resources/argument.png" class="img-fluid" data-fig.alt="Two poorly drawn angry faces. One says 'str(x)' above it and the other says str(x, max.level = 1)'."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>Some (lesser-known?) arguments to some common base-R functions.</p>
+</section>
+<section id="getting-argumentative" class="level2">
+<h2 class="anchored" data-anchor-id="getting-argumentative">Getting argumentative</h2>
+<p>There’s been a recent glut of posts about useful base-R functions, like the ones by <a href="https://masalmon.eu/2023/10/20/three-neat-functions/">Maëlle</a>, <a href="https://ivelasq.rbind.io/blog/not-so-basic-base-r-functions/">Isabella</a> and <a href="https://yihui.org/en/2023/10/three-functions/">Yihui</a>.</p>
+<p>I bring you a twist on the theme. Four useful <em>arguments</em> from four everyday base functions:</p>
+<ul>
+<li><code>max.level</code> in <code>str()</code></li>
+<li><code>n</code> in <code>print()</code></li>
+<li><code>include.only</code> in <code>library()</code></li>
+<li><code>drop</code> in <code>`[`</code></li>
+</ul>
+<p>Feel free to move on if you know all of these.</p>
+<section id="structural-integrity" class="level3">
+<h3 class="anchored" data-anchor-id="structural-integrity">Structural integrity</h3>
+<p><code>str()</code> prints an object’s structure. It’s especially helpful for viewing lists in a compact hierarchical fashion. Consider this nested list:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>nested_list <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> <span class="fu">list</span>(<span class="at">x1 =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="at">x2 =</span> <span class="fu">list</span>(<span class="at">x3 =</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">x4 =</span> <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>)),</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> <span class="fu">list</span>(<span class="at">y1 =</span> <span class="fu">list</span>(<span class="at">y2 =</span> <span class="fu">list</span>(<span class="at">y3 =</span> mtcars))),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">z =</span> <span class="fu">list</span>(<span class="at">z1 =</span> CO2, <span class="at">z2 =</span> <span class="fu">list</span>(<span class="at">z4 =</span> <span class="dv">100</span>, <span class="at">z5 =</span> chickwts), <span class="at">z3 =</span> <span class="fu">list</span>(<span class="at">z5 =</span> <span class="dv">1</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here’s the output we get from a simple <code>str()</code> call:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(nested_list)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 3
+ $ x:List of 2
+  ..$ x1: int [1:3] 1 2 3
+  ..$ x2:List of 2
+  .. ..$ x3: int [1:3] 4 5 6
+  .. ..$ x4: int [1:3] 7 8 9
+ $ y:List of 1
+  ..$ y1:List of 1
+  .. ..$ y2:List of 1
+  .. .. ..$ y3:'data.frame':    32 obs. of  11 variables:
+  .. .. .. ..$ mpg : num [1:32] 21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...
+  .. .. .. ..$ cyl : num [1:32] 6 6 4 6 8 6 8 4 4 6 ...
+  .. .. .. ..$ disp: num [1:32] 160 160 108 258 360 ...
+  .. .. .. ..$ hp  : num [1:32] 110 110 93 110 175 105 245 62 95 123 ...
+  .. .. .. ..$ drat: num [1:32] 3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...
+  .. .. .. ..$ wt  : num [1:32] 2.62 2.88 2.32 3.21 3.44 ...
+  .. .. .. ..$ qsec: num [1:32] 16.5 17 18.6 19.4 17 ...
+  .. .. .. ..$ vs  : num [1:32] 0 0 1 1 0 1 0 1 1 1 ...
+  .. .. .. ..$ am  : num [1:32] 1 1 1 0 0 0 0 0 0 0 ...
+  .. .. .. ..$ gear: num [1:32] 4 4 4 3 3 3 3 4 4 4 ...
+  .. .. .. ..$ carb: num [1:32] 4 4 1 1 2 1 4 2 2 4 ...
+ $ z:List of 3
+  ..$ z1:Classes 'nfnGroupedData', 'nfGroupedData', 'groupedData' and 'data.frame': 84 obs. of  5 variables:
+  .. ..$ Plant    : Ord.factor w/ 12 levels "Qn1"&lt;"Qn2"&lt;"Qn3"&lt;..: 1 1 1 1 1 1 1 2 2 2 ...
+  .. ..$ Type     : Factor w/ 2 levels "Quebec","Mississippi": 1 1 1 1 1 1 1 1 1 1 ...
+  .. ..$ Treatment: Factor w/ 2 levels "nonchilled","chilled": 1 1 1 1 1 1 1 1 1 1 ...
+  .. ..$ conc     : num [1:84] 95 175 250 350 500 675 1000 95 175 250 ...
+  .. ..$ uptake   : num [1:84] 16 30.4 34.8 37.2 35.3 39.2 39.7 13.6 27.3 37.1 ...
+  .. ..- attr(*, "formula")=Class 'formula'  language uptake ~ conc | Plant
+  .. .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  .. ..- attr(*, "outer")=Class 'formula'  language ~Treatment * Type
+  .. .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  .. ..- attr(*, "labels")=List of 2
+  .. .. ..$ x: chr "Ambient carbon dioxide concentration"
+  .. .. ..$ y: chr "CO2 uptake rate"
+  .. ..- attr(*, "units")=List of 2
+  .. .. ..$ x: chr "(uL/L)"
+  .. .. ..$ y: chr "(umol/m^2 s)"
+  ..$ z2:List of 2
+  .. ..$ z4: num 100
+  .. ..$ z5:'data.frame':   71 obs. of  2 variables:
+  .. .. ..$ weight: num [1:71] 179 160 136 227 217 168 108 124 143 140 ...
+  .. .. ..$ feed  : Factor w/ 6 levels "casein","horsebean",..: 2 2 2 2 2 2 2 2 2 2 ...
+  ..$ z3:List of 1
+  .. ..$ z5: num 1</code></pre>
+</div>
+</div>
+<p>Oof, that’s a little bit too much information to flood my console with.</p>
+<p>Luckily you can use the <code>max.level</code> argument to restrict the depth to which the list is printed. Here’s the top layer only, which has a depth of 1:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(nested_list, <span class="at">max.level =</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 3
+ $ x:List of 2
+ $ y:List of 1
+ $ z:List of 3</code></pre>
+</div>
+</div>
+<p>Now I have a very high-level overview: this is list containing three list objects of certain lengths.</p>
+<p>Let’s go deeper.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(nested_list, <span class="at">max.level =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>List of 3
+ $ x:List of 2
+  ..$ x1: int [1:3] 1 2 3
+  ..$ x2:List of 2
+ $ y:List of 1
+  ..$ y1:List of 1
+ $ z:List of 3
+  ..$ z1:Classes 'nfnGroupedData', 'nfGroupedData', 'groupedData' and 'data.frame': 84 obs. of  5 variables:
+  .. ..- attr(*, "formula")=Class 'formula'  language uptake ~ conc | Plant
+  .. .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  .. ..- attr(*, "outer")=Class 'formula'  language ~Treatment * Type
+  .. .. .. ..- attr(*, ".Environment")=&lt;environment: R_EmptyEnv&gt; 
+  .. ..- attr(*, "labels")=List of 2
+  .. ..- attr(*, "units")=List of 2
+  ..$ z2:List of 2
+  ..$ z3:List of 1</code></pre>
+</div>
+</div>
+<p>Now we’ve unpacked the next layer of the onion and can see that the contained objects are made up of vectors and more yet more lists.</p>
+<p>For me, this is a nice way to get the sense of structure without seeing the entire content. I think it beats the interactive list <code>View()</code> in RStudio as well, which can’t be opened to an arbitrary depth in one go.</p>
+</section>
+<section id="carriage-feed" class="level3">
+<h3 class="anchored" data-anchor-id="carriage-feed">Carriage feed</h3>
+<p><code>print()</code> is a ubiquitous function across most programming languages. In R, you might just type an object’s name to show it. Here’s a tibble with 21 rows to demonstrate.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>chick_tbl <span class="ot">&lt;-</span> tibble<span class="sc">::</span><span class="fu">as_tibble</span>(ChickWeight[<span class="dv">1</span><span class="sc">:</span><span class="dv">21</span>, ])</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>chick_tbl</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 21 × 4
+   weight  Time Chick Diet 
+    &lt;dbl&gt; &lt;dbl&gt; &lt;ord&gt; &lt;fct&gt;
+ 1     42     0 1     1    
+ 2     51     2 1     1    
+ 3     59     4 1     1    
+ 4     64     6 1     1    
+ 5     76     8 1     1    
+ 6     93    10 1     1    
+ 7    106    12 1     1    
+ 8    125    14 1     1    
+ 9    149    16 1     1    
+10    171    18 1     1    
+# ℹ 11 more rows</code></pre>
+</div>
+</div>
+<p>You might use <code>head()</code> on a data.frame to prevent printing the whole thing, which defaults to showing 6 rows. Tibbles are truncated by default to 10, but a nice feature is that they’ll show a few more if there’s slightly more than 10 rows total. But what if you want more control?</p>
+<p>Well, in both <code>print()</code> and <code>head()</code> is the <code>n</code> argument. No surprise: it lets you select how many rows of your data.frame or tibble get shown in the console.</p>
+<p>I particularly like this when I have a tibble I’d like to inspect the entirety of, but it gets truncated by default. I’ll often find myself doing this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(chick_tbl, <span class="at">n =</span> <span class="cn">Inf</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 21 × 4
+   weight  Time Chick Diet 
+    &lt;dbl&gt; &lt;dbl&gt; &lt;ord&gt; &lt;fct&gt;
+ 1     42     0 1     1    
+ 2     51     2 1     1    
+ 3     59     4 1     1    
+ 4     64     6 1     1    
+ 5     76     8 1     1    
+ 6     93    10 1     1    
+ 7    106    12 1     1    
+ 8    125    14 1     1    
+ 9    149    16 1     1    
+10    171    18 1     1    
+11    199    20 1     1    
+12    205    21 1     1    
+13     40     0 2     1    
+14     49     2 2     1    
+15     58     4 2     1    
+16     72     6 2     1    
+17     84     8 2     1    
+18    103    10 2     1    
+19    122    12 2     1    
+20    138    14 2     1    
+21    162    16 2     1    </code></pre>
+</div>
+</div>
+<p>You can set an <code>option()</code> to see more tibble rows by default, but I’m usually okay with its normal truncating behaviour.</p>
+</section>
+<section id="library-check-out" class="level3">
+<h3 class="anchored" data-anchor-id="library-check-out">Library check out</h3>
+<p><code>library()</code> calls are a staple of R scripts. Let’s say I’m attaching the {lme4} package because I want to use the famous <code>cake</code> data set<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Aha, no, it’s not the <code>quietly</code> argument I want to talk about<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, though it is handy for stopping messages from being printed.</p>
+<p>Of course, what <code>library()</code> does is let you access objects—like functions and data sets—from a named package. How many objects did we attach from {lme4}?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">ls</span>(<span class="st">"package:lme4"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 102</code></pre>
+</div>
+</div>
+<p>Blimey, all we wanted was <code>cake</code>. But actually, we can be more selective with <code>library()</code> using the <code>include.only</code> argument (note that you can <code>exclude</code> as well).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">detach</span>(<span class="st">"package:lme4"</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4, <span class="at">include.only =</span> <span class="st">"cake"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>(<span class="st">"package:lme4"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "cake"</code></pre>
+</div>
+</div>
+<p>Why would you want to do this? This can keep your environment tidy—if that’s something you care about—but also helps prevent conflicts between objects that might already exist in your environment.</p>
+<p>It also means you’ve been explicit about the origin of any objects used in your script. If I see <code>cake</code> referenced in your script but can’t see how it was derived, I can take a look at that library call to see that you imported it from {lme4}.</p>
+<p>At worst, this might be a nice thing for Python users, who love to <code>from x import y</code>.</p>
+</section>
+<section id="score-a-drop-goal" class="level3">
+<h3 class="anchored" data-anchor-id="score-a-drop-goal">Score a drop goal</h3>
+<p>The square bracket, <code>`[`</code>, is a function<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> for extracting elements out of objects, like rows and columns of a data.frame. Of course, it’s typically used as a pair of square brackets.</p>
+<p>So the following will give you the first three rows of the <code>cake</code> data.frame for the columns <code>temp</code> and <code>angle</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>cake[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="fu">c</span>(<span class="st">"temp"</span>, <span class="st">"angle"</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  temp angle
+1  175    42
+2  185    46
+3  195    47</code></pre>
+</div>
+</div>
+<p>What happens when you select a single column? You get one column back, right?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>cake[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="st">"temp"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 175 185 195</code></pre>
+</div>
+</div>
+<p>Ha, lol, no. You get a vector. This might be a problem if you’re programmatically passing column names into <code>`[`</code> and you’re always expecting a data.frame as output.</p>
+<p>Luckily, you can guard against this by ensuring the returned doesn’t <code>drop</code> to its simplest dimension.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>cake[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="st">"angle"</span>, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  angle
+1    42
+2    46
+3    47</code></pre>
+</div>
+</div>
+<p>I can see how a third argument inside the square brackets may look spooky if you though you could only pass two when working on a data.frame<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
+</section>
+</section>
+<section id="mutual-agreement" class="level2">
+<h2 class="anchored" data-anchor-id="mutual-agreement">Mutual agreement</h2>
+<p>These were unlikely to have blown your mind, especially if you’re a seasoned user. But I’ve live-coded recently with some folks who hadn’t seen them before.</p>
+<p>Let me know if you want to argue your case for some other under-appreciated arguments.</p>
+</section>
+
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2024-02-03 17:21:54 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] lme4_1.1-35.1 Matrix_1.6-0 
+
+loaded via a namespace (and not attached):
+ [1] vctrs_0.6.5       nlme_3.1-162      cli_3.6.2         knitr_1.45       
+ [5] rlang_1.1.3       xfun_0.41         minqa_1.2.6       jsonlite_1.8.7   
+ [9] glue_1.7.0        htmltools_0.5.6.1 fansi_1.0.6       rmarkdown_2.25   
+[13] grid_4.3.1        evaluate_0.23     tibble_3.2.1      MASS_7.3-60      
+[17] fastmap_1.1.1     yaml_2.3.8        lifecycle_1.0.4   compiler_4.3.1   
+[21] Rcpp_1.0.11       htmlwidgets_1.6.2 pkgconfig_2.0.3   rstudioapi_0.15.0
+[25] lattice_0.21-8    digest_0.6.33     nloptr_2.0.3      utf8_1.2.4       
+[29] pillar_1.9.0      splines_4.3.1     magrittr_2.0.3    tools_4.3.1      
+[33] boot_1.3-28.1    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Rasmus recently <a href="https://www.sumsar.net/blog/source-of-the-cake-dataset/">did some sleuthing</a> to discover the source of this data set! A great read.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Note that package startup messages can also be controlled en masse by wrapping library calls in <code>suppressPackageStartupMessages()</code>, which I’ve <a href="https://www.rostrum.blog/posts/2021-08-27-zzz/">talked about before</a>. And also written about <a href="https://www.rostrum.blog/posts/2021-11-27-long-fns/">the sheer length of this function name</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Recall that <code>`[`</code> is actually a function so you can write <code>`[`(mtcars, 1:3, c("cyl", "hp"))</code> to achieve the same things as <code>mtcars[1:3, c("cyl", "hp"]</code>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Of course, three arguments to <code>[`</code> is bread and butter for {data.table} users!<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
