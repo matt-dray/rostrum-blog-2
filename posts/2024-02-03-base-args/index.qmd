@@ -4,6 +4,7 @@ date: 2024-02-03
 slug: "base-args"
 image: resources/argument.png
 categories:
+  - base
   - r
 ---
 
@@ -179,7 +180,7 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 ```
 </details>
 
-[^fn]: Recall that `` `[` `` is actually a function so you can write `` `[`(mtcars, 1:3, c("cyl", "hp")) `` to achieve the same things as `mtcars[1:3, c("cyl", "hp"]`.
+[^fn]: Recall that `` `[` `` is actually a function so you can write `` `[`(mtcars, 1:3, c("cyl", "hp")) `` to achieve the same things as `mtcars[1:3, c("cyl", "hp")]`.
 [^shh]: Note that package startup messages can also be controlled en masse by wrapping library calls in `suppressPackageStartupMessages()`, which I've [talked about before](https://www.rostrum.blog/posts/2021-08-27-zzz/). And also written about [the sheer length of this function name](https://www.rostrum.blog/posts/2021-11-27-long-fns/).
 [^dt]: Of course, three arguments to `` `[` `` is bread and butter for {data.table} users!
 [^baath]: Rasmus recently [did some sleuthing](https://www.sumsar.net/blog/source-of-the-cake-dataset/) to discover the source of this data set! A great read.
