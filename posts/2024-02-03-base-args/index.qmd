@@ -61,15 +61,15 @@ str(nested_list, max.level = 1)
 
 Now we have a very high-level overview: the object is a list containing three sub-lists of particular lengths.
 
-Let's go deeper.
+Let's go deeper. And since `max.level` is the second argument, we don't even need to name it.
 
 ```{r}
 #| label: str-list-2
 
-str(nested_list, max.level = 2)
+str(nested_list, 2)
 ```
 
-Now we've unpeeled the next layer of the onion and can see that the sub-lists are made up of a vector, a data.frame and yet more lists.
+So now we've unpeeled the next layer of the onion and can see that the sub-lists are made up of a vector, a data.frame and yet more lists.
 
 For me, this is a nice way to get a sense of structure without seeing the entire content. I also think it beats the interactive list `View()` in RStudio as well, which can't be opened to an arbitrary depth in one go[^console].
 

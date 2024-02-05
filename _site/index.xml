@@ -180,13 +180,11 @@ font-style: inherit;">1</span>)</span></code></pre></div>
 </div>
 </div>
 <p>Now we have a very high-level overview: the object is a list containing three sub-lists of particular lengths.</p>
-<p>Let’s go deeper.</p>
+<p>Let’s go deeper. And since <code>max.level</code> is the second argument, we don’t even need to name it.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">str</span>(nested_list, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">max.level =</span> <span class="dv" style="color: #AD0000;
+font-style: inherit;">str</span>(nested_list, <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">2</span>)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -202,7 +200,7 @@ font-style: inherit;">2</span>)</span></code></pre></div>
   ..$ z3:List of 1</code></pre>
 </div>
 </div>
-<p>Now we’ve unpeeled the next layer of the onion and can see that the sub-lists are made up of a vector, a data.frame and yet more lists.</p>
+<p>So now we’ve unpeeled the next layer of the onion and can see that the sub-lists are made up of a vector, a data.frame and yet more lists.</p>
 <p>For me, this is a nice way to get a sense of structure without seeing the entire content. I also think it beats the interactive list <code>View()</code> in RStudio as well, which can’t be opened to an arbitrary depth in one go<sup>1</sup>.</p>
 </section>
 <section id="carriage-feed" class="level3">
@@ -415,7 +413,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-02-03 21:25:20 GMT</code></pre>
+<pre><code>Last rendered: 2024-02-05 14:16:16 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)

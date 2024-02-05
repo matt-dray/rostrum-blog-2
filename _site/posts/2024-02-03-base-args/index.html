@@ -277,9 +277,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Now we have a very high-level overview: the object is a list containing three sub-lists of particular lengths.</p>
-<p>Let’s go deeper.</p>
+<p>Let’s go deeper. And since <code>max.level</code> is the second argument, we don’t even need to name it.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(nested_list, <span class="at">max.level =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(nested_list, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>List of 3
  $ x:List of 2
@@ -293,7 +293,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   ..$ z3:List of 1</code></pre>
 </div>
 </div>
-<p>Now we’ve unpeeled the next layer of the onion and can see that the sub-lists are made up of a vector, a data.frame and yet more lists.</p>
+<p>So now we’ve unpeeled the next layer of the onion and can see that the sub-lists are made up of a vector, a data.frame and yet more lists.</p>
 <p>For me, this is a nice way to get a sense of structure without seeing the entire content. I also think it beats the interactive list <code>View()</code> in RStudio as well, which can’t be opened to an arbitrary depth in one go<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 </section>
 <section id="carriage-feed" class="level3">
@@ -430,7 +430,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-02-03 21:25:20 GMT</code></pre>
+<pre><code>Last rendered: 2024-02-05 14:16:16 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
