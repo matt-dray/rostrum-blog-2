@@ -1,0 +1,319 @@
+---
+title: "Ellipses, eclipses and bulletses"
+date: 2024-03-12
+slug: "eclipse"
+image: resources/cli-eclipse.png
+categories:
+  - cli
+  - r
+  - rlang
+---
+
+![](resources/cli-eclipse.png){fig.alt="An R function called add_one is run in an RStudio console with a string passed as the only argument. The output reads 'Error in add_one, x must be of class numeric, you provided x with class character.' The output is coloured and there are symbols at the start of certain lines, like an exclamation point and red cross. It ends with backtrace to see the error was from add_one in the global environment. Also there's a creeppy emoji sun that's not-quite obscured by a creepy emoji moon."}
+
+## tl;dr
+
+You can use [{cli}](https://cli.r-lib.org/) and [{rlang}](https://rlang.r-lib.org/) to help create a helpful error-handling function that can prevent an eclipse.
+
+## Check one two
+
+I've been building an 'error helper' function[^helper] called `check_class()`. You put it inside another function to check if the user has supplied arguments of the expected class. Surprise.
+
+I did this to provide richer, more informative error output compared to a simple `if () stop()`. But it has a few features I wanted to record here for my own reference.
+
+In particular, `check_class()`:
+
+* uses {rlang} to handle multiple inputs to the dots (`...`) argument
+* uses {rlang} to avoid an 'error-handling eclipse'
+* uses {cli} for pretty error messaging
+* can handle multiple errors and build bulleted {cli} lists from them
+
+Maybe you'll find something useful here too.
+
+## A classy check
+
+```{r}
+#| label: check-class-fn-hide
+#| echo: FALSE
+
+check_class <- function(
+    ...,
+    .expected_class = c("numeric", "character"),
+    .call = rlang::caller_env()
+) {
+  
+  .expected_class = match.arg(.expected_class)
+  
+  args <- rlang::dots_list(..., .named = TRUE) 
+  
+  args_are_class <- lapply(
+    args,
+    function(arg) {
+      switch(
+        .expected_class,
+        numeric   = is.numeric(arg),
+        character = is.character(arg),
+      )
+    }
+  )
+  
+  fails_names <- names(Filter(isFALSE, args_are_class))
+  
+  if (length(fails_names) > 0) {
+    
+    fails <- args[names(args) %in% fails_names]
+    fails_classes <- sapply(fails, class)
+    
+    fails_bullets <- setNames(
+      paste0(
+        "{.var ", names(fails_classes), "} with class {.cls ",
+        fails_classes, "}"
+      ),
+      rep("*", length(fails_classes))
+    )
+    
+    cli::cli_abort(
+      message = c(
+        "{.var {fails_names}} must be of class {.cls {(.expected_class)}}",
+        x = "You provided:", fails_bullets
+      ),
+      call = .call
+    )
+  }
+  
+}
+```
+
+### Examples
+
+Here are some simple examples of inserting `check_class()` inside another function. The simple function `add_one()` expects a numeric value. What happens if you supply a string?
+
+```{r}
+#| label: add-one
+#| error: TRUE
+
+add_one <- function(x) {
+  check_class(x, .expected_class = "numeric")
+  x + 1
+}
+
+add_one("text")
+```
+
+You get a user-friendly output that tells you the problem and where you went wrong. It doesn't render in this blog post, but in supported consoles the output will be coloured and you'll get a backtrace to say where the error occurred. See the image at the top of the post for an example.
+
+You can provide an arbitrary number of values to `check_class()` for assessment. The example below takes three arguments that should all be numeric. What happens if we supply three objects of the wrong type?
+
+```{r}
+#| label: multiply-and-raise
+#| error: TRUE
+
+multiply_and_raise <- function(x, y, z) {
+  check_class(x, y, z, .expected_class = "numeric")
+  x * y ^ z
+}
+
+multiply_and_raise(list(), data.frame(), matrix())
+```
+
+The output now shows each failure as separate bullet points so it's clear where we made the error and what the problem was.
+
+## Function
+
+Below is what the `check_class()` function actually looks like. I've added some comments to explain what's happening at each step. For demo purposes, the function is equipped to check for numeric and character classes only, but you could expand the `switch()` statement for other classes too.
+
+```{r}
+#| label: check-class-fn
+
+#' Check Class of Argument Inputs
+#' @param ... Objects to be checked for class.
+#' @param .expected_class Character. The name of the class against which objects
+#'     should be checked.
+#' @param .call The environment in which this function is to be called.
+#' @noRd
+check_class <- function(
+    ...,
+    .expected_class = c("numeric", "character"),
+    .call = rlang::caller_env()
+) {
+  
+  .expected_class = match.arg(.expected_class)  # ensures 'numeric'/'character'
+  
+  args <- rlang::dots_list(..., .named = TRUE)  # collect dots values
+  
+  # Check each value against expected class
+  args_are_class <- lapply(
+    args,
+    function(arg) {
+      switch(
+        .expected_class,
+        numeric   = is.numeric(arg),
+        character = is.character(arg),
+      )
+    }
+  )
+  
+  # Isolate values that have wrong class
+  fails_names <- names(Filter(isFALSE, args_are_class))
+  
+  if (length(fails_names) > 0) {
+    
+    # Prepare variables with failure information
+    fails <- args[names(args) %in% fails_names]
+    fails_classes <- sapply(fails, class)
+    
+    # Build a bulleted {cli}-styled vector of the failures
+    fails_bullets <- setNames(
+      paste0(
+        "{.var ", names(fails_classes), "} with class {.cls ",
+        fails_classes, "}"
+      ),
+      rep("*", length(fails_classes))  # name with bullet point symbol
+    )
+    
+    # Raise the error, printed nicely in {cli} style
+    cli::cli_abort(
+      message = c(
+        "{.var {fails_names}} must be of class {.cls {(.expected_class)}}",
+        x = "You provided:", fails_bullets
+      ),
+      call = .call  # environment of parent function, not check_class() itself
+    )
+  }
+  
+}
+```
+
+And now to explain in a bit more depth those features I mentioned.
+
+## Features
+
+### Ellipses
+
+When a function has a dots (`...`) argument, it means you can pass an arbitrary number of objects to be captured. Consider `paste("You", "smell")` (two values), `paste("You", "smell", "wonderful")` (three), etc, or how you can provide an arbitrary number of column names to `dplyr::select()`.
+
+The first argument to `check_class()` is `...`. You pass to it as many values as you need to assess for an expected class. So the function `add_one(x)` would contain a call to `check_class(x, "numeric")` (one argument to check), while `multiply(x, y)` could take `check_class(x, y, "numeric")` (two)[^dot].
+
+I've used the {rlang} package's `dots_list()` function to collect the dots elements into a list. The `.named = TRUE` argument names each element, so we can pinpoint the errors and report them to the user.
+
+I have collaborators, so readability of the code is important. I think `rlang::dots_list()` is more readable than the base approach, which is something like:
+
+```{r}
+#| label: dots-list-base
+#| eval: FALSE
+
+args <- list(...)
+arg_names <- as.character(substitute(...()))
+names(args) <- arg_names
+```
+
+### Eclipses
+
+So: you put `check_class()` inside another function. This causes a problem: errors will be reported to the user as having been raised by `check_class()`, but it's an internal function that they'll never see. It would be better to report the error has having originated from the parent function instead.
+
+This obfuscation, this 'code smell', has been nicknamed an 'error-handling eclipse' by Nick Tierney, whose [blog post](https://www.njtierney.com/post/2023/12/06/long-errors-smell/) was extremely well-timed for when I was writing `check_class()`.
+
+In short, you can record with `rlang::caller_env()` the environment in which the `check_class()` function was used. You can hand that to the `call` function of `cli::cli_abort()`, which `check_class()` uses to build and report error messages. This means the error is reported from the function enclosing `check_class()`, not from `check_class()` itself.
+
+For example, here's an example `report_env()` function, which prints the environment in which it's called. Since this is being run in the global environment, the global environment will be printed.
+
+```{r}
+#| label: report-env
+
+remove(list = ls())  # clear the global environment
+report_env <- function(env = rlang::caller_env()) rlang::env_print(env)
+report_env()
+```
+
+If we nest `report_env()` inside another function then the reported environment is of that enclosing function (expressed here as its bytecode), which itself is nested in its parent (global) environment.
+
+```{r}
+#| label: report-env-2
+
+report_env_2 <- function() report_env()
+report_env_2()
+```
+
+See the image at the top of this post, which shows the backtrace as having originated from the enclosing `add_one()` function rather than the `check_class()` call within it.
+
+### Bulletses
+
+[The {cli} package](https://github.com/r-lib/cli) lets you build rich user interfaces for your functions[^hyperlink]. This is great for composing informative warning and error messages for the user.
+
+Let's focus on a simplified example of `cli::cli_abort()`, which is like the {cli} equivalent of `stop()`. Let's pretend we passed a character vector when it should have been numeric. 
+
+To the `message` argument you provide a named vector, where the name will be printed as a symbol in the output. This will be a yellow exclamation point for `cli_abort()` by default, which draws attention to the exact error. The name 'x' prints as a red cross to indicate what the user did wrong. 
+
+You can also use {glue} syntax in {cli} to evaluate variables. But {cli} goes one further: it has special syntax to provide consistent mark-up to bits of text. For example, `"{.var x}"` will print with surrounding backticks and `"{.cls numeric}"` will print in blue with surrounding less/greater than symbols.
+
+```{r}
+#| label: single-error
+#| error: TRUE
+
+fail_class <- "character" 
+cli::cli_abort(
+  message = c(
+    "{.var x} must be of class {.cls numeric}",
+    x = "You provided class {.cls {fail_class}}"
+  )
+)
+```
+
+Again, see an example in the image at the top of the post.
+
+Since `check_class()` can take multiple values via the dots, we can construct an individual report for each failing element. {cli} will automatically turn each of these constructed lines into a bullet point in the printed output if we name them with an asterisk, which is pretty neat.
+
+```{r}
+#| label: multiple-error
+#| error: TRUE
+
+expected_class <- "numeric"
+fails <- list(x = "character", y = "list")
+fails_names <- names(fails)
+
+fails_bullets <- setNames(
+  paste0("{.var ", fails_names, "} with class {.cls ", fails, "}"),
+  rep("*", length(fails))
+)
+
+cli::cli_abort(
+  message = c(
+    "{.var {fails_names}} must be of class {.cls {expected_class}}",
+    x = "You provided:", fails_bullets
+  )
+)
+```
+
+Pew pew pew.
+
+#### Test
+
+Here's a cheeky bonus if you're wondering how to test for {cli} messages: you can use `cli::test_that_cli()` to test the output against [an earlier snapshot](https://testthat.r-lib.org/articles/snapshotting.html).
+
+```{r}
+#| label: test-cli
+#| eval: FALSE
+
+cli::test_that_cli("prints expected error", {
+  testthat::local_edition(3)  # only works with {testthat} 3e
+  testthat::expect_snapshot({
+    check_class(x = 1, y = "x", .expected_class = "numeric")
+  })
+})
+```
+
+## Error-helper help?
+
+Is this horribly overengineered? What is your approach to creating friendly and actionable error messages for your users?
+
+### Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^helper]: {rlang} has [some helpful documentation on error helpers](https://rlang.r-lib.org/reference/topic-error-call.html), which you can find by typing `` ?rlang::`topic-error-call` `` into the console
+[^dot]: I've used a dot-prefix for the remaining `check_class()` arguments, which reduces the chance of a clash with user-supplied values to the dots. This is recommended in [the Tidy Design Principles book](https://design.tidyverse.org/dots-prefix.html).
+[^hyperlink]: [I wrote about {cli} in an earlier post](https://www.rostrum.blog/posts/2023-09-17-choosethis/), where I explored its ability to generate hyperlinks in the R console. I used it for fun (to build a choose-your-own-adventure in the console), but it can be useful for things like opening a file at the exact line where a test failure occurred.
