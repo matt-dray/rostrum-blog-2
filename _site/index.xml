@@ -10,7 +10,136 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Tue, 12 Mar 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 15 Mar 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Shitty R help from shitty AI</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2024-03-15-ai-garbage/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p><img src="https://www.rostrum.blog/posts/2024-03-15-ai-garbage/resources/beckhams.png" class="img-fluid" style="width:50.0%" data-fig.alt="Beckhams meme. Panels with Victoria then David. She says 'I wrote an R help website' and he responds 'be honest'. She says 'I am being honest' and he says 'really?'. She says 'well, I used AI to write an R help website and am shamelessly making money from innocent suckers as a result' and he says 'thank you'."></p>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>The rise of R ‘help’ websites written by AI is predatory and shameless. Things will only get worse.</p>
+</section>
+<section id="help" class="level2">
+<h2 class="anchored" data-anchor-id="help">Help</h2>
+<p>Regular readers know this for sure: I’m not an R expert. I don’t just ‘know’ stuff. I’m DuckGoGoing ‘how to do x in r’ every 10 minutes.</p>
+<p>In doing this, I’ve noticed a trend that I want to complain about: I’ve found a few suspicious ‘help websites’ for R appearing high up the search rankings.</p>
+<p>Why ‘suspicious’? They’re clearly written with an AI tool. And they’re garbage. In content and ethics.</p>
+<p>I’m absolutely not going to name websites here because I do not want to send any traffic there.</p>
+</section>
+<section id="you-are-a-sucker" class="level2">
+<h2 class="anchored" data-anchor-id="you-are-a-sucker">You are a sucker</h2>
+<p>Here’s where they excel. They:</p>
+<ul>
+<li>use your gullibility to make money</li>
+<li>are brazen</li>
+<li>have excellent SEO (<a href="https://en.wikipedia.org/wiki/Search_engine_optimization">search-engine optimisation</a>)</li>
+</ul>
+<section id="gullibility" class="level3">
+<h3 class="anchored" data-anchor-id="gullibility">Gullibility</h3>
+<p>You might be thinking ‘okay, but maybe this is an efficient way of helping people’. To which the obvious retort is ‘okay, no, this is an efficient way to make money by exploiting the clicks of vulnerable learners’.</p>
+<p>How? At least one of these sites suggests it has ‘partners’, which are clearly just affiliate links. They will make a commission if their visitors sign up for a course at the affiliate link. The site’s KPI is conversions, not ‘people helped’.</p>
+</section>
+<section id="brazenness" class="level3">
+<h3 class="anchored" data-anchor-id="brazenness">Brazenness</h3>
+<p>These sites seem to have tens (hundreds?) of pages published on the same day without any attribution to a particular human. Either they have some very efficient staff or they assume no-one will check.</p>
+<p>Perhaps most brazen though is the poor attention to detail. At least one of these sites retains the sentence:</p>
+<blockquote class="blockquote">
+<p>Certainly! Here are the two sections for adding <affiliate> and <affiliate> to your webpage:</affiliate></affiliate></p>
+</blockquote>
+<p>Clearly someone has asked a chatbot for some text and it has obliged. And then they forgot to delete this telltale line from the output before pasting it into their website. And the biggest joke is that I found this on a page full of affiliate links.</p>
+</section>
+<section id="seo" class="level3">
+<h3 class="anchored" data-anchor-id="seo">SEO</h3>
+<p>I found links to these sites as the top search result.</p>
+<p>As is well known, people will just click the top links willy-nilly. These must be the most appropriate sites if they’re top of the search rankings, right?</p>
+<p>No.&nbsp;The answer is no. Google is gameable as heck and easily manipulated for clicks.</p>
+</section>
+</section>
+<section id="why-this-sucks" class="level2">
+<h2 class="anchored" data-anchor-id="why-this-sucks">Why this sucks</h2>
+<p>I mean it’s kind of obvious that this garbage is harmful, but for the benefit of the doubt, my concerns are as follows.</p>
+<ol type="1">
+<li>Who are they stealing from?</li>
+<li>How much of the code is hallucinatory?</li>
+<li>Is this ruining learners’ understanding?</li>
+</ol>
+<p>It’s pretty common knowledge that many AIs are trained on data without the consent of original creators. How much content is stolen from people without their consent? Maybe it slurped up some of <em>your</em> material against your will.</p>
+<p>These sites have code where the examples literally cannot be run; the syntax cannot be evaluated if copy-pasted into an R terminal. At least one of these sites was offering advice for {ggplot2} without ever showing an example plot.</p>
+<p>I’m pretty seasoned at searching for things on the internet, particularly R. I can separate the wheat from the chaff, I reckon. But not everyone can. How can a beginner user know what’s wrong if they copy and paste trash from a shameless website like this?</p>
+</section>
+<section id="suck-it-up" class="level2">
+<h2 class="anchored" data-anchor-id="suck-it-up">Suck it up</h2>
+<p>This is scummy.</p>
+<p>I’m asking that you take two seconds to think ‘could this be a fake help website?’ Consider the telltale signs:</p>
+<ul>
+<li>suspicious wording and accidentally-undeleted verbiage copied from the output of an LLM (large language model) query</li>
+<li>obvious links to affiliate sites</li>
+<li>code that doesn’t run when you copy it to your machine</li>
+<li>examples of code, but no output</li>
+<li>crappy <a href="https://en.wikipedia.org/wiki/Corporate_Memphis">Corporate-Memphis-style</a> AI-generated images of a generic white-guy in his 30s at a computer who is probably called Matt<sup>1</sup></li>
+</ul>
+<p>Maybe I don’t need to warn you about this. It’s 2024. Times have changed. You’re smart. I grew up with floppies and CD ROMs.</p>
+<p>Don’t patronise these sites by clicking affiliate links; patronise them with condescension. It’s all we can do.</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2024-03-15 22:47:51 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.2        
+ [5] tools_4.3.1       htmltools_0.5.6.1 rstudioapi_0.15.0 yaml_2.3.8       
+ [9] rmarkdown_2.25    knitr_1.45        jsonlite_1.8.7    xfun_0.41        
+[13] digest_0.6.33     rlang_1.1.3       evaluate_0.23    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>I can say this because it’s my exact description.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>ai</category>
+  <category>r</category>
+  <guid>https://www.rostrum.blog/posts/2024-03-15-ai-garbage/index.html</guid>
+  <pubDate>Fri, 15 Mar 2024 00:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2024-03-15-ai-garbage/resources/beckhams.png" medium="image" type="image/png" height="178" width="144"/>
+</item>
 <item>
   <title>Ellipses, eclipses and bulletses</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -7726,223 +7855,6 @@ loaded via a namespace (and not attached):
   <category>videogames</category>
   <guid>https://www.rostrum.blog/posts/2023-07-15-hiscore/index.html</guid>
   <pubDate>Fri, 14 Jul 2023 23:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Convert a Word table to Markdown</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-06-21-wordup-tables/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><img src="https://www.rostrum.blog/posts/2023-06-21-wordup-tables/resources/wordup.gif" class="img-fluid" style="width:100.0%" alt="A gif that shows a table of numbers being copied. Then  a function called table_to_govspeak is run in an RStudio window and the output is a special Markdown version of that copied table."></p>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I made a function that shouldn’t need to exist in an ideal world: it takes a copied Microsoft Word table and outputs a Markdown version (well, a <a href="https://govspeak-preview.publishing.service.gov.uk/guide">Govspeak</a> version).</p>
-</section>
-<section id="govspeak-when-youre-spoken-to" class="level2">
-<h2 class="anchored" data-anchor-id="govspeak-when-youre-spoken-to">Govspeak when you’re spoken to</h2>
-<p>I’ve written about three painful things recently:</p>
-<ol type="1">
-<li>Forcing data scientists to <a href="https://www.rostrum.blog/2023/06/13/panic-in-the-toolshed/">expose their tools</a> so we can all use and learn from them.</li>
-<li><a href="https://www.rostrum.blog/2023/06/13/panic-in-the-toolshed/">‘Rectangularising’ tables scraped out of a Word document</a> via the {officer} package.</li>
-<li>Easier ways to <a href="https://www.rostrum.blog/2023/04/23/type-convert/">coerce dataframe columns to their ‘intended’ data type</a>.</li>
-</ol>
-<p>Today I bring you a terrible Cerberus with these three heads<sup>1</sup>.</p>
-<p>The challenge: sometimes public sector statisticians produce Word documents that need to be converted to a special type of simplified plaintext Markdown, called <a href="https://govspeak-preview.publishing.service.gov.uk/guide">Govspeak</a>, before they can be uploaded for publication as HTML files on GOV.UK<sup>2</sup>.</p>
-<p>This is fine: we have specific publishing specialists who can take care of it. It can be a little tedious, however. What if we could speed up and make more efficient the process of converting from Word to Govspeak?</p>
-<p>There’s a specific <a href="https://govspeak-preview.publishing.service.gov.uk/">Govspeak converter</a> online that you can paste into. But it doesn’t have full coverage of the things that might appear in a Word doc, including tables. Other online converters exist, but I don’t think we should rely on third parties that are probably intended for producing general Markdown rather than Govspeak, specifically</p>
-</section>
-<section id="markdown-word-up." class="level2">
-<h2 class="anchored" data-anchor-id="markdown-word-up.">Markdown? Word up.</h2>
-<p>I’ve started an R package called <a href="https://github.com/matt-dray/wordup">{wordup}</a> that aims to take a Word document and convert it to Govspeak. It’s early days in the sense that it doesn’t yet do, well… very much. But I thought the package name was funny (if unoriginal) and worth squatting. Maybe I’ll never get around to developing it, who knows.</p>
-<p>To install (which is really not worth it right now, unless you want to <a href="https://github.com/matt-dray/wordup/issues">raise an issue</a> or pull request):</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"remotes"</span>)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># if not yet installed</span></span>
-<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"matt-dray/wordup"</span>)</span>
-<span id="cb1-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(wordup)</span></code></pre></div>
-</div>
-<p>For now, the principle is that you can unzip a Word document to expose a bunch of xml files (yet another thing I’ve been <a href="https://www.rostrum.blog/2023/06/11/apple-health-redux/">writing about recently</a>, lol) that contain all the information needed to build the Word document<sup>3</sup>. As such, you can read that xml and extract all the information, styles, etc, and massage it programmatically into Govspeak format.</p>
-<p>Part of the process will involve taking a Word table, specifically, and converting it to a <a href="https://www.gov.uk/guidance/how-to-publish-on-gov-uk/markdown#tables">Govspeak-friendly form</a>. I figured this might be a nice standalone tool in its itself, so I had a stab at what it could look like.</p>
-</section>
-<section id="fantabulars" class="level2">
-<h2 class="anchored" data-anchor-id="fantabulars">Fantabulars</h2>
-<p>So right now the <code>wordup::table_to_govspeak()</code> function (whose name could change at any time) does three things:</p>
-<ol type="1">
-<li>Handles inputs.</li>
-<li>Guesses data types.</li>
-<li>Applies extra styles.</li>
-</ol>
-<p>You can either (a) copy-paste a Word table into the function, or (b) simply copy it to the clipboard, where it can be read by the function using <a href="http://matthewlincoln.net/clipr/">the {clipr} package</a>. The function will take the string—which is basically tabs (<code>\t</code>) to indicate gaps between cells and newlines (<code>\n</code>) to indicate rows—and reorient it initially into a dataframe.</p>
-<p>Of course, all the columns will be character-class at this point. We can immediately run <code>type.convert()</code> over the whole dataframe to coerce each column to a more appropriate data type, if appropriate. So a character column composed of <code>c("10", "20", "30)</code> will become a numeric column of values <code>c(10, 20, 30)</code>. But this doesn’t work for numeric values that have symbols in them, like commas as thousands separators (<code>1,200</code>), per cent symbols (<code>82%</code>) and placeholder markers to indicate things like suppressed values (<code>[c]</code>)<sup>4</sup>. To get around this, we can strip the nuisance characters and then see if what remains looks like a number.</p>
-<p>Finally, there’s some specific features of Govspeak tables that need attention. It’s acceptable to have row labels, where each value in every cell of the first column should be prefaced with an octothorpe (<code>#</code>), and totals columns, where the entire row should be emboldened with double-asterisks (<code>**</code>) either side of the cells’ values.</p>
-<p>What results can be sort of… magic really. You copy a Word table in its entirety to your clipboard, run the function, and bang: the Govspeak Markdown is returned. You can see this in action in the gif at the top of this page.</p>
-<p>So I can literally copy a table like this to my clipboard:</p>
-<table class="table">
-<thead>
-<tr class="header">
-<th>Column 1</th>
-<th style="text-align: right;">Column 2</th>
-<th style="text-align: right;">Column 3</th>
-<th style="text-align: right;">Column 4</th>
-<th style="text-align: right;">Column 5</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>X</td>
-<td style="text-align: right;">100</td>
-<td style="text-align: right;">1,000</td>
-<td style="text-align: right;">1%</td>
-<td style="text-align: right;">15</td>
-</tr>
-<tr class="even">
-<td>Y</td>
-<td style="text-align: right;">200</td>
-<td style="text-align: right;">2,000</td>
-<td style="text-align: right;">2%</td>
-<td style="text-align: right;">12</td>
-</tr>
-<tr class="odd">
-<td>Z</td>
-<td style="text-align: right;">300</td>
-<td style="text-align: right;">3,000</td>
-<td style="text-align: right;">3%</td>
-<td style="text-align: right;">[c]</td>
-</tr>
-<tr class="even">
-<td>Totals</td>
-<td style="text-align: right;">600</td>
-<td style="text-align: right;">6,000</td>
-<td style="text-align: right;">6%</td>
-<td style="text-align: right;">[c]</td>
-</tr>
-</tbody>
-</table>
-<p>And run this:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">wordup<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">table_to_govspeak</span>()</span></code></pre></div>
-</div>
-<p>To print this (and have it copied to your clipboard as the message says):</p>
-<pre><code>| Column 1 | Column 2 | Column 3 | Column 4 | Column 5 |
-| ------- | ------: | ------: | ------: | ------: |
-| X | 100 | 1,000 | 1% | 15 |
-| Y | 200 | 2,000 | 2% | 12 |
-| Z | 300 | 3,000 | 3% | [c] |
-| Totals | 600 | 6,000 | 6% | [c] |
-The output table has been written to the clipboard.</code></pre>
-<p>Boom. Note the crucial feature that the third, fourth and fifth columns are recognised as numeric—despite containing the strings <code>,</code>, <code>%</code> and <code>[c]</code>—and therefore right-aligned (<code>------:</code>). This is entirely due to the argument <code>ignore_regex</code>, which defaults to removing commas, percentage symbols or anything in square brackets before it guesses what data type the column is<sup>5</sup>.</p>
-<p>And we can do fancy things like:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">wordup<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">table_to_govspeak</span>(</span>
-<span id="cb4-2">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">has_row_titles =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>,</span>
-<span id="cb4-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">totals_rows =</span> 4L</span>
-<span id="cb4-4">)</span></code></pre></div>
-</div>
-<p>Which outputs this thing:</p>
-<pre><code>| Column 1 | Column 2 | Column 3 | Column 4 | Column 5 |
-| ------- | ------: | ------: | ------: | ------: |
-| # X | 100 | 1,000 | 1% | 15 |
-| # Y | 200 | 2,000 | 2% | 12 |
-| # Z | 300 | 3,000 | 3% | [c] |
-| # **Totals** | **600** | **6,000** | **6%** | **[c]** |
-The output table has been written to the clipboard.</code></pre>
-<p>Of course, in practice this might get a little more complicated if you need to manually specify in the function declaration that there’s a column of row titles or some totals rows. Pish-posh. The point is that I think this is probably better than trying to (a) write the Govspeak table by hand or (b) trying to use the Govspeak converter, which just doesn’t work for this task. This also has mild, opinionated, Govspeak-related benefits over using a straightforward <code>knitr::kable()</code>.</p>
-<p>Is this perfect? Ahaha, no. There’s a lot to add or improve, but I think this is a decent start and solves a (niche) problem for now<sup>6</sup>.</p>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-04 09:56:28 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
-[1] wordup_0.0.0.9000
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.14   yaml_2.3.7       
- [9] rmarkdown_2.22    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
-[13] digest_0.6.31     rlang_1.1.1       evaluate_0.21    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>Wrangling Word content with R is certainly a Herculean labour, amirite, classics fans? I know there are classicists who write R. Own up. There’s no shame. Adriana is one of you.↩︎</p></li>
-<li id="fn2"><p>In case you were wondering: yes, this is a ‘solved’ problem where teams use <a href="https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/">Reproducible Analytical Pipelines (RAP)</a> to produce statistical publications. They can convert directly from R Markdown to Govspeak using something like <a href="https://github.com/moj-analytical-services/mojspeakr">{mojspeakr}</a>. But not every team is using R to produce their statistical publications. The wider R community on social media may be aware of <a href="https://rap4mads.eu/">Bruno’s recently-released book</a> on the principles of RAP. The RAP movement <a href="https://dataingovernment.blog.gov.uk/2017/03/27/reproducible-analytical-pipeline/">started in the UK government</a> but appears to be taking off internationally.↩︎</p></li>
-<li id="fn3"><p>This technique is currently in the news (if you move in certain geeky circles, which you do, because you’re reading this), because an unzipped Excel file appeared to <a href="https://datacolada.org/109">expose a… suspicious sequence of formulae executions</a> that underpinned a published academic paper.↩︎</p></li>
-<li id="fn4"><p>There’s specific <a href="https://analysisfunction.civilservice.gov.uk/policy-store/symbols-in-tables-definitions-and-help/">best-practice government guidance</a> for the symbols that should be used for this purpose, such as ‘[c]’ to mean that the data is suppressed due to reasons of confidentiality.↩︎</p></li>
-<li id="fn5"><p>There are pre-existing functions that can parse numbers containing strings, like <code>readr::parse_number("10%")</code> returns <code>10</code>. But this particular function can’t handle arbitrary strings in your number, like the placeholder <code>[c]</code> used to represent suppressed values.↩︎</p></li>
-<li id="fn6"><p>I think you might be used to that by now if you’ve read this blog more than once.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>clipr</category>
-  <category>markdown</category>
-  <category>ms-office</category>
-  <category>public-sector</category>
-  <category>quarto</category>
-  <category>r</category>
-  <category>wordup</category>
-  <guid>https://www.rostrum.blog/posts/2023-06-21-wordup-tables/index.html</guid>
-  <pubDate>Tue, 20 Jun 2023 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
