@@ -1,0 +1,97 @@
+---
+title: "Shitty R help from shitty AI"
+date: 2024-03-15
+slug: "ai-garbage"
+image: resources/beckhams.png
+categories:
+  - ai
+  - r
+---
+
+![](resources/beckhams.png){fig.alt="Beckhams meme. Panels with Victoria then David. She says 'I wrote an R help website' and he responds 'be honest'. She says 'I am being honest' and he says 'really?'. She says 'well, I used AI to write an R help website and am shamelessly making money from innocent suckers as a result' and he says 'thank you'." width='50%'}
+
+## tl;dr
+
+The rise of R 'help' websites written by AI is predatory and shameless. Things will only get worse.
+
+## Help
+
+Regular readers know this for sure: I'm not an R expert. I don't just 'know' stuff. I'm DuckGoGoing 'how to do x in r' every 10 minutes.
+
+In doing this, I've noticed a trend that I want to complain about: I've found a few suspicious 'help websites' for R appearing high up the search rankings.
+
+Why 'suspicious'? They're clearly written with an AI tool. And they're garbage. In content and ethics.
+
+I'm absolutely not going to name websites here because I do not want to send any traffic there. 
+
+## You are a sucker
+
+Here's where they excel. They:
+
+* use your gullibility to make money
+* are brazen
+* have excellent SEO ([search-engine optimisation](https://en.wikipedia.org/wiki/Search_engine_optimization))
+
+### Gullibility
+
+You might be thinking 'okay, but maybe this is an efficient way of helping people'. To which the obvious retort is 'okay, no, this is an efficient way to make money by exploiting the clicks of vulnerable learners'.
+
+How? At least one of these sites suggests it has 'partners', which are clearly just affiliate links. They will make a commission if their visitors sign up for a course at the affiliate link. The site's KPI is conversions, not 'people helped'.
+
+### Brazenness
+
+These sites seem to have tens (hundreds?) of pages published on the same day without any attribution to a particular human. Either they have some very efficient staff or they assume no-one will check.
+
+Perhaps most brazen though is the poor attention to detail. At least one of these sites retains the sentence:
+
+> Certainly! Here are the two sections for adding <affiliate> and <affiliate> to your webpage:
+
+Clearly someone has asked a chatbot for some text and it has obliged. And then they forgot to delete this telltale line from the output before pasting it into their website. And the biggest joke is that I found this on a page full of affiliate links.
+
+### SEO
+
+I found links to these sites as the top search result.
+
+As is well known, people will just click the top links willy-nilly. These must be the most appropriate sites if they're top of the search rankings, right?
+
+No. The answer is no. Google is gameable as heck and easily manipulated for clicks.
+
+## Why this sucks
+
+I mean it's kind of obvious that this garbage is harmful, but for the benefit of the doubt, my concerns are as follows.
+
+1. Who are they stealing from?
+2. How much of the code is hallucinatory?
+3. Is this ruining learners' understanding?
+
+It's pretty common knowledge that many AIs are trained on data without the consent of original creators. How much content is stolen from people without their consent? Maybe it slurped up some of _your_ material against your will.
+
+These sites have code where the examples literally cannot be run; the syntax cannot be evaluated if copy-pasted into an R terminal. At least one of these sites was offering advice for {ggplot2} without ever showing an example plot.
+
+I'm pretty seasoned at searching for things on the internet, particularly R. I can separate the wheat from the chaff, I reckon. But not everyone can. How can a beginner user know what's wrong if they copy and paste trash from a shameless website like this?
+
+## Suck it up
+
+Bottom line: this is scummy.
+
+I'm asking that you take two seconds to think 'could this be a fake help website?' Consider the telltale signs:
+
+* suspicious wording and accidentally-undeleted verbiage copied from the output of an LLM (large language model) query
+* obvious links to affiliate sites
+* code that doesn't run when you copy it to your machine
+* examples of code, but no output
+* crappy [Corporate-Memphis-style](https://en.wikipedia.org/wiki/Corporate_Memphis) AI-generated images of a generic white-guy in his 30s at a computer who is probably called Matt[^matt]
+
+Maybe I don't need to warn you about this. It's 2024. Times have changed. You're smart. I grew up with floppies and CD ROMs. 
+
+Don't patronise these sites by clicking affiliate links; patronise them with condescension. It's all we can do.
+
+### Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^matt]: I can say this because it's my exact description.
