@@ -26,7 +26,7 @@ between 2018-04-14 (first) to 2024-03-15 (latest).
 
 📅 That’s a post roughly every 13 days, or about 2.4 posts per month.
 
-🆕 The latest post: [Shitty R help from shitty
+🆕 The latest post: [Sh\*tty R help from sh\*tty
 AI](https://www.rostrum.blog/posts/2024-03-15-ai-garbage).
 
 📈 Posts over time:
@@ -40,7 +40,7 @@ AI](https://www.rostrum.blog/posts/2024-03-15-ai-garbage).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
-| 171 | 2024-03-15 | [Shitty R help from shitty AI](https://www.rostrum.blog/posts/2024-03-15-ai-garbage)                                           |
+| 171 | 2024-03-15 | [Sh\*tty R help from sh\*tty AI](https://www.rostrum.blog/posts/2024-03-15-ai-garbage)                                         |
 | 170 | 2024-03-12 | [Ellipses, eclipses and bulletses](https://www.rostrum.blog/posts/2024-03-12-eclipse)                                          |
 | 169 | 2024-02-03 | [Start an argument with R](https://www.rostrum.blog/posts/2024-02-03-base-args)                                                |
 | 168 | 2024-01-27 | [Kill your darlings (but bugfix first)](https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3)                              |
@@ -217,4 +217,4 @@ AI](https://www.rostrum.blog/posts/2024-03-15-ai-garbage).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2024-03-16 at 08:29.
+🕒 Last updated: 2024-03-16 at 21:04.
