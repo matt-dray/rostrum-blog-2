@@ -170,8 +170,8 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
 <p>The rise of R ‘help’ websites written by AI is predatory and shameless. Things will only get worse.</p>
 </section>
-<section id="help" class="level2">
-<h2 class="anchored" data-anchor-id="help">Help</h2>
+<section id="chatbottom-of-the-barrel" class="level2">
+<h2 class="anchored" data-anchor-id="chatbottom-of-the-barrel">Chatbottom of the barrel</h2>
 <p>Regular readers know this for sure: I’m not an R expert. I don’t just ‘know’ stuff. I’m DuckGoGoing ‘how to do x in r’ every 10 minutes.</p>
 <p>In doing this, I’ve noticed a trend that I want to complain about: I’ve found a few suspicious ‘help websites’ for R appearing high up the search rankings.</p>
 <p>Why ‘suspicious’? They’re clearly written with an AI tool. And they’re garbage. In content and ethics.</p>
@@ -187,8 +187,9 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <section id="gullibility" class="level3">
 <h3 class="anchored" data-anchor-id="gullibility">Gullibility</h3>
-<p>You might be thinking ‘okay, but maybe this is an efficient way of helping people’. To which the obvious retort is ‘okay, no, this is an efficient way to make money by exploiting the clicks of vulnerable learners’.</p>
-<p>How? At least one of these sites suggests it has ‘partners’, which are clearly just affiliate links. They will make a commission if their visitors sign up for a course at the affiliate link. The site’s KPI is conversions, not ‘people helped’.</p>
+<p>You might be thinking ‘okay, but maybe this is an efficient way of helping people’. To which the obvious retort is ‘okay, no, this is an efficient way to make money by exploiting the clicks of vulnerable learners with low-quality, harmful content’.</p>
+<p>How? At least one of these sites suggests it has ‘partners’, which are clearly just affiliate links. They will make a commission if their visitors sign up for a course at the affiliate link.</p>
+<p>Reputable companies know they need good product to help drive sales. But the KPI for these fake sites is purely conversions, not ‘people helped’.</p>
 </section>
 <section id="brazenness" class="level3">
 <h3 class="anchored" data-anchor-id="brazenness">Brazenness</h3>
@@ -202,36 +203,35 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="seo" class="level3">
 <h3 class="anchored" data-anchor-id="seo">SEO</h3>
-<p>In some cases I found links to these sites as the top search result for fairly generic R queries.</p>
-<p>As is well known, people will just click the top links willy-nilly. There’s an expectation that these must be the best sites if they’re top of the search rankings, right?</p>
-<p>But no. Google is gameable as heck and easily manipulated for clicks.</p>
+<p>In some cases I found links to these sites as the top search result for fairly generic R queries. Naturally, people will just click the top search results willy-nilly. These must be the best sites if they’re top of the rankings, right?</p>
+<p>But no. Google is, of course, gameable as heck and you can be manipulated for clicks with <a href="https://en.wikipedia.org/wiki/Search_engine_optimization">search-engine optimisation</a> (SEO) hacks.</p>
 <p>These sites haven’t ‘earned’ their ranking by producing high-quality advice. They’re not there because other people are linking to them as a mark of endorsement.</p>
 </section>
 </section>
 <section id="why-this-sucks" class="level2">
 <h2 class="anchored" data-anchor-id="why-this-sucks">Why this sucks</h2>
-<p>I mean it’s kind of obvious that this garbage is harmful, but for the benefit of the doubt, my concerns are as follows.</p>
+<p>Feels obvious that this garbage is harmful, but for the benefit of the doubt, my concerns are as follows:</p>
 <ol type="1">
 <li>Who are they stealing from?</li>
 <li>How much of the code is hallucinatory?</li>
 <li>Is this ruining learners’ understanding?</li>
 </ol>
 <p>It’s pretty common knowledge that many AIs are trained on data without the consent of original creators. How much content on these pages is stolen from people without their consent? Maybe it slurped up some of <em>your</em> material against your will.</p>
-<p>These sites have code where the examples literally cannot be run; the syntax cannot be evaluated if copy-pasted into an R terminal. At least one of these sites was offering advice for {ggplot2} without ever showing an example plot.</p>
-<p>I’m pretty seasoned at searching for things on the internet, particularly R. I can separate the wheat from the chaff, I reckon. But not everyone can. How can a beginner user know what’s wrong if they copy and paste trash from a shameless website like this?</p>
+<p>These sites also have code where the examples literally cannot be run; the syntax cannot be evaluated if copy-pasted into an R terminal. At least one of these sites was offering advice for {ggplot2} without ever showing an example plot.</p>
+<p>I’ve been searching the internet for R-related stuff<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> for many years and can separate the wheat from the chaff, I reckon. But not everyone can. How can a beginner user know what’s wrong if they copy and paste trash from a shameless website like this?</p>
 </section>
 <section id="suck-it-up" class="level2">
 <h2 class="anchored" data-anchor-id="suck-it-up">Suck it up</h2>
 <p>Bottom line: this is scummy.</p>
-<p>I’m asking that you take two seconds to think ‘could this be a fake help website?’ Consider the telltale signs:</p>
+<p>I’m asking that you take two seconds to think ‘could this be a fake website?’ Consider the telltale signs:</p>
 <ul>
 <li>suspicious wording and accidentally-undeleted verbiage copied from the output of an LLM (large language model) query</li>
 <li>obvious links to affiliate sites</li>
 <li>code that doesn’t run when you copy it to your machine</li>
 <li>examples of code, but no output</li>
-<li>crappy <a href="https://en.wikipedia.org/wiki/Corporate_Memphis">Corporate-Memphis-style</a> AI-generated images of a generic white-guy in his 30s at a computer who is probably called Matt<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
+<li>crappy AI-generated images that fill space (probably <a href="https://en.wikipedia.org/wiki/Corporate_Memphis">Corporate-Memphis-style</a> abominations showing a generic 30-something white guy at a computer who is probably called Matt<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>)</li>
 </ul>
-<p>Maybe I don’t need to warn you about this. It’s 2024. Times have changed. You’re smart. I grew up with floppies and CD ROMs.</p>
+<p>Maybe I don’t need to warn you about this. It’s 2024. I grew up in a slower-paced learning environment of floppies and CD ROMs. Times have changed. You’re smart.</p>
 <p>Don’t patronise these sites by clicking affiliate links; patronise them with condescension. It’s all we can do.</p>
 
 </section>
@@ -245,7 +245,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-03-16 21:00:07 GMT</code></pre>
+<pre><code>Last rendered: 2024-03-18 10:16:41 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -278,7 +278,8 @@ loaded via a namespace (and not attached):
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>I can say this because it’s my exact description.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Although putting ‘r’ in your search terms often ends up with links to subreddits. Do try to avoid being sucked down an r/ProgrammerHumor black hole.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>I can say this because it’s my exact description.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
