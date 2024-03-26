@@ -1,0 +1,325 @@
+---
+title: "Assign abstracts to sifters"
+date: 2024-03-26
+slug: "assign-abstracts"
+categories:
+  - charlatan
+  - r
+---
+
+## tl;dr
+
+A quick and dirty R function to assign abstracts to sifters.
+
+## Assign me up
+
+I hacked together a function to assign conference abstracts to sifters so they could be assessed. There were several requirements that complicated things. The function:
+
+* tries to make assignment counts equal between sifters where possible
+* results in each abstract being assigned _n_ times, to assure fairness in assessment
+* ensures each sifter receives a unique set of abstracts
+* prevents the sifter seeing their own abstracts, if they submitted any
+* prevents the sifter seeing abstracts by authors with the same affiliation as the sifter, if relevant
+* respects a maximum assignment 'cap', if the sifter has one
+* allows the user to set a maximum number of iterations to prevent infinite looping (may be possible under certain conditions)
+
+### Process
+
+The function itself is split into three main parts:
+
+1. Setup of variables to be used in iteration.
+2. A `repeat` loop that will keep assigning abstracts to the set of sifters until the total abstract pool is exhausted and the various requirements are met.
+3. Within the `repeat` loop, a `for` loop that iterates over each sifter to assign them an abstract from their pool of viable abstracts.
+
+Within the `for` loop are three main steps:
+
+1. Find the pool of abstracts available to the sifter (if any).
+2. Select randomly an abstract from the pool and assign it to the sifter.
+3. Increment the assignment counter for the selected abstract.
+
+The `for` loop will go to the `next` sifter if the pool of abstracts for the current sifter is zero. The `repeat` loop will `break` if all of the abstracts have been assigned _n_ number of times, according to the `assignment_cap` argument. It will also `break` if the number of iterations given by `max_iterations` has been met.
+
+### Definition
+
+The function is not optimised at all, is not fully tested and has no defensive programming. But it fulfilled the requirements for the task. I'm recording it here for posterity.
+
+I've added some comments and tried to make variable names informative. The `abstracts_df` and `sifters_df` inputs are dataframes that have columns for the `name` and `affiliation`, along with a maximum-assignment `cap` column in the `sifters_df`.
+
+Of course, it's too big and should be broken into smaller functions, particularly each of the steps in the `for` loop. Also, you feed in dataframes, but these are converted immediately to named vectors for processing. In part this reflects the ease of handling named vectors, but is also a legacy of when the requirements were far simpler. The requirements grew more complicated over time, so it became a Frankenfunction
+
+```{r}
+#| label: assign-abstracts
+
+assign_abstracts <- function(
+    abstracts_df,
+    sifters_df,
+    assignment_cap = 2, 
+    max_iterations = 1000
+) {
+  
+  # Set up named vectors
+  abstracts <- with(abstracts_df, setNames(affiliation, name))
+  sifters <- with(sifters_df, setNames(affiliation, name))
+  sifter_caps <- with(sifters_df, setNames(cap, name))
+  sifter_caps <- sifter_caps[!is.na(sifter_caps)]
+  
+  # Set up starting variables
+  n_abstracts <- length(abstracts)
+  seq_abstracts <- seq_len(n_abstracts)
+  sifter_assignments <- setNames(vector("list", length(sifters)), names(sifters))
+  assignment_counts <- rep(0, n_abstracts)
+  iter <- 0
+  
+  repeat {
+    
+    for (name in names(sifter_assignments)) {
+      
+      # 1. Find the pool of abstracts available to this sifter (if any)
+      
+      # a. Check if sifter cap has been met
+      sifter_has_cap <- name %in% names(sifter_caps)
+      if (sifter_has_cap) {
+        sifter_cap <- sifter_caps[[name]]
+        sifter_assignment_count <- length(sifter_assignments[[name]])
+      }
+      if (sifter_has_cap && sifter_assignment_count == sifter_cap) next
+      
+      # b. Add abstracts to pool if they have <n assignments
+      abstracts_under_cap <- which(assignment_counts < assignment_cap)
+      if (length(abstracts_under_cap) == 0) next
+      
+      # c. Remove abstracts that are already assigned to this sifter
+      already_assigned_to_sifter <- sifter_assignments[[name]]
+      abstracts_available <- 
+        abstracts_under_cap[!abstracts_under_cap %in% already_assigned_to_sifter]
+      if (length(abstracts_available) == 0) next
+      
+      # d. Remove abstracts by the named sifter
+      abstracts_by_sifter <- which(name == names(abstracts[abstracts_available]))
+      if (length(abstracts_by_sifter) > 0) {
+        abstracts_available <- abstracts_available[-abstracts_by_sifter]
+      }
+      if (length(abstracts_available) == 0) next
+      
+      # e. Remove abstracts with the same affiliation as the sifter
+      sifter_affiliation <- unname(sifters[name])
+      abstracts_by_same_affiliation <- 
+        which(sifter_affiliation == unname(abstracts[abstracts_available]))
+      if (length(abstracts_by_same_affiliation) > 0) {
+        abstracts_available <- 
+          abstracts_available[-abstracts_by_same_affiliation]
+      }
+      if (length(abstracts_available) == 0) next
+      
+      # 2. Select randomly from pool and assign to sifter
+      abstract_selected <- .resample(abstracts_available, 1)
+      sifter_assignments[[name]] <- 
+        c(sifter_assignments[[name]], abstract_selected)
+      
+      # 3. Increment count for sampled abstract
+      assignment_counts[abstract_selected] <- 
+        assignment_counts[abstract_selected] + 1
+      if (all(assignment_counts == assignment_cap)) break
+      
+    }
+    
+    # Reorder so sifter with fewest assignments gets next assignment first
+    sifter_assignments <- sifter_assignments[order(lengths(sifter_assignments))]
+    
+    iter <- iter + 1
+    
+    if (all(assignment_counts == assignment_cap)) break
+    
+    if (iter == max_iterations) {
+      message("max_iterations reached")
+      break
+    }
+    
+  }
+  
+  sifter_assignments <- lapply(sifter_assignments, sort)
+  sifter_assignments[order(names(sifter_assignments))]
+  
+}
+
+.resample <- function(x, ...) x[sample.int(length(x), ...)]
+```
+
+Note the bespoke `.resample()` function because `sample()` operates differently depending on whether you give it a vector or a single value[^inferno]. If only one abstract is left in the pool, e.g. abstract number 13, then `sample(13)` won't output 13, it will actually output a value from 1 to 13.
+
+## Example
+
+### Demo data
+
+Let's create some fake data using [the {charlatan} package](https://docs.ropensci.org/charlatan/). Let's imagine we have some sifters and their affiliations. One sifter only has time to do 10 assessments, so they have a `cap` value.
+
+```{r}
+set.seed(1)
+
+n_sifters <- 5
+sifter_companies <- charlatan::ch_company(n_sifters)
+sifter_names <- charlatan::ch_name(n_sifters)
+
+(sifters_df <- data.frame(
+  name = sifter_names,
+  affiliation = sifter_companies,
+  cap = c(10, rep(NA_real_, n_sifters - 1))
+))
+```
+
+Now let's create some fake abstracts, again with names and affiliations. The abstract titles here are just random species names, so let's pretend we're at a taxonomists' conference or something. Let's make it so the sifters have each submitted an abstract of their own and that there's at least one other submission from their organisation. 
+
+Of course, your abstract dataset is likely to contain more information, like the actual text of the abstract and other details like the author's geographic location and talk-type preference (poster, plenary, etc). If you've used an online survey service then you can usually download a CSV of the results or connect to their API to get the data.
+
+```{r}
+total_abstracts <- 30
+
+abstracts_df <- data.frame(
+  name = c(sifter_names, charlatan::ch_name(total_abstracts - n_sifters)),
+  affiliation = c(
+    rep(sifter_companies, 2),
+    charlatan::ch_company(total_abstracts - (2 * n_sifters))
+  ),
+  title = charlatan::ch_taxonomic_species(total_abstracts)
+)
+
+abstracts_df <- abstracts_df[sample(nrow(abstracts_df)), ]  # shuffle
+row.names(abstracts_df) <- NULL
+
+head(abstracts_df)
+```
+
+### Run
+
+Let's provide the `abstracts_df` and `sifters_df` dataframes to the function, along with the number of times each abstract will need to be assessed.
+
+```{r}
+#| label: run-assign-abstract
+
+n <- 2
+
+assignments <- assign_abstracts(
+  abstracts_df,
+  sifters_df,
+  assignment_cap = n
+)
+```
+
+Here's what the output looks like. It's a named list with one element per sifter. The values are the index of that abstract in the vector provided to the `abstracts_df` argument.
+
+```{r}
+#| label: assignments
+
+assignments
+```
+
+These indices can be matched back to the original dataset. Here's an example for the first sifter.
+
+```{r}
+#| label: assignment-df
+
+assignment_df <- abstracts_df[assignments[[1]], ]
+head(assignment_df)
+```
+
+You could wrangle this into an anonymised dataframe with columns for the sifter to provide their assessment.
+
+```{r}
+#| label: anon_assignment-df
+
+anon_df <- assignment_df[, "title", drop = FALSE]
+anon_df$score <- NA_real_
+anon_df$comments <- NA_character_
+anon_df
+```
+
+And then you can return this back to the sifter. The low-tech mechanism would be to put this into a spreadsheet output with {openxlsx}, for example. Much better would be to create a simple Shiny app hosted on Posit Connect or something, allowing each sifter to see their assigned abstracts and submit their assessments.
+
+### Check
+
+Great, but the output actually meet the initial requirements for the system? Let's take a look.
+
+Was each abstract assigned the number of times specified by `assignment_cap`?
+
+```{r}
+#| label: assignments-cap
+
+all(table(unlist(assignments)) == n)
+```
+
+Here you can see that sifters received a near-equal number of abstracts, apart from the sifter who had a specified maximum-assignment cap.
+
+```{r}
+#| label: lengths-assignments
+
+lengths(assignments)
+```
+
+Was each sifter assigned a unique set of abstracts?
+
+```{r}
+#| label: unique-set
+
+all(lengths(lapply(assignments, unique)) == lengths(assignments))
+```
+
+Did anyone receive their own abstract?
+
+```{r}
+#| label: own-abstract
+
+sifter_names <- sifters_df[sifters_df$name %in% names(assignments), "name"]
+
+has_own_abstract <- vector("list", length = length(sifter_names)) |> 
+  setNames(sifter_names)
+
+for (i in seq_along(sifter_names)) {
+  sifter_name <- sifter_names[i]
+  abstract_names <- abstracts_df$name[assignments[[i]]]
+  has_own_abstract[[i]] <- all(sifter_name == abstract_names)
+}
+
+unlist(has_own_abstract)
+```
+
+Did any of the sifters get assigned abstracts from their own affiliation?
+
+```{r}
+#| label: own-affiliation
+
+affiliations <- 
+  sifters_df[sifters_df$name %in% names(assignments), "affiliation"]
+
+has_affiliate_abstract <- vector("list", length = length(assignments)) |> 
+  setNames(affiliations)
+
+for (i in seq_along(affiliations)) {
+  sifter_affiliation <- affiliations[i]
+  abstract_affiliations <- abstracts_df$affiliation[assignments[[i]]]
+  has_affiliate_abstract[[i]] <- all(sifter_affiliation == abstract_affiliations)
+}
+
+unlist(has_affiliate_abstract)
+```
+
+Okey-doke.
+
+## What now?
+
+This could definitely be better. 
+
+As mentioned, there's a lot of refactoring that could be done, recognising that it was developed rapidly with changing requirements. I'm reflecting on it now that it's solved the problem, but eventually it may be refactored or rewritten from scratch. 
+
+This would make sense if we (or you) want to use it in other scenarios or as part of a more generic package in future.
+
+Or, as usual, this functionality probably exists in some package already and you can tell me all about it. 
+
+### Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^inferno]: The 'single sample switch' as Patrick Burns puts it [in The R Inferno](https://www.burns-stat.com/pages/Tutor/R_inferno.pdf) (section 8.2.33).

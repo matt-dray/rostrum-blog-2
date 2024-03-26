@@ -10,7 +10,950 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Fri, 15 Mar 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 26 Mar 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Assign abstracts to sifters</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2024-03-26-assign-abstracts/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>A quick and dirty R function to assign abstracts to sifters.</p>
+</section>
+<section id="assign-me-up" class="level2">
+<h2 class="anchored" data-anchor-id="assign-me-up">Assign me up</h2>
+<p>I hacked together a function to assign conference abstracts to sifters so they could be assessed. There were several requirements that complicated things. The function:</p>
+<ul>
+<li>tries to make assignment counts equal between sifters where possible</li>
+<li>results in each abstract being assigned <em>n</em> times, to assure fairness in assessment</li>
+<li>ensures each sifter receives a unique set of abstracts</li>
+<li>prevents the sifter seeing their own abstracts, if they submitted any</li>
+<li>prevents the sifter seeing abstracts by authors with the same affiliation as the sifter, if relevant</li>
+<li>respects a maximum assignment ‘cap’, if the sifter has one</li>
+<li>allows the user to set a maximum number of iterations to prevent infinite looping (may be possible under certain conditions)</li>
+</ul>
+<section id="process" class="level3">
+<h3 class="anchored" data-anchor-id="process">Process</h3>
+<p>The function itself is split into three main parts:</p>
+<ol type="1">
+<li>Setup of variables to be used in iteration.</li>
+<li>A <code>repeat</code> loop that will keep assigning abstracts to the set of sifters until the total abstract pool is exhausted and the various requirements are met.</li>
+<li>Within the <code>repeat</code> loop, a <code>for</code> loop that iterates over each sifter to assign them an abstract from their pool of viable abstracts.</li>
+</ol>
+<p>Within the <code>for</code> loop are three main steps:</p>
+<ol type="1">
+<li>Find the pool of abstracts available to the sifter (if any).</li>
+<li>Select randomly an abstract from the pool and assign it to the sifter.</li>
+<li>Increment the assignment counter for the selected abstract.</li>
+</ol>
+<p>The <code>for</code> loop will go to the <code>next</code> sifter if the pool of abstracts for the current sifter is zero. The <code>repeat</code> loop will <code>break</code> if all of the abstracts have been assigned <em>n</em> number of times, according to the <code>assignment_cap</code> argument. It will also <code>break</code> if the number of iterations given by <code>max_iterations</code> has been met.</p>
+</section>
+<section id="definition" class="level3">
+<h3 class="anchored" data-anchor-id="definition">Definition</h3>
+<p>The function is not optimised at all, is not fully tested and has no defensive programming. But it fulfilled the requirements for the task. I’m recording it here for posterity.</p>
+<p>I’ve added some comments and tried to make variable names informative. The <code>abstracts_df</code> and <code>sifters_df</code> inputs are dataframes that have columns for the <code>name</code> and <code>affiliation</code>, along with a maximum-assignment <code>cap</code> column in the <code>sifters_df</code>.</p>
+<p>Of course, it’s too big and should be broken into smaller functions, particularly each of the steps in the <code>for</code> loop. Also, you feed in dataframes, but these are converted immediately to named vectors for processing. In part this reflects the ease of handling named vectors, but is also a legacy of when the requirements were far simpler. The requirements grew more complicated over time, so it became a Frankenfunction</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">assign_abstracts <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(</span>
+<span id="cb1-2">    abstracts_df,</span>
+<span id="cb1-3">    sifters_df,</span>
+<span id="cb1-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">assignment_cap =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>, </span>
+<span id="cb1-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">max_iterations =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1000</span></span>
+<span id="cb1-6">) {</span>
+<span id="cb1-7">  </span>
+<span id="cb1-8">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Set up named vectors</span></span>
+<span id="cb1-9">  abstracts <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">with</span>(abstracts_df, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">setNames</span>(affiliation, name))</span>
+<span id="cb1-10">  sifters <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">with</span>(sifters_df, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">setNames</span>(affiliation, name))</span>
+<span id="cb1-11">  sifter_caps <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">with</span>(sifters_df, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">setNames</span>(cap, name))</span>
+<span id="cb1-12">  sifter_caps <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sifter_caps[<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">is.na</span>(sifter_caps)]</span>
+<span id="cb1-13">  </span>
+<span id="cb1-14">  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Set up starting variables</span></span>
+<span id="cb1-15">  n_abstracts <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(abstracts)</span>
+<span id="cb1-16">  seq_abstracts <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq_len</span>(n_abstracts)</span>
+<span id="cb1-17">  sifter_assignments <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">setNames</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">vector</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"list"</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(sifters)), <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(sifters))</span>
+<span id="cb1-18">  assignment_counts <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, n_abstracts)</span>
+<span id="cb1-19">  iter <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span></span>
+<span id="cb1-20">  </span>
+<span id="cb1-21">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">repeat</span> {</span>
+<span id="cb1-22">    </span>
+<span id="cb1-23">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (name <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(sifter_assignments)) {</span>
+<span id="cb1-24">      </span>
+<span id="cb1-25">      <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 1. Find the pool of abstracts available to this sifter (if any)</span></span>
+<span id="cb1-26">      </span>
+<span id="cb1-27">      <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># a. Check if sifter cap has been met</span></span>
+<span id="cb1-28">      sifter_has_cap <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> name <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(sifter_caps)</span>
+<span id="cb1-29">      <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (sifter_has_cap) {</span>
+<span id="cb1-30">        sifter_cap <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sifter_caps[[name]]</span>
+<span id="cb1-31">        sifter_assignment_count <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(sifter_assignments[[name]])</span>
+<span id="cb1-32">      }</span>
+<span id="cb1-33">      <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (sifter_has_cap <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&amp;&amp;</span> sifter_assignment_count <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> sifter_cap) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">next</span></span>
+<span id="cb1-34">      </span>
+<span id="cb1-35">      <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># b. Add abstracts to pool if they have &lt;n assignments</span></span>
+<span id="cb1-36">      abstracts_under_cap <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">which</span>(assignment_counts <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> assignment_cap)</span>
+<span id="cb1-37">      <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(abstracts_under_cap) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">next</span></span>
+<span id="cb1-38">      </span>
+<span id="cb1-39">      <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># c. Remove abstracts that are already assigned to this sifter</span></span>
+<span id="cb1-40">      already_assigned_to_sifter <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sifter_assignments[[name]]</span>
+<span id="cb1-41">      abstracts_available <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> </span>
+<span id="cb1-42">        abstracts_under_cap[<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span>abstracts_under_cap <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%in%</span> already_assigned_to_sifter]</span>
+<span id="cb1-43">      <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(abstracts_available) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">next</span></span>
+<span id="cb1-44">      </span>
+<span id="cb1-45">      <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># d. Remove abstracts by the named sifter</span></span>
+<span id="cb1-46">      abstracts_by_sifter <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">which</span>(name <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(abstracts[abstracts_available]))</span>
+<span id="cb1-47">      <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(abstracts_by_sifter) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>) {</span>
+<span id="cb1-48">        abstracts_available <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> abstracts_available[<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>abstracts_by_sifter]</span>
+<span id="cb1-49">      }</span>
+<span id="cb1-50">      <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(abstracts_available) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">next</span></span>
+<span id="cb1-51">      </span>
+<span id="cb1-52">      <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># e. Remove abstracts with the same affiliation as the sifter</span></span>
+<span id="cb1-53">      sifter_affiliation <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unname</span>(sifters[name])</span>
+<span id="cb1-54">      abstracts_by_same_affiliation <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> </span>
+<span id="cb1-55">        <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">which</span>(sifter_affiliation <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unname</span>(abstracts[abstracts_available]))</span>
+<span id="cb1-56">      <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(abstracts_by_same_affiliation) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>) {</span>
+<span id="cb1-57">        abstracts_available <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> </span>
+<span id="cb1-58">          abstracts_available[<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>abstracts_by_same_affiliation]</span>
+<span id="cb1-59">      }</span>
+<span id="cb1-60">      <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(abstracts_available) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">next</span></span>
+<span id="cb1-61">      </span>
+<span id="cb1-62">      <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 2. Select randomly from pool and assign to sifter</span></span>
+<span id="cb1-63">      abstract_selected <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">.resample</span>(abstracts_available, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb1-64">      sifter_assignments[[name]] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> </span>
+<span id="cb1-65">        <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(sifter_assignments[[name]], abstract_selected)</span>
+<span id="cb1-66">      </span>
+<span id="cb1-67">      <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 3. Increment count for sampled abstract</span></span>
+<span id="cb1-68">      assignment_counts[abstract_selected] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> </span>
+<span id="cb1-69">        assignment_counts[abstract_selected] <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb1-70">      <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">all</span>(assignment_counts <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> assignment_cap)) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">break</span></span>
+<span id="cb1-71">      </span>
+<span id="cb1-72">    }</span>
+<span id="cb1-73">    </span>
+<span id="cb1-74">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Reorder so sifter with fewest assignments gets next assignment first</span></span>
+<span id="cb1-75">    sifter_assignments <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sifter_assignments[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">order</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lengths</span>(sifter_assignments))]</span>
+<span id="cb1-76">    </span>
+<span id="cb1-77">    iter <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> iter <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span></span>
+<span id="cb1-78">    </span>
+<span id="cb1-79">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">all</span>(assignment_counts <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> assignment_cap)) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">break</span></span>
+<span id="cb1-80">    </span>
+<span id="cb1-81">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> (iter <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> max_iterations) {</span>
+<span id="cb1-82">      <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">message</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"max_iterations reached"</span>)</span>
+<span id="cb1-83">      <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">break</span></span>
+<span id="cb1-84">    }</span>
+<span id="cb1-85">    </span>
+<span id="cb1-86">  }</span>
+<span id="cb1-87">  </span>
+<span id="cb1-88">  sifter_assignments <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(sifter_assignments, sort)</span>
+<span id="cb1-89">  sifter_assignments[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">order</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(sifter_assignments))]</span>
+<span id="cb1-90">  </span>
+<span id="cb1-91">}</span>
+<span id="cb1-92"></span>
+<span id="cb1-93">.resample <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(x, ...) x[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sample.int</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(x), ...)]</span></code></pre></div>
+</div>
+<p>Note the bespoke <code>.resample()</code> function because <code>sample()</code> operates differently depending on whether you give it a vector or a single value<sup>1</sup>. If only one abstract is left in the pool, e.g.&nbsp;abstract number 13, then <code>sample(13)</code> won’t output 13, it will actually output a value from 1 to 13.</p>
+</section>
+</section>
+<section id="example" class="level2">
+<h2 class="anchored" data-anchor-id="example">Example</h2>
+<section id="demo-data" class="level3">
+<h3 class="anchored" data-anchor-id="demo-data">Demo data</h3>
+<p>Let’s create some fake data using <a href="https://docs.ropensci.org/charlatan/">the {charlatan} package</a>. Let’s imagine we have some sifters and their affiliations. One sifter only has time to do 10 assessments, so they have a <code>cap</code> value.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">set.seed</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>)</span>
+<span id="cb2-2"></span>
+<span id="cb2-3">n_sifters <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span></span>
+<span id="cb2-4">sifter_companies <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> charlatan<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ch_company</span>(n_sifters)</span>
+<span id="cb2-5">sifter_names <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> charlatan<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ch_name</span>(n_sifters)</span>
+<span id="cb2-6"></span>
+<span id="cb2-7">(sifters_df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.frame</span>(</span>
+<span id="cb2-8">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">name =</span> sifter_names,</span>
+<span id="cb2-9">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">affiliation =</span> sifter_companies,</span>
+<span id="cb2-10">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">cap =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA_real_</span>, n_sifters <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>))</span>
+<span id="cb2-11">))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              name                        affiliation cap
+1 Justen Powlowski                         Paucek Inc  10
+2 Jon Blick-Erdman                    Ziemann-Ziemann  NA
+3   Cannon Hegmann                        Wyman-Wyman  NA
+4  Nichelle Schoen Daugherty, Daugherty and Daugherty  NA
+5   Earley Monahan                        Walsh-Walsh  NA</code></pre>
+</div>
+</div>
+<p>Now let’s create some fake abstracts, again with names and affiliations. The abstract titles here are just random species names, so let’s pretend we’re at a taxonomists’ conference or something. Let’s make it so the sifters have each submitted an abstract of their own and that there’s at least one other submission from their organisation.</p>
+<p>Of course, your abstract dataset is likely to contain more information, like the actual text of the abstract and other details like the author’s geographic location and talk-type preference (poster, plenary, etc). If you’ve used an online survey service then you can usually download a CSV of the results or connect to their API to get the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">total_abstracts <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span></span>
+<span id="cb4-2"></span>
+<span id="cb4-3">abstracts_df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">data.frame</span>(</span>
+<span id="cb4-4">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">name =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(sifter_names, charlatan<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ch_name</span>(total_abstracts <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> n_sifters)),</span>
+<span id="cb4-5">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">affiliation =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(</span>
+<span id="cb4-6">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(sifter_companies, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>),</span>
+<span id="cb4-7">    charlatan<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ch_company</span>(total_abstracts <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> (<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span> n_sifters))</span>
+<span id="cb4-8">  ),</span>
+<span id="cb4-9">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">title =</span> charlatan<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ch_taxonomic_species</span>(total_abstracts)</span>
+<span id="cb4-10">)</span>
+<span id="cb4-11"></span>
+<span id="cb4-12">abstracts_df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> abstracts_df[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sample</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">nrow</span>(abstracts_df)), ]  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># shuffle</span></span>
+<span id="cb4-13"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">row.names</span>(abstracts_df) <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NULL</span></span>
+<span id="cb4-14"></span>
+<span id="cb4-15"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(abstracts_df)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                  name                        affiliation                 title
+1     Jon Blick-Erdman                    Ziemann-Ziemann   Coniogramme euantha
+2       Tavaris Reilly                        Wyman-Wyman       Tristemon egena
+3 Shavonne Ziemann PhD            Satterfield-Satterfield  Pichleria majungense
+4      Nichelle Schoen Daugherty, Daugherty and Daugherty      Zelkova vigilans
+5        Durrell Mertz                Jaskolski-Jaskolski Papuechites denutatum
+6      Mikayla Rau DDS                        Stark-Stark   Oldfieldia mohriana</code></pre>
+</div>
+</div>
+</section>
+<section id="run" class="level3">
+<h3 class="anchored" data-anchor-id="run">Run</h3>
+<p>Let’s provide the <code>abstracts_df</code> and <code>sifters_df</code> dataframes to the function, along with the number of times each abstract will need to be assessed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">n <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span></span>
+<span id="cb6-2"></span>
+<span id="cb6-3">assignments <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">assign_abstracts</span>(</span>
+<span id="cb6-4">  abstracts_df,</span>
+<span id="cb6-5">  sifters_df,</span>
+<span id="cb6-6">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">assignment_cap =</span> n</span>
+<span id="cb6-7">)</span></code></pre></div>
+</div>
+<p>Here’s what the output looks like. It’s a named list with one element per sifter. The values are the index of that abstract in the vector provided to the <code>abstracts_df</code> argument.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">assignments</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$`Cannon Hegmann`
+ [1]  1  4  6  8 10 12 16 19 20 26 28 29
+
+$`Earley Monahan`
+ [1]  1  4  5  7 10 12 13 17 22 25 27 28
+
+$`Jon Blick-Erdman`
+ [1]  7  8 11 14 15 16 17 18 21 22 23 24 30
+
+$`Justen Powlowski`
+ [1]  2  3  5  9 14 18 20 23 26 29
+
+$`Nichelle Schoen`
+ [1]  2  3  6  9 11 13 15 19 21 24 25 27 30</code></pre>
+</div>
+</div>
+<p>These indices can be matched back to the original dataset. Here’s an example for the first sifter.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">assignment_df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> abstracts_df[assignments[[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>]], ]</span>
+<span id="cb9-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">head</span>(assignment_df)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                             name                        affiliation
+1                Jon Blick-Erdman                    Ziemann-Ziemann
+4                 Nichelle Schoen Daugherty, Daugherty and Daugherty
+6                 Mikayla Rau DDS                        Stark-Stark
+8                  Earley Monahan                        Walsh-Walsh
+10               Heriberto Feeney                    Ziemann-Ziemann
+12 Muhammad Stoltenberg-Hermiston                        Tillman LLC
+                     title
+1      Coniogramme euantha
+4         Zelkova vigilans
+6      Oldfieldia mohriana
+8      Isoetella flaccidum
+10     Tylophora serrulata
+12 Microtropis turubalense</code></pre>
+</div>
+</div>
+<p>You could wrangle this into an anonymised dataframe with columns for the sifter to provide their assessment.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">anon_df <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> assignment_df[, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"title"</span>, drop <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>]</span>
+<span id="cb11-2">anon_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>score <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA_real_</span></span>
+<span id="cb11-3">anon_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>comments <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">NA_character_</span></span>
+<span id="cb11-4">anon_df</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                         title score comments
+1          Coniogramme euantha    NA     &lt;NA&gt;
+4             Zelkova vigilans    NA     &lt;NA&gt;
+6          Oldfieldia mohriana    NA     &lt;NA&gt;
+8          Isoetella flaccidum    NA     &lt;NA&gt;
+10         Tylophora serrulata    NA     &lt;NA&gt;
+12     Microtropis turubalense    NA     &lt;NA&gt;
+16         Coussapoa anatuyana    NA     &lt;NA&gt;
+19 Chiloglottis brideliifolius    NA     &lt;NA&gt;
+20            Crocus candollei    NA     &lt;NA&gt;
+26         Pistacia weinmannii    NA     &lt;NA&gt;
+28         Baillaudea dodsonii    NA     &lt;NA&gt;
+29         Syngonium tangutica    NA     &lt;NA&gt;</code></pre>
+</div>
+</div>
+<p>And then you can return this back to the sifter. The low-tech mechanism would be to put this into a spreadsheet output with {openxlsx}, for example. Much better would be to create a simple Shiny app hosted on Posit Connect or something, allowing each sifter to see their assigned abstracts and submit their assessments.</p>
+</section>
+<section id="check" class="level3">
+<h3 class="anchored" data-anchor-id="check">Check</h3>
+<p>Great, but the output actually meet the initial requirements for the system? Let’s take a look.</p>
+<p>Was each abstract assigned the number of times specified by <code>assignment_cap</code>?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">all</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">table</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unlist</span>(assignments)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> n)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p>Here you can see that sifters received a near-equal number of abstracts, apart from the sifter who had a specified maximum-assignment cap.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lengths</span>(assignments)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Cannon Hegmann   Earley Monahan Jon Blick-Erdman Justen Powlowski 
+              12               12               13               10 
+ Nichelle Schoen 
+              13 </code></pre>
+</div>
+</div>
+<p>Was each sifter assigned a unique set of abstracts?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">all</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lengths</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lapply</span>(assignments, unique)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">lengths</span>(assignments))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p>Did anyone receive their own abstract?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1">sifter_names <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sifters_df[sifters_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>name <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(assignments), <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>]</span>
+<span id="cb19-2"></span>
+<span id="cb19-3">has_own_abstract <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">vector</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"list"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">length =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(sifter_names)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb19-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">setNames</span>(sifter_names)</span>
+<span id="cb19-5"></span>
+<span id="cb19-6"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq_along</span>(sifter_names)) {</span>
+<span id="cb19-7">  sifter_name <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sifter_names[i]</span>
+<span id="cb19-8">  abstract_names <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> abstracts_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>name[assignments[[i]]]</span>
+<span id="cb19-9">  has_own_abstract[[i]] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">all</span>(sifter_name <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> abstract_names)</span>
+<span id="cb19-10">}</span>
+<span id="cb19-11"></span>
+<span id="cb19-12"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unlist</span>(has_own_abstract)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Justen Powlowski Jon Blick-Erdman   Cannon Hegmann  Nichelle Schoen 
+           FALSE            FALSE            FALSE            FALSE 
+  Earley Monahan 
+           FALSE </code></pre>
+</div>
+</div>
+<p>Did any of the sifters get assigned abstracts from their own affiliation?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1">affiliations <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> </span>
+<span id="cb21-2">  sifters_df[sifters_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>name <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(assignments), <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"affiliation"</span>]</span>
+<span id="cb21-3"></span>
+<span id="cb21-4">has_affiliate_abstract <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">vector</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"list"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">length =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">length</span>(assignments)) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb21-5">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">setNames</span>(affiliations)</span>
+<span id="cb21-6"></span>
+<span id="cb21-7"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq_along</span>(affiliations)) {</span>
+<span id="cb21-8">  sifter_affiliation <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> affiliations[i]</span>
+<span id="cb21-9">  abstract_affiliations <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> abstracts_df<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>affiliation[assignments[[i]]]</span>
+<span id="cb21-10">  has_affiliate_abstract[[i]] <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">all</span>(sifter_affiliation <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> abstract_affiliations)</span>
+<span id="cb21-11">}</span>
+<span id="cb21-12"></span>
+<span id="cb21-13"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">unlist</span>(has_affiliate_abstract)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                        Paucek Inc                    Ziemann-Ziemann 
+                             FALSE                              FALSE 
+                       Wyman-Wyman Daugherty, Daugherty and Daugherty 
+                             FALSE                              FALSE 
+                       Walsh-Walsh 
+                             FALSE </code></pre>
+</div>
+</div>
+<p>Okey-doke.</p>
+</section>
+</section>
+<section id="what-now" class="level2">
+<h2 class="anchored" data-anchor-id="what-now">What now?</h2>
+<p>This could definitely be better.</p>
+<p>As mentioned, there’s a lot of refactoring that could be done, recognising that it was developed rapidly with changing requirements. I’m reflecting on it now that it’s solved the problem, but eventually it may be refactored or rewritten from scratch.</p>
+<p>This would make sense if we (or you) want to use it in other scenarios or as part of a more generic package in future.</p>
+<p>Or, as usual, this functionality probably exists in some package already and you can tell me all about it.</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2024-03-26 18:34:06 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] digest_0.6.33     utf8_1.2.4        R6_2.5.1          fastmap_1.1.1    
+ [5] xfun_0.41         magrittr_2.0.3    glue_1.7.0        tibble_3.2.1     
+ [9] knitr_1.45        pkgconfig_2.0.3   htmltools_0.5.6.1 rmarkdown_2.25   
+[13] lifecycle_1.0.4   cli_3.6.2         fansi_1.0.6       vctrs_0.6.5      
+[17] compiler_4.3.1    rstudioapi_0.15.0 tools_4.3.1       whisker_0.4.1    
+[21] pillar_1.9.0      evaluate_0.23     charlatan_0.5.1   yaml_2.3.8       
+[25] rlang_1.1.3       jsonlite_1.8.7    htmlwidgets_1.6.2</code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>The ‘single sample switch’ as Patrick Burns puts it <a href="https://www.burns-stat.com/pages/Tutor/R_inferno.pdf">in The R Inferno</a> (section 8.2.33).↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>charlatan</category>
+  <category>r</category>
+  <guid>https://www.rostrum.blog/posts/2024-03-26-assign-abstracts/index.html</guid>
+  <pubDate>Tue, 26 Mar 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Sh*tty R help from sh*tty AI</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -7612,256 +8555,6 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-08-01-monetize/index.html</guid>
   <pubDate>Mon, 31 Jul 2023 23:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Save high scores for your R game</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-07-15-hiscore/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><img src="https://www.rostrum.blog/posts/2023-07-15-hiscore/resources/hiscore.gif" class="img-fluid" alt="R code run in an RStudio window. The hiscore package is attached and the play_coinflip function is run. The user guesses heads, it's wrong, they score zero, which is the new high score. The user tries again, is reminded that the high score is currently zero and then scores 1. The session is restarted, but the get_save_data function proves that the top score has been saved."></p>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>You can save your high score in games made with R. See <a href="https://github.com/matt-dray/hiscore">the package {hiscore}</a> for a demo.</p>
-</section>
-<section id="boot-up" class="level2">
-<h2 class="anchored" data-anchor-id="boot-up">Boot up</h2>
-<p>I wrote recently about how <a href="https://www.rostrum.blog/2023/04/02/splendid-r-games/">R is a game engine</a> and started <a href="https://github.com/matt-dray/splendid-r-games">a list of games written in R</a>.</p>
-<p>All good game engines should let you save a high score, right?</p>
-<p>So I’ve done exactly this for a tiny concept package called <a href="https://github.com/matt-dray/hiscore">{hiscore}</a><sup>1</sup> that contains a simple game of luck</p>
-<p>The package runs code that saves your high score, which is retained between play sessions.</p>
-</section>
-<section id="install" class="level2">
-<h2 class="anchored" data-anchor-id="install">Install</h2>
-<p>You can install the package <a href="https://github.com/matt-dray/hiscore">from GitHub</a>. It has no dependencies, but you’ll need to be running R version 4, at least.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install.package</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"remotes"</span>)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># if not yet installed</span></span>
-<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"matt-dray/hiscore"</span>)</span>
-<span id="cb1-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(hiscore)</span></code></pre></div>
-</div>
-<p>Of course, it’s just a concept and I’ve intentionally kept this as trivial as possible, but you can <a href="https://github.com/matt-dray/hiscore/issues">leave an issue</a> with bugs or ideas.</p>
-</section>
-<section id="play" class="level2">
-<h2 class="anchored" data-anchor-id="play">Play</h2>
-<p>For demonstration purposes, the inbuilt game is super simple: get the longest streak of correctly guessed coinflips.</p>
-<p>To play, run <code>play_coinflip()</code> and type <kbd>H</kbd> or <kbd>T</kbd> and <kbd>Enter</kbd> when prompted. Basically, a coinflip is simulated with <code>sample(c("H", "T"), 1)</code> and then compared to the user’s input, supplied from the console following a <code>readline()</code> call.</p>
-<p>Keep going until you get it wrong. If you get a new high score, it’ll be saved.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">play_coinflip</span>()</span></code></pre></div>
-</div>
-<pre><code>[H]eads or [T]ails? Answer: H
-Correct! Current score: 1
-[H]eads or [T]ails? Answer: H
-Incorrect! Final score: 1
-New high score!
-New high score saved.</code></pre>
-<p>You can retrieve the current high score with <code>get_save_data()</code>, which returns a little table.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">get_save_data</span>()</span></code></pre></div>
-</div>
-<pre><code>      game high_score
-1 coinflip          1</code></pre>
-<p>Of course, you could also set up the function so that it records different player names too. And you could add additional games that would get their own row in this table.</p>
-</section>
-<section id="memory" class="level2">
-<h2 class="anchored" data-anchor-id="memory">Memory</h2>
-<p>Note that the high score data is retained on your computer even if you restart your session or reboot your machine. How so?</p>
-<p>This is thanks to <a href="https://rdrr.io/r/tools/userdir.html">the <code>tools::R_user_dir()</code> function</a>, which was added to R in version 4.0. It builds system-specific paths to ‘directories for storing R-related user-specific data, configuration and cache files’ where you can save package-related information.</p>
-<p>{hiscore} records top scores in this fashion. On my machine, the save location resolves to the following:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">tools<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">R_user_dir</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"hiscore"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"data"</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "/Users/mattdray/Library/Application Support/org.R-project.R/R/hiscore"</code></pre>
-</div>
-</div>
-<p>Regular readers may remember that I used <code>R_user_dir()</code> in the {tamRgo} package (<a href="https://www.rostrum.blog/2022/11/13/tamrgo/">blog</a>, <a href="https://github.com/matt-dray/tamRgo">source</a>), which lets you look after a Tamagotchi-style cyber-pet in your console. I used the function to save a pet’s ‘blueprint’ (details such as name, age and hunger level) persistently.</p>
-</section>
-<section id="retry" class="level2">
-<h2 class="anchored" data-anchor-id="retry">Retry</h2>
-<p>Now imagine you want to retry to beat that incredible top score of 1. Since you last played, you probably restarted your session or computer.</p>
-<pre><code>Restarting R session...</code></pre>
-<p>But never fear: the high score was retained. You can see that when you run <code>play_coinflip()</code> again and are reminded of the current best.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(hiscore)</span>
-<span id="cb9-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">play_coinflip</span>()</span></code></pre></div>
-</div>
-<pre><code>Welcome. Your current high score is 1
-[H]eads or [T]ails? Answer: h
-Correct! Current score: 1
-[H]eads or [T]ails? Answer: t
-Correct! Current score: 2
-[H]eads or [T]ails? Answer: h
-Incorrect! Final score: 2
-New high score!
-New high score saved.</code></pre>
-<p>Great job, you doubled the previous record!</p>
-<p>When you get a game over, the <code>play_coinflip()</code> function checks the current high score and compares it to the final score for the current play session. The saved data is overwritten if the score is higher.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">get_save_data</span>()</span></code></pre></div>
-</div>
-<pre><code>      game high_score
-1 coinflip          2</code></pre>
-<p>I think it’s a good idea to make it easy for people to destroy the stored data if they want, which you can do easily with <code>delete_save_data()</code>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">delete_save_data</span>()</span></code></pre></div>
-</div>
-<pre><code>Really delete? [Y]es/[N]o: Y
-High score data deleted.</code></pre>
-</section>
-<section id="game-over" class="level2">
-<h2 class="anchored" data-anchor-id="game-over">Game over</h2>
-<p>How else could this approach be used in an R gaming perspective? You could use this to save a game state, similar to what’s done for <a href="https://www.rostrum.blog/2022/11/13/tamrgo/">{tamRgo}</a>. The user could input <code>S</code>ave instead of performing a guess, which would record the current status of the game so the user can return later. But that would feel like cheating for a game like coinflip.</p>
-<p>Speaking of, here’s a cheatcode as a bonus for reading this far:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">cheat <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(game, new_score) {</span>
-<span id="cb15-2">  user_dir <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> tools<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">R_user_dir</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"hiscore"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"data"</span>)</span>
-<span id="cb15-3">  score_path <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">file.path</span>(user_dir, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"score_table.rds"</span>)</span>
-<span id="cb15-4">  score_table <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">readRDS</span>(score_path)</span>
-<span id="cb15-5">  score_table[score_table[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"game"</span>]] <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> game, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"high_score"</span>] <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> new_score</span>
-<span id="cb15-6">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">saveRDS</span>(score_table, score_path)</span>
-<span id="cb15-7">}</span>
-<span id="cb15-8"></span>
-<span id="cb15-9"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">cheat</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"coinflip"</span>, <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1e100</span>)</span>
-<span id="cb15-10"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">get_save_data</span>()</span></code></pre></div>
-</div>
-<pre><code>      game high_score
-1 coinflip     1e+100</code></pre>
-<p>Heh heh heh.</p>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-25 15:10:34 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
-[1] hiscore_0.0.0.9000
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
- [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
-[13] digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>As in ‘high score’ not as in ‘his core’.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>hiscore</category>
-  <category>r</category>
-  <category>videogames</category>
-  <guid>https://www.rostrum.blog/posts/2023-07-15-hiscore/index.html</guid>
-  <pubDate>Fri, 14 Jul 2023 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
