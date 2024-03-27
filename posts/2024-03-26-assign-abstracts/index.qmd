@@ -13,7 +13,9 @@ A quick and dirty R function to assign abstracts to sifters.
 
 ## Assign me up
 
-I hacked together a function to assign conference abstracts to sifters so they could be assessed. There were several requirements that complicated things. The function:
+I hacked together a function to assign submitted conference abstracts to sifters for assessment. At its simplest you give it two dataframes: one with a row per abstract, one with a row per sifter. You receive back a list, one element per sifter, with the abstracts they've been assigned.
+
+There were several criteria that complicated things. The function:
 
 * tries to make assignment counts equal between sifters where possible
 * results in each abstract being assigned _n_ times, to assure fairness in assessment
@@ -27,13 +29,13 @@ I hacked together a function to assign conference abstracts to sifters so they c
 
 The function itself is split into three main parts:
 
-1. Setup of variables to be used in iteration.
-2. A `repeat` loop that will keep assigning abstracts to the set of sifters until the total abstract pool is exhausted and the various requirements are met.
+1. Setup of variables and counters to be used in the iterations.
+2. A `repeat` loop that will keep assigning abstracts to the set of sifters until the total abstract pool is exhausted and the various criteria are met.
 3. Within the `repeat` loop, a `for` loop that iterates over each sifter to assign them an abstract from their pool of viable abstracts.
 
 Within the `for` loop are three main steps:
 
-1. Find the pool of abstracts available to the sifter (if any).
+1. Find the pool of abstracts available to the sifter given various criteria (if any).
 2. Select randomly an abstract from the pool and assign it to the sifter.
 3. Increment the assignment counter for the selected abstract.
 
@@ -41,11 +43,9 @@ The `for` loop will go to the `next` sifter if the pool of abstracts for the cur
 
 ### Definition
 
-The function is not optimised at all, is not fully tested and has no defensive programming. But it fulfilled the requirements for the task. I'm recording it here for posterity.
+The function was developed quickly, is not optimised, is not fully tested and has no defensive programming. But it fulfilled the requirements for the task. I'm recording it here for posterity.
 
 I've added some comments and tried to make variable names informative. The `abstracts_df` and `sifters_df` inputs are dataframes that have columns for the `name` and `affiliation`, along with a maximum-assignment `cap` column in the `sifters_df`.
-
-Of course, it's too big and should be broken into smaller functions, particularly each of the steps in the `for` loop. Also, you feed in dataframes, but these are converted immediately to named vectors for processing. In part this reflects the ease of handling named vectors, but is also a legacy of when the requirements were far simpler. The requirements grew more complicated over time, so it became a Frankenfunction
 
 ```{r}
 #| label: assign-abstracts
@@ -145,13 +145,15 @@ assign_abstracts <- function(
 .resample <- function(x, ...) x[sample.int(length(x), ...)]
 ```
 
-Note the bespoke `.resample()` function because `sample()` operates differently depending on whether you give it a vector or a single value[^inferno]. If only one abstract is left in the pool, e.g. abstract number 13, then `sample(13)` won't output 13, it will actually output a value from 1 to 13.
+Of course, it's too big and should be broken into smaller functions, particularly each of the steps in the `for` loop. Also, you feed in dataframes, but these are converted immediately to named vectors for processing. In part this reflects the ease of handling named vectors, but is also a legacy of when the requirements were far simpler. The requirements grew more complicated over time, so it became a Frankenfunction
+
+Note also the bespoke `.resample()` function because `sample()` operates differently depending on whether you give it a vector or a single value[^inferno]. If only one abstract is left in the pool, e.g. abstract number 13, then `sample(13)` won't output 13, it will actually output a value from 1 to 13.
 
 ## Example
 
 ### Demo data
 
-Let's create some fake data using [the {charlatan} package](https://docs.ropensci.org/charlatan/). Let's imagine we have some sifters and their affiliations. One sifter only has time to do 10 assessments, so they have a `cap` value.
+Let's create some fake data using [the {charlatan} package](https://docs.ropensci.org/charlatan/). Let's imagine we have some sifters and their affiliations. One sifter only has time to do 10 assessments, so they have an assignment `cap` value.
 
 ```{r}
 set.seed(1)
@@ -169,7 +171,7 @@ sifter_names <- charlatan::ch_name(n_sifters)
 
 Now let's create some fake abstracts, again with names and affiliations. The abstract titles here are just random species names, so let's pretend we're at a taxonomists' conference or something. Let's make it so the sifters have each submitted an abstract of their own and that there's at least one other submission from their organisation. 
 
-Of course, your abstract dataset is likely to contain more information, like the actual text of the abstract and other details like the author's geographic location and talk-type preference (poster, plenary, etc). If you've used an online survey service then you can usually download a CSV of the results or connect to their API to get the data.
+Of course, your abstract dataset is likely to contain additional information, like the actual text of the abstract and other details like the author's geographic location and talk-type preference (poster, plenary, etc). If you've used an online survey service then you can usually download a CSV of the results or connect to their API to get the data.
 
 ```{r}
 total_abstracts <- 30

@@ -199,7 +199,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="assign-me-up" class="level2">
 <h2 class="anchored" data-anchor-id="assign-me-up">Assign me up</h2>
-<p>I hacked together a function to assign conference abstracts to sifters so they could be assessed. There were several requirements that complicated things. The function:</p>
+<p>I hacked together a function to assign submitted conference abstracts to sifters for assessment. At its simplest you give it two dataframes: one with a row per abstract, one with a row per sifter. You receive back a list, one element per sifter, with the abstracts they’ve been assigned.</p>
+<p>There were several criteria that complicated things. The function:</p>
 <ul>
 <li>tries to make assignment counts equal between sifters where possible</li>
 <li>results in each abstract being assigned <em>n</em> times, to assure fairness in assessment</li>
@@ -213,13 +214,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="process">Process</h3>
 <p>The function itself is split into three main parts:</p>
 <ol type="1">
-<li>Setup of variables to be used in iteration.</li>
-<li>A <code>repeat</code> loop that will keep assigning abstracts to the set of sifters until the total abstract pool is exhausted and the various requirements are met.</li>
+<li>Setup of variables and counters to be used in the iterations.</li>
+<li>A <code>repeat</code> loop that will keep assigning abstracts to the set of sifters until the total abstract pool is exhausted and the various criteria are met.</li>
 <li>Within the <code>repeat</code> loop, a <code>for</code> loop that iterates over each sifter to assign them an abstract from their pool of viable abstracts.</li>
 </ol>
 <p>Within the <code>for</code> loop are three main steps:</p>
 <ol type="1">
-<li>Find the pool of abstracts available to the sifter (if any).</li>
+<li>Find the pool of abstracts available to the sifter given various criteria (if any).</li>
 <li>Select randomly an abstract from the pool and assign it to the sifter.</li>
 <li>Increment the assignment counter for the selected abstract.</li>
 </ol>
@@ -227,9 +228,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="definition" class="level3">
 <h3 class="anchored" data-anchor-id="definition">Definition</h3>
-<p>The function is not optimised at all, is not fully tested and has no defensive programming. But it fulfilled the requirements for the task. I’m recording it here for posterity.</p>
+<p>The function was developed quickly, is not optimised, is not fully tested and has no defensive programming. But it fulfilled the requirements for the task. I’m recording it here for posterity.</p>
 <p>I’ve added some comments and tried to make variable names informative. The <code>abstracts_df</code> and <code>sifters_df</code> inputs are dataframes that have columns for the <code>name</code> and <code>affiliation</code>, along with a maximum-assignment <code>cap</code> column in the <code>sifters_df</code>.</p>
-<p>Of course, it’s too big and should be broken into smaller functions, particularly each of the steps in the <code>for</code> loop. Also, you feed in dataframes, but these are converted immediately to named vectors for processing. In part this reflects the ease of handling named vectors, but is also a legacy of when the requirements were far simpler. The requirements grew more complicated over time, so it became a Frankenfunction</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>assign_abstracts <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    abstracts_df,</span>
@@ -325,14 +325,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>.resample <span class="ot">&lt;-</span> <span class="cf">function</span>(x, ...) x[<span class="fu">sample.int</span>(<span class="fu">length</span>(x), ...)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Note the bespoke <code>.resample()</code> function because <code>sample()</code> operates differently depending on whether you give it a vector or a single value<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. If only one abstract is left in the pool, e.g.&nbsp;abstract number 13, then <code>sample(13)</code> won’t output 13, it will actually output a value from 1 to 13.</p>
+<p>Of course, it’s too big and should be broken into smaller functions, particularly each of the steps in the <code>for</code> loop. Also, you feed in dataframes, but these are converted immediately to named vectors for processing. In part this reflects the ease of handling named vectors, but is also a legacy of when the requirements were far simpler. The requirements grew more complicated over time, so it became a Frankenfunction</p>
+<p>Note also the bespoke <code>.resample()</code> function because <code>sample()</code> operates differently depending on whether you give it a vector or a single value<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. If only one abstract is left in the pool, e.g.&nbsp;abstract number 13, then <code>sample(13)</code> won’t output 13, it will actually output a value from 1 to 13.</p>
 </section>
 </section>
 <section id="example" class="level2">
 <h2 class="anchored" data-anchor-id="example">Example</h2>
 <section id="demo-data" class="level3">
 <h3 class="anchored" data-anchor-id="demo-data">Demo data</h3>
-<p>Let’s create some fake data using <a href="https://docs.ropensci.org/charlatan/">the {charlatan} package</a>. Let’s imagine we have some sifters and their affiliations. One sifter only has time to do 10 assessments, so they have a <code>cap</code> value.</p>
+<p>Let’s create some fake data using <a href="https://docs.ropensci.org/charlatan/">the {charlatan} package</a>. Let’s imagine we have some sifters and their affiliations. One sifter only has time to do 10 assessments, so they have an assignment <code>cap</code> value.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -355,7 +356,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Now let’s create some fake abstracts, again with names and affiliations. The abstract titles here are just random species names, so let’s pretend we’re at a taxonomists’ conference or something. Let’s make it so the sifters have each submitted an abstract of their own and that there’s at least one other submission from their organisation.</p>
-<p>Of course, your abstract dataset is likely to contain more information, like the actual text of the abstract and other details like the author’s geographic location and talk-type preference (poster, plenary, etc). If you’ve used an online survey service then you can usually download a CSV of the results or connect to their API to get the data.</p>
+<p>Of course, your abstract dataset is likely to contain additional information, like the actual text of the abstract and other details like the author’s geographic location and talk-type preference (poster, plenary, etc). If you’ve used an online survey service then you can usually download a CSV of the results or connect to their API to get the data.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>total_abstracts <span class="ot">&lt;-</span> <span class="dv">30</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -553,7 +554,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-03-26 18:34:06 GMT</code></pre>
+<pre><code>Last rendered: 2024-03-27 15:42:32 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
