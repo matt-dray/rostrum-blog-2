@@ -10,7 +10,147 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Tue, 26 Mar 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 31 Mar 2024 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Prevent Jenny Bryan from committing arson</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2024-04-01-jenny-arson/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2024-04-01-jenny-arson/resources/arson.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="Posit employee Jenny Bryan on stage at a lectern. her eyes are emoji flames. In red Comic Sans around her are the words 'fire', 'computer' and 'burn', as well as the R code 'rm(list=ls())'. There is a flame effect along the bottom of the image."></p>
+<figcaption class="figure-caption">This image has been edited.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>Make RStudio restart itself. Perpetually.</p>
+</section>
+<section id="passing-the-torch" class="level2">
+<h2 class="anchored" data-anchor-id="passing-the-torch">Passing the torch</h2>
+<p><a href="https://www.tidyverse.org/blog/2017/12/workflow-vs-script/">Jenny once said</a>:</p>
+<blockquote class="blockquote">
+<p>If the first line of your R script is <code>rm(list = ls())</code> I will come into your office and SET YOUR COMPUTER ON FIRE 🔥.</p>
+</blockquote>
+<p>The objects in your R environment are wicked little imps whose only motivation is to deceive you. They must be destroyed. Frequently.</p>
+<p>But <code>rm()</code> isn’t enough to start with a completely a clean slate. It doesn’t detach packages, for example. Reproducibility is at stake here, folks!</p>
+<p>The only salvation is to completely restart R. All the time.</p>
+<p>I don’t think you heard me. Come closer. I said <em>all the time</em>.</p>
+</section>
+<section id="an-extinguisher" class="level2">
+<h2 class="anchored" data-anchor-id="an-extinguisher">An extinguisher</h2>
+<p>I’ve been <a href="https://www.rostrum.blog/posts/2020-04-17-r-self-shame/index.html#env">woke to this thought technology</a> for a while. You’re right, it’s time I gave back to the community.</p>
+<p>I can’t trust you to restart R voluntarily, so I must help you to help yourself.</p>
+<p>So, I have for you a gift. A precious snippet of R code that came to me in a fever dream.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">setHook</span>(</span>
+<span id="cb1-2">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"rstudio.sessionInit"</span>,</span>
+<span id="cb1-3">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">function</span>(...) {</span>
+<span id="cb1-4">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">message</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"⏳ You have 30 seconds..."</span>)</span>
+<span id="cb1-5">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">Sys.sleep</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span>)</span>
+<span id="cb1-6">    rstudioapi<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">executeCommand</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"restartR"</span>)</span>
+<span id="cb1-7">  }</span>
+<span id="cb1-8">)</span></code></pre></div>
+</div>
+<p>Simply open your <code>.Rprofile</code> (<a href="https://support.posit.co/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf">a special file</a> that’s executed at start up) with <code>usethis::edit_r_profile()</code><sup>1</sup>, paste in the code<sup>2</sup> and then restart R for it to take effect<sup>3</sup>.</p>
+<p>What does it do? When RStudio starts up it waits for 30 seconds and restarts R<sup>4</sup>.</p>
+<p>…Which prompts another restart after 30 more seconds.</p>
+<p>…And another.</p>
+<p>…Forever<sup>5</sup>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2024-04-01-jenny-arson/resources/restart.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="The R console in RStudio. Repeated several times is the texrt 'restarting in 30 seconds...' then 'restarting R session'."></p>
+<figcaption class="figure-caption">trapped in a loop help I’m</figcaption>
+</figure>
+</div>
+<p>I know what you’re thinking: doesn’t this block the console? Kind of. You can still type stuff and it’ll be executed before the next restart. Only to disappear immediately.</p>
+<p>Just like Jenny wanted! I think?</p>
+</section>
+<section id="rise-from-the-ashes" class="level2">
+<h2 class="anchored" data-anchor-id="rise-from-the-ashes">Rise from the ashes</h2>
+<p>How can you thank me for this? I am humble (extremely), but you’re welcome to <a href="https://github.com/scrogster/rickrollR/">support my Patreon</a>.</p>
+<p>Happy March 32nd, colleagues.</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2024-03-28 11:05:02 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.1 (2023-06-16)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.2        
+ [5] tools_4.3.1       htmltools_0.5.8   rstudioapi_0.16.0 yaml_2.3.8       
+ [9] rmarkdown_2.26    knitr_1.45        jsonlite_1.8.8    xfun_0.43        
+[13] digest_0.6.35     rlang_1.1.3       evaluate_0.23    </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Don’t.↩︎</p></li>
+<li id="fn2"><p>Don’t.↩︎</p></li>
+<li id="fn3"><p>Fine, <a href="https://www.youtube.com/watch?v=lCscYsICvoA">do it</a>.↩︎</p></li>
+<li id="fn4"><p>If you’re feeling extra spicy, maybe randomise the wait period!↩︎</p></li>
+<li id="fn5"><p>Maybe you’ll have to force quit RStudio? Use <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>Esc</kbd> on a Macintosh or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Delete</kbd> on Michaelsoft Binbows. I don’t need to tell Linux users what to do because they claim to know what they’re doing.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>r</category>
+  <guid>https://www.rostrum.blog/posts/2024-04-01-jenny-arson/index.html</guid>
+  <pubDate>Sun, 31 Mar 2024 23:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2024-04-01-jenny-arson/resources/arson.png" medium="image" type="image/png" height="66" width="144"/>
+</item>
 <item>
   <title>Assign abstracts to sifters</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -8364,202 +8504,6 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-08-19-find-bad-names/index.html</guid>
   <pubDate>Fri, 18 Aug 2023 23:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>One weird trick to {monetize} your R package</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-08-01-monetize/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="quarto-figure quarto-figure-left">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2023-08-01-monetize/resources/monetize-hats.png" class="img-fluid figure-img" style="width:40.0%" alt="Three green dollar symbols in Comic Sans, each with an emoji hat on."></p>
-</figure>
-</div>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p><a href="https://github.com/matt-dray/monetize">The {monetize} R package</a> gives you inspiration for monetising your R package. Developers rise up!</p>
-</section>
-<section id="free-as-in-free" class="level2">
-<h2 class="anchored" data-anchor-id="free-as-in-free">Free as in free</h2>
-<p>There’s one good reason why SAS, SPSS and Stata<sup>1</sup> are such successful and beloved statistical tools: money.</p>
-<p>For some reason, R remains free and open source. But what if <a href="https://en.wikipedia.org/wiki/R_(programming_language)">Ihaka &amp; Gentleman</a> originally wanted users to be charged a literal (New Zealand) dollar<sup>2</sup> every time they use the <code>$</code> symbol to access an element from an object? I’m just asking the question!</p>
-<p>Us package developers should seize the initiative and harvest the sweet, sweet bounty of our labour. But how? I will tell you the secret!</p>
-</section>
-<section id="free-as-in-not-quite" class="level2">
-<h2 class="anchored" data-anchor-id="free-as-in-not-quite">Free as in not quite</h2>
-<p>Introducing the {monetize} R package! It will provide the inspiration you seek. Serious entrepreneurs can <a href="https://github.com/matt-dray/monetize">install from GitHub</a><sup>3</sup>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"remotes"</span>)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># if not yet installed</span></span>
-<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"matt-dray/monetize"</span>)</span>
-<span id="cb1-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(monetize)</span></code></pre></div>
-</div>
-<pre><code>Welcome to the monetize(TM) package FREE TRIAL version!
-Try our EXCLUSIVE add_one() function!
-Try watch_ad() to gain MEGA COINS and increase your MEMBER LEVEL for REWARDS!
-And now a quick message from our sponsor:
-  🧃 IMBIBE ACME(TM)-BRAND FRUIT PULP (7% FEWER INSECT COMPONENTS)! 🪳</code></pre>
-<p>The package contains the exclusive <code>add_one()</code> function, which surprisingly doesn’t come pre-installed with base R. A gap in the market!</p>
-<p>Users should speculate to accumulate, so there’s a small cost to use the function. In {monetize}, each use of a function costs 1 MEGA COIN.</p>
-<p>Because I am so kind, I have chosen for users to receive a 30-day FREE TRIAL of the package and to receive 3 MEGA COINS as an exclusive NEW-MEMBER PERK.</p>
-<p>One use of the function costs the low, low price of 1 MEGA COIN. Merely a small payment, or ‘micro transaction’, if you will.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">add_one</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>)</span></code></pre></div>
-</div>
-<pre><code>📅 You have 30 days left of your FREE TRIAL!
-🏅 Your MEMBER LEVEL is 1! Try watch_ad()!
-💰 Your MEGA COIN balance is now 2! Try watch_ad()!
-[1] 2</code></pre>
-<p>Along with the result, the function helpfully prints the number of days left in your FREE TRIAL, your MEMBER LEVEL and the number of MEGA COINS you have left.</p>
-<p>What’s a MEMBER LEVEL? Well, at MEMBER LEVEL 1, the function can’t guarantee a correct result. 20% of the time there’ll be an off-by-one error. But R users index from 1 anyway, so they’ll be used to that.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">add_one</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>)</span></code></pre></div>
-</div>
-<pre><code>📅 You have 30 days left of your FREE TRIAL!
-🏅 Your MEMBER LEVEL is 1! Try watch_ad()!
-💰 Your MEGA COIN balance is now 1! Try watch_ad()!
-[1] 3</code></pre>
-<p>How can you get the correct result 100% of the time? That’s an exclusive for MEMBER LEVEL 2. How do you reach MEMBER LEVEL 2? What happens if you run out of MEGA COINS?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">add_one</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>)</span></code></pre></div>
-</div>
-<pre><code>📅 You have 30 days left of your FREE TRIAL!
-🏅 Your MEMBER LEVEL is 1! Try watch_ad()!
-Error: 😭 You'll need more MEGA COINS to re-use this function! Try watch_ad()!</code></pre>
-<p>Answer: simply watch some ads! I’ve managed to get an ad deal with the famous <a href="https://en.wikipedia.org/wiki/Acme_Corporation">Acme(TM) Corporation</a>. Maybe you could get a sponsorship deal from a third-party whose interests align with your users’ interests; maybe SAS, SPSS or Stata would be interested?</p>
-<p>Anyway, the user can just <code>watch_ad()</code> in exchange for MEGA COINS: I’ve allowed the user to employ their FREE WILL to watch a <code>"short"</code> ad for 1 MEGA COIN or a <code>"long"</code> ad for 3 MEGA COINS.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">watch_ad</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"short"</span>)</span></code></pre></div>
-</div>
-<pre><code>🌭 CONSUME ACME(TM)-BRAND RECONSTITUTED MEAT-LIKE CYLINDERS! 🐕
-🌭 CONSUME ACME(TM)-BRAND RECONSTITUTED MEAT-LIKE CYLINDERS! 🐕
-🌭 CONSUME ACME(TM)-BRAND RECONSTITUTED MEAT-LIKE CYLINDERS! 🐕
-🌭 CONSUME ACME(TM)-BRAND RECONSTITUTED MEAT-LIKE CYLINDERS! 🐕
-🌭 CONSUME ACME(TM)-BRAND RECONSTITUTED MEAT-LIKE CYLINDERS! 🐕
-Congratulations! Your new MEGA COIN total is 1!</code></pre>
-<p>Reach MEMBER LEVEL 2 after gaining 10 all-time MEGA COINS and MEMBER LEVEL 3 after 20 MEGA COINS.</p>
-<p>What’s the exclusive MEMBER LEVEL 3? Well, you get the perk of an actually-correct answer like in MEMBER LEVEL 2… plus the value gets a randomised FREE HAT!</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">add_one</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>)</span></code></pre></div>
-</div>
-<pre><code>📅 You have 30 days left of your FREE TRIAL!
-🏅 Your MEMBER LEVEL is 3! Try watch_ad()!
-💰 Your MEGA COIN balance is now 19! Try watch_ad()!
-🎩 
- 2 </code></pre>
-<p>What a tease! Oh, and the stats are persistent, so your users can’t refresh their session and wipe the slate clean. Watch the cash roll in!</p>
-</section>
-<section id="free-as-in-absolutely-not" class="level2">
-<h2 class="anchored" data-anchor-id="free-as-in-absolutely-not">Free as in absolutely not</h2>
-<p>I hope this has been an inspirational eye-opener for you and that one day you can be as rich as me. Oh, you didn’t know I was rich? How else could I afford to keep this absolute juggernaut of a blog going?</p>
-<p>To demonstrate how little I personally need them, here are some more ideas to maximise your financial rewards via R. You could try:</p>
-<ul>
-<li>releasing version updates as paid add-ons, like <a href="https://en.wikipedia.org/wiki/Downloadable_content">videogame DLC</a> (you could also make them take several hours to download, like videogame DLC, which would definitely heighten the tension)</li>
-<li><a href="https://en.wikipedia.org/wiki/Loot_box#Criticism">loot boxes</a> to allow users to gamble—I mean, test their precognitive skills—for new functionality (<code>add_two()</code> could be a common drop, while <code>multiply_by_two()</code> is ultra rare)</li>
-<li>using certified financial guru <a href="https://github.com/nacnudus/ggbillboard">Duncan Garmonsway’s {ggbillboard} package</a> (‘use vacant ggplot2 facets for advertising’)</li>
-</ul>
-<p>You are welcome. Don’t read the small print for nerds.</p>
-<details>
-<summary>
-Small print for nerds.
-</summary>
-It’s a simple trick: up-to-date stats are stored on the user’s computer in the directory resolved by <code>tools::R_user_dir("monetize", "data")</code><sup>4</sup> and are updated each time you use the functions in the package. Easy to circumvent… if you know how.
-</details>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-08-01 11:37:35 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
-[1] monetize_0.0.0.9000
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
- [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
-[13] digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>Curious why they all start with ‘S’? It’s in deference to ‘R’, which comes first in the alphabet and in being really cool.↩︎</p></li>
-<li id="fn2"><p>Did you also know that the use of the New Zealand dollar is part of <a href="htpps://rostrum.blog/2021/07/15/dollar-dollar">a wider conspiracy</a>? The sheep dip goes deep on this one.↩︎</p></li>
-<li id="fn3"><p>Don’t.↩︎</p></li>
-<li id="fn4"><p>I consider this my hattrick of posts on <code>R_user_dir()</code>. I wrote about it as a way to <a href="https://rostrum.blog2023/02/02/trapinch">cache data from the PokéAPI in {trapinch}</a> and <a href="https://rostrum.blog/2022/11/13/tamrgo">store cyber pet blueprints in {tamRgo}</a>, the latter of which led to a post on <a href="https://rostrum.blog/2023/07/15/hiscore">saving high-score data with {hiscore}</a>.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>monetize</category>
-  <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2023-08-01-monetize/index.html</guid>
-  <pubDate>Mon, 31 Jul 2023 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
