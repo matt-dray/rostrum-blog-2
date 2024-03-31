@@ -101,13 +101,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="rostrum.blog - Stop Jenny committing arson">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://www.rostrum.blog/posts/2024-04-01-jenny-arson/resources/arson.png">
+<meta property="og:image" content="https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/resources/arson.png">
 <meta property="og:site-name" content="rostrum.blog">
 <meta property="og:image:height" content="407">
 <meta property="og:image:width" content="894">
 <meta name="twitter:title" content="rostrum.blog - Stop Jenny committing arson">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://www.rostrum.blog/posts/2024-04-01-jenny-arson/resources/arson.png">
+<meta name="twitter:image" content="https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/resources/arson.png">
 <meta name="twitter:creator" content="@mattdray">
 <meta name="twitter:image-height" content="407">
 <meta name="twitter:image-width" content="894">
@@ -201,8 +201,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="resources/arson.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="Posit employee Jenny Bryan on stage at a lectern. her eyes are emoji flames. In red Comic Sans around her are the words 'fire', 'computer' and 'burn', as well as the R code 'rm(list=ls())'. There is a flame effect along the bottom of the image."></p>
-<figcaption class="figure-caption">This image has been edited.</figcaption>
+<p><img src="resources/arson.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="Posit employee Jenny Bryan on stage at a lectern. Her eyes are emoji flames. In red Comic Sans around her are the words 'fire', 'computer' and 'burn', as well as the R code 'rm(list=ls())'. There is a flame effect along the bottom of the image."></p>
+<figcaption class="figure-caption">This image has been edited. With apologies.</figcaption>
 </figure>
 </div>
 <section id="tldr" class="level2">
@@ -216,7 +216,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>If the first line of your R script is <code>rm(list = ls())</code> I will come into your office and SET YOUR COMPUTER ON FIRE 🔥.</p>
 </blockquote>
 <p>The objects in your R environment are wicked little imps whose only motivation is to deceive you. They must be destroyed. Frequently.</p>
-<p>But <code>rm()</code> isn’t enough to start with a completely a clean slate. It doesn’t detach packages, for example. Reproducibility is at stake here, folks!</p>
+<p>But <code>rm(list = ls())</code> isn’t enough to start a new session with a completely a clean slate. It doesn’t detach packages, for example. Reproducibility is at stake here, folks!</p>
 <p>The only salvation is to completely restart R. All the time.</p>
 <p>I don’t think you heard me. Come closer. I said <em>all the time</em>.</p>
 </section>
@@ -235,19 +235,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Simply open your <code>.Rprofile</code> (<a href="https://support.posit.co/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf">a special file</a> that’s executed at start up) with <code>usethis::edit_r_profile()</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, paste in the code<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> and then restart R for it to take effect<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
-<p>What does it do? When RStudio starts up it waits for 30 seconds and restarts R<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
+<p>Simply open your <code>.Rprofile</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> (<a href="https://support.posit.co/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf">a special file</a> that’s executed at start up) with <code>usethis::edit_r_profile()</code><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, paste in the code<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> and then restart R for it to take effect<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
+<p>What does it do? It waits 30 seconds after RStudio starts up<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> and then restarts R<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
 <p>…Which prompts another restart after 30 more seconds.</p>
 <p>…And another.</p>
-<p>…Forever<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</p>
+<p>…Forever<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="resources/restart.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="The R console in RStudio. Repeated several times is the texrt 'restarting in 30 seconds...' then 'restarting R session'."></p>
+<p><img src="resources/restart.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="The R console in RStudio. Repeated several times is the message 'restarting in 30 seconds...' then 'restarting R session'."></p>
 <figcaption class="figure-caption">trapped in a loop help I’m</figcaption>
 </figure>
 </div>
 <p>I know what you’re thinking: doesn’t this block the console? Kind of. You can still type stuff and it’ll be executed before the next restart. Only to disappear immediately.</p>
-<p>Just like Jenny wanted! I think?</p>
+<p>Complete panic. Just like Jenny wanted! I think?</p>
 </section>
 <section id="rise-from-the-ashes" class="level2">
 <h2 class="anchored" data-anchor-id="rise-from-the-ashes">Rise from the ashes</h2>
@@ -265,7 +265,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-03-31 21:47:51 BST</code></pre>
+<pre><code>Last rendered: 2024-03-31 22:29:35 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -300,9 +300,11 @@ loaded via a namespace (and not attached):
 <ol>
 <li id="fn1"><p>Don’t.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Don’t.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Fine, <a href="https://www.youtube.com/watch?v=lCscYsICvoA">do it</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>If you’re feeling extra spicy, maybe randomise the wait period!<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Maybe you’ll have to force quit RStudio? Use <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>Esc</kbd> on a Macintosh or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Delete</kbd> on Michaelsoft Binbows. I don’t need to tell Linux users what to do because they claim to know what they’re doing.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Don’t.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Fine, <a href="https://www.youtube.com/watch?v=lCscYsICvoA">do it</a>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>If you’re feeling extra spicy, maybe randomise the wait period!<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>I also tried <code>rsudioapi::restartSession()</code> and <code>.rs.restartR()</code> here, but they didn’t work quite as I expected. Let me know any non-RStudio ways to do this, of course.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Maybe you’ll have to force quit RStudio? Use <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>Esc</kbd> on a Macintosh or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Delete</kbd> on Michaelsoft Binbows. I assume Linux users know what they’re doing.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

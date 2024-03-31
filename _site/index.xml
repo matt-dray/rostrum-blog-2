@@ -12,9 +12,9 @@
 <generator>quarto-1.3.450</generator>
 <lastBuildDate>Sun, 31 Mar 2024 23:00:00 GMT</lastBuildDate>
 <item>
-  <title>Prevent Jenny Bryan from committing arson</title>
+  <title>Stop Jenny committing arson</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-04-01-jenny-arson/index.html</link>
+  <link>https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/index.html</link>
   <description><![CDATA[ 
 
 
@@ -22,8 +22,8 @@
 
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2024-04-01-jenny-arson/resources/arson.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="Posit employee Jenny Bryan on stage at a lectern. her eyes are emoji flames. In red Comic Sans around her are the words 'fire', 'computer' and 'burn', as well as the R code 'rm(list=ls())'. There is a flame effect along the bottom of the image."></p>
-<figcaption class="figure-caption">This image has been edited.</figcaption>
+<p><img src="https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/resources/arson.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="Posit employee Jenny Bryan on stage at a lectern. Her eyes are emoji flames. In red Comic Sans around her are the words 'fire', 'computer' and 'burn', as well as the R code 'rm(list=ls())'. There is a flame effect along the bottom of the image."></p>
+<figcaption class="figure-caption">This image has been edited. With apologies.</figcaption>
 </figure>
 </div>
 <section id="tldr" class="level2">
@@ -32,12 +32,12 @@
 </section>
 <section id="passing-the-torch" class="level2">
 <h2 class="anchored" data-anchor-id="passing-the-torch">Passing the torch</h2>
-<p><a href="https://www.tidyverse.org/blog/2017/12/workflow-vs-script/">Jenny once said</a>:</p>
+<p><a href="https://www.tidyverse.org/blog/2017/12/workflow-vs-script/">Jenny Bryan once said</a>:</p>
 <blockquote class="blockquote">
 <p>If the first line of your R script is <code>rm(list = ls())</code> I will come into your office and SET YOUR COMPUTER ON FIRE 🔥.</p>
 </blockquote>
 <p>The objects in your R environment are wicked little imps whose only motivation is to deceive you. They must be destroyed. Frequently.</p>
-<p>But <code>rm()</code> isn’t enough to start with a completely a clean slate. It doesn’t detach packages, for example. Reproducibility is at stake here, folks!</p>
+<p>But <code>rm(list = ls())</code> isn’t enough to start a new session with a completely a clean slate. It doesn’t detach packages, for example. Reproducibility is at stake here, folks!</p>
 <p>The only salvation is to completely restart R. All the time.</p>
 <p>I don’t think you heard me. Come closer. I said <em>all the time</em>.</p>
 </section>
@@ -76,19 +76,19 @@ font-style: inherit;">"restartR"</span>)</span>
 <span id="cb1-7">  }</span>
 <span id="cb1-8">)</span></code></pre></div>
 </div>
-<p>Simply open your <code>.Rprofile</code> (<a href="https://support.posit.co/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf">a special file</a> that’s executed at start up) with <code>usethis::edit_r_profile()</code><sup>1</sup>, paste in the code<sup>2</sup> and then restart R for it to take effect<sup>3</sup>.</p>
-<p>What does it do? When RStudio starts up it waits for 30 seconds and restarts R<sup>4</sup>.</p>
+<p>Simply open your <code>.Rprofile</code><sup>1</sup> (<a href="https://support.posit.co/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf">a special file</a> that’s executed at start up) with <code>usethis::edit_r_profile()</code><sup>2</sup>, paste in the code<sup>3</sup> and then restart R for it to take effect<sup>4</sup>.</p>
+<p>What does it do? It waits 30 seconds after RStudio starts up<sup>5</sup> and then restarts R<sup>6</sup>.</p>
 <p>…Which prompts another restart after 30 more seconds.</p>
 <p>…And another.</p>
-<p>…Forever<sup>5</sup>.</p>
+<p>…Forever<sup>7</sup>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2024-04-01-jenny-arson/resources/restart.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="The R console in RStudio. Repeated several times is the texrt 'restarting in 30 seconds...' then 'restarting R session'."></p>
+<p><img src="https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/resources/restart.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="The R console in RStudio. Repeated several times is the message 'restarting in 30 seconds...' then 'restarting R session'."></p>
 <figcaption class="figure-caption">trapped in a loop help I’m</figcaption>
 </figure>
 </div>
 <p>I know what you’re thinking: doesn’t this block the console? Kind of. You can still type stuff and it’ll be executed before the next restart. Only to disappear immediately.</p>
-<p>Just like Jenny wanted! I think?</p>
+<p>Complete panic. Just like Jenny wanted! I think?</p>
 </section>
 <section id="rise-from-the-ashes" class="level2">
 <h2 class="anchored" data-anchor-id="rise-from-the-ashes">Rise from the ashes</h2>
@@ -106,7 +106,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-03-28 11:05:02 GMT</code></pre>
+<pre><code>Last rendered: 2024-03-31 22:29:35 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -141,15 +141,18 @@ loaded via a namespace (and not attached):
 <ol>
 <li id="fn1"><p>Don’t.↩︎</p></li>
 <li id="fn2"><p>Don’t.↩︎</p></li>
-<li id="fn3"><p>Fine, <a href="https://www.youtube.com/watch?v=lCscYsICvoA">do it</a>.↩︎</p></li>
-<li id="fn4"><p>If you’re feeling extra spicy, maybe randomise the wait period!↩︎</p></li>
-<li id="fn5"><p>Maybe you’ll have to force quit RStudio? Use <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>Esc</kbd> on a Macintosh or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Delete</kbd> on Michaelsoft Binbows. I don’t need to tell Linux users what to do because they claim to know what they’re doing.↩︎</p></li>
+<li id="fn3"><p>Don’t.↩︎</p></li>
+<li id="fn4"><p>Fine, <a href="https://www.youtube.com/watch?v=lCscYsICvoA">do it</a>.↩︎</p></li>
+<li id="fn5"><p>If you’re feeling extra spicy, maybe randomise the wait period!↩︎</p></li>
+<li id="fn6"><p>I also tried <code>rsudioapi::restartSession()</code> and <code>.rs.restartR()</code> here, but they didn’t work quite as I expected. Let me know any non-RStudio ways to do this, of course.↩︎</p></li>
+<li id="fn7"><p>Maybe you’ll have to force quit RStudio? Use <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>Esc</kbd> on a Macintosh or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Delete</kbd> on Michaelsoft Binbows. I assume Linux users know what they’re doing.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2024-04-01-jenny-arson/index.html</guid>
+  <category>reproducibility</category>
+  <guid>https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/index.html</guid>
   <pubDate>Sun, 31 Mar 2024 23:00:00 GMT</pubDate>
-  <media:content url="https://www.rostrum.blog/posts/2024-04-01-jenny-arson/resources/arson.png" medium="image" type="image/png" height="66" width="144"/>
+  <media:content url="https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/resources/arson.png" medium="image" type="image/png" height="66" width="144"/>
 </item>
 <item>
   <title>Assign abstracts to sifters</title>
