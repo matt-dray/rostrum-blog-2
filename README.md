@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 172 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2024-03-26 (latest).
+🔢 There have been 173 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2024-04-01 (latest).
 
 📅 That’s a post roughly every 13 days, or about 2.4 posts per month.
 
-🆕 The latest post: [Assign abstracts to
-sifters](https://www.rostrum.blog/posts/2024-03-26-assign-abstracts).
+🆕 The latest post: [Stop Jenny committing
+arson](https://www.rostrum.blog/posts/2024-04-01-perpetual-restart).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ sifters](https://www.rostrum.blog/posts/2024-03-26-assign-abstracts).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 173 | 2024-04-01 | [Stop Jenny committing arson](https://www.rostrum.blog/posts/2024-04-01-perpetual-restart)                                     |
 | 172 | 2024-03-26 | [Assign abstracts to sifters](https://www.rostrum.blog/posts/2024-03-26-assign-abstracts)                                      |
 | 171 | 2024-03-15 | [Sh\*tty R help from sh\*tty AI](https://www.rostrum.blog/posts/2024-03-15-ai-garbage)                                         |
 | 170 | 2024-03-12 | [Ellipses, eclipses and bulletses](https://www.rostrum.blog/posts/2024-03-12-eclipse)                                          |
@@ -218,4 +219,4 @@ sifters](https://www.rostrum.blog/posts/2024-03-26-assign-abstracts).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2024-03-27 at 17:47.
+🕒 Last updated: 2024-04-01 at 07:53.
