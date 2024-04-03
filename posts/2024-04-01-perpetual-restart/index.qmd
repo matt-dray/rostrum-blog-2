@@ -17,7 +17,7 @@ Make RStudio restart itself. Perpetually.
 <div class="tip"> 
 `r fontawesome::fa("exclamation-circle")` <b>Note</b>
 
-This post contains April Fool's Day content.
+This post contains April Fools' Day content.
 
 </div>
 
@@ -29,7 +29,7 @@ This post contains April Fool's Day content.
 
 The objects in your R environment are wicked little imps whose only motivation is to deceive you. They must be destroyed. Frequently. 
 
-But `rm(list = ls())` isn't enough to start a new session with a completely a clean slate. It doesn't detach packages, for example. Reproducibility is at stake here, folks!
+But `rm(list = ls())` isn't enough to start a new session with a completely clean slate. It doesn't detach packages, for example. Reproducibility is at stake here, folks!
 
 The only salvation is to completely restart R. All the time.
 
@@ -47,7 +47,7 @@ So, I have for you a gift. A precious snippet of R code that came to me in a fev
 setHook(
   "rstudio.sessionInit",
   function(...) {
-    message("⏳ You have 30 seconds...")
+    message("⏳ Restarting in 30 seconds...")
     Sys.sleep(30)
     rstudioapi::executeCommand("restartR")
   }
@@ -56,7 +56,7 @@ setHook(
 
 Simply open your `.Rprofile`[^dont1] ([a special file](https://support.posit.co/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf) that's executed at start up) with `usethis::edit_r_profile()`[^dont2], paste in the code[^dont3] and then restart R for it to take effect[^dont4].
 
-What does it do? It waits 30 seconds after RStudio starts up[^thespicemelange] and then restarts R[^restart].
+What does it do? It waits for RStudio to start up[^rstudio] and then restarts R[^restart] after 30 seconds[^thespicemelange].
 
 ...Which prompts another restart after 30 more seconds.
 
@@ -91,3 +91,4 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 [^quit]: Maybe you'll have to force quit RStudio? Use <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>Esc</kbd> on a Macintosh or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Delete</kbd> on Michaelsoft Binbows. I assume Linux users know what they're doing.
 [^thespicemelange]: If you're feeling extra spicy, maybe randomise the wait period!
 [^restart]: I also tried `rsudioapi::restartSession()` and `.rs.restartR()` here, but they didn't work quite as I expected. Let me know any non-RStudio ways to do this, of course.
+[^rstudio]: The code depends on the {rstudioapi} package, but it needs to load before it can be used. This seems to happen _after_ the .Rprofile has been read. This is why we have to use `setHook()` with `rstudio.sessionInit` so the restart command can be executed once RStudio has initiated.

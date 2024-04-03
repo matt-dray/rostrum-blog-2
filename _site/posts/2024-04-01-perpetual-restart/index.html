@@ -210,7 +210,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Make RStudio restart itself. Perpetually.</p>
 <div class="tip">
 <p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
-<p>This post contains April Fool’s Day content.</p>
+<p>This post contains April Fools’ Day content.</p>
 </div>
 </section>
 <section id="passing-the-torch" class="level2">
@@ -220,7 +220,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>If the first line of your R script is <code>rm(list = ls())</code> I will come into your office and SET YOUR COMPUTER ON FIRE 🔥.</p>
 </blockquote>
 <p>The objects in your R environment are wicked little imps whose only motivation is to deceive you. They must be destroyed. Frequently.</p>
-<p>But <code>rm(list = ls())</code> isn’t enough to start a new session with a completely a clean slate. It doesn’t detach packages, for example. Reproducibility is at stake here, folks!</p>
+<p>But <code>rm(list = ls())</code> isn’t enough to start a new session with a completely clean slate. It doesn’t detach packages, for example. Reproducibility is at stake here, folks!</p>
 <p>The only salvation is to completely restart R. All the time.</p>
 <p>I don’t think you heard me. Come closer. I said <em>all the time</em>.</p>
 </section>
@@ -233,17 +233,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setHook</span>(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">"rstudio.sessionInit"</span>,</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">function</span>(...) {</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">"⏳ You have 30 seconds..."</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">"⏳ Restarting in 30 seconds..."</span>)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">Sys.sleep</span>(<span class="dv">30</span>)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    rstudioapi<span class="sc">::</span><span class="fu">executeCommand</span>(<span class="st">"restartR"</span>)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  }</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Simply open your <code>.Rprofile</code><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> (<a href="https://support.posit.co/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf">a special file</a> that’s executed at start up) with <code>usethis::edit_r_profile()</code><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, paste in the code<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> and then restart R for it to take effect<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
-<p>What does it do? It waits 30 seconds after RStudio starts up<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> and then restarts R<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
+<p>What does it do? It waits for RStudio to start up<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> and then restarts R<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> after 30 seconds<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>.</p>
 <p>…Which prompts another restart after 30 more seconds.</p>
 <p>…And another.</p>
-<p>…Forever<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>.</p>
+<p>…Forever<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="resources/restart.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="The R console in RStudio. Repeated several times is the message 'restarting in 30 seconds...' then 'restarting R session'."></p>
@@ -269,7 +269,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-04-01 08:48:55 BST</code></pre>
+<pre><code>Last rendered: 2024-04-03 08:14:51 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -306,9 +306,10 @@ loaded via a namespace (and not attached):
 <li id="fn2"><p>Don’t.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>Don’t.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>Fine, <a href="https://www.youtube.com/watch?v=lCscYsICvoA">dew it</a>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>If you’re feeling extra spicy, maybe randomise the wait period!<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>The code depends on the {rstudioapi} package, but it needs to load before it can be used. This seems to happen <em>after</em> the .Rprofile has been read. This is why we have to use <code>setHook()</code> with <code>rstudio.sessionInit</code> so the restart command can be executed once RStudio has initiated.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn6"><p>I also tried <code>rsudioapi::restartSession()</code> and <code>.rs.restartR()</code> here, but they didn’t work quite as I expected. Let me know any non-RStudio ways to do this, of course.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>Maybe you’ll have to force quit RStudio? Use <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>Esc</kbd> on a Macintosh or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Delete</kbd> on Michaelsoft Binbows. I assume Linux users know what they’re doing.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>If you’re feeling extra spicy, maybe randomise the wait period!<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Maybe you’ll have to force quit RStudio? Use <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>Esc</kbd> on a Macintosh or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Delete</kbd> on Michaelsoft Binbows. I assume Linux users know what they’re doing.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

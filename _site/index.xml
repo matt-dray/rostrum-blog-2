@@ -31,7 +31,7 @@
 <p>Make RStudio restart itself. Perpetually.</p>
 <div class="tip">
 <p> <b>Note</b></p>
-<p>This post contains April Fool’s Day content.</p>
+<p>This post contains April Fools’ Day content.</p>
 </div>
 </section>
 <section id="passing-the-torch" class="level2">
@@ -41,7 +41,7 @@
 <p>If the first line of your R script is <code>rm(list = ls())</code> I will come into your office and SET YOUR COMPUTER ON FIRE 🔥.</p>
 </blockquote>
 <p>The objects in your R environment are wicked little imps whose only motivation is to deceive you. They must be destroyed. Frequently.</p>
-<p>But <code>rm(list = ls())</code> isn’t enough to start a new session with a completely a clean slate. It doesn’t detach packages, for example. Reproducibility is at stake here, folks!</p>
+<p>But <code>rm(list = ls())</code> isn’t enough to start a new session with a completely clean slate. It doesn’t detach packages, for example. Reproducibility is at stake here, folks!</p>
 <p>The only salvation is to completely restart R. All the time.</p>
 <p>I don’t think you heard me. Come closer. I said <em>all the time</em>.</p>
 </section>
@@ -64,7 +64,7 @@ font-style: inherit;">function</span>(...) {</span>
 background-color: null;
 font-style: inherit;">message</span>(<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"⏳ You have 30 seconds..."</span>)</span>
+font-style: inherit;">"⏳ Restarting in 30 seconds..."</span>)</span>
 <span id="cb1-5">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">Sys.sleep</span>(<span class="dv" style="color: #AD0000;
@@ -81,10 +81,10 @@ font-style: inherit;">"restartR"</span>)</span>
 <span id="cb1-8">)</span></code></pre></div>
 </div>
 <p>Simply open your <code>.Rprofile</code><sup>1</sup> (<a href="https://support.posit.co/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf">a special file</a> that’s executed at start up) with <code>usethis::edit_r_profile()</code><sup>2</sup>, paste in the code<sup>3</sup> and then restart R for it to take effect<sup>4</sup>.</p>
-<p>What does it do? It waits 30 seconds after RStudio starts up<sup>5</sup> and then restarts R<sup>6</sup>.</p>
+<p>What does it do? It waits for RStudio to start up<sup>5</sup> and then restarts R<sup>6</sup> after 30 seconds<sup>7</sup>.</p>
 <p>…Which prompts another restart after 30 more seconds.</p>
 <p>…And another.</p>
-<p>…Forever<sup>7</sup>.</p>
+<p>…Forever<sup>8</sup>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/resources/restart.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="The R console in RStudio. Repeated several times is the message 'restarting in 30 seconds...' then 'restarting R session'."></p>
@@ -110,7 +110,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-04-01 08:48:55 BST</code></pre>
+<pre><code>Last rendered: 2024-04-03 08:14:51 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -147,9 +147,10 @@ loaded via a namespace (and not attached):
 <li id="fn2"><p>Don’t.↩︎</p></li>
 <li id="fn3"><p>Don’t.↩︎</p></li>
 <li id="fn4"><p>Fine, <a href="https://www.youtube.com/watch?v=lCscYsICvoA">dew it</a>.↩︎</p></li>
-<li id="fn5"><p>If you’re feeling extra spicy, maybe randomise the wait period!↩︎</p></li>
+<li id="fn5"><p>The code depends on the {rstudioapi} package, but it needs to load before it can be used. This seems to happen <em>after</em> the .Rprofile has been read. This is why we have to use <code>setHook()</code> with <code>rstudio.sessionInit</code> so the restart command can be executed once RStudio has initiated.↩︎</p></li>
 <li id="fn6"><p>I also tried <code>rsudioapi::restartSession()</code> and <code>.rs.restartR()</code> here, but they didn’t work quite as I expected. Let me know any non-RStudio ways to do this, of course.↩︎</p></li>
-<li id="fn7"><p>Maybe you’ll have to force quit RStudio? Use <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>Esc</kbd> on a Macintosh or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Delete</kbd> on Michaelsoft Binbows. I assume Linux users know what they’re doing.↩︎</p></li>
+<li id="fn7"><p>If you’re feeling extra spicy, maybe randomise the wait period!↩︎</p></li>
+<li id="fn8"><p>Maybe you’ll have to force quit RStudio? Use <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>Esc</kbd> on a Macintosh or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Delete</kbd> on Michaelsoft Binbows. I assume Linux users know what they’re doing.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>r</category>
