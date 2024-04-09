@@ -7,6 +7,8 @@ categories:
   - r
   - r.oguelike
   - videogames
+filters:
+  - "webr"
 ---
 
 ```{r prep, include=FALSE}
@@ -18,7 +20,31 @@ set.seed(1337)
 
 ## tl;dr
 
-I wrote a (very!) basic procedure to generate randomised ASCII-character tile-based dungeons for [{r.oguelike}, an in-development roguelike-game-in-a-package for R](https://matt-dray.github.io/r.oguelike/).
+I wrote a (very!) basic procedure to generate randomised ASCII-character tile-based dungeons for [{r.oguelike}](https://matt-dray.github.io/r.oguelike/), an in-development roguelike-game-in-a-package for R.
+
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+In 2024 it's possible to [put editable R code into this blog post](https://www.rostrum.blog/posts/2024-01-20-webr-remote/) thanks to [WebR](https://docs.r-wasm.org/webr/latest/). So here's the function that creates procedural dungeons. Hit the 'run code' button several times to generate a fresh cavern. Adjust the parameters and see what effect it has. Unfortunately this won't print in colour.
+
+```{webr-r}
+#| context: setup
+webr::install("r.oguelike", repos = "https://matt-dray.r-universe.dev")
+webr::install("crayon")
+```
+```{webr-r}
+#| label: generate-dungeon
+r.oguelike::generate_dungeon(
+  iterations = 4,
+  n_row = 25,
+  n_col = 40,
+  n_rooms = 5,
+  is_snake = FALSE,
+  is_organic = TRUE
+)
+```
+
+</div>
 
 ## Generate to accumulate
 
