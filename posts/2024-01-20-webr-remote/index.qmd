@@ -13,11 +13,6 @@ filters:
 
 ![](resources/browser.png){fig-alt="Meme from Super Mario Movie. Top panel is the king penguin from the start of the film labelled 'R Stats' and saying 'do you yield?' Lower panel is Bowser labelled 'the browser', laughing and saying 'I do not', except the 'not' has been censored with a black bar." width="75%"}
 
-```{webr-r}
-#| context: setup
-webr::install("dialga", repos = "https://matt-dray.r-universe.dev")
-```
-
 ## tl;dr
 
 A demo post to test out embedded [WebR chunks](https://docs.r-wasm.org/webr/latest/) that [source a non-CRAN R package](https://jamesgoldie.dev/writing/your-new-r-package-webr). Readers can edit and re-run code later in this blog post, entirely within the browser.
@@ -68,6 +63,10 @@ Now let's use the {dialga} package.
 Use `r2cron()` to convert values into a cron string. The integer values for each argument below show the full range of possibilities, which you can adjust. The output will be `* * * * *`, which means 'every minute'. Start by running the code with the 'Run Code' button.
 
 ```{webr-r}
+#| context: setup
+webr::install("dialga", repos = "https://matt-dray.r-universe.dev")
+```
+```{webr-r}
 (cron_string <- dialga::r2cron(
   minutes    = 0L:59L,
   hours      = 0L:23L,
@@ -90,6 +89,13 @@ In other words... if you don't want to install {dialga} you can just visit this 
 That, or you can use one of the already-existing, excellent sites like [crontab.guru](https://crontab.guru/), lol. Your call. 
 
 Regardless, I think this is a good indication of how a WebR post can help readers understand—or simply just use—your package in a demonstrative blog post.
+
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+As a further example, I've now added a WebR chunk to [the 'Simple procedural dungeons in R' post](https://www.rostrum.blog/posts/2022-05-01-dungeon/) and may well add more to earlier posts that would have benefited from this technology had it existed at the time.
+
+</div>
 
 ## Environment {.appendix}
 
