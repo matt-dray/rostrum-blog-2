@@ -1557,7 +1557,7 @@ font-style: inherit;"># environment of parent function, not check_class() itself
 <section id="ellipses" class="level3">
 <h3 class="anchored" data-anchor-id="ellipses">Ellipses</h3>
 <p>When a function has a dots (<code>...</code>) argument, it means you can pass an arbitrary number of objects to be captured. Consider <code>paste("You", "smell")</code> (two values), <code>paste("You", "smell", "wonderful")</code> (three), etc, or how you can provide an arbitrary number of column names to <code>dplyr::select()</code>.</p>
-<p>The first argument to <code>check_class()</code> is <code>...</code>. You pass to it as many values as you need to assess for an expected class. So the function <code>add_one(x)</code> would contain a call to <code>check_class(x, "numeric")</code> (one argument to check), while <code>multiply(x, y)</code> could take <code>check_class(x, y, "numeric")</code> (two)<sup>2</sup>.</p>
+<p>The first argument to <code>check_class()</code> is <code>...</code>. You pass to it as many values as you need to assess for an expected class. So the function <code>add_one(x)</code> would contain within it a call to <code>check_class(x, .expected_class = "numeric")</code> (one argument to check), while <code>multiply(x, y)</code> would accept <code>check_class(x, y, .expected_class = "numeric")</code> (two)<sup>2</sup>.</p>
 <p>I’ve used the {rlang} package’s <code>dots_list()</code> function to collect the dots elements into a list. The <code>.named = TRUE</code> argument names each element, so we can pinpoint the errors and report them to the user.</p>
 <p>I have collaborators, so readability of the code is important. I think <code>rlang::dots_list()</code> is more readable than the base approach, which is something like:</p>
 <div class="cell">
@@ -1637,7 +1637,7 @@ font-style: inherit;">report_env</span>()</span>
 background-color: null;
 font-style: inherit;">report_env_2</span>()</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;environment: 0x11f0af038&gt;
+<pre><code>&lt;environment: 0x10b25d0a0&gt;
 Parent: &lt;environment: global&gt;</code></pre>
 </div>
 </div>
@@ -1821,7 +1821,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-03-12 21:02:41 GMT</code></pre>
+<pre><code>Last rendered: 2024-04-10 08:54:28 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.3.1 (2023-06-16)
@@ -1842,11 +1842,11 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 loaded via a namespace (and not attached):
- [1] digest_0.6.33     utf8_1.2.4        fastmap_1.1.1     xfun_0.41        
- [5] glue_1.7.0        knitr_1.45        htmltools_0.5.6.1 rmarkdown_2.25   
+ [1] digest_0.6.35     utf8_1.2.4        fastmap_1.1.1     xfun_0.43        
+ [5] glue_1.7.0        knitr_1.45        htmltools_0.5.8   rmarkdown_2.26   
  [9] lifecycle_1.0.4   cli_3.6.2         fansi_1.0.6       vctrs_0.6.5      
-[13] compiler_4.3.1    rstudioapi_0.15.0 tools_4.3.1       evaluate_0.23    
-[17] pillar_1.9.0      yaml_2.3.8        rlang_1.1.3       jsonlite_1.8.7   
+[13] compiler_4.3.1    rstudioapi_0.16.0 tools_4.3.1       evaluate_0.23    
+[17] pillar_1.9.0      yaml_2.3.8        rlang_1.1.3       jsonlite_1.8.8   
 [21] htmlwidgets_1.6.2</code></pre>
 </div>
 </div>

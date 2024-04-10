@@ -192,7 +192,7 @@ And now to explain in a bit more depth those features I mentioned.
 
 When a function has a dots (`...`) argument, it means you can pass an arbitrary number of objects to be captured. Consider `paste("You", "smell")` (two values), `paste("You", "smell", "wonderful")` (three), etc, or how you can provide an arbitrary number of column names to `dplyr::select()`.
 
-The first argument to `check_class()` is `...`. You pass to it as many values as you need to assess for an expected class. So the function `add_one(x)` would contain a call to `check_class(x, "numeric")` (one argument to check), while `multiply(x, y)` could take `check_class(x, y, "numeric")` (two)[^dot].
+The first argument to `check_class()` is `...`. You pass to it as many values as you need to assess for an expected class. So the function `add_one(x)` would contain within it a call to `check_class(x, .expected_class = "numeric")` (one argument to check), while `multiply(x, y)` would accept `check_class(x, y, .expected_class = "numeric")` (two)[^dot].
 
 I've used the {rlang} package's `dots_list()` function to collect the dots elements into a list. The `.named = TRUE` argument names each element, so we can pinpoint the errors and report them to the user.
 
