@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 173 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2024-04-01 (latest).
+🔢 There have been 174 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2024-05-08 (latest).
 
 📅 That’s a post roughly every 13 days, or about 2.4 posts per month.
 
-🆕 The latest post: [Stop Jenny committing
-arson](https://www.rostrum.blog/posts/2024-04-01-perpetual-restart).
+🆕 The latest post: [The Aesthetics Wiki: an R
+Addendum](https://www.rostrum.blog/posts/2024-05-08-aesthetic).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ arson](https://www.rostrum.blog/posts/2024-04-01-perpetual-restart).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 174 | 2024-05-08 | [The Aesthetics Wiki: an R Addendum](https://www.rostrum.blog/posts/2024-05-08-aesthetic)                                      |
 | 173 | 2024-04-01 | [Stop Jenny committing arson](https://www.rostrum.blog/posts/2024-04-01-perpetual-restart)                                     |
 | 172 | 2024-03-26 | [Assign abstracts to sifters](https://www.rostrum.blog/posts/2024-03-26-assign-abstracts)                                      |
 | 171 | 2024-03-15 | [Sh\*tty R help from sh\*tty AI](https://www.rostrum.blog/posts/2024-03-15-ai-garbage)                                         |
@@ -219,4 +220,4 @@ arson](https://www.rostrum.blog/posts/2024-04-01-perpetual-restart).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2024-04-11 at 20:40.
+🕒 Last updated: 2024-05-08 at 22:39.
