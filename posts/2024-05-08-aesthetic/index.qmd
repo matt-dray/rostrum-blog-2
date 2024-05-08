@@ -1,0 +1,163 @@
+---
+title: "The Aesthetics Wiki: an R Addendum"
+date: 2024-05-08
+slug: "aesthetic"
+categories:
+  - base
+  - r
+  - tidyverse
+---
+
+![They're doing the Lord's work over at [makewordart.com](https://www.makewordart.com/).](resources/passion.png){fig.alt="90s-style Word Art saying 'aesethics' in the middle, surrounded by the words 'base R', 'tidyverse' and 'tidy base question' in various egregious fonts and colours." width='100%'}
+
+## tl;dr
+
+Some people look at an R script and see code. But I _feel_ something.
+
+## A philosophy
+
+Have you experienced the [Aesthetics Wiki](https://aesthetics.fandom.com/wiki/Aesthetics_Wiki)?
+
+It's missing R-related entries for some reason, which definitely fit [the aesthetic philosophy](https://aesthetics.fandom.com/wiki/Philosophy) of having:
+
+> perspectives on beauty and the human condition and a political, economic, or social statement
+
+Tell me you don't look at an R script and get an immediate vibe.
+
+I want to suggest two obvious aesthetics for submission to the wiki—_Basecore_ and _Tidywave_—and to introduce the definitely-soon-to-be-mainstreamed _V4 Punk_[^suffix].
+
+## The addendum
+
+### Basecore
+
+![Adapted from [Aesthetics Wiki](https://static.wikia.nocookie.net/aesthetics/images/1/15/Chaotic_academia.jpg/revision/latest?cb=20200610213320).](resources/chaotic-academia.png){fig.alt="A set of different-sized books haphazardly placed ona bookshelf." width='100%'}
+
+#### Overview
+
+* History: emerged as Base Academic in 1993, mainstreamed as Base Core from 2000 to date.
+* Visuals: `[` (square-bracket selector), `$` (dollar selector), `~` (formula-form tilde).
+* Palette: <span style="background-color:lightgrey;">grey</span>.
+* Fashion: Emacs, mailing lists, a wired mouse with a ball in it.
+* Nearest aesthetic: [Chaotic Academia](https://aesthetics.fandom.com/wiki/Chaotic_Academia), which 'acknowledges the pretentiousness of classic academia, subtly mocking it at times'.
+
+#### Sample
+
+Classic stuff. Typical base-R code uses a lot of intermediate assignment to create temporary objects for further manipulation. Many actions make use of square bracket notation to indicate some action over rows and columns of a data.frame. Data.frame columns have to be called within the context of the data.frame they belong to, using dollar or square-bracket notation. The tilde is used for formula notation ('this given that').
+
+<details><summary>Set up demo data</summary>
+```{r}
+#| label: setup
+
+suppressPackageStartupMessages(library(dplyr))
+sw_a <- starwars[, c("name", "species", "height")]
+sw_b <- starwars[, c("name", "homeworld")]
+```
+</details>
+
+```{r}
+#| label: basecore
+
+x <- sw_a[sw_a$species == "Human", names(sw_a) != "species"]
+x <- merge(x, sw_b, by = "name")
+x$height <- x$height / 100
+x$homeworld <- ifelse(
+  !x$homeworld %in% c("Tatooine", "Naboo"),
+  "Other",
+  x$homeworld
+)
+x <- aggregate(x, height ~ homeworld, mean, na.rm = TRUE)
+x <- x[order(-x$height), ]
+x
+```
+
+### Tidywave
+
+![Adapted from [Aesthetics Wiki](https://static.wikia.nocookie.net/aesthetics/images/6/62/Blob-web-exercise.webp/revision/latest?cb=20210410215136).](resources/corporate-memphis.png){fig.alt="Colourful stylised cartoon of faceless humans with small heads and large limbs and hands." width='100%'}
+
+#### Overview
+
+* History: humble academic origins in 2008, later popularised with the creation of the {tidyverse} in 2016.
+* Visuals: `%>%` ({magrittr} pipe), `.` (data placeholder), `~` (lambda function).
+* Palette: Posit <span style="background-color:#1a162d;color:white;">blue</span>, <span style="background-color:#fdeba4;">yellow</span>, and <span style="background-color:#767381;color:white;">grey</span>.
+* Fashion: RStudio, hex stickers, rapid deprecation.
+* Nearest aesthetic: [Corporate Memphis](https://aesthetics.fandom.com/wiki/Corporate_Memphis) because I've literally seen it in Posit marketing.
+
+#### Sample
+
+The script reads from left-to-right and top-to-bottom, recipe style, using pipes: 'take dataset, then do a thing, then do a thing', etc. Each function is verb that indicates its action. Non-standard evaluation is rampant. A tilde replaces the tedious typing of <kbd>f</kbd><kbd>u</kbd><kbd>n</kbd><kbd>c</kbd><kbd>t</kbd><kbd>i</kbd><kbd>o</kbd><kbd>n</kbd><kbd>(</kbd><kbd>)</kbd>. A titchy inconspicuous `.` acts as a data placeholder on the right-hand side of a pipe.
+
+```{r}
+#| label: tidywave
+
+sw_a %>%
+  filter(species == "Human") %>%
+  select(-species) %>%
+  left_join(sw_b, by = "name") %>%
+  mutate(
+    height = height / 100,
+    homeworld = if_else(
+      !homeworld %in% c("Tatooine", "Naboo"),
+      "Other",
+      homeworld
+    )
+  ) %>%
+  summarise(
+    height = mean(height, na.rm = TRUE),
+    .by = homeworld
+  ) %>%
+  arrange(desc(height))
+```
+
+#### V4 Punk
+
+![Adapted from [Aesthetics Wiki](https://static.wikia.nocookie.net/aesthetics/images/d/d1/Magnum-pi-hawaiian-shirt.jpg/revision/latest?cb=20200507215616).](resources/vacation-dadcore.png){fig.alt="Tom Sellick in a Hawaiian shirt at the beach, leaning against a palm tree. He is smiling." width='100%'}
+
+#### Overview
+
+* History: incremental emergence following R version 4.0 in 2020, boosted greatly in 2022 with the release of the base pipe.
+* Visuals: `|>` (base pipe), `_` (data placeholder), `\()` (lambda function).
+* Palette: <span style="background-color:#ff0000;">r</span><span style="background-color:#ff00ff;">a</span><span style="background-color:#00ffff;">i</span><span style="background-color:#00ff00;">n</span><span style="background-color:#0000ff;color:white;">b</span><span style="background-color:#4b0082;color:white;">o</span><span style="background-color:#ee82ee;">w</span>?
+* Fashion: hubris, moustaches, troll-face emojis.
+* Nearest aesthetic: [Vacation Dadcore](https://aesthetics.fandom.com/wiki/Vacation_Dadcore), so you can 'escape to a simpler time without sacrificing any of the fun'.
+
+#### Sample
+
+Hear me out: what if tidyverse, but made entirely of base R functions[^modern]? This is now possible with the base pipe and by using obscure functions that help you avoid square brackets[^poorman]. It's also sketchy as heck; just see the help files for `subset()` ('unanticipated consequences') and `transform()` ('you deserve whatever you get!'). The death of Basecore and Tidywave, for sure.
+
+```{r}
+#| label: four-point-oh-punk
+
+sw_a |>
+  subset(
+    species == "Human",
+    select = -species
+  ) |>
+  merge(sw_b, by = "name") |>
+  transform(
+    height = height / 100,
+    homeworld = ifelse(
+      !homeworld %in% c("Tatooine", "Naboo"),
+      "Other",
+      homeworld
+    )
+  ) |>
+  aggregate(
+    height ~ homeworld, 
+    \(x) mean(x, na.rm = TRUE)
+  ) |>
+  sort_by(~ height, decreasing = TRUE)  # hot off the v4.4 press
+```
+
+Can't wait to see this roll out into production code. 
+
+### Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^suffix]: These [suffixes are meaningful](https://aesthetics.fandom.com/wiki/Suffix_Meaning): core 'implies a system, a set of rules', wave 'a significant shift within a genre' and punk 'reject[s] social norms'.
+[^modern]: I called this 'The Modern Base Aesthetic' in [my talk, 'Base Slaps!'](https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/), at the NHS-R conference 2023. But now I realise the aesthetics run deeper.
+[^poorman]: If you truly want something that looks like {dplyr} code but depends only on base R, then check out [the {poorman} package](https://nathaneastwood.github.io/poorman/).
