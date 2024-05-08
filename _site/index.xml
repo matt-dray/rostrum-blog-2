@@ -10,7 +10,485 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Sun, 31 Mar 2024 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 07 May 2024 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>The Aesthetics Wiki: an R Addendum</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2024-05-08-aesthetic/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2024-05-08-aesthetic/resources/passion.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="90s-style Word Art saying 'aesethics' in the middle, surrounded by the words 'base R', 'tidyverse' and 'tidy base question' in various egregious fonts and colours."></p>
+<figcaption class="figure-caption">They’re doing the Lord’s work over at <a href="https://www.makewordart.com/">makewordart.com</a>.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>Some people look at an R script and see code. But I <em>feel</em> something.</p>
+</section>
+<section id="a-philosophy" class="level2">
+<h2 class="anchored" data-anchor-id="a-philosophy">A philosophy</h2>
+<p>Have you experienced the <a href="https://aesthetics.fandom.com/wiki/Aesthetics_Wiki">Aesthetics Wiki</a>?</p>
+<p>It’s missing R-related entries for some reason, which definitely fit <a href="https://aesthetics.fandom.com/wiki/Philosophy">the aesthetic philosophy</a> of having:</p>
+<blockquote class="blockquote">
+<p>perspectives on beauty and the human condition and a political, economic, or social statement</p>
+</blockquote>
+<p>Tell me you don’t look at an R script and get an immediate vibe.</p>
+<p>I want to suggest two obvious aesthetics for submission to the wiki—<em>Basecore</em> and <em>Tidywave</em>—and to introduce the definitely-soon-to-be-mainstreamed <em>V4 Punk</em><sup>1</sup>.</p>
+</section>
+<section id="the-addendum" class="level2">
+<h2 class="anchored" data-anchor-id="the-addendum">The addendum</h2>
+<section id="basecore" class="level3">
+<h3 class="anchored" data-anchor-id="basecore">Basecore</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2024-05-08-aesthetic/resources/chaotic-academia.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="A set of different-sized books haphazardly placed ona bookshelf."></p>
+<figcaption class="figure-caption">Adapted from <a href="https://static.wikia.nocookie.net/aesthetics/images/1/15/Chaotic_academia.jpg/revision/latest?cb=20200610213320">Aesthetics Wiki</a>.</figcaption>
+</figure>
+</div>
+<section id="overview" class="level4">
+<h4 class="anchored" data-anchor-id="overview">Overview</h4>
+<ul>
+<li>History: emerged as Base Academic in 1993, mainstreamed as Base Core from 2000 to date.</li>
+<li>Visuals: <code>[</code> (square-bracket selector), <code>$</code> (dollar selector), <code>~</code> (formula-form tilde).</li>
+<li>Palette: <span style="background-color:lightgrey;">grey</span>.</li>
+<li>Fashion: Emacs, mailing lists, a wired mouse with a ball in it.</li>
+<li>Nearest aesthetic: <a href="https://aesthetics.fandom.com/wiki/Chaotic_Academia">Chaotic Academia</a>, which ‘acknowledges the pretentiousness of classic academia, subtly mocking it at times’.</li>
+</ul>
+</section>
+<section id="sample" class="level4">
+<h4 class="anchored" data-anchor-id="sample">Sample</h4>
+<p>Classic stuff. Typical base-R code uses a lot of intermediate assignment to create temporary objects for further manipulation. Many actions make use of square bracket notation to indicate some action over rows and columns of a data.frame. Data.frame columns have to be called within the context of the data.frame they belong to, using dollar or square-bracket notation. The tilde is used for formula notation (‘this given that’).</p>
+<details>
+<summary>
+Set up demo data
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">suppressPackageStartupMessages</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">library</span>(dplyr))</span>
+<span id="cb1-2">sw_a <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> starwars[, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"species"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"height"</span>)]</span>
+<span id="cb1-3">sw_b <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> starwars[, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"homeworld"</span>)]</span></code></pre></div>
+</div>
+</details>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">x <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> sw_a[sw_a<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>species <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Human"</span>, <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">names</span>(sw_a) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"species"</span>]</span>
+<span id="cb2-2">x <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">merge</span>(x, sw_b, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">by =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>)</span>
+<span id="cb2-3">x<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>height <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> x<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>height <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span></span>
+<span id="cb2-4">x<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>homeworld <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ifelse</span>(</span>
+<span id="cb2-5">  <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span>x<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>homeworld <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Tatooine"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Naboo"</span>),</span>
+<span id="cb2-6">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Other"</span>,</span>
+<span id="cb2-7">  x<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>homeworld</span>
+<span id="cb2-8">)</span>
+<span id="cb2-9">x <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aggregate</span>(x, height <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> homeworld, mean, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb2-10">x <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> x[<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">order</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>x<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">$</span>height), ]</span>
+<span id="cb2-11">x</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  homeworld   height
+3  Tatooine 1.792500
+2     Other 1.776471
+1     Naboo 1.772000</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="tidywave" class="level3">
+<h3 class="anchored" data-anchor-id="tidywave">Tidywave</h3>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2024-05-08-aesthetic/resources/corporate-memphis.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="Colourful stylised cartoon of faceless humans with small heads and large limbs and hands."></p>
+<figcaption class="figure-caption">Adapted from <a href="https://static.wikia.nocookie.net/aesthetics/images/6/62/Blob-web-exercise.webp/revision/latest?cb=20210410215136">Aesthetics Wiki</a>.</figcaption>
+</figure>
+</div>
+<section id="overview-1" class="level4">
+<h4 class="anchored" data-anchor-id="overview-1">Overview</h4>
+<ul>
+<li>History: humble academic origins in 2008, later popularised with the creation of the {tidyverse} in 2016.</li>
+<li>Visuals: <code>%&gt;%</code> ({magrittr} pipe), <code>.</code> (data placeholder), <code>~</code> (lambda function).</li>
+<li>Palette: Posit <span style="background-color:#1a162d;color:white;">blue</span>, <span style="background-color:#fdeba4;">yellow</span>, and <span style="background-color:#767381;color:white;">grey</span>.</li>
+<li>Fashion: RStudio, hex stickers, rapid deprecation.</li>
+<li>Nearest aesthetic: <a href="https://aesthetics.fandom.com/wiki/Corporate_Memphis">Corporate Memphis</a> because I’ve literally seen it in Posit marketing.</li>
+</ul>
+</section>
+<section id="sample-1" class="level4">
+<h4 class="anchored" data-anchor-id="sample-1">Sample</h4>
+<p>The script reads from left-to-right and top-to-bottom, recipe style, using pipes: ‘take dataset, then do a thing, then do a thing’, etc. Each function is verb that indicates its action. Non-standard evaluation is rampant. A tilde replaces the tedious typing of <kbd>f</kbd><kbd>u</kbd><kbd>n</kbd><kbd>c</kbd><kbd>t</kbd><kbd>i</kbd><kbd>o</kbd><kbd>n</kbd><kbd>(</kbd><kbd>)</kbd>. A titchy inconspicuous <code>.</code> acts as a data placeholder on the right-hand side of a pipe.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">sw_a <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span></span>
+<span id="cb4-2">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">filter</span>(species <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Human"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span></span>
+<span id="cb4-3">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">select</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>species) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span></span>
+<span id="cb4-4">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">left_join</span>(sw_b, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">by =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span></span>
+<span id="cb4-5">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mutate</span>(</span>
+<span id="cb4-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">height =</span> height <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>,</span>
+<span id="cb4-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">homeworld =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">if_else</span>(</span>
+<span id="cb4-8">      <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span>homeworld <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Tatooine"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Naboo"</span>),</span>
+<span id="cb4-9">      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Other"</span>,</span>
+<span id="cb4-10">      homeworld</span>
+<span id="cb4-11">    )</span>
+<span id="cb4-12">  ) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span></span>
+<span id="cb4-13">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">summarise</span>(</span>
+<span id="cb4-14">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">height =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(height, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>),</span>
+<span id="cb4-15">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">.by =</span> homeworld</span>
+<span id="cb4-16">  ) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%&gt;%</span></span>
+<span id="cb4-17">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">desc</span>(height))</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  homeworld height
+  &lt;chr&gt;      &lt;dbl&gt;
+1 Tatooine    1.79
+2 Other       1.78
+3 Naboo       1.77</code></pre>
+</div>
+</div>
+</section>
+<section id="v4-punk" class="level4">
+<h4 class="anchored" data-anchor-id="v4-punk">V4 Punk</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2024-05-08-aesthetic/resources/vacation-dadcore.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="Tom Sellick in a Hawaiian shirt at the beach, leaning against a palm tree. He is smiling."></p>
+<figcaption class="figure-caption">Adapted from <a href="https://static.wikia.nocookie.net/aesthetics/images/d/d1/Magnum-pi-hawaiian-shirt.jpg/revision/latest?cb=20200507215616">Aesthetics Wiki</a>.</figcaption>
+</figure>
+</div>
+</section>
+<section id="overview-2" class="level4">
+<h4 class="anchored" data-anchor-id="overview-2">Overview</h4>
+<ul>
+<li>History: incremental emergence following R version 4.0 in 2020, boosted greatly in 2022 with the release of the base pipe.</li>
+<li>Visuals: <code>|&gt;</code> (base pipe), <code>_</code> (data placeholder), <code>\()</code> (lambda function).</li>
+<li>Palette: <span style="background-color:#ff0000;">r</span><span style="background-color:#ff00ff;">a</span><span style="background-color:#00ffff;">i</span><span style="background-color:#00ff00;">n</span><span style="background-color:#0000ff;color:white;">b</span><span style="background-color:#4b0082;color:white;">o</span><span style="background-color:#ee82ee;">w</span>?</li>
+<li>Fashion: hubris, moustaches, troll-face emojis.</li>
+<li>Nearest aesthetic: <a href="https://aesthetics.fandom.com/wiki/Vacation_Dadcore">Vacation Dadcore</a>, so you can ‘escape to a simpler time without sacrificing any of the fun’.</li>
+</ul>
+</section>
+<section id="sample-2" class="level4">
+<h4 class="anchored" data-anchor-id="sample-2">Sample</h4>
+<p>Hear me out: what if tidyverse, but made entirely of base R functions<sup>2</sup>? This is now possible with the base pipe and by using obscure functions that help you avoid square brackets<sup>3</sup>. It’s also sketchy as heck; just see the help files for <code>subset()</code> (‘unanticipated consequences’) and <code>transform()</code> (‘you deserve whatever you get!’). The death of Basecore and Tidywave, for sure.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">sw_a <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb6-2">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">subset</span>(</span>
+<span id="cb6-3">    species <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Human"</span>,</span>
+<span id="cb6-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">select =</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>species</span>
+<span id="cb6-5">  ) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb6-6">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">merge</span>(sw_b, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">by =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb6-7">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">transform</span>(</span>
+<span id="cb6-8">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">height =</span> height <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">/</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>,</span>
+<span id="cb6-9">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">homeworld =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">ifelse</span>(</span>
+<span id="cb6-10">      <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span>homeworld <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Tatooine"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Naboo"</span>),</span>
+<span id="cb6-11">      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Other"</span>,</span>
+<span id="cb6-12">      homeworld</span>
+<span id="cb6-13">    )</span>
+<span id="cb6-14">  ) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb6-15">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">aggregate</span>(</span>
+<span id="cb6-16">    height <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> homeworld, </span>
+<span id="cb6-17">    \(x) <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mean</span>(x, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)</span>
+<span id="cb6-18">  ) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb6-19">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sort_by</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">~</span> height, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">decreasing =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># hot off the v4.4 press</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  homeworld   height
+3  Tatooine 1.792500
+2     Other 1.776471
+1     Naboo 1.772000</code></pre>
+</div>
+</div>
+<p>Can’t wait to see this roll out into production code.</p>
+</section>
+</section>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2024-05-08 23:33:15 BST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.4.0 (2024-04-24)
+Platform: aarch64-apple-darwin20
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] dplyr_1.1.4
+
+loaded via a namespace (and not attached):
+ [1] digest_0.6.35     utf8_1.2.4        R6_2.5.1          fastmap_1.1.1    
+ [5] tidyselect_1.2.1  xfun_0.43         magrittr_2.0.3    glue_1.7.0       
+ [9] tibble_3.2.1      knitr_1.46        pkgconfig_2.0.3   htmltools_0.5.8.1
+[13] rmarkdown_2.26    generics_0.1.3    lifecycle_1.0.4   cli_3.6.2        
+[17] fansi_1.0.6       vctrs_0.6.5       withr_3.0.0       compiler_4.4.0   
+[21] rstudioapi_0.16.0 tools_4.4.0       pillar_1.9.0      evaluate_0.23    
+[25] yaml_2.3.8        rlang_1.1.3       jsonlite_1.8.8   </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>These <a href="https://aesthetics.fandom.com/wiki/Suffix_Meaning">suffixes are meaningful</a>: core ‘implies a system, a set of rules’, wave ‘a significant shift within a genre’ and punk ‘reject[s] social norms’.↩︎</p></li>
+<li id="fn2"><p>I called this ‘The Modern Base Aesthetic’ in <a href="https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/">my talk, ‘Base Slaps!’</a>, at the NHS-R conference 2023. But now I realise the aesthetics run deeper.↩︎</p></li>
+<li id="fn3"><p>If you truly want something that looks like {dplyr} code but depends only on base R, then check out <a href="https://nathaneastwood.github.io/poorman/">the {poorman} package</a>.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>base</category>
+  <category>r</category>
+  <category>tidyverse</category>
+  <guid>https://www.rostrum.blog/posts/2024-05-08-aesthetic/index.html</guid>
+  <pubDate>Tue, 07 May 2024 23:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Stop Jenny committing arson</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -8075,447 +8553,6 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-08-26-cheerio-blogdown/index.html</guid>
   <pubDate>Fri, 25 Aug 2023 23:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Object of type closure can shut up</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-08-19-find-bad-names/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><img src="https://www.rostrum.blog/posts/2023-08-19-find-bad-names/resources/paste.png" class="img-fluid" style="width:100.0%" alt="A string of R code written in Comic Sans that says 'paste <- paste(paste)'."></p>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I wrote an R function to help identify variable names that already exist as function names, like in <code>c &lt;- 1</code> or <code>head &lt;- "x"</code>.</p>
-</section>
-<section id="naming-and-shaming" class="level2">
-<h2 class="anchored" data-anchor-id="naming-and-shaming">Naming and shaming</h2>
-<p>Naming things is hard, yes, but <code>data</code> is a short and sensible choice for a dataframe, right?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">data[data<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>column <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, ]</span></code></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error in data$column: object of type 'closure' is not subsettable</code></pre>
-</div>
-</div>
-<p>Oh, silly me, I tried to subset a dataframe called <code>data</code> without actually, y’know, creating it first.</p>
-<p>This is <a href="https://stackoverflow.com/search?q=%22object+of+type+%27closure%27+is+not+subsettable%22+%5Br%5D">a classic stumbling block</a> in R. In short, there’s already a function in base R called <code>data()</code> (!) and I ended up trying subset it. But you can’t subset a function, hence the error.</p>
-<p>Here’s what happens if you subset a non-existent object that has a name that’s different to any existing functions:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">x[x<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>column <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, ]</span></code></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error in eval(expr, envir, enclos): object 'x' not found</code></pre>
-</div>
-</div>
-<p>‘Object not found’ is a much more helpful error message.</p>
-</section>
-<section id="whats-in-a-name" class="level2">
-<h2 class="anchored" data-anchor-id="whats-in-a-name">What’s in a name?</h2>
-<p>So it’s not a big deal, but using existing function names as variable names is a <a href="https://en.wikipedia.org/wiki/Code_smell">code smell</a>. Especially if they’re frequently used functions from base R like <code>head()</code>, <code>str()</code>, <code>paste()</code>, etc<sup>1</sup>.</p>
-<p>But R doesn’t stop you from using these names. In general, R is pretty loose with variable naming, though you can’t use a small set of <a href="https://search.r-project.org/R/refmans/base/html/Reserved.html">reserved words</a> like <code>TRUE</code>, <code>if</code> or <code>NA</code> <sup>2</sup>.</p>
-<p>For example, here we can call the <code>c()</code> function to see its (very short) definition. But using it as a variable name obscures the function definition.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">c  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># this refers to the function</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>function (...)  .Primitive("c")</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">c <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span></span>
-<span id="cb7-2">c  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># this now refers to the variable!</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 1</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rm</span>(c)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># tidy up by removing variable</span></span></code></pre></div>
-</div>
-<p>Can we write a generic function to identify if some code contains ‘bad’ variable names in this way?</p>
-</section>
-<section id="symbolic-gesture" class="level2">
-<h2 class="anchored" data-anchor-id="symbolic-gesture">Symbolic gesture</h2>
-<p>Of course. I’ve made a function called <code>find_var_names()</code>. I’m certain the functionality already exists; consider this a thought experiment.</p>
-<p>You provide (a) a string of code to evaluate<sup>3</sup> and (b) a vector of names to avoid. The code is parsed with <code>getparsedata(parse())</code> to identify variable names<sup>4</sup>. It checks for a <code>SYMBOL</code> token followed by the assignment operators <code>&lt;-</code> or <code>=</code><sup>5</sup>, or preceded by an assignment operator in the case of <code>-&gt;</code><sup>6</sup> (i.e.&nbsp;<code>*_ASSIGN</code> tokens). These variable names are then compared to the set of names provided.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1">find_var_names <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(code_string, names_to_find) {</span>
-<span id="cb10-2">  </span>
-<span id="cb10-3">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Parse the string of code to identify R 'tokens'</span></span>
-<span id="cb10-4">  parsed <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">getParseData</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">parse</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text =</span> code_string, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">keep.source =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>))</span>
-<span id="cb10-5">  parsed <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> parsed[parsed<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>text <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">""</span>, ]</span>
-<span id="cb10-6">  </span>
-<span id="cb10-7">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Identify subsequent tokens (to help find 'x' in x &lt;- 1 and x = 1)</span></span>
-<span id="cb10-8">  parsed<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>next_token <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> </span>
-<span id="cb10-9">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(parsed<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>token[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">nrow</span>(parsed)], <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">NA_character_</span>)</span>
-<span id="cb10-10">  </span>
-<span id="cb10-11">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Identify prior token (to help find 'x' in 1 -&gt; x)</span></span>
-<span id="cb10-12">  parsed<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>last_token <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> </span>
-<span id="cb10-13">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">NA_character_</span>, parsed<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>token[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">nrow</span>(parsed) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>])</span>
-<span id="cb10-14">  </span>
-<span id="cb10-15">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Identify variable names with left-assignment</span></span>
-<span id="cb10-16">  lassign <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> </span>
-<span id="cb10-17">    parsed[parsed<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>token <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"SYMBOL"</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">grepl</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"ASSIGN"</span>, parsed<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>next_token), ]</span>
-<span id="cb10-18">  </span>
-<span id="cb10-19">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Identify row index for variable names following right-assignment</span></span>
-<span id="cb10-20">  rassign_i <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> </span>
-<span id="cb10-21">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">which</span>(parsed<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>token <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"RIGHT_ASSIGN"</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span> parsed<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>next_token <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"SYMBOL"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span></span>
-<span id="cb10-22">  </span>
-<span id="cb10-23">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Filter for right-assigned variable names</span></span>
-<span id="cb10-24">  rassign <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> parsed[rassign_i, ]</span>
-<span id="cb10-25">  </span>
-<span id="cb10-26">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Combine the results and sort by location</span></span>
-<span id="cb10-27">  var_names <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rbind</span>(lassign, rassign)</span>
-<span id="cb10-28">  var_names <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> var_names[<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sort</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">row.names</span>(var_names)), ]</span>
-<span id="cb10-29">  </span>
-<span id="cb10-30">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Filter for variable names that are in the provided names list</span></span>
-<span id="cb10-31">  var_names[var_names<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>text <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%in%</span> names_to_find, <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">grepl</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"_token"</span>, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">names</span>(var_names))]</span>
-<span id="cb10-32">  </span>
-<span id="cb10-33">}</span></code></pre></div>
-</div>
-<p>So, let’s say we have this snippet of R code<sup>7</sup> below. It uses some variable names that are already function names, as well as each flavour of assignment.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">demo_code <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> r<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"{</span></span>
-<span id="cb11-2"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">data &lt;- "</span>x<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span></span>
-<span id="cb11-3"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">head = head(chickwts)</span></span>
-<span id="cb11-4"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>y<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">" -&gt; df</span></span>
-<span id="cb11-5"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">a &lt;- beaver1[1:3]</span></span>
-<span id="cb11-6"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">b &lt;- 2 -&gt; c</span></span>
-<span id="cb11-7"><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">}"</span></span></code></pre></div>
-</div>
-<p>And here’s a function that grabs the base packages and the function names within. This is what we’ll use as our ‘no-go’ variable names. You could expand this to include other names, like function names from the tidyverse, for example.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1">get_base_functions <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>() {</span>
-<span id="cb12-2">  base_names <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sessionInfo</span>()<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>basePkgs</span>
-<span id="cb12-3">  base_pkgs <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">paste0</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"package:"</span>, base_names)</span>
-<span id="cb12-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">lapply</span>(base_pkgs, ls) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">unlist</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">unique</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sort</span>()</span>
-<span id="cb12-5">}</span>
-<span id="cb12-6"></span>
-<span id="cb12-7"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tail</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">get_base_functions</span>())</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "xyTable"    "xyz.coords" "xzfile"     "yinch"      "zapsmall"  
-[6] "zip"       </code></pre>
-</div>
-</div>
-<p>Aside: this function uses a little hack. It specifically grabs the attached base packages from the <code>sessionInfo()</code> listing. There are other base and ‘recommended’ packages that are actually not attached from the start of your session; see the <code>Priority</code> value from the output of <code>installed.packages()</code>.</p>
-<p>Now we can run the function to check the code for the list of function names.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">naughty_words <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">find_var_names</span>(</span>
-<span id="cb14-2">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">code_string =</span> demo_code,</span>
-<span id="cb14-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">names_to_find =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">get_base_functions</span>()</span>
-<span id="cb14-4">)</span>
-<span id="cb14-5"></span>
-<span id="cb14-6">naughty_words</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   line1 col1 line2 col2 id parent  token terminal text
-12     3    1     3    4 12     14 SYMBOL     TRUE head
-3      2    1     2    4  3      5 SYMBOL     TRUE data
-33     4    8     4    9 33     35 SYMBOL     TRUE   df
-66     6   11     6   11 66     68 SYMBOL     TRUE    c</code></pre>
-</div>
-</div>
-<p>The output is what you normally get from <code>getparsedata(parse())</code>, filtered for the illegal names. Helpfully it shows you the exact row and column indices for where the string exists in the code you provided.</p>
-<p>And of course you can just isolate the offenders.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">naughty_words<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>text <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">unique</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sort</span>()</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "c"    "data" "df"   "head"</code></pre>
-</div>
-</div>
-<p>So the variable names <code>a</code> and <code>b</code> in <code>demo_code</code> were ignored because they’re not function names in base R. And the in-built data sets <code>beaver1</code> and <code>chickwts</code> were also ignored, because they’re not being used as variable names. And yes, <code>df</code>—a commonly-used variable name for dataframes—is also a function!</p>
-</section>
-<section id="seeking-closure" class="level2">
-<h2 class="anchored" data-anchor-id="seeking-closure">Seeking closure</h2>
-<p>I probably won’t use this function in real life, but maybe the concepts are interesting to you or you can tell me about a linter that does this already.</p>
-<p>At least for now, object of type ‘Matthew’ is not upsettable.</p>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-08-22 20:39:44 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
- [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
-[13] digest_0.6.33     rlang_1.1.1       evaluate_0.21    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>Please note that this post is not a subtweet. I’ve read a bunch of code recently—including my own!—that uses variable names in this way.↩︎</p></li>
-<li id="fn2"><p>Although the more nefarious among you will know you can put just about anything in backticks and it can be a legit variable name. So <code>`TRUE` &lt;- FALSE</code> will work, but you’ll have to supply <code>`TRUE`</code> with the backticks to use it.↩︎</p></li>
-<li id="fn3"><p>Exercise for the reader: have the function accept script files from a connection, not just as a string. I didn’t bother for this silly demo.↩︎</p></li>
-<li id="fn4"><p>If you can be parsed, I’ve <a href="https://www.rostrum.blog/2023/03/03/getparsedata/">written about this</a> before.↩︎</p></li>
-<li id="fn5"><p>If you haven’t already <a href="https://www.rostrum.blog/2021/03/13/assign/">expunged</a> any files containing equals assignment.↩︎</p></li>
-<li id="fn6"><p>I’ll have to update this in future to work with <a href="https://www.rostrum.blog/2022/06/07/assign-down/">down-assignment arrows</a>.↩︎</p></li>
-<li id="fn7"><p>This is an ‘R string’, introduced in R version 4.0.0. It deals with escaping certain characters and quotes within quotes so that you don’t have to. So <code>"x &lt;- "y""</code> will error but <code>r"(x &lt;- "y")"</code> will return <code>"x &lt;- \"y\""</code>. You can use symbols other than parentheses, such as curly braces, if your expression already contains parentheses itself.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2023-08-19-find-bad-names/index.html</guid>
-  <pubDate>Fri, 18 Aug 2023 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
