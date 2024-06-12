@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 174 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2024-05-08 (latest).
+🔢 There have been 175 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2024-06-12 (latest).
 
-📅 That’s a post roughly every 13 days, or about 2.4 posts per month.
+📅 That’s a post roughly every 13 days, or about 2.3 posts per month.
 
-🆕 The latest post: [The Aesthetics Wiki: an R
-Addendum](https://www.rostrum.blog/posts/2024-05-08-aesthetic).
+🆕 The latest post: [Making CRAN packages easier to find (and
+shame?)](https://www.rostrum.blog/posts/2024-06-12-cran-db).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ Addendum](https://www.rostrum.blog/posts/2024-05-08-aesthetic).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 175 | 2024-06-12 | [Making CRAN packages easier to find (and shame?)](https://www.rostrum.blog/posts/2024-06-12-cran-db)                          |
 | 174 | 2024-05-08 | [The Aesthetics Wiki: an R Addendum](https://www.rostrum.blog/posts/2024-05-08-aesthetic)                                      |
 | 173 | 2024-04-01 | [Stop Jenny committing arson](https://www.rostrum.blog/posts/2024-04-01-perpetual-restart)                                     |
 | 172 | 2024-03-26 | [Assign abstracts to sifters](https://www.rostrum.blog/posts/2024-03-26-assign-abstracts)                                      |
@@ -220,4 +221,4 @@ Addendum](https://www.rostrum.blog/posts/2024-05-08-aesthetic).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2024-05-09 at 08:07.
+🕒 Last updated: 2024-06-12 at 20:59.
