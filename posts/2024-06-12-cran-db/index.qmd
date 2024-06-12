@@ -1,0 +1,103 @@
+---
+title: "Making CRAN packages easier to find (and shame?)"
+date: 2024-06-12
+slug: "cran-db"
+image: resources/app.png
+categories:
+  - badgr
+  - base
+  - bslib
+  - cran
+  - r
+  - shiny
+---
+
+![Red alert!](resources/app.png){fig.alt="Screenshot of webpage called 'CRAN Deadlines'. There are individual cards with the names of R packages in them. The header of each card says how many days remain for fixes to be made and is coloured according to the amount of time left (e.g. red for 0 days). The footer says e.g. 'issues need fixing before 2024-06-12' with a link to the CRAN page detailing the errors." width='100%'}
+
+## tl;dr
+
+You can now programmatically access deadlines and DOIs for CRAN packages. I larked about with them to make [a Shiny app](https://mattdray.shinyapps.io/cran-deadlines/) and [a README-badge-making function](https://github.com/matt-dray/badgr).
+
+## CRANking the database
+
+If you didn't know, base R has functions that return information about packages on CRAN[^cran]. The main one is probably `CRAN_package_db()`. Here's a few columns:
+
+```{r db}
+db <- tools::CRAN_package_db()
+db[1:5, c("Package", "Version", "Maintainer")]
+```
+
+This post is about two new columns that have appeared recently in that dataframe—`Deadline` and `DOI`—and a couple of little tools I've built around them.
+
+### Meet the deadline
+
+If your package-builds fail on CRAN then you need to fix them. The CRAN database now contains the date by which fixes need to be made.
+
+```{r deadline}
+db[!is.na(db$Deadline), c("Package", "Deadline")][1:5, ]
+```
+
+You can get this information in an R terminal, sure, but it's ripe for displaying in a web app that can be refreshed for the latest news. This seemed a good excuse for me to try a couple of Shiny things: [{bslib}](https://rstudio.github.io/bslib/) as a framework, and a way to create arbitrary numbers of UI elements.
+
+In short, I made a Shiny app that's embedded below. [You can also visit directly on shinyapps.io](https://mattdray.shinyapps.io/cran-deadlines/)[^live] or [find the source on GitHub](https://github.com/matt-dray/cran-deadlines).
+
+<iframe width='780' height='500' src='https://mattdray.shinyapps.io/cran-deadlines/' title='CRAN deadlines'></iframe>
+
+I wound up with a hacky approach that does the job. I looped over the deadlined packages to build a list of `bslib::card()` elements that each contained a package name, title, deadline date and days left, linking also to the CRAN and CRAN check pages. For added spice, I coloured the card headers by threat level.
+
+Some other bits-and-bobs I used were [an emoji as a favicon](https://twitter.com/LeaVerou/status/1241619866475474946), {bslib}'s very simple [dark-mode toggle](https://rstudio.github.io/bslib/reference/input_dark_mode.html), and [`htmltools::tagAppendChild()`](https://rstudio.github.io/htmltools/reference/tagAppendChild.html) to splice breaks between cards.
+
+So this was a chance to polish up my Shiny knowledge, but I did start out this mini project with just a basic {reactable} of the deadline information. I see [Hadley has now done something similar to that](https://hadley.github.io/cran-deadlines/)[^hadley] and it's a better tool[^shame].
+
+Ah well. You've come to expect overengineering from this blog anyway, I suspect.
+
+### Oi! DOI!
+
+A [DOI](https://www.doi.org/) is a 'digital object identifier'. These are used extensively in publishing and can be useful for tracking things and gathering usage statistics. CRAN has been adding these steadily to packages recently and the value has been added to the `CRAN_package_db()` dataframe.
+
+```{r doi}
+db[!is.na(db$DOI), c("Package", "DOI")][1:5, ]
+```
+
+[Dirk wondered aloud on Mastodon](https://fosstodon.org/@eddelbuettel@mastodon.social/112597923361268334) when someone will make a badge service for it. I don't know about a 'service' but I once wrote a package called [{badgr}](https://github.com/matt-dray/badgr) to build customised [shields.io](https://shields.io/) metadata badges within R. It's a small leap to make a {badgr} function that builds CRAN DOI badges.
+
+So, as of of {badgr} v0.2.0, you can use `get_cran_doi_badge()`. You can download it from my R-universe:
+
+```{r badgr, eval=FALSE}
+install.packages("badgr", repos = "https://matt-dray.r-universe.dev")
+```
+
+You pass it a CRAN package name. If you want, you can pass other arguments to `get_badge()` to change its colour, etc (but the default colour is the blue of the R logo, so you probably want to keep that). For purposes of this blog post, I've turned off arguments that open a browser preview of the badge and copy it to your clipboard.
+
+```{r get-badge}
+badgr::get_cran_doi_badge(
+  package_name = "datapasta",
+  browser_preview = FALSE,
+  to_clipboard = FALSE
+)
+```
+
+The code outputs a Markdown string that you can paste into your repository's README, for example. It looks like this when rendered:
+
+[![](https://img.shields.io/badge/DOI-10.32614/CRAN.package.datapasta-1f57b6?style=flat&link=https://doi.org/10.32614/CRAN.package.datapasta)](https://doi.org/10.32614/CRAN.package.datapasta)
+
+You can click it to be taken to the resource, which is the CRAN listing for the package. The whole process looks like this:
+
+![[{datapasta}](https://milesmcbain.github.io/datapasta/) is great, even if you don't pronounce it 'dah-tah pars-tah'.](resources/doi-badge.gif){fig.alt="A gif of the function get_cran_doi_badge running in RStudio with the package name 'datapasta' passed as the only argument. The console prints 'opening browser to display badge preview' and 'badge markdown added to clipboard' The markdown has also printed in the console. The badge opens in a browser window. It says 'DOI' on the left side and the DOIc ode on the right. Clicking it takes you to the CRAN page for hte package." width='100%'}
+
+In retrospect, this function probably doesn't need to use `CRAN_package_db()` because the DOIs look fairly standardised in structure. 
+
+Ah well. You've come to expect overengineering from this blog anyway, I suspect.
+
+### Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^cran]: The Comprehensive R Archive Network, not [the unit of uncleaned herring](https://www.rostrum.blog/posts/2020-09-12-herring-units/).
+[^live]: I initially tried making this as [a Shinylive app](https://posit-dev.github.io/r-shinylive/), but the cards didn't appear on the page. But don't worry, [Eric is on the case](https://github.com/matt-dray/cran-deadlines/issues/1#issuecomment-2163322390) (thank you).
+[^hadley]: The absolute cheek of using the same (completely obvious and utterly non-plagiarised) repository name, can you believe it.
+[^shame]: Though I chose not to shame the package owners by putting their names in my app, lol.
