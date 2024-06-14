@@ -26,8 +26,8 @@ between 2018-04-14 (first) to 2024-06-12 (latest).
 
 📅 That’s a post roughly every 13 days, or about 2.3 posts per month.
 
-🆕 The latest post: [Making CRAN packages easier to find (and
-shame?)](https://www.rostrum.blog/posts/2024-06-12-cran-db).
+🆕 The latest post: [Expose CRAN deadlines and
+DOIs](https://www.rostrum.blog/posts/2024-06-12-cran-db).
 
 📈 Posts over time:
 
@@ -40,7 +40,7 @@ shame?)](https://www.rostrum.blog/posts/2024-06-12-cran-db).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
-| 175 | 2024-06-12 | [Making CRAN packages easier to find (and shame?)](https://www.rostrum.blog/posts/2024-06-12-cran-db)                          |
+| 175 | 2024-06-12 | [Expose CRAN deadlines and DOIs](https://www.rostrum.blog/posts/2024-06-12-cran-db)                                            |
 | 174 | 2024-05-08 | [The Aesthetics Wiki: an R Addendum](https://www.rostrum.blog/posts/2024-05-08-aesthetic)                                      |
 | 173 | 2024-04-01 | [Stop Jenny committing arson](https://www.rostrum.blog/posts/2024-04-01-perpetual-restart)                                     |
 | 172 | 2024-03-26 | [Assign abstracts to sifters](https://www.rostrum.blog/posts/2024-03-26-assign-abstracts)                                      |
@@ -221,4 +221,4 @@ shame?)](https://www.rostrum.blog/posts/2024-06-12-cran-db).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2024-06-12 at 20:59.
+🕒 Last updated: 2024-06-14 at 10:20.
