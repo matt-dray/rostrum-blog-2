@@ -98,12 +98,12 @@ background-color: null;
 font-style: inherit;">head</span>()</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>          Package   Deadline
-11554       MuMIn 2024-06-14
-16241       rsolr 2024-06-14
-16963      semEff 2024-06-14
+11555       MuMIn 2024-06-14
+16242       rsolr 2024-06-14
+16964      semEff 2024-06-14
 6901  gghighlight 2024-06-17
 9671         lme4 2024-06-17
-11799 nestedLogit 2024-06-17</code></pre>
+11800 nestedLogit 2024-06-17</code></pre>
 </div>
 </div>
 <p>You can get this information in an R terminal, sure, but it’s ripe for displaying in a web app that shows the latest data.</p>
@@ -111,11 +111,12 @@ font-style: inherit;">head</span>()</span></code></pre></div>
 <p>In short, I made a Shiny(live) app, which is embedded below (may take a moment to fully load).</p>
 <iframe width="400" height="500" src="https://matt-dray.github.io/cran-deadlines/" title="CRAN deadlines">
 </iframe>
-<p><a href="https://matt-dray.github.io/cran-deadlines/">You can also visit directly on GitHub Pages</a> or <a href="https://github.com/matt-dray/cran-deadlines">find the source on GitHub</a>. The data refreshes with each visit so it stays up to date<sup>3</sup>.</p>
-<p>It’s pretty simple: there’s a card per deadlined package with a link to their CRAN-listing page and check details. For added spice, I calculated days remaining and coloured the card headers by threat level.</p>
-<p>To handle on the fly an arbitrary number of UI elements, I looped over the deadlined packages to build a <code>tagList</code> of <code>bslib::card()</code> elements. This object was then interpreted by <code>renderUI()</code> and the cards were spat out.</p>
+<p><a href="https://matt-dray.github.io/cran-deadlines/">You can also visit directly on GitHub Pages</a> or <a href="https://github.com/matt-dray/cran-deadlines">find the source on GitHub</a>. The data refreshes with each visit so it stays up to date.</p>
+<p>It’s pretty simple: there’s a card per deadlined package with a link to its CRAN-listing page and check details. For added spice, I calculated days remaining and coloured the card headers by threat level.</p>
+<p>If you see a negative number of days remaining, it’s not because the data haven’t updated correctly. A package can have a deadline listed that has already passed, which will manifest as a negative value in the number of days remaining<sup>3</sup>. It also seems that packages can have a deadline listed in <code>CRAN_package_db()</code> even if they’ve been archived or reprieved, so they’ll continue to appear in the app regardless.</p>
+<p>Re handling an arbitrary number of UI elements on the fly, I looped over the deadlined packages to build a <code>tagList</code> of <code>bslib::card()</code> elements. This object was then interpreted by <code>renderUI()</code> and the cards were spat out.</p>
 <p>Some other new-to-me bits-and-bobs I used were <a href="https://twitter.com/LeaVerou/status/1241619866475474946">an emoji as a favicon</a><sup>4</sup>, {bslib}’s very simple <a href="https://rstudio.github.io/bslib/reference/input_dark_mode.html">dark-mode toggle</a>, and <a href="https://rstudio.github.io/htmltools/reference/tagAppendChild.html"><code>htmltools::tagAppendChild()</code></a> to splice breaks between cards in the <code>tagList</code><sup>5</sup>.</p>
-<p>In the end, this was a good excuse to polish some of my Shiny knowledge, but there are simpler approaches to displaying this information. For example, I started with just a basic {reactable} and I see <a href="https://hadley.github.io/cran-deadlines/">Hadley has now done something similar to that</a><sup>6</sup>, which allows you to click rows to expand a package’s check results. It’s a better tool<sup>7</sup>.</p>
+<p>In the end, this was a good excuse to polish some of my Shiny knowledge, but there are simpler approaches to displaying this information. For example, I started with just a basic {reactable}. I see <a href="https://hadley.github.io/cran-deadlines/">Hadley has now done something similar to that</a><sup>6</sup>, in a table that allows you to click rows to expand a package’s check results as well. It’s a better tool and I recommend you bookmark that instead of this Shiny app<sup>7</sup>.</p>
 <p>Ah well. By now you’ve come to expect overengineering from this blog, I suspect. At least I had fun.</p>
 <div class="tip">
 <p> <b>Note</b></p>
@@ -236,7 +237,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-06-17 08:39:49 BST</code></pre>
+<pre><code>Last rendered: 2024-06-17 14:50:18 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.4.0 (2024-04-24)
@@ -272,7 +273,7 @@ loaded via a namespace (and not attached):
 <ol>
 <li id="fn1"><p>The Comprehensive R Archive Network, not <a href="https://www.rostrum.blog/posts/2020-09-12-herring-units/">the unit of uncleaned herring</a>.↩︎</p></li>
 <li id="fn2"><p>I think it was <a href="https://mastodon.social/@henrikbengtsson/112591630316235677">Henrik’s Mastodon post</a> that first tipped me off to this, thank you.↩︎</p></li>
-<li id="fn3"><p>If you see a negative number of days remaining, it’s not because the data haven’t updated correctly. A package can have a deadline listed that has already passed, which will manifest as a negative value in the number of days remaining. Lluis was kind enough to <a href="https://fosstodon.org/@Lluis_Revilla/112620123453580083">suggest why this might be</a>.↩︎</p></li>
+<li id="fn3"><p>Lluis was kind enough to <a href="https://fosstodon.org/@Lluis_Revilla/112620123453580083">suggest why this might be</a>.↩︎</p></li>
 <li id="fn4"><p>This appears when the Shiny app is opened locally in a browser, but does not carry through to the Shinylive version.↩︎</p></li>
 <li id="fn5"><p>I’m not convinced my approach is the best one, but it works for now. Please leave an issue in the repo if you have a better idea.↩︎</p></li>
 <li id="fn6"><p>The absolute cheek of using the same (completely obvious and utterly non-plagiarised) repository name, can you believe it.↩︎</p></li>

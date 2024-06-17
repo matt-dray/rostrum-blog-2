@@ -46,15 +46,17 @@ In short, I made a Shiny(live) app, which is embedded below (may take a moment t
 
 <iframe width='400' height='500' src='https://matt-dray.github.io/cran-deadlines/' title='CRAN deadlines'></iframe>
 
-[You can also visit directly on GitHub Pages](https://matt-dray.github.io/cran-deadlines/) or [find the source on GitHub](https://github.com/matt-dray/cran-deadlines). The data refreshes with each visit so it stays up to date[^neg].
+[You can also visit directly on GitHub Pages](https://matt-dray.github.io/cran-deadlines/) or [find the source on GitHub](https://github.com/matt-dray/cran-deadlines). The data refreshes with each visit so it stays up to date.
 
-It's pretty simple: there's a card per deadlined package with a link to their CRAN-listing page and check details. For added spice, I calculated days remaining and coloured the card headers by threat level.
+It's pretty simple: there's a card per deadlined package with a link to its CRAN-listing page and check details. For added spice, I calculated days remaining and coloured the card headers by threat level.
 
-To handle on the fly an arbitrary number of UI elements, I looped over the deadlined packages to build a `tagList` of `bslib::card()` elements. This object was then interpreted by `renderUI()` and the cards were spat out. 
+If you see a negative number of days remaining, it's not because the data haven't updated correctly. A package can have a deadline listed that has already passed, which will manifest as a negative value in the number of days remaining[^neg]. It also seems that packages can have a deadline listed in `CRAN_package_db()` even if they've been archived or reprieved, so they'll continue to appear in the app regardless.
+
+Re handling an arbitrary number of UI elements on the fly, I looped over the deadlined packages to build a `tagList` of `bslib::card()` elements. This object was then interpreted by `renderUI()` and the cards were spat out. 
 
 Some other new-to-me bits-and-bobs I used were [an emoji as a favicon](https://twitter.com/LeaVerou/status/1241619866475474946)[^favicon], {bslib}'s very simple [dark-mode toggle](https://rstudio.github.io/bslib/reference/input_dark_mode.html), and [`htmltools::tagAppendChild()`](https://rstudio.github.io/htmltools/reference/tagAppendChild.html) to splice breaks between cards in the `tagList`[^splice].
 
-In the end, this was a good excuse to polish some of my Shiny knowledge, but there are simpler approaches to displaying this information. For example, I started with just a basic {reactable} and I see [Hadley has now done something similar to that](https://hadley.github.io/cran-deadlines/)[^hadley], which allows you to click rows to expand a package's check results. It's a better tool[^shame].
+In the end, this was a good excuse to polish some of my Shiny knowledge, but there are simpler approaches to displaying this information. For example, I started with just a basic {reactable}. I see [Hadley has now done something similar to that](https://hadley.github.io/cran-deadlines/)[^hadley], in a table that allows you to click rows to expand a package's check results as well. It's a better tool and I recommend you bookmark that instead of this Shiny app[^shame].
 
 Ah well. By now you've come to expect overengineering from this blog, I suspect. At least I had fun.
 
@@ -136,7 +138,7 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 [^hadley]: The absolute cheek of using the same (completely obvious and utterly non-plagiarised) repository name, can you believe it.
 [^shame]: Though I chose not to shame the package owners by putting their names in my app, lol.
 [^favicon]: This appears when the Shiny app is opened locally in a browser, but does not carry through to the Shinylive version.
-[^neg]: If you see a negative number of days remaining, it's not because the data haven't updated correctly. A package can have a deadline listed that has already passed, which will manifest as a negative value in the number of days remaining. Lluis was kind enough to [suggest why this might be](https://fosstodon.org/@Lluis_Revilla/112620123453580083).
 [^achim]: I first noticed this thanks to [Achim's post on Mastodon](https://fosstodon.org/@zeileis/112597049943483012).
 [^henrik]: I think it was [Henrik's Mastodon post](https://mastodon.social/@henrikbengtsson/112591630316235677) that first tipped me off to this, thank you. 
 [^splice]: I'm not convinced my approach is the best one, but it works for now. Please leave an issue in the repo if you have a better idea.
+[^neg]: Lluis was kind enough to [suggest why this might be](https://fosstodon.org/@Lluis_Revilla/112620123453580083).
