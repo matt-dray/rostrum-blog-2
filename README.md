@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 175 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2024-06-12 (latest).
+🔢 There have been 176 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2024-07-14 (latest).
 
 📅 That’s a post roughly every 13 days, or about 2.3 posts per month.
 
-🆕 The latest post: [Expose CRAN deadlines and
-DOIs](https://www.rostrum.blog/posts/2024-06-12-cran-db).
+🆕 The latest post: [Tile-style sprite
+delight](https://www.rostrum.blog/posts/2024-07-14-tilebased).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ DOIs](https://www.rostrum.blog/posts/2024-06-12-cran-db).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 176 | 2024-07-14 | [Tile-style sprite delight](https://www.rostrum.blog/posts/2024-07-14-tilebased)                                               |
 | 175 | 2024-06-12 | [Expose CRAN deadlines and DOIs](https://www.rostrum.blog/posts/2024-06-12-cran-db)                                            |
 | 174 | 2024-05-08 | [The Aesthetics Wiki: an R Addendum](https://www.rostrum.blog/posts/2024-05-08-aesthetic)                                      |
 | 173 | 2024-04-01 | [Stop Jenny committing arson](https://www.rostrum.blog/posts/2024-04-01-perpetual-restart)                                     |
@@ -221,4 +222,4 @@ DOIs](https://www.rostrum.blog/posts/2024-06-12-cran-db).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2024-06-17 at 13:53.
+🕒 Last updated: 2024-07-14 at 12:47.
