@@ -212,7 +212,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="based-tiles" class="level2">
 <h2 class="anchored" data-anchor-id="based-tiles">Based tiles</h2>
 <p>You know by now that <a href="https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/">R is unequivocally a game engine</a>.</p>
-<p>In this vein, Mike Cheng (coolbutuseless) has been hard at work updating the <a href="https://coolbutuseless.github.io/package/nara/index.html">{nara}</a> package, which allows for <a href="https://github.com/coolbutuseless/narademos">fast rendering of pixel-based graphics</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. This can make games easier to develop, especially in tandem with Mike’s {eventloop} package for reading continuous input from the player’s keyboard.</p>
+<p>In this vein, Mike Cheng (coolbutuseless) has been hard at work updating the <a href="https://coolbutuseless.github.io/package/nara/index.html">{nara}</a> package, which allows for <a href="https://github.com/coolbutuseless/narademos">fast rendering of pixel-based graphics</a><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. This can make games easier to develop, especially in tandem with Mike’s <a href="https://coolbutuseless.github.io/package/eventloop/index.html">{eventloop}</a> package for reading continuous input from the player’s keyboard.</p>
 <p>As a result, I’ve taken some of the ‘engine’ from <a href="https://github.com/matt-dray/r.oguelike">{r.oguelike}</a>—a toy dungeon-crawling game in an R package<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>—and made it draw graphics instead of just printing to the console<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. The outcome from this test is the <a href="https://github.com/matt-dray/tilebased">demo {tilebased} package</a>.</p>
 <p>It also borrows grass, tree, person and rat sprites from <a href="https://www.kenney.nl/">Kenney’s</a> free and excellent <a href="https://www.kenney.nl/assets?search=tiny&amp;sort=update">‘Tiny’ asset packs</a>. They’re 16×16 pixels, shown here at actual size:</p>
 <p><img src="resources/grass.png" class="img-fluid" data-fig.alt="A square of 16 by 16 pixels with a green grass pattern." width="16"> <img src="resources/tree.png" class="img-fluid" data-fig.alt="A pixelated tree with a thick black outline that fits inside limits of 16 by 16 pixels." width="16"> <img src="resources/player.png" class="img-fluid" data-fig.alt="A pixelated human player-character with a thick black outline that fits inside limits of 16 by 16 pixels." width="16"> <img src="resources/rat.png" class="img-fluid" data-fig.alt="A pixelated grey rat enemy-character with a thick black outline that fits inside limits of 16 by 16 pixels." width="16"></p>
@@ -226,7 +226,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"matt-dray/tilebased"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The only dependency is my <a href="https://github.com/matt-dray/r.oguelike">{r.oguelike}</a> package, which is also GitHub-only.</p>
+<p>As well as {nara} and {eventloop}, it depends on my GitHub-only <a href="https://github.com/matt-dray/r.oguelike">{r.oguelike}</a> package.</p>
 <p>You can then start a game, which opens a graphics device. Use your arrow keys to move around. This will look like the gif at the top of this page.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tilebased<span class="sc">::</span><span class="fu">play</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -314,7 +314,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-07-14 13:44:26 BST</code></pre>
+<pre><code>Last rendered: 2024-07-14 13:49:17 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.4.0 (2024-04-24)

@@ -22,7 +22,7 @@ categories:
 
 You know by now that [R is unequivocally a game engine](https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/).
 
-In this vein, Mike Cheng (coolbutuseless) has been hard at work updating the [{nara}](https://coolbutuseless.github.io/package/nara/index.html) package, which allows for [fast rendering of pixel-based graphics](https://github.com/coolbutuseless/narademos)[^hex]. This can make games easier to develop, especially in tandem with Mike's {eventloop} package for reading continuous input from the player's keyboard.
+In this vein, Mike Cheng (coolbutuseless) has been hard at work updating the [{nara}](https://coolbutuseless.github.io/package/nara/index.html) package, which allows for [fast rendering of pixel-based graphics](https://github.com/coolbutuseless/narademos)[^hex]. This can make games easier to develop, especially in tandem with Mike's [{eventloop}](https://coolbutuseless.github.io/package/eventloop/index.html) package for reading continuous input from the player's keyboard.
 
 As a result, I've taken some of the 'engine' from [{r.oguelike}](https://github.com/matt-dray/r.oguelike)—a toy dungeon-crawling game in an R package[^rogue]—and made it draw graphics instead of just printing to the console[^iso]. The outcome from this test is the [demo {tilebased} package](https://github.com/matt-dray/tilebased).
 
@@ -47,7 +47,7 @@ You can install [from GitHub](https://github.com/matt-dray/tilebased) like:
 remotes::install_github("matt-dray/tilebased")
 ```
 
-The only dependency is my [{r.oguelike}](https://github.com/matt-dray/r.oguelike) package, which is also GitHub-only.
+As well as {nara} and {eventloop}, it depends on my GitHub-only [{r.oguelike}](https://github.com/matt-dray/r.oguelike) package.
 
 You can then start a game, which opens a graphics device. Use your arrow keys to move around. This will look like the gif at the top of this page.
 
