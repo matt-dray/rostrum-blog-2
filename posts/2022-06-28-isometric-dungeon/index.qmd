@@ -23,16 +23,16 @@ I made an interactive isometric-dungeon demo in R, thanks to [{r.oguelike}](http
 
 ## A new dimension
 
-[Mike](https://twitter.com/coolbutuseless) (AKA mikefc, AKA coolbutuseless) is well known for off-label R creations that desecrate the assumption that ['R is a language for statistical computing'](https://twitter.com/mattdray/status/1539371338250522624).
+[Mike](https://twitter.com/coolbutuseless) (AKA mikefc, AKA coolbutuseless) is well known for off-label R creations that desecrate the assumption that 'R is a language for statistical computing'.
 
 Mike revealed [the {isocubes} package](https://github.com/coolbutuseless/isocubes) recently, which lets you print objects made of isometric cubes to a graphics device. I immediately thought of [the toy {r.oguelike} package](https://matt-dray.github.io/r.oguelike/) I've [been developing recently](https://www.rostrum.blog/2022/04/25/r.oguelike-dev/), which has the goal of creating (really) basic features of [a roguelike game](https://en.wikipedia.org/wiki/Roguelike) in R.[^wolfgang] The dungeons are currently ASCII tiles printed to the console. How would it look in isometric?
 
 In a frenzied series of tweets, I built up a little toy that creates a procedural isometric dungeon and adds a user-controlled player character and a pathfinding enemy. The steps were to:
 
-1. Build an isometric dungeon ([tweet](https://twitter.com/mattdray/status/1539281300619763718))
-2. Add a player ([tweet](https://twitter.com/mattdray/status/1539370837219868673))
-3. Accept continuous input ([tweet](https://twitter.com/mattdray/status/1539400843409207296))
-4. Add a pathfinding enemy ([tweet](https://twitter.com/mattdray/status/1540107713681788928))
+1. Build an isometric dungeon.
+2. Add a player.
+3. Accept continuous input.
+4. Add a pathfinding enemy.
 
 This post talks through those steps. You can [find the code for the final product in a GitHub Gist](https://gist.github.com/matt-dray/dcbd5cd2f4bdc471921e5c741a1233c0). It is absolutely not polished and really is just a Frankenstein's monster of code that I stapled together.
 
@@ -144,7 +144,7 @@ So many ideas for off-label R use, so little time.
 
 I lied a bit earlier. The actual first thought I had when seeing {isocubes} was pixel art. [I wrote a post (exactly) one year ago](https://www.rostrum.blog/2021/06/28/pixel-art/) where I converted some vectors into little pixel drawings using R's `image()` function.
 
-It's fairly straightforward to convert those vectors into a format accepted by {isocubes}, which means you can have an [isometric sprite of Link from The Legend of Zelda](https://twitter.com/mattdray/status/1538869234410967041), or [a rainbow version of the insect logo for this blog](https://twitter.com/mattdray/status/1538862896855359499).
+It's fairly straightforward to convert those vectors into a format accepted by {isocubes}, which means you can have an isometric sprite of Link from The Legend of Zelda, or a rainbow version of the insect logo for this blog.
 
 ![](resources/isometric-link-rostrum.png){fig-alt="Two images side-by-side. A sprite of Link from the Legend of Zelda on the NES, rendered with isometric cubes thanks to the 'isocubes' R package. A pixelated image of an insect—the logo of rostrum.blog—rendered with isometric cubes, thanks to the 'isocube' package. The cubes are rainbow-coloured from left to right." width="100%"}
 

@@ -14,6 +14,15 @@ categories:
 
 R has an interactive spreadsheet editor for dataframes that you can access with `edit()`. [I made the function `tide::tide()`](https://github.com/matt-dray/tide) to generate automatically some code that will reproduce the changes you made manually with `edit()`.
 
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+As of July 2024 I've added functionality for handling factors and released version 0.1.0, thanks to [an issue](https://github.com/matt-dray/tide/issues/8) raised in the GitHub repo. 
+
+As ever, [check the repo](https://github.com/matt-dray/tide) for the latest state of the package.
+
+</div>
+
 ## Edit
 
 R's `edit()` function invokes a text editor so you can amend an R object.[^tweet]
@@ -129,7 +138,7 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 ```
 </details>
 
-[^tweet]: I think this was new to quite a lot of people, based on [a recent tweet I wrote about it](https://twitter.com/mattdray/status/1518374831993069570?s=20&t=X0VR706pMtDQrUMLn_YHoA). The `edit()` function feels like another one of those 'hidden' base functions. There's not really a good reason for you to know about it unless someone told you about it. I got it from an old-school textbook when first learning R, just like the `locator()` function for retrieving interactively the coordinates from a plot, which [I wrote about in a previous post](https://www.rostrum.blog/2021/11/04/kanto-locator/).
+[^tweet]: The `edit()` function feels like another one of those 'hidden' base functions (for good reason in this case!). There's not really a good reason for you to know about it; it's not good practice. I got it from an old-school textbook when first learning R, just like the `locator()` function for retrieving interactively the coordinates from a plot, which [I wrote about in a previous post](https://www.rostrum.blog/2021/11/04/kanto-locator/).
 [^concept]: 'Concept' means I can put it out there without any guarantees or polish, and I don't even have to complete it if I don't want to!
 [^puns]: You came here for the wordplay anyway, right?
 [^canute]: Also consider the allusion to [King Canute trying to turn back the tide](https://en.wikipedia.org/wiki/King_Canute_and_the_tide). It can be pretty hard to stop people writing non-reproducible code. And this package isn't going to change that.

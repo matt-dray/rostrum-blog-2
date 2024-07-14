@@ -231,7 +231,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>simply <em>begin</em> an approach to address what was raised in Amelia’s presentation</li>
 </ul>
 <p>Obviously the package is not finished, let alone perfect, and it requires more theoretical and practical considerations to make it truly useful. Clearly I don’t have all the answers and I’m certainly not an arbiter of language, but I think the purpose is defined and it certainly works for simple cases.</p>
-<p>At worst, I hope the package will encourage discussion. There’s been some interest <a href="https://twitter.com/mattdray/status/1282378130901131264?s=20">on Twitter</a> and <a href="https://community.rstudio.com/t/how-do-you-speak-r/73727">on the RStudio Community site</a>, but do consider contributing thoughts and ideas to <a href="https://github.com/matt-dray/r2eng">the {r2eng} GitHub repo</a>.</p>
+<p>At worst, I hope the package will encourage discussion. There’s been some interest on Twitter and <a href="https://community.rstudio.com/t/how-do-you-speak-r/73727">on the RStudio Community site</a>, but do consider contributing thoughts and ideas to <a href="https://github.com/matt-dray/r2eng">the {r2eng} GitHub repo</a>.</p>
 <p>In this vein, it’s important to highlight Chung-hong Chan’s valuable contributions to the package. Check out his <a href="http://chainsawriot.com/">website</a> and find him on <a href="https://twitter.com/chainsawriot">Twitter</a>. Chung-hong was responsible for updating {r2eng} to handle <a href="https://github.com/matt-dray/r2eng/commit/c38e0a44a785f3ac10dfd7a9302cf3f77091ba55">non-standard evaluation</a> in the <code>translate()</code> function and for replacing my original simple R-to-English lookup with a proper <a href="https://github.com/matt-dray/r2eng/commit/dcbfa08a7b7798a76c6c7101c9c152b1a3ccb77f">parsing method</a> for interpreting R expressions.</p>
 <section id="installation" class="level3">
 <h3 class="anchored" data-anchor-id="installation">Installation</h3>
@@ -421,16 +421,16 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-21 19:28:55 BST</code></pre>
+<pre><code>Last rendered: 2024-07-14 20:38:54 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
+<pre><code>R version 4.4.0 (2024-04-24)
+Platform: aarch64-apple-darwin20
 Running under: macOS Ventura 13.2.1
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -442,18 +442,13 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] magrittr_2.0.3   r2eng_0.0.0.9005
+[1] magrittr_2.0.3   r2eng_0.0.0.9006
 
 loaded via a namespace (and not attached):
- [1] vctrs_0.6.3        crayon_1.5.2       cli_3.6.1          knitr_1.43.1      
- [5] rlang_1.1.1        xfun_0.39          rex_1.2.1          processx_3.8.2    
- [9] purrr_1.0.1        xmlparsedata_1.0.5 jsonlite_1.8.7     rprojroot_2.0.3   
-[13] htmltools_0.5.5    ps_1.7.5           rmarkdown_2.23     evaluate_0.21     
-[17] fastmap_1.1.1      lifecycle_1.0.3    yaml_2.3.7         cyclocomp_1.1.0   
-[21] compiler_4.3.1     lintr_3.0.2        htmlwidgets_1.6.2  rstudioapi_0.15.0 
-[25] digest_0.6.33      R6_2.5.1           callr_3.7.3        tools_4.3.1       
-[29] withr_2.5.0        lazyeval_0.2.2     xml2_1.3.5         remotes_2.4.2     
-[33] desc_1.4.2        </code></pre>
+ [1] htmlwidgets_1.6.4 compiler_4.4.0    fastmap_1.2.0     cli_3.6.3.9000   
+ [5] tools_4.4.0       htmltools_0.5.8.1 rstudioapi_0.16.0 yaml_2.3.8       
+ [9] rmarkdown_2.26    knitr_1.46        jsonlite_1.8.8    xfun_0.43        
+[13] digest_0.6.35     rlang_1.1.4.9000  evaluate_0.23    </code></pre>
 </div>
 </div>
 </details>
