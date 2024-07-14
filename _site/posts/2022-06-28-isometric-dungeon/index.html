@@ -206,14 +206,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="a-new-dimension" class="level2">
 <h2 class="anchored" data-anchor-id="a-new-dimension">A new dimension</h2>
-<p><a href="https://twitter.com/coolbutuseless">Mike</a> (AKA mikefc, AKA coolbutuseless) is well known for off-label R creations that desecrate the assumption that <a href="https://twitter.com/mattdray/status/1539371338250522624">‘R is a language for statistical computing’</a>.</p>
+<p><a href="https://twitter.com/coolbutuseless">Mike</a> (AKA mikefc, AKA coolbutuseless) is well known for off-label R creations that desecrate the assumption that ‘R is a language for statistical computing’.</p>
 <p>Mike revealed <a href="https://github.com/coolbutuseless/isocubes">the {isocubes} package</a> recently, which lets you print objects made of isometric cubes to a graphics device. I immediately thought of <a href="https://matt-dray.github.io/r.oguelike/">the toy {r.oguelike} package</a> I’ve <a href="https://www.rostrum.blog/2022/04/25/r.oguelike-dev/">been developing recently</a>, which has the goal of creating (really) basic features of <a href="https://en.wikipedia.org/wiki/Roguelike">a roguelike game</a> in R.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> The dungeons are currently ASCII tiles printed to the console. How would it look in isometric?</p>
 <p>In a frenzied series of tweets, I built up a little toy that creates a procedural isometric dungeon and adds a user-controlled player character and a pathfinding enemy. The steps were to:</p>
 <ol type="1">
-<li>Build an isometric dungeon (<a href="https://twitter.com/mattdray/status/1539281300619763718">tweet</a>)</li>
-<li>Add a player (<a href="https://twitter.com/mattdray/status/1539370837219868673">tweet</a>)</li>
-<li>Accept continuous input (<a href="https://twitter.com/mattdray/status/1539400843409207296">tweet</a>)</li>
-<li>Add a pathfinding enemy (<a href="https://twitter.com/mattdray/status/1540107713681788928">tweet</a>)</li>
+<li>Build an isometric dungeon.</li>
+<li>Add a player.</li>
+<li>Accept continuous input.</li>
+<li>Add a pathfinding enemy.</li>
 </ol>
 <p>This post talks through those steps. You can <a href="https://gist.github.com/matt-dray/dcbd5cd2f4bdc471921e5c741a1233c0">find the code for the final product in a GitHub Gist</a>. It is absolutely not polished and really is just a Frankenstein’s monster of code that I stapled together.</p>
 <section id="build-an-isometric-dungeon" class="level3">
@@ -299,7 +299,7 @@ Click for the required code changes.
 <section id="postscript" class="level2">
 <h2 class="anchored" data-anchor-id="postscript">Postscript</h2>
 <p>I lied a bit earlier. The actual first thought I had when seeing {isocubes} was pixel art. <a href="https://www.rostrum.blog/2021/06/28/pixel-art/">I wrote a post (exactly) one year ago</a> where I converted some vectors into little pixel drawings using R’s <code>image()</code> function.</p>
-<p>It’s fairly straightforward to convert those vectors into a format accepted by {isocubes}, which means you can have an <a href="https://twitter.com/mattdray/status/1538869234410967041">isometric sprite of Link from The Legend of Zelda</a>, or <a href="https://twitter.com/mattdray/status/1538862896855359499">a rainbow version of the insect logo for this blog</a>.</p>
+<p>It’s fairly straightforward to convert those vectors into a format accepted by {isocubes}, which means you can have an isometric sprite of Link from The Legend of Zelda, or a rainbow version of the insect logo for this blog.</p>
 <p><img src="resources/isometric-link-rostrum.png" class="img-fluid" style="width:100.0%" alt="Two images side-by-side. A sprite of Link from the Legend of Zelda on the NES, rendered with isometric cubes thanks to the 'isocubes' R package. A pixelated image of an insect—the logo of rostrum.blog—rendered with isometric cubes, thanks to the 'isocube' package. The cubes are rainbow-coloured from left to right."></p>
 <p>I wrote <a href="https://gist.github.com/matt-dray/389af1afa61a778bbd1f286912b43627">a GitHub Gist with the code for these images</a>, so feel free to steal. Let me know what you end up making.</p>
 </section>
@@ -314,16 +314,16 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-21 19:29:26 BST</code></pre>
+<pre><code>Last rendered: 2024-07-14 20:11:19 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
+<pre><code>R version 4.4.0 (2024-04-24)
+Platform: aarch64-apple-darwin20
 Running under: macOS Ventura 13.2.1
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -335,10 +335,10 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
- [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
-[13] digest_0.6.33     rlang_1.1.1       fontawesome_0.5.1 evaluate_0.21    </code></pre>
+ [1] htmlwidgets_1.6.4 compiler_4.4.0    fastmap_1.2.0     cli_3.6.3.9000   
+ [5] tools_4.4.0       htmltools_0.5.8.1 rstudioapi_0.16.0 yaml_2.3.8       
+ [9] rmarkdown_2.26    knitr_1.46        jsonlite_1.8.8    xfun_0.43        
+[13] digest_0.6.35     rlang_1.1.4.9000  fontawesome_0.5.2 evaluate_0.23    </code></pre>
 </div>
 </div>
 </details>
