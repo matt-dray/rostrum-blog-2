@@ -1,0 +1,155 @@
+---
+title: "Tile-style sprite delight"
+date: 2024-07-14
+slug: "tilebased"
+image: resources/tilebased.gif
+categories:
+  - eventloop
+  - kenney
+  - nara
+  - r
+  - r.oguelike
+  - tilebased
+---
+
+![An enemy. Or a friend?](resources/demo.gif){fig.alt='A pixel-sprite human character is moving around on some grassy tiles in a clearing of a procedurally generated forest. A rat is chasing him down. This is happening in an R Graphics Device.' width='100%'}
+
+## tl;dr
+
+[An experiment](https://github.com/matt-dray/tilebased) with [graphical advancements](https://coolbutuseless.github.io/package/nara/index.html) in tile-based games made for R.
+
+## Based tiles
+
+You know by now that [R is unequivocally a game engine](https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/).
+
+In this vein, Mike Cheng (coolbutuseless) has been hard at work updating the [{nara}](https://coolbutuseless.github.io/package/nara/index.html) package, which allows for [fast rendering of pixel-based graphics](https://github.com/coolbutuseless/narademos)[^hex]. This can make games easier to develop, especially in tandem with Mike's {eventloop} package for reading continuous input from the player's keyboard.
+
+As a result, I've taken some of the 'engine' from [{r.oguelike}](https://github.com/matt-dray/r.oguelike)—a toy dungeon-crawling game in an R package[^rogue]—and made it draw graphics instead of just printing to the console[^iso]. The outcome from this test is the [demo {tilebased} package](https://github.com/matt-dray/tilebased).
+
+It also borrows grass, tree, person and rat sprites from [Kenney's](https://www.kenney.nl/) free and excellent ['Tiny' asset packs](https://www.kenney.nl/assets?search=tiny&sort=update). They're 16×16 pixels, shown here at actual size:
+
+![](resources/grass.png){fig.alt="A square of 16 by 16 pixels with a green grass pattern." width='16px'}
+![](resources/tree.png){fig.alt="A pixelated tree with a thick black outline that fits inside limits of 16 by 16 pixels." width='16px'}
+![](resources/player.png){fig.alt="A pixelated human player-character with a thick black outline that fits inside limits of 16 by 16 pixels." width='16px'}
+![](resources/rat.png){fig.alt="A pixelated grey rat enemy-character with a thick black outline that fits inside limits of 16 by 16 pixels." width='16px'}
+
+Very cute.
+
+## Install
+
+I put this experiment into an R package so it's easier to develop and play around with. 
+
+But note that the package's functionality is dependent on your operating system. It'll work on macOS, but not Windows, due to the required graphics device.
+
+You can install [from GitHub](https://github.com/matt-dray/tilebased) like:
+
+```{r eval=FALSE}
+remotes::install_github("matt-dray/tilebased")
+```
+
+The only dependency is my [{r.oguelike}](https://github.com/matt-dray/r.oguelike) package, which is also GitHub-only.
+
+You can then start a game, which opens a graphics device. Use your arrow keys to move around. This will look like the gif at the top of this page.
+
+```{r eval=FALSE}
+tilebased::play()
+```
+
+As it stands, I haven't built a proper game-over condition for this experiment. Collide with the enemy and the game will crash (consider this a feature, not a bug!).
+
+## Process
+
+The user just sees graphics in a window. The basic process-loop underlying this is roughly:
+
+1. Create a 'board mesh'[^mesh], a matrix object that encodes the play-area layout and content.
+2. Place the player (`@`) and enemy (`e`) actors randomly in a cell (`.`) of the board mesh, avoiding each other and cells that contain obstacles (`#`).
+3. Generate a 'navigation mesh' that labels each cell with a distance value to the player (i.e. how many tiles away from the player).
+4. Map the board mesh to pixels of the graphics device, where the board-mesh cell contents define the tiles to be selected for display. Draw the pixels to the device.
+5. Accept realtime keypress input from the user and move the player, then consequently move the enemy down the distance gradient of the navmesh. Redraw.
+6. Repeat step 5.
+
+## Structures
+
+I think it's worth explaining a bit more about how the game board is represented, translated and drawn.
+
+### Board mesh
+
+The board mesh is a matrix represenation of the board layout and contents.
+
+As a simple example, you could have a 5×6 board-mesh matrix like below, where `#` is an impenetrable obstacle, `.` is a traversable floor tile, `@` is the player and `e` the enemy:
+
+```
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,] "#"  "#"  "#"  "#"  "#"  "#" 
+[2,] "#"  "@"  "."  "."  "."  "#" 
+[3,] "#"  "."  "#"  "#"  "."  "#" 
+[4,] "#"  "."  "."  "e"  "."  "#" 
+[5,] "#"  "#"  "#"  "#"  "#"  "#" 
+```
+
+### Nav mesh
+
+The navigation (nav) mesh places a value in each cell, which is the distance between that cell and the player's cell.
+
+The enemy character will travel from high to low distance values, so will travel left on the board mesh from index [4,4] to [4,3], which decreases the distance value from 4 to 3.
+
+```
+     [,1] [,2] [,3] [,4] [,5] [,6]
+[1,] Inf  Inf  Inf  Inf  Inf  Inf 
+[2,] Inf  0    1    2    3    Inf 
+[3,] Inf  1    Inf  Inf  4    Inf 
+[4,] Inf  2    3    4    5    Inf 
+[5,] Inf  Inf  Inf  Inf  Inf  Inf 
+```
+
+### Board
+
+The board the users actually see is a pixel-based translation of the underlying board mesh.
+
+Each cell of the board mesh is drawn to the screen as tiles. If each tile is 16×16 pixels, then our example board is 80×96 pixels. The upper-left corner of the first tile will be placed at pixel position [1,1]. By extension, the enemy-rat tile in board-mesh cell [4,4] will, for example, occupy the square of pixels at 49 to 64 across and 49 to 64 down.
+
+![](resources/mini-demo.png){fig.alt="A 5 by 6 tile map. Every tile slot has a grass tile. There's also a pixel-sprite human character at a position 2 tiles along and 2 tiles down and an enemy rat character at a position 4 tiles along and 4 down. There are tree sprites all the way around the edge and two more in the centre, creating a donut shape of grass that the player and enemy can move within."}
+
+The tiles themselves are stored as nativeRaster class, which is a matrix format with colour encoded in each cell as integer values.
+
+```{r}
+str(tilebased::grass)
+```
+
+These can be overplotted by {nara}, which means we can have grass tiles covering the whole board and partially-transparent tree, player and enemy sprites drawn on top.
+
+```{r}
+#| fig-width: 2
+#| fig-height: 2
+#| fig-alt: 'A pixelated human sprite is plotted over a pixelated green grass tile.'
+library(nara)
+plot(tilebased::grass)   # place grass first
+plot(tilebased::player)  # then player over the top
+```
+
+To extend this behvaiour for a more exciting adventure, {tilebased} uses the `r.oguelike::create_dungeon()` function to create a procedural map that's randomised with each new game. Here's a 20×32-tile example:
+
+![](resources/demo.png){fig.alt="Pixel-sprite human and rat characters are placed on some grassy tiles in a clearing of a procedurally generated forest. There is a forest around the edge of the map and some dotted within the interior. The human is hiding behind a tree." width='100%'}
+
+## The next level
+
+For now, I've shown it's possible to convert a board-mesh matrix into tile-based graphics with user control.
+
+A lot of functionality is missing, which prevents this concept from having a true gameloop. I may work to improve this in future.
+
+For example, {r.oguelike} has auto-battling and a basic inventory system to collect gold and food; you can imagine showing these in a graphical overlay. Perhaps there could be doorways to new areas of a larger map. It could also use a larger tileset and make use of 'compound tiles' that fit together to produce larger sprites. I could also make my own sprites with help from [my {pixeltrix} package](https://github.com/matt-dray/pixeltrix).
+
+In addition, I note that Mike is looking at improved sound generation in R. A bangin' chiptune would complement {tilebased} well, which makes me wonder if a tile-based rhythm game, like [Crypt of the Necrodancer](https://en.wikipedia.org/wiki/Crypt_of_the_NecroDancer), would be possible.
+
+### Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^hex]: And has one of the best hex stickers around.
+[^iso]: I [played around with this idea](https://www.rostrum.blog/posts/2022-06-28-isometric-dungeon/) once before, rendering a {r.oguelike} dungeon, player and enemy as isometric-view cubes—thanks to Mike's [{isocubes}](https://github.com/coolbutuseless/isocubes) package—that the user could move around with keypresses. But a cube only has so much character!
+[^rogue]: I've written [a few posts](https://www.rostrum.blog/index.html#category=r.oguelike) about {r.oguelike} if you want to learn more.
+[^mesh]: I've borrowed this term from game development but Im' probably not using it quite right. The idea is that the board and nav meshes are theoretical surfaces that contain data to support the final visual output.
