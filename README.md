@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 176 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2024-07-14 (latest).
+🔢 There have been 177 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2024-09-15 (latest).
 
 📅 That’s a post roughly every 13 days, or about 2.3 posts per month.
 
-🆕 The latest post: [Tile-style sprite
-delight](https://www.rostrum.blog/posts/2024-07-14-tilebased).
+🆕 The latest post: [Little pixel fun
+zone](https://www.rostrum.blog/posts/2024-09-15-shiny-pixel).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ delight](https://www.rostrum.blog/posts/2024-07-14-tilebased).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 177 | 2024-09-15 | [Little pixel fun zone](https://www.rostrum.blog/posts/2024-09-15-shiny-pixel)                                                 |
 | 176 | 2024-07-14 | [Tile-style sprite delight](https://www.rostrum.blog/posts/2024-07-14-tilebased)                                               |
 | 175 | 2024-06-12 | [Expose CRAN deadlines and DOIs](https://www.rostrum.blog/posts/2024-06-12-cran-db)                                            |
 | 174 | 2024-05-08 | [The Aesthetics Wiki: an R Addendum](https://www.rostrum.blog/posts/2024-05-08-aesthetic)                                      |
@@ -222,4 +223,4 @@ delight](https://www.rostrum.blog/posts/2024-07-14-tilebased).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2024-07-14 at 19:54.
+🕒 Last updated: 2024-09-15 at 19:24.
