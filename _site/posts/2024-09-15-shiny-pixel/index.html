@@ -209,7 +209,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>A simple toy pixel-editor for the browser, which helped me learn about reacting to user clicks and implementing undo/redo in {shiny}.</p>
+<p>I made a <a href="https://matt-dray.github.io/little-pixel-fun-zone/">simple toy pixel-editor for the browser</a>, which helped me learn about reacting to user clicks and implementing undo/redo in {shiny}.</p>
 </section>
 <section id="just-browsing" class="level2">
 <h2 class="anchored" data-anchor-id="just-browsing">Just browsing</h2>
@@ -220,10 +220,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Read a clicked point on a plot and react to it.</li>
 <li>Implement a basic undo/redo feature.</li>
 </ol>
+<p>This is a reminder to myself of how to do these things.</p>
 </section>
 <section id="app" class="level2">
 <h2 class="anchored" data-anchor-id="app">App</h2>
-<p>The app is available <a href="https://matt-dray.github.io/little-pixel-fun-zone/">on a standalone webpage</a> and <a href="https://github.com/matt-dray/little-pixel-fun-zone">the source on GitHub</a> (v0.3.0 at time of writing). I used <a href="https://posit-dev.github.io/r-shinylive/">{shinylive}</a> to compile it so it runs serverless on GitHub Pages. I’ve also embedded it below. Yes, click the squares!</p>
+<p>The app is available <a href="https://matt-dray.github.io/little-pixel-fun-zone/">on a standalone webpage</a> and <a href="https://github.com/matt-dray/little-pixel-fun-zone">the source on GitHub</a> (v0.3.0 at time of writing). I used <a href="https://posit-dev.github.io/r-shinylive/">{shinylive}</a> to compile it so it runs serverless on GitHub Pages. I’ve also embedded it below (may take a moment to load). Yes, go ahead and click the squares!</p>
 <iframe width="450" height="600" src="https://matt-dray.github.io/little-pixel-fun-zone/" title="little-pixel-fun-zone">
 </iframe>
 <p>There’s (intentionally) only a few features. You can:</p>
@@ -232,8 +233,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>change the colour, thanks to <a href="https://daattali.com/shiny/colourInput/">Dean Attali’s {colourpicker}</a></li>
 <li>undo/redo (with a very short ‘memory’)</li>
 <li>flood fill</li>
-<li>have an assistant ✨AI ✨draw a picture for you<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
-<li>download a matrix representation of your treasured art (pixeltrix-class, for my own needs)</li>
+<li>have an assistant ✨AI draw a picture for you<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
+<li>download a matrix representation of your treasured art (pixeltrix-class, for my own needs) as an RDS file</li>
 <li>download a png copy of your treasured art</li>
 </ul>
 <p>Wow!</p>
@@ -243,8 +244,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>I mentioned there were two things I learnt in particular: handling click-reacts and undo/redo.</p>
 <section id="click-react" class="level3">
 <h3 class="anchored" data-anchor-id="click-react">Click-react</h3>
-<p>{pixeltrix} reads the coordinates of a user’s click on the plotting device, thanks to the <code>locator()</code> function (witchcraft). The returned values can be used to identify the nearest ‘pixel’ clicked.</p>
-<p>With {shiny} we can capture an input that is itself generated from an output object. In the example below, we output the plot <code>pixel_plot</code> generated in the server and then a <code>click</code> on that plot by the user would be registered as <code>clicked_point</code> for retrieval in the server. In my case, I took the x and y elements of that object and matched them to the nearest pixel (using self-plagiarised {pixeltrix} code). I also made the click trigger <code>observeEvent()</code> to refresh the plot given the user’s selection.</p>
+<p>Thanks to the <code>locator()</code> function (witchcraft), {pixeltrix} reads the coordinates of a user’s click on the plotting device. The returned values can be used to identify the nearest ‘pixel’ clicked.</p>
+<p>With {shiny} we can generate a plot output and then capture an input from it when clicked<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> using the handy <code>click</code> argument to <code>plotOutput()</code>.</p>
+<p>In the example but of UI code below, we output a plot with ID <code>pixel_grid</code> that was generated in the server. Then, a <code>click</code> on that plot in the app would be registered as the ID <code>clicked_point</code> for retrieval in the server. In my case, I took the x and y elements of that object and matched them to the nearest pixel (using self-plagiarised {pixeltrix} code).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>shiny<span class="sc">::</span><span class="fu">plotOutput</span>(</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">outputId =</span> <span class="st">"pixel_grid"</span>,  <span class="co"># the plot of the pixel grid</span></span>
@@ -254,17 +256,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  )</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Note also that there’s arguments for <code>dblclick</code>, <code>hover</code> and <code>brush</code> that may also come in handy.</p>
+<p>I also made the click trigger <code>observeEvent()</code> to refresh the plot given the user’s selection. So, the user clicks the plot and the nearest pixel is toggled.</p>
 </section>
 <section id="undoredo" class="level3">
 <h3 class="anchored" data-anchor-id="undoredo">Undo/redo</h3>
-<p>Yes, if you do a misclick in your precious picture, you could just change the colour and re-click the errant point. But that takes, ooh, perhaps a couple of seconds. Instead, it seems more conceptually fun to have an undo button. And imagine how exhilarating it would be if that button toggled to redo after it was clicked?</p>
-<p>So, there’s probably lots of ways to do this, but I settled on keeping a sort of cyber-goldfish brain using <code>reactiveValues()</code>. The first (of two) ‘memory slots’ is the current matrix representation of the drawing and the second slot is the previous matrix state. Each time you update the drawing, slot 1 overwrites slot 2 and the new matrix takes its place in slot 1.</p>
-<p>I set up a ‘blank’ grid at startup:</p>
+<p>If you misclick a pixel in your picture you could correct it by changing the colour in the colourpicker and re-clicking the errant point. But that takes, ooh, perhaps a couple of seconds. Instead, it seems conceptually more fun to have an undo button. And imagine how exhilarating it would be if that button toggled to redo after it was clicked? I know, calm down.</p>
+<p>So, there’s probably lots of ways to do this, but I settled on bookeeping with ‘memory slots’ in a sort-of cyber-goldfish brain, using <code>reactiveValues()</code>.</p>
+<p>The image is stored as a matrix object, with each cell representing the current state of the corresponding pixel when drawn. The current state of the matrix is stored in the first (of two) memory slots, while the second slot is the previous matrix state. Each time you update the drawing, slot 1 overwrites slot 2 and the new matrix takes its place in slot 1.</p>
+<p>So, for example, the app starts up with a ‘blank’ grid:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pixel_matrices <span class="ot">&lt;-</span> shiny<span class="sc">::</span><span class="fu">reactiveValues</span>(<span class="at">slot1 =</span> <span class="fu">.gen_grid</span>(<span class="dv">16</span>, <span class="st">"#E5E5E5"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>And then <code>observeEvent()</code> handles post-click activity. After the user clicks on the plot surface, the coordinates and selected colour are used to toggle or adjust a pixel. The new version of the representational matrix is added to slot 1 and the prior one slips to slot 2.</p>
+<p>And then <code>observeEvent()</code> handles things when a click occurs. The click coordinates and currently-selected colour are used to toggle or adjust a pixel in the underlying matrix. The resulting, new, version of the matrix is added to slot 1 and the prior version slips into slot 2.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>shiny<span class="sc">::</span><span class="fu">observeEvent</span>(input<span class="sc">$</span>clicked_point, {  <span class="co"># trigger on click</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  </span>
@@ -280,7 +283,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Could the so-called cyber-goldfish brain be larger, with more brain slots? No, because then it would be a cyber-elephant and I think that mental image is less funny. But yes, you could probably create slots on the fly and have the ability to undo much further back in history.</p>
-<p>I mentioned do-overs. The icon for the undo/redo button is stored in a <code>reactiveVal()</code> that starts as ‘undo’ arrow. When clicked, we flip the memory slots and also update the icon to be a ‘redo’ arrow. Another click of the button and the situation will revert again<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. Voila: time travel.</p>
+<p>So, to perform a do-over, we just need to access the older slot with a button click. The icon for the button is stored in a <code>reactiveVal()</code> that starts as ‘undo’ arrow. When clicked, we flip the memory slots to put the older version in slot 1 and also update the icon to be a ‘redo’ arrow. Another click of the button and the situation will revert again<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. Voila: time travel.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>button_icon <span class="ot">&lt;-</span> shiny<span class="sc">::</span><span class="fu">reactiveVal</span>(<span class="st">"rotate-left"</span>)  <span class="co"># starting condition</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -305,13 +308,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Inelegant, perhaps, but manageable<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
+<p>Inelegant, perhaps, but manageable<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</p>
 </section>
 </section>
 <section id="fiddly-is-money" class="level2">
 <h2 class="anchored" data-anchor-id="fiddly-is-money">Fiddly is money</h2>
-<p>There’s a number of features I could implement, if only I could perceive that I have more time and that the fiddlyometer gauge is lower. Yes, this is current me goading future me. Until then, drop bug reports and how to fix them in <a href="https://github.com/matt-dray/little-pixel-fun-zone/issues">the issues</a>.</p>
-<p>Also use the app to draw and send me a classic videogame action scene, obviously (see inspiration at top of post).</p>
+<p>There’s a number of features I could implement, like arbitrary pixel-grid sizes, uploading a matrix to continue editing it, or maybe even multi-select with click-and-drag (is this even possible?).</p>
+<p>If only I could perceive that I have more time and that the fiddlyometer gauge was lower. Yes, this is current me goading future me.</p>
+<p>Until then, drop bug reports and how to fix them in <a href="https://github.com/matt-dray/little-pixel-fun-zone/issues">the issues</a>.</p>
+<p>Also use the app to draw a classic videogame action scene and send it to me, obviously (see inspiration at top of post).</p>
 
 </section>
 
@@ -324,7 +329,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-09-15 21:20:08 CEST</code></pre>
+<pre><code>Last rendered: 2024-09-16 10:31:39 CEST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.4.0 (2024-04-24)
@@ -359,8 +364,9 @@ loaded via a namespace (and not attached):
 <ol>
 <li id="fn1"><p>You can read about {pixeltrix} in <a href="https://www.rostrum.blog/index.html#category=pixeltrix">other posts</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>This most often <em>looks</em> like random noise, but I’m sure that’s because of the training set or something. Maybe squint? I’ve been told that robot self-portraits sometimes appear, but I’m sure that’s just a hallucination.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>If you undo and then make a new click, then the undo/redo button will continue to show the ‘redo’ icon. Subtle, but to avoid this, you must reset the <code>reactiveVal()</code> to show the ‘undo’ icon if you perform any other actions after undoing.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>If we messed with time travel and things didn’t go a bit <a href="https://en.wikipedia.org/wiki/Primer_(film)"><em>Primer</em></a>, then I’d say we’ve done well.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Note also that you can perform actions on <code>dblclick</code>, <code>hover</code> and <code>brush</code>, not just a single click.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>If you undo and then make a new click, then the undo/redo button will continue to show the ‘redo’ icon. Subtle, but to avoid this, you must reset the <code>reactiveVal()</code> to show the ‘undo’ icon if you perform any other actions after undoing.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>If we messed with time travel and things didn’t go a bit <a href="https://en.wikipedia.org/wiki/Primer_(film)"><em>Primer</em></a>, then I’d say we’ve done well.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
