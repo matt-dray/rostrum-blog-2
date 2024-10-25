@@ -9,7 +9,7 @@
 <meta name="author" content="Matt Dray">
 <meta name="dcterms.date" content="2024-10-25">
 
-<title>rostrum.blog - Card games with {shiny} and {sortable}</title>
+<title>rostrum.blog - {sortable} card games in {shiny}</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,13 +65,13 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="rostrum.blog - Card games with {shiny} and {sortable}">
+<meta property="og:title" content="rostrum.blog - {sortable} card games in {shiny}">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://www.rostrum.blog/posts/2024-10-20-not-balatro/resources/cards.gif">
+<meta property="og:image" content="https://www.rostrum.blog/posts/2024-10-25-not-balatro/resources/cards.gif">
 <meta property="og:site-name" content="rostrum.blog">
-<meta name="twitter:title" content="rostrum.blog - Card games with {shiny} and {sortable}">
+<meta name="twitter:title" content="rostrum.blog - {sortable} card games in {shiny}">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://www.rostrum.blog/posts/2024-10-20-not-balatro/resources/cards.gif">
+<meta name="twitter:image" content="https://www.rostrum.blog/posts/2024-10-25-not-balatro/resources/cards.gif">
 <meta name="twitter:creator" content="@mattdray">
 <meta name="twitter:card" content="summary_large_image">
 </head>
@@ -122,7 +122,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Card games with {shiny} and {sortable}</h1>
+      <h1 class="title">{sortable} card games in {shiny}</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">games</div>
                 <div class="quarto-category">r</div>
@@ -167,7 +167,7 @@ ul.task-list li input[type="checkbox"] {
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
 <p><img src="resources/cards.gif" class="img-fluid figure-img" style="width:100.0%" alt="Two rows of playing cards labelled 'pool' and 'hand'. Buttons are pressed to order the cards by suit and then by rank. Cards are dragged from the pool to the hand. An ace is dragged and the text updates from 'no hand' to 'high card'. Another ace and it changes to 'a pair'. A 'draw' button is pressed and two new cards are added to the pool. The pool is ordered again by rank. Then two queens are added to the hand and the text changes to 'two pair'."></p>
-<figcaption class="figure-caption">I sunk your battleship!</figcaption>
+<figcaption class="figure-caption">You sunk my battleship!</figcaption>
 </figure>
 </div>
 <section id="tldr" class="level2">
@@ -176,7 +176,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="balatro" class="level2">
 <h2 class="anchored" data-anchor-id="balatro">Balatro</h2>
-<p>LocalThunk<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>—the anonymous creator of the hit poker-inspired roguelike<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> videogame <em>Balatro</em>—revealed recently that 11,000 <em>years</em> of gameplay have been sunk into the game.</p>
+<p>LocalThunk<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>—the anonymous creator of <a href="https://en.wikipedia.org/wiki/Balatro_(video_game)"><em>Balatro</em></a>—the hit poker-inspired roguelike videogame<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>—revealed recently that 11,000 <em>years</em> of gameplay have been sunk into the game.</p>
 <p>The average productivity of the universe has continued to drop now that the game is available on mobile. I am one of the suckers that made the purchase.</p>
 <p>As a result, I wondered how viable a card game in R might be. Not just a simple blackjack simulator in the console, but a drag-and-droppable interface in the browser.</p>
 <p>It must be possible, since <a href="https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/">R is a game engine (fight me)</a>.</p>
@@ -208,7 +208,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="a-bit-flushed" class="level3">
 <h3 class="anchored" data-anchor-id="a-bit-flushed">A bit flushed</h3>
 <p>Detecting poker hands is tricky because you want to recognise that two jacks and three kings is a full house, not a pair of jacks or a three-of-a-kind, for example. I also made things harder by wanting to evaluate poker hands on the fly rather than when the user submits the hand.</p>
-<p>I read about lots of very clever algorithms to do this. But I basically just brute-forced it, lol. it’s basically <code>if</code> statements that evaluate and return strongest hands first. So the function will assess a royal flush (i.e.&nbsp;ace, king, queen jack and 10 of the same suit) and confirm it before it tries to assess the hand for a more basic straight (consecutive ranks of any suit) or a flush (any suit of non-consecutive rank).</p>
+<p>I read about lots of very clever algorithms to do this. But I basically just brute-forced it, lol. It’s basically <code>if</code> statements that evaluate and return strongest hands first. So the function will assess a royal flush (i.e.&nbsp;ace, king, queen, jack and 10 of the same suit) and confirm it before it checks for a more basic straight (consecutive ranks of any suit) or a flush (any suit of non-consecutive rank).</p>
 </section>
 <section id="hit-the-deck" class="level3">
 <h3 class="anchored" data-anchor-id="hit-the-deck">Hit the deck</h3>
@@ -220,19 +220,19 @@ ul.task-list li input[type="checkbox"] {
 <p>There’s many features that would improve the demo app. Below are some examples: one seems like it’s not possible, one won’t add that much to what I’ve learnt so far, one is obvious and one is just… bad programming.</p>
 <section id="stop-n-swop" class="level3">
 <h3 class="anchored" data-anchor-id="stop-n-swop">Stop ‘n’ swop</h3>
-<p>It’s satisfying to pick up a card and drag and drop it somewhere else within the pool or hand. This action feels how it would when sorting real cards in your real hand. I would like, however, to be able to <em>swap</em> cards <em>between</em> the pool and hand. Especially if you change your mind about the hand you’re building as new cards are drawn. As far as I can tell, SortableJS allows <code>swap = TRUE</code> within each rank list and if they are part of the same <code>group</code> then you can swap between them. I haven’t yet found a way to allow swapping to only happen when moving cards between lists, however.</p>
+<p>It’s satisfying to pick up a card, drag it to a new position and drop it between the cards at that location. This action feels how it would when sorting real cards in your real hand. I’d like the option to be able to directly <em>swap</em> two cards as well, though, particularly between the pool and hand. This would be useful if you change your mind about the hand you’re building as new cards are drawn. As far as I can tell, SortableJS allows <code>swap = TRUE</code> within each rank list and if they are part of the same <code>group</code> then you can swap between them. I haven’t yet found a way to allow swapping to happen <em>only</em> when moving cards between lists, however.</p>
 </section>
 <section id="diss-card" class="level3">
 <h3 class="anchored" data-anchor-id="diss-card">Diss card</h3>
-<p>The most awkward thing about having a draw ‘pool’ and a ‘hand’ is that there’s no natural way to discard. I haven’t found a solution for earmarking cards in the pool or hand to discard them. As it stands, you have to drag the card somewhere for an action to be performed on it. The answer might be to drag these cards to a third area, where they’re binned. Compare this to a game like <em>Balatro</em>, where you first select cards in your hand and then click a button to either play or discard them.</p>
+<p>The awkward thing about having a ‘pool’ and a ‘hand’ is that there’s no natural way to discard. I haven’t properly explored solutions for earmarking; as it stands, you have to drag the card somewhere for an action to be performed on it. The answer might be to drag these cards to a third area, where they’re binned. Compare this to a game like <em>Balatro</em>, where you first select cards in your hand and then click a button to either play or discard them.</p>
 </section>
 <section id="u-and-i" class="level3">
 <h3 class="anchored" data-anchor-id="u-and-i">U and I</h3>
-<p>Of course, as a proof of concept, it means that I haven’t paid much attention to the user interface and experience. You can imagine making prettier cards, a nice green baise to mimic a poker table and even some animations to show cards being dealt. For now, I think the plainness is a good indicator that it’s a demo.</p>
+<p>Of course, as a proof of concept, I haven’t paid much attention to the user interface and experience. You can imagine making prettier cards, a nice green baise to mimic a poker table and even some animations to show cards being dealt. For now, I think the janky plainness is a good indicator that it’s just a demo.</p>
 </section>
 <section id="card-trick" class="level3">
 <h3 class="anchored" data-anchor-id="card-trick">Card trick</h3>
-<p>Oh yeah, haha, sometimes the cards disappear. It can happen when you drag from the pool to the hand, then back again and hit the ‘rank’ or ‘suit’ sorting buttons. We know that the card returns correctly to the pool by checking the <code>inputs$pool_list</code> object, but there is some issue with displaying the image, maybe? This is the only true bug that needs fixing, but I’d rather just write this blog post and deal with it later<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
+<p>Oh yeah, haha, sometimes the cards disappear. It can happen when you drag from the pool to the hand, then back again and hit the ‘rank’ or ‘suit’ sorting buttons. We know that the card returns correctly to the pool by checking <code>input$pool_list</code> in the app, but there’s some issue with displaying the image, maybe? This is the only true bug that needs fixing, but I’d rather just write this blog post and deal with it later<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
 </section>
 </section>
 <section id="a-gamble" class="level2">
@@ -244,7 +244,7 @@ ul.task-list li input[type="checkbox"] {
 <li>create a new, simple game to chase high scores with combos of poker hands, discards and chip ‘bets’, perhaps incorporating some <em>Balatro</em>-inspired joker-activated bonuses or wild cards <a href="https://en.wikipedia.org/wiki/Dungeons_%26_Degenerate_Gamblers">like in <em>Dungeons and Degenerate Gamblers</em></a> (might actually be fun)</li>
 <li>do nothing (appealing option)</li>
 </ul>
-<p>Feel free to chip (HA HA HA) in with your ideas.</p>
+<p>Feel free to chip (HA HA HA) in your ideas.</p>
 
 </section>
 
@@ -257,7 +257,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-10-25 20:59:16 BST</code></pre>
+<pre><code>Last rendered: 2024-10-25 21:42:09 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.4.0 (2024-04-24)
