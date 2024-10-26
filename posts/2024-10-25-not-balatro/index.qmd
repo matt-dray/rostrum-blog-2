@@ -15,11 +15,11 @@ categories:
 
 ## tl;dr
 
-Use [{sortable}](https://rstudio.github.io/sortable/) in a [{shiny}](https://shiny.posit.co/) app to build card games, maybe? I mocked up a starting point and [made it available on the web](https://matt-dray.github.io/not-balatro/) with [{shinylive}](https://posit-dev.github.io/r-shinylive/).
+Use [{sortable}](https://rstudio.github.io/sortable/) in a [{shiny}](https://shiny.posit.co/) app to build card games, maybe? I mocked up a demo and [made it available on the web](https://matt-dray.github.io/not-balatro/) with [{shinylive}](https://posit-dev.github.io/r-shinylive/).
 
 ## Balatro
 
-LocalThunk[^r]—the anonymous creator of [_Balatro_](https://en.wikipedia.org/wiki/Balatro_(video_game))—the hit poker-inspired roguelike videogame[^roguelike]—revealed recently that 11,000 _years_ of gameplay have been sunk into the game. 
+LocalThunk[^r]—the anonymous creator of [_Balatro_](https://en.wikipedia.org/wiki/Balatro_(video_game)), the hit poker-inspired roguelike videogame[^roguelike]—revealed recently that 11,000 _years_ of gameplay have been sunk into the game. 
 
 The average productivity of the universe has continued to drop now that the game is available on mobile. I am one of the suckers that made the purchase.
 
@@ -35,13 +35,13 @@ I wanted to use {shiny} and existing R packages and to avoid writing much JavaSc
 
 Luckily, the [{sortable}](https://rstudio.github.io/sortable/) package does most of the hard work. The package from Andrie, Barrett and Kent wraps the [SortableJS](https://sortablejs.github.io/Sortable/) library and lets you drag list elements around, including into other lists.
 
-Typically, you would use {sortable} to drag little boxes of text. The order can then be read to record preference or perhaps as part of a quiz. But now I've hijacked it to show little images of cards that you can drag between a 'pool' (randomly drawn cards) and a 'hand' (cards selected by the user).
+Typically, you would use {sortable} to drag little boxes of text. The order can then be read to record preference or perhaps as part of a quiz[^rasmus]. But now I've hijacked it to show little images of cards that you can drag between a 'pool' (randomly drawn cards) and a 'hand' (cards selected by the user).
 
 ## App
 
-You can check out [the source on GitHub](https://github.com/matt-dray/not-balatro) and [find the app deployed online](https://matt-dray.github.io/not-balatro/), thanks to {shinylive} and GitHub Pages. I've embedded it below as well[^joker] (will take a moment to load). I recommend using this on desktop for now, rather than mobile.
+You can check out [the source on GitHub](https://github.com/matt-dray/not-balatro) and [find the app deployed online](https://matt-dray.github.io/not-balatro/), thanks to {shinylive} and GitHub Pages. I've embedded it below as well[^joker] (it'll take a moment to load). I recommend using this on desktop for now, rather than mobile.
 
-<iframe width='800' height='660' src='https://matt-dray.github.io/not-balatro/' title='not-balatro'></iframe>
+<iframe width='800' height='650' src='https://matt-dray.github.io/not-balatro/' title='not-balatro'></iframe>
 
 ## Features
 
@@ -49,11 +49,11 @@ So far it doesn't do much, but it does enough to prove the concept. Here's some 
 
 ### Counting cards
 
-I iterated over all suits and ranks with [{magick}](https://docs.ropensci.org/magick/) to apply text and symbols to a blank PNG image. I then read the 52 cards into a `shiny::tagList()` and passed that to the `label` argument of `sortable::list()`. From there, the images could be matched to sampled card names and displayed in the app. This is slightly off-label compared to 'normal' use of the package, which generally involves providing text rather than images.
+I iterated over all suits and ranks with [{magick}](https://docs.ropensci.org/magick/) to apply text and symbols to a blank PNG image. I then read the 52 cards into a `shiny::tagList()` and passed that to the `label` argument of `sortable::list()`. From there, the images could be matched to sampled card names and displayed in the app. This is slightly off-label (ha) compared to 'normal' use of the package, which generally involves providing text rather than images.
 
 ### Drag 'til you drop
 
-{sortable} has a nice feature where you can drag list elements _between_ lists within 'buckets'. I opted instead to use two `rank_list()`s that shared a `group` name in their `options` argument. This meant I could restrict the list size (8 cards in the pool, 5 in hand), thanks to some JavaScript from Barrett in a response to [a Posit community post](https://forum.posit.co/t/shiny-sortable-how-to-limit-number-of-items-that-can-be-dropped/69233/2).
+{sortable} has a nice feature where you can drag list elements between lists within 'buckets'. I opted instead to use two `rank_list()`s that shared a `group` name in their `options` argument. This meant I could restrict the list size (8 cards in the pool, 5 in hand), thanks to some JavaScript from Barrett in a response to [a Posit community post](https://forum.posit.co/t/shiny-sortable-how-to-limit-number-of-items-that-can-be-dropped/69233/2).
 
 ### A bit flushed
 
@@ -63,7 +63,7 @@ I read about lots of very clever algorithms to do this. But I basically just bru
 
 ### Hit the deck
 
-The deck is stored in 'dynamic memory' as a `reactieValues()` element. When cards are drawn, they're removed from the deck and can't be redrawn. This means we can instigate a 'draw' button that can add previously unseen cards into the pool's empty slots. Of course, we can take the length of the deck and present this back to the user as well.
+The deck is stored in 'dynamic memory' as a `reactieValues()` element. When cards are drawn, they're removed from the deck and can't be redrawn. This meant I could add a 'draw' button that adds previously unseen cards into the pool's empty slots. Of course, we can take the length of the deck and present this back to the user as well.
 
 ## Improvements
 
@@ -71,11 +71,11 @@ There's many features that would improve the demo app. Below are some examples: 
 
 ### Stop 'n' swop
 
-It's satisfying to pick up a card, drag it to a new position and drop it between the cards at that location. This action feels how it would when sorting real cards in your real hand. I'd like the option to be able to directly _swap_ two cards as well, though, particularly between the pool and hand. This would be useful if you change your mind about the hand you're building as new cards are drawn. As far as I can tell, SortableJS allows `swap = TRUE` within each rank list and if they are part of the same `group` then you can swap between them. I haven't yet found a way to allow swapping to happen _only_ when moving cards between lists, however.
+It's satisfying to pick up a card, drag it to a new position and drop it between the cards at that location. This action feels how it would when sorting real cards in your real hand. I'd like the option to be able to directly _swap_ two cards between the pool and hand, though. This would be useful if you change your mind about the hand you're building as new cards are drawn. As far as I can tell, SortableJS allows `swap = TRUE` within each rank list and if they are part of the same `group` then you can swap between them. I haven't yet found a way to allow swapping to happen _only_ when moving cards between lists, however.
 
 ### Diss card
 
-The awkward thing about having a 'pool' and a 'hand' is that there's no natural way to discard. I haven't properly explored solutions for earmarking; as it stands, you have to drag the card somewhere for an action to be performed on it. The answer might be to drag these cards to a third area, where they're binned. Compare this to a game like _Balatro_, where you first select cards in your hand and then click a button to either play or discard them.
+The awkward thing about having a 'pool' and a 'hand' is that there's no natural way to discard. I haven't properly explored solutions for earmarking cards to toss; as it stands, you have to drag the card somewhere for an action to be performed on it. The answer might be to drag these cards to a third area, where they're binned. Compare this to a game like _Balatro_, where you first select cards in your hand and then click a button to either play or discard them.
 
 ### U and I
 
@@ -94,7 +94,7 @@ Obviously this isn't yet a 'game'. There's a few ways this could go:
 * create a new, simple game to chase high scores with combos of poker hands, discards and chip 'bets', perhaps incorporating some _Balatro_-inspired joker-activated bonuses or wild cards [like in _Dungeons and Degenerate Gamblers_](https://en.wikipedia.org/wiki/Dungeons_%26_Degenerate_Gamblers) (might actually be fun)
 * do nothing (appealing option)
 
-Feel free to chip (HA HA HA) in your ideas.
+Feel free to chip (HA HA HA) in [your ideas](https://github.com/matt-dray/not-balatro/issues).
 
 ### Environment {.appendix}
 
@@ -107,4 +107,5 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 [^r]: Apparently LocalThunk's name [was inspired partly by R](https://youtu.be/iaIu0PT8n_o?t=47).
 [^roguelike]: If you've been here before, you know I've toyed around with roguelikes in R with the concept packages [{r.oguelike}](https://github.com/matt-dray/r.oguelike/) and [{tilebased}](https://github.com/matt-dray/tilebased).
 [^mo]: This is basically the entire modus operandi of this blog, lol.
-[^joker]: Psst, click the joker card at the bottom of the app to activate 'dev mode'.
+[^joker]: Psst, click the joker card at the bottom of the app to see 'dev mode' (you'll have to scroll down in the embedded app to see it).
+[^rasmus]: For example, Rasmus has done this recently in the [climate impact sorting challenge](https://www.sumsar.net/climate-impact-sorting-challenge/). I scored 1 on my first go, ha.
