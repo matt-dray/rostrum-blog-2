@@ -36,7 +36,7 @@
 <p>I have another idea: <a href="https://itch.io/">itch.io</a> is a web-based platform known for hosting indie videogames, assets and other miscellaneous game-adjacent tools<sup>1</sup>. Developers can upload file bundles for users to download, or they can serve their HTML apps directly on the site.</p>
 <p>Since <a href="http://localhost:6375/posts/2023-04-02-splendid-r-games/">R is a game engine</a><sup>2</sup>, why aren’t R users uploading their apps to itch.io?</p>
 <p>Well, part of the problem is that you didn’t know this was possible. And also because it’s only recently that you can use <a href="https://shiny.posit.co/">{shinylive}</a> to convert your app to be served entirely in the browser with no need for a server<sup>3</sup>.</p>
-<p>{shinylive} generates a folder containing your app and all the files needed for deployment. You just need to zip it up and upload it to itch.io.</p>
+<p><code>shinylive::export()</code> generates a folder containing your app and all the assets needed for deployment. You just need to zip it up and upload it to itch.io.</p>
 <p>Which is <a href="https://mattdray.itch.io/little-pixel-fun-zone">exactly what I did</a> with <a href="https://github.com/matt-dray/little-pixel-fun-zone/">a toy pixel editor</a> that I made and <a href="https://www.rostrum.blog/posts/2024-09-15-shiny-pixel/">wrote about</a> recently.</p>
 <p>This requires an itch.io account. When you upload the app you fill in a short pro forma, making sure to set the ‘kind of project’ to HTML and to tick a checkbox to say ‘this game will be played in the browser’. For my example, I also set the ‘classification’ to ‘tools’.</p>
 <p>I can’t really think of a catch, but there are limitations around size and complexity: the upload must be under 1 GB and I think there’s a limit of 1000 files (this tripped me up when I tried once before).</p>
@@ -58,7 +58,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-11-16 20:14:54 GMT</code></pre>
+<pre><code>Last rendered: 2024-11-16 20:28:05 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.4.0 (2024-04-24)
