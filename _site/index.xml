@@ -10,7 +10,100 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Thu, 24 Oct 2024 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 16 Nov 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Serve a Shiny app on itch.io</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2024-11-16-itch/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2024-11-16-itch/resources/itch.png" class="img-fluid figure-img" style="width:100.0%" alt="The indie game distribution platform, itch.io, showing a pixel-editor tool made with R Shiny."></p>
+<figcaption class="figure-caption">Graphic design is my passion.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>As a test, I uploaded an R Shiny app to <a href="https://itch.io/">itch.io</a>, which is a platform for sharing indie games. <a href="https://mattdray.itch.io/little-pixel-fun-zone">It worked</a>.</p>
+</section>
+<section id="scratching-an-itch.io" class="level2">
+<h2 class="anchored" data-anchor-id="scratching-an-itch.io">Scratching an itch.io</h2>
+<p>Where can you host your Shiny app for free? Typical options are services like <a href="https://www.shinyapps.io/">shinyapps.io</a> or <a href="https://connect.posit.cloud/">Connect Cloud</a> by Posit.</p>
+<p>I have another idea: <a href="https://itch.io/">itch.io</a> is a web-based platform known for hosting indie videogames, assets and other miscellaneous game-adjacent tools<sup>1</sup>. Developers can upload file bundles for users to download, or they can serve their HTML apps directly on the site.</p>
+<p>Since <a href="http://localhost:6375/posts/2023-04-02-splendid-r-games/">R is a game engine</a><sup>2</sup>, why aren’t R users uploading their apps to itch.io?</p>
+<p>Well, part of the problem is that you didn’t know this was possible. And also because it’s only recently that you can use <a href="https://shiny.posit.co/">{shinylive}</a> to convert your app to be served entirely in the browser with no need for a server<sup>3</sup>.</p>
+<p>{shinylive} generates a folder containing your app and all the files needed for deployment. You just need to zip it up and upload it to itch.io.</p>
+<p>Which is <a href="https://mattdray.itch.io/little-pixel-fun-zone">exactly what I did</a> with <a href="https://github.com/matt-dray/little-pixel-fun-zone/">a toy pixel editor</a> that I made and <a href="https://www.rostrum.blog/posts/2024-09-15-shiny-pixel/">wrote about</a> recently.</p>
+<p>To do this, you have to sign up for an itch.io account and fill in a short pro forma about your app, but that’s about it.</p>
+<p>I can’t really think of a catch, but there are limitations around size and complexity: the upload must be under 1 GB and I think there’s a limit of 1000 files (this tripped me up when I tried once before).</p>
+</section>
+<section id="scratch-my-back" class="level2">
+<h2 class="anchored" data-anchor-id="scratch-my-back">Scratch my back</h2>
+<p>I did this for the lols, of course, but I do think itch.io is a viable option for certain types of app. It’s a platform for people to share their creativity and no-one cares what language was used if the outcome is fun or useful.</p>
+<p>And if that wasn’t enough, you can also use itch.io as a payment platform. Users can leave you a little tip for your efforts.</p>
+<p>So, what’s stopping you from becoming the first professional indie R game developer?</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2024-11-16 19:34:48 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.4.0 (2024-04-24)
+Platform: aarch64-apple-darwin20
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.4 compiler_4.4.0    fastmap_1.2.0     cli_3.6.3.9000   
+ [5] tools_4.4.0       htmltools_0.5.8.1 rstudioapi_0.16.0 yaml_2.3.10      
+ [9] rmarkdown_2.28    knitr_1.48        jsonlite_1.8.9    xfun_0.48        
+[13] digest_0.6.37     rlang_1.1.4       evaluate_1.0.1   </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Kinda like <a href="https://store.steampowered.com/">Steam</a>, but with a greater focus on independent developers and the rest of us.↩︎</p></li>
+<li id="fn2"><p>Are you sick of me saying this yet?↩︎</p></li>
+<li id="fn3"><p>Which makes it possible to deploy apps for free via static-site services like <a href="https://pages.github.com/">GitHub Pages</a> or <a href="https://www.netlify.com/">Netlify</a>.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>ich.io</category>
+  <category>r</category>
+  <category>shiny</category>
+  <category>shinylive</category>
+  <guid>https://www.rostrum.blog/posts/2024-11-16-itch/index.html</guid>
+  <pubDate>Sat, 16 Nov 2024 00:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2024-11-16-itch/resources/itch.png" medium="image" type="image/png" height="90" width="144"/>
+</item>
 <item>
   <title>{sortable} card games in {shiny}</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -6300,661 +6393,6 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-09-17-choosethis/index.html</guid>
   <pubDate>Sat, 16 Sep 2023 23:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Dear John, I’m sorry</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-09-16-chunktop/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><img src="https://www.rostrum.blog/posts/2023-09-16-chunktop/resources/chunktop.png" class="img-fluid" data-fig.alt="Crudely drawn picture of an apologetic face with two documents pointing to each other. One says Rmd on it, one says CSV."></p>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I developed a convenience function for parsing chunk options out of an R Markdown document for collaborators to edit. But it doesn’t work in reverse, which is the whole point. Some notes on failure.</p>
-<div class="tip">
-<p> <b>Note</b></p>
-<p>Since this was posted, the folks at ThinkR have a pretty good solution with <a href="https://github.com/ThinkR-open/lightparser">the {lightparser} package</a>: ‘From Rmd And Qmd To Tibble And Back’. The ‘And Back’ being the crucial part.</p>
-</div>
-</section>
-<section id="a-very-simple-problem" class="level2">
-<h2 class="anchored" data-anchor-id="a-very-simple-problem">A very simple problem (?)</h2>
-<p>John asked about <a href="https://fosstodon.org/@johnmackintosh/111047625054222865">parsing chunk options</a> from R Markdown files (Rmd), passing the content to editors, then reincorporating the edited text back into the chunk whence it came.</p>
-<p>Well, John, have I got the solution for you. Oh wait, I absolutely don’t. Rather I’ve looked into <a href="https://CRAN.R-project.org/package=parsermd">{parsermd}</a>, messed around and… gave up. C’est la vie.</p>
-<p>In my hubris, I began the package <a href="https://github.com/matt-dray/chunktop">{chunktop}</a> to solve John’s problem. Goal: parse Rmd chunk options, write them to file, allow for edits, read them back in and reintegrate the strings into the chunks they came from. Then re-write the Rmd with the changes. Boom.</p>
-<p>Spoiler: I was naïve.</p>
-</section>
-<section id="a-good-start" class="level2">
-<h2 class="anchored" data-anchor-id="a-good-start">A good start</h2>
-<p>My advice: don’t install {chunktop}; it’s already archived on GitHub.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"remotes"</span>)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># if not yet installed</span></span>
-<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"matt-dray/chunktop"</span>)</span></code></pre></div>
-</div>
-<p>It steals functionality from the excellent <a href="https://CRAN.R-project.org/package=parsermd">{parsermd} package</a> to grab Rmd chunk options using the very appropriate <code>rmd_get_options()</code> function.</p>
-<p>The package contains a demo Rmd for testing purposes.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">path <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">system.file</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"extdata/demo1.Rmd"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">package =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"chunktop"</span>)</span></code></pre></div>
-</div>
-<p>You can read in this demo Rmd with <code>parsermd::parse_rmd()</code>, which is actually a little abstract syntax tree (AST) that demonstrates the hierarchy of the page and contains all the data.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">require</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"parsermd"</span>)) <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install.packages</span>(parsermd)</span></code></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Loading required package: parsermd</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">(rmd <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">parse_rmd</span>(path))</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>├── YAML [1 lines]
-└── Heading [h1] - A header
-    ├── Chunk [r, 1 opt, 1 lines] - chunk1
-    └── Heading [h2] - A subheader
-        ├── Chunk [r, 2 opts, 1 lines] - chunk2
-        ├── Markdown [2 lines]
-        ├── Chunk [r, 1 lines] - chunk3
-        └── Chunk [r, 2 opts, 1 lines] - chunk4</code></pre>
-</div>
-</div>
-<p>And we can take a look at the lines in the Rmd doc.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1">(rmd_doc <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> parsermd<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as_document</span>(rmd))</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] "---"                                                                
- [2] "title: Test"                                                        
- [3] "---"                                                                
- [4] ""                                                                   
- [5] "# A header"                                                         
- [6] ""                                                                   
- [7] "```{r chunk1, eval = FALSE}"                                        
- [8] "1 + 1"                                                              
- [9] "```"                                                                
-[10] ""                                                                   
-[11] "## A subheader"                                                     
-[12] ""                                                                   
-[13] "```{r chunk2, fig.cap = \"I am a fig caption.\", fig.height = 4}"   
-[14] "plot(mtcars$mpg, mtcars$cyl)"                                       
-[15] "```"                                                                
-[16] ""                                                                   
-[17] "Some text."                                                         
-[18] ""                                                                   
-[19] ""                                                                   
-[20] "```{r chunk3}"                                                      
-[21] "plot(mtcars$mpg, mtcars$disp"                                       
-[22] "```"                                                                
-[23] ""                                                                   
-[24] "```{r chunk4, fig.cap = \"I am another fig caption.\", eval = TRUE}"
-[25] "plot(mtcars$mpg, mtcars$drat)"                                      
-[26] "```"                                                                
-[27] ""                                                                   </code></pre>
-</div>
-</div>
-<p>So it contains a bunch of chunks with various options.</p>
-<p>So, here’s as far as I got. First off, given our Rmd file, we can use <code>get_chunktop()</code> to read the chunk options of interest using {parsermd} and stick them a nice little list. Trivially.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(chunktop)</span>
-<span id="cb9-2">(chunktop_list <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">get_chunktop</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">rmd_file =</span> path, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">opts =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"fig.cap"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"eval"</span>)))</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$chunk1
-$chunk1$eval
-[1] "FALSE"
-
-
-$chunk2
-$chunk2$fig.cap
-[1] "\"I am a fig caption.\""
-
-
-$chunk4
-$chunk4$fig.cap
-[1] "\"I am another fig caption.\""
-
-$chunk4$eval
-[1] "TRUE"</code></pre>
-</div>
-</div>
-<p>Which is trivially massaged into a data.frame.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">(chunktop_df <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">chunktop_to_df</span>(chunktop_list))</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  chunk_name option_name                option_value
-1     chunk1        eval                       FALSE
-2     chunk2     fig.cap       "I am a fig caption."
-3     chunk4     fig.cap "I am another fig caption."
-4     chunk4        eval                        TRUE</code></pre>
-</div>
-</div>
-<p>Which is trivially written to a CSV to share with your colleagues for editing.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">csv_file <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">tempfile</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">".csv"</span>)</span>
-<span id="cb13-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">write.csv</span>(chunktop_df, csv_file, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">row.names =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span>)</span></code></pre></div>
-</div>
-<p>Which is trivially read back into R.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1">(chunktop_df2 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">read.csv</span>(csv_file))</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  chunk_name option_name                option_value
-1     chunk1        eval                       FALSE
-2     chunk2     fig.cap       "I am a fig caption."
-3     chunk4     fig.cap "I am another fig caption."
-4     chunk4        eval                        TRUE</code></pre>
-</div>
-</div>
-<p>Which is trivially converted back into a list.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1">(chunktop_list2 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">df_to_chunktop</span>(chunktop_df2))</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$chunk1
-$chunk1$eval
-[1] "FALSE"
-
-
-$chunk2
-$chunk2$fig.cap
-[1] "\"I am a fig caption.\""
-
-
-$chunk4
-$chunk4$fig.cap
-[1] "\"I am another fig caption.\""
-
-$chunk4$eval
-[1] "TRUE"</code></pre>
-</div>
-</div>
-<p>And then we trivially, um, well, I don’t know, actually. I just assumed there would be an elegant way to convert the listed options back into the chunk options.</p>
-<p>The function <code>parsermd::rmd_set_options()</code> exists, but appears to set options for <em>all</em> chunks, not <em>selected</em> options. Maybe I misunderstood, let me know.</p>
-<p>For sure you could do a thing where you parse the strings out of the Rmd and replace them with the new option values. You are welcome to do that, friend.</p>
-</section>
-<section id="descent-into-masochism" class="level2">
-<h2 class="anchored" data-anchor-id="descent-into-masochism">Descent into masochism</h2>
-<p>Anyway, having implied that I am too lazy to do that, I actually tried something much more procastinatory when I hit a brick wall. Enjoy this bonus content.</p>
-<p>I wondered if I could just… extract the chunk options from the original Rmd myself, dependency-free. For ‘fun’.</p>
-<p>But I turned I into a sort of unhinged <a href="remotes::install_github(%22matt-dray/chunktop%22)">code golf</a>. Well, maybe ‘code wild-goose-chase’. The challenge: is it possible to extract chunk options from an arbitrary Rmd using only base R in a single base-R pipe (<code>|&gt;</code>) chain? Haha, of course.</p>
-<p>First, I’ve got a few input checks that I’ve put into a <code>.check_inputs()</code> so that it causes less clutter in the main function.</p>
-<details>
-<summary>
-Click for function to check inputs
-</summary>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1">.check_inputs <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(rmd_lines, engine, yaml_out) {</span>
-<span id="cb18-2">  </span>
-<span id="cb18-3">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">inherits</span>(rmd_lines, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"character"</span>)) {</span>
-<span id="cb18-4">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">stop</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Argument 'rmd_lines' must be a character vector."</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">call. =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span>)</span>
-<span id="cb18-5">  }</span>
-<span id="cb18-6">  </span>
-<span id="cb18-7">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (engine <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"r"</span>) {</span>
-<span id="cb18-8">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">stop</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"For now, argument 'engine' must be 'r'."</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">call. =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span>)</span>
-<span id="cb18-9">  }</span>
-<span id="cb18-10">  </span>
-<span id="cb18-11">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">is.null</span>(yaml_out) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&amp;</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">inherits</span>(yaml_out, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"character"</span>)) {</span>
-<span id="cb18-12">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">stop</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Argument 'yaml_out' must be NULL or character."</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">call. =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span>)</span>
-<span id="cb18-13">  }</span>
-<span id="cb18-14">  </span>
-<span id="cb18-15">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">is.null</span>(yaml_out)) {</span>
-<span id="cb18-16">    </span>
-<span id="cb18-17">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (tools<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">file_ext</span>(yaml_out) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"yaml"</span>) {</span>
-<span id="cb18-18">      <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">stop</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Argument 'yaml_out' must have extension '.yaml'."</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">call. =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span>)</span>
-<span id="cb18-19">    }</span>
-<span id="cb18-20">    </span>
-<span id="cb18-21">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">dir.exists</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">dirname</span>(yaml_out))) {</span>
-<span id="cb18-22">      <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">stop</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"The directory in 'yaml_out' does not exist."</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">call. =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span>)</span>
-<span id="cb18-23">    }</span>
-<span id="cb18-24">    </span>
-<span id="cb18-25">  }</span>
-<span id="cb18-26">  </span>
-<span id="cb18-27">}</span></code></pre></div>
-</div>
-</details>
-<p>So here’s an overengineered <code>grab_chunktop()</code> function that extracts Rmd chunk options.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1">grab_chunktop <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(rmd_lines, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">engine =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"r"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">yaml_out =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">NULL</span>) {</span>
-<span id="cb19-2">  </span>
-<span id="cb19-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">.check_inputs</span>(rmd_lines, engine, yaml_out)</span>
-<span id="cb19-4">  </span>
-<span id="cb19-5">  rmd_lines[<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">grep</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"```</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">\\</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">{"</span>, rmd_lines)] <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># isolate Rmd chunks</span></span>
-<span id="cb19-6">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">gsub</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">paste0</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"```</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">\\</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">{"</span>, engine , <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">" |</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">\\</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">}$"</span>), <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">""</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x =</span> _) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># retain options</span></span>
-<span id="cb19-7">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">strsplit</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">", "</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># list of chunks, split by commas</span></span>
-<span id="cb19-8">    (\(chunk_str) {</span>
-<span id="cb19-9">      <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">setNames</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">object =</span> chunk_str, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sapply</span>(chunk_str, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"[["</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>))  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># name-value</span></span>
-<span id="cb19-10">    })() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># name the list elements after chunks</span></span>
-<span id="cb19-11">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sapply</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"["</span>, <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># forget first element (engine)</span></span>
-<span id="cb19-12">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">lapply</span>(  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># split options/values into nested list under named chunk</span></span>
-<span id="cb19-13">      \(opt_str) {</span>
-<span id="cb19-14">        <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">strsplit</span>(opt_str, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"="</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># "eval=TRUE" to "eval" and "TRUE"</span></span>
-<span id="cb19-15">          (\(opt_str) {  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># first element to name</span></span>
-<span id="cb19-16">            <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">setNames</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">object =</span> opt_str, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">trimws</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sapply</span>(opt_str, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"[["</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>)))}</span>
-<span id="cb19-17">          )() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb19-18">          <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sapply</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"["</span>, <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># now remove first element</span></span>
-<span id="cb19-19">          <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">trimws</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span> </span>
-<span id="cb19-20">          <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as.list</span>() <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb19-21">          <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">type.convert</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">as.is =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># make sure "1" becomes 1</span></span>
-<span id="cb19-22">      }</span>
-<span id="cb19-23">    )</span>
-<span id="cb19-24">  </span>
-<span id="cb19-25">}</span></code></pre></div>
-</div>
-<p>Absolutely disgusting. But it works!</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">grab_chunktop</span>(rmd_doc)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>$chunk1
-$chunk1$eval
-[1] FALSE
-
-
-$chunk2
-$chunk2$fig.cap
-[1] "\"I am a fig caption.\""
-
-$chunk2$fig.height
-[1] 4
-
-
-$chunk3
-list()
-
-$chunk4
-$chunk4$fig.cap
-[1] "\"I am another fig caption.\""
-
-$chunk4$eval
-[1] TRUE</code></pre>
-</div>
-</div>
-<p>Note the exclusive use of <code>|&gt;</code> base pipe, <code>_</code> placeholder, <code>\()</code> anonymous function and <code>()()</code> ‘dog’s balls’. Welcome to base R circa 2023.</p>
-<p>I’m telling you this works and you can see that’s the case. But gosh bless you if you actually try to grok that code by eye.</p>
-</section>
-<section id="brief-grief" class="level2">
-<h2 class="anchored" data-anchor-id="brief-grief">Brief grief</h2>
-<p>Nothing good has come of this. I just have more respect for {parsermd}. But here’s a brief timeline of my activites on this task:</p>
-<ul>
-<li>there’s no way this isn’t trivial (denial)</li>
-<li>I can’t believe I can’t batter {parsermd} into doing this (anger)</li>
-<li>I’ll start a package and see where we get (bargaining)</li>
-<li>what if I simply ignore the package and lark about with base R instead (depression)</li>
-<li>I’ll just write a blog post and move on (acceptance)</li>
-</ul>
-<p>Don’t worry, you only lost a few braincells reading this. I lost an afternoon, woe is me.</p>
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-01-13 09:55:00 GMT</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
-[1] chunktop_0.0.0.9000 parsermd_0.1.2     
-
-loaded via a namespace (and not attached):
- [1] vctrs_0.6.5       cli_3.6.2         knitr_1.45        rlang_1.1.3      
- [5] xfun_0.41         purrr_1.0.2       jsonlite_1.8.7    glue_1.7.0       
- [9] backports_1.4.1   htmltools_0.5.6.1 hms_1.1.3         fansi_1.0.6      
-[13] rmarkdown_2.25    evaluate_0.23     tibble_3.2.1      tzdb_0.4.0       
-[17] fontawesome_0.5.2 fastmap_1.1.1     yaml_2.3.8        lifecycle_1.0.4  
-[21] compiler_4.3.1    htmlwidgets_1.6.2 Rcpp_1.0.11       pkgconfig_2.0.3  
-[25] rstudioapi_0.15.0 digest_0.6.33     R6_2.5.1          tidyselect_1.2.0 
-[29] readr_2.1.4       utf8_1.2.4        pillar_1.9.0      magrittr_2.0.3   
-[33] checkmate_2.2.0   withr_2.5.2       tools_4.3.1      </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>parsermd</category>
-  <category>r</category>
-  <category>r-markdown</category>
-  <guid>https://www.rostrum.blog/posts/2023-09-16-chunktop/index.html</guid>
-  <pubDate>Fri, 15 Sep 2023 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
