@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 178 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2024-10-25 (latest).
+🔢 There have been 179 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2024-11-16 (latest).
 
 📅 That’s a post roughly every 13 days, or about 2.2 posts per month.
 
-🆕 The latest post: [{sortable} card games in
-{shiny}](https://www.rostrum.blog/posts/2024-10-25-not-balatro).
+🆕 The latest post: [Deploy a Shiny app to
+itch.io](https://www.rostrum.blog/posts/2024-11-16-itch).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ between 2018-04-14 (first) to 2024-10-25 (latest).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 179 | 2024-11-16 | [Deploy a Shiny app to itch.io](https://www.rostrum.blog/posts/2024-11-16-itch)                                                |
 | 178 | 2024-10-25 | [{sortable} card games in {shiny}](https://www.rostrum.blog/posts/2024-10-25-not-balatro)                                      |
 | 177 | 2024-09-15 | [Little pixel fun zone](https://www.rostrum.blog/posts/2024-09-15-shiny-pixel)                                                 |
 | 176 | 2024-07-14 | [Tile-style sprite delight](https://www.rostrum.blog/posts/2024-07-14-tilebased)                                               |
@@ -224,4 +225,4 @@ between 2018-04-14 (first) to 2024-10-25 (latest).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2024-10-26 at 20:56.
+🕒 Last updated: 2024-11-16 at 20:20.
