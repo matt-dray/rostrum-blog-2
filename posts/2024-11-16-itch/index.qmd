@@ -1,0 +1,55 @@
+---
+title: "Deploy a Shiny app to itch.io"
+date: 2024-11-16
+slug: "itch"
+image: resources/itch.png
+categories:
+  - ich.io
+  - r
+  - shiny
+  - shinylive
+---
+
+![Graphic design is my passion.](resources/itch.png){fig-align="left" fig-alt="The indie game distribution platform, itch.io, showing a pixel-editor tool made with R Shiny." width='100%'}
+
+## tl;dr
+
+As a test, I uploaded an R Shiny app to [itch.io](https://itch.io/), which is a platform for sharing indie games. [It worked](https://mattdray.itch.io/little-pixel-fun-zone).
+
+## Scratching an itch.io
+
+Where can you host your Shiny app for free? Typical options are services like [shinyapps.io](https://www.shinyapps.io/) or [Connect Cloud](https://connect.posit.cloud/) by Posit.
+
+I have another idea: [itch.io](https://itch.io/) is a web-based platform known for hosting indie videogames, assets and other miscellaneous game-adjacent tools[^steam]. Developers can upload file bundles for users to download, or they can serve their HTML apps directly on the site.
+
+Since [R is a game engine](http://localhost:6375/posts/2023-04-02-splendid-r-games/)[^sick], why aren't R users uploading their apps to itch.io?
+
+Well, part of the problem is that you didn't know this was possible. And also because it's only recently that you can use [{shinylive}](https://shiny.posit.co/) to convert your app to be served entirely in the browser with no need for a server[^pages].
+
+{shinylive} generates a folder containing your app and all the files needed for deployment. You just need to zip it up and upload it to itch.io.
+
+Which is [exactly what I did](https://mattdray.itch.io/little-pixel-fun-zone) with [a toy pixel editor](https://github.com/matt-dray/little-pixel-fun-zone/) that I made and [wrote about](https://www.rostrum.blog/posts/2024-09-15-shiny-pixel/) recently.
+
+This requires an itch.io account. When you upload the app you fill in a short pro forma, making sure to set the 'kind of project' to HTML and to tick a checkbox to say 'this game will be played in the browser'. For my example, I also set the 'classification' to 'tools'.
+
+I can't really think of a catch, but there are limitations around size and complexity: the upload must be under 1 GB and I think there's a limit of 1000 files (this tripped me up when I tried once before).
+
+## Scratch my back
+
+I did this for the lols, of course, but I do think itch.io is a viable option for certain types of app. It's a platform for people to share their creativity and no-one cares what language was used if the outcome is fun or useful.
+
+And if that wasn't enough, you can also use itch.io as a payment platform. Users can leave you a little tip for your efforts.
+
+So, what's stopping you from becoming the first professional indie R game developer?
+
+### Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^pages]: Which makes it possible to deploy apps for free via static-site services like [GitHub Pages](https://pages.github.com/) or [Netlify](https://www.netlify.com/).
+[^steam]: Kinda like [Steam](https://store.steampowered.com/), but with a greater focus on independent developers and the rest of us.
+[^sick]: Are you sick of me saying this yet?
