@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 179 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2024-11-16 (latest).
+🔢 There have been 180 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2024-12-15 (latest).
 
-📅 That’s a post roughly every 13 days, or about 2.2 posts per month.
+📅 That’s a post roughly every 14 days, or about 2.2 posts per month.
 
-🆕 The latest post: [Deploy a Shiny app to
-itch.io](https://www.rostrum.blog/posts/2024-11-16-itch).
+🆕 The latest post: [A roguelike sprite randomiser with
+Shiny](https://www.rostrum.blog/posts/2024-12-15-sprite-builder).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ itch.io](https://www.rostrum.blog/posts/2024-11-16-itch).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 180 | 2024-12-15 | [A roguelike sprite randomiser with Shiny](https://www.rostrum.blog/posts/2024-12-15-sprite-builder)                           |
 | 179 | 2024-11-16 | [Deploy a Shiny app to itch.io](https://www.rostrum.blog/posts/2024-11-16-itch)                                                |
 | 178 | 2024-10-25 | [{sortable} card games in {shiny}](https://www.rostrum.blog/posts/2024-10-25-not-balatro)                                      |
 | 177 | 2024-09-15 | [Little pixel fun zone](https://www.rostrum.blog/posts/2024-09-15-shiny-pixel)                                                 |
@@ -225,4 +226,4 @@ itch.io](https://www.rostrum.blog/posts/2024-11-16-itch).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2024-11-16 at 20:29.
+🕒 Last updated: 2024-12-15 at 21:26.
