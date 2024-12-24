@@ -46,6 +46,13 @@ Why not just draw the `image_mosaic()` object? Two reasons: I specifically want 
 
 Of course, I could use [{nara} by Mike](https://coolbutuseless.github.io/package/nara/index.html) (coolbutuseless) to 'blit' sprite parts to a single object, but I had some trouble using the package in a {shinylive} context as its not on CRAN and the GitHub repo [doesn't have any releases with the necessary WebAssembly binaries](https://github.com/matt-dray/roguelike-sprite-builder/issues/15) (yet?).
 
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+Mike points out that [{nara} is on R-universe](https://coolbutuseless.r-universe.dev/nara), which [builds WASM binaries for use by WebR applications](https://ropensci.org/blog/2023/11/17/runiverse-wasm/) including {shinylive}. Totally forgot about this! Will give it a go.
+
+</div>
+
 ## Expanding the inventory
 
 As ever, there were some learning points, like how:

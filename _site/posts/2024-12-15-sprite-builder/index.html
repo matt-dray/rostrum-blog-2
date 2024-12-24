@@ -197,6 +197,10 @@ ul.task-list li input[type="checkbox"] {
 </ol>
 <p>Why not just draw the <code>image_mosaic()</code> object? Two reasons: I specifically want to download the nativeRaster version of the sprite (for later use in R) and because nativeRaster can then be used to produce an image at any size. The nativeRaster object is just a matrix of colour information, where each cell is a pixel of the image. That means you can re-plot it any size you want.</p>
 <p>Of course, I could use <a href="https://coolbutuseless.github.io/package/nara/index.html">{nara} by Mike</a> (coolbutuseless) to ‘blit’ sprite parts to a single object, but I had some trouble using the package in a {shinylive} context as its not on CRAN and the GitHub repo <a href="https://github.com/matt-dray/roguelike-sprite-builder/issues/15">doesn’t have any releases with the necessary WebAssembly binaries</a> (yet?).</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>Mike points out that <a href="https://coolbutuseless.r-universe.dev/nara">{nara} is on R-universe</a>, which <a href="https://ropensci.org/blog/2023/11/17/runiverse-wasm/">builds WASM binaries for use by WebR applications</a> including {shinylive}. Totally forgot about this! Will give it a go.</p>
+</div>
 </section>
 <section id="expanding-the-inventory" class="level2">
 <h2 class="anchored" data-anchor-id="expanding-the-inventory">Expanding the inventory</h2>
@@ -224,10 +228,10 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-12-15 21:28:38 GMT</code></pre>
+<pre><code>Last rendered: 2024-12-24 08:57:34 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.4.0 (2024-04-24)
+<pre><code>R version 4.4.2 (2024-10-31)
 Platform: aarch64-apple-darwin20
 Running under: macOS Ventura 13.2.1
 
@@ -245,10 +249,10 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.4 compiler_4.4.0    fastmap_1.2.0     cli_3.6.3.9000   
- [5] tools_4.4.0       htmltools_0.5.8.1 rstudioapi_0.16.0 yaml_2.3.10      
+ [1] htmlwidgets_1.6.4 compiler_4.4.2    fastmap_1.2.0     cli_3.6.3.9000   
+ [5] tools_4.4.2       htmltools_0.5.8.1 rstudioapi_0.16.0 yaml_2.3.10      
  [9] rmarkdown_2.28    knitr_1.48        jsonlite_1.8.9    xfun_0.48        
-[13] digest_0.6.37     rlang_1.1.4       evaluate_1.0.1   </code></pre>
+[13] digest_0.6.37     rlang_1.1.4       fontawesome_0.5.2 evaluate_1.0.1   </code></pre>
 </div>
 </div>
 </details>
