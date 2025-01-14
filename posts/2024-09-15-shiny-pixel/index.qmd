@@ -13,11 +13,11 @@ categories:
 
 ## tl;dr
 
-I made a [simple toy pixel-editor for the browser](https://connect.posit.cloud/matt-dray/content/01929f88-4e28-a552-bc1f-62fa999e2c63), which helped me learn about reacting to user clicks and implementing undo/redo in {shiny}.
+I made a [simple toy pixel-editor for the browser](https://matt-dray.github.io/little-pixel-fun-zone/), which helped me learn about reacting to user clicks and implementing undo/redo in {shiny}.
 
 ## Just browsing
 
-[The {pixeltrix} package](https://github.com/matt-dray/pixeltrix) is a local pixel editor you can run from the R console[^readmore]. It's intentionally simple. You start a graphics device and click the squares ('pixels'), cycling through your provided colour palette. You're returned a little pixeltrix-class matrix as a memento, which you can re-edit later.
+My [{pixeltrix} package](https://github.com/matt-dray/pixeltrix) is a local pixel editor you can run from the R console[^readmore]. It's intentionally simple. You start a graphics device and click the squares ('pixels'), cycling through your provided colour palette. You're returned a little pixeltrix-class matrix as a memento, which you can re-edit later.
 
 It might be nice to have a browser-based version, but I've never really had the time and figured it would be too fiddly. Well guess what, I had some time and it wasn't that fiddly.
 
@@ -30,7 +30,7 @@ This is a reminder to myself of how to do these things.
 
 ## App
 
-The app is available [via Posit Connect Cloud](https://connect.posit.cloud/matt-dray/content/01929f88-4e28-a552-bc1f-62fa999e2c63) and [the source is on GitHub](https://github.com/matt-dray/little-pixel-fun-zone) (v0.3.0 at time of writing).
+The app is available [via {shinylive} deployed via GitHub Pages](https://matt-dray.github.io/little-pixel-fun-zone/) and [the source is on GitHub](https://github.com/matt-dray/little-pixel-fun-zone) (v0.3.0 at time of writing).
 
 There's (intentionally) only a few features. You can:
 
@@ -38,11 +38,22 @@ There's (intentionally) only a few features. You can:
 * change the colour, thanks to [Dean Attali's {colourpicker}](https://daattali.com/shiny/colourInput/)
 * undo/redo (with a very short 'memory')
 * flood fill
-* have an assistant ✨AI draw a picture for you[^bot]
+* have an assistant ✨AI✨ draw a picture for you[^bot]
 * download a matrix representation of your treasured art (pixeltrix-class, for my own needs) as an RDS file
 * download a png copy of your treasured art
 
 Wow!
+
+Here's an embedded version of the app:
+
+<iframe width='800' height='550' src='https://matt-dray.github.io/little-pixel-fun-zone/' title='roguelike-sprite-builder'></iframe>
+
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+To test the limits of {shinylive}, I also managed to [deploy the app to itch.io](https://mattdray.itch.io/little-pixel-fun-zone), the indie-game dispensation platform! You can read [a separate blog post](https://www.rostrum.blog/posts/2024-11-16-itch/) about that.
+
+</div>
 
 ## Tricks
 
