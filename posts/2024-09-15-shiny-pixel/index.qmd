@@ -44,9 +44,9 @@ There's (intentionally) only a few features. You can:
 
 Wow!
 
-Here's an embedded version of the app:
+Here's an embedded version of the app (may take a moment to load):
 
-<iframe width='800' height='550' src='https://matt-dray.github.io/little-pixel-fun-zone/' title='roguelike-sprite-builder'></iframe>
+<iframe width='800' height='585' src='https://matt-dray.github.io/little-pixel-fun-zone/' title='roguelike-sprite-builder'></iframe>
 
 <div class="tip"> 
 `r fontawesome::fa("exclamation-circle")` <b>Note</b>
@@ -83,7 +83,7 @@ I also made the click trigger `observeEvent()` to refresh the plot given the use
 
 If you misclick a pixel in your picture you could correct it by changing the colour in the colourpicker and re-clicking the errant point. But that takes, ooh, perhaps a couple of seconds. Instead, it seems conceptually more fun to have an undo button. And imagine how exhilarating it would be if that button toggled to redo after it was clicked? I know, calm down.
 
-So, there's probably lots of ways to do this, but I settled on bookeeping with 'memory slots' in a sort-of cyber-goldfish brain, using `reactiveValues()`. 
+So, there's probably lots of ways to do this, but I settled on bookkeeping with 'memory slots' in a sort-of cyber-goldfish brain, using `reactiveValues()`. 
 
 The image is stored as a matrix object, with each cell representing the current state of the corresponding pixel when drawn. The current state of the matrix is stored in the first (of two) memory slots, while the second slot is the previous matrix state. Each time you update the drawing, slot 1 overwrites slot 2 and the new matrix takes its place in slot 1.
 

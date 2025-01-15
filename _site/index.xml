@@ -389,7 +389,7 @@ loaded via a namespace (and not attached):
 </section>
 <section id="just-browsing" class="level2">
 <h2 class="anchored" data-anchor-id="just-browsing">Just browsing</h2>
-<p><a href="https://github.com/matt-dray/pixeltrix">The {pixeltrix} package</a> is a local pixel editor you can run from the R console<sup>1</sup>. It’s intentionally simple. You start a graphics device and click the squares (‘pixels’), cycling through your provided colour palette. You’re returned a little pixeltrix-class matrix as a memento, which you can re-edit later.</p>
+<p>My <a href="https://github.com/matt-dray/pixeltrix">{pixeltrix} package</a> is a local pixel editor you can run from the R console<sup>1</sup>. It’s intentionally simple. You start a graphics device and click the squares (‘pixels’), cycling through your provided colour palette. You’re returned a little pixeltrix-class matrix as a memento, which you can re-edit later.</p>
 <p>It might be nice to have a browser-based version, but I’ve never really had the time and figured it would be too fiddly. Well guess what, I had some time and it wasn’t that fiddly.</p>
 <p>I’ve been learning a bit more <a href="https://shiny.posit.co/">{shiny}</a> of late. This mini project was a good way to learn a few things that might come in handy later. In particular, how to:</p>
 <ol type="1">
@@ -407,17 +407,17 @@ loaded via a namespace (and not attached):
 <li>change the colour, thanks to <a href="https://daattali.com/shiny/colourInput/">Dean Attali’s {colourpicker}</a></li>
 <li>undo/redo (with a very short ‘memory’)</li>
 <li>flood fill</li>
-<li>have an assistant ✨AI ✨draw a picture for you<sup>2</sup></li>
+<li>have an assistant ✨AI✨ draw a picture for you<sup>2</sup></li>
 <li>download a matrix representation of your treasured art (pixeltrix-class, for my own needs) as an RDS file</li>
 <li>download a png copy of your treasured art</li>
 </ul>
 <p>Wow!</p>
-<p>Here’s an embedded version of the app:</p>
-<iframe width="800" height="550" src="https://matt-dray.github.io/little-pixel-fun-zone/" title="roguelike-sprite-builder">
+<p>Here’s an embedded version of the app (may take a moment to load):</p>
+<iframe width="800" height="585" src="https://matt-dray.github.io/little-pixel-fun-zone/" title="roguelike-sprite-builder">
 </iframe>
 <div class="tip">
 <p> <b>Note</b></p>
-<p>To test the limits of {shinylive} deployments, I also managed to <a href="https://mattdray.itch.io/little-pixel-fun-zone">deploy the app to itch.io</a>, the indie-game dispensation platform! You can read <a href="https://www.rostrum.blog/posts/2024-11-16-itch/">a separate blog post</a> about that.</p>
+<p>To test the limits of {shinylive}, I also managed to <a href="https://mattdray.itch.io/little-pixel-fun-zone">deploy the app to itch.io</a>, the indie-game dispensation platform! You can read <a href="https://www.rostrum.blog/posts/2024-11-16-itch/">a separate blog post</a> about that.</p>
 </div>
 </section>
 <section id="tricks" class="level2">
@@ -470,7 +470,7 @@ font-style: inherit;"># restrict to plot bounds?</span></span>
 <section id="undoredo" class="level3">
 <h3 class="anchored" data-anchor-id="undoredo">Undo/redo</h3>
 <p>If you misclick a pixel in your picture you could correct it by changing the colour in the colourpicker and re-clicking the errant point. But that takes, ooh, perhaps a couple of seconds. Instead, it seems conceptually more fun to have an undo button. And imagine how exhilarating it would be if that button toggled to redo after it was clicked? I know, calm down.</p>
-<p>So, there’s probably lots of ways to do this, but I settled on bookeeping with ‘memory slots’ in a sort-of cyber-goldfish brain, using <code>reactiveValues()</code>.</p>
+<p>So, there’s probably lots of ways to do this, but I settled on bookkeeping with ‘memory slots’ in a sort-of cyber-goldfish brain, using <code>reactiveValues()</code>.</p>
 <p>The image is stored as a matrix object, with each cell representing the current state of the corresponding pixel when drawn. The current state of the matrix is stored in the first (of two) memory slots, while the second slot is the previous matrix state. Each time you update the drawing, slot 1 overwrites slot 2 and the new matrix takes its place in slot 1.</p>
 <p>So, for example, the app starts up with a ‘blank’ grid:</p>
 <div class="cell">
@@ -674,7 +674,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2025-01-14 23:35:08 GMT</code></pre>
+<pre><code>Last rendered: 2025-01-15 21:05:27 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.4.2 (2024-10-31)
