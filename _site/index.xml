@@ -10,7 +10,367 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Sun, 15 Dec 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 31 Jan 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Dependency-free hex stickers with {hexbase}</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2025-01-31-hexbase/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2025-01-31-hexbase/resources/demo-hex.png" class="img-fluid figure-img" style="width:50.0%" alt="A bisque-coloured hexagon with a hotpink border. The R logo is above centre and tilted at a jaunty angle. The text 'example' writtenin Comic Sans and is copied and shifted to give the effect of a shadow, red on black. On the lower-right edge in blue papyrus font is the text 'visit https://rstats.lol ftw'."></p>
+<figcaption class="figure-caption">Graphic design is my passion.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I’ve made <a href="https://github.com/matt-dray/hexbase">{hexbase}</a>, a simple package to create hex stickers in R. The twist: it relies only on base R packages.</p>
+</section>
+<section id="stick-around" class="level2">
+<h2 class="anchored" data-anchor-id="stick-around">Stick around</h2>
+<p>Hex stickers are obviously popular in the R community<sup>1</sup> for advertising your package or other projects<sup>2</sup>.</p>
+<p>There’s some existing tools to help you make these:</p>
+<ul>
+<li><a href="https://github.com/GuangchuangYu/hexSticker">{hexSticker}</a> by Guangchuang Yu</li>
+<li>the <a href="https://github.com/ColinFay/hexmake">hexmake Shiny app</a><sup>3</sup> by Colin Fay</li>
+<li><a href="https://github.com/dmi3kno/bunny">{bunny}</a> by Dmytro Perepolkin, used in conjunction with {magick}</li>
+</ul>
+<p>Surprise, I’ve made another one: <a href="https://github.com/matt-dray/hexbase">{hexbase}</a>. Why? I wanted to learn about low-level plotting with <a href="https://www.stat.auckland.ac.nz/~paul/grid/grid.html">{grid}</a>, one of R’s built-in packages<sup>4</sup>. The constraint of using <em>only</em> {grid} in a simple, lightweight sticker-making package seemed a good exemplar (and a good wheeze).</p>
+<p>I don’t know if it’s actually any good, but I learnt a lot.</p>
+</section>
+<section id="do-the-griddy" class="level2">
+<h2 class="anchored" data-anchor-id="do-the-griddy">Do the griddy</h2>
+<p>I reckon most R users make plots with <a href="https://ggplot2.tidyverse.org/">{ggplot2}</a> otherwise R’s native <code>plot()</code>ting system. I’ll bet {grid}<sup>5</sup> is used less often. It’s much lower-level and you have to build everything up yourself, but it is extremely flexible.</p>
+<p>To put it extremely simply, {grid} mostly works through a system of nested ‘viewports’ that you push and pop to add and arrange various graphics objects (grobs<sup>6</sup>) onto a graphics device.</p>
+<p>This post isn’t about {grid} because there’s too much to cover. I found <a href="https://www.stat.auckland.ac.nz/~paul/grid/grid.html">Paul Murrell</a>’s writings really helpful, which is no surprise as Paul is {grid}’s author. See also <a href="https://bookdown.org/rdpeng/RProgDA/the-grid-package.html">Roger’s chapter</a> for an intro.</p>
+<p>However, I did learn a few things I wanted to note to myself:</p>
+<ul>
+<li>you can rotate a viewport but the x and y coordinates will be relative to the angle, so you need to put it inside another viewport that’s relative to the sticker’s coordindates</li>
+<li>you can clip to a grob, which means you could clip out any text or image that falls outside the hexagon boundary</li>
+<li>the <code>grDevices::png()</code> function has a handy <code>bg</code> argument that you can set to <code>"transparent"</code></li>
+<li>the default grid coordinate system is ‘normalised parent coordinates’ (0 to 1 on both axes), but the hexagon is not as wide as it is tall, so the <code>xscale</code> of the parent viewport can be set to the min and max width of the hexagon, while the <code>default.units</code> of the hexagon grobs can be set to <code>"native"</code></li>
+</ul>
+</section>
+<section id="cast-a-hex" class="level2">
+<h2 class="anchored" data-anchor-id="cast-a-hex">Cast a hex</h2>
+<p>You could install {hexbase} <a href="https://github.com/matt-dray/hexbase">from GitHub</a> like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"remotes"</span>)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># if not yet installed</span></span>
+<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"matt-dray/hexbase"</span>)</span></code></pre></div>
+</div>
+<p>As mentioned, the package only imports {grid} and {grDevices} from base R. Otherwise it’s BYOIAF (‘bring your own images and fonts’) by importing with packages like {png} and by installing your fonts locally. Is that cheating? Nah, the <code>Imports</code> section in the <code>DESCRIPTION</code> file is clean as far as I’m concerned!</p>
+<p>You can then build a sticker additively with a series of function calls:</p>
+<ol type="1">
+<li><code>open_device()</code> to set up a PNG graphics device with the dimensions of <a href="https://sticker.how/#type-hexagon">the Stickers Standard</a>.</li>
+<li><code>add_hex()</code> to add the hexagon and border.</li>
+<li><code>add_image()</code> to place an image (run multiple times for more images).</li>
+<li><code>add_text()</code> to place and style text (run multiple times for more text).</li>
+<li><code>close_device()</code> to close the PNG graphics device and save to file.</li>
+</ol>
+<p>You can set various text and image properties like position, size, colour and angle. Text and images will be clipped if they exceed the boundary of the hexagon. Check the help files for all the explanation.</p>
+<p>Below is an extremely basic example. Note how you call each function independently (i.e.&nbsp;no pipes), much like writing base plots with successive calls to <code>plot()</code>, <code>points()</code>, <code>text()</code>, etc.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Somewhere to save it</span></span>
+<span id="cb2-2">temp_path <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tempfile</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".png"</span>)</span>
+<span id="cb2-3"></span>
+<span id="cb2-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 'Bring your own image'</span></span>
+<span id="cb2-5">image_path <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">system.file</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"img"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Rlogo.png"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">package =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"png"</span>)</span>
+<span id="cb2-6">image_png <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> png<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">readPNG</span>(image_path)</span>
+<span id="cb2-7"></span>
+<span id="cb2-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Build up and write the sticker</span></span>
+<span id="cb2-9">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">open_device</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">file_path =</span> temp_path)</span>
+<span id="cb2-10">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_hex</span>(</span>
+<span id="cb2-11">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">border_width =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.06</span>,</span>
+<span id="cb2-12">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">border_col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"hotpink3"</span>,</span>
+<span id="cb2-13">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">bg_col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"bisque"</span></span>
+<span id="cb2-14">)</span>
+<span id="cb2-15">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_image</span>(</span>
+<span id="cb2-16">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">image_object =</span> image_png,</span>
+<span id="cb2-17">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">image_y =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.6</span>,  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># y = 0.5 is centre</span></span>
+<span id="cb2-18">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">image_angle =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">20</span>,</span>
+<span id="cb2-19">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">image_width =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.5</span></span>
+<span id="cb2-20">)</span>
+<span id="cb2-21">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_text</span>(</span>
+<span id="cb2-22">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_string =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"example"</span>,</span>
+<span id="cb2-23">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_x =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.495</span>,</span>
+<span id="cb2-24">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_y =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.35</span>,</span>
+<span id="cb2-25">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#000000"</span>,  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># named or hex</span></span>
+<span id="cb2-26">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_family =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Comic Sans MS"</span>,  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># must be installed locally</span></span>
+<span id="cb2-27">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_face =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"bold"</span></span>
+<span id="cb2-28">)</span>
+<span id="cb2-29">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_text</span>(  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># add multiple texts/images</span></span>
+<span id="cb2-30">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_string =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"example"</span>,</span>
+<span id="cb2-31">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_x =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.505</span>,</span>
+<span id="cb2-32">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_y =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.34</span>,</span>
+<span id="cb2-33">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"red"</span>,</span>
+<span id="cb2-34">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_family =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Comic Sans MS"</span>,</span>
+<span id="cb2-35">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_face =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"bold"</span></span>
+<span id="cb2-36">)</span>
+<span id="cb2-37">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_text</span>(</span>
+<span id="cb2-38">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_string =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"visit https://rstats.lol ftw"</span>,</span>
+<span id="cb2-39">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_x =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.73</span>, </span>
+<span id="cb2-40">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_y =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.18</span>,</span>
+<span id="cb2-41">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_angle =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span>, </span>
+<span id="cb2-42">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, </span>
+<span id="cb2-43">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"blue"</span>, </span>
+<span id="cb2-44">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_family =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Papyrus"</span></span>
+<span id="cb2-45">)</span>
+<span id="cb2-46">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">close_device</span>()</span></code></pre></div>
+</div>
+<p>You can then open the image for inspection. A quick way to do this from within R would be like <code>system(paste("open", temp_path))</code>. Note that you can’t rely on plot-window previews (they lie) when you’re developing your sticker. You must inspect the generated PNG file instead.</p>
+<p>The (stunning) hex produced by this code can be found at the top of this post. Well done for being able to read this far after you burnt your eyes by looking at it.</p>
+</section>
+<section id="dont-get-too-hexcited" class="level2">
+<h2 class="anchored" data-anchor-id="dont-get-too-hexcited">Don’t get too hexcited</h2>
+<p>I might play around with this a bit more if I have time and if I want to delve deeper into {grid}. The {hexbase} package seems to work for my use-case, but it can undoubtedly be improved. <a href="https://github.com/matt-dray/hexbase/issues">Let me know</a> if there’s anything you can unstick. I’d be hexstatic, etc.</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2025-01-31 23:46:41 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.4.2 (2024-10-31)
+Platform: aarch64-apple-darwin20
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.4 compiler_4.4.2    fastmap_1.2.0     cli_3.6.3.9000   
+ [5] tools_4.4.2       htmltools_0.5.8.1 rstudioapi_0.16.0 yaml_2.3.10      
+ [9] rmarkdown_2.28    knitr_1.48        jsonlite_1.8.9    xfun_0.48        
+[13] digest_0.6.37     rlang_1.1.4       evaluate_1.0.1   </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>And beyond, if you take a look at <a href="http://hexb.in/">hexb.in</a>.↩︎</p></li>
+<li id="fn2"><p>I’ve <a href="https://github.com/matt-dray/stickers">made a few</a> myself.↩︎</p></li>
+<li id="fn3"><p>At time of writing, the app seems to need a login, oddly.↩︎</p></li>
+<li id="fn4"><p><a href="https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/">Base slaps</a>, as they say.↩︎</p></li>
+<li id="fn5"><p>Though {grid} actually underpins {ggplot2}, so {ggplot2} extension-writers will be familiar.↩︎</p></li>
+<li id="fn6"><p>I swear this is the name of a <em>Magic</em> creature or something.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>grid</category>
+  <category>hexbase</category>
+  <category>r</category>
+  <guid>https://www.rostrum.blog/posts/2025-01-31-hexbase/index.html</guid>
+  <pubDate>Fri, 31 Jan 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2025-01-31-hexbase/resources/demo-hex.png" medium="image" type="image/png" height="167" width="144"/>
+</item>
 <item>
   <title>A roguelike sprite randomiser with Shiny</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -6228,130 +6588,6 @@ loaded via a namespace (and not attached):
   <category>talk</category>
   <guid>https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/index.html</guid>
   <pubDate>Mon, 16 Oct 2023 23:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Govspeakify tables with {shinylive}</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables/resources/govspeakify-tables.gif" class="img-fluid figure-img" alt="Gif of an app called 'Govspeakify Tables'. A table is pasted into a text box, then a checkbox is ticked to say that the table has row titles and the number 4 is written into a text box that asks for row numbers that contain totals. The 'convert to Govspeak' button is clicked and a special Markdown version of the pasted table is printed. A 'copy' button underneath it is clicked."></p>
-</figure>
-</div>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I made <a href="https://matt-dray.github.io/govspeakify-tables/">a demo Shiny app</a> that’s hosted with GitHub Pages but runs serverless in the browser, thanks to <a href="https://posit-dev.github.io/r-shinylive/">{shinylive}</a>. It converts a copied table to Govspeak Markdown, the format required for publishing reports by the UK’s government.</p>
-</section>
-<section id="rise" class="level2">
-<h2 class="anchored" data-anchor-id="rise">Rise</h2>
-<p>Statistical reports in the UK public sector are often prepared as Word documents. However, they need to be uploaded to the UK government’s publishing system as a special, simplified flavour of Markdown called ‘<a href="https://govspeak-preview.publishing.service.gov.uk/guide">Govspeak</a>’. There’s <a href="https://govspeak-preview.publishing.service.gov.uk/">an online tool</a> to help with this, but it doesn’t yet handle the conversion of tables.</p>
-<p><a href="https://www.rostrum.blog/posts/2023-06-21-wordup-tables/">I wrote recently</a> about a little function I made to transform Word tables to Govspeak. It suits me to run the function within R, but this approach isn’t ideal for colleagues who aren’t R users (imagine!).</p>
-<p>A Shiny app could be useful here. But that’s a bit of a faff; where would I serve it from? I don’t have access to a server and all my free slots on shinyapps.io are taken up.</p>
-<p>But! Thanks to recent developments<sup>1</sup> in <a href="https://github.com/posit-dev/shinylive">Shinylive</a> and <a href="https://docs.r-wasm.org/webr/latest/">{webR}</a>, I can serve the app from GitHub pages and have all the computation happen in the user’s browser. This is a gamechanger.</p>
-</section>
-<section id="and-shine" class="level2">
-<h2 class="anchored" data-anchor-id="and-shine">And shine</h2>
-<p>The first step was to create a Shiny app to ‘govspeakify’ a table. Nothing fancy, I just wanted:</p>
-<ol type="1">
-<li>A text field to receive a copied table.</li>
-<li>Some interactive options for additional Govspeak formatting<sup>2</sup>.</li>
-<li>A button to convert the table to Govspeak.</li>
-<li>The Govspeak output printed to the screen.</li>
-<li>A button to copy the output to the clipboard.</li>
-</ol>
-<p>So, a button-click triggers the conversion of the pasted table via <code>eventReactive()</code>, given the user-supplied formatting options. The output is presented back to the user, along with a button to copy it, thanks to <a href="https://CRAN.R-project.org/package=rclipboard">{rclipboard}</a>.</p>
-<p>You can find the app code in <a href="https://github.com/matt-dray/govspeakify-tables">a GitHub repo</a>. I prepared the app in a single <code>app.R</code> file, along with an <code>R/conversion.R</code> file with bespoke functions. I housed these in a <code>govspeakify-tables</code> subfolder.</p>
-<p>There’s a number of things I want to add or improve to this proof of concept. For example, some more defensive programming to protect against invalid inputs and perhaps some more explanations and styling. Also the ability to upload a full docx file, extract and ‘govspeakify’ all tables and return them in a text file.</p>
-<p>You’ll be able to break the app very easily, but it does what I need it to do for now.</p>
-</section>
-<section id="and-live" class="level2">
-<h2 class="anchored" data-anchor-id="and-live">And live!</h2>
-<p>So, I have the Shiny app; how do we prepare it? The <a href="https://posit-dev.github.io/r-shinylive/">{shinylive}</a> package has a one-liner function that will generate a single folder containing your app and all the necessary bits and bobs from <a href="https://github.com/posit-dev/shinylive">the Shinylive project</a> so it can be served by GitHub Pages but perform computations in the user’s browser.</p>
-<p>The steps are:</p>
-<ol type="1">
-<li>Run <code>shinylive::export("govspeakify-tables", "docs")</code> to take the Shiny app and assets from the <code>govspeakify-tables</code> folder and generate a deployable version of it in a folder called <code>docs/</code> (since this is a folder name that GitHub Pages can serve from).</li>
-<li>Run <code>httpuv::runStaticServer("docs")</code> to launch the app in a local static server and check that it works as intended (this requires the development version of {httpuv} at the time of writing, which you can install <a href="https://github.com/rstudio/httpuv">from GitHub</a>). You could also test it out by pasting code into <a href="https://shinylive.io/r/editor/">the online Shinylive editor</a>.</li>
-<li>Push to your GitHub repo and set up GitHub Pages to serve the <code>docs/</code> folder (from the repo, go to the ‘Settings’ tab, click ‘Pages’ in the sidebar, select the ‘main’ branch and ‘/docs’ folder from the dropdowns, then click the ‘Save’ button).</li>
-</ol>
-<p>GitHub will take a moment to ready your app, but it’s then available on the web via a URL in the form ‘https://username.github.io/repo-name’. The Govspeakify Tables app can be found here: <a href="https://matt-dray.github.io/govspeakify-tables">https://matt-dray.github.io/govspeakify-tables</a> (may take a sec to load).</p>
-<p>Some of these instructions and links may change as tools like Shinylive (the asset-preparation system), {shinylive} (the package) and {webR} continue to develop. I realised later that Rami has also <a href="https://github.com/RamiKrispin/shinylive-r">recorded these steps in a README</a>, so you may want to look there in future for more up-to-date information.</p>
-<p>Bottom line: Shinylive is a huge deal for creating small, nimble apps that are free from the tyranny of server management.</p>
-<div class="tip">
-<p> <b>Note</b></p>
-<p>I later saw Nicola Rennie’s <a href="https://nrennie.github.io/tidytuesday-shiny-app/">TidyTuesday Shinylive app</a> and Veerle van Leemput’s post about a <a href="https://hypebright.nl/index.php/en/2023/10/02/run-a-shiny-app-in-the-browser-with-shinylive-for-r/">Hangman Shinylive app</a> that are worth checking out too.</p>
-</div>
-<div class="tip">
-<p> <b>Note</b></p>
-<p>It occurred to me that the arrival of Shinylive might finally be the death knell for <a href="https://rstudio.github.io/crosstalk/">{crosstalk}</a>. {crosstalk} allows for certain <a href="https://rstudio.github.io/crosstalk/widgets.html">htmlwidgets</a> to speak to each other so that, for example, you can select from a dropdown and the points displayed on a graph or table will get filtered. In other words, you get a Shiny-like experience without {shiny} and without a server. I <a href="https://www.rostrum.blog/posts/2018-09-12-crosstalk-memes/">spoke about {crosstalk} in 2018</a> and it hasn’t really been developed since then. I think I’ll probably use Shinylive in Quarto from now on.</p>
-<div class="quarto-figure quarto-figure-left">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables/resources/crosstalk.png" class="img-fluid figure-img" style="width:100.0%" alt="Meme. First line says 'mom, can we have serverless Shiny?' with a screenshot of the Shinylive R package website. Second line says 'No, there is serverless Shiny at home'. Third line says 'serverless Shiny at home' and has a screenshot of the crosstalk R package website."></p>
-</figure>
-</div>
-</div>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-10-11 17:12:59 CEST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/Rome
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.6.1 rstudioapi_0.15.0 yaml_2.3.7       
- [9] rmarkdown_2.25    knitr_1.44        jsonlite_1.8.7    xfun_0.40        
-[13] digest_0.6.33     rlang_1.1.1       fontawesome_0.5.2 evaluate_0.22    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>Thanks to George Stagg, Winston Chang, Barret Schloerke and many others! See Joe Cheng’s <a href="https://jcheng5.github.io/posit-conf-2023-shinylive/">slides from Shinylive</a> at the 2023 Posit conference.↩︎</p></li>
-<li id="fn2"><p>To mark-up row titles (i.e.&nbsp;content in the first column is suffixed with <code>#</code>) and totals rows (all content in the row is emboldened between asterisks), and to provide a regular expression for characters to ignore when evaluating numeric columns (e.g.&nbsp;recognise that <code>"75%"</code> is 75 and <code>"1,000"</code> is 1000) so that they’ll be marked-up as right-aligned in the output.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>govspeak</category>
-  <category>markdown</category>
-  <category>public-sector</category>
-  <category>r</category>
-  <category>shiny</category>
-  <category>shinylive</category>
-  <category>wordup</category>
-  <guid>https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables/index.html</guid>
-  <pubDate>Sat, 07 Oct 2023 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
