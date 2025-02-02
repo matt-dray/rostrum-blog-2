@@ -17,36 +17,39 @@ I've made [{hexbase}](https://github.com/matt-dray/hexbase), a simple package to
 
 ## Stick around
 
-Hex stickers are obviously popular in the R community[^hexbin] for advertising your package or other projects[^examples].
+Hex stickers are obviously popular in the R community [and beyond](http://hexb.in/) for advertising your package or other projects[^examples]. So much so that there are packages to [organise your stickers](http://hexsession.liomys.mx/).
 
 There's some existing tools to help you make these:
 
 * [{hexSticker}](https://github.com/GuangchuangYu/hexSticker) by Guangchuang Yu
-* the [hexmake Shiny app](https://github.com/ColinFay/hexmake)[^login] by Colin Fay
 * [{bunny}](https://github.com/dmi3kno/bunny) by Dmytro Perepolkin, used in conjunction with {magick}
+* the [hexmake Shiny app](https://github.com/ColinFay/hexmake)[^login] by Colin Fay
 
-Surprise, I've made another one: [{hexbase}](https://github.com/matt-dray/hexbase). Why? I wanted to learn about low-level plotting with [{grid}](https://www.stat.auckland.ac.nz/~paul/grid/grid.html), one of R's built-in packages[^slaps]. The constraint of using _only_ {grid} in a simple, lightweight sticker-making package seemed a good exemplar (and a good wheeze).
+Surprise, I've made another one: [{hexbase}](https://github.com/matt-dray/hexbase). Why? I wanted to learn about low-level plotting with [{grid}](https://www.stat.auckland.ac.nz/~paul/grid/grid.html), one of R's built-in packages[^slaps]. The constraint of using only {grid} in a simple, lightweight package seemed a good test (and a good wheeze).
 
-I don't know if it's actually any good, but I learnt a lot.
+It's not perfect, but it does what I need and I learnt a lot.
 
 ## Do the griddy
 
-I reckon most R users make plots with [{ggplot2}](https://ggplot2.tidyverse.org/) otherwise R's native `plot()`ting system. I'll bet {grid}[^ggplot] is used less often. It's much lower-level and you have to build everything up yourself, but it is extremely flexible. 
+I reckon most R users make plots with [{ggplot2}](https://ggplot2.tidyverse.org/) otherwise R's native `plot()`ting system. I'll bet {grid}[^ggplot] is used less often. It's lower-level and you have to build everything up yourself, but it is extremely flexible. 
 
 To put it extremely simply, {grid} mostly works through a system of nested 'viewports' that you push and pop to add and arrange various graphics objects (grobs[^grob]) onto a graphics device. 
 
-This post isn't about {grid} because there's too much to cover. I found [Paul Murrell](https://www.stat.auckland.ac.nz/~paul/grid/grid.html)'s writings really helpful, which is no surprise as Paul is {grid}'s author. See also [Roger's chapter](https://bookdown.org/rdpeng/RProgDA/the-grid-package.html) for an intro.
+This post isn't a how-to for {grid} because there's too much to cover, though I might write a separate post to explain how {hexbase} uses {grid}. I found [Paul Murrell](https://www.stat.auckland.ac.nz/~paul/grid/grid.html)'s writings really helpful, which is no surprise as Paul is {grid}'s author. See also [Roger's chapter](https://bookdown.org/rdpeng/RProgDA/the-grid-package.html) for an intro.
 
 However, I did learn a few things I wanted to note to myself:
 
-* you can rotate a viewport but the x and y coordinates will be relative to the angle, so you need to put it inside another viewport that's relative to the sticker's coordindates
-* you can clip to a grob, which means you could clip out any text or image that falls outside the hexagon boundary
 * the `grDevices::png()` function has a handy `bg` argument that you can set to `"transparent"`
-* the default grid coordinate system is 'normalised parent coordinates' (0 to 1 on both axes), but the hexagon is not as wide as it is tall, so the `xscale` of the parent viewport can be set to the min and max width of the hexagon, while the `default.units` of the hexagon grobs can be set to `"native"`
+* you can clip to a grob, which means you could clip out any text or image that falls outside the hexagon boundary
+* you can rotate a viewport but the x and y coordinates will be relative to the angle, so you need to put it inside another viewport that's relative to the sticker's coordinates
+* the hexagon is not as wide as it is tall, so the x-axis on the default 'normalised parent coordinate' system (where the axes are 0 to 1) has to be narrowed by setting the viewport's `xscale` to hexagon limits, while the hexagon grob must have `default.units = "native"` so it's placed relative to that `xscale`
+* you can make the border by stacking a smaller hexagin on a bigger one, ensuring that the maximum extent of the sticker will fit inside a unit-1 square
+
+
 
 ## Cast a hex
 
-You could install {hexbase} [from GitHub](https://github.com/matt-dray/hexbase) like:
+If you want to give it a go, you can install {hexbase} [from GitHub](https://github.com/matt-dray/hexbase) like:
 
 ```{r}
 #| eval: false
@@ -54,9 +57,9 @@ install.packages("remotes")  # if not yet installed
 remotes::install_github("matt-dray/hexbase")
 ```
 
-As mentioned, the package only imports {grid} and {grDevices} from base R. Otherwise it's BYOIAF ('bring your own images and fonts') by importing with packages like {png} and by installing your fonts locally. Is that cheating? Nah, the `Imports` section in the `DESCRIPTION` file is clean as far as I'm concerned!
+As mentioned, the package only imports {grid} and {grDevices} from base R. Otherwise it's BYOIAF ('bring your own images and fonts') by importing with packages like {png} and by installing your fonts locally. Is that cheating? Nah, the `Imports` section in [the `DESCRIPTION` file](https://github.com/matt-dray/hexbase/blob/main/DESCRIPTION) is clean as far as I'm concerned!
 
-You can then build a sticker additively with a series of function calls:
+You can then build a sticker additively with a series of {hexbase} function calls:
 
 1. `open_device()` to set up a PNG graphics device with the dimensions of [the Stickers Standard](https://sticker.how/#type-hexagon).
 1. `add_hex()` to add the hexagon and border.
@@ -64,9 +67,9 @@ You can then build a sticker additively with a series of function calls:
 1. `add_text()` to place and style text (run multiple times for more text).
 1. `close_device()` to close the PNG graphics device and save to file.
 
-You can set various text and image properties like position, size, colour and angle. Text and images will be clipped if they exceed the boundary of the hexagon. Check the help files for all the explanation. 
+You can set various text and image properties like position, size, colour and angle. Note that the coordinates are relative to a unit square[^square] with axes of 0 to 1, a lower-left origin at [0, 0] and a centre at [0.5, 0.5]. Text and images will be clipped if they exceed the boundary of the hexagon. Check the help files for all the explanation. 
 
-Below is an extremely basic example. Note how you call each function independently (i.e. no pipes), much like writing base plots with successive calls to `plot()`, `points()`, `text()`, etc.
+Below is an extremely basic example to demonstrate a number of features. Note how you call each function independently (i.e. no pipes), much like writing base plots with successive calls to `plot()`, `points()`, `text()`, etc.
 
 ```{r}
 #| eval: false
@@ -74,12 +77,14 @@ Below is an extremely basic example. Note how you call each function independent
 # Somewhere to save it
 temp_path <- tempfile(fileext = ".png")
 
-# 'Bring your own image'
+# 'Bring your own image', e.g. with {png}
 image_path <- system.file("img", "Rlogo.png", package = "png")
 image_png <- png::readPNG(image_path)
 
 # Build up and write the sticker
-hexbase::open_device(file_path = temp_path)
+hexbase::open_device(  # open with sticker-standard dimensions
+  file_path = temp_path
+)
 hexbase::add_hex(
   border_width = 0.06,
   border_col = "hotpink3",
@@ -89,17 +94,17 @@ hexbase::add_image(
   image_object = image_png,
   image_y = 0.6,  # y = 0.5 is centre
   image_angle = 20,
-  image_width = 0.5
+  image_width = 0.5  # i.e. half of the npc coord system
 )
 hexbase::add_text(
   text_string = "example",
   text_x = 0.495,
   text_y = 0.35,
-  text_col = "#000000",  # named or hex
+  text_col = "#000000",  # named colour or hexadecimal
   text_family = "Comic Sans MS",  # must be installed locally
-  text_face = "bold"
+  text_face = "bold"  # or 'plain', 'italic', 'bold.italic'
 )
-hexbase::add_text(  # add multiple texts/images
+hexbase::add_text(  # add multiple text/images (in a loop?)
   text_string = "example",
   text_x = 0.505,
   text_y = 0.34,
@@ -111,12 +116,12 @@ hexbase::add_text(
   text_string = "visit https://rstats.lol ftw",
   text_x = 0.73, 
   text_y = 0.18,
-  text_angle = 30, 
-  text_size = 5, 
+  text_angle = 30,  # rotate to match lower-right edge
+  text_size = 5,  # point size
   text_col = "blue", 
   text_family = "Papyrus"
 )
-hexbase::close_device()
+hexbase::close_device()  # close viewports, write file
 ```
 
 You can then open the image for inspection. A quick way to do this from within R would be like `system(paste("open", temp_path))`. Note that you can't rely on plot-window previews (they lie) when you're developing your sticker. You must inspect the generated PNG file instead.
@@ -136,8 +141,8 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 </details>
 
 [^examples]: I've [made a few](https://github.com/matt-dray/stickers) myself.
-[^hexbin]: And beyond, if you take a look at [hexb.in](http://hexb.in/).
+[^login]: There seems to be [a problem with accessing the app](https://github.com/ColinFay/hexmake/issues/22) at time of writing.
 [^slaps]: [Base slaps](https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/), as they say.
 [^ggplot]: Though {grid} actually underpins {ggplot2}, so {ggplot2} extension-writers will be familiar.
-[^grob]: I swear this is the name of a _Magic_ creature or something.
-[^login]: At time of writing, the app seems to need a login, oddly.
+[^grob]: I swear this is the name of a _Magic: The Gathering_ creature or something.
+[^square]: Well, the initial plotting area is a unit-1 square, but the width of the hexagon is less than 1 on this scale, so two slivers are removed from the left and right of the hexagon. You can get the vertex point locations of the hexagon with the unexported `hexbase:::.get_hex_coords(diameter = 1)` function.
