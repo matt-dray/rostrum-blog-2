@@ -32,32 +32,33 @@
 </section>
 <section id="stick-around" class="level2">
 <h2 class="anchored" data-anchor-id="stick-around">Stick around</h2>
-<p>Hex stickers are obviously popular in the R community<sup>1</sup> for advertising your package or other projects<sup>2</sup>.</p>
+<p>Hex stickers are obviously popular in the R community <a href="http://hexb.in/">and beyond</a> for advertising your package or other projects<sup>1</sup>. So much so that there are packages to <a href="http://hexsession.liomys.mx/">organise your stickers</a>.</p>
 <p>There’s some existing tools to help you make these:</p>
 <ul>
 <li><a href="https://github.com/GuangchuangYu/hexSticker">{hexSticker}</a> by Guangchuang Yu</li>
-<li>the <a href="https://github.com/ColinFay/hexmake">hexmake Shiny app</a><sup>3</sup> by Colin Fay</li>
 <li><a href="https://github.com/dmi3kno/bunny">{bunny}</a> by Dmytro Perepolkin, used in conjunction with {magick}</li>
+<li>the <a href="https://github.com/ColinFay/hexmake">hexmake Shiny app</a><sup>2</sup> by Colin Fay</li>
 </ul>
-<p>Surprise, I’ve made another one: <a href="https://github.com/matt-dray/hexbase">{hexbase}</a>. Why? I wanted to learn about low-level plotting with <a href="https://www.stat.auckland.ac.nz/~paul/grid/grid.html">{grid}</a>, one of R’s built-in packages<sup>4</sup>. The constraint of using <em>only</em> {grid} in a simple, lightweight sticker-making package seemed a good exemplar (and a good wheeze).</p>
-<p>I don’t know if it’s actually any good, but I learnt a lot.</p>
+<p>Surprise, I’ve made another one: <a href="https://github.com/matt-dray/hexbase">{hexbase}</a>. Why? I wanted to learn about low-level plotting with <a href="https://www.stat.auckland.ac.nz/~paul/grid/grid.html">{grid}</a>, one of R’s built-in packages<sup>3</sup>. The constraint of using only {grid} in a simple, lightweight package seemed a good test (and a good wheeze).</p>
+<p>It’s not perfect, but it does what I need and I learnt a lot.</p>
 </section>
 <section id="do-the-griddy" class="level2">
 <h2 class="anchored" data-anchor-id="do-the-griddy">Do the griddy</h2>
-<p>I reckon most R users make plots with <a href="https://ggplot2.tidyverse.org/">{ggplot2}</a> otherwise R’s native <code>plot()</code>ting system. I’ll bet {grid}<sup>5</sup> is used less often. It’s much lower-level and you have to build everything up yourself, but it is extremely flexible.</p>
-<p>To put it extremely simply, {grid} mostly works through a system of nested ‘viewports’ that you push and pop to add and arrange various graphics objects (grobs<sup>6</sup>) onto a graphics device.</p>
-<p>This post isn’t about {grid} because there’s too much to cover. I found <a href="https://www.stat.auckland.ac.nz/~paul/grid/grid.html">Paul Murrell</a>’s writings really helpful, which is no surprise as Paul is {grid}’s author. See also <a href="https://bookdown.org/rdpeng/RProgDA/the-grid-package.html">Roger’s chapter</a> for an intro.</p>
+<p>I reckon most R users make plots with <a href="https://ggplot2.tidyverse.org/">{ggplot2}</a> otherwise R’s native <code>plot()</code>ting system. I’ll bet {grid}<sup>4</sup> is used less often. It’s lower-level and you have to build everything up yourself, but it is extremely flexible.</p>
+<p>To put it extremely simply, {grid} mostly works through a system of nested ‘viewports’ that you push and pop to add and arrange various graphics objects (grobs<sup>5</sup>) onto a graphics device.</p>
+<p>This post isn’t a how-to for {grid} because there’s too much to cover, though I might write a separate post to explain how {hexbase} uses {grid}. I found <a href="https://www.stat.auckland.ac.nz/~paul/grid/grid.html">Paul Murrell</a>’s writings really helpful, which is no surprise as Paul is {grid}’s author. See also <a href="https://bookdown.org/rdpeng/RProgDA/the-grid-package.html">Roger’s chapter</a> for an intro.</p>
 <p>However, I did learn a few things I wanted to note to myself:</p>
 <ul>
-<li>you can rotate a viewport but the x and y coordinates will be relative to the angle, so you need to put it inside another viewport that’s relative to the sticker’s coordindates</li>
-<li>you can clip to a grob, which means you could clip out any text or image that falls outside the hexagon boundary</li>
 <li>the <code>grDevices::png()</code> function has a handy <code>bg</code> argument that you can set to <code>"transparent"</code></li>
-<li>the default grid coordinate system is ‘normalised parent coordinates’ (0 to 1 on both axes), but the hexagon is not as wide as it is tall, so the <code>xscale</code> of the parent viewport can be set to the min and max width of the hexagon, while the <code>default.units</code> of the hexagon grobs can be set to <code>"native"</code></li>
+<li>you can clip to a grob, which means you could clip out any text or image that falls outside the hexagon boundary</li>
+<li>you can rotate a viewport but the x and y coordinates will be relative to the angle, so you need to put it inside another viewport that’s relative to the sticker’s coordinates</li>
+<li>the hexagon is not as wide as it is tall, so the x-axis on the default ‘normalised parent coordinate’ system (where the axes are 0 to 1) has to be narrowed by setting the viewport’s <code>xscale</code> to hexagon limits, while the hexagon grob must have <code>default.units = "native"</code> so it’s placed relative to that <code>xscale</code></li>
+<li>you can make the border by stacking a smaller hexagin on a bigger one, ensuring that the maximum extent of the sticker will fit inside a unit-1 square</li>
 </ul>
 </section>
 <section id="cast-a-hex" class="level2">
 <h2 class="anchored" data-anchor-id="cast-a-hex">Cast a hex</h2>
-<p>You could install {hexbase} <a href="https://github.com/matt-dray/hexbase">from GitHub</a> like:</p>
+<p>If you want to give it a go, you can install {hexbase} <a href="https://github.com/matt-dray/hexbase">from GitHub</a> like:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -74,8 +75,8 @@ font-style: inherit;">install_github</span>(<span class="st" style="color: #2079
 background-color: null;
 font-style: inherit;">"matt-dray/hexbase"</span>)</span></code></pre></div>
 </div>
-<p>As mentioned, the package only imports {grid} and {grDevices} from base R. Otherwise it’s BYOIAF (‘bring your own images and fonts’) by importing with packages like {png} and by installing your fonts locally. Is that cheating? Nah, the <code>Imports</code> section in the <code>DESCRIPTION</code> file is clean as far as I’m concerned!</p>
-<p>You can then build a sticker additively with a series of function calls:</p>
+<p>As mentioned, the package only imports {grid} and {grDevices} from base R. Otherwise it’s BYOIAF (‘bring your own images and fonts’) by importing with packages like {png} and by installing your fonts locally. Is that cheating? Nah, the <code>Imports</code> section in <a href="https://github.com/matt-dray/hexbase/blob/main/DESCRIPTION">the <code>DESCRIPTION</code> file</a> is clean as far as I’m concerned!</p>
+<p>You can then build a sticker additively with a series of {hexbase} function calls:</p>
 <ol type="1">
 <li><code>open_device()</code> to set up a PNG graphics device with the dimensions of <a href="https://sticker.how/#type-hexagon">the Stickers Standard</a>.</li>
 <li><code>add_hex()</code> to add the hexagon and border.</li>
@@ -83,8 +84,8 @@ font-style: inherit;">"matt-dray/hexbase"</span>)</span></code></pre></div>
 <li><code>add_text()</code> to place and style text (run multiple times for more text).</li>
 <li><code>close_device()</code> to close the PNG graphics device and save to file.</li>
 </ol>
-<p>You can set various text and image properties like position, size, colour and angle. Text and images will be clipped if they exceed the boundary of the hexagon. Check the help files for all the explanation.</p>
-<p>Below is an extremely basic example. Note how you call each function independently (i.e.&nbsp;no pipes), much like writing base plots with successive calls to <code>plot()</code>, <code>points()</code>, <code>text()</code>, etc.</p>
+<p>You can set various text and image properties like position, size, colour and angle. Note that the coordinates are relative to a unit square<sup>6</sup> with axes of 0 to 1, a lower-left origin at [0, 0] and a centre at [0.5, 0.5]. Text and images will be clipped if they exceed the boundary of the hexagon. Check the help files for all the explanation.</p>
+<p>Below is an extremely basic example to demonstrate a number of features. Note how you call each function independently (i.e.&nbsp;no pipes), much like writing base plots with successive calls to <code>plot()</code>, <code>points()</code>, <code>text()</code>, etc.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -101,7 +102,7 @@ font-style: inherit;">".png"</span>)</span>
 <span id="cb2-3"></span>
 <span id="cb2-4"><span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># 'Bring your own image'</span></span>
+font-style: inherit;"># 'Bring your own image', e.g. with {png}</span></span>
 <span id="cb2-5">image_path <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
@@ -130,180 +131,194 @@ font-style: inherit;"># Build up and write the sticker</span></span>
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">open_device</span>(<span class="at" style="color: #657422;
+font-style: inherit;">open_device</span>(  <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">file_path =</span> temp_path)</span>
-<span id="cb2-10">hexbase<span class="sc" style="color: #5E5E5E;
+font-style: inherit;"># open with sticker-standard dimensions</span></span>
+<span id="cb2-10">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">file_path =</span> temp_path</span>
+<span id="cb2-11">)</span>
+<span id="cb2-12">hexbase<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">add_hex</span>(</span>
-<span id="cb2-11">  <span class="at" style="color: #657422;
+<span id="cb2-13">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">border_width =</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.06</span>,</span>
-<span id="cb2-12">  <span class="at" style="color: #657422;
+<span id="cb2-14">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">border_col =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"hotpink3"</span>,</span>
-<span id="cb2-13">  <span class="at" style="color: #657422;
+<span id="cb2-15">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">bg_col =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"bisque"</span></span>
-<span id="cb2-14">)</span>
-<span id="cb2-15">hexbase<span class="sc" style="color: #5E5E5E;
+<span id="cb2-16">)</span>
+<span id="cb2-17">hexbase<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">add_image</span>(</span>
-<span id="cb2-16">  <span class="at" style="color: #657422;
+<span id="cb2-18">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">image_object =</span> image_png,</span>
-<span id="cb2-17">  <span class="at" style="color: #657422;
+<span id="cb2-19">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">image_y =</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.6</span>,  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># y = 0.5 is centre</span></span>
-<span id="cb2-18">  <span class="at" style="color: #657422;
+<span id="cb2-20">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">image_angle =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">20</span>,</span>
-<span id="cb2-19">  <span class="at" style="color: #657422;
+<span id="cb2-21">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">image_width =</span> <span class="fl" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">0.5</span></span>
-<span id="cb2-20">)</span>
-<span id="cb2-21">hexbase<span class="sc" style="color: #5E5E5E;
+font-style: inherit;">0.5</span>  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># i.e. half of the npc coord system</span></span>
+<span id="cb2-22">)</span>
+<span id="cb2-23">hexbase<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">add_text</span>(</span>
-<span id="cb2-22">  <span class="at" style="color: #657422;
+<span id="cb2-24">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_string =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"example"</span>,</span>
-<span id="cb2-23">  <span class="at" style="color: #657422;
+<span id="cb2-25">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_x =</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.495</span>,</span>
-<span id="cb2-24">  <span class="at" style="color: #657422;
+<span id="cb2-26">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_y =</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.35</span>,</span>
-<span id="cb2-25">  <span class="at" style="color: #657422;
+<span id="cb2-27">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_col =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"#000000"</span>,  <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># named or hex</span></span>
-<span id="cb2-26">  <span class="at" style="color: #657422;
+font-style: inherit;"># named colour or hexadecimal</span></span>
+<span id="cb2-28">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_family =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Comic Sans MS"</span>,  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># must be installed locally</span></span>
-<span id="cb2-27">  <span class="at" style="color: #657422;
+<span id="cb2-29">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_face =</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"bold"</span></span>
-<span id="cb2-28">)</span>
-<span id="cb2-29">hexbase<span class="sc" style="color: #5E5E5E;
+font-style: inherit;">"bold"</span>  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># or 'plain', 'italic', 'bold.italic'</span></span>
+<span id="cb2-30">)</span>
+<span id="cb2-31">hexbase<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">add_text</span>(  <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># add multiple texts/images</span></span>
-<span id="cb2-30">  <span class="at" style="color: #657422;
+font-style: inherit;"># add multiple text/images (in a loop?)</span></span>
+<span id="cb2-32">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_string =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"example"</span>,</span>
-<span id="cb2-31">  <span class="at" style="color: #657422;
+<span id="cb2-33">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_x =</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.505</span>,</span>
-<span id="cb2-32">  <span class="at" style="color: #657422;
+<span id="cb2-34">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_y =</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.34</span>,</span>
-<span id="cb2-33">  <span class="at" style="color: #657422;
+<span id="cb2-35">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_col =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"red"</span>,</span>
-<span id="cb2-34">  <span class="at" style="color: #657422;
+<span id="cb2-36">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_family =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Comic Sans MS"</span>,</span>
-<span id="cb2-35">  <span class="at" style="color: #657422;
+<span id="cb2-37">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_face =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"bold"</span></span>
-<span id="cb2-36">)</span>
-<span id="cb2-37">hexbase<span class="sc" style="color: #5E5E5E;
+<span id="cb2-38">)</span>
+<span id="cb2-39">hexbase<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">add_text</span>(</span>
-<span id="cb2-38">  <span class="at" style="color: #657422;
+<span id="cb2-40">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_string =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"visit https://rstats.lol ftw"</span>,</span>
-<span id="cb2-39">  <span class="at" style="color: #657422;
+<span id="cb2-41">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_x =</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.73</span>, </span>
-<span id="cb2-40">  <span class="at" style="color: #657422;
+<span id="cb2-42">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_y =</span> <span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0.18</span>,</span>
-<span id="cb2-41">  <span class="at" style="color: #657422;
+<span id="cb2-43">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_angle =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">30</span>, </span>
-<span id="cb2-42">  <span class="at" style="color: #657422;
+font-style: inherit;">30</span>,  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># rotate to match lower-right edge</span></span>
+<span id="cb2-44">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_size =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">5</span>, </span>
-<span id="cb2-43">  <span class="at" style="color: #657422;
+font-style: inherit;">5</span>,  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># point size</span></span>
+<span id="cb2-45">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_col =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"blue"</span>, </span>
-<span id="cb2-44">  <span class="at" style="color: #657422;
+<span id="cb2-46">  <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">text_family =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Papyrus"</span></span>
-<span id="cb2-45">)</span>
-<span id="cb2-46">hexbase<span class="sc" style="color: #5E5E5E;
+<span id="cb2-47">)</span>
+<span id="cb2-48">hexbase<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">close_device</span>()</span></code></pre></div>
+font-style: inherit;">close_device</span>()  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># close viewports, write file</span></span></code></pre></div>
 </div>
 <p>You can then open the image for inspection. A quick way to do this from within R would be like <code>system(paste("open", temp_path))</code>. Note that you can’t rely on plot-window previews (they lie) when you’re developing your sticker. You must inspect the generated PNG file instead.</p>
 <p>The (stunning) hex produced by this code can be found at the top of this post. Well done for being able to read this far after you burnt your eyes by looking at it.</p>
@@ -323,7 +338,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2025-01-31 23:46:41 GMT</code></pre>
+<pre><code>Last rendered: 2025-02-02 11:58:42 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.4.2 (2024-10-31)
@@ -356,12 +371,12 @@ loaded via a namespace (and not attached):
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>And beyond, if you take a look at <a href="http://hexb.in/">hexb.in</a>.↩︎</p></li>
-<li id="fn2"><p>I’ve <a href="https://github.com/matt-dray/stickers">made a few</a> myself.↩︎</p></li>
-<li id="fn3"><p>At time of writing, the app seems to need a login, oddly.↩︎</p></li>
-<li id="fn4"><p><a href="https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/">Base slaps</a>, as they say.↩︎</p></li>
-<li id="fn5"><p>Though {grid} actually underpins {ggplot2}, so {ggplot2} extension-writers will be familiar.↩︎</p></li>
-<li id="fn6"><p>I swear this is the name of a <em>Magic</em> creature or something.↩︎</p></li>
+<li id="fn1"><p>I’ve <a href="https://github.com/matt-dray/stickers">made a few</a> myself.↩︎</p></li>
+<li id="fn2"><p>There seems to be <a href="https://github.com/ColinFay/hexmake/issues/22">a problem with accessing the app</a> at time of writing.↩︎</p></li>
+<li id="fn3"><p><a href="https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/">Base slaps</a>, as they say.↩︎</p></li>
+<li id="fn4"><p>Though {grid} actually underpins {ggplot2}, so {ggplot2} extension-writers will be familiar.↩︎</p></li>
+<li id="fn5"><p>I swear this is the name of a <em>Magic: The Gathering</em> creature or something.↩︎</p></li>
+<li id="fn6"><p>Well, the initial plotting area is a unit-1 square, but the width of the hexagon is less than 1 on this scale, so two slivers are removed from the left and right of the hexagon. You can get the vertex point locations of the hexagon with the unexported <code>hexbase:::.get_hex_coords(diameter = 1)</code> function.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>grid</category>
