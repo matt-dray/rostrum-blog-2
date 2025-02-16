@@ -15,6 +15,13 @@ categories:
 
 I've made [{hexbase}](https://github.com/matt-dray/hexbase), a simple package to create hex stickers in R. The twist: it relies only on base R packages.
 
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+This post is about a package in development, so you can expect that the functions and interface (and maybe other things) may change after this post is written.
+
+</div>
+
 ## Stick around
 
 Hex stickers are obviously popular in the R community [and beyond](http://hexb.in/) for advertising your package or other projects[^examples]. So much so that there are packages to [organise your stickers](http://hexsession.liomys.mx/).
@@ -45,8 +52,6 @@ However, I did learn a few things I wanted to note to myself:
 * the hexagon is not as wide as it is tall, so the x-axis on the default 'normalised parent coordinate' system (where the axes are 0 to 1) has to be narrowed by setting the viewport's `xscale` to hexagon limits, while the hexagon grob must have `default.units = "native"` so it's placed relative to that `xscale`
 * you can make the border by stacking a smaller hexagin on a bigger one, ensuring that the maximum extent of the sticker will fit inside a unit-1 square
 
-
-
 ## Cast a hex
 
 If you want to give it a go, you can install {hexbase} [from GitHub](https://github.com/matt-dray/hexbase) like:
@@ -56,6 +61,8 @@ If you want to give it a go, you can install {hexbase} [from GitHub](https://git
 install.packages("remotes")  # if not yet installed
 remotes::install_github("matt-dray/hexbase")
 ```
+
+At time of writing, the package is at version 0.1.0. You can install that specific version by adding `@v0.1.0` to the end of the string in `install_github()`.
 
 As mentioned, the package only imports {grid} and {grDevices} from base R. Otherwise it's BYOIAF ('bring your own images and fonts') by importing with packages like {png} and by installing your fonts locally. Is that cheating? Nah, the `Imports` section in [the `DESCRIPTION` file](https://github.com/matt-dray/hexbase/blob/main/DESCRIPTION) is clean as far as I'm concerned!
 
