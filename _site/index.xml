@@ -10,7 +10,411 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Fri, 31 Jan 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 09 Feb 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>The {grid} underlying {hexbase}</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2025-02-09-hexbase-grid/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2025-02-09-hexbase-grid/resources/.png" class="img-fluid figure-img" style="width:50.0%" alt=""></p>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+</section>
+<section id="section" class="level2">
+<h2 class="anchored" data-anchor-id="section"></h2>
+<p>I <a href="https://www.rostrum.blog/posts/2025-01-31-hexbase/">wrote about</a> an R package I’d put together for making hex stickers, <a href="https://github.com/matt-dray/hexbase">{hexbase}</a>, which is built without dependencies. Instead it relies on <a href="https://www.stat.auckland.ac.nz/~paul/grid/grid.html">the {grid} package</a>, which is built into the base installation of R.</p>
+<p>{grid} lets you build up plots and layouts from basic principles, offering ultimate flexibility. Both {ggplot2} and the legendary {lattice} package, also part of base R, are made using {grid} under the hood.</p>
+<p>I chose to use {grid} for {hexbase} for a few reasons:</p>
+<ul>
+<li>when building a hex, you’re not really ‘plotting’ as much as you are ‘arranging’ elements</li>
+<li>you don’t necessarily <em>need</em> any dependencies for this task</li>
+<li>I’ve never used {grid}, lol</li>
+</ul>
+<p>I don’t want to write a guide for using {grid} because I know little and I feel like {hexbase} only scratches the surface anyway. Most of the code can be improved, but I thought I’d explain the approach used in {hexbase}.</p>
+</section>
+<section id="a-walkthrough" class="level2">
+<h2 class="anchored" data-anchor-id="a-walkthrough">A walkthrough</h2>
+<p>I’ll give a simple demo of {hexbase} in action and then step through the functions to give a conceptual overview.</p>
+<section id="the-front-end" class="level3">
+<h3 class="anchored" data-anchor-id="the-front-end">The front-end</h3>
+<p>From the user perspective, the steps are to:</p>
+<ol type="1">
+<li>Open a PNG graphics device with <code>open_hex()</code>.</li>
+<li>Add a hexagon with <code>add_hex()</code>.</li>
+<li>Add and arrange as many text and image elements as you like with <code>add_text()</code> and <code>add_image()</code>.</li>
+<li>Close the device and write the file with <code>close_device()</code>.</li>
+</ol>
+<p>We don’t need anything complex for this example. I just took a free image from a website and added it to a basic hex with some text:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">temp_path <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tempfile</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".png"</span>)</span>
+<span id="cb1-2"></span>
+<span id="cb1-3">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">open_device</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">file_path =</span> temp_path)</span>
+<span id="cb1-4">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_hex</span>(</span>
+<span id="cb1-5">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">border_col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"navy"</span>,</span>
+<span id="cb1-6">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">bg_col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"lightblue"</span></span>
+<span id="cb1-7">)</span>
+<span id="cb1-8">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_image</span>(</span>
+<span id="cb1-9">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">image_object =</span> png<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">readPNG</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"resources/turtle.png"</span>),</span>
+<span id="cb1-10">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">image_y =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.55</span>,</span>
+<span id="cb1-11">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">image_width =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.8</span></span>
+<span id="cb1-12">)</span>
+<span id="cb1-13">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_text</span>(</span>
+<span id="cb1-14">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_string =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"hexbase"</span>,</span>
+<span id="cb1-15">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_x =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.65</span>,</span>
+<span id="cb1-16">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_y =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.35</span>,</span>
+<span id="cb1-17">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">12</span>,</span>
+<span id="cb1-18">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_family =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Playwrite GB S"</span></span>
+<span id="cb1-19">)</span>
+<span id="cb1-20">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_text</span>(</span>
+<span id="cb1-21">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_string =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"github.com/matt-dray/hexbase"</span>,</span>
+<span id="cb1-22">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_x =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.73</span>, </span>
+<span id="cb1-23">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_y =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.17</span>,</span>
+<span id="cb1-24">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_angle =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span>, </span>
+<span id="cb1-25">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>,</span>
+<span id="cb1-26">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_family =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Playwrite GB S"</span>,</span>
+<span id="cb1-27">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">text_col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"navy"</span></span>
+<span id="cb1-28">)</span>
+<span id="cb1-29">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">close_device</span>()</span>
+<span id="cb1-30"></span>
+<span id="cb1-31"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">system</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"open"</span>, temp_path))</span></code></pre></div>
+</div>
+</section>
+<section id="the-back-end" class="level3">
+<h3 class="anchored" data-anchor-id="the-back-end">The back-end</h3>
+<p>So let me explain what’s going on in the code.</p>
+</section>
+</section>
+<section id="going-offgrid" class="level2">
+<h2 class="anchored" data-anchor-id="going-offgrid">Going off{grid}</h2>
+<p>Something I’m quite keen on is to allow for base plot to be added to the hex. This seems fitting; the packahge is made with base R, so wouldn’t it be nice to add a nice base R plot to the hex?</p>
+<p>This isn’t as easy as it seems. The <code>plot()</code> funciton, for example, isn’t built with {grid}. You have to convert this type of object to a grob so it can be placed on the hex.</p>
+<p>There seems to be an inescapable truth to this process: you need to depend on a package to do it easily. Prof Murrell has also created <a href="https://cran.r-project.org/package=gridBase">{gridBase}</a><sup>1</sup> to put a plot in a viewport and <a href="https://cran.r-project.org/package=gridGraphics">{gridGraphics}</a> to convert a plot to grobs. Using {gridgraphics}, <code>ggplotify::base2grob()</code> does what it says on the tin:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Start with hexbase</span></span>
+<span id="cb2-2">temp_path <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tempfile</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".png"</span>)</span>
+<span id="cb2-3">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">open_device</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">file_path =</span> temp_path)</span>
+<span id="cb2-4">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_hex</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>)</span>
+<span id="cb2-5"></span>
+<span id="cb2-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Add a base plot without {hexbase}</span></span>
+<span id="cb2-7">grid<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pushViewport</span>(grid<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">viewport</span>())</span>
+<span id="cb2-8">base_plot <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> ggplotify<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">base2grob</span>(</span>
+<span id="cb2-9">  \() {</span>
+<span id="cb2-10">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">par</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">mar =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">rep</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>))  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># no plot margin</span></span>
+<span id="cb2-11">    <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">plot</span>(</span>
+<span id="cb2-12">      <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">runif</span>(n), <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">runif</span>(n),  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 'random' points</span></span>
+<span id="cb2-13">      <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">xaxs =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"i"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">yaxs =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"i"</span>,  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># 'edge-to-edge' plot</span></span>
+<span id="cb2-14">      <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">axes =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">ann =</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">FALSE</span>,  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># no chart stuff</span></span>
+<span id="cb2-15">      <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">pch =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">16</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">palette.colors</span>(n, , , <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">TRUE</span>)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># style points</span></span>
+<span id="cb2-16">    )</span>
+<span id="cb2-17">  }</span>
+<span id="cb2-18">)</span>
+<span id="cb2-19">grid<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grid.draw</span>(base_plot)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># it's a grob now, we can draw it</span></span>
+<span id="cb2-20">grid<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">popViewport</span>()</span>
+<span id="cb2-21"></span>
+<span id="cb2-22"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Finish up with {hexbase}</span></span>
+<span id="cb2-23">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_text</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"hexbase"</span>)</span>
+<span id="cb2-24">hexbase<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">close_device</span>()</span>
+<span id="cb2-25"></span>
+<span id="cb2-26"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Open file to view it</span></span>
+<span id="cb2-27"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">system</span>(<span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">paste</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"open"</span>, temp_path))</span></code></pre></div>
+</div>
+<p>The question is whether I can engineer a function myself to convert base plots to grobs, or whether I’ll need to lean on e.g.&nbsp;{gridGraphics}. In the latter case, {hexbase} would no longer be ‘dependency free’. Instead it would be ‘dependency light’. I think this could be acceptable, given that {gridGraphics} is smallin size and is part of the ‘gridverse’ (I think we can make this a thing).</p>
+<p>However, the name ‘{hexbase}’ would then be stretching the truth slightly. Pretty sure that {hexNearlyButNotQuiteBaseOnly} is available on CRAN… might need to workshop that one. Ah well, at least I’ll be able to make a hex sticker for it, lol.</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2025-02-09 22:47:25 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.4.2 (2024-10-31)
+Platform: aarch64-apple-darwin20
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.4 compiler_4.4.2    fastmap_1.2.0     cli_3.6.3.9000   
+ [5] tools_4.4.2       htmltools_0.5.8.1 rstudioapi_0.16.0 yaml_2.3.10      
+ [9] rmarkdown_2.28    knitr_1.48        jsonlite_1.8.9    xfun_0.48        
+[13] digest_0.6.37     rlang_1.1.4       evaluate_1.0.1   </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Although with {gridBase} ‘it is not possible to embed base graphics output within a grid viewport that is rotated’. This might be inconsistent for {hexbase}, which allows you to rotate text and image grobs.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>grid</category>
+  <category>hexbase</category>
+  <category>r</category>
+  <guid>https://www.rostrum.blog/posts/2025-02-09-hexbase-grid/index.html</guid>
+  <pubDate>Sun, 09 Feb 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2025-02-09-hexbase-grid/resources/" medium="image"/>
+</item>
 <item>
   <title>Dependency-free hex stickers with {hexbase}</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -6459,150 +6863,6 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2023-11-01-qr-enabled-fn/index.html</guid>
   <pubDate>Wed, 01 Nov 2023 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Base slaps!</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I gave <a href="https://matt-dray.github.io/nhs-r-2023/">a lightning talk</a> at the <a href="https://nhsrcommunity.com/">NHS-R</a> Conference 2023 about base R.</p>
-</section>
-<section id="video" class="level2">
-<h2 class="anchored" data-anchor-id="video">Video</h2>
-<p>You can choose to <a href="https://youtu.be/q-JZxrDC0ck?feature=shared&amp;t=14298">watch the video on YouTube</a><sup>1</sup>.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div class="vembedr">
-<div>
-<iframe src="https://www.youtube.com/embed/q-JZxrDC0ck?start=14298" width="533" height="300" frameborder="0" allowfullscreen="" data-external="1"></iframe>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="slides" class="level2">
-<h2 class="anchored" data-anchor-id="slides">Slides</h2>
-<p>The slides are embedded below<sup>2</sup> or they can be <a href="https://matt-dray.github.io/nhs-r-2023/">opened in a dedicated tab</a>. Click on them and press <kbd>→</kbd> to advance, <kbd>F</kbd> to go fullscreen, and <kbd>S</kbd> to pop-out the speaker notes<sup>3</sup>.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div class="shareagain" style="min-width:300px;margin:1em auto;" data-exeternal="1">
-<iframe src="https://matt-dray.github.io/nhs-r-2023/" width="1600" height="900" style="border:2px solid currentColor;" loading="lazy" allowfullscreen=""></iframe>
-<script>fitvids('.shareagain', {players: 'iframe'});</script>
-</div>
-</div>
-</div>
-<p>The source is <a href="https://github.com/matt-dray/nhs-r-2023">on GitHub</a>. The slides are <a href="https://quarto.org/docs/presentations/">written with Quarto</a>, of course.</p>
-</section>
-<section id="premise" class="level2">
-<h2 class="anchored" data-anchor-id="premise">Premise</h2>
-<p>The abstract for the talk:</p>
-<blockquote class="blockquote">
-<p>Did you hear? Base R is dead! Or is it? I’ve spent most of my time in the public sector using the tidyverse, but I started learning R before the tidyverse existed (to be polite, you could call me ‘seasoned’). Recently I’ve started to write more base R code again. Why? I’ll talk about how base R can do loads of neat stuff out of the box without you needing to install and update any packages (dependencies aren’t bad things per se, but can cause trouble if not managed appropriately). I’ll also tell you about some recent additions, like the base pipe and lambda function notation, which demonstrate how base R is responding to the needs of the modern coder. Oh, and you can also do wacky stuff like make an interactive pixel-art creator, a persistent Tamagotchi pet, or a procedural dungeon-crawler. Note that this talk does not constitute a ‘base versus tidyverse’ flamewar. It’s purely to appreciate the elegance of good ol’ base R and to highlight some things it can do that you might not have realised (or like me, you forgot a long time ago).</p>
-</blockquote>
-<p>In other words, the content of the talk was neither new nor earth-shattering<sup>4</sup>. The basic premise was ‘base R is pretty neat, don’t forget it exists!’</p>
-<p>I have a narrow window of experience. I work in the public sector, mostly with people who publish statistical reports. The default for data preparation and analysis is often the tidyverse. That’s fine, for many reasons, but it may be overkill for small projects. Arguably, at worst, reproducibility may be jeopardised. And we <a href="https://analysisfunction.civilservice.gov.uk/support/reproducible-analytical-pipelines/">love reproducibility</a> in the public sector.</p>
-<p>My plea to fellow public-sector coders: use your tool of choice, but consider if base R can do it alone<sup>5</sup>. Or, at very least, become more acquainted with the built-in functions and (spoiler alert) maybe build some off-piste packages for a laugh.</p>
-</section>
-<section id="content" class="level2">
-<h2 class="anchored" data-anchor-id="content">Content</h2>
-<p>The talk mentions three beneficial things related to base R:</p>
-<ol type="1">
-<li>Stability.</li>
-<li>Dependency.</li>
-<li>Modernity.</li>
-</ol>
-<p>Re stability, vanilla R has changed little over time. Code written a couple of decades ago has a high chance of running now and will (likely) be executable for a long time into the future<sup>6</sup>. As a result, I contend that R is a horseshoe crab (unchanged for aeons, cryptically beautiful). And that R users are Milhouse in this relevant gif (look deep inside yourself, you are Milhouse).</p>
-<p><img src="https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/resources/nice-doggie.gif" class="img-fluid" style="width:50.0%" alt="Milhouse from the Simpsons pats a happy horseshoe crab on the head. Milhouse is not wearig his glasses. He thinks the crab is a dog."></p>
-<p>Re dependencies, R’s extensibility is one of its greatest strengths, but reducing the dependency count could help improve reproducibility and reduce headaches<sup>7</sup>. I used an obligatory (adapted) <a href="https://xkcd.com/2347/">xkcd comic</a> to illustrate this. Note that base R is the literal, unyielding base of the teetering tower of packages used by your project (incredible metaphor).</p>
-<p><img src="https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/resources/xkcd.png" class="img-fluid" style="width:50.0%" alt="Comic from xkcd. Lots of blocks are stacked on top of each other. One small block near the bottom is indicated. The implication is that removing the one small block will bring the whole thing down. The stack is labelled 'your project', the small block is labelled 'some dependency' and the big stable blocks underneath it at the bottom are labelled 'base'."></p>
-<p>Re ‘modernity’, high stability hasn’t stopped base R from also being adapted to meet the expectations of a contemporary coder. R version 4.0 has given us a ‘modern base aesthetic’ (trademark pending) of pipes (<code>|&gt;</code>), lambdas (<code>\()</code>) and string literals (<code>r"{}"</code>). R has morphed, much like the morphing of its janky old logo to the (perhaps already-outdated, lol) contemporary ‘flat’ design of the new logo<sup>8</sup>?</p>
-<p><img src="https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/resources/logo.gif" class="img-fluid" style="width:50.0%" alt="The old R logo morphs into the new R logo. The old has bevels, highlights and shadows. The new one is simpler with peak 'flat' design."></p>
-<p>But wait! A bonus thing:</p>
-<ol start="4" type="1">
-<li>‘Oddity’.</li>
-</ol>
-<p>Re oddity, base R has some hidden-gem functions that you can use for serious—or utterly nonserious things—like:</p>
-<ul>
-<li><code>locator()</code> to click a plot and have coordinates returned (e.g.&nbsp;in <a href="https://github.com/matt-dray/pixeltrix">my experimental {pixeltrix} package</a> for interactive pixel art)</li>
-<li><code>readline()</code> to accept user input interactively (e.g.&nbsp;i <a href="https://github.com/matt-dray/r.oguelike">my experimental {r.oguelike} package</a> for a ‘procedural dungeon-crawler’ in the R console)</li>
-<li><code>R_user_dir()</code> as a location for storing user data (e.g.&nbsp;in <a href="https://github.com/matt-dray/tamRgo">my experimental {tamRgo} package</a> for a persistent cyber pet in the R console)</li>
-</ul>
-<p>Despite all this, base R isn’t perfect for everyone in every situation<sup>9</sup>. Base <em>flaps</em> sometimes, that’s fine. You can argue it’s more terse and less readable than the verb-driven tidyverse, for example. But we have a duty in the public sector to think about long-term code survival. And high employee turnover rates mean we should perhaps default to the most vanilla tool.</p>
-<p>I like base R for writing functions and code I want to live for a long time, for example. I use the tidyverse for everyday data wrangling.</p>
-<p>But ultimately, I just wanted to do this terrible ‘base slaps’/‘slap bass’ pun, sorry. But also, I hear that zoomers say ‘slaps’ to mean ‘cool’. I think. Oh dear, this was a flimsy premise for a talk. Cringe-driven development?</p>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-11-28 23:20:58 GMT</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] assertthat_0.2.1    digest_0.6.33       R6_2.5.1           
- [4] fastmap_1.1.1       xfun_0.41           magrittr_2.0.3     
- [7] glue_1.6.2          stringr_1.5.0       knitr_1.45         
-[10] htmltools_0.5.6.1   rmarkdown_2.25      lifecycle_1.0.3    
-[13] cli_3.6.1           vctrs_0.6.4         compiler_4.3.1     
-[16] httr_1.4.7          vembedr_0.1.5       rstudioapi_0.15.0  
-[19] tools_4.3.1         xaringanExtra_0.7.0 curl_5.1.0         
-[22] evaluate_0.23       yaml_2.3.7          rlang_1.1.1        
-[25] jsonlite_1.8.7      htmlwidgets_1.6.2   stringi_1.7.12     </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>No Matt Dray presentation is complete without a ‘Dr Dre’ pun at beginning, lol. Only made funnier by my ongoing work with RAP (Reproducible Analytical Pipelines).↩︎</p></li>
-<li id="fn2"><p>I think there’ll be a video; I’ll link to it here when it’s released.↩︎</p></li>
-<li id="fn3"><p>Amusingly, these notes are absolutely not what I said in the talk itself, lol.↩︎</p></li>
-<li id="fn4"><p>Although at least one attendee’s mind was blown to discover that you can simultaneously assign and print an expression by wrapping it in brackets, like <code>(x &lt;- 1)</code>.↩︎</p></li>
-<li id="fn5"><p>But to be clear: I don’t think you should ‘just replace all your code with base R code’. There’s very few examples of where that would make sense. But is it worth importing all of {dplyr} if you just want to <code>select()</code>, <code>filter()</code> and <code>mutate()</code> a data.frame? Maybe, maybe not.↩︎</p></li>
-<li id="fn6"><p>Until we all switch to the Julia and/or Rust languages, amirite.↩︎</p></li>
-<li id="fn7"><p>Bearing in mind that tools like {renv}, Docker and Nix (thanks Bruno) can help coordinate dependencies. But that’s yet another tool to manage.↩︎</p></li>
-<li id="fn8"><p>I think this was incepted into my brain by Jeroen in <a href="https://docs.ropensci.org/magick/articles/intro.html">the {magick} docs</a>.↩︎</p></li>
-<li id="fn9"><p>See <a href="https://github.com/HenrikBengtsson/Wishlist-for-R/issues">the wishlist</a> that Henrik Bengtsson has been hosting.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>base</category>
-  <category>public-sector</category>
-  <category>r</category>
-  <category>talk</category>
-  <guid>https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/index.html</guid>
-  <pubDate>Mon, 16 Oct 2023 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
