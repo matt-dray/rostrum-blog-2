@@ -163,7 +163,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <h1 class="title">Dependency-free hex stickers with {hexbase}</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">grid</div>
-                <div class="quarto-category">hexbase</div>
+                <div class="quarto-category">gex</div>
                 <div class="quarto-category">r</div>
               </div>
                   </div>
@@ -208,10 +208,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I’ve made <a href="https://github.com/matt-dray/hexbase">{hexbase}</a>, a simple package to create hex stickers in R. The twist: it relies only on base R packages.</p>
+<p>I’ve made <a href="https://github.com/matt-dray/hexbase">{hexbase}</a>, a simple package to create hex stickers in R. The twist: it relies only on base R.</p>
 <div class="tip">
 <p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
-<p>This post is about a package in development, so you can expect that the functions and interface (and maybe other things) may change after this post is written.</p>
+<p>The package has been renamed to {gex} (loosely ‘grid’ + ‘hex’) and is now, ahem, ‘dependency-light’ to take advantage of other ‘gridverse’ packages (grid-graphics expansion packages made by Prof Murrell and others). The API for {gex} has also been updated relative to the version of {hexbase} shown in this post.</p>
 </div>
 </section>
 <section id="stick-around" class="level2">
@@ -230,7 +230,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="do-the-griddy">Do the griddy</h2>
 <p>I reckon most R users make plots with <a href="https://ggplot2.tidyverse.org/">{ggplot2}</a> otherwise R’s native <code>plot()</code>ting system. I’ll bet {grid}<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> is used less often. It’s lower-level and you have to build everything up yourself, but it is extremely flexible.</p>
 <p>To put it extremely simply, {grid} mostly works through a system of nested ‘viewports’ that you push and pop to add and arrange various graphics objects (grobs<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>) onto a graphics device.</p>
-<p>This post isn’t a how-to for {grid} because there’s too much to cover, though I might write a separate post to explain how {hexbase} uses {grid}. I found <a href="https://www.stat.auckland.ac.nz/~paul/grid/grid.html">Paul Murrell</a>’s writings really helpful, which is no surprise as Paul is {grid}’s author. See also <a href="https://bookdown.org/rdpeng/RProgDA/the-grid-package.html">Roger’s chapter</a> for an intro.</p>
+<p>This post isn’t a how-to for {grid} because there’s too much to cover, though I might write a separate post to explain how {hexbase} uses {grid}. I found <a href="https://www.stat.auckland.ac.nz/~paul/grid/grid.html">Prof Paul Murrell</a>’s writings really helpful, which is no surprise as Paul is {grid}’s author. See also <a href="https://bookdown.org/rdpeng/RProgDA/the-grid-package.html">Roger’s chapter</a> for an intro.</p>
 <p>However, I did learn a few things I wanted to note to myself:</p>
 <ul>
 <li>the <code>grDevices::png()</code> function has a handy <code>bg</code> argument that you can set to <code>"transparent"</code></li>
@@ -327,7 +327,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2025-02-16 16:09:36 GMT</code></pre>
+<pre><code>Last rendered: 2025-02-22 18:00:11 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.4.2 (2024-10-31)

@@ -28,10 +28,10 @@
 </div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I’ve made <a href="https://github.com/matt-dray/hexbase">{hexbase}</a>, a simple package to create hex stickers in R. The twist: it relies only on base R packages.</p>
+<p>I’ve made <a href="https://github.com/matt-dray/hexbase">{hexbase}</a>, a simple package to create hex stickers in R. The twist: it relies only on base R.</p>
 <div class="tip">
 <p> <b>Note</b></p>
-<p>This post is about a package in development, so you can expect that the functions and interface (and maybe other things) may change after this post is written.</p>
+<p>The package has been renamed to {gex} (loosely ‘grid’ + ‘hex’) and is now, ahem, ‘dependency-light’ to take advantage of other ‘gridverse’ packages (grid-graphics expansion packages made by Prof Murrell and others). The API for {gex} has also been updated relative to the version of {hexbase} shown in this post.</p>
 </div>
 </section>
 <section id="stick-around" class="level2">
@@ -50,7 +50,7 @@
 <h2 class="anchored" data-anchor-id="do-the-griddy">Do the griddy</h2>
 <p>I reckon most R users make plots with <a href="https://ggplot2.tidyverse.org/">{ggplot2}</a> otherwise R’s native <code>plot()</code>ting system. I’ll bet {grid}<sup>4</sup> is used less often. It’s lower-level and you have to build everything up yourself, but it is extremely flexible.</p>
 <p>To put it extremely simply, {grid} mostly works through a system of nested ‘viewports’ that you push and pop to add and arrange various graphics objects (grobs<sup>5</sup>) onto a graphics device.</p>
-<p>This post isn’t a how-to for {grid} because there’s too much to cover, though I might write a separate post to explain how {hexbase} uses {grid}. I found <a href="https://www.stat.auckland.ac.nz/~paul/grid/grid.html">Paul Murrell</a>’s writings really helpful, which is no surprise as Paul is {grid}’s author. See also <a href="https://bookdown.org/rdpeng/RProgDA/the-grid-package.html">Roger’s chapter</a> for an intro.</p>
+<p>This post isn’t a how-to for {grid} because there’s too much to cover, though I might write a separate post to explain how {hexbase} uses {grid}. I found <a href="https://www.stat.auckland.ac.nz/~paul/grid/grid.html">Prof Paul Murrell</a>’s writings really helpful, which is no surprise as Paul is {grid}’s author. See also <a href="https://bookdown.org/rdpeng/RProgDA/the-grid-package.html">Roger’s chapter</a> for an intro.</p>
 <p>However, I did learn a few things I wanted to note to myself:</p>
 <ul>
 <li>the <code>grDevices::png()</code> function has a handy <code>bg</code> argument that you can set to <code>"transparent"</code></li>
@@ -343,7 +343,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2025-02-16 16:09:36 GMT</code></pre>
+<pre><code>Last rendered: 2025-02-22 18:00:11 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.4.2 (2024-10-31)
@@ -385,7 +385,7 @@ loaded via a namespace (and not attached):
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>grid</category>
-  <category>hexbase</category>
+  <category>gex</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2025-01-31-hexbase/index.html</guid>
   <pubDate>Fri, 31 Jan 2025 00:00:00 GMT</pubDate>

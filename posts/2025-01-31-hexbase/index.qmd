@@ -5,7 +5,7 @@ slug: "hexbase"
 image: resources/demo-hex.png
 categories:
   - grid
-  - hexbase
+  - gex
   - r
 ---
 
@@ -13,12 +13,12 @@ categories:
 
 ## tl;dr
 
-I've made [{hexbase}](https://github.com/matt-dray/hexbase), a simple package to create hex stickers in R. The twist: it relies only on base R packages.
+I've made [{hexbase}](https://github.com/matt-dray/hexbase), a simple package to create hex stickers in R. The twist: it relies only on base R.
 
 <div class="tip"> 
 `r fontawesome::fa("exclamation-circle")` <b>Note</b>
 
-This post is about a package in development, so you can expect that the functions and interface (and maybe other things) may change after this post is written.
+The package has been renamed to {gex} (loosely 'grid' + 'hex') and is now, ahem, 'dependency-light' to take advantage of other 'gridverse' packages (grid-graphics expansion packages made by Prof Murrell and others). The API for {gex} has also been updated relative to the version of {hexbase} shown in this post.
 
 </div>
 
@@ -42,7 +42,7 @@ I reckon most R users make plots with [{ggplot2}](https://ggplot2.tidyverse.org/
 
 To put it extremely simply, {grid} mostly works through a system of nested 'viewports' that you push and pop to add and arrange various graphics objects (grobs[^grob]) onto a graphics device. 
 
-This post isn't a how-to for {grid} because there's too much to cover, though I might write a separate post to explain how {hexbase} uses {grid}. I found [Paul Murrell](https://www.stat.auckland.ac.nz/~paul/grid/grid.html)'s writings really helpful, which is no surprise as Paul is {grid}'s author. See also [Roger's chapter](https://bookdown.org/rdpeng/RProgDA/the-grid-package.html) for an intro.
+This post isn't a how-to for {grid} because there's too much to cover, though I might write a separate post to explain how {hexbase} uses {grid}. I found [Prof Paul Murrell](https://www.stat.auckland.ac.nz/~paul/grid/grid.html)'s writings really helpful, which is no surprise as Paul is {grid}'s author. See also [Roger's chapter](https://bookdown.org/rdpeng/RProgDA/the-grid-package.html) for an intro.
 
 However, I did learn a few things I wanted to note to myself:
 
