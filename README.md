@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 181 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2025-01-31 (latest).
+🔢 There have been 182 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2025-02-25 (latest).
 
 📅 That’s a post roughly every 14 days, or about 2.2 posts per month.
 
-🆕 The latest post: [Dependency-free hex stickers with
-{hexbase}](https://www.rostrum.blog/posts/2025-01-31-hexbase).
+🆕 The latest post: [Dependency-light hex stickers with
+{gex}](https://www.rostrum.blog/posts/2025-02-25-gex).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ between 2018-04-14 (first) to 2025-01-31 (latest).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 182 | 2025-02-25 | [Dependency-light hex stickers with {gex}](https://www.rostrum.blog/posts/2025-02-25-gex)                                      |
 | 181 | 2025-01-31 | [Dependency-free hex stickers with {hexbase}](https://www.rostrum.blog/posts/2025-01-31-hexbase)                               |
 | 180 | 2024-12-15 | [A roguelike sprite randomiser with Shiny](https://www.rostrum.blog/posts/2024-12-15-sprite-builder)                           |
 | 179 | 2024-11-16 | [Deploy a Shiny app to itch.io](https://www.rostrum.blog/posts/2024-11-16-itch)                                                |
@@ -227,4 +228,4 @@ between 2018-04-14 (first) to 2025-01-31 (latest).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2025-02-22 at 18:03.
+🕒 Last updated: 2025-02-25 at 22:26.
