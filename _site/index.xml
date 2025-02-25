@@ -28,14 +28,14 @@
 </div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>The package {hexbase} has been improved and renamed {gex}. It’s no longer ‘dependency free’, but has a goal of being ‘gridverse’ only. Sellout!</p>
+<p>The package {hexbase} has been improved and renamed <a href="https://github.com/matt-dray/gex">{gex}</a>. It’s no longer ‘dependency free’, but has a goal of being ‘gridverse’ only. Sellout!</p>
 </section>
 <section id="enter-the-gecko" class="level2">
 <h2 class="anchored" data-anchor-id="enter-the-gecko">Enter the gecko</h2>
 <p><a href="https://www.rostrum.blog/posts/2025-01-31-hexbase/">In my last post</a> I wrote about <a href="https://github.com/matt-dray/hexbase">{hexbase}</a>: a dependency-free hex-logo builder, which was helping me learn the basics of R’s grid-graphics system.</p>
 <p>Now the package goal is to stay ‘lightweight’ and import only Prof Murrell and co’s family of small ‘gridverse’ packages (I think I’ve invented this term?).<sup>1</sup></p>
-<p>A great example of the benefit is for the hex border. In {hexbase}, the ‘border’ was just the gap between a smaller hexagon inside a bigger one. Now, {gex} uses {gridGeometry}‘s <code>polyclipGrob()</code> with <code>op = "minus"</code> to ’cut out’ a smaller from a bigger hexagon to create a polygon that can be applied with <code>add_border()</code>.</p>
 <p>Hence the name change: ‘gex’ is an allusion to grid + hex. I liked ‘grex’ more, but it’s already taken on CRAN. Also, a certain flavour of 90s gamer might appreciate the new name.</p>
+<p>A great example of the benefit is for the hex border. In {hexbase}, the ‘border’ was just the gap between a smaller hexagon inside a bigger one. Now, {gex} uses {gridGeometry}‘s <code>polyclipGrob()</code> with <code>op = "minus"</code> to ’cut out’ a smaller from a bigger hexagon to create a polygon that can be applied with <code>add_border()</code>.</p>
 </section>
 <section id="cast-a-gex-hex" class="level2">
 <h2 class="anchored" data-anchor-id="cast-a-gex-hex">Cast a gex hex</h2>
@@ -47,8 +47,8 @@
 <li>Choose to overlay a border with <code>add_border()</code> (or not).</li>
 <li>Close the device and write the file with <code>close_device()</code>.</li>
 </ol>
-<p>Below is the code used to create the logo for the package itself (how meta), which is shown at the top of this post.</p>
-<p>First, install the package.</p>
+<p>Below is the code used to create the logo for the package itself (how meta), which is shown at the top of this post.<sup>2</sup></p>
+<p>First, install the package <a href="https://github.com/matt-dray/gex">from GitHub</a>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -560,7 +560,7 @@ font-style: inherit;">close_device</span>()</span></code></pre></div>
 </section>
 <section id="further-gexplorations" class="level2">
 <h2 class="anchored" data-anchor-id="further-gexplorations">Further gexplorations?</h2>
-<p>As ever, I’m having a nice time. Also as ever, I may choose to continue this or stop working on it entirely. The most important thing is that {gex} will help me towards the utopia of Hex-Driven Development (HDD), the one true method of developing R packages by <em>starting</em> with the sticker.<sup>2</sup></p>
+<p>As ever, I’m having a nice time. Also as ever, I may choose to continue this or stop working on it entirely. The most important thing is that {gex} will help me towards the utopia of Hex-Driven Development (HDD), the one true method of developing R packages by <em>starting</em> with the sticker.<sup>3</sup></p>
 
 </section>
 
@@ -573,7 +573,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2025-02-25 22:16:42 GMT</code></pre>
+<pre><code>Last rendered: 2025-02-25 22:34:12 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.4.2 (2024-10-31)
@@ -607,7 +607,8 @@ loaded via a namespace (and not attached):
 
 <ol>
 <li id="fn1"><p>There a few more packages listed in ‘Suggests’, but these are mostly used for testing or examples. A particular highlight is <a href="https://github.com/markvanderloo/tinytest">{tinytest}</a>, which I’m using for the first time and is very much in the ‘lightweight’ spirit.↩︎</p></li>
-<li id="fn2"><p>Could this explain why my packages don’t have millions of downloads? Am I so out of touch? <a href="https://frinkiac.com/caption/S05E20/291123">No, it’s the children who are wrong</a>.↩︎</p></li>
+<li id="fn2"><p>{gex} has also been used in anger to create the hex for <a href="https://github.com/best-practice-and-impact/aftables">{aftables}</a>, which is the new name for {a11ytables} that you may recall <a href="https://www.rostrum.blog/index.html#category=a11ytables">from earlier posts</a>. It’s also now <a href="https://cran.r-project.org/package=aftables">on CRAN</a> (thanks Olivia!).↩︎</p></li>
+<li id="fn3"><p>Could this explain why my packages don’t have millions of downloads? Am I so out of touch? <a href="https://frinkiac.com/caption/S05E20/291123">No, it’s the children who are wrong</a>.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>grid</category>

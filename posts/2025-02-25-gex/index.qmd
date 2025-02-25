@@ -13,7 +13,7 @@ categories:
 
 ## tl;dr
 
-The package {hexbase} has been improved and renamed {gex}. It's no longer 'dependency free', but has a goal of being 'gridverse' only. Sellout!
+The package {hexbase} has been improved and renamed [{gex}](https://github.com/matt-dray/gex). It's no longer 'dependency free', but has a goal of being 'gridverse' only. Sellout!
 
 ## Enter the gecko
 
@@ -21,9 +21,9 @@ The package {hexbase} has been improved and renamed {gex}. It's no longer 'depen
 
 Now the package goal is to stay 'lightweight' and import only Prof Murrell and co's family of small 'gridverse' packages (I think I've invented this term?).[^suggests]
 
-A great example of the benefit is for the hex border. In {hexbase}, the 'border' was just the gap between a smaller hexagon inside a bigger one. Now, {gex} uses {gridGeometry}'s `polyclipGrob()` with `op = "minus"` to 'cut out' a smaller from a bigger hexagon to create a polygon that can be applied with `add_border()`.
-
 Hence the name change: 'gex' is an allusion to grid + hex. I liked 'grex' more, but it's already taken on CRAN. Also, a certain flavour of 90s gamer might appreciate the new name.
+
+A great example of the benefit is for the hex border. In {hexbase}, the 'border' was just the gap between a smaller hexagon inside a bigger one. Now, {gex} uses {gridGeometry}'s `polyclipGrob()` with `op = "minus"` to 'cut out' a smaller from a bigger hexagon to create a polygon that can be applied with `add_border()`.
 
 ## Cast a gex hex
 
@@ -35,9 +35,9 @@ Building a hex with {gex} differs little from {hexbase}. The steps are:
 3. Choose to overlay a border with `add_border()` (or not).
 4. Close the device and write the file with `close_device()`.
 
-Below is the code used to create the logo for the package itself (how meta), which is shown at the top of this post.
+Below is the code used to create the logo for the package itself (how meta), which is shown at the top of this post.[^aftables]
 
-First, install the package.
+First, install the package [from GitHub](https://github.com/matt-dray/gex).
 
 ```{r}
 #| eval: false
@@ -198,5 +198,6 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 ```
 </details>
 
+[^aftables]: {gex} has also been used in anger to create the hex for [{aftables}](https://github.com/best-practice-and-impact/aftables), which is the new name for {a11ytables} that you may recall [from earlier posts](https://www.rostrum.blog/index.html#category=a11ytables). It's also now [on CRAN](https://cran.r-project.org/package=aftables) (thanks Olivia!).
 [^suggests]: There a few more packages listed in 'Suggests', but these are mostly used for testing or examples. A particular highlight is [{tinytest}](https://github.com/markvanderloo/tinytest), which I'm using for the first time and is very much in the 'lightweight' spirit.
 [^cran]: Could this explain why my packages don't have millions of downloads? Am I so out of touch? [No, it's the children who are wrong](https://frinkiac.com/caption/S05E20/291123).
