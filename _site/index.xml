@@ -10,11 +10,11 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Sun, 09 Feb 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Tue, 25 Feb 2025 00:00:00 GMT</lastBuildDate>
 <item>
-  <title>The {grid} underlying {hexbase}</title>
+  <title>Dependency-light hex stickers with {gex}</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2025-02-09-hexbase-grid/index.html</link>
+  <link>https://www.rostrum.blog/posts/2025-02-25-gex/index.html</link>
   <description><![CDATA[ 
 
 
@@ -22,198 +22,128 @@
 
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2025-02-09-hexbase-grid/resources/.png" class="img-fluid figure-img" style="width:50.0%" alt=""></p>
+<p><img src="https://www.rostrum.blog/posts/2025-02-25-gex/resources/logo.png" class="img-fluid figure-img" style="width:33.0%" alt="A hexagon logo for the package 'gex'. In the centre is italicised serif text saying the package name. The background is a repeating pattern of a line-drawn frill-winged lizards heading from lower-right to top-left. It has a border. The colours are olivedrab1 and olivedrab4 from base R's named colour palette."></p>
+<figcaption class="figure-caption">Would you buy this as a tasteful wallpaper?</figcaption>
 </figure>
 </div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>The package {hexbase} has been improved and renamed {gex}. It’s no longer ‘dependency free’, but has a goal of being ‘gridverse’ only. Sellout!</p>
 </section>
-<section id="section" class="level2">
-<h2 class="anchored" data-anchor-id="section"></h2>
-<p>I <a href="https://www.rostrum.blog/posts/2025-01-31-hexbase/">wrote about</a> an R package I’d put together for making hex stickers, <a href="https://github.com/matt-dray/hexbase">{hexbase}</a>, which is built without dependencies. Instead it relies on <a href="https://www.stat.auckland.ac.nz/~paul/grid/grid.html">the {grid} package</a>, which is built into the base installation of R.</p>
-<p>{grid} lets you build up plots and layouts from basic principles, offering ultimate flexibility. Both {ggplot2} and the legendary {lattice} package, also part of base R, are made using {grid} under the hood.</p>
-<p>I chose to use {grid} for {hexbase} for a few reasons:</p>
-<ul>
-<li>when building a hex, you’re not really ‘plotting’ as much as you are ‘arranging’ elements</li>
-<li>you don’t necessarily <em>need</em> any dependencies for this task</li>
-<li>I’ve never used {grid}, lol</li>
-</ul>
-<p>I don’t want to write a guide for using {grid} because I know little and I feel like {hexbase} only scratches the surface anyway. Most of the code can be improved, but I thought I’d explain the approach used in {hexbase}.</p>
+<section id="enter-the-gecko" class="level2">
+<h2 class="anchored" data-anchor-id="enter-the-gecko">Enter the gecko</h2>
+<p><a href="https://www.rostrum.blog/posts/2025-01-31-hexbase/">In my last post</a> I wrote about <a href="https://github.com/matt-dray/hexbase">{hexbase}</a>: a dependency-free hex-logo builder, which was helping me learn the basics of R’s grid-graphics system.</p>
+<p>Now the package goal is to stay ‘lightweight’ and import only Prof Murrell and co’s family of small ‘gridverse’ packages (I think I’ve invented this term?).<sup>1</sup></p>
+<p>A great example of the benefit is for the hex border. In {hexbase}, the ‘border’ was just the gap between a smaller hexagon inside a bigger one. Now, {gex} uses {gridGeometry}‘s <code>polyclipGrob()</code> with <code>op = "minus"</code> to ’cut out’ a smaller from a bigger hexagon to create a polygon that can be applied with <code>add_border()</code>.</p>
+<p>Hence the name change: ‘gex’ is an allusion to grid + hex. I liked ‘grex’ more, but it’s already taken on CRAN. Also, a certain flavour of 90s gamer might appreciate the new name.</p>
 </section>
-<section id="a-walkthrough" class="level2">
-<h2 class="anchored" data-anchor-id="a-walkthrough">A walkthrough</h2>
-<p>I’ll give a simple demo of {hexbase} in action and then step through the functions to give a conceptual overview.</p>
-<section id="the-front-end" class="level3">
-<h3 class="anchored" data-anchor-id="the-front-end">The front-end</h3>
-<p>From the user perspective, the steps are to:</p>
+<section id="cast-a-gex-hex" class="level2">
+<h2 class="anchored" data-anchor-id="cast-a-gex-hex">Cast a gex hex</h2>
+<p>Building a hex with {gex} differs little from {hexbase}. The steps are:</p>
 <ol type="1">
 <li>Open a PNG graphics device with <code>open_hex()</code>.</li>
-<li>Add a hexagon with <code>add_hex()</code>.</li>
+<li>Add the hexagon with <code>add_hex()</code>.</li>
 <li>Add and arrange as many text and image elements as you like with <code>add_text()</code> and <code>add_image()</code>.</li>
+<li>Choose to overlay a border with <code>add_border()</code> (or not).</li>
 <li>Close the device and write the file with <code>close_device()</code>.</li>
 </ol>
-<p>We don’t need anything complex for this example. I just took a free image from a website and added it to a basic hex with some text:</p>
+<p>Below is the code used to create the logo for the package itself (how meta), which is shown at the top of this post.</p>
+<p>First, install the package.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">temp_path <span class="ot" style="color: #003B4F;
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+font-style: inherit;">install.packages</span>(<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">tempfile</span>(<span class="at" style="color: #657422;
+font-style: inherit;">"remotes"</span>)  <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">".png"</span>)</span>
-<span id="cb1-2"></span>
-<span id="cb1-3">hexbase<span class="sc" style="color: #5E5E5E;
+font-style: inherit;"># if not yet installed</span></span>
+<span id="cb1-2">remotes<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">open_device</span>(<span class="at" style="color: #657422;
+font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">file_path =</span> temp_path)</span>
-<span id="cb1-4">hexbase<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">add_hex</span>(</span>
-<span id="cb1-5">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">border_col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"navy"</span>,</span>
-<span id="cb1-6">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">bg_col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"lightblue"</span></span>
-<span id="cb1-7">)</span>
-<span id="cb1-8">hexbase<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">add_image</span>(</span>
-<span id="cb1-9">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">image_object =</span> png<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">readPNG</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"resources/turtle.png"</span>),</span>
-<span id="cb1-10">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">image_y =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.55</span>,</span>
-<span id="cb1-11">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">image_width =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.8</span></span>
-<span id="cb1-12">)</span>
-<span id="cb1-13">hexbase<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">add_text</span>(</span>
-<span id="cb1-14">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text_string =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"hexbase"</span>,</span>
-<span id="cb1-15">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text_x =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.65</span>,</span>
-<span id="cb1-16">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text_y =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.35</span>,</span>
-<span id="cb1-17">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text_size =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">12</span>,</span>
-<span id="cb1-18">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text_family =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Playwrite GB S"</span></span>
-<span id="cb1-19">)</span>
-<span id="cb1-20">hexbase<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">add_text</span>(</span>
-<span id="cb1-21">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text_string =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"github.com/matt-dray/hexbase"</span>,</span>
-<span id="cb1-22">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text_x =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.73</span>, </span>
-<span id="cb1-23">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text_y =</span> <span class="fl" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0.17</span>,</span>
-<span id="cb1-24">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text_angle =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">30</span>, </span>
-<span id="cb1-25">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text_size =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span>,</span>
-<span id="cb1-26">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text_family =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Playwrite GB S"</span>,</span>
-<span id="cb1-27">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">text_col =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"navy"</span></span>
-<span id="cb1-28">)</span>
-<span id="cb1-29">hexbase<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">close_device</span>()</span>
-<span id="cb1-30"></span>
-<span id="cb1-31"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">system</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">paste</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"open"</span>, temp_path))</span></code></pre></div>
+font-style: inherit;">"matt-dray/gex"</span>)</span></code></pre></div>
 </div>
-</section>
-<section id="the-back-end" class="level3">
-<h3 class="anchored" data-anchor-id="the-back-end">The back-end</h3>
-<p>So let me explain what’s going on in the code.</p>
-</section>
-</section>
-<section id="going-offgrid" class="level2">
-<h2 class="anchored" data-anchor-id="going-offgrid">Going off{grid}</h2>
-<p>Something I’m quite keen on is to allow for base plot to be added to the hex. This seems fitting; the packahge is made with base R, so wouldn’t it be nice to add a nice base R plot to the hex?</p>
-<p>This isn’t as easy as it seems. The <code>plot()</code> funciton, for example, isn’t built with {grid}. You have to convert this type of object to a grob so it can be placed on the hex.</p>
-<p>There seems to be an inescapable truth to this process: you need to depend on a package to do it easily. Prof Murrell has also created <a href="https://cran.r-project.org/package=gridBase">{gridBase}</a><sup>1</sup> to put a plot in a viewport and <a href="https://cran.r-project.org/package=gridGraphics">{gridGraphics}</a> to convert a plot to grobs. Using {gridgraphics}, <code>ggplotify::base2grob()</code> does what it says on the tin:</p>
+<p>Image manipulation is at the the user’s discretion before being added to the hex. Here I’ll use {magick} to wrangle a line-drawing of a lizard that I want to use (which is bundled in the package), turning it from black to green. I’ll save it as a new PNG and re-read it.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">img_tmp <span class="ot" style="color: #003B4F;
 background-color: null;
-font-style: inherit;"># Start with hexbase</span></span>
-<span id="cb2-2">temp_path <span class="ot" style="color: #003B4F;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tempfile</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".png"</span>)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># temp storage for image</span></span>
+<span id="cb2-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">system.file</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"images"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"lizard.png"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">package =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gex"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb2-3">  magick<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">image_read</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb2-4">  magick<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">image_fill</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"olivedrab1"</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fuzz =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">refcolor =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"black"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb2-5">  magick<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">image_write</span>(img_tmp)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># write</span></span>
+<span id="cb2-6">img <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> png<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">readPNG</span>(img_tmp)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># read the edited image</span></span></code></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2025-02-25-gex/resources/lizard-olivedrab1.png" class="img-fluid figure-img" style="width:20.0%" alt="A line drawing of a lizard, mouth agape, with a winglike frill extending from its fore to hind limbs. The linework is in a bright shade of olive drab."></p>
+<figcaption class="figure-caption">Charming little fellow.</figcaption>
+</figure>
+</div>
+<p>Now I’ll start building the hex. Here I’m using loops to write multiple images and to add the text twice with an offset and different colours for a drop-shadow effect.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Set up write location and graphics device</span></span>
+<span id="cb3-2">temp_path <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -222,25 +152,246 @@ background-color: null;
 font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">".png"</span>)</span>
-<span id="cb2-3">hexbase<span class="sc" style="color: #5E5E5E;
+<span id="cb3-3">gex<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">open_device</span>(<span class="at" style="color: #657422;
+font-style: inherit;">open_device</span>(temp_path)</span>
+<span id="cb3-4"></span>
+<span id="cb3-5"><span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">file_path =</span> temp_path)</span>
-<span id="cb2-4">hexbase<span class="sc" style="color: #5E5E5E;
+font-style: inherit;"># Add same image multiple times in a loop</span></span>
+<span id="cb3-6">gex<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">add_hex</span>(<span class="dv" style="color: #AD0000;
+font-style: inherit;">add_hex</span>(<span class="at" style="color: #657422;
 background-color: null;
-font-style: inherit;">0</span>)</span>
-<span id="cb2-5"></span>
-<span id="cb2-6"><span class="co" style="color: #5E5E5E;
+font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;"># Add a base plot without {hexbase}</span></span>
-<span id="cb2-7">grid<span class="sc" style="color: #5E5E5E;
+font-style: inherit;">"olivedrab4"</span>)</span>
+<span id="cb3-7"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (x <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq</span>(<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.04</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.2</span>)) {  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># add many images in a loop</span></span>
+<span id="cb3-8">  <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (y <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">seq</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1</span>, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.16</span>)) {</span>
+<span id="cb3-9">    gex<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_image</span>(img, x, y, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">width =</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.3</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">angle =</span> <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">30</span>)</span>
+<span id="cb3-10">  }</span>
+<span id="cb3-11">}</span>
+<span id="cb3-12"></span>
+<span id="cb3-13"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Add text with 'drop shadow'</span></span>
+<span id="cb3-14">font <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"IBM Plex Serif"</span>  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># installed on my system</span></span>
+<span id="cb3-15">x <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.52</span>; y <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.56</span>  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># starting positions</span></span>
+<span id="cb3-16">styles <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># to loop over</span></span>
+<span id="cb3-17">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">coords =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> x <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.01</span>, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> y <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.01</span>), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"olivedrab4"</span>),</span>
+<span id="cb3-18">  <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">coords =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">c</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> x, <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> y), <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"olivedrab1"</span>)</span>
+<span id="cb3-19">)</span>
+<span id="cb3-20"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> (style <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> styles) {</span>
+<span id="cb3-21">  gex<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_text</span>(</span>
+<span id="cb3-22">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">string =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"gex"</span>,</span>
+<span id="cb3-23">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">x =</span> style[[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"coords"</span>]][[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"x"</span>]],</span>
+<span id="cb3-24">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">y =</span> style[[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"coords"</span>]][[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y"</span>]],</span>
+<span id="cb3-25">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">size =</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">60</span>,</span>
+<span id="cb3-26">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col =</span> style[[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"col"</span>]],</span>
+<span id="cb3-27">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">family =</span> font,</span>
+<span id="cb3-28">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">face =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"italic"</span></span>
+<span id="cb3-29">  )</span>
+<span id="cb3-30">}</span>
+<span id="cb3-31"></span>
+<span id="cb3-32"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Add border and write file</span></span>
+<span id="cb3-33">gex<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_border</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">col =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"olivedrab1"</span>)</span>
+<span id="cb3-34">gex<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">close_device</span>()</span></code></pre></div>
+</div>
+<p>As mentioned previously, you build the hex by opening a device and adding elements to it, before closing it to save the file. That may make some people uncomfortable since there’s no ‘object’ as such; you can’t pipe between functions in {gex}. But this comes as no surprise to base and grid-graphics enjoyers, which is kind of the target market. There are dozens of us!</p>
+<p>Having said this, I did enjoy <a href="https://kieranhealy.org/blog/archives/2025/02/06/kerning-and-kerning-in-a-widening-gyre/">Kieran’s recent sermon</a> on this style of interaction:</p>
+<blockquote class="blockquote">
+<p>We have to remember to turn the device off once we’re done with it, like it’s 1997. If you forget, you won’t notice for a while but eventually it’s like your Dad is gonna yell at you because you forgot to turn the lights off downstairs before you went to bed or you left the fridge door open after you went to get a drink of milk or you opened the window while the air conditioning is running in the house what the hell kind of child have I raised.</p>
+</blockquote>
+<p>I’m (probably) not your dad and you (probably) weren’t raised in a barn; I trust you to <code>close_device()</code> when using {gex}. Also, the package is partly named after a videogame from pre-1997, so it’d be anachronistic to do it any other way, amirite?</p>
+</section>
+<section id="going-on-grid" class="level2">
+<h2 class="anchored" data-anchor-id="going-on-grid">Going <em>on</em> grid</h2>
+<p>Since {gex} uses the grid graphics system, other ‘gridverse’ packages can be used to help make your hex. Two others are <a href="https://cran.r-project.org/package=gridBase">{gridBase}</a> to put a base R plot in a viewport and <a href="https://cran.r-project.org/package=gridGraphics">{gridGraphics}</a> to convert that plot to a grob. Handily, Guangchuang Yu (of {hexSticker} fame!) wrapped this up in <code>ggplotify::base2grob()</code>, which does what it says on the tin.</p>
+<p>Here’s a plot of multicoloured points applied to a hex. Note all the {grid} calls, which are the type of thing that {gex} hides in its functions so you don’t have to think about it (more on that later in the post).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Start with {gex}</span></span>
+<span id="cb4-2">temp_path <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tempfile</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".png"</span>)</span>
+<span id="cb4-3">gex<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">open_device</span>(temp_path)</span>
+<span id="cb4-4">gex<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_hex</span>()</span>
+<span id="cb4-5"></span>
+<span id="cb4-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Add a base plot without {gex}</span></span>
+<span id="cb4-7">grid<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -249,15 +400,15 @@ background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">viewport</span>())</span>
-<span id="cb2-8">base_plot <span class="ot" style="color: #003B4F;
+<span id="cb4-8">base_plot <span class="ot" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">&lt;-</span> ggplotify<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">base2grob</span>(</span>
-<span id="cb2-9">  \() {</span>
-<span id="cb2-10">    <span class="fu" style="color: #4758AB;
+<span id="cb4-9">  \() {</span>
+<span id="cb4-10">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">par</span>(<span class="at" style="color: #657422;
 background-color: null;
@@ -270,17 +421,22 @@ background-color: null;
 font-style: inherit;">4</span>))  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># no plot margin</span></span>
-<span id="cb2-11">    <span class="fu" style="color: #4758AB;
+<span id="cb4-11">    n <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1000</span></span>
+<span id="cb4-12">    <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">plot</span>(</span>
-<span id="cb2-12">      <span class="fu" style="color: #4758AB;
+<span id="cb4-13">      <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">runif</span>(n), <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">runif</span>(n),  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># 'random' points</span></span>
-<span id="cb2-13">      <span class="at" style="color: #657422;
+<span id="cb4-14">      <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">xaxs =</span> <span class="st" style="color: #20794D;
 background-color: null;
@@ -291,7 +447,7 @@ background-color: null;
 font-style: inherit;">"i"</span>,  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># 'edge-to-edge' plot</span></span>
-<span id="cb2-14">      <span class="at" style="color: #657422;
+<span id="cb4-15">      <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">axes =</span> <span class="cn" style="color: #8f5902;
 background-color: null;
@@ -302,7 +458,7 @@ background-color: null;
 font-style: inherit;">FALSE</span>,  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># no chart stuff</span></span>
-<span id="cb2-15">      <span class="at" style="color: #657422;
+<span id="cb4-16">      <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">pch =</span> <span class="dv" style="color: #AD0000;
 background-color: null;
@@ -315,51 +471,96 @@ background-color: null;
 font-style: inherit;">TRUE</span>)  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># style points</span></span>
-<span id="cb2-16">    )</span>
-<span id="cb2-17">  }</span>
-<span id="cb2-18">)</span>
-<span id="cb2-19">grid<span class="sc" style="color: #5E5E5E;
+<span id="cb4-17">    )</span>
+<span id="cb4-18">  }</span>
+<span id="cb4-19">)</span>
+<span id="cb4-20">grid<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">grid.draw</span>(base_plot)  <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># it's a grob now, we can draw it</span></span>
-<span id="cb2-20">grid<span class="sc" style="color: #5E5E5E;
+<span id="cb4-21">grid<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">popViewport</span>()</span>
-<span id="cb2-21"></span>
-<span id="cb2-22"><span class="co" style="color: #5E5E5E;
+<span id="cb4-22"></span>
+<span id="cb4-23"><span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># Finish up with {hexbase}</span></span>
-<span id="cb2-23">hexbase<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">add_text</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"hexbase"</span>)</span>
-<span id="cb2-24">hexbase<span class="sc" style="color: #5E5E5E;
+font-style: inherit;"># Finish up with {gex}</span></span>
+<span id="cb4-24">gex<span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
 background-color: null;
-font-style: inherit;">close_device</span>()</span>
-<span id="cb2-25"></span>
-<span id="cb2-26"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Open file to view it</span></span>
-<span id="cb2-27"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">system</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">paste</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"open"</span>, temp_path))</span></code></pre></div>
+font-style: inherit;">close_device</span>()</span></code></pre></div>
 </div>
-<p>The question is whether I can engineer a function myself to convert base plots to grobs, or whether I’ll need to lean on e.g.&nbsp;{gridGraphics}. In the latter case, {hexbase} would no longer be ‘dependency free’. Instead it would be ‘dependency light’. I think this could be acceptable, given that {gridGraphics} is smallin size and is part of the ‘gridverse’ (I think we can make this a thing).</p>
-<p>However, the name ‘{hexbase}’ would then be stretching the truth slightly. Pretty sure that {hexNearlyButNotQuiteBaseOnly} is available on CRAN… might need to workshop that one. Ah well, at least I’ll be able to make a hex sticker for it, lol.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2025-02-25-gex/resources/base-grob.png" class="img-fluid figure-img" style="width:25.0%" alt="A black hexagon filled with a thousand small circles of varying colours."></p>
+</figure>
+</div>
+<p>Other grid-adjacent packages could be used as well. Trevor has put together <a href="https://trevorldavis.com/R/gridpattern/dev/">{gridpattern}</a> to allow for pattern and gradient fills. For example, you could call <code>grid.pattern_gradient()</code> to add a splendid background to your hex.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1">temp_path <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tempfile</span>(<span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">fileext =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">".png"</span>)</span>
+<span id="cb5-2">gex<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">open_device</span>(temp_path)</span>
+<span id="cb5-3">gex<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">add_hex</span>()</span>
+<span id="cb5-4">gridpattern<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">grid.pattern_gradient</span>()</span>
+<span id="cb5-5">gex<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">close_device</span>()</span></code></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2025-02-25-gex/resources/pattern.png" class="img-fluid figure-img" style="width:25.0%" alt="A hexagon with a tasteful colour-gradient background."></p>
+</figure>
+</div>
+<p>Lovely.</p>
+</section>
+<section id="the-sticky-back-end" class="level2">
+<h2 class="anchored" data-anchor-id="the-sticky-back-end">The sticky back-end</h2>
+<p>In case you’re wondering what’s going on under the hood, here’s a simplified description. This is more for the nerds. Which is what you are if you’ve read this far.</p>
+<section id="grid-reference" class="level3">
+<h3 class="anchored" data-anchor-id="grid-reference">Grid reference</h3>
+<p>You can find lots of useful material about {grid} and the ‘gridverse’ on <a href="https://www.stat.auckland.ac.nz/~paul/grid/grid.html">the dedicated page</a> of The University of Auckland’s website and on Prof Murrell’s <a href="https://www.stat.auckland.ac.nz/~paul/">home page</a>. Read that first.</p>
+<p>But here’s a massive oversimplification anyway. With grid graphics you draw ‘grobs’ (graphics objects, like polygons, lines and text) into little windows on your canvas called ‘viewports’. You create a viewport with various properties (size, position, rotation, etc), ‘push’ to activate it, draw your grobs inside it and then ‘pop’ the viewport to add it to your canvas. Importantly, you can nest viewports for finer control or to inherit characteristics. Note that the default coordinates of your canvas are on ‘npc’ (native parent coordinates) units, meaning a 1 × 1 area with origin [0,0] in the lower left.</p>
+<p>{gex} probably doesn’t use {grid} optimally, but I’ve learnt enough for the package to work for my own needs at least.</p>
+</section>
+<section id="push-pops" class="level3">
+<h3 class="anchored" data-anchor-id="push-pops">Push pops</h3>
+<p>With {gex}, you start by running <code>open_device()</code> to call a <code>png()</code> graphics device pre-filled with the width and height of the stickers standard, plus a transparent background. The graphics device will be populated with grobs and eventually saved to file in <code>close_device()</code>.</p>
+<p>Next, the <code>add_hex()</code> function. It first sets up a <code>polygonGrob</code> of hexagon vertices, which is used in two ways. First, a viewport is pushed with the grob as a <code>clip</code> mask, which means anything falling outside of the hexagon area will be deleted when this viewport is popped. This happens as the end in <code>close_device()</code>. Second, we <code>grid.draw()</code> the grob in its own viewport so its added to the canvas. Since a ‘point-up’ hexagon is slightly narrower than tall, we remove the ‘slivers’ either side of it on the x-axis by setting the enclosing viewport’s <code>xscale</code> to the maximum hexagon width. This ensures that our final PNG file goes ‘edge to edge’. The hex grobs are added with ‘native’ rather than ‘npc’ units so that they’re relative to that ‘sliverless’ viewport.</p>
+<p>The <code>add_text()</code> and <code>add_image()</code> functions work in similar fashion: a viewport is opened to house a grob, which is drawn with <code>grid.text()</code> or <code>grid.raster()</code>. Crucially, we put that grob in another viewport in which we can control rotation. We nest the viewports this way so that the user controls the x and y positions or a rotated text or image relative to the hex. If we didn’t do this, the x and y positions would be relative to the element’s angle of rotation.</p>
+<p>You would typically use <code>add_border()</code> at this stage, if you want to. The border is just a polygon with the same coordinates as in <code>add_hex()</code>, but with a smaller hexagon cut out of the middle. The <code>width</code> of the border is just the inverse ratio of the inner to the outer hexagon size. By placing this after the text and images, it will overlay them if they inhabit the same coordinates.</p>
+<p>Finally, we <code>close_device()</code> to pop the ‘hanging’ viewports we pushed in <code>open_device()</code> at the start. This includes the one that clips out any content that falls outside the extent of the hexagon. The function also contains a call to <code>dev.off()</code> to close the device and save the image to the path specified by <code>file_path</code> in <code>open_device()</code>.</p>
+</section>
+</section>
+<section id="further-gexplorations" class="level2">
+<h2 class="anchored" data-anchor-id="further-gexplorations">Further gexplorations?</h2>
+<p>As ever, I’m having a nice time. Also as ever, I may choose to continue this or stop working on it entirely. The most important thing is that {gex} will help me towards the utopia of Hex-Driven Development (HDD), the one true method of developing R packages by <em>starting</em> with the sticker.<sup>2</sup></p>
 
 </section>
 
@@ -372,7 +573,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2025-02-09 22:47:25 GMT</code></pre>
+<pre><code>Last rendered: 2025-02-25 22:16:42 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.4.2 (2024-10-31)
@@ -405,15 +606,16 @@ loaded via a namespace (and not attached):
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>Although with {gridBase} ‘it is not possible to embed base graphics output within a grid viewport that is rotated’. This might be inconsistent for {hexbase}, which allows you to rotate text and image grobs.↩︎</p></li>
+<li id="fn1"><p>There a few more packages listed in ‘Suggests’, but these are mostly used for testing or examples. A particular highlight is <a href="https://github.com/markvanderloo/tinytest">{tinytest}</a>, which I’m using for the first time and is very much in the ‘lightweight’ spirit.↩︎</p></li>
+<li id="fn2"><p>Could this explain why my packages don’t have millions of downloads? Am I so out of touch? <a href="https://frinkiac.com/caption/S05E20/291123">No, it’s the children who are wrong</a>.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>grid</category>
-  <category>hexbase</category>
+  <category>gex</category>
   <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2025-02-09-hexbase-grid/index.html</guid>
-  <pubDate>Sun, 09 Feb 2025 00:00:00 GMT</pubDate>
-  <media:content url="https://www.rostrum.blog/posts/2025-02-09-hexbase-grid/resources/" medium="image"/>
+  <guid>https://www.rostrum.blog/posts/2025-02-25-gex/index.html</guid>
+  <pubDate>Tue, 25 Feb 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2025-02-25-gex/resources/logo.png" medium="image" type="image/png" height="167" width="144"/>
 </item>
 <item>
   <title>Dependency-free hex stickers with {hexbase}</title>
