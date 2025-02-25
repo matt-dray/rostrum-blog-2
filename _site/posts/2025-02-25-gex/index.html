@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matt Dray">
+<meta name="dcterms.date" content="2025-02-25">
+
+<title>rostrum.blog - Dependency-light hex stickers with {gex}</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="rostrum.blog - Dependency-light hex stickers with {gex}">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://www.rostrum.blog/posts/2025-02-25-gex/resources/logo.png">
+<meta property="og:site-name" content="rostrum.blog">
+<meta property="og:image:height" content="600">
+<meta property="og:image:width" content="518">
+<meta name="twitter:title" content="rostrum.blog - Dependency-light hex stickers with {gex}">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://www.rostrum.blog/posts/2025-02-25-gex/resources/logo.png">
+<meta name="twitter:creator" content="@mattdray">
+<meta name="twitter:image-height" content="600">
+<meta name="twitter:image-width" content="518">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">rostrum.blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+</i> 
+ <span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+</i> 
+ <span class="menu-text">RSS</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+</i> 
+ <span class="menu-text">Source</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Dependency-light hex stickers with {gex}</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">grid</div>
+                <div class="quarto-category">gex</div>
+                <div class="quarto-category">r</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p><a href="https://www.matt-dray.com">Matt Dray</a> </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">February 25, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="resources/logo.png" class="img-fluid figure-img" style="width:33.0%" alt="A hexagon logo for the package 'gex'. In the centre is italicised serif text saying the package name. The background is a repeating pattern of a line-drawn frill-winged lizards heading from lower-right to top-left. It has a border. The colours are olivedrab1 and olivedrab4 from base R's named colour palette."></p>
+<figcaption class="figure-caption">Would you buy this as a tasteful wallpaper?</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>The package {hexbase} has been improved and renamed {gex}. It’s no longer ‘dependency free’, but has a goal of being ‘gridverse’ only. Sellout!</p>
+</section>
+<section id="enter-the-gecko" class="level2">
+<h2 class="anchored" data-anchor-id="enter-the-gecko">Enter the gecko</h2>
+<p><a href="https://www.rostrum.blog/posts/2025-01-31-hexbase/">In my last post</a> I wrote about <a href="https://github.com/matt-dray/hexbase">{hexbase}</a>: a dependency-free hex-logo builder, which was helping me learn the basics of R’s grid-graphics system.</p>
+<p>Now the package goal is to stay ‘lightweight’ and import only Prof Murrell and co’s family of small ‘gridverse’ packages (I think I’ve invented this term?).<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<p>A great example of the benefit is for the hex border. In {hexbase}, the ‘border’ was just the gap between a smaller hexagon inside a bigger one. Now, {gex} uses {gridGeometry}‘s <code>polyclipGrob()</code> with <code>op = "minus"</code> to ’cut out’ a smaller from a bigger hexagon to create a polygon that can be applied with <code>add_border()</code>.</p>
+<p>Hence the name change: ‘gex’ is an allusion to grid + hex. I liked ‘grex’ more, but it’s already taken on CRAN. Also, a certain flavour of 90s gamer might appreciate the new name.</p>
+</section>
+<section id="cast-a-gex-hex" class="level2">
+<h2 class="anchored" data-anchor-id="cast-a-gex-hex">Cast a gex hex</h2>
+<p>Building a hex with {gex} differs little from {hexbase}. The steps are:</p>
+<ol type="1">
+<li>Open a PNG graphics device with <code>open_hex()</code>.</li>
+<li>Add the hexagon with <code>add_hex()</code>.</li>
+<li>Add and arrange as many text and image elements as you like with <code>add_text()</code> and <code>add_image()</code>.</li>
+<li>Choose to overlay a border with <code>add_border()</code> (or not).</li>
+<li>Close the device and write the file with <code>close_device()</code>.</li>
+</ol>
+<p>Below is the code used to create the logo for the package itself (how meta), which is shown at the top of this post.</p>
+<p>First, install the package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)  <span class="co"># if not yet installed</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"matt-dray/gex"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Image manipulation is at the the user’s discretion before being added to the hex. Here I’ll use {magick} to wrangle a line-drawing of a lizard that I want to use (which is bundled in the package), turning it from black to green. I’ll save it as a new PNG and re-read it.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>img_tmp <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".png"</span>)  <span class="co"># temp storage for image</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">system.file</span>(<span class="st">"images"</span>, <span class="st">"lizard.png"</span>, <span class="at">package =</span> <span class="st">"gex"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  magick<span class="sc">::</span><span class="fu">image_read</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  magick<span class="sc">::</span><span class="fu">image_fill</span>(<span class="st">"olivedrab1"</span>, <span class="at">fuzz =</span> <span class="dv">100</span>, <span class="at">refcolor =</span> <span class="st">"black"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  magick<span class="sc">::</span><span class="fu">image_write</span>(img_tmp)  <span class="co"># write</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>img <span class="ot">&lt;-</span> png<span class="sc">::</span><span class="fu">readPNG</span>(img_tmp)  <span class="co"># read the edited image</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="resources/lizard-olivedrab1.png" class="img-fluid figure-img" style="width:20.0%" alt="A line drawing of a lizard, mouth agape, with a winglike frill extending from its fore to hind limbs. The linework is in a bright shade of olive drab."></p>
+<figcaption class="figure-caption">Charming little fellow.</figcaption>
+</figure>
+</div>
+<p>Now I’ll start building the hex. Here I’m using loops to write multiple images and to add the text twice with an offset and different colours for a drop-shadow effect.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set up write location and graphics device</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>temp_path <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".png"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>gex<span class="sc">::</span><span class="fu">open_device</span>(temp_path)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Add same image multiple times in a loop</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>gex<span class="sc">::</span><span class="fu">add_hex</span>(<span class="at">col =</span> <span class="st">"olivedrab4"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (x <span class="cf">in</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">0.04</span>, <span class="dv">1</span>, <span class="fl">0.2</span>)) {  <span class="co"># add many images in a loop</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (y <span class="cf">in</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.16</span>)) {</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    gex<span class="sc">::</span><span class="fu">add_image</span>(img, x, y, <span class="at">width =</span> <span class="fl">0.3</span>, <span class="at">angle =</span> <span class="sc">-</span><span class="dv">30</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Add text with 'drop shadow'</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>font <span class="ot">&lt;-</span> <span class="st">"IBM Plex Serif"</span>  <span class="co"># installed on my system</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fl">0.52</span>; y <span class="ot">&lt;-</span> <span class="fl">0.56</span>  <span class="co"># starting positions</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>styles <span class="ot">&lt;-</span> <span class="fu">list</span>(  <span class="co"># to loop over</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="at">x =</span> x <span class="sc">+</span> <span class="fl">0.01</span>, <span class="at">y =</span> y <span class="sc">-</span> <span class="fl">0.01</span>), <span class="at">col =</span> <span class="st">"olivedrab4"</span>),</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(<span class="at">coords =</span> <span class="fu">c</span>(<span class="at">x =</span> x, <span class="at">y =</span> y), <span class="at">col =</span> <span class="st">"olivedrab1"</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (style <span class="cf">in</span> styles) {</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  gex<span class="sc">::</span><span class="fu">add_text</span>(</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">string =</span> <span class="st">"gex"</span>,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> style[[<span class="st">"coords"</span>]][[<span class="st">"x"</span>]],</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> style[[<span class="st">"coords"</span>]][[<span class="st">"y"</span>]],</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="dv">60</span>,</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">col =</span> style[[<span class="st">"col"</span>]],</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">family =</span> font,</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">face =</span> <span class="st">"italic"</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Add border and write file</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>gex<span class="sc">::</span><span class="fu">add_border</span>(<span class="at">col =</span> <span class="st">"olivedrab1"</span>)</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>gex<span class="sc">::</span><span class="fu">close_device</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As mentioned previously, you build the hex by opening a device and adding elements to it, before closing it to save the file. That may make some people uncomfortable since there’s no ‘object’ as such; you can’t pipe between functions in {gex}. But this comes as no surprise to base and grid-graphics enjoyers, which is kind of the target market. There are dozens of us!</p>
+<p>Having said this, I did enjoy <a href="https://kieranhealy.org/blog/archives/2025/02/06/kerning-and-kerning-in-a-widening-gyre/">Kieran’s recent sermon</a> on this style of interaction:</p>
+<blockquote class="blockquote">
+<p>We have to remember to turn the device off once we’re done with it, like it’s 1997. If you forget, you won’t notice for a while but eventually it’s like your Dad is gonna yell at you because you forgot to turn the lights off downstairs before you went to bed or you left the fridge door open after you went to get a drink of milk or you opened the window while the air conditioning is running in the house what the hell kind of child have I raised.</p>
+</blockquote>
+<p>I’m (probably) not your dad and you (probably) weren’t raised in a barn; I trust you to <code>close_device()</code> when using {gex}. Also, the package is partly named after a videogame from pre-1997, so it’d be anachronistic to do it any other way, amirite?</p>
+</section>
+<section id="going-on-grid" class="level2">
+<h2 class="anchored" data-anchor-id="going-on-grid">Going <em>on</em> grid</h2>
+<p>Since {gex} uses the grid graphics system, other ‘gridverse’ packages can be used to help make your hex. Two others are <a href="https://cran.r-project.org/package=gridBase">{gridBase}</a> to put a base R plot in a viewport and <a href="https://cran.r-project.org/package=gridGraphics">{gridGraphics}</a> to convert that plot to a grob. Handily, Guangchuang Yu (of {hexSticker} fame!) wrapped this up in <code>ggplotify::base2grob()</code>, which does what it says on the tin.</p>
+<p>Here’s a plot of multicoloured points applied to a hex. Note all the {grid} calls, which are the type of thing that {gex} hides in its functions so you don’t have to think about it (more on that later in the post).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Start with {gex}</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>temp_path <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".png"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>gex<span class="sc">::</span><span class="fu">open_device</span>(temp_path)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>gex<span class="sc">::</span><span class="fu">add_hex</span>()</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a base plot without {gex}</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>grid<span class="sc">::</span><span class="fu">pushViewport</span>(grid<span class="sc">::</span><span class="fu">viewport</span>())</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>base_plot <span class="ot">&lt;-</span> ggplotify<span class="sc">::</span><span class="fu">base2grob</span>(</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  \() {</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="dv">4</span>))  <span class="co"># no plot margin</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    n <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">plot</span>(</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>      <span class="fu">runif</span>(n), <span class="fu">runif</span>(n),  <span class="co"># 'random' points</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">xaxs =</span> <span class="st">"i"</span>, <span class="at">yaxs =</span> <span class="st">"i"</span>,  <span class="co"># 'edge-to-edge' plot</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">axes =</span> <span class="cn">FALSE</span>, <span class="at">ann =</span> <span class="cn">FALSE</span>,  <span class="co"># no chart stuff</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">pch =</span> <span class="dv">16</span>, <span class="at">col =</span> <span class="fu">palette.colors</span>(n, , , <span class="cn">TRUE</span>)  <span class="co"># style points</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>grid<span class="sc">::</span><span class="fu">grid.draw</span>(base_plot)  <span class="co"># it's a grob now, we can draw it</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>grid<span class="sc">::</span><span class="fu">popViewport</span>()</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Finish up with {gex}</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>gex<span class="sc">::</span><span class="fu">close_device</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="resources/base-grob.png" class="img-fluid figure-img" style="width:25.0%" alt="A black hexagon filled with a thousand small circles of varying colours."></p>
+</figure>
+</div>
+<p>Other grid-adjacent packages could be used as well. Trevor has put together <a href="https://trevorldavis.com/R/gridpattern/dev/">{gridpattern}</a> to allow for pattern and gradient fills. For example, you could call <code>grid.pattern_gradient()</code> to add a splendid background to your hex.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>temp_path <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".png"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>gex<span class="sc">::</span><span class="fu">open_device</span>(temp_path)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>gex<span class="sc">::</span><span class="fu">add_hex</span>()</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>gridpattern<span class="sc">::</span><span class="fu">grid.pattern_gradient</span>()</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>gex<span class="sc">::</span><span class="fu">close_device</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="resources/pattern.png" class="img-fluid figure-img" style="width:25.0%" alt="A hexagon with a tasteful colour-gradient background."></p>
+</figure>
+</div>
+<p>Lovely.</p>
+</section>
+<section id="the-sticky-back-end" class="level2">
+<h2 class="anchored" data-anchor-id="the-sticky-back-end">The sticky back-end</h2>
+<p>In case you’re wondering what’s going on under the hood, here’s a simplified description. This is more for the nerds. Which is what you are if you’ve read this far.</p>
+<section id="grid-reference" class="level3">
+<h3 class="anchored" data-anchor-id="grid-reference">Grid reference</h3>
+<p>You can find lots of useful material about {grid} and the ‘gridverse’ on <a href="https://www.stat.auckland.ac.nz/~paul/grid/grid.html">the dedicated page</a> of The University of Auckland’s website and on Prof Murrell’s <a href="https://www.stat.auckland.ac.nz/~paul/">home page</a>. Read that first.</p>
+<p>But here’s a massive oversimplification anyway. With grid graphics you draw ‘grobs’ (graphics objects, like polygons, lines and text) into little windows on your canvas called ‘viewports’. You create a viewport with various properties (size, position, rotation, etc), ‘push’ to activate it, draw your grobs inside it and then ‘pop’ the viewport to add it to your canvas. Importantly, you can nest viewports for finer control or to inherit characteristics. Note that the default coordinates of your canvas are on ‘npc’ (native parent coordinates) units, meaning a 1 × 1 area with origin [0,0] in the lower left.</p>
+<p>{gex} probably doesn’t use {grid} optimally, but I’ve learnt enough for the package to work for my own needs at least.</p>
+</section>
+<section id="push-pops" class="level3">
+<h3 class="anchored" data-anchor-id="push-pops">Push pops</h3>
+<p>With {gex}, you start by running <code>open_device()</code> to call a <code>png()</code> graphics device pre-filled with the width and height of the stickers standard, plus a transparent background. The graphics device will be populated with grobs and eventually saved to file in <code>close_device()</code>.</p>
+<p>Next, the <code>add_hex()</code> function. It first sets up a <code>polygonGrob</code> of hexagon vertices, which is used in two ways. First, a viewport is pushed with the grob as a <code>clip</code> mask, which means anything falling outside of the hexagon area will be deleted when this viewport is popped. This happens as the end in <code>close_device()</code>. Second, we <code>grid.draw()</code> the grob in its own viewport so its added to the canvas. Since a ‘point-up’ hexagon is slightly narrower than tall, we remove the ‘slivers’ either side of it on the x-axis by setting the enclosing viewport’s <code>xscale</code> to the maximum hexagon width. This ensures that our final PNG file goes ‘edge to edge’. The hex grobs are added with ‘native’ rather than ‘npc’ units so that they’re relative to that ‘sliverless’ viewport.</p>
+<p>The <code>add_text()</code> and <code>add_image()</code> functions work in similar fashion: a viewport is opened to house a grob, which is drawn with <code>grid.text()</code> or <code>grid.raster()</code>. Crucially, we put that grob in another viewport in which we can control rotation. We nest the viewports this way so that the user controls the x and y positions or a rotated text or image relative to the hex. If we didn’t do this, the x and y positions would be relative to the element’s angle of rotation.</p>
+<p>You would typically use <code>add_border()</code> at this stage, if you want to. The border is just a polygon with the same coordinates as in <code>add_hex()</code>, but with a smaller hexagon cut out of the middle. The <code>width</code> of the border is just the inverse ratio of the inner to the outer hexagon size. By placing this after the text and images, it will overlay them if they inhabit the same coordinates.</p>
+<p>Finally, we <code>close_device()</code> to pop the ‘hanging’ viewports we pushed in <code>open_device()</code> at the start. This includes the one that clips out any content that falls outside the extent of the hexagon. The function also contains a call to <code>dev.off()</code> to close the device and save the image to the path specified by <code>file_path</code> in <code>open_device()</code>.</p>
+</section>
+</section>
+<section id="further-gexplorations" class="level2">
+<h2 class="anchored" data-anchor-id="further-gexplorations">Further gexplorations?</h2>
+<p>As ever, I’m having a nice time. Also as ever, I may choose to continue this or stop working on it entirely. The most important thing is that {gex} will help me towards the utopia of Hex-Driven Development (HDD), the one true method of developing R packages by <em>starting</em> with the sticker.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2025-02-25 22:16:42 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.4.2 (2024-10-31)
+Platform: aarch64-apple-darwin20
+Running under: macOS Ventura 13.2.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.4 compiler_4.4.2    fastmap_1.2.0     cli_3.6.3.9000   
+ [5] tools_4.4.2       htmltools_0.5.8.1 rstudioapi_0.16.0 yaml_2.3.10      
+ [9] rmarkdown_2.28    knitr_1.48        jsonlite_1.8.9    xfun_0.48        
+[13] digest_0.6.37     rlang_1.1.4       evaluate_1.0.1   </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>There a few more packages listed in ‘Suggests’, but these are mostly used for testing or examples. A particular highlight is <a href="https://github.com/markvanderloo/tinytest">{tinytest}</a>, which I’m using for the first time and is very much in the ‘lightweight’ spirit.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Could this explain why my packages don’t have millions of downloads? Am I so out of touch? <a href="https://frinkiac.com/caption/S05E20/291123">No, it’s the children who are wrong</a>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
