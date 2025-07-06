@@ -11,15 +11,15 @@ categories:
   - website
 ---
 
-![](resources/faxcrayon.png){fig-alt="A screenshot of the webpage faxcrayon dot art that has the site title at the top with emojis of a fax machine and a crayon. Below are links to the source and other materials. Below that are some rectangular cards that show some art with the date, title and type of art, like whether its original or a recreation." width="100%"}
+![](resources/faxcrayon.png){fig-alt="A screenshot of the webpage faxcrayon that has the site title at the top with emojis of a fax machine and a crayon. Below are links to the source and other materials. Below that are some rectangular cards that show some art with the date, title and type of art, like whether its original or a recreation." width="100%"}
 
 ## tl;dr 
 
-I used [the {bs4cards} package](https://bs4cards.djnavarro.net/articles/introduction.html) by [Danielle Navarro](https://djnavarro.net/) to create an effortless online 'gallery' of 'art' on a single [R Markdown page](https://rmarkdown.rstudio.com/): [faxcrayon.art](https://faxcrayon.art).
+I used [the {bs4cards} package](https://bs4cards.djnavarro.net/articles/introduction.html) by [Danielle Navarro](https://djnavarro.net/) to create an effortless online 'gallery' of 'art' on a single [R Markdown page](https://rmarkdown.rstudio.com/).
 
 <div class="tip"> `r fontawesome::fa("exclamation-circle")` <b>Note</b>
 
-I may decide to shutdown this site at some point. The code will always be available on GitHub, but the site may disappear. C'est la vie.
+I wrote below about setting up a custom domain. I've not renewed the original domain for this site, so it will no longer live at faxcrayon dot art and I'm not responsible for whatever is at the address now. You can still access the site at [https://matt-dray.github.io/faxcrayon/](https://matt-dray.github.io/faxcrayon/), however.
 
 </div>
 
@@ -37,7 +37,7 @@ To create a card, you use the `card()` function with arguments for `title`, `ima
 
 So, this format could work well to bring disparate information together in one central location, like a blog's landing page, where a card's content gives you a preview of post that you can click to visit it.
 
-So I did just that: [I made a single page](https://github.com/matt-dray/faxcrayon)[^site] where each card displays an art piece I created with R code for [#RecreationThursday](https://twitter.com/search?q=%23recreationthursday), or whatever.
+So I did just that: I made a single page[^site] where each card displays an art piece I created with R code for [#RecreationThursday](https://twitter.com/search?q=%23recreationthursday), or whatever.
 
 The cards contain the creation date in the header; the 'name' of the piece as the card title, which links out to where the code is hosted for recreating it; and in the card body it states whether the image is a recreation, a remix or something original.
 
@@ -57,11 +57,11 @@ But that doesn't make for a terribly exciting URL. Since I'm going to be an inte
 
 Where to get inspiration? I've tweeted images for #RecreationThursday using the fax[^fax] 📠 and crayon 🖍️ emojis because I was using my rudimentary skills to create facsimile copies of original artworks. So... fax crayon? Like a wax crayon, but, like, fax? 
 
-And the <faxcrayon.art> URL only cost two dollars to buy, so.
+And the 'faxcrayon dot art' URL only cost two dollars to buy, so.
 
 There's [a small dance](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#about-custom-domain-configuration) you have to do to make GitHub Pages link to your domain, while your domain provider may themselves require [a particular set of settings](https://www.namecheap.com/support/knowledgebase/article.aspx/9645/2208/how-do-i-link-my-domain-to-github-pages/).
 
-It took half an hour or so for the domain dance to complete, but now the site is available at [faxcrayon.art](https://www.faxcrayon.art).
+It can take half an hour or so for the domain dance to complete.
 
 ## Nothing is real
 

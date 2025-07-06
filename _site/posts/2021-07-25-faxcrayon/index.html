@@ -69,14 +69,14 @@ ul.task-list li input[type="checkbox"] {
 <meta property="og:description" content="">
 <meta property="og:image" content="https://www.rostrum.blog/posts/2021-07-25-faxcrayon/resources/faxcrayon.png">
 <meta property="og:site-name" content="rostrum.blog">
-<meta property="og:image:height" content="1760">
-<meta property="og:image:width" content="2268">
+<meta property="og:image:height" content="1244">
+<meta property="og:image:width" content="2134">
 <meta name="twitter:title" content="rostrum.blog - Make an art gallery with {bs4cards}">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://www.rostrum.blog/posts/2021-07-25-faxcrayon/resources/faxcrayon.png">
 <meta name="twitter:creator" content="@mattdray">
-<meta name="twitter:image-height" content="1760">
-<meta name="twitter:image-width" content="2268">
+<meta name="twitter:image-height" content="1244">
+<meta name="twitter:image-width" content="2134">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -169,13 +169,13 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p><img src="resources/faxcrayon.png" class="img-fluid" style="width:100.0%" alt="A screenshot of the webpage faxcrayon dot art that has the site title at the top with emojis of a fax machine and a crayon. Below are links to the source and other materials. Below that are some rectangular cards that show some art with the date, title and type of art, like whether its original or a recreation."></p>
+<p><img src="resources/faxcrayon.png" class="img-fluid" style="width:100.0%" alt="A screenshot of the webpage faxcrayon that has the site title at the top with emojis of a fax machine and a crayon. Below are links to the source and other materials. Below that are some rectangular cards that show some art with the date, title and type of art, like whether its original or a recreation."></p>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I used <a href="https://bs4cards.djnavarro.net/articles/introduction.html">the {bs4cards} package</a> by <a href="https://djnavarro.net/">Danielle Navarro</a> to create an effortless online ‘gallery’ of ‘art’ on a single <a href="https://rmarkdown.rstudio.com/">R Markdown page</a>: <a href="https://faxcrayon.art">faxcrayon.art</a>.</p>
+<p>I used <a href="https://bs4cards.djnavarro.net/articles/introduction.html">the {bs4cards} package</a> by <a href="https://djnavarro.net/">Danielle Navarro</a> to create an effortless online ‘gallery’ of ‘art’ on a single <a href="https://rmarkdown.rstudio.com/">R Markdown page</a>.</p>
 <div class="tip">
 <p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
-<p>I may decide to shutdown this site at some point. The code will always be available on GitHub, but the site may disappear. C’est la vie.</p>
+<p>I wrote below about setting up a custom domain. I’ve not renewed the original domain for this site, so it will no longer live at faxcrayon dot art and I’m not responsible for whatever is at the address now. You can still access the site at <a href="https://matt-dray.github.io/faxcrayon/">https://matt-dray.github.io/faxcrayon/</a>, however.</p>
 </div>
 </section>
 <section id="art-is-a-lie" class="level2">
@@ -188,7 +188,7 @@ ul.task-list li input[type="checkbox"] {
 <p>The <a href="https://bs4cards.djnavarro.net/articles/introduction.html">{bs4cards}</a> package (available on CRAN) is great because it lets you create customisable ‘cards’ that you can tile on an R Markdown page.</p>
 <p>To create a card, you use the <code>card()</code> function with arguments for <code>title</code>, <code>image</code>,<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <code>text</code>, <code>link</code>, etc. You can put these in a list and pass that to <code>card_grid()</code> to make a grid. Of cards. A card grid.</p>
 <p>So, this format could work well to bring disparate information together in one central location, like a blog’s landing page, where a card’s content gives you a preview of post that you can click to visit it.</p>
-<p>So I did just that: <a href="https://github.com/matt-dray/faxcrayon">I made a single page</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> where each card displays an art piece I created with R code for <a href="https://twitter.com/search?q=%23recreationthursday">#RecreationThursday</a>, or whatever.</p>
+<p>So I did just that: I made a single page<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> where each card displays an art piece I created with R code for <a href="https://twitter.com/search?q=%23recreationthursday">#RecreationThursday</a>, or whatever.</p>
 <p>The cards contain the creation date in the header; the ‘name’ of the piece as the card title, which links out to where the code is hosted for recreating it; and in the card body it states whether the image is a recreation, a remix or something original.</p>
 <p><img src="resources/cards.png" class="img-fluid" style="width:100.0%" alt="Example of three cards made use the bs4cards package. Each one has a header with the date in, a square image in the middle, the name of the piece which is a link, and some body text that explains whether the piece is original, a remix or a recreation."></p>
 <p>You can find <a href="https://github.com/matt-dray/faxcrayon">the source on GitHub</a>.</p>
@@ -201,9 +201,9 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="domain">Domain</h3>
 <p>But that doesn’t make for a terribly exciting URL. Since I’m going to be an internationally-famous and extremely financially-successful artist, it makes sense to improve <a href="https://www.youtube.com/watch?v=rPHK494AUxE">my online brand</a> with a rad URL.</p>
 <p>Where to get inspiration? I’ve tweeted images for #RecreationThursday using the fax<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> 📠 and crayon 🖍️ emojis because I was using my rudimentary skills to create facsimile copies of original artworks. So… fax crayon? Like a wax crayon, but, like, fax?</p>
-<p>And the &lt;faxcrayon.art&gt; URL only cost two dollars to buy, so.</p>
+<p>And the ‘faxcrayon dot art’ URL only cost two dollars to buy, so.</p>
 <p>There’s <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/managing-a-custom-domain-for-your-github-pages-site#about-custom-domain-configuration">a small dance</a> you have to do to make GitHub Pages link to your domain, while your domain provider may themselves require <a href="https://www.namecheap.com/support/knowledgebase/article.aspx/9645/2208/how-do-i-link-my-domain-to-github-pages/">a particular set of settings</a>.</p>
-<p>It took half an hour or so for the domain dance to complete, but now the site is available at <a href="https://www.faxcrayon.art">faxcrayon.art</a>.</p>
+<p>It can take half an hour or so for the domain dance to complete.</p>
 </section>
 </section>
 <section id="nothing-is-real" class="level2">
@@ -222,16 +222,16 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-07-17 18:32:26 BST</code></pre>
+<pre><code>Last rendered: 2025-07-06 13:32:19 BST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
+<pre><code>R version 4.5.1 (2025-06-13)
+Platform: aarch64-apple-darwin20
+Running under: macOS Sequoia 15.5
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
 locale:
 [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
@@ -243,10 +243,10 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.5   rstudioapi_0.15.0 yaml_2.3.7       
- [9] rmarkdown_2.23    knitr_1.43.1      jsonlite_1.8.7    xfun_0.39        
-[13] digest_0.6.31     rlang_1.1.1       fontawesome_0.5.1 evaluate_0.21    </code></pre>
+ [1] compiler_4.5.1    fastmap_1.2.0     cli_3.6.5         tools_4.5.1      
+ [5] htmltools_0.5.8.1 yaml_2.3.10       rmarkdown_2.29    knitr_1.50       
+ [9] jsonlite_2.0.0    xfun_0.52         digest_0.6.37     rlang_1.1.6      
+[13] fontawesome_0.5.3 evaluate_1.0.4   </code></pre>
 </div>
 </div>
 </details>
