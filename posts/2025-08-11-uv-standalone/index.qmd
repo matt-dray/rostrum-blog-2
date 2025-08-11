@@ -67,13 +67,15 @@ if needs_bunting:
 print(str_out)
 ```
 
-Very simple. Does the job[^r]. But if we want to use the script, we'll have to clone a repo containing the script, then activate the virtual environment, then run the script. Every time we want to use it.
+Very simple. Does the job[^r]. But if we want to use the script, maybe we'll have to clone a repo containing the script, change directory, activate the virtual environment and only then run the script. Every time we want to use it.
 
-Wouldn't it be better if you could 'install' it and use it from the command line when you need it? Like just type `bank.py` to get a response?
+Wouldn't it be better if you could 'install' it and use it from the command line when you need it? Like just type `bank.py` to get a response? A really fast response?
 
 ## uv protection
 
-This is where the life-changing magic of [uv](https://docs.astral.sh/uv/) comes in[^uv]. With uv, you can add a block at the top of your file to declare dependencies. No need to worry about a separate dependecies file, lockfile or virtual environment. You can use `uv add` with the `--script` option in the form:
+This is where the life-changing magic of [uv](https://docs.astral.sh/uv/) comes in[^uv]. 
+
+You can start by adding a block at the top of your file to declare dependencies. No need to worry about a separate dependecies file, lockfile or virtual environment. You can use `uv add` with the `--script` option in the form:
 
 ```{sh}
 #| label: uv-add
@@ -97,7 +99,7 @@ Which will add the following section at the top of our `bank.py` script:
 
 And there you have it: all the information needed to run this file in a standalone manner. Like putting your `pyproject.toml` inside your script[^inscript]. So you'll be able to run `uv run bank.py` without any additional files required.
 
-But wait! There's more. How boring, how _painful_ to have to write the `uv run` but. That's _six_ characters[^typo].
+But wait! There's more. How boring, how _painful_ to have to write the `uv run` bit. That's _six_ characters[^typo].
 
 Instead, you can add a [shebang](https://en.wikipedia.org/wiki/Shebang_%28Unix%29)[^shebang] to the top of the file:
 ```{python}
@@ -106,7 +108,7 @@ Instead, you can add a [shebang](https://en.wikipedia.org/wiki/Shebang_%28Unix%2
 #!/usr/bin/env -S uv run
 ```
 
-But something there's something interesting there.. aha! uv again! The `-S uv run` bit is quite clever because it asks the interpreter to let good ol' uv do all the dependency and Python-version handling. Great! Especially given the raw speed of uv.
+But there's something different and interesting there... aha! uv again! The `-S uv run` bit is quite clever because it asks the interpreter to let good ol' uv do all the dependency and Python-version handling. Great! Especially given the raw speed of uv.
 
 Finally, you can make the file executable and add it to your path like:
 

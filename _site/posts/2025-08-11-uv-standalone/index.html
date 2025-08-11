@@ -261,12 +261,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Summer bank holiday is on 25 August 2025 ▼▽▼▽▼▽</code></pre>
 </div>
 </div>
-<p>Very simple. Does the job<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. But if we want to use the script, we’ll have to clone a repo containing the script, then activate the virtual environment, then run the script. Every time we want to use it.</p>
-<p>Wouldn’t it be better if you could ‘install’ it and use it from the command line when you need it? Like just type <code>bank.py</code> to get a response?</p>
+<p>Very simple. Does the job<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. But if we want to use the script, maybe we’ll have to clone a repo containing the script, change directory, activate the virtual environment and only then run the script. Every time we want to use it.</p>
+<p>Wouldn’t it be better if you could ‘install’ it and use it from the command line when you need it? Like just type <code>bank.py</code> to get a response? A really fast response?</p>
 </section>
 <section id="uv-protection" class="level2">
 <h2 class="anchored" data-anchor-id="uv-protection">uv protection</h2>
-<p>This is where the life-changing magic of <a href="https://docs.astral.sh/uv/">uv</a> comes in<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. With uv, you can add a block at the top of your file to declare dependencies. No need to worry about a separate dependecies file, lockfile or virtual environment. You can use <code>uv add</code> with the <code>--script</code> option in the form:</p>
+<p>This is where the life-changing magic of <a href="https://docs.astral.sh/uv/">uv</a> comes in<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<p>You can start by adding a block at the top of your file to declare dependencies. No need to worry about a separate dependecies file, lockfile or virtual environment. You can use <code>uv add</code> with the <code>--script</code> option in the form:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add httpx datetime <span class="at">--script</span> bank.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -281,12 +282,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ///</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And there you have it: all the information needed to run this file in a standalone manner. Like putting your <code>pyproject.toml</code> inside your script<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. So you’ll be able to run <code>uv run bank.py</code> without any additional files required.</p>
-<p>But wait! There’s more. How boring, how <em>painful</em> to have to write the <code>uv run</code> but. That’s <em>six</em> characters<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</p>
+<p>But wait! There’s more. How boring, how <em>painful</em> to have to write the <code>uv run</code> bit. That’s <em>six</em> characters<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</p>
 <p>Instead, you can add a <a href="https://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> to the top of the file:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env -S uv run</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>But something there’s something interesting there.. aha! uv again! The <code>-S uv run</code> bit is quite clever because it asks the interpreter to let good ol’ uv do all the dependency and Python-version handling. Great! Especially given the raw speed of uv.</p>
+<p>But there’s something different and interesting there… aha! uv again! The <code>-S uv run</code> bit is quite clever because it asks the interpreter to let good ol’ uv do all the dependency and Python-version handling. Great! Especially given the raw speed of uv.</p>
 <p>Finally, you can make the file executable and add it to your path like:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x bank.py</span>
