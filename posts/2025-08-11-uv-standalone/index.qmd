@@ -1,0 +1,199 @@
+---
+title: "A bank holiday to honour uv?"
+date: 2025-08-11
+slug: "uv-standalone"
+image: resources/bank.png
+categories:
+  - api
+  - python
+  - uv
+---
+
+![](resources/bank.png){fig-align="left" fig-alt="The command bank.py is run in a macOS terminal Window, yielding the phrase 'Summer bank holiday is on 25 August 2025', with a series of triangle symbols alternating with a black-and-white fill to look like bunting." width='100%'}
+
+## tl;dr
+
+You can use [uv](https://docs.astral.sh/uv/) to help turn a Python script into a self-contained executable. Useful for really important stuff, like... discovering the next public holiday from your terminal?
+
+This is my own attempt at something [I saw Rodrigo do](https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv).
+
+## Worth a bunt
+
+The UK government maintains [an API catalogue](https://www.api.gov.uk/#uk-public-sector-apis). A very (very) simple API example is [the bank-holidays API](https://www.api.gov.uk/gds/bank-holidays/#bank-holidays) run by the Government Digital Service (GDS). It's perhaps most well-known for [the associated page on the GOV.UK website](https://www.gov.uk/bank-holidays). 
+
+All the API does is serve a JSON file with upcoming public holidays. I wrote a ramshackle little Python script that grabs the file, works out what the next holiday is, and prints it out.
+
+Crucially, it also prints [bunting](https://en.wikipedia.org/wiki/Bunting_(decoration)) if, according to the JSON, the occasion calls for it.
+
+## Banking crisis
+
+So, here's the quite-ordinary code for this demonstration[^critique]:
+
+```{python}
+#| label: bank-script
+#| filename: "bank.py"
+
+import httpx
+from datetime import date
+
+# Fetch bank holidays
+
+resp = httpx.get("https://www.gov.uk/bank-holidays.json")
+events = resp.json()["england-and-wales"]["events"]
+
+for event in events:
+    event["date"] = date.fromisoformat(event["date"])
+
+# Find next holiday
+today = date.today()
+future = [event for event in events if event["date"] >= today]
+next = future[0]
+
+# Print message
+
+is_today = next["date"] == today
+needs_bunting = next["bunting"]
+
+if is_today:
+    when = "today!"
+else: 
+    when = f"on {next['date'].strftime('%d %B %Y')}"
+
+str_out = f"{next['title']} is {when}"
+
+if needs_bunting:
+    str_out = str_out + " ▼▽▼▽▼▽"
+
+print(str_out)
+```
+
+Very simple. Does the job[^r]. But if we want to use the script, we'll have to clone a repo containing the script, then activate the virtual environment, then run the script. Every time we want to use it.
+
+Wouldn't it be better if you could 'install' it and use it from the command line when you need it? Like just type `bank.py` to get a response?
+
+## uv protection
+
+This is where the life-changing magic of [uv](https://docs.astral.sh/uv/) comes in[^uv]. With uv, you can add a block at the top of your file to declare dependencies. No need to worry about a separate dependecies file, lockfile or virtual environment. You can use `uv add` with the `--script` option in the form:
+
+```{sh}
+#| label: uv-add
+#| eval: false
+uv add httpx datetime --script bank.py
+```
+
+Which will add the following section at the top of our `bank.py` script:
+
+```{python}
+#| label: declare
+#| eval: false
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "datetime",
+#     "httpx",
+# ]
+# ///
+```
+
+And there you have it: all the information needed to run this file in a standalone manner. Like putting your `pyproject.toml` inside your script[^inscript]. So you'll be able to run `uv run bank.py` without any additional files required.
+
+But wait! There's more. How boring, how _painful_ to have to write the `uv run` but. That's _six_ characters[^typo].
+
+Instead, you can add a [shebang](https://en.wikipedia.org/wiki/Shebang_%28Unix%29)[^shebang] to the top of the file:
+```{python}
+#| label: shebang
+#| eval: false
+#!/usr/bin/env -S uv run
+```
+
+But something there's something interesting there.. aha! uv again! The `-S uv run` bit is quite clever because it asks the interpreter to let good ol' uv do all the dependency and Python-version handling. Great! Especially given the raw speed of uv.
+
+Finally, you can make the file executable and add it to your path like:
+
+```{sh}
+#| label: executable
+#| eval: false
+chmod +x bank.py
+mv bank.py ~/.local/bin
+```
+
+In other words, change the mode (`chmod`) of the file by adding (`+`) executable (`x`) status. Then put the file where you terminal will look if you type the name of the file.
+
+Then you can merely call `bank.py` from the terminal to know when the next bank holiday is.
+
+I only found this [thanks to Rodrigo](https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv), who spotted it via [Simon](https://simonwillison.net/2024/Aug/21/usrbinenv-uv-run/), who spotted it [via David](https://github.com/alsuren/sixdofone/pull/8). And now I'm ripping it off.
+
+## The vital code snippet
+
+You can find a [GitHub Gist of the code](https://gist.github.com/matt-dray/c97603f294fb80736b669141191d827b)[^gist] I put together, or:
+
+<details><summary>Click to see the complete `bank.py` script.</summary>
+
+```{python}
+#| label: full-bank-script
+#| filename: "bank.py"
+#| eval: false
+
+#!/usr/bin/env -S uv run
+
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "datetime",
+#     "httpx",
+# ]
+# ///
+
+import httpx
+from datetime import date
+
+# Fetch bank holidays
+
+resp = httpx.get("https://www.gov.uk/bank-holidays.json")
+events = resp.json()["england-and-wales"]["events"]
+
+for event in events:
+    event["date"] = date.fromisoformat(event["date"])
+
+# Find next holiday
+today = date.today()
+future = [event for event in events if event["date"] >= today]
+next = future[0]
+
+# Print message
+
+is_today = next["date"] == today
+needs_bunting = next["bunting"]
+
+if is_today:
+    when = "today!"
+else: 
+    when = f"on {next['date'].strftime('%d %B %Y')}"
+
+str_out = f"{next['title']} is {when}"
+
+if needs_bunting:
+    str_out = str_out + " ▼▽▼▽▼▽"
+
+print(str_out)
+```
+
+</details>
+
+Next, more important goal: write something similar to help me know what bin day it is (we alternate fortnightly between refuse and recycling). I saved a neighbour from getting erroneously binfluenced recently, so this is dear to my heart.
+
+### Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat(readLines("pyproject.toml"), sep = "\n")
+```
+</details>
+
+[^inscript]: _The call was coming from inside the script._
+[^critique]: Please feel free to critique my Python code. How could it possibly be worse than my R code?
+[^r]: As a more frequent R user: _0 days since last zero-indexing mistake._
+[^typo]: Likely more, given [my terrible typo history](https://www.rostrum.blog/posts/2021-02-27-typos/index.html).
+[^shebang]: Basically says 'if I'm called, execute me like a little standalone program'.
+[^uv]: Perhaps you have been living under a rock where uv rays have not struck you. uv is all the rage for doing all-the-Python-setup-things-that-make-Python-setup-a-headache. And it's super fast. Because Rust. Because carcinisation is coming for all of us.
+[^gist]: I'm losing my mind becuase I've discovered recently that the pronunciation of 'gist' is another 'how do you pronounce gif?' situation. To be clear, it should be pronounced 'gist'.
