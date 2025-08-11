@@ -10,7 +10,507 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Tue, 25 Feb 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 10 Aug 2025 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>A bank holiday to honour uv?</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2025-08-11-uv-standalone/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2025-08-11-uv-standalone/resources/bank.png" class="img-fluid figure-img" style="width:100.0%" alt="The command bank.py is run in a macOS terminal Window, yielding the phrase 'Summer bank holiday is on 25 August 2025', with a series of triangle symbols alternating with a black-and-white fill to look like bunting."></p>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>You can use <a href="https://docs.astral.sh/uv/">uv</a> to help turn a Python script into a self-contained executable. Useful for really important stuff, like… discovering the next public holiday from your terminal?</p>
+<p>This is my own attempt at something <a href="https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv">I saw Rodrigo do</a>.</p>
+</section>
+<section id="worth-a-bunt" class="level2">
+<h2 class="anchored" data-anchor-id="worth-a-bunt">Worth a bunt</h2>
+<p>The UK government maintains <a href="https://www.api.gov.uk/#uk-public-sector-apis">an API catalogue</a>. A very (very) simple API example is <a href="https://www.api.gov.uk/gds/bank-holidays/#bank-holidays">the bank-holidays API</a> run by the Government Digital Service (GDS). It’s perhaps most well-known for <a href="https://www.gov.uk/bank-holidays">the associated page on the GOV.UK website</a>.</p>
+<p>All the API does is serve a JSON file with upcoming public holidays. I wrote a ramshackle little Python script that grabs the file, works out what the next holiday is, and prints it out.</p>
+<p>Crucially, it also prints <a href="https://en.wikipedia.org/wiki/Bunting_(decoration)">bunting</a> if, according to the JSON, the occasion calls for it.</p>
+</section>
+<section id="banking-crisis" class="level2">
+<h2 class="anchored" data-anchor-id="banking-crisis">Banking crisis</h2>
+<p>So, here’s the quite-ordinary code for this demonstration<sup>1</sup>:</p>
+<div class="cell">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>bank.py</strong></pre>
+</div>
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> httpx</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> datetime <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> date</span>
+<span id="cb1-3"></span>
+<span id="cb1-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Fetch bank holidays</span></span>
+<span id="cb1-5"></span>
+<span id="cb1-6">resp <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> httpx.get(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://www.gov.uk/bank-holidays.json"</span>)</span>
+<span id="cb1-7">events <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> resp.json()[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"england-and-wales"</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"events"</span>]</span>
+<span id="cb1-8"></span>
+<span id="cb1-9"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> event <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> events:</span>
+<span id="cb1-10">    event[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"date"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> date.fromisoformat(event[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"date"</span>])</span>
+<span id="cb1-11"></span>
+<span id="cb1-12"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Find next holiday</span></span>
+<span id="cb1-13">today <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> date.today()</span>
+<span id="cb1-14">future <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [event <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> event <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> events <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> event[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"date"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;=</span> today]</span>
+<span id="cb1-15"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">next</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> future[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]</span>
+<span id="cb1-16"></span>
+<span id="cb1-17"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Print message</span></span>
+<span id="cb1-18"></span>
+<span id="cb1-19">is_today <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">next</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"date"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> today</span>
+<span id="cb1-20">needs_bunting <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">next</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"bunting"</span>]</span>
+<span id="cb1-21"></span>
+<span id="cb1-22"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> is_today:</span>
+<span id="cb1-23">    when <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"today!"</span></span>
+<span id="cb1-24"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">else</span>: </span>
+<span id="cb1-25">    when <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"on </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">next</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'date'</span>]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>strftime(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%d</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> %B %Y'</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb1-26"></span>
+<span id="cb1-27">str_out <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">next</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'title'</span>]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> is </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>when<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb1-28"></span>
+<span id="cb1-29"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> needs_bunting:</span>
+<span id="cb1-30">    str_out <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> str_out <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">" ▼▽▼▽▼▽"</span></span>
+<span id="cb1-31"></span>
+<span id="cb1-32"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(str_out)</span></code></pre></div>
+</div>
+</div>
+<p>Very simple. Does the job<sup>2</sup>. But if we want to use the script, we’ll have to clone a repo containing the script, then activate the virtual environment, then run the script. Every time we want to use it.</p>
+<p>Wouldn’t it be better if you could ‘install’ it and use it from the command line when you need it? Like just type <code>bank.py</code> to get a response?</p>
+</section>
+<section id="uv-protection" class="level2">
+<h2 class="anchored" data-anchor-id="uv-protection">uv protection</h2>
+<p>This is where the life-changing magic of <a href="https://docs.astral.sh/uv/">uv</a> comes in<sup>3</sup>. With uv, you can add a block at the top of your file to declare dependencies. No need to worry about a separate dependecies file, lockfile or virtual environment. You can use <code>uv add</code> with the <code>--script</code> option in the form:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">uv</span> add httpx datetime <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--script</span> bank.py</span></code></pre></div>
+</div>
+<p>Which will add the following section at the top of our <code>bank.py</code> script:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># /// script</span></span>
+<span id="cb3-2"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># requires-python = "&gt;=3.12"</span></span>
+<span id="cb3-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># dependencies = [</span></span>
+<span id="cb3-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#     "datetime",</span></span>
+<span id="cb3-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#     "httpx",</span></span>
+<span id="cb3-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ]</span></span>
+<span id="cb3-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ///</span></span></code></pre></div>
+</div>
+<p>And there you have it: all the information needed to run this file in a standalone manner. Like putting your <code>pyproject.toml</code> inside your script<sup>4</sup>. So you’ll be able to run <code>uv run bank.py</code> without any additional files required.</p>
+<p>But wait! There’s more. How boring, how <em>painful</em> to have to write the <code>uv run</code> but. That’s <em>six</em> characters<sup>5</sup>.</p>
+<p>Instead, you can add a <a href="https://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a><sup>6</sup> to the top of the file:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#!/usr/bin/env -S uv run</span></span></code></pre></div>
+</div>
+<p>But something there’s something interesting there.. aha! uv again! The <code>-S uv run</code> bit is quite clever because it asks the interpreter to let good ol’ uv do all the dependency and Python-version handling. Great! Especially given the raw speed of uv.</p>
+<p>Finally, you can make the file executable and add it to your path like:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">chmod</span> +x bank.py</span>
+<span id="cb5-2"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">mv</span> bank.py ~/.local/bin</span></code></pre></div>
+</div>
+<p>In other words, change the mode (<code>chmod</code>) of the file by adding (<code>+</code>) executable (<code>x</code>) status. Then put the file where you terminal will look if you type the name of the file.</p>
+<p>Then you can merely call <code>bank.py</code> from the terminal to know when the next bank holiday is.</p>
+<p>I only found this <a href="https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv">thanks to Rodrigo</a>, who spotted it via <a href="https://simonwillison.net/2024/Aug/21/usrbinenv-uv-run/">Simon</a>, who spotted it <a href="https://github.com/alsuren/sixdofone/pull/8">via David</a>. And now I’m ripping it off.</p>
+</section>
+<section id="the-vital-code-snippet" class="level2">
+<h2 class="anchored" data-anchor-id="the-vital-code-snippet">The vital code snippet</h2>
+<p>You can find a <a href="https://gist.github.com/matt-dray/c97603f294fb80736b669141191d827b">GitHub Gist of the code</a><sup>7</sup> I put together, or:</p>
+<details>
+<summary>
+Click to see the complete <code>bank.py</code> script.
+</summary>
+<div class="cell">
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>bank.py</strong></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#!/usr/bin/env -S uv run</span></span>
+<span id="cb6-2"></span>
+<span id="cb6-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># /// script</span></span>
+<span id="cb6-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># requires-python = "&gt;=3.12"</span></span>
+<span id="cb6-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># dependencies = [</span></span>
+<span id="cb6-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#     "datetime",</span></span>
+<span id="cb6-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">#     "httpx",</span></span>
+<span id="cb6-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ]</span></span>
+<span id="cb6-9"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># ///</span></span>
+<span id="cb6-10"></span>
+<span id="cb6-11"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> httpx</span>
+<span id="cb6-12"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> datetime <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> date</span>
+<span id="cb6-13"></span>
+<span id="cb6-14"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Fetch bank holidays</span></span>
+<span id="cb6-15"></span>
+<span id="cb6-16">resp <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> httpx.get(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"https://www.gov.uk/bank-holidays.json"</span>)</span>
+<span id="cb6-17">events <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> resp.json()[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"england-and-wales"</span>][<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"events"</span>]</span>
+<span id="cb6-18"></span>
+<span id="cb6-19"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> event <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> events:</span>
+<span id="cb6-20">    event[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"date"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> date.fromisoformat(event[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"date"</span>])</span>
+<span id="cb6-21"></span>
+<span id="cb6-22"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Find next holiday</span></span>
+<span id="cb6-23">today <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> date.today()</span>
+<span id="cb6-24">future <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [event <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> event <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> events <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> event[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"date"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;=</span> today]</span>
+<span id="cb6-25"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">next</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> future[<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>]</span>
+<span id="cb6-26"></span>
+<span id="cb6-27"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Print message</span></span>
+<span id="cb6-28"></span>
+<span id="cb6-29">is_today <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">next</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"date"</span>] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> today</span>
+<span id="cb6-30">needs_bunting <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">next</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"bunting"</span>]</span>
+<span id="cb6-31"></span>
+<span id="cb6-32"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> is_today:</span>
+<span id="cb6-33">    when <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"today!"</span></span>
+<span id="cb6-34"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">else</span>: </span>
+<span id="cb6-35">    when <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"on </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">next</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'date'</span>]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>strftime(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%d</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> %B %Y'</span>)<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb6-36"></span>
+<span id="cb6-37">str_out <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">next</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'title'</span>]<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;"> is </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>when<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span></span>
+<span id="cb6-38"></span>
+<span id="cb6-39"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">if</span> needs_bunting:</span>
+<span id="cb6-40">    str_out <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> str_out <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">" ▼▽▼▽▼▽"</span></span>
+<span id="cb6-41"></span>
+<span id="cb6-42"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(str_out)</span></code></pre></div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Summer bank holiday is on 25 August 2025 ▼▽▼▽▼▽</code></pre>
+</div>
+</div>
+</details>
+<p>Next, more important goal: write something similar to help me know what bin day it is (we alternate fortnightly between refuse and recycling). I saved a neighbour from getting erroneously binfluenced recently, so this is dear to my heart.</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[project]
+name = "2025-08-11-uv-standalone"
+version = "0.1.0"
+description = "rostrum.blog post: uv-standalone"
+requires-python = "&gt;=3.12"
+dependencies = [
+    "datetime&gt;=5.5",
+    "httpx&gt;=0.28.1",
+]</code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Please feel free to critique my Python code. How could it possibly be worse than my R code?↩︎</p></li>
+<li id="fn2"><p>As a more frequent R user: <em>0 days since last zero-indexing mistake.</em>↩︎</p></li>
+<li id="fn3"><p>Perhaps you have been living under a rock where uv rays have not struck you. uv is all the rage for doing all-the-Python-setup-things-that-make-Python-setup-a-headache. And it’s super fast. Because Rust. Because carcinisation is coming for all of us.↩︎</p></li>
+<li id="fn4"><p><em>The call was coming from inside the script.</em>↩︎</p></li>
+<li id="fn5"><p>Likely more, given <a href="https://www.rostrum.blog/posts/2021-02-27-typos/index.html">my terrible typo history</a>.↩︎</p></li>
+<li id="fn6"><p>Basically says ‘if I’m called, execute me like a little standalone program’.↩︎</p></li>
+<li id="fn7"><p>I’m losing my mind becuase I’ve discovered recently that the pronunciation of ‘gist’ is another ‘how do you pronounce gif?’ situation. To be clear, it should be pronounced ‘gist’.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>api</category>
+  <category>python</category>
+  <category>uv</category>
+  <guid>https://www.rostrum.blog/posts/2025-08-11-uv-standalone/index.html</guid>
+  <pubDate>Sun, 10 Aug 2025 23:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2025-08-11-uv-standalone/resources/bank.png" medium="image" type="image/png" height="35" width="144"/>
+</item>
 <item>
   <title>Dependency-light hex stickers with {gex}</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -6906,171 +7406,6 @@ loaded via a namespace (and not attached):
   <category>visNetwork</category>
   <guid>https://www.rostrum.blog/posts/2023-11-25-kanto-graph/index.html</guid>
   <pubDate>Sat, 25 Nov 2023 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Unlock R functions with QR codes</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2023-11-01-qr-enabled-fn/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2023-11-01-qr-enabled-fn/resources/uhuhuh.png" class="img-fluid figure-img" alt="Screenshot of the computer from Jurassic Park with repeating monospace text in all caps saying 'you didn't say the magic word' and a photo of the antagonist's (Nedry's) head on a cartoon body wagging his finger."></p>
-<figcaption class="figure-caption">Uh uh uh! (Jurassic Park via <a href="https://www.youtube.com/watch?v=K3PrSj9XEu4">BJ22CS</a>)</figcaption>
-</figure>
-</div>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>What if (hear me out) you could prevent an R function from operating correctly unless the user presents a specific QR code?</p>
-</section>
-<section id="qr-you" class="level2">
-<h2 class="anchored" data-anchor-id="qr-you">QR you?</h2>
-<p><a href="https://ropensci.org/blog/2023/10/30/opencv-qr/">Jeroen announced</a> that the latest version of <a href="https://ropensci.r-universe.dev/opencv#">the {opencv} package</a> is capable of detecting and decoding a QR code.</p>
-<p>So this means we could write a function that only returns an answer when you introduce a QR code that encodes the correct ‘password’.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">add_one <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(n) {</span>
-<span id="cb1-2">  </span>
-<span id="cb1-3">  string_in <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> opencv<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">qr_scanner</span>()</span>
-<span id="cb1-4">  password <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> RCurl<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">base64Decode</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"b3BlbmN2IHNlc2FtZSE="</span>)</span>
-<span id="cb1-5">  </span>
-<span id="cb1-6">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (string_in <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> password) {</span>
-<span id="cb1-7">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">cat</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"🔑 Correct password!</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">\n</span><span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"</span>)</span>
-<span id="cb1-8">    n <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span></span>
-<span id="cb1-9">  } <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">else</span> {</span>
-<span id="cb1-10">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">stop</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Wrong password!"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">call. =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span>)</span>
-<span id="cb1-11">  }</span>
-<span id="cb1-12">  </span>
-<span id="cb1-13">}</span></code></pre></div>
-</div>
-<p>So <code>add_one()</code> uses the <code>qr_scanner()</code> function to find and read a QR code from a video image and compare that to a password before giving the answer. You can see in the function body that I’ve only mildly obfuscated the password, using base64 encoding. Maybe you can do something more secure?</p>
-<p>Now to run the function:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">add_one</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>)</span></code></pre></div>
-</div>
-<pre><code>Starting video window (could be behind this window)</code></pre>
-<p>This will activate your device’s camera and it will keep looking for a QR code before it runs the rest of the code in the function.</p>
-<p>The ‘correct’ QR code (made with <a href="https://cran.r-project.org/package=qrcode">{qrcode}</a>) is this one:</p>
-<div class="quarto-figure quarto-figure-left">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2023-11-01-qr-enabled-fn/resources/qr.png" class="img-fluid figure-img" style="width:25.0%" alt="A QR code."></p>
-<figcaption class="figure-caption">Maybe this is a rickroll, who knows?</figcaption>
-</figure>
-</div>
-<p>If you then scan this QR code with your device you’ll get an answer:</p>
-<pre><code>Correct password!
-[1] 2</code></pre>
-<p>Here’s a gif of the process:</p>
-<div class="quarto-figure quarto-figure-left">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2023-11-01-qr-enabled-fn/resources/add-one-qr.gif" class="img-fluid figure-img" style="width:75.0%" alt="Screengrab gif. An R function called 'add_one' is run in the terminal with the argument '1'. A message is printed saying 'Starting video window (could be behind this window)' and then a video image appears, showing the corner of a room. A phone displaying a QR code flashes briefly in front of the screen. The Terminal window returns and the message 'correct password' is displayed, along with the answer value of '2'."></p>
-<figcaption class="figure-caption">Halloween special: the QR code appears like a jumpscare</figcaption>
-</figure>
-</div>
-<p>The <code>add_one()</code> function was run, my laptop’s camera opened and then I showed it the QR code on my phone. The code was detected super quickly and the correct answer was returned in the console.</p>
-<p>I think there’s a lot of promise in this approach for helping to <a href="https://www.rostrum.blog/posts/2023-08-01-monetize/">monetise your R package</a>!</p>
-<div class="tip">
-<p> <b>Note</b></p>
-<p>As <a href="https://fosstodon.org/@Dan@aus.social/111334590992309389">Jeroen and Dan</a> pointed out: you could use this to create an R-based multi-factor authentication solution by introducing <a href="https://randy3k.github.io/otp/">{otp}</a> and <a href="https://github.com/jonocarroll/ntfy">{ntfy}</a> into the mix.</p>
-<p>I also wanted to mention <a href="https://the-strategy-unit.github.io/data_science/presentations/2023-10-17_conference-check-in-app/#/title-slide">Tom’s talk</a> at the recent NHS-R conference. Tom had fun building a conference check-in service with personalised QR codes, making use of <a href="https://www.rplumber.io/">{plumber}</a> and <a href="https://rstudio.github.io/blastula/">{blastula}</a> in the back end.</p>
-</div>
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2023-11-01 10:23:17 GMT</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.1        
- [5] tools_4.3.1       htmltools_0.5.6.1 rstudioapi_0.15.0 yaml_2.3.7       
- [9] rmarkdown_2.25    knitr_1.44        jsonlite_1.8.7    xfun_0.40        
-[13] digest_0.6.33     rlang_1.1.1       fontawesome_0.5.2 evaluate_0.22    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>opencv</category>
-  <category>qrcode</category>
-  <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2023-11-01-qr-enabled-fn/index.html</guid>
-  <pubDate>Wed, 01 Nov 2023 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
