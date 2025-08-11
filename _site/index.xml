@@ -203,6 +203,9 @@ font-style: inherit;">" ▼▽▼▽▼▽"</span></span>
 background-color: null;
 font-style: inherit;">print</span>(str_out)</span></code></pre></div>
 </div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Summer bank holiday is on 25 August 2025 ▼▽▼▽▼▽</code></pre>
+</div>
 </div>
 <p>Very simple. Does the job<sup>2</sup>. But if we want to use the script, we’ll have to clone a repo containing the script, then activate the virtual environment, then run the script. Every time we want to use it.</p>
 <p>Wouldn’t it be better if you could ‘install’ it and use it from the command line when you need it? Like just type <code>bank.py</code> to get a response?</p>
@@ -211,7 +214,7 @@ font-style: inherit;">print</span>(str_out)</span></code></pre></div>
 <h2 class="anchored" data-anchor-id="uv-protection">uv protection</h2>
 <p>This is where the life-changing magic of <a href="https://docs.astral.sh/uv/">uv</a> comes in<sup>3</sup>. With uv, you can add a block at the top of your file to declare dependencies. No need to worry about a separate dependecies file, lockfile or virtual environment. You can use <code>uv add</code> with the <code>--script</code> option in the form:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">uv</span> add httpx datetime <span class="at" style="color: #657422;
 background-color: null;
@@ -219,25 +222,25 @@ font-style: inherit;">--script</span> bank.py</span></code></pre></div>
 </div>
 <p>Which will add the following section at the top of our <code>bank.py</code> script:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="co" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># /// script</span></span>
-<span id="cb3-2"><span class="co" style="color: #5E5E5E;
+<span id="cb4-2"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># requires-python = "&gt;=3.12"</span></span>
-<span id="cb3-3"><span class="co" style="color: #5E5E5E;
+<span id="cb4-3"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># dependencies = [</span></span>
-<span id="cb3-4"><span class="co" style="color: #5E5E5E;
+<span id="cb4-4"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#     "datetime",</span></span>
-<span id="cb3-5"><span class="co" style="color: #5E5E5E;
+<span id="cb4-5"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#     "httpx",</span></span>
-<span id="cb3-6"><span class="co" style="color: #5E5E5E;
+<span id="cb4-6"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># ]</span></span>
-<span id="cb3-7"><span class="co" style="color: #5E5E5E;
+<span id="cb4-7"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># ///</span></span></code></pre></div>
 </div>
@@ -245,17 +248,17 @@ font-style: inherit;"># ///</span></span></code></pre></div>
 <p>But wait! There’s more. How boring, how <em>painful</em> to have to write the <code>uv run</code> but. That’s <em>six</em> characters<sup>5</sup>.</p>
 <p>Instead, you can add a <a href="https://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a><sup>6</sup> to the top of the file:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="co" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#!/usr/bin/env -S uv run</span></span></code></pre></div>
 </div>
 <p>But something there’s something interesting there.. aha! uv again! The <code>-S uv run</code> bit is quite clever because it asks the interpreter to let good ol’ uv do all the dependency and Python-version handling. Great! Especially given the raw speed of uv.</p>
 <p>Finally, you can make the file executable and add it to your path like:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><span class="fu" style="color: #4758AB;
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">chmod</span> +x bank.py</span>
-<span id="cb5-2"><span class="fu" style="color: #4758AB;
+<span id="cb6-2"><span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">mv</span> bank.py ~/.local/bin</span></code></pre></div>
 </div>
@@ -275,78 +278,78 @@ Click to see the complete <code>bank.py</code> script.
 <div class="code-with-filename-file">
 <pre><strong>bank.py</strong></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="co" style="color: #5E5E5E;
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#!/usr/bin/env -S uv run</span></span>
-<span id="cb6-2"></span>
-<span id="cb6-3"><span class="co" style="color: #5E5E5E;
+<span id="cb7-2"></span>
+<span id="cb7-3"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># /// script</span></span>
-<span id="cb6-4"><span class="co" style="color: #5E5E5E;
+<span id="cb7-4"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># requires-python = "&gt;=3.12"</span></span>
-<span id="cb6-5"><span class="co" style="color: #5E5E5E;
+<span id="cb7-5"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># dependencies = [</span></span>
-<span id="cb6-6"><span class="co" style="color: #5E5E5E;
+<span id="cb7-6"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#     "datetime",</span></span>
-<span id="cb6-7"><span class="co" style="color: #5E5E5E;
+<span id="cb7-7"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">#     "httpx",</span></span>
-<span id="cb6-8"><span class="co" style="color: #5E5E5E;
+<span id="cb7-8"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># ]</span></span>
-<span id="cb6-9"><span class="co" style="color: #5E5E5E;
+<span id="cb7-9"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># ///</span></span>
-<span id="cb6-10"></span>
-<span id="cb6-11"><span class="im" style="color: #00769E;
+<span id="cb7-10"></span>
+<span id="cb7-11"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> httpx</span>
-<span id="cb6-12"><span class="im" style="color: #00769E;
+<span id="cb7-12"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> datetime <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> date</span>
-<span id="cb6-13"></span>
-<span id="cb6-14"><span class="co" style="color: #5E5E5E;
+<span id="cb7-13"></span>
+<span id="cb7-14"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Fetch bank holidays</span></span>
-<span id="cb6-15"></span>
-<span id="cb6-16">resp <span class="op" style="color: #5E5E5E;
+<span id="cb7-15"></span>
+<span id="cb7-16">resp <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> httpx.get(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"https://www.gov.uk/bank-holidays.json"</span>)</span>
-<span id="cb6-17">events <span class="op" style="color: #5E5E5E;
+<span id="cb7-17">events <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> resp.json()[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"england-and-wales"</span>][<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"events"</span>]</span>
-<span id="cb6-18"></span>
-<span id="cb6-19"><span class="cf" style="color: #003B4F;
+<span id="cb7-18"></span>
+<span id="cb7-19"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">for</span> event <span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">in</span> events:</span>
-<span id="cb6-20">    event[<span class="st" style="color: #20794D;
+<span id="cb7-20">    event[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"date"</span>] <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> date.fromisoformat(event[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"date"</span>])</span>
-<span id="cb6-21"></span>
-<span id="cb6-22"><span class="co" style="color: #5E5E5E;
+<span id="cb7-21"></span>
+<span id="cb7-22"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Find next holiday</span></span>
-<span id="cb6-23">today <span class="op" style="color: #5E5E5E;
+<span id="cb7-23">today <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> date.today()</span>
-<span id="cb6-24">future <span class="op" style="color: #5E5E5E;
+<span id="cb7-24">future <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [event <span class="cf" style="color: #003B4F;
 background-color: null;
@@ -359,19 +362,19 @@ background-color: null;
 font-style: inherit;">"date"</span>] <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">&gt;=</span> today]</span>
-<span id="cb6-25"><span class="bu" style="color: null;
+<span id="cb7-25"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">next</span> <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> future[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>]</span>
-<span id="cb6-26"></span>
-<span id="cb6-27"><span class="co" style="color: #5E5E5E;
+<span id="cb7-26"></span>
+<span id="cb7-27"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Print message</span></span>
-<span id="cb6-28"></span>
-<span id="cb6-29">is_today <span class="op" style="color: #5E5E5E;
+<span id="cb7-28"></span>
+<span id="cb7-29">is_today <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="bu" style="color: null;
 background-color: null;
@@ -380,26 +383,26 @@ background-color: null;
 font-style: inherit;">"date"</span>] <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> today</span>
-<span id="cb6-30">needs_bunting <span class="op" style="color: #5E5E5E;
+<span id="cb7-30">needs_bunting <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">next</span>[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"bunting"</span>]</span>
-<span id="cb6-31"></span>
-<span id="cb6-32"><span class="cf" style="color: #003B4F;
+<span id="cb7-31"></span>
+<span id="cb7-32"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">if</span> is_today:</span>
-<span id="cb6-33">    when <span class="op" style="color: #5E5E5E;
+<span id="cb7-33">    when <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"today!"</span></span>
-<span id="cb6-34"><span class="cf" style="color: #003B4F;
+<span id="cb7-34"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">else</span>: </span>
-<span id="cb6-35">    when <span class="op" style="color: #5E5E5E;
+<span id="cb7-35">    when <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
 background-color: null;
@@ -422,8 +425,8 @@ background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span></span>
-<span id="cb6-36"></span>
-<span id="cb6-37">str_out <span class="op" style="color: #5E5E5E;
+<span id="cb7-36"></span>
+<span id="cb7-37">str_out <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
 background-color: null;
@@ -444,24 +447,21 @@ background-color: null;
 font-style: inherit;">}</span><span class="ss" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"</span></span>
-<span id="cb6-38"></span>
-<span id="cb6-39"><span class="cf" style="color: #003B4F;
+<span id="cb7-38"></span>
+<span id="cb7-39"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">if</span> needs_bunting:</span>
-<span id="cb6-40">    str_out <span class="op" style="color: #5E5E5E;
+<span id="cb7-40">    str_out <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> str_out <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">+</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">" ▼▽▼▽▼▽"</span></span>
-<span id="cb6-41"></span>
-<span id="cb6-42"><span class="bu" style="color: null;
+<span id="cb7-41"></span>
+<span id="cb7-42"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">print</span>(str_out)</span></code></pre></div>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Summer bank holiday is on 25 August 2025 ▼▽▼▽▼▽</code></pre>
 </div>
 </div>
 </details>
