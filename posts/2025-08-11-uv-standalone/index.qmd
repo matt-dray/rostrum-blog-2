@@ -13,7 +13,7 @@ categories:
 
 ## tl;dr
 
-You can use [uv](https://docs.astral.sh/uv/) to help turn a Python script into a self-contained executable. Useful for really important stuff, like... discovering the next public holiday from your terminal?
+You can use [uv](https://docs.astral.sh/uv/) to help turn a Python[^streak] script into a self-contained executable. Useful for really important stuff, like... discovering the next public holiday from your terminal?
 
 This is my own attempt at something [I saw Rodrigo do](https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv).
 
@@ -69,13 +69,15 @@ print(str_out)
 
 Very simple. Does the job[^r]. But if we want to use the script, maybe we'll have to clone a repo containing the script, change directory, activate the virtual environment and only then run the script. Every time we want to use it.
 
-Wouldn't it be better if you could 'install' it and use it from the command line when you need it? Like just type `bank.py` to get a response? A really fast response?
+Wouldn't it be better if you could just call it quickly from the command line when you need it? Just type `bank.py` and get a quick response?
 
 ## uv protection
 
-This is where the life-changing magic of [uv](https://docs.astral.sh/uv/) comes in[^uv]. 
+This is where [uv](https://docs.astral.sh/uv/) can help out[^uv]. 
 
-You can start by adding a block at the top of your file to declare dependencies. No need to worry about a separate dependecies file, lockfile or virtual environment. You can use `uv add` with the `--script` option in the form:
+You can start by adding a block at the top of your file to declare dependencies. Kind of like bundling a `pyproject.toml` inside your script[^inscript]. No need to worry about a separate dependencies file, lockfile or virtual environment.
+
+To add your dependencies, use `uv add` with the `--script` option in the form:
 
 ```{sh}
 #| label: uv-add
@@ -83,7 +85,7 @@ You can start by adding a block at the top of your file to declare dependencies.
 uv add httpx datetime --script bank.py
 ```
 
-Which will add the following section at the top of our `bank.py` script:
+Which will add the following section at the top of our `bank.py` script, including the Python requirement:
 
 ```{python}
 #| label: declare
@@ -97,20 +99,20 @@ Which will add the following section at the top of our `bank.py` script:
 # ///
 ```
 
-And there you have it: all the information needed to run this file in a standalone manner. Like putting your `pyproject.toml` inside your script[^inscript]. So you'll be able to run `uv run bank.py` without any additional files required.
+And there you have it: all the information needed to run this file in an isolated manner. You'll be able to run `uv run bank.py` from your terminal without any additional files required.
 
-But wait! There's more. How boring, how _painful_ to have to write the `uv run` bit. That's _six_ characters[^typo].
+But wait! There's more. How boring, how _painful_ to have to write the `uv run` bit. That's _six_ characters[^typo]. And you'll have to provide the full path to the script, yikes.
 
-Instead, you can add a [shebang](https://en.wikipedia.org/wiki/Shebang_%28Unix%29)[^shebang] to the top of the file:
+Instead, you can add a [shebang](https://en.wikipedia.org/wiki/Shebang_%28Unix%29)[^shebang] at the top of the file to make it executable:
 ```{python}
 #| label: shebang
 #| eval: false
 #!/usr/bin/env -S uv run
 ```
 
-But there's something different and interesting there... aha! uv again! The `-S uv run` bit is quite clever because it asks the interpreter to let good ol' uv do all the dependency and Python-version handling. Great! Especially given the raw speed of uv.
+Note the unusual bit on the end... aha! uv again! The `-S uv run` bit asks the interpreter to let good ol' uv handle the whole operation.
 
-Finally, you can make the file executable and add it to your path like:
+Finally, you can change the mode (`chmod`) of the file by adding (`+`) executable (`x`) status. Then put the file where you terminal will look if you type the name of the file.
 
 ```{sh}
 #| label: executable
@@ -119,15 +121,13 @@ chmod +x bank.py
 mv bank.py ~/.local/bin
 ```
 
-In other words, change the mode (`chmod`) of the file by adding (`+`) executable (`x`) status. Then put the file where you terminal will look if you type the name of the file.
+Then you can merely call `bank.py` from the terminal to know when the next bank holiday is[^py].
 
-Then you can merely call `bank.py` from the terminal to know when the next bank holiday is.
+## One man's trash
 
-I only found this [thanks to Rodrigo](https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv), who spotted it via [Simon](https://simonwillison.net/2024/Aug/21/usrbinenv-uv-run/), who spotted it [via David](https://github.com/alsuren/sixdofone/pull/8). And now I'm ripping it off.
+I only found this [thanks to Rodrigo](https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv), who spotted it via [Simon](https://simonwillison.net/2024/Aug/21/usrbinenv-uv-run/), who spotted it [via David](https://github.com/alsuren/sixdofone/pull/8). And now I've ripped it off.
 
-## The vital code snippet
-
-You can find a [GitHub Gist of the code](https://gist.github.com/matt-dray/c97603f294fb80736b669141191d827b)[^gist] I put together, or:
+You can find a [GitHub Gist of my code](https://gist.github.com/matt-dray/c97603f294fb80736b669141191d827b)[^gist], or:
 
 <details><summary>Click to see the complete `bank.py` script.</summary>
 
@@ -199,3 +199,5 @@ cat(readLines("pyproject.toml"), sep = "\n")
 [^shebang]: Basically says 'if I'm called, execute me like a little standalone program'.
 [^uv]: Perhaps you have been living under a rock where uv rays have not struck you. uv is all the rage for doing all-the-Python-setup-things-that-make-Python-setup-a-headache. And it's super fast. Because Rust. Because carcinisation is coming for all of us.
 [^gist]: I'm losing my mind becuase I've discovered recently that the pronunciation of 'gist' is another 'how do you pronounce gif?' situation. To be clear, it should be pronounced 'gist'.
+[^py]: I swear I saw a blog or video somewhere that showed how to just type the filename without the extension, like `bank`. Tell me if you know what I mean.
+[^streak]: And thus my 182-post streak without running Python comes to an end.
