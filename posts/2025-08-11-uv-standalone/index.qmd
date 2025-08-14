@@ -5,7 +5,9 @@ slug: "uv-standalone"
 image: resources/bank.png
 categories:
   - api
+  - executable
   - python
+  - shell
   - uv
 ---
 
@@ -15,7 +17,7 @@ categories:
 
 You can use [uv](https://docs.astral.sh/uv/) to help turn a Python[^streak] script into a self-contained executable. Useful for really important stuff, like... discovering the next public holiday from your terminal?
 
-This is my own attempt at something [I saw Rodrigo do](https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv).
+This is my own attempt at something [I saw Rodrigo do](https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv)[^credit].
 
 ## Worth a bunt
 
@@ -69,11 +71,11 @@ print(str_out)
 
 Very simple. Does the job[^r]. But if we want to use the script, maybe we'll have to clone a repo containing the script, change directory, activate the virtual environment and only then run the script. Every time we want to use it.
 
-Wouldn't it be better if you could just call it quickly from the command line when you need it? Just type `bank.py` and get a quick response?
+Wouldn't it be better if I could just call it quickly from my macOS Terminal when I need it? To just type `bank.py` and get a quick response?
 
 ## uv protection
 
-This is where [uv](https://docs.astral.sh/uv/) can help out[^uv]. 
+This is where [uv](https://docs.astral.sh/uv/) can help out[^uv]. You can [install](https://docs.astral.sh/uv/getting-started/installation/) via Homebrew with `brew install uv`, for example.
 
 You can start by adding a block at the top of your file to declare dependencies. Kind of like bundling a `pyproject.toml` inside your script[^inscript]. No need to worry about a separate dependencies file, lockfile or virtual environment.
 
@@ -121,11 +123,16 @@ chmod +x bank.py
 mv bank.py ~/.local/bin
 ```
 
-Then you can merely call `bank.py` from the terminal to know when the next bank holiday is[^py].
+Then you can merely call `bank.py` from the terminal to know when the next bank holiday is.
+
+<div class="tip"> 
+`r fontawesome::fa("exclamation-circle")` <b>Note</b>
+
+In fact, I discovered later [in uv's docs](https://docs.astral.sh/uv/guides/scripts/#using-a-shebang-to-create-an-executable-file) that you can add the `--script` flag to the shebang and remove the `.py` extension from the filename to ensure you only need to type `bank` into the terminal. Much sleeker.
+
+</div>
 
 ## One man's trash
-
-I only found this [thanks to Rodrigo](https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv), who spotted it via [Simon](https://simonwillison.net/2024/Aug/21/usrbinenv-uv-run/), who spotted it [via David](https://github.com/alsuren/sixdofone/pull/8). And now I've ripped it off.
 
 You can find a [GitHub Gist of my code](https://gist.github.com/matt-dray/c97603f294fb80736b669141191d827b)[^gist], or:
 
@@ -199,5 +206,5 @@ cat(readLines("pyproject.toml"), sep = "\n")
 [^shebang]: Basically says 'if I'm called, execute me like a little standalone program'.
 [^uv]: Perhaps you have been living under a rock where uv rays have not struck you. uv is all the rage for doing all-the-Python-setup-things-that-make-Python-setup-a-headache. And it's super fast. Because Rust. Because carcinisation is coming for all of us.
 [^gist]: I'm losing my mind becuase I've discovered recently that the pronunciation of 'gist' is another 'how do you pronounce gif?' situation. To be clear, it should be pronounced 'gist'.
-[^py]: I swear I saw a blog or video somewhere that showed how to just type the filename without the extension, like `bank`. Tell me if you know what I mean.
 [^streak]: And thus my 182-post streak without running Python comes to an end.
+[^credit]: I found this [thanks to Rodrigo](https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv), who spotted it via [Simon](https://simonwillison.net/2024/Aug/21/usrbinenv-uv-run/), who spotted it [via David](https://github.com/alsuren/sixdofone/pull/8). And now I'm ripping it off.

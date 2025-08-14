@@ -163,7 +163,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <h1 class="title">A bank holiday to honour uv?</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">api</div>
+                <div class="quarto-category">executable</div>
                 <div class="quarto-category">python</div>
+                <div class="quarto-category">shell</div>
                 <div class="quarto-category">uv</div>
               </div>
                   </div>
@@ -208,7 +210,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
 <p>You can use <a href="https://docs.astral.sh/uv/">uv</a> to help turn a Python<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> script into a self-contained executable. Useful for really important stuff, like… discovering the next public holiday from your terminal?</p>
-<p>This is my own attempt at something <a href="https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv">I saw Rodrigo do</a>.</p>
+<p>This is my own attempt at something <a href="https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv">I saw Rodrigo do</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
 </section>
 <section id="worth-a-bunt" class="level2">
 <h2 class="anchored" data-anchor-id="worth-a-bunt">Worth a bunt</h2>
@@ -218,7 +220,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="banking-crisis" class="level2">
 <h2 class="anchored" data-anchor-id="banking-crisis">Banking crisis</h2>
-<p>So, here’s the quite-ordinary code for this demonstration<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>:</p>
+<p>So, here’s the quite-ordinary code for this demonstration<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>:</p>
 <div class="cell">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -261,13 +263,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Summer bank holiday is on 25 August 2025 ▼▽▼▽▼▽</code></pre>
 </div>
 </div>
-<p>Very simple. Does the job<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. But if we want to use the script, maybe we’ll have to clone a repo containing the script, change directory, activate the virtual environment and only then run the script. Every time we want to use it.</p>
-<p>Wouldn’t it be better if you could just call it quickly from the command line when you need it? Just type <code>bank.py</code> and get a quick response?</p>
+<p>Very simple. Does the job<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. But if we want to use the script, maybe we’ll have to clone a repo containing the script, change directory, activate the virtual environment and only then run the script. Every time we want to use it.</p>
+<p>Wouldn’t it be better if I could just call it quickly from my macOS Terminal when I need it? To just type <code>bank.py</code> and get a quick response?</p>
 </section>
 <section id="uv-protection" class="level2">
 <h2 class="anchored" data-anchor-id="uv-protection">uv protection</h2>
-<p>This is where <a href="https://docs.astral.sh/uv/">uv</a> can help out<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
-<p>You can start by adding a block at the top of your file to declare dependencies. Kind of like bundling a <code>pyproject.toml</code> inside your script<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>. No need to worry about a separate dependencies file, lockfile or virtual environment.</p>
+<p>This is where <a href="https://docs.astral.sh/uv/">uv</a> can help out<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>. You can <a href="https://docs.astral.sh/uv/getting-started/installation/">install</a> via Homebrew with <code>brew install uv</code>, for example.</p>
+<p>You can start by adding a block at the top of your file to declare dependencies. Kind of like bundling a <code>pyproject.toml</code> inside your script<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. No need to worry about a separate dependencies file, lockfile or virtual environment.</p>
 <p>To add your dependencies, use <code>uv add</code> with the <code>--script</code> option in the form:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> add httpx datetime <span class="at">--script</span> bank.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -283,8 +285,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ///</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And there you have it: all the information needed to run this file in an isolated manner. You’ll be able to run <code>uv run bank.py</code> from your terminal without any additional files required.</p>
-<p>But wait! There’s more. How boring, how <em>painful</em> to have to write the <code>uv run</code> bit. That’s <em>six</em> characters<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. And you’ll have to provide the full path to the script, yikes.</p>
-<p>Instead, you can add a <a href="https://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a><a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> at the top of the file to make it executable:</p>
+<p>But wait! There’s more. How boring, how <em>painful</em> to have to write the <code>uv run</code> bit. That’s <em>six</em> characters<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>. And you’ll have to provide the full path to the script, yikes.</p>
+<p>Instead, you can add a <a href="https://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a><a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> at the top of the file to make it executable:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env -S uv run</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -294,11 +296,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">chmod</span> +x bank.py</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> bank.py ~/.local/bin</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Then you can merely call <code>bank.py</code> from the terminal to know when the next bank holiday is<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>.</p>
+<p>Then you can merely call <code>bank.py</code> from the terminal to know when the next bank holiday is.</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>In fact, I discovered later <a href="https://docs.astral.sh/uv/guides/scripts/#using-a-shebang-to-create-an-executable-file">in uv’s docs</a> that you can add the <code>--script</code> flag to the shebang and remove the <code>.py</code> extension from the filename to ensure you only need to type <code>bank</code> into the terminal. Much sleeker.</p>
+</div>
 </section>
 <section id="one-mans-trash" class="level2">
 <h2 class="anchored" data-anchor-id="one-mans-trash">One man’s trash</h2>
-<p>I only found this <a href="https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv">thanks to Rodrigo</a>, who spotted it via <a href="https://simonwillison.net/2024/Aug/21/usrbinenv-uv-run/">Simon</a>, who spotted it <a href="https://github.com/alsuren/sixdofone/pull/8">via David</a>. And now I’ve ripped it off.</p>
 <p>You can find a <a href="https://gist.github.com/matt-dray/c97603f294fb80736b669141191d827b">GitHub Gist of my code</a><a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>, or:</p>
 <details>
 <summary>
@@ -385,13 +390,13 @@ dependencies = [
 
 <ol>
 <li id="fn1"><p>And thus my 182-post streak without running Python comes to an end.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Please feel free to critique my Python code. How could it possibly be worse than my R code?<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>As a more frequent R user: <em>0 days since last zero-indexing mistake.</em><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Perhaps you have been living under a rock where uv rays have not struck you. uv is all the rage for doing all-the-Python-setup-things-that-make-Python-setup-a-headache. And it’s super fast. Because Rust. Because carcinisation is coming for all of us.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p><em>The call was coming from inside the script.</em><a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>Likely more, given <a href="https://www.rostrum.blog/posts/2021-02-27-typos/index.html">my terrible typo history</a>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p>Basically says ‘if I’m called, execute me like a little standalone program’.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn8"><p>I swear I saw a blog or video somewhere that showed how to just type the filename without the extension, like <code>bank</code>. Tell me if you know what I mean.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>I found this <a href="https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv">thanks to Rodrigo</a>, who spotted it via <a href="https://simonwillison.net/2024/Aug/21/usrbinenv-uv-run/">Simon</a>, who spotted it <a href="https://github.com/alsuren/sixdofone/pull/8">via David</a>. And now I’m ripping it off.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Please feel free to critique my Python code. How could it possibly be worse than my R code?<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>As a more frequent R user: <em>0 days since last zero-indexing mistake.</em><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Perhaps you have been living under a rock where uv rays have not struck you. uv is all the rage for doing all-the-Python-setup-things-that-make-Python-setup-a-headache. And it’s super fast. Because Rust. Because carcinisation is coming for all of us.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p><em>The call was coming from inside the script.</em><a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Likely more, given <a href="https://www.rostrum.blog/posts/2021-02-27-typos/index.html">my terrible typo history</a>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Basically says ‘if I’m called, execute me like a little standalone program’.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn9"><p>I’m losing my mind becuase I’ve discovered recently that the pronunciation of ‘gist’ is another ‘how do you pronounce gif?’ situation. To be clear, it should be pronounced ‘gist’.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
