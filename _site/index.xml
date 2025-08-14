@@ -28,7 +28,7 @@
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
 <p>You can use <a href="https://docs.astral.sh/uv/">uv</a> to help turn a Python<sup>1</sup> script into a self-contained executable. Useful for really important stuff, like… discovering the next public holiday from your terminal?</p>
-<p>This is my own attempt at something <a href="https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv">I saw Rodrigo do</a>.</p>
+<p>This is my own attempt at something <a href="https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv">I saw Rodrigo do</a><sup>2</sup>.</p>
 </section>
 <section id="worth-a-bunt" class="level2">
 <h2 class="anchored" data-anchor-id="worth-a-bunt">Worth a bunt</h2>
@@ -38,7 +38,7 @@
 </section>
 <section id="banking-crisis" class="level2">
 <h2 class="anchored" data-anchor-id="banking-crisis">Banking crisis</h2>
-<p>So, here’s the quite-ordinary code for this demonstration<sup>2</sup>:</p>
+<p>So, here’s the quite-ordinary code for this demonstration<sup>3</sup>:</p>
 <div class="cell">
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -207,13 +207,13 @@ font-style: inherit;">print</span>(str_out)</span></code></pre></div>
 <pre><code>Summer bank holiday is on 25 August 2025 ▼▽▼▽▼▽</code></pre>
 </div>
 </div>
-<p>Very simple. Does the job<sup>3</sup>. But if we want to use the script, maybe we’ll have to clone a repo containing the script, change directory, activate the virtual environment and only then run the script. Every time we want to use it.</p>
-<p>Wouldn’t it be better if you could just call it quickly from the command line when you need it? Just type <code>bank.py</code> and get a quick response?</p>
+<p>Very simple. Does the job<sup>4</sup>. But if we want to use the script, maybe we’ll have to clone a repo containing the script, change directory, activate the virtual environment and only then run the script. Every time we want to use it.</p>
+<p>Wouldn’t it be better if I could just call it quickly from my macOS Terminal when I need it? To just type <code>bank.py</code> and get a quick response?</p>
 </section>
 <section id="uv-protection" class="level2">
 <h2 class="anchored" data-anchor-id="uv-protection">uv protection</h2>
-<p>This is where <a href="https://docs.astral.sh/uv/">uv</a> can help out<sup>4</sup>.</p>
-<p>You can start by adding a block at the top of your file to declare dependencies. Kind of like bundling a <code>pyproject.toml</code> inside your script<sup>5</sup>. No need to worry about a separate dependencies file, lockfile or virtual environment.</p>
+<p>This is where <a href="https://docs.astral.sh/uv/">uv</a> can help out<sup>5</sup>. You can <a href="https://docs.astral.sh/uv/getting-started/installation/">install</a> via Homebrew with <code>brew install uv</code>, for example.</p>
+<p>You can start by adding a block at the top of your file to declare dependencies. Kind of like bundling a <code>pyproject.toml</code> inside your script<sup>6</sup>. No need to worry about a separate dependencies file, lockfile or virtual environment.</p>
 <p>To add your dependencies, use <code>uv add</code> with the <code>--script</code> option in the form:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
@@ -247,8 +247,8 @@ background-color: null;
 font-style: inherit;"># ///</span></span></code></pre></div>
 </div>
 <p>And there you have it: all the information needed to run this file in an isolated manner. You’ll be able to run <code>uv run bank.py</code> from your terminal without any additional files required.</p>
-<p>But wait! There’s more. How boring, how <em>painful</em> to have to write the <code>uv run</code> bit. That’s <em>six</em> characters<sup>6</sup>. And you’ll have to provide the full path to the script, yikes.</p>
-<p>Instead, you can add a <a href="https://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a><sup>7</sup> at the top of the file to make it executable:</p>
+<p>But wait! There’s more. How boring, how <em>painful</em> to have to write the <code>uv run</code> bit. That’s <em>six</em> characters<sup>7</sup>. And you’ll have to provide the full path to the script, yikes.</p>
+<p>Instead, you can add a <a href="https://en.wikipedia.org/wiki/Shebang_%28Unix%29">shebang</a><sup>8</sup> at the top of the file to make it executable:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
@@ -264,11 +264,14 @@ font-style: inherit;">chmod</span> +x bank.py</span>
 background-color: null;
 font-style: inherit;">mv</span> bank.py ~/.local/bin</span></code></pre></div>
 </div>
-<p>Then you can merely call <code>bank.py</code> from the terminal to know when the next bank holiday is<sup>8</sup>.</p>
+<p>Then you can merely call <code>bank.py</code> from the terminal to know when the next bank holiday is.</p>
+<div class="tip">
+<p> <b>Note</b></p>
+<p>In fact, I discovered later <a href="https://docs.astral.sh/uv/guides/scripts/#using-a-shebang-to-create-an-executable-file">in uv’s docs</a> that you can add the <code>--script</code> flag to the shebang and remove the <code>.py</code> extension from the filename to ensure you only need to type <code>bank</code> into the terminal. Much sleeker.</p>
+</div>
 </section>
 <section id="one-mans-trash" class="level2">
 <h2 class="anchored" data-anchor-id="one-mans-trash">One man’s trash</h2>
-<p>I only found this <a href="https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv">thanks to Rodrigo</a>, who spotted it via <a href="https://simonwillison.net/2024/Aug/21/usrbinenv-uv-run/">Simon</a>, who spotted it <a href="https://github.com/alsuren/sixdofone/pull/8">via David</a>. And now I’ve ripped it off.</p>
 <p>You can find a <a href="https://gist.github.com/matt-dray/c97603f294fb80736b669141191d827b">GitHub Gist of my code</a><sup>9</sup>, or:</p>
 <details>
 <summary>
@@ -497,13 +500,13 @@ dependencies = [
 
 <ol>
 <li id="fn1"><p>And thus my 182-post streak without running Python comes to an end.↩︎</p></li>
-<li id="fn2"><p>Please feel free to critique my Python code. How could it possibly be worse than my R code?↩︎</p></li>
-<li id="fn3"><p>As a more frequent R user: <em>0 days since last zero-indexing mistake.</em>↩︎</p></li>
-<li id="fn4"><p>Perhaps you have been living under a rock where uv rays have not struck you. uv is all the rage for doing all-the-Python-setup-things-that-make-Python-setup-a-headache. And it’s super fast. Because Rust. Because carcinisation is coming for all of us.↩︎</p></li>
-<li id="fn5"><p><em>The call was coming from inside the script.</em>↩︎</p></li>
-<li id="fn6"><p>Likely more, given <a href="https://www.rostrum.blog/posts/2021-02-27-typos/index.html">my terrible typo history</a>.↩︎</p></li>
-<li id="fn7"><p>Basically says ‘if I’m called, execute me like a little standalone program’.↩︎</p></li>
-<li id="fn8"><p>I swear I saw a blog or video somewhere that showed how to just type the filename without the extension, like <code>bank</code>. Tell me if you know what I mean.↩︎</p></li>
+<li id="fn2"><p>I found this <a href="https://mathspp.com/blog/til/standalone-executable-python-scripts-with-uv">thanks to Rodrigo</a>, who spotted it via <a href="https://simonwillison.net/2024/Aug/21/usrbinenv-uv-run/">Simon</a>, who spotted it <a href="https://github.com/alsuren/sixdofone/pull/8">via David</a>. And now I’m ripping it off.↩︎</p></li>
+<li id="fn3"><p>Please feel free to critique my Python code. How could it possibly be worse than my R code?↩︎</p></li>
+<li id="fn4"><p>As a more frequent R user: <em>0 days since last zero-indexing mistake.</em>↩︎</p></li>
+<li id="fn5"><p>Perhaps you have been living under a rock where uv rays have not struck you. uv is all the rage for doing all-the-Python-setup-things-that-make-Python-setup-a-headache. And it’s super fast. Because Rust. Because carcinisation is coming for all of us.↩︎</p></li>
+<li id="fn6"><p><em>The call was coming from inside the script.</em>↩︎</p></li>
+<li id="fn7"><p>Likely more, given <a href="https://www.rostrum.blog/posts/2021-02-27-typos/index.html">my terrible typo history</a>.↩︎</p></li>
+<li id="fn8"><p>Basically says ‘if I’m called, execute me like a little standalone program’.↩︎</p></li>
 <li id="fn9"><p>I’m losing my mind becuase I’ve discovered recently that the pronunciation of ‘gist’ is another ‘how do you pronounce gif?’ situation. To be clear, it should be pronounced ‘gist’.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
