@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 183 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2025-08-11 (latest).
+🔢 There have been 184 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2025-08-25 (latest).
 
 📅 That’s a post roughly every 15 days, or about 2.1 posts per month.
 
-🆕 The latest post: [A bank holiday to honour
-uv?](https://www.rostrum.blog/posts/2025-08-11-uv-standalone).
+🆕 The latest post: [Jotting down some indifferent
+vibes](https://www.rostrum.blog/posts/2025-08-25-jot).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ uv?](https://www.rostrum.blog/posts/2025-08-11-uv-standalone).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 184 | 2025-08-25 | [Jotting down some indifferent vibes](https://www.rostrum.blog/posts/2025-08-25-jot)                                           |
 | 183 | 2025-08-11 | [A bank holiday to honour uv?](https://www.rostrum.blog/posts/2025-08-11-uv-standalone)                                        |
 | 182 | 2025-02-25 | [Dependency-light hex stickers with {gex}](https://www.rostrum.blog/posts/2025-02-25-gex)                                      |
 | 181 | 2025-01-31 | [Dependency-free hex stickers with {hexbase}](https://www.rostrum.blog/posts/2025-01-31-hexbase)                               |
@@ -229,4 +230,4 @@ uv?](https://www.rostrum.blog/posts/2025-08-11-uv-standalone).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2025-08-14 at 17:51.
+🕒 Last updated: 2025-08-25 at 22:25.
