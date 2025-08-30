@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 184 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2025-08-25 (latest).
+🔢 There have been 185 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2025-08-30 (latest).
 
 📅 That’s a post roughly every 15 days, or about 2.1 posts per month.
 
-🆕 The latest post: [Jotting down some indifferent
-vibes](https://www.rostrum.blog/posts/2025-08-25-jot).
+🆕 The latest post: [Keeping jot’s options
+open](https://www.rostrum.blog/posts/2025-08-30-jot-options).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ vibes](https://www.rostrum.blog/posts/2025-08-25-jot).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 185 | 2025-08-30 | [Keeping jot’s options open](https://www.rostrum.blog/posts/2025-08-30-jot-options)                                            |
 | 184 | 2025-08-25 | [Jotting down some indifferent vibes](https://www.rostrum.blog/posts/2025-08-25-jot)                                           |
 | 183 | 2025-08-11 | [A bank holiday to honour uv?](https://www.rostrum.blog/posts/2025-08-11-uv-standalone)                                        |
 | 182 | 2025-02-25 | [Dependency-light hex stickers with {gex}](https://www.rostrum.blog/posts/2025-02-25-gex)                                      |
@@ -230,4 +231,4 @@ vibes](https://www.rostrum.blog/posts/2025-08-25-jot).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2025-08-25 at 22:25.
+🕒 Last updated: 2025-08-30 at 20:52.
