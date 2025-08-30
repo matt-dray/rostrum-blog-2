@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Matt Dray">
-<meta name="dcterms.date" content="2025-08-25">
+<meta name="dcterms.date" content="2025-08-30">
 
-<title>rostrum.blog - Jotting down some indifferent vibes</title>
+<title>rostrum.blog - Keeping jot’s options open</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -65,18 +99,18 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="rostrum.blog - Jotting down some indifferent vibes">
+<meta property="og:title" content="rostrum.blog - Keeping jot’s options open">
 <meta property="og:description" content="">
-<meta property="og:image" content="https://www.rostrum.blog/posts/2025-08-25-jot/resources/install-jot.png">
+<meta property="og:image" content="https://www.rostrum.blog/posts/2025-08-30-jot-options/resources/jot.png">
 <meta property="og:site-name" content="rostrum.blog">
-<meta property="og:image:height" content="1138">
-<meta property="og:image:width" content="2247">
-<meta name="twitter:title" content="rostrum.blog - Jotting down some indifferent vibes">
+<meta property="og:image:height" content="474">
+<meta property="og:image:width" content="568">
+<meta name="twitter:title" content="rostrum.blog - Keeping jot’s options open">
 <meta name="twitter:description" content="">
-<meta name="twitter:image" content="https://www.rostrum.blog/posts/2025-08-25-jot/resources/install-jot.png">
+<meta name="twitter:image" content="https://www.rostrum.blog/posts/2025-08-30-jot-options/resources/jot.png">
 <meta name="twitter:creator" content="@mattdray">
-<meta name="twitter:image-height" content="1138">
-<meta name="twitter:image-width" content="2247">
+<meta name="twitter:image-height" content="474">
+<meta name="twitter:image-width" content="568">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -126,7 +160,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Jotting down some indifferent vibes</h1>
+      <h1 class="title">Keeping jot’s options open</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">cli</div>
                 <div class="quarto-category">jot</div>
@@ -149,7 +183,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">August 25, 2025</p>
+        <p class="date">August 30, 2025</p>
       </div>
     </div>
     
@@ -169,62 +203,135 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="resources/install-jot.png" class="img-fluid figure-img" style="width:100.0%" alt="A terminal with instructions to install the jot tool from GitHub. The jot command is used to save the note 'sharpened my pencils'. The user is prompted to give a path to a text file where the note will be saved. Successive jot calls are made and the content of the text file is printed to show the notes were saved to file with a timestamp."></p>
+<p><img src="resources/jot.png" class="img-fluid figure-img" alt="Terribly drawn image of the word 'jot' in cursive with a pencil at the end of the letter 't'." width="200"></p>
 </figure>
 </div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I’ve started a minimal opinionated Python command-line tool to help me remember stuff. It’s called <a href="https://github.com/matt-dray/jot">jot</a>.</p>
-</section>
-<section id="jot-or-not" class="level2">
-<h2 class="anchored" data-anchor-id="jot-or-not">Jot or not</h2>
-<p>This tool is for me<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, but if you want to install it, I recommend you <a href="https://docs.astral.sh/uv/">install uv first</a>. Then run <code>uv tool install git+https://github.com/matt-dray/jot</code> from a terminal to install jot (currently v0.2.1) <a href="https://github.com/matt-dray/jot">from GitHub</a>.</p>
-<p>Open a terminal and write your first jotting like <code>jot "sharpened my pencils"</code>. When prompted, enter a text file path where your jottings will be saved. This path will be stored in a <code>.jot-config.json</code> file in your home folder. Each <code>jot</code> call will prepend your your text file with the jotting and a timestamp.</p>
-<p>Keep that terminal window open and write new jottings throughout the day, week, month, year.</p>
-<p>That’s it.</p>
+<p>I’ve added a small set of options to <a href="https://github.com/matt-dray/jot">jot</a>, my minimal opinionated Python command-line tool that helps me remember stuff.</p>
 </section>
 <section id="forget-me-jot" class="level2">
 <h2 class="anchored" data-anchor-id="forget-me-jot">Forget me jot</h2>
-<p>The development of jot is a story in three neurologically-themed parts:</p>
-<ol type="1">
-<li>Goldfish brain.</li>
-<li>Robot brain.</li>
-<li>Human brain.</li>
-</ol>
-<section id="goldfish-brain" class="level3">
-<h3 class="anchored" data-anchor-id="goldfish-brain">1. Goldfish brain</h3>
-<p>I forget stuff. Work stuff in particular. The fogginess stops me from properly recognising my efforts and reflecting on what I’ve learnt.</p>
-<p>Recently I’ve reacquainted myself with <a href="https://gilest.org/doingweeknotes/index.html">weeknotes</a>; appreciated Jeff Huang’s <a href="https://jeffhuang.com/productivity_text_file/">neverending text file</a>; and resonated with Chris Albon’s advice to avoid ‘invisible work’ and to try a <a href="https://bsky.app/profile/chrisalbon.com/post/3ld24aoq4ik2p">lightweight logging system</a>.</p>
-<p>So I figured I’d write a Python-powered platform-independent command-line tool to jot notes into an immortal text file<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. I’m developing <a href="https://www.rostrum.blog/posts/2025-08-11-uv-standalone/">my Python skills</a> after all.</p>
+<p>You may recall <a href="https://www.rostrum.blog/posts/2025-08-25-jot/">I made a Python CLI tool called jot</a> to help me record work tasks. I go to my terminal and type <code>jot "corrected a typo"</code> and it gets added to a simple text file with a timestamp.</p>
+<p>To give it a go, I recommend installing <a href="https://docs.astral.sh/uv/">uv</a> and then install <a href="https://github.com/matt-dray/jot">from GitHub</a> like <code>uv tool install git+https://github.com/matt-dray/jot</code>.</p>
 </section>
-<section id="robot-brain" class="level3">
-<h3 class="anchored" data-anchor-id="robot-brain">2. Robot brain</h3>
-<p>As a ‘data scientist’ on ‘the cutting edge’, I wondered if I should try ‘<a href="https://en.wikipedia.org/wiki/Vibe_coding">vibe coding</a>’ on this non-critical personal project<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
-<p>After some low-effort LLM prompts, I got a thing that did the thing. I figured its existence was the main goal and I could iterate later with more ‘artisanal’ approaches (i.e.&nbsp;engaging my monkey brain and paws).</p>
-<p>I released this as <a href="https://github.com/matt-dray/jot/releases/tag/v0.1.0">v0.1.0</a> and started using it. It was just what I wanted (i.e.&nbsp;not very much).</p>
-<p>So why then did I rewrite the whole thing from scratch?</p>
-</section>
-<section id="human-brain" class="level3">
-<h3 class="anchored" data-anchor-id="human-brain">3. Human brain</h3>
-<p>Inevitably (obviously) the vibes didn’t teach me anything<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. I knew this would happen, but not how much I’d actually miss the failing and learning that comes with doing a new thing.</p>
-<p>So I rewrote it myself using some old-fashioned Duck-Duck-Going, some snotty Stackoverflow comments and, shudder, some documentation.</p>
-<p>I learnt things about file handling with <code>with</code>, <a href="https://docs.python.org/3.15/library/pathlib.html">pathlib</a> for easing the pain of filepaths, and <a href="https://docs.python.org/3.15/library/argparse.html">argparse</a> for interpreting inputs on the command line.</p>
-<p>Is the resulting <a href="https://github.com/matt-dray/jot/releases/tag/v0.2.0">v0.2.0</a> (human-powered edition) better than v0.1.0? Well, it’s ‘as good’ in the sense it achieves the same outcome. My code is more brittle and my limits are more evident. But I’m okay with that.</p>
-</section>
-</section>
-<section id="human-heart" class="level2">
-<h2 class="anchored" data-anchor-id="human-heart">Human heart</h2>
-<p>There’s not much of a lesson here, apart from the fact I like tinkering and would prefer to do things that way.</p>
-<p>I’ll develop jot a bit more with the aid of ‘traditional’ techniques. The interface will remain minimal, but I’d like to add some really basic options to fetch jottings from the past day/week/month or that match a keyword. <a href="https://github.com/matt-dray/jot/issues">Add some ideas</a> if you like.</p>
-<p>And actually, I think LLMs do have a place in this story, just not in the development stage. Before team standups I can consult an LLM to summarise the past week from my jottings. Before appraisals I can summarise the past year.</p>
-<p>One particular LLM asked if I’d like some Python code to generate a P*werPoint slide to summarise my week. Wow!</p>
+<section id="opt-in" class="level2">
+<h2 class="anchored" data-anchor-id="opt-in">Opt in</h2>
+<p>I’ve been using jot for the past couple of weeks and it’s helping me record things I would typically forget about. As a result, I’ve found it easier to unobscure ‘<a href="https://www.youtube.com/watch?v=HiF83i1OLOM">invisible work</a>’ and reflect on what I’ve achieved.</p>
+<p>But my list of jottings is getting harder to manage as it gets longer. There’s a couple of things that would make it easier for me: to be able to peek at the past few jottings and to search them for specific terms.</p>
+<p>So, I’ve added two options and will demonstrate them against some imaginary data:</p>
+<details>
+<summary>
+<code>breakfast-jot.txt</code>
+</summary>
+<pre><code>[2025-08-30 09:27] granola and yoghurt
+[2025-08-29 07:47] pancakes, blueberries and maple syrup
+[2025-08-28 08:00] fried egg on sourdough toast
+[2025-08-27 08:06] yoghurt and strawberries
+[2025-08-26 08:19] strawberry jam on toast
+[2025-08-25 08:52] wholemeal toast and poached eggs
+[2025-08-24 09:15] muesli and milk
+[2025-08-23 09:23] muesli with berries and milk
+[2025-08-22 08:13] hash browns and scrambled eggs
+[2025-08-21 07:48] granola and yoghurt
+[2025-08-20 07:54] cereal and milk</code></pre>
+<p>Believe me, my actual breakfast is more boring than this. Also sometimes I have a hobbitesque second breakfast.</p>
+</details>
+<p>Everything below is correct as of jot v0.2.3, but I may work to improve some features. Feel free to <a href="https://github.com/matt-dray/jot/issues">make suggestions</a> too.</p>
+<section id="list" class="level3">
+<h3 class="anchored" data-anchor-id="list">1. List</h3>
+<p>The first option is simple: print out the last <em>n</em> jottings. You can use the flag <code>--list</code>, or <code>-l</code> for short, and then provide an integer for the number of entries to show.</p>
+<p>So let’s print the most recent three entries:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> jot <span class="at">-l</span> 3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>[2025-08-30 09:27] granola and yoghurt
+[2025-08-29 07:47] pancakes, blueberries and maple syrup
+[2025-08-28 08:00] fried egg on sourdough toast</code></pre>
+<p>This is handy for a quick peek at the last few things you’ve been doing.</p>
+<p>It reminds me of returning to games like <a href="https://en.wikipedia.org/wiki/Pok%C3%A9mon_FireRed_and_LeafGreen"><em>Pokémon FireRed</em></a> after some time away and being given a quick recap.</p>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="resources/jot-pptx.png" class="img-fluid figure-img" style="width:100.0%" alt="A PowerPoint slide. The title is 'weekly summary' with a sun emoji. There are two columns. The left is titled 'what went well' with a green checkbox emoji. The right is titled 'lessons learnt' with a book emoji. Both columns have three bullet points of text. The text doesn't wrap. It overlaps and runs off the screen."></p>
-<figcaption class="figure-caption">Word wrap is for cowards.</figcaption>
+<p><img src="resources/previously.png" class="img-fluid figure-img" alt="A greyscale screengrab of the game Pokemon FireRed showing a recap of what the player did before their last save. At the top it says 'previously on your quest'. At the bottom, 'here in Viridian City, Red obtained the item Oak's Parcel. In the centre is an image of the player's sprite in a Pokémart, facing the shopkeeper." width="300"></p>
+<figcaption class="figure-caption"><em>To collect parcels is my real test</em> (thanks <a href="https://www.reddit.com/r/pokemon/comments/f0m0ne/fire_redleaf_green_were_ahead_of_their_time/">Reddit user AIMWSTRN</a>).</figcaption>
 </figure>
 </div>
-<p>Very cool. Judgement day is inevitable.</p>
+</section>
+<section id="search" class="level3">
+<h3 class="anchored" data-anchor-id="search">2. Search</h3>
+<p>The second option is also simple. But much more powerful. It lets you search for words and phrases, powered by <a href="https://docs.python.org/3/library/re.html">re</a>’s regular-expression handling.</p>
+<p>A simple example would be to look for a single word, this time with the <code>--search</code> or <code>-s</code> flag<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jot</span> <span class="at">-s</span> egg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>[2025-08-28 08:00] fried egg on sourdough toast
+[2025-08-25 08:52] wholemeal toast and poached eggs
+[2025-08-22 08:13] hash browns and scrambled eggs</code></pre>
+<p>But we can use a regular expression to be more specific. We can even specify a date range, thanks to the timestamps.</p>
+<p>So, when did I have eggs last work-week, specifically? Let’s use a suitable <del>regeggs</del> regex:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> jot <span class="at">-s</span> <span class="st">"2025-08-2([5-9]).*egg"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>[2025-08-28 08:00] fried egg on sourdough toast
+[2025-08-25 08:52] wholemeal toast and poached eggs</code></pre>
+<p>With that regex I’m asking for the string ‘egg’ used in jottings between 25 and 29 August 2025’<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+</section>
+</section>
+<section id="pain-in-the-argparse" class="level2">
+<h2 class="anchored" data-anchor-id="pain-in-the-argparse">Pain in the argparse?</h2>
+<p>A new learning for me has been <a href="https://docs.python.org/3/library/argparse.html">argparse package</a>, which allows your Python function to accept inputs at the command line.</p>
+<p>That’s been crucial for this update to jot (v0.2.3). At the start of the <code>main()</code> function I’ve set up some argparse steps.</p>
+<p>To initiate the parser:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> argparse</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>parser <span class="op">=</span> argparse.ArgumentParser(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    prog<span class="op">=</span><span class="st">"jot"</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    description<span class="op">=</span><span class="st">"Minimal opinionated Python CLI to jot timestamped thoughts."</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    epilog<span class="op">=</span><span class="st">"Source: https://github.com/matt-dray/jot"</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we can add arguments to the parser. Here’s how we do that for the search argument, for which I’ve written a corresponding <code>search_jottings()</code> Python function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>parser.add_argument(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"-s"</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"--search"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    nargs<span class="op">=</span><span class="st">"?"</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">help</span><span class="op">=</span><span class="st">"search jottings (regex supported)"</span>,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After these declarations, we can collect the parsed arguments:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>args <span class="op">=</span> parser.parse_args()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Later in the body of the <code>main()</code> function we can use the named elements of <code>args</code> to pass into our Python functions. For our search option, that looks like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>search_jottings(jot_path, args.search)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As a result of this set up, we also get a nice help file for free with <code>--help</code> or <code>-h</code>, which should be helpful for users:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jot</span> <span class="at">-h</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>usage: jot [-h] [-l [LIST]] [-s [SEARCH]] [text]
+
+Minimal opinionated Python CLI to jot timestamped thoughts.
+
+positional arguments:
+  text                  text to write to file
+
+options:
+  -h, --help            show this help message and exit
+  -l [LIST], --list [LIST]
+                        show last n jottings
+  -s [SEARCH], --search [SEARCH]
+                        search jottings (regex supported)
+
+Source: https://github.com/matt-dray/jot</code></pre>
+</section>
+<section id="jot-on" class="level2">
+<h2 class="anchored" data-anchor-id="jot-on">Jot on</h2>
+<p>As I’ve mentioned before, jot was built by me for me. It’s basically feature-complete from my perspective. The plan is to extend it minimally and only as a way to learn more Python. But <a href="https://github.com/matt-dray/jot/issues">I welcome suggestions</a>!</p>
 
 </section>
 
@@ -238,7 +345,7 @@ Session info
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>[project]
-name = "2025-08-25-jot"
+name = "2025-08-30-jot-options"
 version = "0.1.0"
 requires-python = "&gt;=3.12"
 dependencies = []</code></pre>
@@ -250,10 +357,8 @@ dependencies = []</code></pre>
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>Though <a href="https://www.rostrum.blog/about#adriana-de-palma">Adriana</a> has been using it too, in a slightly different way to me.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>You’re thinking ‘yes, but now you have a meta problem: will you actually remember to write in it?’ I don’t think this is a problem for me, personally. A terminal window is always in front of my face and hard to miss. I seem capable of building habits for other positive things.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>This blog is a non-critical personal project too, but I have not and will not write posts with anything other than my brain and typo-addled fingers. <a href="https://www.rostrum.blog/posts/2024-03-15-ai-garbage/">I’ve written before</a> about my distaste for LLMs as slop manufacturers. I have fewer qualms about using it for boilerplate, as a code helper, and for-fun personal projects. But I’m still not 100% happy with it in general from an ethical standpoint and for the existential dread it can bring.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Yes, I could have asked the LLM to walk me through the code and teach me. Would I have remembered any of it? Unlikely. More fool me.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>In future I want an argument to limit the number of jottings returned, otherwise we might flood the console. With eggs. Which could get messy.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>More literally, it matches the string ‘2025-08-2’, replacing the final digit of the date with 5, 6, 7, 8 or 9; then allows for any number of any characters until it finds the string ‘egg’.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
