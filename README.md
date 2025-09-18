@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 185 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2025-08-30 (latest).
+🔢 There have been 186 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2025-09-18 (latest).
 
 📅 That’s a post roughly every 15 days, or about 2.1 posts per month.
 
-🆕 The latest post: [Keeping jot’s options
-open](https://www.rostrum.blog/posts/2025-08-30-jot-options).
+🆕 The latest post: [Abandon P\*werpoint for the command
+line](https://www.rostrum.blog/posts/2025-09-18-rich-slides).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ open](https://www.rostrum.blog/posts/2025-08-30-jot-options).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 186 | 2025-09-18 | [Abandon P\*werpoint for the command line](https://www.rostrum.blog/posts/2025-09-18-rich-slides)                              |
 | 185 | 2025-08-30 | [Keeping jot’s options open](https://www.rostrum.blog/posts/2025-08-30-jot-options)                                            |
 | 184 | 2025-08-25 | [Jotting down some indifferent vibes](https://www.rostrum.blog/posts/2025-08-25-jot)                                           |
 | 183 | 2025-08-11 | [A bank holiday to honour uv?](https://www.rostrum.blog/posts/2025-08-11-uv-standalone)                                        |
@@ -231,4 +232,4 @@ open](https://www.rostrum.blog/posts/2025-08-30-jot-options).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2025-08-31 at 09:15.
+🕒 Last updated: 2025-09-18 at 20:40.
