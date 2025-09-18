@@ -1,0 +1,214 @@
+---
+title: "Abandon P*werpoint for the command line"
+date: 2025-09-18
+slug: "rich-slides"
+image: resources/slide-1.svg
+categories:
+  - cli
+  - python
+  - rich
+  - uv
+---
+
+![](resources/slide-1.svg){fig-alt="A dark terminal window with ASCII art of the word 'synergy' and some text under it saying 'promote it'. There's a border line around the edge. These elements are green." width='100%'}
+
+## tl;dr
+
+You can use Python's [rich](https://rich.readthedocs.io/en/stable/) library to make super minimal presentations at the command line.
+
+## Sliding scale
+
+Recently, conference organisers forced a colleague to convert their Quarto presentation to P*werPoint. Unconscionable.
+
+Proprietary software shouldn't get in the way of good ideas, maaan.
+
+Actually, if your message is good enough[^gds] then why waste time _rendering_ anything? Why not just print directly to the terminal, lol?
+
+## That's rich 
+
+The [rich](https://rich.readthedocs.io/en/stable/) library is for prettifying output and making user interfaces[^jot].
+
+There's nothing to stop you using rich to show faux 'slides' at the command line. So, as a thought experiment, I've given this a go.
+
+Basic approach:
+
+1. Clear the screen.
+2. Accept keyboard input.
+3. Draw the next slide.
+
+I've prepared a single Python demo script to do exactly this. Dependencies are declared at the top, so you can run it with [uv](https://docs.astral.sh/uv/) like `uv run slides.py`[^uv].
+
+Crucially, you'll have to zoom in to you terminal so the words end up nice and big. I don't know a simple way to do this automatically (or if it's even possible).
+
+Then you can use arrow keys to move through the slides and press <kbd>Q</kbd> to quit.
+
+<details><summary>Click to see the full demo script</summary>
+
+```{python}
+#| label: slides
+#| eval: false
+#| filename: "slides.py"
+
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "pynput",
+#     "rich",
+# ]
+# ///
+
+from pynput import keyboard
+from rich.align import Align
+from rich.console import Console
+from rich.panel import Panel
+import os
+
+console = Console()
+
+def panelise(
+    *args,
+    sep="\n",
+    panel_title,
+    panel_subtitle="#ShareholderValue",
+    panel_width=console.size.width,
+    panel_height=console.size.height - 2,
+):
+    panel_text = sep.join(args)
+    panel_body = Align.center(panel_text, vertical="middle")
+    panel = Panel(
+        panel_body,
+        title=panel_title,
+        subtitle=panel_subtitle,
+        width=panel_width,
+        height=panel_height,
+    )
+    return panel
+
+slides = [
+    panelise(
+        " ___ _   _ _ __   ___ _ __ __ _ _   _ ",
+        "/ __| | | | '_ \ / _ \ '__/ _` | | | |",
+        "\__ \ |_| | | | |  __/ | | (_| | |_| |",
+        "|___/\__, |_| |_|\___|_|  \__, |\__, |",
+        "      __/ |                __/ | __/ |",
+        "     |___/                |___/ |___/ ",
+        "                            promote it",
+        panel_title="",
+        panel_subtitle="",
+    ),
+    panelise(
+        "• Push the envelope",
+        "• Double down",
+        "• Think outside the box",
+        panel_title="Paradigm shift",
+    ),
+    panelise(
+        "• Move the needle",
+        "• Circle back",
+        "• Take this offline",
+        panel_title="Key deliverables",
+    ),
+    panelise(
+        "You must clap",
+        panel_title="You're welcome",
+    ),
+]
+
+index = 0
+running = True
+
+def render_slide():
+    os.system("clear")
+
+    width = console.size.width
+    filled = int((index) / (len(slides) - 1) * width)
+    bar = "▬" * filled + " " * (width - filled)
+    console.print(bar, style="green")
+
+    console.print(slides[index], style="green")
+
+def on_press(key):
+    global index, running
+
+    if hasattr(key, "char") and key.char == "q":
+        running = False
+        listener.stop()
+        return
+
+    if key == keyboard.Key.right:
+        index = (index + 1) % len(slides)
+
+    elif key == keyboard.Key.left:
+        index = (index - 1) % len(slides)
+
+    render_slide()
+
+listener = keyboard.Listener(on_press=on_press)
+
+render_slide()
+listener.start()
+listener.join() 
+```
+
+</details>
+
+The slides in the demo are spat out like this[^record]:
+
+![](resources/slide-1.svg){fig-alt="Title slide: green ASCII art of the word 'synergy' with a green border in a dark terminal window." width="49%"}
+![](resources/slide-2.svg){fig-alt="Slide 2, titled 'paradigm shift', with a progress bar one-third full, three bullet points including 'push the envelope' and a footer saying '#ShareholderValue'. The elements are all green." width="49%"}
+![](resources/slide-3.svg){fig-alt="Slide 3, titled 'key deliverables', with a progress bar two-thirds full, three bullet points including 'take this offline' and a footer saying '#ShareholderValue'. The elements are all green." width="49%"}
+![](resources/slide-4.svg){fig-alt="Slide 4, titled 'you're welcome', with a full progress bar, a line saying 'you must clap' and a footer saying '#ShareholderValue'. The elements are all green." width="49%"}
+
+Some may call this content 'jargon rich' but they are losers who have simply never grinded as hard as me, bro.
+
+## Slidecraft
+
+I'll step through the code.
+
+First, we initiate a console object: `console = Console()`. The `print()` method against this lets us `style` the output.
+
+Next, I made a `panelise()` function, which wraps rich's `Panel()`. This simplifies 'slide' setup with some defaults. 
+
+Incidentally, a '[panel](https://rich.readthedocs.io/en/stable/panel.html)' is just an area surrounded by a border, which I've 'hacked' to use as a bordered slide.
+
+Then we create a dict of slides, passing lines of text and the slide title. In my example I created a title slide with [some cool ASCII art](https://patorjk.com/software/taag/) and then a few slides with simple bullets.
+
+Next are two important functions:
+
+* `render_slide()`, which clears the console, adds a progress bar at the top (oh yeah, did I mention there's a progress bar?[^bar]) and then prints the slide content
+* `on_press()`, which uses the [pynput](https://pynput.readthedocs.io/en/latest/index.html) library to accept keypresses (left- and right-arrows to move slides and <kbd>Q</kbd> to quit)
+
+Then there are steps to run the presentation itself:
+
+1. Start 'listening' to keyboard presses with `keyboard.Listener()`.
+2. Render the first slide (`index = 0`) with `render_slide()`.
+3. Move to the next slide with an arrow press (wrapping back to the start).
+4. Exit the slides when a <kbd>q</kbd> happens (set `running = FALSE` and stop listening for keypresses).
+
+## The slideshow's over
+
+So, this thing I threw together does what I wanted it to do. Improvements are absolutely possible.
+
+Of course, I haven't made full use of rich's rich colour and style control. rich also has a module that [interprets Markdown input](https://rich.readthedocs.io/en/stable/markdown.html), which may be preferable to `Panel()` in some cases.
+
+I know the script works on macOS but I haven't tested it anywhere else. I suspect there may be better, platform independent approaches.
+
+It's also true that pressing the arrow keys will advance slides... even if the focus is away from the terminal. Ah well!
+
+Anyway, if you want an actual fully-featured terminal-based tool, you could try something like [Maas Lalani's slides](https://maaslalani.com/slides/).
+
+Next slide please!
+
+### Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat(readLines("pyproject.toml"), sep = "\n")
+```
+</details>
+
+[^gds]: I worked at the [Government Digital Service](https://www.gov.uk/government/organisations/government-digital-service) (GDS) where there was [a culture of good, simple slides](https://gds.blog.gov.uk/2016/04/07/giving-clear-presentations/).
+[^record]: Add `record=TRUE` to the `Console()` call and `console.save_svg("slides.svg")` at the end to get an image of your slides as you progress through them.
+[^bar]: Yes, the bar starts on the second slide, after the title slide. This is for aesthetic reasons mostly.
+[^uv]: An approach I wrote about in [a recent post](https://www.rostrum.blog/posts/2025-08-11-uv-standalone/).
+[^jot]: I used its basic features recently to add colour to [my minimal note-taking tool, jot](https://github.com/matt-dray/jot).
