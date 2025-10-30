@@ -25,7 +25,7 @@ I made this for learning purposes, but if you did want to try it:
 2. Run `pet`.
 3. Take responsibility.
 
-## Front-end
+## Pet the kitty
 
 Running `pet` takes control of the terminal and asks you to select an option with <kbd>↓</kbd>, <kbd>↑</kbd> and <kbd>Enter</kbd>:
 
@@ -45,7 +45,7 @@ Crucially, if you quit and come back later, your pet will be recalled and its st
 
 That's it.
 
-## Back-end
+## The soft underbelly
 
 You can see the 'game loop' in [the `cli.py` module](https://github.com/matt-dray/pet/blob/main/src/pet/cli.py). Basically:
 
@@ -64,7 +64,7 @@ As well as getting more general experience in Python packaging, I learnt more ab
 * [InquirerPy](https://inquirerpy.readthedocs.io/en/latest/), which does the heavy lifting on user interaction, like `inquirer.select()` for presenting keyboard-navigable options[^r]
 * [`user_data_dir()` from platformdirs](https://platformdirs.readthedocs.io/en/latest/), which can create a platform-independent path to a location on the user's machine where game data can be stored
 
-As in [several recent posts](https://www.rostrum.blog/index.html#category=uv), uv has also been great here for the development loop, as well as shortcutting use of ruff and ty for code quality, like `uvx ruff format`.
+As in [several recent posts](https://www.rostrum.blog/index.html#category=uv), uv has also been great here for the development loop, including to support use of ruff and ty[^astral] for code quality, like `uvx ruff format`.
 
 ## A good egg
 
@@ -83,3 +83,4 @@ cat(readLines("pyproject.toml"), sep = "\n")
 [^unalive]: Do not panic: your pet will not run away or die. I was too lazy to program that.
 [^r]: See [Textual](https://textual.textualize.io/) as a more advanced tool for building your own complicated terminal user interfaces.
 [^a]: Amateur, Adequate, Awkward?
+[^astral]: [Astral](https://astral.sh/): please don't bait-and-switch me, I need this.

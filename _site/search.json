@@ -10504,14 +10504,14 @@
     "href": "posts/2025-10-30-pet/index.html#footnotes",
     "title": "={ o x o}=",
     "section": "Footnotes",
-    "text": "Footnotes\n\n\nDo not panic: your pet will not run away or die. I was too lazy to program that.↩︎\nSee Textual as a more advanced tool for building your own complicated terminal user interfaces.↩︎\nAmateur, Adequate, Awkward?↩︎"
+    "text": "Footnotes\n\n\nDo not panic: your pet will not run away or die. I was too lazy to program that.↩︎\nSee Textual as a more advanced tool for building your own complicated terminal user interfaces.↩︎\nAstral: please don’t bait-and-switch me, I need this.↩︎\nAmateur, Adequate, Awkward?↩︎"
   },
   {
     "objectID": "posts/2025-10-30-pet/index.html#a-good-egg",
     "href": "posts/2025-10-30-pet/index.html#a-good-egg",
     "title": "={ o x o}=",
     "section": "A good egg",
-    "text": "A good egg\nThis pet tool has been designed for my own learning. There’s loads of missing features, but my goals have been met.\nFor more of a triple-A3 virtual pet experience, you can read earlier blogs about my {tamRgo} package, which does a much better job of this in the R console. It has lots more features, like ‘happy’, ‘hungry’ and ‘dirty’ meters; different pet species; experience points and levelling up; and ‘graphics’ dependent on the pet’s species and level. Ah, and the concept of death."
+    "text": "A good egg\nThis pet tool has been designed for my own learning. There’s loads of missing features, but my goals have been met.\nFor more of a triple-A4 virtual pet experience, you can read earlier blogs about my {tamRgo} package, which does a much better job of this in the R console. It has lots more features, like ‘happy’, ‘hungry’ and ‘dirty’ meters; different pet species; experience points and levelling up; and ‘graphics’ dependent on the pet’s species and level. Ah, and the concept of death."
   },
   {
     "objectID": "posts/2025-10-30-pet/index.html",
@@ -10525,14 +10525,14 @@
     "href": "posts/2025-10-30-pet/index.html#gaining-xp",
     "title": "={ o x o}=",
     "section": "Gaining XP",
-    "text": "Gaining XP\nAs well as getting more general experience in Python packaging, I learnt more about:\n\nInquirerPy, which does the heavy lifting on user interaction, like inquirer.select() for presenting keyboard-navigable options2\nuser_data_dir() from platformdirs, which can create a platform-independent path to a location on the user’s machine where game data can be stored\n\nAs in several recent posts, uv has also been great here for the development loop, as well as shortcutting use of ruff and ty for code quality, like uvx ruff format."
+    "text": "Gaining XP\nAs well as getting more general experience in Python packaging, I learnt more about:\n\nInquirerPy, which does the heavy lifting on user interaction, like inquirer.select() for presenting keyboard-navigable options2\nuser_data_dir() from platformdirs, which can create a platform-independent path to a location on the user’s machine where game data can be stored\n\nAs in several recent posts, uv has also been great here for the development loop, including to support use of ruff and ty3 for code quality, like uvx ruff format."
   },
   {
     "objectID": "posts/2025-10-30-pet/index.html#front-end",
     "href": "posts/2025-10-30-pet/index.html#front-end",
     "title": "={ o x o}=",
     "section": "Front-end",
-    "text": "Front-end\nRunning pet takes control of the terminal and asks you to select an option with ↓, ↑ and Enter:\n\n📊 Stats to show your pet’s name (supplied by the user when they first run pet), birth (creation datetime), age (days since birth) and health (out of 10)\n👀 See to print a little picture of your pet (always the same handsome cat)\n🍣 Feed to simulate your pet eating and gaining one unit of health\n❌ Quit to exit the program back to the terminal\n👋 Release to discard your pet (cry) and delete its data\n\nHere’s what a playthrough looks like:\n\n\n\nObligatory Monty Python reference.\n\n\nLines starting with a question mark require input from the user. Once selected, the options disappear and the chosen one is displayed in blue. When the user can choose from several options, a blue chevron is moved between the options.\nCrucially, if you quit and come back later, your pet will be recalled and its stats will have changed given the amount of time that’s passed. Pay attention because your pet’s health will diminish over time1.\nThat’s it."
+    "text": "Front-end\nRunning pet takes control of the terminal and asks you to select an option with ↓, ↑ and Enter:\n\n📊 Stats to show your pet’s name (supplied by the user when they first run pet), birth (creation datetime), age (days since birth) and health (out of 10)\n👀 See to print a little picture of your pet (always the same handsome cat)\n🍣 Feed to simulate your pet eating and gaining one unit of health\n❌ Quit to exit the program back to the terminal\n👋 Release to discard your pet (cry) and delete its data\n\nHere’s what a playthrough looks like:\n\n\n\nObligatory Monty Python reference.\n\n\nLines starting with a question mark require input from the user. Once selected, the options disappear and the chosen one is displayed in blue. When the user can choose from several options, a blue chevron is moved between the options.\nCrucially, if you quit and come back later, your pet will be recalled and its stats will have changed given the amount of time that’s passed. Pay attention! Your pet’s health will diminish over time1.\nThat’s it."
   },
   {
     "objectID": "posts/2025-10-30-pet/index.html#back-end",
@@ -10540,5 +10540,19 @@
     "title": "={ o x o}=",
     "section": "Back-end",
     "text": "Back-end\nYou can see the ‘game loop’ in the cli.py module. Basically:\n\nIf it doesn’t exist, create a json file of pet stats on the user’s computer, having prompted for the pet’s name.\nUpdate the stats given the time elapsed since birth and since your last interaction.\nDeplete the pet’s health as a function of elapsed time (1 health unit lost per hour).\nAsk the user to select an action from the menu and act accordingly, ad infinitum.\nBreak the loop on exit, and delete the stats json file if the pet was released.\n\nNot too complicated. Behind this, the Python functions in utils.py are for wrangling and overwriting the stats file, calculating time and health loss, and for initiating the graphics engine (i.e. print(), lol)."
+  },
+  {
+    "objectID": "posts/2025-10-30-pet/index.html#pet-the-kitty",
+    "href": "posts/2025-10-30-pet/index.html#pet-the-kitty",
+    "title": "={ o x o}=",
+    "section": "Pet the kitty",
+    "text": "Pet the kitty\nRunning pet takes control of the terminal and asks you to select an option with ↓, ↑ and Enter:\n\n📊 Stats to show your pet’s name (supplied by the user when they first run pet), birth (creation datetime), age (days since birth) and health (out of 10)\n👀 See to print a little picture of your pet (always the same handsome cat)\n🍣 Feed to simulate your pet eating and gaining one unit of health\n❌ Quit to exit the program back to the terminal\n👋 Release to discard your pet (cry) and delete its data\n\nHere’s what a playthrough looks like:\n\n\n\nObligatory Monty Python reference.\n\n\nLines starting with a question mark require input from the user. Once selected, the options disappear and the chosen one is displayed in blue. When the user can choose from several options, a blue chevron is moved between the options.\nCrucially, if you quit and come back later, your pet will be recalled and its stats will have changed given the amount of time that’s passed. Pay attention! Your pet’s health will diminish over time1.\nThat’s it."
+  },
+  {
+    "objectID": "posts/2025-10-30-pet/index.html#the-soft-underbelly",
+    "href": "posts/2025-10-30-pet/index.html#the-soft-underbelly",
+    "title": "={ o x o}=",
+    "section": "The soft underbelly",
+    "text": "The soft underbelly\nYou can see the ‘game loop’ in the cli.py module. Basically:\n\nIf it doesn’t exist, create a json file of pet stats on the user’s computer, having prompted for the pet’s name.\nUpdate the stats given the time elapsed since birth and since your last interaction.\nDeplete the pet’s health as a function of elapsed time (1 health unit lost per hour).\nAsk the user to select an action from the menu and act accordingly, ad infinitum.\nBreak the loop on exit, and delete the stats json file if the pet was released.\n\nNot too complicated. Behind this, the Python functions in utils.py are for wrangling and overwriting the stats file, calculating time and health loss, and for initiating the graphics engine (i.e. print(), lol)."
   }
 ]

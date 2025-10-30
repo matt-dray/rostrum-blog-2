@@ -187,8 +187,8 @@ ul.task-list li input[type="checkbox"] {
 <li>Take responsibility.</li>
 </ol>
 </section>
-<section id="front-end" class="level2">
-<h2 class="anchored" data-anchor-id="front-end">Front-end</h2>
+<section id="pet-the-kitty" class="level2">
+<h2 class="anchored" data-anchor-id="pet-the-kitty">Pet the kitty</h2>
 <p>Running <code>pet</code> takes control of the terminal and asks you to select an option with <kbd>↓</kbd>, <kbd>↑</kbd> and <kbd>Enter</kbd>:</p>
 <ul>
 <li>📊 <strong>Stats</strong> to show your pet’s name (supplied by the user when they first run pet), birth (creation datetime), age (days since birth) and health (out of 10)</li>
@@ -205,11 +205,11 @@ ul.task-list li input[type="checkbox"] {
 </figure>
 </div>
 <p>Lines starting with a question mark require input from the user. Once selected, the options disappear and the chosen one is displayed in blue. When the user can choose from several options, a blue chevron is moved between the options.</p>
-<p>Crucially, if you quit and come back later, your pet will be recalled and its stats will have changed given the amount of time that’s passed. Pay attention because your pet’s health will diminish over time<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>Crucially, if you quit and come back later, your pet will be recalled and its stats will have changed given the amount of time that’s passed. Pay attention! Your pet’s health will diminish over time<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <p>That’s it.</p>
 </section>
-<section id="back-end" class="level2">
-<h2 class="anchored" data-anchor-id="back-end">Back-end</h2>
+<section id="the-soft-underbelly" class="level2">
+<h2 class="anchored" data-anchor-id="the-soft-underbelly">The soft underbelly</h2>
 <p>You can see the ‘game loop’ in <a href="https://github.com/matt-dray/pet/blob/main/src/pet/cli.py">the <code>cli.py</code> module</a>. Basically:</p>
 <ol type="1">
 <li>If it doesn’t exist, create a json file of pet stats on the user’s computer, having prompted for the pet’s name.</li>
@@ -227,12 +227,12 @@ ul.task-list li input[type="checkbox"] {
 <li><a href="https://inquirerpy.readthedocs.io/en/latest/">InquirerPy</a>, which does the heavy lifting on user interaction, like <code>inquirer.select()</code> for presenting keyboard-navigable options<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></li>
 <li><a href="https://platformdirs.readthedocs.io/en/latest/"><code>user_data_dir()</code> from platformdirs</a>, which can create a platform-independent path to a location on the user’s machine where game data can be stored</li>
 </ul>
-<p>As in <a href="https://www.rostrum.blog/index.html#category=uv">several recent posts</a>, uv has also been great here for the development loop, as well as shortcutting use of ruff and ty for code quality, like <code>uvx ruff format</code>.</p>
+<p>As in <a href="https://www.rostrum.blog/index.html#category=uv">several recent posts</a>, uv has also been great here for the development loop, including to support use of ruff and ty<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> for code quality, like <code>uvx ruff format</code>.</p>
 </section>
 <section id="a-good-egg" class="level2">
 <h2 class="anchored" data-anchor-id="a-good-egg">A good egg</h2>
 <p>This pet tool has been designed for my own learning. There’s loads of missing features, but my goals have been met.</p>
-<p>For more of a triple-A<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> virtual pet experience, you can <a href="https://www.rostrum.blog/posts/2022-11-13-tamrgo/">read earlier blogs</a> about <a href="https://github.com/matt-dray/tamRgo">my {tamRgo} package</a>, which does a much better job of this in the R console. It has lots more features, like ‘happy’, ‘hungry’ and ‘dirty’ meters; different pet species; experience points and levelling up; and ‘graphics’ dependent on the pet’s species and level. Ah, and the concept of death.</p>
+<p>For more of a triple-A<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> virtual pet experience, you can <a href="https://www.rostrum.blog/posts/2022-11-13-tamrgo/">read earlier blogs</a> about <a href="https://github.com/matt-dray/tamRgo">my {tamRgo} package</a>, which does a much better job of this in the R console. It has lots more features, like ‘happy’, ‘hungry’ and ‘dirty’ meters; different pet species; experience points and levelling up; and ‘graphics’ dependent on the pet’s species and level. Ah, and the concept of death.</p>
 
 </section>
 
@@ -260,7 +260,8 @@ dependencies = []</code></pre>
 <ol>
 <li id="fn1"><p>Do not panic: your pet will not run away or die. I was too lazy to program that.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>See <a href="https://textual.textualize.io/">Textual</a> as a more advanced tool for building your own complicated terminal user interfaces.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Amateur, Adequate, Awkward?<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://astral.sh/">Astral</a>: please don’t bait-and-switch me, I need this.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Amateur, Adequate, Awkward?<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
