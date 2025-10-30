@@ -10,7 +10,121 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Wed, 17 Sep 2025 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 30 Oct 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>={ o x o}=</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2025-10-30-pet/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2025-10-30-pet/resources/pet-see.png" class="img-fluid figure-img" style="width:100.0%" alt="Screenshot of a terminal window. There is text with the question 'what would you like to do' and the user has selected the option 'see'. An ASCII-art cat saying 'meow' is printed underneath. Then the same question is asked, with options for 'stats', 'see', 'feed', 'quit' and 'release'. Emoji are sprinkled throughout, like a sushi for the 'see' option."></p>
+<figcaption class="figure-caption">Yes, my true calling is ASCII art.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I’ve made <a href="https://github.com/matt-dray/pet">pet</a>: a (very simple) Python tool to look after a persistent cyberpet on your command line.</p>
+</section>
+<section id="adopt" class="level2">
+<h2 class="anchored" data-anchor-id="adopt">Adopt</h2>
+<p>I made this for learning purposes, but if you did want to try it:</p>
+<ol start="0" type="1">
+<li>Install <a href="https://docs.astral.sh/uv/">uv</a> if you somehow haven’t already.</li>
+<li>From your terminal run <code>uv tool install git+https://github.com/matt-dray/pet.git</code>.</li>
+<li>Run <code>pet</code>.</li>
+<li>Take responsibility.</li>
+</ol>
+</section>
+<section id="pet-the-kitty" class="level2">
+<h2 class="anchored" data-anchor-id="pet-the-kitty">Pet the kitty</h2>
+<p>Running <code>pet</code> takes control of the terminal and asks you to select an option with <kbd>↓</kbd>, <kbd>↑</kbd> and <kbd>Enter</kbd>:</p>
+<ul>
+<li>📊 <strong>Stats</strong> to show your pet’s name (supplied by the user when they first run pet), birth (creation datetime), age (days since birth) and health (out of 10)</li>
+<li>👀 <strong>See</strong> to print a little picture of your pet (always the same handsome cat)</li>
+<li>🍣 <strong>Feed</strong> to simulate your pet eating and gaining one unit of health</li>
+<li>❌ <strong>Quit</strong> to exit the program back to the terminal</li>
+<li>👋 <strong>Release</strong> to discard your pet (cry) and delete its data</li>
+</ul>
+<p>Here’s what a playthrough looks like:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2025-10-30-pet/resources/pet-play.png" class="img-fluid figure-img" style="width:100.0%" alt="Screenshot of a terminal window. The command 'pet' has been run. The user is asked 'what would you like to do' and they respond 'stats', which returns the pet name, bith date, age in days and health status. The user chooses eom other options with different effects. Emoji are sprinkled throughout, like a battery for the 'health' status."></p>
+<figcaption class="figure-caption">Obligatory <em>Monty Python</em> reference.</figcaption>
+</figure>
+</div>
+<p>Lines starting with a question mark require input from the user. Once selected, the options disappear and the chosen one is displayed in blue. When the user can choose from several options, a blue chevron is moved between the options.</p>
+<p>Crucially, if you quit and come back later, your pet will be recalled and its stats will have changed given the amount of time that’s passed. Pay attention! Your pet’s health will diminish over time<sup>1</sup>.</p>
+<p>That’s it.</p>
+</section>
+<section id="the-soft-underbelly" class="level2">
+<h2 class="anchored" data-anchor-id="the-soft-underbelly">The soft underbelly</h2>
+<p>You can see the ‘game loop’ in <a href="https://github.com/matt-dray/pet/blob/main/src/pet/cli.py">the <code>cli.py</code> module</a>. Basically:</p>
+<ol type="1">
+<li>If it doesn’t exist, create a json file of pet stats on the user’s computer, having prompted for the pet’s name.</li>
+<li>Update the stats given the time elapsed since birth and since your last interaction.</li>
+<li>Deplete the pet’s health as a function of elapsed time (1 health unit lost per hour).</li>
+<li>Ask the user to select an action from the menu and act accordingly, ad infinitum.</li>
+<li>Break the loop on exit, and delete the stats json file if the pet was released.</li>
+</ol>
+<p>Not too complicated. Behind this, the Python functions in <a href="https://github.com/matt-dray/pet/blob/main/src/pet/utils.py">utils.py</a> are for wrangling and overwriting the stats file, calculating time and health loss, and for initiating the graphics engine (i.e.&nbsp;<code>print()</code>, lol).</p>
+</section>
+<section id="gaining-xp" class="level2">
+<h2 class="anchored" data-anchor-id="gaining-xp">Gaining XP</h2>
+<p>As well as getting more general experience in Python packaging, I learnt more about:</p>
+<ul>
+<li><a href="https://inquirerpy.readthedocs.io/en/latest/">InquirerPy</a>, which does the heavy lifting on user interaction, like <code>inquirer.select()</code> for presenting keyboard-navigable options<sup>2</sup></li>
+<li><a href="https://platformdirs.readthedocs.io/en/latest/"><code>user_data_dir()</code> from platformdirs</a>, which can create a platform-independent path to a location on the user’s machine where game data can be stored</li>
+</ul>
+<p>As in <a href="https://www.rostrum.blog/index.html#category=uv">several recent posts</a>, uv has also been great here for the development loop, including to support use of ruff and ty<sup>3</sup> for code quality, like <code>uvx ruff format</code>.</p>
+</section>
+<section id="a-good-egg" class="level2">
+<h2 class="anchored" data-anchor-id="a-good-egg">A good egg</h2>
+<p>This pet tool has been designed for my own learning. There’s loads of missing features, but my goals have been met.</p>
+<p>For more of a triple-A<sup>4</sup> virtual pet experience, you can <a href="https://www.rostrum.blog/posts/2022-11-13-tamrgo/">read earlier blogs</a> about <a href="https://github.com/matt-dray/tamRgo">my {tamRgo} package</a>, which does a much better job of this in the R console. It has lots more features, like ‘happy’, ‘hungry’ and ‘dirty’ meters; different pet species; experience points and levelling up; and ‘graphics’ dependent on the pet’s species and level. Ah, and the concept of death.</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[project]
+name = "2025-10-30-pet"
+version = "0.1.0"
+requires-python = "&gt;=3.12"
+dependencies = []</code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Do not panic: your pet will not run away or die. I was too lazy to program that.↩︎</p></li>
+<li id="fn2"><p>See <a href="https://textual.textualize.io/">Textual</a> as a more advanced tool for building your own complicated terminal user interfaces.↩︎</p></li>
+<li id="fn3"><p><a href="https://astral.sh/">Astral</a>: please don’t bait-and-switch me, I need this.↩︎</p></li>
+<li id="fn4"><p>Amateur, Adequate, Awkward?↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>cli</category>
+  <category>pet</category>
+  <category>python</category>
+  <category>uv</category>
+  <guid>https://www.rostrum.blog/posts/2025-10-30-pet/index.html</guid>
+  <pubDate>Thu, 30 Oct 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2025-10-30-pet/resources/pet-see.png" medium="image" type="image/png" height="64" width="144"/>
+</item>
 <item>
   <title>Abandon P*werpoint for the command line</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -6517,269 +6631,6 @@ loaded via a namespace (and not attached):
   <guid>https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3/index.html</guid>
   <pubDate>Sat, 27 Jan 2024 00:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3/resources/a11ytables03.png" medium="image" type="image/png" height="34" width="144"/>
-</item>
-<item>
-  <title>Pseudo-apps in the browser with WebR and Quarto?</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-01-20-webr-remote/index.html</link>
-  <description><![CDATA[ 
-<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs/loader.js"></script>
-<script type="module" id="qwebr-monaco-editor-init">
-
-  // Configure the Monaco Editor's loader
-  require.config({
-    paths: {
-      'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.43.0/min/vs'
-    }
-  });
-</script>
-<script type="module">
-// Global dictionary to store Monaco Editor instances
-const qwebrEditorInstances = {};
-
-// Function that builds and registers a Monaco Editor instance    
-globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
-
-  const initialCode = cellData.code;
-  const qwebrCounter = cellData.id;
-
-  // Retrieve the previously created document elements
-  let runButton = document.getElementById(`qwebr-button-run-${qwebrCounter}`);
-  let editorDiv = document.getElementById(`qwebr-editor-${qwebrCounter}`);
-  
-  // Load the Monaco Editor and create an instance
-  let editor;
-  require(['vs/editor/editor.main'], function () {
-    editor = monaco.editor.create(editorDiv, {
-      value: initialCode,
-      language: 'r',
-      theme: 'vs-light',
-      automaticLayout: true,           // Works wonderfully with RevealJS
-      scrollBeyondLastLine: false,
-      minimap: {
-        enabled: false
-      },
-      fontSize: '17.5pt',              // Bootstrap is 1 rem
-      renderLineHighlight: "none",     // Disable current line highlighting
-      hideCursorInOverviewRuler: true  // Remove cursor indictor in right hand side scroll bar
-    });
-
-    // Store the official counter ID to be used in keyboard shortcuts
-    editor.__qwebrCounter = qwebrCounter;
-
-    // Store the official div container ID
-    editor.__qwebrEditorId = `qwebr-editor-${qwebrCounter}`;
-
-    // Store the initial code value
-    editor.__qwebrinitialCode = initialCode;
-
-    // Dynamically modify the height of the editor window if new lines are added.
-    let ignoreEvent = false;
-    const updateHeight = () => {
-      const contentHeight = editor.getContentHeight();
-      // We're avoiding a width change
-      //editorDiv.style.width = `${width}px`;
-      editorDiv.style.height = `${contentHeight}px`;
-      try {
-        ignoreEvent = true;
-
-        // The key to resizing is this call
-        editor.layout();
-      } finally {
-        ignoreEvent = false;
-      }
-    };
-
-    // Helper function to check if selected text is empty
-    function isEmptyCodeText(selectedCodeText) {
-      return (selectedCodeText === null || selectedCodeText === undefined || selectedCodeText === "");
-    }
-
-    // Registry of keyboard shortcuts that should be re-added to each editor window
-    // when focus changes.
-    const addWebRKeyboardShortCutCommands = () => {
-      // Add a keydown event listener for Shift+Enter to run all code in cell
-      editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
-
-        // Retrieve all text inside the editor
-        qwebrExecuteCode(editor.getValue(), editor.__qwebrCounter);
-      });
-
-      // Add a keydown event listener for CMD/Ctrl+Enter to run selected code
-      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
-
-        // Get the selected text from the editor
-        const selectedText = editor.getModel().getValueInRange(editor.getSelection());
-        // Check if no code is selected
-        if (isEmptyCodeText(selectedText)) {
-          // Obtain the current cursor position
-          let currentPosition = editor.getPosition();
-          // Retrieve the current line content
-          let currentLine = editor.getModel().getLineContent(currentPosition.lineNumber);
-
-          // Propose a new position to move the cursor to
-          let newPosition = new monaco.Position(currentPosition.lineNumber + 1, 1);
-
-          // Check if the new position is beyond the last line of the editor
-          if (newPosition.lineNumber > editor.getModel().getLineCount()) {
-            // Add a new line at the end of the editor
-            editor.executeEdits("addNewLine", [{
-            range: new monaco.Range(newPosition.lineNumber, 1, newPosition.lineNumber, 1),
-            text: "\n", 
-            forceMoveMarkers: true,
-            }]);
-          }
-          
-          // Run the entire line of code.
-          qwebrExecuteCode(currentLine, editor.__qwebrCounter,
-            EvalTypes.Interactive);
-
-          // Move cursor to new position
-          editor.setPosition(newPosition);
-        } else {
-          // Code to run when Ctrl+Enter is pressed with selected code
-          qwebrExecuteCode(selectedText, editor.__qwebrCounter, EvalTypes.Interactive);
-        }
-      });
-    }
-
-    // Register an on focus event handler for when a code cell is selected to update
-    // what keyboard shortcut commands should work.
-    // This is a workaround to fix a regression that happened with multiple
-    // editor windows since Monaco 0.32.0 
-    // https://github.com/microsoft/monaco-editor/issues/2947
-    editor.onDidFocusEditorText(addWebRKeyboardShortCutCommands);
-
-    // Register an on change event for when new code is added to the editor window
-    editor.onDidContentSizeChange(updateHeight);
-
-    // Manually re-update height to account for the content we inserted into the call
-    updateHeight();
-
-    // Store the editor instance in the global dictionary
-    qwebrEditorInstances[editor.__qwebrCounter] = editor;
-
-  });
-
-  // Add a click event listener to the run button
-  runButton.onclick = function () {
-    qwebrExecuteCode(editor.getValue(), editor.__qwebrCounter, EvalTypes.Interactive);
-  };
-
-}
-</script>
-
-
-
-
-<p><img src="https://www.rostrum.blog/posts/2024-01-20-webr-remote/resources/browser.png" class="img-fluid" style="width:75.0%" alt="Meme from Super Mario Movie. Top panel is the king penguin from the start of the film labelled 'R Stats' and saying 'do you yield?' Lower panel is Bowser labelled 'the browser', laughing and saying 'I do not', except the 'not' has been censored with a black bar."></p>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>A demo post to test out embedded <a href="https://docs.r-wasm.org/webr/latest/">WebR chunks</a> that <a href="https://jamesgoldie.dev/writing/your-new-r-package-webr">source a non-CRAN R package</a>. Readers can edit and re-run code later in this blog post, entirely within the browser.</p>
-</section>
-<section id="world-wide-webr" class="level2">
-<h2 class="anchored" data-anchor-id="world-wide-webr">World Wide WebR</h2>
-<p><a href="https://docs.r-wasm.org/webr/latest/">WebR</a> lets you run R code in a browser with no need for a server, thanks in large part to <a href="https://gws.phd/">George Stagg</a>’s efforts. And these days you can embed editable R chunks into Quarto documents, thanks to <a href="https://quarto-webr.thecoatlessprofessor.com/">James Balamuta’s quarto-webr extension</a>.</p>
-<p>I’ve <a href="https://www.rostrum.blog/posts/2023-03-16-webr-quarto/">written before</a> about how powerful this could be for demonstrating how to use code. Readers can adjust the code themselves to better understand the approach without having to install anything.</p>
-<p>This blog has been <a href="https://www.rostrum.blog/posts/2023-08-26-cheerio-blogdown/">ported to Quarto</a> since I wrote that post, so it’s now possible for me to include WebR chunks in my posts directly.</p>
-<p>Even better, it’s now possible to install remote, non-CRAN packages for use in WebR sessions. Thanks to <a href="https://jamesgoldie.dev/writing/your-new-r-package-webr">James Goldie</a> for his excellent blog post on how you can get this set up and running<sup>1</sup>. That post should be your first port of call; I’m not going to repeat all of his advice here because you should read his post in the first instance.</p>
-<p>So much of this blog could have benefited from the inclusion of WebR chunks and I hope to use it a lot more in future. The rest of this post is a chance for me to try out the process of using WebR and installing a GitHub-hosted package.</p>
-</section>
-<section id="a-pseudo-app" class="level2">
-<h2 class="anchored" data-anchor-id="a-pseudo-app">A ‘pseudo-app’?</h2>
-<p>In some cases, WebR helps could help your blog post become a pseudo web app<sup>2</sup>. Load a package and provide some code that performs basic functionality, which readers can then fiddle with. If the package is simple enough, people may not need to install the package at all; they could just visit your blog post.</p>
-<p>I call it a ‘pseudo’ app because of the lack of control: in a Shiny app I can force you to select certain elements from a dropdown, or only show you certain outputs. With WebR and Quarto I can only demo functions and let you adjust the arguments; if you delete all the code, that’s on you.</p>
-<section id="example" class="level3">
-<h3 class="anchored" data-anchor-id="example">Example</h3>
-<p>So here’s an example of what I mean. My <a href="https://www.rostrum.blog/posts/2021-04-10-dialga/">{dialga} package</a> is very focused: its goal is to make it easier to compose <a href="https://en.wikipedia.org/wiki/Cron">cron strings</a> programmatically. Provide numeric values to its arguments, convert them to cron strings and then convert those to an English interpretation.</p>
-<p>The package is not on CRAN, but I’ve added it to <a href="https://matt-dray.r-universe.dev/builds">my R-universe</a>, thanks to the amazing <a href="https://r-universe.dev/search/">R-universe project</a> by rOpenSci and particularly the mighty Jeroen Ooms<sup>3</sup>. This is crucial for sourcing the package with WebR.</p>
-<section id="setup" class="level4">
-<h4 class="anchored" data-anchor-id="setup">Setup</h4>
-<p>Following <a href="https://jamesgoldie.dev/writing/your-new-r-package-webr">James G’s post</a>, I first installed James B’s WebR extension to <a href="https://github.com/matt-dray/rostrum-blog-2">this blog’s source</a> by running <code>quarto add coatless/quarto-webr</code> in the terminal. Within this post I added <code>filters: ["webr"]</code> to the YAML header and specified the <code>webr-r</code> engine for chunks that I wanted to let users interact with.</p>
-<p>I also added the hidden code chunk below, which installs in the background a WebR-ready version of the {dialga} package from R-universe when the page loads (as dictated by the <code>context: setup</code> instruction).</p>
-<pre><code>```{webr-r}
-#| context: setup
-webr::install("dialga", repos = "https://matt-dray.r-universe.dev")
-```</code></pre>
-<p>How do you know this has worked? You may have noticed when you arrived that ‘WEBR STATUS: 🟡 Loading…’ was shown at the top of the post before changing to ‘🟢 Ready!’ to indicate that the WebR chunks are ready to use.</p>
-</section>
-<section id="run" class="level4">
-<h4 class="anchored" data-anchor-id="run">Run</h4>
-<p>Now let’s use the {dialga} package.</p>
-<p>Use <code>r2cron()</code> to convert values into a cron string. The integer values for each argument below show the full range of possibilities, which you can adjust. The output will be <code>* * * * *</code>, which means ‘every minute’. Start by running the code with the ‘Run Code’ button.</p>
-<div id="qwebr-insertion-location-1"></div>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<div id="qwebr-insertion-location-2"></div>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Let’s say you wanted ‘every minute past hour 12’ instead. Change the <code>hours</code> argument to <code>12</code> and press the ‘Run Code’ button again. And so on as you please.</p>
-<p>For completeness, you can convert the output above into English with <code>cron2eng()</code>.</p>
-<div id="qwebr-insertion-location-3"></div>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>In other words… if you don’t want to install {dialga} you can just visit this page and adjust the WebR chunks!</p>
-<p>That, or you can use one of the already-existing, excellent sites like <a href="https://crontab.guru/">crontab.guru</a>, lol. Your call.</p>
-<p>Regardless, I think this is a good indication of how a WebR post can help readers understand—or simply just use—your package in a demonstrative blog post.</p>
-<div class="tip">
-<p> <b>Note</b></p>
-<p>As a further example, I’ve now added a WebR chunk to <a href="https://www.rostrum.blog/posts/2022-05-01-dungeon/">the ‘Simple procedural dungeons in R’ post</a> and may well add more to earlier posts that would have benefited from this technology had it existed at the time.</p>
-</div>
-</section>
-</section>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-04-09 22:46:07 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.2        
- [5] tools_4.3.1       htmltools_0.5.8   rstudioapi_0.16.0 yaml_2.3.8       
- [9] rmarkdown_2.26    knitr_1.45        jsonlite_1.8.8    xfun_0.43        
-[13] digest_0.6.35     rlang_1.1.3       fontawesome_0.5.2 evaluate_0.23    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>I note also that James G has clearly written some CSS on his blog to make the WebR code blocks match the theme of his blog. I haven’t done this yet at time of writing, so the chunks do a look a bit conspicuous.↩︎</p></li>
-<li id="fn2"><p>Although these days you can also use <a href="https://posit-dev.github.io/r-shinylive/">{shinylive}</a> to write a Shiny app that can run entirely in the browser! I wrote about this in <a href="https://www.rostrum.blog/posts/2023-10-08-govspeakify-tables/">a previous post</a>.↩︎</p></li>
-<li id="fn3"><p>There really isn’t enough space in this post to talk about the R-universe, but you can <a href="https://ropensci.org/r-universe/">learn more on the rOpenSci site</a>.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>dialga</category>
-  <category>r</category>
-  <category>webR</category>
-  <guid>https://www.rostrum.blog/posts/2024-01-20-webr-remote/index.html</guid>
-  <pubDate>Sat, 20 Jan 2024 00:00:00 GMT</pubDate>
-  <media:content url="https://www.rostrum.blog/posts/2024-01-20-webr-remote/resources/browser.png" medium="image" type="image/png" height="119" width="144"/>
 </item>
 </channel>
 </rss>
