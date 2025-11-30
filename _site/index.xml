@@ -10,7 +10,108 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Thu, 30 Oct 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 30 Nov 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>How the tables turned</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2025-11-30-turn-tables/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2025-11-30-turn-tables/resources/let-go.jpg" class="img-fluid figure-img" style="width:50.0%" alt="Meme of Link from The lEgend of Zelda: Windwaker. The camera is zoomed right up under his chin, his face filling the screen. There's an on-screen instruction to press the 'A' button to 'let go'."></p>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>{a11ytables} is dead, long live <a href="https://best-practice-and-impact.github.io/aftables/">{aftables}</a>.</p>
+</section>
+<section id="regret" class="level2">
+<h2 class="anchored" data-anchor-id="regret">Regret?</h2>
+<p>A while back I presented <a href="https://www.rostrum.blog/posts/2023-06-13-panic-in-the-toolshed/">‘Panic! In The Toolshed’</a> about how public-sector data scientists should share code to prevent wheel reinvention<sup>1</sup>.</p>
+<p>I gave the example of my {a11ytables} R package, which has helped to publish spreadsheets of official statistics that follow <a href="https://analysisfunction.civilservice.gov.uk/policy-store/releasing-statistics-in-spreadsheets/">best practices</a>.</p>
+<p>It got harder to find time to maintain the package. <a href="https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3/">I hemmed-and-hawed</a> about its existence and procrastinated two concept packages to make up for its weaknesses<sup>2</sup>.</p>
+<p>But then the weight<sup>3</sup> was lifted!</p>
+</section>
+<section id="rehome" class="level2">
+<h2 class="anchored" data-anchor-id="rehome">Rehome</h2>
+<p>The Analysis Function at the Office for National Statistics (ONS) now host and maintain the package. I can’t think of a better home.</p>
+<p>Transferring the package GitHub repository was a bit of a dance, passing from the co-analysis org to my personal account and finally the best-practice-and-impact org. I fretted about archiving and forking instead, but a transfer appears not to have caused issues.</p>
+<p>As part of this move, the package has been renamed {aftables}. The ‘af’ stands for ‘Analysis Function’ and echoes the related <a href="https://best-practice-and-impact.github.io/afcharts/">{afcharts} package</a> that helps produce best-practice visualisations.</p>
+<p>As a parting gift, I used <a href="https://github.com/matt-dray/gex">my {gex} package</a> to make a quick hex logo that echoes the {afcharts} logo:</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2025-11-30-turn-tables/resources/aftables.png" class="img-fluid figure-img" alt="Hex logo for aftables. Multicoloured squares on the lower half echo the cells of a spreadsheet. The name of the package is above the squares. Reminiscent of the hex logo for afcharts and uses the same colour palette." width="200"></p>
+</figure>
+</div>
+<p>This renaming hasn’t had a major impact as far as I can tell. The team <a href="https://analysisfunction.civilservice.gov.uk/blog/best-practice-for-automated-spreadsheets-in-r-creating-accessible-spreadsheets-with-aftables/">published a launch blog</a>; I updated colleagues via the cross-government Slack; and GitHub auto-rereoutes from <a href="https://github.com/co-analysis/a11ytables">co-analysis/a11ytables</a> to <a href="https://github.com/best-practice-and-impact/aftables">best-practice-and-impact/aftables</a>.</p>
+<p>The team has already made updates and <a href="https://CRAN.R-project.org/package=aftables">submitted successfully to CRAN</a> in these past few months, which I definitely didn’t have the energy to tackle.</p>
+<p>So now you can just <code>install.packages("aftables")</code> to try it out. Simply lovely.</p>
+</section>
+<section id="relief" class="level2">
+<h2 class="anchored" data-anchor-id="relief">Relief</h2>
+<p>So thank you to the Analysis Function team, particularly Olivia and Zach; to Matt and Tim for their early contributions; and to everyone who has used the package and provided feedback.</p>
+<p>Panic? What panic?</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2025-11-30 17:03:05 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.5.1 (2025-06-13)
+Platform: aarch64-apple-darwin20
+Running under: macOS Sequoia 15.6.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
+
+locale:
+[1] en_GB.UTF-8/en_GB.UTF-8/en_GB.UTF-8/C/en_GB.UTF-8/en_GB.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.4 compiler_4.5.1    fastmap_1.2.0     cli_3.6.5        
+ [5] tools_4.5.1       htmltools_0.5.8.1 yaml_2.3.10       rmarkdown_2.29   
+ [9] knitr_1.50        jsonlite_2.0.0    xfun_0.52         digest_0.6.37    
+[13] rlang_1.1.6       evaluate_1.0.4   </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>We talk a lot about <em>reproducibility</em> of our work, as we should, but Rhian gave a good talk at the NHS RPySOC 2025 conference about <a href="https://rhian.rbind.io/talks/2024-11-22-reusability/">the power of <em>reusability</em></a>.↩︎</p></li>
+<li id="fn2"><p><a href="https://github.com/matt-dray/a11ytables2">{a11ytables2}</a> aimed to use a more pipeable approach and to upgrade the package from {openxlsx} to {openxlsx2} (which the Analysis Function team have already done in {aftables}!), while <a href="https://github.com/matt-dray/yamlsheets">{yamlsheets}</a> attempted to use a text-based YAML ‘blueprint’ file to declare spreadsheet content.↩︎</p></li>
+<li id="fn3"><p>The fact I was using phrases like ‘panic’, ‘kill’ and ‘rebuild’ in earlier posts about {a11ytables} tells you something about the entirely self-imposed torment I was inflicting on myself.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>a11ytables</category>
+  <category>aftables</category>
+  <category>r</category>
+  <guid>https://www.rostrum.blog/posts/2025-11-30-turn-tables/index.html</guid>
+  <pubDate>Sun, 30 Nov 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2025-11-30-turn-tables/resources/let-go.jpg" medium="image" type="image/jpeg"/>
+</item>
 <item>
   <title>={ o x o}=</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -6399,238 +6500,6 @@ loaded via a namespace (and not attached):
   <guid>https://www.rostrum.blog/posts/2024-02-03-base-args/index.html</guid>
   <pubDate>Sat, 03 Feb 2024 00:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-02-03-base-args/resources/argument.png" medium="image" type="image/png" height="63" width="144"/>
-</item>
-<item>
-  <title>Kill your darlings (but bugfix first)</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><img src="https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3/resources/a11ytables03.png" class="img-fluid" alt="The text 'a11ytables v0.3' writtten out using cells of a spreadsheet coloured green."></p>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>An update about updates to <a href="https://co-analysis.github.io/a11ytables/index.html">{a11ytables}</a>. Also maybe I should rewrite the whole thing from scratch, lol.</p>
-</section>
-<section id="birth" class="level2">
-<h2 class="anchored" data-anchor-id="birth">Birth</h2>
-<p>Right so, <a href="https://co-analysis.github.io/a11ytables/index.html">I made the {a11ytables} R package</a> to help create government statistics publications that meet <a href="https://analysisfunction.civilservice.gov.uk/policy-store/releasing-statistics-in-spreadsheets/">official best practice standards</a>. You may be interested in <a href="https://www.rostrum.blog/posts/2022-09-07-earl22/">a talk I did about it at EARL 2022</a>.</p>
-<p>I originally made it for me and my team so we could publish accessible spreadsheets to <a href="https://www.gov.uk/search/research-and-statistics">GOV.UK</a>. It seems to have been picked up by a number of other government departments, so I’ve continued to develop it even though I don’t use it myself anymore<sup>1</sup>.</p>
-<p>You can stop reading now if you aren’t one of those 12 users. Go and water your plants maybe.</p>
-</section>
-<section id="life" class="level2">
-<h2 class="anchored" data-anchor-id="life">Life</h2>
-<p>I’ve done two minor updates that add new features. We’re now on version 0.3, please try to keep up.</p>
-<p>Of course, you can read <a href="https://co-analysis.github.io/a11ytables/news/index.html">the package’s NEWS.md file</a> for details on the changes covered by these updates.</p>
-<p>My tests are weak and I’ve no idea of all edge cases, so please do <a href="https://github.com/co-analysis/a11ytables/issues">leave an issue in the repo</a> if you find something bad or embarrassing<sup>2</sup> in the package.</p>
-<section id="version-0.2" class="level3">
-<h3 class="anchored" data-anchor-id="version-0.2">Version 0.2</h3>
-<p>The package interface lets you supply a data.frame to insert into each worksheet. Nice and simple and makes perfect sense for the contents, notes and ‘tables’ sheet types. But not ideal for the cover, actually.</p>
-<p>You used to have to supply a data.frame for the cover that had a row per section and a column each for the section headers and their content. This is obviously restrictive: what if the sections on your cover sheet need more than one row of information?</p>
-<p>For example, you might need a section on the cover sheet called ‘Contact us’ that contains three rows: some preamble, a website link and a contact email address.</p>
-<p>Version 0.2 of the package, which dropped in November 2023, solves this problem. Now you can provide a list object with arbitrary content instead of providing a data.frame. For example:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">cover_list <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(</span>
-<span id="cb1-2">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Information"</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"This is a demo spreadsheet cover."</span>,</span>
-<span id="cb1-3">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Contact us"</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(</span>
-<span id="cb1-4">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Find out more by contacting us."</span>,</span>
-<span id="cb1-5">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Website: https://co-analysis.github.io/a11ytables/"</span>,</span>
-<span id="cb1-6">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Email address: fake.address@a11ytables.com"</span></span>
-<span id="cb1-7">  )</span>
-<span id="cb1-8">)</span></code></pre></div>
-</div>
-<p>This will result in a cover sheet with two sections. The first will have one row and the second will have three. This is way better than in before, when you could only supply one row per section.</p>
-<p>But wait! This update made hyperlinks available on the cover page as well. The user supplies these in Markdown format—like <code>[{a11ytables}](https://github.com/co-analysis/a11ytables)</code>—and they’re auto-converted so that the resulting spreadsheet cell contains a hyperlink<sup>3</sup>. For example, the website and email address could be written like this:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">cover_list <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(</span>
-<span id="cb2-2">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Information"</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"This is a demo spreadsheet cover."</span>,</span>
-<span id="cb2-3">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Contact us"</span> <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(</span>
-<span id="cb2-4">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Find out more by contacting us."</span>,</span>
-<span id="cb2-5">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"[Website](https://co-analysis.github.io/a11ytables/)"</span>,</span>
-<span id="cb2-6">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"[Email address](fake.address@a11ytables.com)"</span></span>
-<span id="cb2-7">  )</span>
-<span id="cb2-8">)</span></code></pre></div>
-</div>
-<p>While I was adding the hyperlink functionality to the cover, I figured I would make it available to the <code>source</code> argument of <code>create_a11ytable()</code> as well, so users can link to the origin for the tables of data in their publication.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">    sources <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(</span>
-<span id="cb3-2">      <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rep</span>(<span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">NA_character_</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>),</span>
-<span id="cb3-3">      <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"[Gorman et al, 2024](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0090081)"</span></span>
-<span id="cb3-4">    ),</span></code></pre></div>
-</div>
-</section>
-<section id="version-0.3" class="level3">
-<h3 class="anchored" data-anchor-id="version-0.3">Version 0.3</h3>
-<p>Arbitrary content was also the theme for version 0.3, which hit shelves earlier this month. Prior to this version, it was assumed there were only going to be certain rows of information above a table: the sheet title (required, provided by the user), a message about the number of tables in the sheet (autogenerated), a message about the presence of notes (autogenerated) and the data source (optional, if provided by the user).</p>
-<p>But {a11ytables} users and other spreadsheet publishers made it clear that sometimes they want to put other, arbitrary rows above tables of data. I can’t think of a good reason why extra rows of text above tables of data would necessarily break best practice guidance. In fact, they’ll probably be helpful to provide needed context.</p>
-<p>So, version 0.3 allows for these arbitrary rows of content. Not just on sheets containing data tables, but also on the contents and notes sheets, just in case. Of course, these can also be provided in the form of Markdown hyperlinks if the user desires.</p>
-<p>The approach to integrating this functionality is a new argument to <code>create_a11ytables()</code>: <code>custom_rows</code>. You provide a character vector where each element is a sheet and each sub-element is a separate custom row for that sheet. Here’s an example of specifying the list argument where the fourth sheet will contain two custom rows, the first of which is a hyperlink:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">    custom_rows <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(</span>
-<span id="cb4-2">      <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rep</span>(<span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">NA_character_</span>, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>)</span>
-<span id="cb4-3">      <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(</span>
-<span id="cb4-4">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"First custom row [with a hyperlink.](https://co-analysis.github.io/a11ytables/)"</span>,</span>
-<span id="cb4-5">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Second custom row."</span></span>
-<span id="cb4-6">      )</span>
-<span id="cb4-7">    ),</span></code></pre></div>
-</div>
-</section>
-</section>
-<section id="death" class="level2">
-<h2 class="anchored" data-anchor-id="death">Death?</h2>
-<p>These are two fixes that were a long time coming. Time now to ramble and navel-gaze<sup>4</sup> about the future of the package. You can always <a href="https://github.com/co-analysis/a11ytables/issues?q=is%3Aissue+is%3Aclosed">take a look at the outstanding issues</a> to see what’s on the to-do list. For now there’s a couple of things I want to mention.</p>
-<section id="i-like-those-ods" class="level3">
-<h3 class="anchored" data-anchor-id="i-like-those-ods">I like those ODS</h3>
-<p>A big missing piece of the puzzle is to have the option to write to an open-format ODS file, which is the preferred format for publishing on GOV.UK. I’ve had some great chats with the underground cross-government ‘Spreadsheet Club’<sup>5</sup> to consider whether it’s possible to do things like piggyback off a spreadsheet program via the command line<sup>6</sup> or even develop some code to generate the necessary XML files. Ideally I need an {openods} package, or to add functionality into {openxlsx}<sup>7</sup> to convert the Workbook-class object into the necessary XML for an xlsx file or an ODS file. None of these are ‘easy’.</p>
-<p>Another thing: there are plenty of bugfixes and outstanding nice-to-haves as well. Much of the development required is to handle cell-level problems, like setting the number of decimal places to show. This is not that hard in principle; {openxlsx} itself has some <code>options()</code> that you can set. The hard part is that numeric columns are often coerced to text columns in {a11ytables} because strings are often used as placeholder values, like ‘[c]’ for confidential values.</p>
-<p>There’s another reason why this kind of thing is tricky: the ethos of {a11ytables} is to keep the user interface ‘simple’ so an analyst can go from data to spreadsheet as quickly as possible. Adding lots of arguments to control things like decimal places would clutter the interface and could be a headache for backwards-compatibility if more need to be added in future. This makes me think that an <code>options()</code>-led approach would be a decent solution, especially as this is already something that {openxlsx} does.</p>
-</section>
-<section id="a-fateful-journey" class="level3">
-<h3 class="anchored" data-anchor-id="a-fateful-journey">A fateful journey</h3>
-<p>I took the train to spend time with my parents over Christmas. High winds caused a tree to fall on the tracks and I could only make it partway. There was a rail replacement service, but the driver got lost and started heading the wrong way.</p>
-<p>This gave me plenty of time to try out some new ideas for a potential successor to {a11ytables}. I’ve been thinking about building a new version of the package for a while, now that I’ve had time for its limitations to emerge.</p>
-<p>Anyway, while the bus driver was U-turning on a country lane in East Sussex, I fiddled around with alternative input methods. The ‘purity’ of a nice tidy a11ytables-class data.frame is spoiled slightly by having to provide a list rather than a data.frame for the cover sheet and by providing vectors to the new <code>custom_rows</code> argument. This is a minor gripe, but I think it has usability issues and lacks some consistency.</p>
-<p>I was able to spend some time <a href="https://github.com/matt-dray/a11ytables2">enacting some ideas for an ‘{a11ytables2}’ package</a>. The long and the short of it is that it uses <a href="https://janmarvin.github.io/openxlsx2/">{openxlsx2}</a> (note the ‘2’) and you provide input via a nested list, so that arbitrary arguments and argument lengths are more easily handled.</p>
-<p>I also have some earlier work in that repo to explore the idea of supplying a YAML configuration file that contains all the information required for you to construct a compliant spreadsheet.</p>
-</section>
-</section>
-<section id="introspective-conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="introspective-conclusion">Introspective conclusion</h2>
-<p>So, a tale as old as time: I’m trying to fix things when I can; please keep submitting bug fixes and feature requests; I’d love to burn the whole thing down and start again<sup>8</sup>.</p>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-02-03 17:08:17 GMT</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.2        
- [5] tools_4.3.1       htmltools_0.5.6.1 rstudioapi_0.15.0 yaml_2.3.8       
- [9] rmarkdown_2.25    knitr_1.45        jsonlite_1.8.7    xfun_0.41        
-[13] digest_0.6.33     rlang_1.1.3       evaluate_0.23    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>In fact, I don’t work in central government anymore, which means <a href="https://en.wikipedia.org/wiki/Eating_your_own_dog_food">I don’t ‘dogfood’ this work</a>. I can only feed this dogfood (the package) to my dog (package users) and not myself (me), which feels more normal if I’m honest. Weird metaphor.↩︎</p></li>
-<li id="fn2"><p>Like, I don’t know, if you <a href="https://github.com/co-analysis/a11ytables/issues/111">spell the name of your own package wrong</a>. I think this highlights how silly this name was in the first place, but there’s no going back now.↩︎</p></li>
-<li id="fn3"><p>Note that the text of a spreadsheet cell is either entirely a link or not. So <code>Visit [the site](https://github.com/co-analysis) for more information</code> and <code>[Visit the site for more information](https://github.com/co-analysis)</code> will both result in an output cell that is entirely a hyperlink.↩︎</p></li>
-<li id="fn4"><p>This is a guaranteed recipe for accidentally plummeting off a cliff, I don’t recommend it.↩︎</p></li>
-<li id="fn5"><p>u jelly?↩︎</p></li>
-<li id="fn6"><p>See <a href="https://github.com/co-analysis/a11ytables/issues/46">the issue</a>, especially where <a href="https://github.com/department-for-transport-public/dftutils/blob/main/R/convert_ods.R">Fran presents a function</a> she’s already written to do this for the Department for Transport.↩︎</p></li>
-<li id="fn7"><p>I tried asking this of the {openxlsx2} author with <a href="https://github.com/JanMarvin/openxlsx2/discussions/574">predictable results</a>.↩︎</p></li>
-<li id="fn8"><p>Slightly dramatic: {a11ytables} would continue to exist and would get bugfixes and small feature updates as needed; it’s just the new version would be the successor, probably.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>a11ytables</category>
-  <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3/index.html</guid>
-  <pubDate>Sat, 27 Jan 2024 00:00:00 GMT</pubDate>
-  <media:content url="https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3/resources/a11ytables03.png" medium="image" type="image/png" height="34" width="144"/>
 </item>
 </channel>
 </rss>

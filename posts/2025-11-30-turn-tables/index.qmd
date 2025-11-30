@@ -1,0 +1,62 @@
+---
+title: "How the tables turned"
+date: 2025-11-30
+slug: "turn-tables"
+image: resources/let-go.jpg
+categories:
+  - a11ytables
+  - aftables
+  - r
+---
+
+![](resources/let-go.jpg){fig-align="left" fig-alt="Meme of Link from The lEgend of Zelda: Windwaker. The camera is zoomed right up under his chin, his face filling the screen. There's an on-screen instruction to press the 'A' button to 'let go'." width="50%"}
+
+## tl;dr
+
+{a11ytables} is dead, long live [{aftables}](https://best-practice-and-impact.github.io/aftables/).
+
+## Regret?
+
+A while back I presented ['Panic! In The Toolshed'](https://www.rostrum.blog/posts/2023-06-13-panic-in-the-toolshed/) about how public-sector data scientists should share code to prevent wheel reinvention[^reuse].
+
+I gave the example of my {a11ytables} R package, which has helped to publish spreadsheets of official statistics that follow [best practices](https://analysisfunction.civilservice.gov.uk/policy-store/releasing-statistics-in-spreadsheets/).
+
+It got harder to find time to maintain the package. [I hemmed-and-hawed](https://www.rostrum.blog/posts/2024-01-27-a11ytables-0.3/) about its existence and procrastinated two concept packages to make up for its weaknesses[^a11ytables2].
+
+But then the weight[^weight] was lifted!
+
+## Rehome
+
+The Analysis Function at the Office for National Statistics (ONS) now host and maintain the package. I can't think of a better home.
+
+Transferring the package GitHub repository was a bit of a dance, passing from the co-analysis org to my personal account and finally the best-practice-and-impact org. I fretted about archiving and forking instead, but a transfer appears not to have caused issues.
+
+As part of this move, the package has been renamed {aftables}. The 'af' stands for 'Analysis Function' and echoes the related [{afcharts} package](https://best-practice-and-impact.github.io/afcharts/) that helps produce best-practice visualisations.
+
+As a parting gift, I used [my {gex} package](https://github.com/matt-dray/gex) to make a quick hex logo that echoes the {afcharts} logo: 
+
+![](resources/aftables.png){fig-align="left" fig-alt="Hex logo for aftables. Multicoloured squares on the lower half echo the cells of a spreadsheet. The name of the package is above the squares. Reminiscent of the hex logo for afcharts and uses the same colour palette." width="200px"}
+
+This renaming hasn't had a major impact as far as I can tell. The team [published a launch blog](https://analysisfunction.civilservice.gov.uk/blog/best-practice-for-automated-spreadsheets-in-r-creating-accessible-spreadsheets-with-aftables/); I updated colleagues via the cross-government Slack; and GitHub auto-rereoutes from [co-analysis/a11ytables](https://github.com/co-analysis/a11ytables) to [best-practice-and-impact/aftables](https://github.com/best-practice-and-impact/aftables).
+
+The team has already made updates and [submitted successfully to CRAN](https://CRAN.R-project.org/package=aftables) in these past few months, which I definitely didn't have the energy to tackle.
+
+So now you can just `install.packages("aftables")` to try it out. Simply lovely.
+
+## Relief
+
+So thank you to the Analysis Function team, particularly Olivia and Zach; to Matt and Tim for their early contributions; and to everyone who has used the package and provided feedback.
+
+Panic? What panic?
+
+### Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^reuse]: We talk a lot about _reproducibility_ of our work, as we should, but Rhian gave a good talk at the NHS RPySOC 2025 conference about [the power of _reusability_](https://rhian.rbind.io/talks/2024-11-22-reusability/).
+[^a11ytables2]: [{a11ytables2}](https://github.com/matt-dray/a11ytables2) aimed to use a more pipeable approach and to upgrade the package from {openxlsx} to {openxlsx2} (which the Analysis Function team have already done in {aftables}!), while [{yamlsheets}](https://github.com/matt-dray/yamlsheets) attempted to use a text-based YAML 'blueprint' file to declare spreadsheet content.
+[^weight]: The fact I was using phrases like 'panic', 'kill' and 'rebuild' in earlier posts about {a11ytables} tells you something about the entirely self-imposed torment I was inflicting on myself.
