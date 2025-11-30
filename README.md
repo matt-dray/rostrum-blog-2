@@ -21,13 +21,13 @@ learning with the R language.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 187 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2025-10-30 (latest).
+🔢 There have been 188 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2025-11-30 (latest).
 
 📅 That’s a post roughly every 15 days, or about 2 posts per month.
 
-🆕 The latest post: [={ o x
-o}=](https://www.rostrum.blog/posts/2025-10-30-pet).
+🆕 The latest post: [How the tables
+turned](https://www.rostrum.blog/posts/2025-11-30-turn-tables).
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ o}=](https://www.rostrum.blog/posts/2025-10-30-pet).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 188 | 2025-11-30 | [How the tables turned](https://www.rostrum.blog/posts/2025-11-30-turn-tables)                                                 |
 | 187 | 2025-10-30 | [={ o x o}=](https://www.rostrum.blog/posts/2025-10-30-pet)                                                                    |
 | 186 | 2025-09-18 | [Abandon P\*werpoint for the command line](https://www.rostrum.blog/posts/2025-09-18-rich-slides)                              |
 | 185 | 2025-08-30 | [Keeping jot’s options open](https://www.rostrum.blog/posts/2025-08-30-jot-options)                                            |
@@ -233,4 +234,4 @@ o}=](https://www.rostrum.blog/posts/2025-10-30-pet).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2025-10-30 at 22:53.
+🕒 Last updated: 2025-11-30 at 17:06.
