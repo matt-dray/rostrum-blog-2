@@ -114,11 +114,11 @@ post](https://img.shields.io/badge/rostrum-blog-008900?style=flat&labelColor=bla
 
 `r emoji("date")` That's a post roughly every `r round((as.numeric(max(posts$publish_date) - min(posts$publish_date))) / nrow(posts))` days, or about `r round(((nrow(posts) / (as.numeric(max(posts$publish_date) - min(posts$publish_date)))) * 30), 1)` posts per month.
 
-`r emoji("new")` The latest post: [`r posts$title[1]`](`r posts$link[1]`)`r ifelse(grepl("[!|?|\\.|]$", posts$link[1]), "", ".")`
+`r emoji("new")` The latest post: [`r posts$title[1]`](`r posts$link[1]`)
 
 `r emoji("chart_with_upwards_trend")` Posts over time:
 
-```{r plot-out, fig.height=1, fig.width=10, fig.alt="A 2D chart where each point represents a published blog post on a Y axis of time spanning from 2018 to the present. There are some gaps, but posts have been relatively consistent over time."}
+```{r plot-out, fig.height=1, fig.width=10, fig.alt="A 2D chart where each point represents a published blog post on a Y axis of time spanning from 2018 to the present."}
 p
 ```
 
