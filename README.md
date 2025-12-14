@@ -27,11 +27,11 @@ between 2018-04-14 (first) to 2025-11-30 (latest).
 📅 That’s a post roughly every 15 days, or about 2 posts per month.
 
 🆕 The latest post: [How the tables
-turned](https://www.rostrum.blog/posts/2025-11-30-turn-tables).
+turned](https://www.rostrum.blog/posts/2025-11-30-turn-tables)
 
 📈 Posts over time:
 
-<img src="README_files/figure-gfm/plot-out-1.png" alt="A 2D chart where each point represents a published blog post on a Y axis of time spanning from 2018 to the present. There are some gaps, but posts have been relatively consistent over time."  />
+<img src="README_files/figure-gfm/plot-out-1.png" alt="A 2D chart where each point represents a published blog post on a Y axis of time spanning from 2018 to the present."  />
 
 <details>
 <summary>
@@ -234,4 +234,4 @@ turned](https://www.rostrum.blog/posts/2025-11-30-turn-tables).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2025-12-14 at 11:07.
+🕒 Last updated: 2025-12-14 at 11:32.
