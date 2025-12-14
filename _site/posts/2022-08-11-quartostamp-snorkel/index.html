@@ -212,7 +212,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>I <a href="https://www.rostrum.blog/2022/02/19/backtick/">wrote about</a> the little <a href="https://github.com/matt-dray/backtick">{backtick} Addin package</a> that inserts backticks (`) and backtick constructions<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></li>
 <li>I <a href="https://www.rostrum.blog/2020/11/14/hello-r2eng/">wrote about</a> the <a href="https://matt-dray.github.io/r2eng/">{r2eng} package</a>, which has an Addin that lets you highlight some R code and then speak that expression out loud in English</li>
 <li>I <a href="https://www.rostrum.blog/2019/10/22/blogsnip/">wrote about</a> the <a href="https://matt-dray.github.io/blogsnip/">{blogsnip} Addin package</a> that can manipulate code used to write this blog</li>
-<li><a href="https://co-analysis.github.io/a11ytables/articles/a11ytables.html">the {a11ytables} package</a> has an Addin to insert code skeletons for creating publishable best-practice spreadsheets</li>
+<li><a href="https://best-practice-and-impact.github.io/aftables/">the {a11ytables} (edit Dec 2025: now {aftables}) package</a> has an Addin to insert code skeletons for creating publishable best-practice spreadsheets</li>
 </ul>
 <p>RStudio Addins are <a href="https://www.rostrum.blog/2022/02/19/backtick/#add-your-own">kinda straightforward to put into in an R package</a>. Put your functions in <code>R/</code> as usual, then write an <code>inst/rstudio/addins.dcf</code> file to declare your functions (<a href="https://github.com/matt-dray/backtick/blob/main/inst/rstudio/addins.dcf">e.g.&nbsp;see {backtick}’s .dcf</a>). Learn more from <a href="https://www.infoworld.com/article/3336059/do-more-with-r-write-your-own-rstudio-addins.html">Sharon Machlis</a> and <a href="https://jozef.io/r101-addin-reproducibility/">Jozef Hajnala</a>.</p>
 <p>The user can then select the functions from the ‘Addins’ dropdown in the RStudio IDE.</p>
@@ -305,19 +305,19 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-01-13 10:00:28 GMT</code></pre>
+<pre><code>Last rendered: 2025-12-14 10:24:00 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
+<pre><code>R version 4.5.1 (2025-06-13)
+Platform: aarch64-apple-darwin20
+Running under: macOS Sequoia 15.6.1
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
 
 locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+[1] en_GB.UTF-8/en_GB.UTF-8/en_GB.UTF-8/C/en_GB.UTF-8/en_GB.UTF-8
 
 time zone: Europe/London
 tzcode source: internal
@@ -326,10 +326,10 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.2        
- [5] tools_4.3.1       htmltools_0.5.6.1 rstudioapi_0.15.0 yaml_2.3.8       
- [9] rmarkdown_2.25    knitr_1.45        jsonlite_1.8.7    xfun_0.41        
-[13] digest_0.6.33     rlang_1.1.3       fontawesome_0.5.2 evaluate_0.23    </code></pre>
+ [1] htmlwidgets_1.6.4 compiler_4.5.1    fastmap_1.2.0     cli_3.6.5        
+ [5] tools_4.5.1       htmltools_0.5.8.1 yaml_2.3.10       rmarkdown_2.29   
+ [9] knitr_1.50        jsonlite_2.0.0    xfun_0.52         digest_0.6.37    
+[13] rlang_1.1.6       fontawesome_0.5.3 evaluate_1.0.4   </code></pre>
 </div>
 </div>
 </details>
