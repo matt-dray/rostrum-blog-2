@@ -1,0 +1,155 @@
+---
+title: "Correcting a fib about jot"
+date: 2025-12-28
+slug: "jot-fib"
+image: resources/jot-fib.png
+categories:
+  - cli
+  - jot
+  - python
+  - uv
+---
+
+![](resources/jot-fib.png){fig-align="left" fig-alt="Screenshot of a macOS terminal window running the jot tool four times, with option 'v' to print the version number; 'w' to print where the config and jot files are; 's' and 'l' to search for the most recent jotting that contains the word 'apple'; and 'f' and 't' flags to return jottings from one date to another."}
+
+## tl;dr
+
+[jot](https://github.com/matt-dray/jot) now has `--where`, `--version`, `--from` and `--to` options.
+
+## Whoops
+
+Me, lying, the [last time I posted about jot](https://www.rostrum.blog/posts/2025-08-30-jot-options/):
+
+> It’s basically feature-complete from my perspective.
+
+Reminder: [jot](https://github.com/matt-dray/jot) is my simple little Python CLI for recording timestamped notes to a text file.
+
+In fact, now you can:
+
+* combine options
+* search between specific dates
+* quickly get tool meta-information
+
+## And?
+
+Options `--search` and `--list` (`-s` and `-l`) can now be used in combination.
+
+This was achieved by adding an argument to the `search_jottings()` function that takes the value given by `--list`.
+
+So, assuming this little jot file:
+
+```{.txt filename="jot.txt"}
+[2025-08-28 11:15] ate an apple
+[2025-08-27 10:58] ate a kiwi
+[2025-08-26 11:09] ate a pineapple
+[2025-08-25 10:40] ate an apple and a pear
+```
+
+A casual `--search` will return anything matching your search term.
+
+```sh
+jot -s "apple"
+```
+```
+[2025-08-28 11:15] ate an apple
+[2025-08-26 11:09] ate a pineapple
+[2025-08-25 10:40] ate an apple and a pear
+```
+
+But that could overwhelm the console if you have a lot of jottings.
+
+So now you can add the `--list` flag to limit to the most recent _n_ jottings that match the search term.
+
+```sh
+jot -s "apple" -l 1
+```
+```
+[2025-08-28 11:15] ate an apple
+```
+
+## Where? What?
+
+I added helpers `--where` and `--version` (`-w` and  `-v`) as quality-of-life improvements.
+
+`--where` is useful if you forget the file paths handled by jot, which are:
+
+* the config file, which contains a key-value path to the jot file
+* the jot file, which is where the text of the jottings is saved
+
+```sh
+jot -w
+```
+```
+📍 Default path to config file: /Users/mattdray/.jot-config.json
+📍 Path to jot file: /Users/mattdray/Documents/jot.txt
+```
+
+The tool has gone through a bunch of changes, so you can check what version you're running with `--version`.
+
+```sh
+jot -v
+```
+```
+0.2.11
+```
+
+The version number is also provided now when you run `jot --help` (`-h`) to print the help documentation.
+
+Assuming you're using uv, run `uv tool upgrade jot` to get the latest version.
+
+## When?
+
+I mentioned using a regular expression to filter for jottings between dates.
+That's awful[^rx].
+
+Helpfully, [Olivier Iffrig-Petit](https://github.com/oiffrig) contributed a couple of new options to handle this.
+
+`--from` and `--to` (`-f` and `-t`) take values in the form `YYYYMMDD` to filter from (inclusive) and to (exclusive) given dates.
+They can be used alone or together, along with `--search` and `--list`.
+
+So, to return jottings from 26 August 2025 up to (but not including) 28 August 2025:
+
+```sh
+jot -f 20250826 -t 20250828
+```
+```
+[2025-08-27 10:58] ate a kiwi
+[2025-08-26 11:09] ate a pineapple
+```
+
+Isolating time periods like this has helped me find information to write weeknotes and complete my timesheets.
+
+Many thanks Olivier.
+
+## Sure?
+
+Along with these features, I've added basic tests for the Python functions using [pytest](https://docs.pytest.org/en/stable/).
+A couple of things that were new to me were:
+
+* the `@pytest.mark.parametrize()` decorator, which helps set up inputs that can be iterated over in a test
+* that `capsys` captures system outputs, as the name implies, which you can compare to expected values
+
+And naturally my patience was tested trying to get the pytest GitHub Action to run correctly.
+
+## Next?
+
+Next thing might be to [prepare jot for PyPi](https://github.com/matt-dray/jot/issues/44).
+There's probably two breaking changes to be made before then: 
+
+1. Save the config file [somewhere more suitable](https://github.com/matt-dray/jot/issues/14) than the user's home directory.
+2. [Rename the package](https://github.com/matt-dray/jot/issues/57) because there's [already a macOS tool named 'jot'](https://ss64.com/mac/jot.html), lol[^doc].
+
+So, perhaps, finally, maybe, for now:
+
+> It’s basically feature-complete from my perspective.
+
+### Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat(readLines("pyproject.toml"), sep = "\n")
+```
+</details>
+
+[^rx]: 'Regex? Now you have two problems.'
+[^doc]: Or alias and document it so the user can decide. Either way, 'jot' is already taken on PyPi, so the package name will need changing even if the entry point doesn't.
