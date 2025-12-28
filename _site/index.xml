@@ -10,7 +10,177 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Japes with R</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Sun, 30 Nov 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 28 Dec 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Correcting a fib about jot</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2025-12-28-jot-fib/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2025-12-28-jot-fib/resources/jot-fib.png" class="img-fluid figure-img" alt="Screenshot of a macOS terminal window running the jot tool four times, with option 'v' to print the version number; 'w' to print where the config and jot files are; 's' and 'l' to search for the most recent jotting that contains the word 'apple'; and 'f' and 't' flags to return jottings from one date to another."></p>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p><a href="https://github.com/matt-dray/jot">jot</a> now has <code>--where</code>, <code>--version</code>, <code>--from</code> and <code>--to</code> options.</p>
+</section>
+<section id="whoops" class="level2">
+<h2 class="anchored" data-anchor-id="whoops">Whoops</h2>
+<p>Me, lying, the <a href="https://www.rostrum.blog/posts/2025-08-30-jot-options/">last time I posted about jot</a>:</p>
+<blockquote class="blockquote">
+<p>It’s basically feature-complete from my perspective.</p>
+</blockquote>
+<p>Reminder: <a href="https://github.com/matt-dray/jot">jot</a> is my simple little Python CLI for recording timestamped notes to a text file.</p>
+<p>In fact, now you can:</p>
+<ul>
+<li>combine options</li>
+<li>search between specific dates</li>
+<li>quickly get tool meta-information</li>
+</ul>
+</section>
+<section id="and" class="level2">
+<h2 class="anchored" data-anchor-id="and">And?</h2>
+<p>Options <code>--search</code> and <code>--list</code> (<code>-s</code> and <code>-l</code>) can now be used in combination.</p>
+<p>This was achieved by adding an argument to the <code>search_jottings()</code> function that takes the value given by <code>--list</code>.</p>
+<p>So, assuming this little jot file:</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>jot.txt</strong></pre>
+</div>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb1-1">[2025-08-28 11:15] ate an apple</span>
+<span id="cb1-2">[2025-08-27 10:58] ate a kiwi</span>
+<span id="cb1-3">[2025-08-26 11:09] ate a pineapple</span>
+<span id="cb1-4">[2025-08-25 10:40] ate an apple and a pear</span></code></pre></div>
+</div>
+<p>A casual <code>--search</code> will return anything matching your search term.</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">jot</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-s</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"apple"</span></span></code></pre></div>
+<pre><code>[2025-08-28 11:15] ate an apple
+[2025-08-26 11:09] ate a pineapple
+[2025-08-25 10:40] ate an apple and a pear</code></pre>
+<p>But that could overwhelm the console if you have a lot of jottings.</p>
+<p>So now you can add the <code>--list</code> flag to limit to the most recent <em>n</em> jottings that match the search term.</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">jot</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-s</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"apple"</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-l</span> 1</span></code></pre></div>
+<pre><code>[2025-08-28 11:15] ate an apple</code></pre>
+</section>
+<section id="where-what" class="level2">
+<h2 class="anchored" data-anchor-id="where-what">Where? What?</h2>
+<p>I added helpers <code>--where</code> and <code>--version</code> (<code>-w</code> and <code>-v</code>) as quality-of-life improvements.</p>
+<p><code>--where</code> is useful if you forget the file paths handled by jot, which are:</p>
+<ul>
+<li>the config file, which contains a key-value path to the jot file</li>
+<li>the jot file, which is where the text of the jottings is saved</li>
+</ul>
+<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">jot</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-w</span></span></code></pre></div>
+<pre><code>📍 Default path to config file: /Users/mattdray/.jot-config.json
+📍 Path to jot file: /Users/mattdray/Documents/jot.txt</code></pre>
+<p>The tool has gone through a bunch of changes, so you can check what version you’re running with <code>--version</code>.</p>
+<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">jot</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-v</span></span></code></pre></div>
+<pre><code>0.2.11</code></pre>
+<p>The version number is also provided now when you run <code>jot --help</code> (<code>-h</code>) to print the help documentation.</p>
+<p>Assuming you’re using uv, run <code>uv tool upgrade jot</code> to get the latest version.</p>
+</section>
+<section id="when" class="level2">
+<h2 class="anchored" data-anchor-id="when">When?</h2>
+<p>I mentioned using a regular expression to filter for jottings between dates. That’s awful<sup>1</sup>.</p>
+<p>Helpfully, <a href="https://github.com/oiffrig">Olivier Iffrig-Petit</a> contributed a couple of new options to handle this.</p>
+<p><code>--from</code> and <code>--to</code> (<code>-f</code> and <code>-t</code>) take values in the form <code>YYYYMMDD</code> to filter from (inclusive) and to (exclusive) given dates. They can be used alone or together, along with <code>--search</code> and <code>--list</code>.</p>
+<p>So, to return jottings from 26 August 2025 up to (but not including) 28 August 2025:</p>
+<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">jot</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-f</span> 20250826 <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-t</span> 20250828</span></code></pre></div>
+<pre><code>[2025-08-27 10:58] ate a kiwi
+[2025-08-26 11:09] ate a pineapple</code></pre>
+<p>Isolating time periods like this has helped me find information to write weeknotes and complete my timesheets.</p>
+<p>Many thanks Olivier.</p>
+</section>
+<section id="sure" class="level2">
+<h2 class="anchored" data-anchor-id="sure">Sure?</h2>
+<p>Along with these features, I’ve added basic tests for the Python functions using <a href="https://docs.pytest.org/en/stable/">pytest</a>. A couple of things that were new to me were:</p>
+<ul>
+<li>the <code>@pytest.mark.parametrize()</code> decorator, which helps set up inputs that can be iterated over in a test</li>
+<li>that <code>capsys</code> captures system outputs, as the name implies, which you can compare to expected values</li>
+</ul>
+<p>And naturally my patience was tested trying to get the pytest GitHub Action to run correctly.</p>
+</section>
+<section id="next" class="level2">
+<h2 class="anchored" data-anchor-id="next">Next?</h2>
+<p>Next thing might be to <a href="https://github.com/matt-dray/jot/issues/44">prepare jot for PyPi</a>. There’s probably two breaking changes to be made before then:</p>
+<ol type="1">
+<li>Save the config file <a href="https://github.com/matt-dray/jot/issues/14">somewhere more suitable</a> than the user’s home directory.</li>
+<li><a href="https://github.com/matt-dray/jot/issues/57">Rename the package</a> because there’s <a href="https://ss64.com/mac/jot.html">already a macOS tool named ‘jot’</a>, lol<sup>2</sup>.</li>
+</ol>
+<p>So, perhaps, finally, maybe, for now:</p>
+<blockquote class="blockquote">
+<p>It’s basically feature-complete from my perspective.</p>
+</blockquote>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[project]
+name = "2025-12-28-jot-fib"
+version = "0.1.0"
+requires-python = "&gt;=3.12"
+dependencies = []</code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>‘Regex? Now you have two problems.’↩︎</p></li>
+<li id="fn2"><p>Or alias and document it so the user can decide. Either way, ‘jot’ is already taken on PyPi, so the package name will need changing even if the entry point doesn’t.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>cli</category>
+  <category>jot</category>
+  <category>python</category>
+  <category>uv</category>
+  <guid>https://www.rostrum.blog/posts/2025-12-28-jot-fib/index.html</guid>
+  <pubDate>Sun, 28 Dec 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2025-12-28-jot-fib/resources/jot-fib.png" medium="image" type="image/png" height="51" width="144"/>
+</item>
 <item>
   <title>How the tables turned</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -6043,463 +6213,6 @@ loaded via a namespace (and not attached):
   <guid>https://www.rostrum.blog/posts/2024-03-12-eclipse/index.html</guid>
   <pubDate>Tue, 12 Mar 2024 00:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-03-12-eclipse/resources/cli-eclipse.png" medium="image" type="image/png" height="57" width="144"/>
-</item>
-<item>
-  <title>Start an argument with R</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-02-03-base-args/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><img src="https://www.rostrum.blog/posts/2024-02-03-base-args/resources/argument.png" class="img-fluid" data-fig.alt="Two poorly drawn angry faces. One says 'str(x)' above it and the other says str(x, max.level = 1)'."></p>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>Some (lesser-known?) arguments to some common base-R functions.</p>
-</section>
-<section id="getting-argumentative" class="level2">
-<h2 class="anchored" data-anchor-id="getting-argumentative">Getting argumentative</h2>
-<p>There’s been a recent glut of posts about useful base-R functions, like the ones by <a href="https://masalmon.eu/2023/10/20/three-neat-functions/">Maëlle</a>, <a href="https://ivelasq.rbind.io/blog/not-so-basic-base-r-functions/">Isabella</a> and <a href="https://yihui.org/en/2023/10/three-functions/">Yihui</a>.</p>
-<p>I bring you a twist on the theme. Four useful <em>arguments</em> from four everyday base functions:</p>
-<ul>
-<li><code>max.level</code> in <code>str()</code></li>
-<li><code>n</code> in <code>print()</code></li>
-<li><code>include.only</code> in <code>library()</code></li>
-<li><code>drop</code> in <code>`[`</code></li>
-</ul>
-<p>Feel free to move on if you know all of these.</p>
-<section id="structural-integrity" class="level3">
-<h3 class="anchored" data-anchor-id="structural-integrity">Structural integrity</h3>
-<p><code>str()</code> prints an object’s structure. It can be especially helpful for viewing lists in a compact hierarchical fashion. Consider this nested list:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">nested_list <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(</span>
-<span id="cb1-2">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x1 =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x2 =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x3 =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">4</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">6</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x4 =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">7</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">9</span>)),</span>
-<span id="cb1-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">y =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">y1 =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">y2 =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">y3 =</span> mtcars))),</span>
-<span id="cb1-4">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">z =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">z1 =</span> beaver1, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">z2 =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">z4 =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">100</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">z5 =</span> chickwts), <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">z3 =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">z5 =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>))</span>
-<span id="cb1-5">)</span></code></pre></div>
-</div>
-<p>Here’s the output we get from a simple <code>str()</code> call:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">str</span>(nested_list)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>List of 3
- $ x:List of 2
-  ..$ x1: int [1:3] 1 2 3
-  ..$ x2:List of 2
-  .. ..$ x3: int [1:3] 4 5 6
-  .. ..$ x4: int [1:3] 7 8 9
- $ y:List of 1
-  ..$ y1:List of 1
-  .. ..$ y2:List of 1
-  .. .. ..$ y3:'data.frame':    32 obs. of  11 variables:
-  .. .. .. ..$ mpg : num [1:32] 21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...
-  .. .. .. ..$ cyl : num [1:32] 6 6 4 6 8 6 8 4 4 6 ...
-  .. .. .. ..$ disp: num [1:32] 160 160 108 258 360 ...
-  .. .. .. ..$ hp  : num [1:32] 110 110 93 110 175 105 245 62 95 123 ...
-  .. .. .. ..$ drat: num [1:32] 3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...
-  .. .. .. ..$ wt  : num [1:32] 2.62 2.88 2.32 3.21 3.44 ...
-  .. .. .. ..$ qsec: num [1:32] 16.5 17 18.6 19.4 17 ...
-  .. .. .. ..$ vs  : num [1:32] 0 0 1 1 0 1 0 1 1 1 ...
-  .. .. .. ..$ am  : num [1:32] 1 1 1 0 0 0 0 0 0 0 ...
-  .. .. .. ..$ gear: num [1:32] 4 4 4 3 3 3 3 4 4 4 ...
-  .. .. .. ..$ carb: num [1:32] 4 4 1 1 2 1 4 2 2 4 ...
- $ z:List of 3
-  ..$ z1:'data.frame':  114 obs. of  4 variables:
-  .. ..$ day  : num [1:114] 346 346 346 346 346 346 346 346 346 346 ...
-  .. ..$ time : num [1:114] 840 850 900 910 920 930 940 950 1000 1010 ...
-  .. ..$ temp : num [1:114] 36.3 36.3 36.4 36.4 36.5 ...
-  .. ..$ activ: num [1:114] 0 0 0 0 0 0 0 0 0 0 ...
-  ..$ z2:List of 2
-  .. ..$ z4: num 100
-  .. ..$ z5:'data.frame':   71 obs. of  2 variables:
-  .. .. ..$ weight: num [1:71] 179 160 136 227 217 168 108 124 143 140 ...
-  .. .. ..$ feed  : Factor w/ 6 levels "casein","horsebean",..: 2 2 2 2 2 2 2 2 2 2 ...
-  ..$ z3:List of 1
-  .. ..$ z5: num 1</code></pre>
-</div>
-</div>
-<p>Oof, that’s a little bit too much information to flood my console with.</p>
-<p>Luckily we can use the <code>max.level</code> argument to restrict the depth to which the list is printed. Here’s the top level only, which has a depth of 1:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">str</span>(nested_list, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">max.level =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>List of 3
- $ x:List of 2
- $ y:List of 1
- $ z:List of 3</code></pre>
-</div>
-</div>
-<p>Now we have a very high-level overview: the object is a list containing three sub-lists of particular lengths.</p>
-<p>Let’s go deeper. And since <code>max.level</code> is the second argument, we don’t even need to name it.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">str</span>(nested_list, <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">2</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>List of 3
- $ x:List of 2
-  ..$ x1: int [1:3] 1 2 3
-  ..$ x2:List of 2
- $ y:List of 1
-  ..$ y1:List of 1
- $ z:List of 3
-  ..$ z1:'data.frame':  114 obs. of  4 variables:
-  ..$ z2:List of 2
-  ..$ z3:List of 1</code></pre>
-</div>
-</div>
-<p>So now we’ve unpeeled the next layer of the onion and can see that the sub-lists are made up of a vector, a data.frame and yet more lists.</p>
-<p>For me, this is a nice way to get a sense of structure without seeing the entire content. I also think it beats the interactive list <code>View()</code> in RStudio as well, which can’t be opened to an arbitrary depth in one go<sup>1</sup>.</p>
-</section>
-<section id="carriage-feed" class="level3">
-<h3 class="anchored" data-anchor-id="carriage-feed">Carriage feed</h3>
-<p><code>print()</code> is a ubiquitous function across most programming languages. In R, you might just type an object’s name to show it. Here’s a tibble with 21 rows to demonstrate.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1">chick_tbl <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> tibble<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as_tibble</span>(ChickWeight[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">21</span>, ])</span>
-<span id="cb8-2">chick_tbl</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 21 × 4
-   weight  Time Chick Diet 
-    &lt;dbl&gt; &lt;dbl&gt; &lt;ord&gt; &lt;fct&gt;
- 1     42     0 1     1    
- 2     51     2 1     1    
- 3     59     4 1     1    
- 4     64     6 1     1    
- 5     76     8 1     1    
- 6     93    10 1     1    
- 7    106    12 1     1    
- 8    125    14 1     1    
- 9    149    16 1     1    
-10    171    18 1     1    
-# ℹ 11 more rows</code></pre>
-</div>
-</div>
-<p>You might use <code>head()</code> on a data.frame to prevent printing the whole thing, which defaults to showing 6 rows. Tibbles are truncated by default to 10, but a nice feature is that they’ll show a few more if there’s slightly more than 10 rows total. But what if you want more control?</p>
-<p>Well, in both <code>print()</code> and <code>head()</code> is the <code>n</code> argument. No surprise: it lets you select <code>n</code> number of data.frame or tibble rows to show in the console.</p>
-<p>I particularly like this for inspecting the entirety of a small tibble that’s been truncated by default. I’ll sometimes find myself doing this:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">print</span>(chick_tbl, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">n =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">Inf</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 21 × 4
-   weight  Time Chick Diet 
-    &lt;dbl&gt; &lt;dbl&gt; &lt;ord&gt; &lt;fct&gt;
- 1     42     0 1     1    
- 2     51     2 1     1    
- 3     59     4 1     1    
- 4     64     6 1     1    
- 5     76     8 1     1    
- 6     93    10 1     1    
- 7    106    12 1     1    
- 8    125    14 1     1    
- 9    149    16 1     1    
-10    171    18 1     1    
-11    199    20 1     1    
-12    205    21 1     1    
-13     40     0 2     1    
-14     49     2 2     1    
-15     58     4 2     1    
-16     72     6 2     1    
-17     84     8 2     1    
-18    103    10 2     1    
-19    122    12 2     1    
-20    138    14 2     1    
-21    162    16 2     1    </code></pre>
-</div>
-</div>
-<p>You can set an <code>option()</code> to see more tibble rows by default, but I’m usually okay with its normal truncating behaviour. Using <code>n</code> is a convenience when I need it.</p>
-</section>
-<section id="library-check-out" class="level3">
-<h3 class="anchored" data-anchor-id="library-check-out">Library check out</h3>
-<p><code>library()</code> calls are a staple of R scripts. Let’s say I’m attaching the {lme4} package because I want to use the famous <code>cake</code> data set (thanks Rasmus<sup>2</sup>).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(lme4, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">quietly =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>)</span></code></pre></div>
-</div>
-<p>Aha, no, it’s not the <code>quietly</code> argument I want to talk about<sup>3</sup>, though it is handy for stopping messages from being printed.</p>
-<p>Of course, what <code>library()</code> does is let you access objects—like functions and data sets—from a named package. How many objects did we attach from {lme4}?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">length</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ls</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"package:lme4"</span>))</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 102</code></pre>
-</div>
-</div>
-<p>Blimey, all we wanted was <code>cake</code>. But actually, we can be more selective with <code>library()</code> using the <code>include.only</code> argument (note that you can <code>exclude</code> as well).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">detach</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"package:lme4"</span>)</span>
-<span id="cb15-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(lme4, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">include.only =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"cake"</span>)</span>
-<span id="cb15-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ls</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"package:lme4"</span>)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "cake"</code></pre>
-</div>
-</div>
-<p>Why would you want to do this? This can keep your environment tidy—if that’s something you care about—but also helps prevent conflicts between objects that have the same name. For example, {dplyr}’s <code>filter()</code> function masks <code>stats::filter()</code>.</p>
-<p>This is also more explicit. People reading your script can see all the functions you’ve pulled in from each package by looking at your <code>library()</code> calls <sup>4</sup>. If I see <code>cake</code> referenced in your script but can’t see how it was derived, I can look at the <code>library()</code> call to see that you imported it from {lme4}.</p>
-<p>At worst, this might be a nice thing for Python users, who love to <code>from x import y</code>.</p>
-</section>
-<section id="score-a-drop-goal" class="level3">
-<h3 class="anchored" data-anchor-id="score-a-drop-goal">Score a drop goal</h3>
-<p>The square bracket, <code>`[`</code>, is a function<sup>5</sup> for extracting elements out of objects, like rows and columns of a data.frame. Of course, it’s typically used as a pair of square brackets.</p>
-<p>So the following will give you the first three rows of the <code>cake</code> data.frame for the columns <code>temp</code> and <code>angle</code>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1">cake[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"temp"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"angle"</span>)]</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  temp angle
-1  175    42
-2  185    46
-3  195    47</code></pre>
-</div>
-</div>
-<p>What happens when you select a single column? You get one column back, right?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1">cake[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"temp"</span>]</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 175 185 195</code></pre>
-</div>
-</div>
-<p>Ha, lol, no. You get a vector. This might be a problem if you’re passing column names into <code>`[`</code> programmatically and you’re always expecting a data.frame as output.</p>
-<p>Luckily, you can guard against this by ensuring the returned doesn’t <code>drop</code> to its simplest dimension.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1">cake[<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span><span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">:</span><span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"angle"</span>, drop <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">FALSE</span>]</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  angle
-1    42
-2    46
-3    47</code></pre>
-</div>
-</div>
-<p>I can see how a third argument inside the square brackets may look spooky if you thought you could only pass two when working on a data.frame<sup>6</sup>.</p>
-</section>
-</section>
-<section id="mutual-agreement" class="level2">
-<h2 class="anchored" data-anchor-id="mutual-agreement">Mutual agreement</h2>
-<p>These were unlikely to have blown your mind, especially if you’re a seasoned user. But I’ve live-coded recently with some folks who hadn’t seen them before. Maybe you haven’t either.</p>
-<p>Let me know if you want to argue your case for some other under-appreciated arguments.</p>
-</section>
-
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level2 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-02-05 14:16:16 GMT</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
-[1] lme4_1.1-35.1 Matrix_1.6-0 
-
-loaded via a namespace (and not attached):
- [1] vctrs_0.6.5       nlme_3.1-162      cli_3.6.2         knitr_1.45       
- [5] rlang_1.1.3       xfun_0.41         minqa_1.2.6       jsonlite_1.8.7   
- [9] glue_1.7.0        htmltools_0.5.6.1 fansi_1.0.6       rmarkdown_2.25   
-[13] grid_4.3.1        evaluate_0.23     tibble_3.2.1      MASS_7.3-60      
-[17] fastmap_1.1.1     yaml_2.3.8        lifecycle_1.0.4   compiler_4.3.1   
-[21] Rcpp_1.0.11       htmlwidgets_1.6.2 pkgconfig_2.0.3   rstudioapi_0.15.0
-[25] lattice_0.21-8    digest_0.6.33     nloptr_2.0.3      utf8_1.2.4       
-[29] pillar_1.9.0      splines_4.3.1     magrittr_2.0.3    tools_4.3.1      
-[33] boot_1.3-28.1    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>I generally prefer to use the console for inspecting objects, rather than an IDE. I usually have the RStudio environment pane minimised.↩︎</p></li>
-<li id="fn2"><p>Rasmus recently <a href="https://www.sumsar.net/blog/source-of-the-cake-dataset/">did some sleuthing</a> to discover the source of this data set! A great read.↩︎</p></li>
-<li id="fn3"><p>Note that package startup messages can also be controlled en masse by wrapping library calls in <code>suppressPackageStartupMessages()</code>, which I’ve <a href="https://www.rostrum.blog/posts/2021-08-27-zzz/">talked about before</a>. And also written about <a href="https://www.rostrum.blog/posts/2021-11-27-long-fns/">the sheer length of this function name</a>.↩︎</p></li>
-<li id="fn4"><p>I’m fully aware that you can namespace objects in your scripts, like <code>lme4::cake</code>. That can reduce readability if every object is called in this way, though I do this myself when writing packages, for example.↩︎</p></li>
-<li id="fn5"><p>Recall that <code>`[`</code> is actually a function so you can write <code>`[`(mtcars, 1:3, c("cyl", "hp"))</code> to achieve the same things as <code>mtcars[1:3, c("cyl", "hp")]</code>.↩︎</p></li>
-<li id="fn6"><p>Of course, three arguments to <code>`[`</code> is bread and butter for {data.table} users!↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>base</category>
-  <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2024-02-03-base-args/index.html</guid>
-  <pubDate>Sat, 03 Feb 2024 00:00:00 GMT</pubDate>
-  <media:content url="https://www.rostrum.blog/posts/2024-02-03-base-args/resources/argument.png" medium="image" type="image/png" height="63" width="144"/>
 </item>
 </channel>
 </rss>
