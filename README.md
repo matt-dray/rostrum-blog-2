@@ -15,19 +15,19 @@ post](https://img.shields.io/badge/rostrum-blog-008900?style=flat&labelColor=bla
 Status](https://api.netlify.com/api/v1/badges/09af3502-e7fc-4abb-b370-ca71214bea50/deploy-status)](https://app.netlify.com/sites/rostrum-blog/deploys)
 <!-- badges: end -->
 
-💾 Source files for [rostrum.blog](https://www.rostrum.blog/): fun and
-learning with the R language.
+💾 Source files for [rostrum.blog](https://www.rostrum.blog/): realised
+showerthoughts about R and Python, mostly.
 
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 188 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2025-11-30 (latest).
+🔢 There have been 189 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2025-12-28 (latest).
 
 📅 That’s a post roughly every 15 days, or about 2 posts per month.
 
-🆕 The latest post: [How the tables
-turned](https://www.rostrum.blog/posts/2025-11-30-turn-tables)
+🆕 The latest post: [Correcting a fib about
+jot](https://www.rostrum.blog/posts/2025-12-28-jot-fib)
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ turned](https://www.rostrum.blog/posts/2025-11-30-turn-tables)
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 189 | 2025-12-28 | [Correcting a fib about jot](https://www.rostrum.blog/posts/2025-12-28-jot-fib)                                                |
 | 188 | 2025-11-30 | [How the tables turned](https://www.rostrum.blog/posts/2025-11-30-turn-tables)                                                 |
 | 187 | 2025-10-30 | [={ o x o}=](https://www.rostrum.blog/posts/2025-10-30-pet)                                                                    |
 | 186 | 2025-09-18 | [Abandon P\*werpoint for the command line](https://www.rostrum.blog/posts/2025-09-18-rich-slides)                              |
@@ -234,4 +235,4 @@ turned](https://www.rostrum.blog/posts/2025-11-30-turn-tables)
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2025-12-14 at 11:32.
+🕒 Last updated: 2025-12-28 at 22:53.
