@@ -1,0 +1,179 @@
+---
+title: "A roguelike-like with tyle"
+date: 2026-02-01
+slug: "tyle"
+image: resources/tyle.png
+categories:
+  - cli
+  - python
+  - tyle
+  - uv
+---
+
+![](resources/tyle.png){fig-align="left" fig-alt="A 10 by 10 grid of characters printed to a macOS terminal. Tiles are mostly period characters, with some hashmark characters, and an at symbol near the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input."}
+
+## tl;dr
+
+I'm writing [tyle](https://github.com/matt-dray/tyle) to help me Python.
+And help me fun?
+
+## Very early access
+
+I've started [tyle](https://github.com/matt-dray/tyle), a concept Python CLI that contains the foundations for a little in-terminal tile- and turn-based game.
+
+The rudimentary tool is available to install.
+I like [uv](https://docs.astral.sh/uv/) for this job[^tool]:
+
+```bash
+uv tool install git+https://github.com/matt-dray/tyle.git
+```
+
+You can start a 'game' (heavy emphasis on those quote marks) by typing:
+
+```bash
+tyle
+```
+```
+.......#..
+..........
+.##..#....
+....#....#
+......#...
+.....@....
+..#.......
+........#.
+..........
+....#.....
+Move (WASD+Enter): 
+```
+
+The gameboard is just a tile grid printed to the terminal.
+You (the `@` symbol) can travel around the floor tiles (`.`), but not through obstacles (`#`, which are randomised) or off the map. 
+
+At the prompt you can type <kbd>W</kbd> and <kbd>Enter</kbd> to move up, for example.
+<kbd>Q</kbd> and <kbd>Enter</kbd> will quit.
+
+Aaand that's it for now[^awards].
+
+## Like Rogue?
+
+This game style may be familiar because it's a fragment of the blueprint for [the classic videgame _Rogue_](https://en.wikipedia.org/wiki/Rogue_(video_game)) (1980).
+Key features are things like text-based graphics, turn-based player interaction, and permadeath. 
+Later games aped this style and adapted with it, giving rise to the 'roguelike' and 'roguelite' genres.
+
+The scope here is far tighter: I promise nothing.
+So let's call this a roguelike-like for now.
+
+## A sidequest
+
+To explain the meta, I've been making some twee little projects to help me learn Python.
+First [jot](https://github.com/matt-dray/jot), then [pet](https://github.com/matt-dray/pet).
+tyle is also a Python-backed CLI but is helping me learn more about classes.
+
+As someone with a background in R, I tend to think every nail can be hammered with a function.
+R supports classes, of course, most recently with [the {S7} package](https://rconsortium.github.io/S7/index.html)[^frivolity].
+But the approach feels far more at home in Python with its greater focus on 'programming' than 'doing statistics'[^take].
+
+In tyle, there are currently three main classes:
+
+* `Tile` that represent the tiles of the world map
+* `TileGrid` to generate the world map from tile objects
+* `Entity` to create the player character
+
+Each of these have properties and methods that allow them to store data and be queried in certain ways.
+
+Tile objects contain information like whether they're traversable; tile-grid objects store the tile grid as a list of lists of tile objects and are responsible for printing the map; and entities serve as the blueprint for creating the player object, hosting parameters for tile coordinates and hit points, for example.
+
+So, at its core, the map can be indexed by 'rows' and 'columns' that are really just sublist and list-element positions.
+When printing the map, the player is drawn over the user-specified position if the move clears legality checks (i.e. you can't move onto an obstacle nor exit the map boundary).
+
+### Grouting
+
+As it stands, you can see the Python code in [the `tiles.py` file](https://github.com/matt-dray/tyle/tree/main/src/tyle).
+The simplest possible example of a class there is `Tile`:
+
+```python
+class Tile:
+    def __init__(self, symbol: str, traversable: bool) -> None:
+        self.symbol = symbol
+        self.traversable = traversable
+```
+
+I've shown the type hints[^ty] but hidden the docstrings for brevity.
+
+So you:
+
+1. Declare with `class`.
+2. Use an UpperCamelCase name by convention.
+3. `def`ine a function to `__init__`ialise the class, with reference to:
+    a. `self`, i.e. the class itself.
+    b. 'normal' function arguments (`symbol` is the text character representing the tile and `traversable` is whether the tile can be moved across).
+4. Set properties that may just be the arguments, or passed through other functions.
+5. `def`ine functions (methods) within the body of the class (not shown here becuase the `Tile` class doesn't currently have any).
+
+And then you can call it like:
+
+```python
+tile = Tile(".", True)
+```
+
+So we've created a tile object with the `Tile` class and parameters for its symbol when printed (a period) and whether it can be moved across (it can).
+And we can access these properties (and methods) with dot notation, like:
+
+```python
+tile.symbol
+```
+```
+'.'
+```
+
+That's a _very_ simple example.
+You can imagine how the `Entity` class has parameters like `hp` (hit points) and `TileGrid` has a `draw` method to print the map to the screen.
+
+Later we could create subclasses from the `Entity` class, so `Player` and `Enemy` could inherit the properties and methods from `Entity`, but maybe `Player` has a `name` or something.
+
+## Hack
+
+> But I've read about [the {r.oguelike} R package](https://github.com/matt-dray/r.oguelike) on [this blog](https://www.rostrum.blog/index.html#category=r.oguelike) before.
+> Have you run out of ideas?
+
+Uh-oh, I've been rumbled.
+
+Listen, agitator: R was never the 'right' choice for this type of thing.
+Not least because that particular 'game' had to be played in the R console, rather than the terminal directly.
+
+Python is far more suited to this type of activity.
+In fact, Python can be used as a full-blown game engine, aided by tools like [PyGame](https://www.pygame.org/docs/).
+In fact, there are several roguelike-specific packages to help you build roguelikes specifically, like [libtcod](https://github.com/libtcod/libtcod).
+
+I'm ignoring these because I want to use this little project to help me learn Python skills, not roguelike-making skills, specifically.
+The logic, yes, but also stuff like type hints, docstrings, writing modules, creating CLIs, etc.
+
+## Game over?
+
+As ever, I may stop there[^shot].
+But there are some obvious improvements that would also strengthen my skills.
+
+A bunch of stuff from {r.oguelike} could be interesting to translate here, like procedural dungeons, enemy pathfinding and a styled interface.
+
+Of course, we probably want to 'listen' to keyboard input, which is a more natural approach to interactivity versus hitting <kbd>Enter</kbd> all the time
+
+It would also be nice to improve the CLI itself to accept various options, rather than generating the same-size grid and player starting-position every time.
+
+Oh yeah and, y'know, make it into like an actual game with winning and losing conditions?
+Eh, maybe.
+
+### Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat(readLines("pyproject.toml"), sep = "\n")
+```
+</details>
+
+[^take]: Wow, a take that's hotter than the sun.
+[^shot]: Take a shot every time you read that phrase on this blog.
+[^frivolity]: I wouldn't dream of taking the cutting edge and [being frivolous with it](https://www.rostrum.blog/posts/2023-02-26-nook-s7/).
+[^tool]: And `uv tool update tyle` and `uv tool uninstall tyle` do what you think they do.
+[^awards]: Pfft, game awards? More like _shame awards_ in comparison to this, amirite?
+[^ty]: [Astral](https://astral.sh/) have brought ty out of version beta_BETA_draft_v0.0.0.0.0.900000, huzzah. You can check type hints cheaply [with uv](https://docs.astral.sh/uv/guides/tools/) and without installing anything else, like `uvx ty check`. Or `uvx ruff format` and `uv ruff check` for linting and formatting. Real noice.

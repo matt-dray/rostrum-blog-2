@@ -10,7 +10,186 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Realised showerthoughts about R and Python mostly</description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Sun, 28 Dec 2025 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 01 Feb 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>A roguelike-like with tyle</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2026-02-01-tyle/index.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2026-02-01-tyle/resources/tyle.png" class="img-fluid figure-img" alt="A 10 by 10 grid of characters printed to a macOS terminal. Tiles are mostly period characters, with some hashmark characters, and an at symbol near the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input."></p>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I’m writing <a href="https://github.com/matt-dray/tyle">tyle</a> to help me Python. And help me fun?</p>
+</section>
+<section id="very-early-access" class="level2">
+<h2 class="anchored" data-anchor-id="very-early-access">Very early access</h2>
+<p>I’ve started <a href="https://github.com/matt-dray/tyle">tyle</a>, a concept Python CLI that contains the foundations for a little in-terminal tile- and turn-based game.</p>
+<p>The rudimentary tool is available to install. I like <a href="https://docs.astral.sh/uv/">uv</a> for this job<sup>1</sup>:</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">uv</span> tool install git+https://github.com/matt-dray/tyle.git</span></code></pre></div>
+<p>You can start a ‘game’ (heavy emphasis on those quote marks) by typing:</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">tyle</span></span></code></pre></div>
+<pre><code>.......#..
+..........
+.##..#....
+....#....#
+......#...
+.....@....
+..#.......
+........#.
+..........
+....#.....
+Move (WASD+Enter): </code></pre>
+<p>The gameboard is just a tile grid printed to the terminal. You (the <code>@</code> symbol) can travel around the floor tiles (<code>.</code>), but not through obstacles (<code>#</code>, which are randomised) or off the map.</p>
+<p>At the prompt you can type <kbd>W</kbd> and <kbd>Enter</kbd> to move up, for example. <kbd>Q</kbd> and <kbd>Enter</kbd> will quit.</p>
+<p>Aaand that’s it for now<sup>2</sup>.</p>
+</section>
+<section id="like-rogue" class="level2">
+<h2 class="anchored" data-anchor-id="like-rogue">Like Rogue?</h2>
+<p>This game style may be familiar because it’s a fragment of the blueprint for <a href="https://en.wikipedia.org/wiki/Rogue_(video_game)">the classic videgame <em>Rogue</em></a> (1980). Key features are things like text-based graphics, turn-based player interaction, and permadeath. Later games aped this style and adapted with it, giving rise to the ‘roguelike’ and ‘roguelite’ genres.</p>
+<p>The scope here is far tighter: I promise nothing. So let’s call this a roguelike-like for now.</p>
+</section>
+<section id="a-sidequest" class="level2">
+<h2 class="anchored" data-anchor-id="a-sidequest">A sidequest</h2>
+<p>To explain the meta, I’ve been making some twee little projects to help me learn Python. First <a href="https://github.com/matt-dray/jot">jot</a>, then <a href="https://github.com/matt-dray/pet">pet</a>. tyle is also a Python-backed CLI but is helping me learn more about classes.</p>
+<p>As someone with a background in R, I tend to think every nail can be hammered with a function. R supports classes, of course, most recently with <a href="https://rconsortium.github.io/S7/index.html">the {S7} package</a><sup>3</sup>. But the approach feels far more at home in Python with its greater focus on ‘programming’ than ‘doing statistics’<sup>4</sup>.</p>
+<p>In tyle, there are currently three main classes:</p>
+<ul>
+<li><code>Tile</code> that represent the tiles of the world map</li>
+<li><code>TileGrid</code> to generate the world map from tile objects</li>
+<li><code>Entity</code> to create the player character</li>
+</ul>
+<p>Each of these have properties and methods that allow them to store data and be queried in certain ways.</p>
+<p>Tile objects contain information like whether they’re traversable; tile-grid objects store the tile grid as a list of lists of tile objects and are responsible for printing the map; and entities serve as the blueprint for creating the player object, hosting parameters for tile coordinates and hit points, for example.</p>
+<p>So, at its core, the map can be indexed by ‘rows’ and ‘columns’ that are really just sublist and list-element positions. When printing the map, the player is drawn over the user-specified position if the move clears legality checks (i.e.&nbsp;you can’t move onto an obstacle nor exit the map boundary).</p>
+<section id="grouting" class="level3">
+<h3 class="anchored" data-anchor-id="grouting">Grouting</h3>
+<p>As it stands, you can see the Python code in <a href="https://github.com/matt-dray/tyle/tree/main/src/tyle">the <code>tiles.py</code> file</a>. The simplest possible example of a class there is <code>Tile</code>:</p>
+<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">class</span> Tile:</span>
+<span id="cb4-2">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>, symbol: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>, traversable: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">bool</span>) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>:</span>
+<span id="cb4-3">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.symbol <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> symbol</span>
+<span id="cb4-4">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.traversable <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> traversable</span></code></pre></div>
+<p>I’ve shown the type hints<sup>5</sup> but hidden the docstrings for brevity.</p>
+<p>So you:</p>
+<ol type="1">
+<li>Declare with <code>class</code>.</li>
+<li>Use an UpperCamelCase name by convention.</li>
+<li><code>def</code>ine a function to <code>__init__</code>ialise the class, with reference to:
+<ol type="a">
+<li><code>self</code>, i.e.&nbsp;the class itself.</li>
+<li>‘normal’ function arguments (<code>symbol</code> is the text character representing the tile and <code>traversable</code> is whether the tile can be moved across).</li>
+</ol></li>
+<li>Set properties that may just be the arguments, or passed through other functions.</li>
+<li><code>def</code>ine functions (methods) within the body of the class (not shown here becuase the <code>Tile</code> class doesn’t currently have any).</li>
+</ol>
+<p>And then you can call it like:</p>
+<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">tile <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Tile(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"."</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span></code></pre></div>
+<p>So we’ve created a tile object with the <code>Tile</code> class and parameters for its symbol when printed (a period) and whether it can be moved across (it can). And we can access these properties (and methods) with dot notation, like:</p>
+<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">tile.symbol</span></code></pre></div>
+<pre><code>'.'</code></pre>
+<p>That’s a <em>very</em> simple example. You can imagine how the <code>Entity</code> class has parameters like <code>hp</code> (hit points) and <code>TileGrid</code> has a <code>draw</code> method to print the map to the screen.</p>
+<p>Later we could create subclasses from the <code>Entity</code> class, so <code>Player</code> and <code>Enemy</code> could inherit the properties and methods from <code>Entity</code>, but maybe <code>Player</code> has a <code>name</code> or something.</p>
+</section>
+</section>
+<section id="hack" class="level2">
+<h2 class="anchored" data-anchor-id="hack">Hack</h2>
+<blockquote class="blockquote">
+<p>But I’ve read about <a href="https://github.com/matt-dray/r.oguelike">the {r.oguelike} R package</a> on <a href="https://www.rostrum.blog/index.html#category=r.oguelike">this blog</a> before. Have you run out of ideas?</p>
+</blockquote>
+<p>Uh-oh, I’ve been rumbled.</p>
+<p>Listen, agitator: R was never the ‘right’ choice for this type of thing. Not least because that particular ‘game’ had to be played in the R console, rather than the terminal directly.</p>
+<p>Python is far more suited to this type of activity. In fact, Python can be used as a full-blown game engine, aided by tools like <a href="https://www.pygame.org/docs/">PyGame</a>. In fact, there are several roguelike-specific packages to help you build roguelikes specifically, like <a href="https://github.com/libtcod/libtcod">libtcod</a>.</p>
+<p>I’m ignoring these because I want to use this little project to help me learn Python skills, not roguelike-making skills, specifically. The logic, yes, but also stuff like type hints, docstrings, writing modules, creating CLIs, etc.</p>
+</section>
+<section id="game-over" class="level2">
+<h2 class="anchored" data-anchor-id="game-over">Game over?</h2>
+<p>As ever, I may stop there<sup>6</sup>. But there are some obvious improvements that would also strengthen my skills.</p>
+<p>A bunch of stuff from {r.oguelike} could be interesting to translate here, like procedural dungeons, enemy pathfinding and a styled interface.</p>
+<p>Of course, we probably want to ‘listen’ to keyboard input, which is a more natural approach to interactivity versus hitting <kbd>Enter</kbd> all the time</p>
+<p>It would also be nice to improve the CLI itself to accept various options, rather than generating the same-size grid and player starting-position every time.</p>
+<p>Oh yeah and, y’know, make it into like an actual game with winning and losing conditions? Eh, maybe.</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[project]
+name = "2026-02-01-tyle"
+version = "0.1.0"
+requires-python = "&gt;=3.12"
+dependencies = []</code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>And <code>uv tool update tyle</code> and <code>uv tool uninstall tyle</code> do what you think they do.↩︎</p></li>
+<li id="fn2"><p>Pfft, game awards? More like <em>shame awards</em> in comparison to this, amirite?↩︎</p></li>
+<li id="fn3"><p>I wouldn’t dream of taking the cutting edge and <a href="https://www.rostrum.blog/posts/2023-02-26-nook-s7/">being frivolous with it</a>.↩︎</p></li>
+<li id="fn4"><p>Wow, a take that’s hotter than the sun.↩︎</p></li>
+<li id="fn5"><p><a href="https://astral.sh/">Astral</a> have brought ty out of version beta_BETA_draft_v0.0.0.0.0.900000, huzzah. You can check type hints cheaply <a href="https://docs.astral.sh/uv/guides/tools/">with uv</a> and without installing anything else, like <code>uvx ty check</code>. Or <code>uvx ruff format</code> and <code>uv ruff check</code> for linting and formatting. Real noice.↩︎</p></li>
+<li id="fn6"><p>Take a shot every time you read that phrase on this blog.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+  <category>cli</category>
+  <category>python</category>
+  <category>tyle</category>
+  <category>uv</category>
+  <guid>https://www.rostrum.blog/posts/2026-02-01-tyle/index.html</guid>
+  <pubDate>Sun, 01 Feb 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2026-02-01-tyle/resources/tyle.png" medium="image" type="image/png" height="89" width="144"/>
+</item>
 <item>
   <title>Correcting a fib about jot</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -5588,631 +5767,6 @@ loaded via a namespace (and not attached):
   <guid>https://www.rostrum.blog/posts/2024-03-15-ai-garbage/index.html</guid>
   <pubDate>Fri, 15 Mar 2024 00:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-03-15-ai-garbage/resources/beckhams.png" medium="image" type="image/png" height="178" width="144"/>
-</item>
-<item>
-  <title>Ellipses, eclipses and bulletses</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-03-12-eclipse/index.html</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><img src="https://www.rostrum.blog/posts/2024-03-12-eclipse/resources/cli-eclipse.png" class="img-fluid" data-fig.alt="An R function called add_one is run in an RStudio console with a string passed as the only argument. The output reads 'Error in add_one, x must be of class numeric, you provided x with class character.' The output is coloured and there are symbols at the start of certain lines, like an exclamation point and red cross. It ends with backtrace to see the error was from add_one in the global environment. Also there's a creeppy emoji sun that's not-quite obscured by a creepy emoji moon."></p>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>You can use <a href="https://cli.r-lib.org/">{cli}</a> and <a href="https://rlang.r-lib.org/">{rlang}</a> to help create a helpful error-handling function that can prevent an eclipse.</p>
-</section>
-<section id="check-one-two" class="level2">
-<h2 class="anchored" data-anchor-id="check-one-two">Check one two</h2>
-<p>I’ve been building an ‘error helper’ function<sup>1</sup> called <code>check_class()</code>. You put it inside another function to check if the user has supplied arguments of the expected class. Surprise.</p>
-<p>I did this to provide richer, more informative error output compared to a simple <code>if () stop()</code>. But it has a few features I wanted to record here for my own reference.</p>
-<p>In particular, <code>check_class()</code>:</p>
-<ul>
-<li>uses {rlang} to handle multiple inputs to the dots (<code>...</code>) argument</li>
-<li>uses {rlang} to avoid an ‘error-handling eclipse’</li>
-<li>uses {cli} for pretty error messaging</li>
-<li>can handle multiple errors and build bulleted {cli} lists from them</li>
-</ul>
-<p>Maybe you’ll find something useful here too.</p>
-</section>
-<section id="a-classy-check" class="level2">
-<h2 class="anchored" data-anchor-id="a-classy-check">A classy check</h2>
-<section id="examples" class="level3">
-<h3 class="anchored" data-anchor-id="examples">Examples</h3>
-<p>Here are some simple examples of inserting <code>check_class()</code> inside another function. The simple function <code>add_one()</code> expects a numeric value. What happens if you supply a string?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">add_one <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(x) {</span>
-<span id="cb1-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">check_class</span>(x, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">.expected_class =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"numeric"</span>)</span>
-<span id="cb1-3">  x <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">+</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span></span>
-<span id="cb1-4">}</span>
-<span id="cb1-5"></span>
-<span id="cb1-6"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">add_one</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"text"</span>)</span></code></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error in `add_one()`:
-! `x` must be of class &lt;numeric&gt;
-✖ You provided:
-• `x` with class &lt;character&gt;</code></pre>
-</div>
-</div>
-<p>You get a user-friendly output that tells you the problem and where you went wrong. It doesn’t render in this blog post, but in supported consoles the output will be coloured and you’ll get a backtrace to say where the error occurred. See the image at the top of the post for an example.</p>
-<p>You can provide an arbitrary number of values to <code>check_class()</code> for assessment. The example below takes three arguments that should all be numeric. What happens if we supply three objects of the wrong type?</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">multiply_and_raise <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(x, y, z) {</span>
-<span id="cb3-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">check_class</span>(x, y, z, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">.expected_class =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"numeric"</span>)</span>
-<span id="cb3-3">  x <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">*</span> y <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">^</span> z</span>
-<span id="cb3-4">}</span>
-<span id="cb3-5"></span>
-<span id="cb3-6"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">multiply_and_raise</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(), <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">data.frame</span>(), <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">matrix</span>())</span></code></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error in `multiply_and_raise()`:
-! `x`, `y`, and `z` must be of class &lt;numeric&gt;
-✖ You provided:
-• `x` with class &lt;list&gt;
-• `y` with class &lt;data.frame&gt;
-• `z` with class &lt;c("matrix", "array")&gt;</code></pre>
-</div>
-</div>
-<p>The output now shows each failure as separate bullet points so it’s clear where we made the error and what the problem was.</p>
-</section>
-</section>
-<section id="function" class="level2">
-<h2 class="anchored" data-anchor-id="function">Function</h2>
-<p>Below is what the <code>check_class()</code> function actually looks like. I’ve added some comments to explain what’s happening at each step. For demo purposes, the function is equipped to check for numeric and character classes only, but you could expand the <code>switch()</code> statement for other classes too.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#' Check Class of Argument Inputs</span></span>
-<span id="cb5-2"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#' @param ... Objects to be checked for class.</span></span>
-<span id="cb5-3"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#' @param .expected_class Character. The name of the class against which objects</span></span>
-<span id="cb5-4"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#'     should be checked.</span></span>
-<span id="cb5-5"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#' @param .call The environment in which this function is to be called.</span></span>
-<span id="cb5-6"><span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">#' @noRd</span></span>
-<span id="cb5-7">check_class <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(</span>
-<span id="cb5-8">    ...,</span>
-<span id="cb5-9">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">.expected_class =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"numeric"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"character"</span>),</span>
-<span id="cb5-10">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">.call =</span> rlang<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">caller_env</span>()</span>
-<span id="cb5-11">) {</span>
-<span id="cb5-12">  </span>
-<span id="cb5-13">  .expected_class <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">=</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">match.arg</span>(.expected_class)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># ensures 'numeric'/'character'</span></span>
-<span id="cb5-14">  </span>
-<span id="cb5-15">  args <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> rlang<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">dots_list</span>(..., <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">.named =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># collect dots values</span></span>
-<span id="cb5-16">  </span>
-<span id="cb5-17">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Check each value against expected class</span></span>
-<span id="cb5-18">  args_are_class <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">lapply</span>(</span>
-<span id="cb5-19">    args,</span>
-<span id="cb5-20">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(arg) {</span>
-<span id="cb5-21">      <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">switch</span>(</span>
-<span id="cb5-22">        .expected_class,</span>
-<span id="cb5-23">        <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">numeric   =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">is.numeric</span>(arg),</span>
-<span id="cb5-24">        <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">character =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">is.character</span>(arg),</span>
-<span id="cb5-25">      )</span>
-<span id="cb5-26">    }</span>
-<span id="cb5-27">  )</span>
-<span id="cb5-28">  </span>
-<span id="cb5-29">  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Isolate values that have wrong class</span></span>
-<span id="cb5-30">  fails_names <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">names</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">Filter</span>(isFALSE, args_are_class))</span>
-<span id="cb5-31">  </span>
-<span id="cb5-32">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">length</span>(fails_names) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">&gt;</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">0</span>) {</span>
-<span id="cb5-33">    </span>
-<span id="cb5-34">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Prepare variables with failure information</span></span>
-<span id="cb5-35">    fails <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> args[<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">names</span>(args) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%in%</span> fails_names]</span>
-<span id="cb5-36">    fails_classes <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sapply</span>(fails, class)</span>
-<span id="cb5-37">    </span>
-<span id="cb5-38">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Build a bulleted {cli}-styled vector of the failures</span></span>
-<span id="cb5-39">    fails_bullets <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">setNames</span>(</span>
-<span id="cb5-40">      <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">paste0</span>(</span>
-<span id="cb5-41">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"{.var "</span>, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">names</span>(fails_classes), <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"} with class {.cls "</span>,</span>
-<span id="cb5-42">        fails_classes, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"}"</span></span>
-<span id="cb5-43">      ),</span>
-<span id="cb5-44">      <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rep</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"*"</span>, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">length</span>(fails_classes))  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># name with bullet point symbol</span></span>
-<span id="cb5-45">    )</span>
-<span id="cb5-46">    </span>
-<span id="cb5-47">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Raise the error, printed nicely in {cli} style</span></span>
-<span id="cb5-48">    cli<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">cli_abort</span>(</span>
-<span id="cb5-49">      <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">message =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(</span>
-<span id="cb5-50">        <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"{.var {fails_names}} must be of class {.cls {(.expected_class)}}"</span>,</span>
-<span id="cb5-51">        <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You provided:"</span>, fails_bullets</span>
-<span id="cb5-52">      ),</span>
-<span id="cb5-53">      <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">call =</span> .call  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># environment of parent function, not check_class() itself</span></span>
-<span id="cb5-54">    )</span>
-<span id="cb5-55">  }</span>
-<span id="cb5-56">  </span>
-<span id="cb5-57">}</span></code></pre></div>
-</div>
-<p>And now to explain in a bit more depth those features I mentioned.</p>
-</section>
-<section id="features" class="level2">
-<h2 class="anchored" data-anchor-id="features">Features</h2>
-<section id="ellipses" class="level3">
-<h3 class="anchored" data-anchor-id="ellipses">Ellipses</h3>
-<p>When a function has a dots (<code>...</code>) argument, it means you can pass an arbitrary number of objects to be captured. Consider <code>paste("You", "smell")</code> (two values), <code>paste("You", "smell", "wonderful")</code> (three), etc, or how you can provide an arbitrary number of column names to <code>dplyr::select()</code>.</p>
-<p>The first argument to <code>check_class()</code> is <code>...</code>. You pass to it as many values as you need to assess for an expected class. So the function <code>add_one(x)</code> would contain within it a call to <code>check_class(x, .expected_class = "numeric")</code> (one argument to check), while <code>multiply(x, y)</code> would accept <code>check_class(x, y, .expected_class = "numeric")</code> (two)<sup>2</sup>.</p>
-<p>I’ve used the {rlang} package’s <code>dots_list()</code> function to collect the dots elements into a list. The <code>.named = TRUE</code> argument names each element, so we can pinpoint the errors and report them to the user.</p>
-<p>I have collaborators, so readability of the code is important. I think <code>rlang::dots_list()</code> is more readable than the base approach, which is something like:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">args <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(...)</span>
-<span id="cb6-2">arg_names <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">as.character</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">substitute</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">...</span>()))</span>
-<span id="cb6-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">names</span>(args) <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> arg_names</span></code></pre></div>
-</div>
-</section>
-<section id="eclipses" class="level3">
-<h3 class="anchored" data-anchor-id="eclipses">Eclipses</h3>
-<p>So: you put <code>check_class()</code> inside another function. This causes a problem: errors will be reported to the user as having been raised by <code>check_class()</code>, but it’s an internal function that they’ll never see. It would be better to report the error has having originated from the parent function instead.</p>
-<p>This obfuscation, this ‘code smell’, has been nicknamed an ‘error-handling eclipse’ by Nick Tierney, whose <a href="https://www.njtierney.com/post/2023/12/06/long-errors-smell/">blog post</a> was extremely well-timed for when I was writing <code>check_class()</code>.</p>
-<p>In short, you can record with <code>rlang::caller_env()</code> the environment in which the <code>check_class()</code> function was used. You can hand that to the <code>call</code> function of <code>cli::cli_abort()</code>, which <code>check_class()</code> uses to build and report error messages. This means the error is reported from the function enclosing <code>check_class()</code>, not from <code>check_class()</code> itself.</p>
-<p>For example, here’s an example <code>report_env()</code> function, which prints the environment in which it’s called. Since this is being run in the global environment, the global environment will be printed.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">remove</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">list =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ls</span>())  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># clear the global environment</span></span>
-<span id="cb7-2">report_env <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">env =</span> rlang<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">caller_env</span>()) rlang<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">env_print</span>(env)</span>
-<span id="cb7-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">report_env</span>()</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>&lt;environment: global&gt;
-Parent: &lt;environment: package:stats&gt;
-Bindings:
-• report_env: &lt;fn&gt;
-• .main: &lt;fn&gt;</code></pre>
-</div>
-</div>
-<p>If we nest <code>report_env()</code> inside another function then the reported environment is of that enclosing function (expressed here as its bytecode), which itself is nested in its parent (global) environment.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1">report_env_2 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">function</span>() <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">report_env</span>()</span>
-<span id="cb9-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">report_env_2</span>()</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>&lt;environment: 0x10b25d0a0&gt;
-Parent: &lt;environment: global&gt;</code></pre>
-</div>
-</div>
-<p>See the image at the top of this post, which shows the backtrace as having originated from the enclosing <code>add_one()</code> function rather than the <code>check_class()</code> call within it.</p>
-</section>
-<section id="bulletses" class="level3">
-<h3 class="anchored" data-anchor-id="bulletses">Bulletses</h3>
-<p><a href="https://github.com/r-lib/cli">The {cli} package</a> lets you build rich user interfaces for your functions<sup>3</sup>. This is great for composing informative warning and error messages for the user.</p>
-<p>Let’s focus on a simplified example of <code>cli::cli_abort()</code>, which is like the {cli} equivalent of <code>stop()</code>. Let’s pretend we passed a character vector when it should have been numeric.</p>
-<p>To the <code>message</code> argument you provide a named vector, where the name will be printed as a symbol in the output. This will be a yellow exclamation point for <code>cli_abort()</code> by default, which draws attention to the exact error. The name ‘x’ prints as a red cross to indicate what the user did wrong.</p>
-<p>You can also use {glue} syntax in {cli} to evaluate variables. But {cli} goes one further: it has special syntax to provide consistent mark-up to bits of text. For example, <code>"{.var x}"</code> will print with surrounding backticks and <code>"{.cls numeric}"</code> will print in blue with surrounding less/greater than symbols.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1">fail_class <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"character"</span> </span>
-<span id="cb11-2">cli<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">cli_abort</span>(</span>
-<span id="cb11-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">message =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(</span>
-<span id="cb11-4">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"{.var x} must be of class {.cls numeric}"</span>,</span>
-<span id="cb11-5">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You provided class {.cls {fail_class}}"</span></span>
-<span id="cb11-6">  )</span>
-<span id="cb11-7">)</span></code></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error:
-! `x` must be of class &lt;numeric&gt;
-✖ You provided class &lt;character&gt;</code></pre>
-</div>
-</div>
-<p>Again, see an example in the image at the top of the post.</p>
-<p>Since <code>check_class()</code> can take multiple values via the dots, we can construct an individual report for each failing element. {cli} will automatically turn each of these constructed lines into a bullet point in the printed output if we name them with an asterisk, which is pretty neat.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1">expected_class <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"numeric"</span></span>
-<span id="cb13-2">fails <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">list</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"character"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">y =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"list"</span>)</span>
-<span id="cb13-3">fails_names <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">names</span>(fails)</span>
-<span id="cb13-4"></span>
-<span id="cb13-5">fails_bullets <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">setNames</span>(</span>
-<span id="cb13-6">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">paste0</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"{.var "</span>, fails_names, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"} with class {.cls "</span>, fails, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"}"</span>),</span>
-<span id="cb13-7">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">rep</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"*"</span>, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">length</span>(fails))</span>
-<span id="cb13-8">)</span>
-<span id="cb13-9"></span>
-<span id="cb13-10">cli<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">cli_abort</span>(</span>
-<span id="cb13-11">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">message =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(</span>
-<span id="cb13-12">    <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"{.var {fails_names}} must be of class {.cls {expected_class}}"</span>,</span>
-<span id="cb13-13">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"You provided:"</span>, fails_bullets</span>
-<span id="cb13-14">  )</span>
-<span id="cb13-15">)</span></code></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error:
-! `x` and `y` must be of class &lt;numeric&gt;
-✖ You provided:
-• `x` with class &lt;character&gt;
-• `y` with class &lt;list&gt;</code></pre>
-</div>
-</div>
-<p>Pew pew pew.</p>
-<section id="test" class="level4">
-<h4 class="anchored" data-anchor-id="test">Test</h4>
-<p>Here’s a cheeky bonus if you’re wondering how to test for {cli} messages: you can use <code>cli::test_that_cli()</code> to test the output against <a href="https://testthat.r-lib.org/articles/snapshotting.html">an earlier snapshot</a>.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1">cli<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">test_that_cli</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"prints expected error"</span>, {</span>
-<span id="cb15-2">  testthat<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">local_edition</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">3</span>)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># only works with {testthat} 3e</span></span>
-<span id="cb15-3">  testthat<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">expect_snapshot</span>({</span>
-<span id="cb15-4">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">check_class</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">x =</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">1</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">y =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"x"</span>, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">.expected_class =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"numeric"</span>)</span>
-<span id="cb15-5">  })</span>
-<span id="cb15-6">})</span></code></pre></div>
-</div>
-</section>
-</section>
-</section>
-<section id="error-helper-help" class="level2">
-<h2 class="anchored" data-anchor-id="error-helper-help">Error-helper help?</h2>
-<p>Is this horribly overengineered? What is your approach to creating friendly and actionable error messages for your users?</p>
-
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-04-10 08:54:28 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] digest_0.6.35     utf8_1.2.4        fastmap_1.1.1     xfun_0.43        
- [5] glue_1.7.0        knitr_1.45        htmltools_0.5.8   rmarkdown_2.26   
- [9] lifecycle_1.0.4   cli_3.6.2         fansi_1.0.6       vctrs_0.6.5      
-[13] compiler_4.3.1    rstudioapi_0.16.0 tools_4.3.1       evaluate_0.23    
-[17] pillar_1.9.0      yaml_2.3.8        rlang_1.1.3       jsonlite_1.8.8   
-[21] htmlwidgets_1.6.2</code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>{rlang} has <a href="https://rlang.r-lib.org/reference/topic-error-call.html">some helpful documentation on error helpers</a>, which you can find by typing <code>?rlang::`topic-error-call`</code> into the console↩︎</p></li>
-<li id="fn2"><p>I’ve used a dot-prefix for the remaining <code>check_class()</code> arguments, which reduces the chance of a clash with user-supplied values to the dots. This is recommended in <a href="https://design.tidyverse.org/dots-prefix.html">the Tidy Design Principles book</a>.↩︎</p></li>
-<li id="fn3"><p><a href="https://www.rostrum.blog/posts/2023-09-17-choosethis/">I wrote about {cli} in an earlier post</a>, where I explored its ability to generate hyperlinks in the R console. I used it for fun (to build a choose-your-own-adventure in the console), but it can be useful for things like opening a file at the exact line where a test failure occurred.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>cli</category>
-  <category>r</category>
-  <category>rlang</category>
-  <guid>https://www.rostrum.blog/posts/2024-03-12-eclipse/index.html</guid>
-  <pubDate>Tue, 12 Mar 2024 00:00:00 GMT</pubDate>
-  <media:content url="https://www.rostrum.blog/posts/2024-03-12-eclipse/resources/cli-eclipse.png" medium="image" type="image/png" height="57" width="144"/>
 </item>
 </channel>
 </rss>
