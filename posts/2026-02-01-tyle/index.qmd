@@ -21,14 +21,14 @@ And help me fun?
 
 I've started [tyle](https://github.com/matt-dray/tyle), a concept Python CLI that contains the foundations for a little in-terminal tile- and turn-based game.
 
-The tool is available to install, though rudimentary.
-I like [uv](https://docs.astral.sh/uv/) for this job [^tool]:
+The rudimentary tool is available to install.
+I like [uv](https://docs.astral.sh/uv/) for this job[^tool]:
 
 ```bash
 uv tool install git+https://github.com/matt-dray/tyle.git
 ```
 
-Then you start a 'game' (heavy emphasis on those quote marks) by typing:
+You can start a 'game' (heavy emphasis on those quote marks) by typing:
 
 ```bash
 tyle
@@ -47,7 +47,7 @@ tyle
 Move (WASD+Enter): 
 ```
 
-The gameboard is a series of tiles in a grid that's printed to the terminal.
+The gameboard is just a tile grid printed to the terminal.
 You (the `@` symbol) can travel around the floor tiles (`.`), but not through obstacles (`#`, which are randomised) or off the map. 
 
 At the prompt you can type <kbd>W</kbd> and <kbd>Enter</kbd> to move up, for example.
@@ -62,6 +62,7 @@ Key features are things like text-based graphics, turn-based player interaction,
 Later games aped this style and adapted with it, giving rise to the 'roguelike' and 'roguelite' genres.
 
 The scope here is far tighter: I promise nothing.
+So let's call this a roguelike-like for now.
 
 ## A sidequest
 
@@ -81,10 +82,10 @@ In tyle, there are currently three main classes:
 
 Each of these have properties and methods that allow them to store data and be queried in certain ways.
 
-Tile objects contain information like whether they're traversable; tile-grid objects store the tile grid as a list of lists of tile objects and are responsible for printing the map; and entities serve as the blueprint for creating the player object, hosting parameters tile coordinates and hit points, for example.
+Tile objects contain information like whether they're traversable; tile-grid objects store the tile grid as a list of lists of tile objects and are responsible for printing the map; and entities serve as the blueprint for creating the player object, hosting parameters for tile coordinates and hit points, for example.
 
 So, at its core, the map can be indexed by 'rows' and 'columns' that are really just sublist and list-element positions.
-When printing the map, the player is drawn over the user-specific position if the move clears legality checks (i.e. you can't move onto an obstacle nor exit the map boundary).
+When printing the map, the player is drawn over the user-specified position if the move clears legality checks (i.e. you can't move onto an obstacle nor exit the map boundary).
 
 ### Grouting
 
@@ -98,7 +99,7 @@ class Tile:
         self.traversable = traversable
 ```
 
-I've shown the type hints, which can be checked like `uvx ty check`, but hidden the docstrings for brevity.
+I've shown the type hints[^ty] but hidden the docstrings for brevity.
 
 So you:
 
@@ -170,8 +171,9 @@ cat(readLines("pyproject.toml"), sep = "\n")
 ```
 </details>
 
-[^take]: Wow, a take hotter than the sun.
+[^take]: Wow, a take that's hotter than the sun.
 [^shot]: Take a shot every time you read that phrase on this blog.
 [^frivolity]: I wouldn't dream of taking the cutting edge and [being frivolous with it](https://www.rostrum.blog/posts/2023-02-26-nook-s7/).
 [^tool]: And `uv tool update tyle` and `uv tool uninstall tyle` do what you think they do.
 [^awards]: Pfft, game awards? More like _shame awards_ in comparison to this, amirite?
+[^ty]: [Astral](https://astral.sh/) have brought ty out of version beta_BETA_draft_v0.0.0.0.0.900000, huzzah. You can check type hints cheaply [with uv](https://docs.astral.sh/uv/guides/tools/) and without installing anything else, like `uvx ty check`. Or `uvx ruff format` and `uv ruff check` for linting and formatting. Real noice.

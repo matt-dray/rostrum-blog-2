@@ -213,9 +213,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="very-early-access" class="level2">
 <h2 class="anchored" data-anchor-id="very-early-access">Very early access</h2>
 <p>I’ve started <a href="https://github.com/matt-dray/tyle">tyle</a>, a concept Python CLI that contains the foundations for a little in-terminal tile- and turn-based game.</p>
-<p>The tool is available to install, though rudimentary. I like <a href="https://docs.astral.sh/uv/">uv</a> for this job <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<p>The rudimentary tool is available to install. I like <a href="https://docs.astral.sh/uv/">uv</a> for this job<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> tool install git+https://github.com/matt-dray/tyle.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Then you start a ‘game’ (heavy emphasis on those quote marks) by typing:</p>
+<p>You can start a ‘game’ (heavy emphasis on those quote marks) by typing:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tyle</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>.......#..
 ..........
@@ -228,14 +228,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ..........
 ....#.....
 Move (WASD+Enter): </code></pre>
-<p>The gameboard is a series of tiles in a grid that’s printed to the terminal. You (the <code>@</code> symbol) can travel around the floor tiles (<code>.</code>), but not through obstacles (<code>#</code>, which are randomised) or off the map.</p>
+<p>The gameboard is just a tile grid printed to the terminal. You (the <code>@</code> symbol) can travel around the floor tiles (<code>.</code>), but not through obstacles (<code>#</code>, which are randomised) or off the map.</p>
 <p>At the prompt you can type <kbd>W</kbd> and <kbd>Enter</kbd> to move up, for example. <kbd>Q</kbd> and <kbd>Enter</kbd> will quit.</p>
 <p>Aaand that’s it for now<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
 </section>
 <section id="like-rogue" class="level2">
 <h2 class="anchored" data-anchor-id="like-rogue">Like Rogue?</h2>
 <p>This game style may be familiar because it’s a fragment of the blueprint for <a href="https://en.wikipedia.org/wiki/Rogue_(video_game)">the classic videgame <em>Rogue</em></a> (1980). Key features are things like text-based graphics, turn-based player interaction, and permadeath. Later games aped this style and adapted with it, giving rise to the ‘roguelike’ and ‘roguelite’ genres.</p>
-<p>The scope here is far tighter: I promise nothing.</p>
+<p>The scope here is far tighter: I promise nothing. So let’s call this a roguelike-like for now.</p>
 </section>
 <section id="a-sidequest" class="level2">
 <h2 class="anchored" data-anchor-id="a-sidequest">A sidequest</h2>
@@ -248,8 +248,8 @@ Move (WASD+Enter): </code></pre>
 <li><code>Entity</code> to create the player character</li>
 </ul>
 <p>Each of these have properties and methods that allow them to store data and be queried in certain ways.</p>
-<p>Tile objects contain information like whether they’re traversable; tile-grid objects store the tile grid as a list of lists of tile objects and are responsible for printing the map; and entities serve as the blueprint for creating the player object, hosting parameters tile coordinates and hit points, for example.</p>
-<p>So, at its core, the map can be indexed by ‘rows’ and ‘columns’ that are really just sublist and list-element positions. When printing the map, the player is drawn over the user-specific position if the move clears legality checks (i.e.&nbsp;you can’t move onto an obstacle nor exit the map boundary).</p>
+<p>Tile objects contain information like whether they’re traversable; tile-grid objects store the tile grid as a list of lists of tile objects and are responsible for printing the map; and entities serve as the blueprint for creating the player object, hosting parameters for tile coordinates and hit points, for example.</p>
+<p>So, at its core, the map can be indexed by ‘rows’ and ‘columns’ that are really just sublist and list-element positions. When printing the map, the player is drawn over the user-specified position if the move clears legality checks (i.e.&nbsp;you can’t move onto an obstacle nor exit the map boundary).</p>
 <section id="grouting" class="level3">
 <h3 class="anchored" data-anchor-id="grouting">Grouting</h3>
 <p>As it stands, you can see the Python code in <a href="https://github.com/matt-dray/tyle/tree/main/src/tyle">the <code>tiles.py</code> file</a>. The simplest possible example of a class there is <code>Tile</code>:</p>
@@ -257,7 +257,7 @@ Move (WASD+Enter): </code></pre>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, symbol: <span class="bu">str</span>, traversable: <span class="bu">bool</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.symbol <span class="op">=</span> symbol</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.traversable <span class="op">=</span> traversable</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>I’ve shown the type hints, which can be checked like <code>uvx ty check</code>, but hidden the docstrings for brevity.</p>
+<p>I’ve shown the type hints<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> but hidden the docstrings for brevity.</p>
 <p>So you:</p>
 <ol type="1">
 <li>Declare with <code>class</code>.</li>
@@ -291,7 +291,7 @@ Move (WASD+Enter): </code></pre>
 </section>
 <section id="game-over" class="level2">
 <h2 class="anchored" data-anchor-id="game-over">Game over?</h2>
-<p>As ever, I may stop there<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>. But there are some obvious improvements that would also strengthen my skills.</p>
+<p>As ever, I may stop there<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. But there are some obvious improvements that would also strengthen my skills.</p>
 <p>A bunch of stuff from {r.oguelike} could be interesting to translate here, like procedural dungeons, enemy pathfinding and a styled interface.</p>
 <p>Of course, we probably want to ‘listen’ to keyboard input, which is a more natural approach to interactivity versus hitting <kbd>Enter</kbd> all the time</p>
 <p>It would also be nice to improve the CLI itself to accept various options, rather than generating the same-size grid and player starting-position every time.</p>
@@ -324,8 +324,9 @@ dependencies = []</code></pre>
 <li id="fn1"><p>And <code>uv tool update tyle</code> and <code>uv tool uninstall tyle</code> do what you think they do.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Pfft, game awards? More like <em>shame awards</em> in comparison to this, amirite?<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>I wouldn’t dream of taking the cutting edge and <a href="https://www.rostrum.blog/posts/2023-02-26-nook-s7/">being frivolous with it</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Wow, a take hotter than the sun.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Take a shot every time you read that phrase on this blog.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Wow, a take that’s hotter than the sun.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p><a href="https://astral.sh/">Astral</a> have brought ty out of version beta_BETA_draft_v0.0.0.0.0.900000, huzzah. You can check type hints cheaply <a href="https://docs.astral.sh/uv/guides/tools/">with uv</a> and without installing anything else, like <code>uvx ty check</code>. Or <code>uvx ruff format</code> and <code>uv ruff check</code> for linting and formatting. Real noice.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Take a shot every time you read that phrase on this blog.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
