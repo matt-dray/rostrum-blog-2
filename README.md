@@ -21,13 +21,13 @@ showerthoughts about R and Python, mostly.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 189 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2025-12-28 (latest).
+🔢 There have been 190 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2026-02-01 (latest).
 
 📅 That’s a post roughly every 15 days, or about 2 posts per month.
 
-🆕 The latest post: [Correcting a fib about
-jot](https://www.rostrum.blog/posts/2025-12-28-jot-fib)
+🆕 The latest post: [A roguelike-like with
+tyle](https://www.rostrum.blog/posts/2026-02-01-tyle)
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ jot](https://www.rostrum.blog/posts/2025-12-28-jot-fib)
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 190 | 2026-02-01 | [A roguelike-like with tyle](https://www.rostrum.blog/posts/2026-02-01-tyle)                                                   |
 | 189 | 2025-12-28 | [Correcting a fib about jot](https://www.rostrum.blog/posts/2025-12-28-jot-fib)                                                |
 | 188 | 2025-11-30 | [How the tables turned](https://www.rostrum.blog/posts/2025-11-30-turn-tables)                                                 |
 | 187 | 2025-10-30 | [={ o x o}=](https://www.rostrum.blog/posts/2025-10-30-pet)                                                                    |
@@ -235,4 +236,4 @@ jot](https://www.rostrum.blog/posts/2025-12-28-jot-fib)
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2025-12-28 at 22:53.
+🕒 Last updated: 2026-02-01 at 22:55.
