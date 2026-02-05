@@ -203,7 +203,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="resources/tyle.png" class="img-fluid figure-img" alt="A 10 by 10 grid of characters printed to a macOS terminal. Tiles are mostly period characters, with some hashmark characters, and an at symbol near the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input."></p>
+<p><img src="resources/tyle.png" class="img-fluid figure-img" style="width:100.0%" alt="A 10 by 10 grid of characters printed to a macOS terminal. Tiles are mostly period characters, with some hashmark characters, and an at symbol near the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input."></p>
 </figure>
 </div>
 <section id="tldr" class="level2">
@@ -213,7 +213,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="very-early-access" class="level2">
 <h2 class="anchored" data-anchor-id="very-early-access">Very early access</h2>
 <p>I’ve started <a href="https://github.com/matt-dray/tyle">tyle</a>, a concept Python CLI that contains the foundations for a little in-terminal tile- and turn-based game.</p>
-<p>The rudimentary tool is available to install. I like <a href="https://docs.astral.sh/uv/">uv</a> for this job<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<p>The rudimentary tool is available to install (v0.1.0 at time of writing). I like <a href="https://docs.astral.sh/uv/">uv</a> for this job<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> tool install git+https://github.com/matt-dray/tyle.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>You can start a ‘game’ (heavy emphasis on those quote marks) by typing:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tyle</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -231,10 +231,19 @@ Move (WASD+Enter): </code></pre>
 <p>The gameboard is just a tile grid printed to the terminal. You (the <code>@</code> symbol) can travel around the floor tiles (<code>.</code>), but not through obstacles (<code>#</code>, which are randomised) or off the map.</p>
 <p>At the prompt you can type <kbd>W</kbd> and <kbd>Enter</kbd> to move up, for example. <kbd>Q</kbd> and <kbd>Enter</kbd> will quit.</p>
 <p>Aaand that’s it for now<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<div class="tip">
+<p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
+<p>A quick update on changes in v0.1.0.9001, made immediately after this post (). I’ve added CLI options so you can do something like <code>tyle -r 10 -c 20 -w 25</code> to set the starting count of <code>--rows</code>, <code>--columns</code> and <code>--walls</code> (see <code>tyle -h</code> for help). I also adjusted the column- and wall-count defaults and added a space between adjacent tiles; and introduced colours (but only if your terminal suports <a href="https://en.wikipedia.org/wiki/ANSI_escape_code">ANSI codes</a>, like zsh in the image below).</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="resources/tyle-dev.png" class="img-fluid figure-img" style="width:50.0%" alt="A 10 by 20 grid of characters printed to a zsh terminal. The majority are floor tiles, which are are grey period symbols. Randomly-placed walls are red hash symbols. The player is a yellow at symbol in the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input."></p>
+</figure>
+</div>
+</div>
 </section>
 <section id="like-rogue" class="level2">
 <h2 class="anchored" data-anchor-id="like-rogue">Like Rogue?</h2>
-<p>This game style may be familiar because it’s a fragment of the blueprint for <a href="https://en.wikipedia.org/wiki/Rogue_(video_game)">the classic videgame <em>Rogue</em></a> (1980). Key features are things like text-based graphics, turn-based player interaction, and permadeath. Later games aped this style and adapted with it, giving rise to the ‘roguelike’ and ‘roguelite’ genres.</p>
+<p>This game style and ASCII ‘graphics’ may be familiar as the blueprint for <a href="https://en.wikipedia.org/wiki/Rogue_(video_game)">the classic videgame <em>Rogue</em></a> (1980). Key features are things like text-based graphics, turn-based player interaction, and permadeath. Later games aped this style and adapted with it, giving rise to the ‘roguelike’ and ‘roguelite’ genres.</p>
 <p>The scope here is far tighter: I promise nothing. So let’s call this a roguelike-like for now.</p>
 </section>
 <section id="a-sidequest" class="level2">
@@ -250,6 +259,7 @@ Move (WASD+Enter): </code></pre>
 <p>Each of these have properties and methods that allow them to store data and be queried in certain ways.</p>
 <p>Tile objects contain information like whether they’re traversable; tile-grid objects store the tile grid as a list of lists of tile objects and are responsible for printing the map; and entities serve as the blueprint for creating the player object, hosting parameters for tile coordinates and hit points, for example.</p>
 <p>So, at its core, the map can be indexed by ‘rows’ and ‘columns’ that are really just sublist and list-element positions. When printing the map, the player is drawn over the user-specified position if the move clears legality checks (i.e.&nbsp;you can’t move onto an obstacle nor exit the map boundary).</p>
+<p>We have separate ‘terrain’ and an ‘entity’ layers, basically.</p>
 <section id="grouting" class="level3">
 <h3 class="anchored" data-anchor-id="grouting">Grouting</h3>
 <p>As it stands, you can see the Python code in <a href="https://github.com/matt-dray/tyle/tree/main/src/tyle">the <code>tiles.py</code> file</a>. The simplest possible example of a class there is <code>Tile</code>:</p>
@@ -285,9 +295,9 @@ Move (WASD+Enter): </code></pre>
 <p>But I’ve read about <a href="https://github.com/matt-dray/r.oguelike">the {r.oguelike} R package</a> on <a href="https://www.rostrum.blog/index.html#category=r.oguelike">this blog</a> before. Have you run out of ideas?</p>
 </blockquote>
 <p>Uh-oh, I’ve been rumbled.</p>
-<p>Listen, agitator: R was never the ‘right’ choice for this type of thing. Not least because that particular ‘game’ had to be played in the R console, rather than the terminal directly.</p>
+<p>Listen, agitator: an approach composed entirely of R functions was never the ‘right’ choice for this type of thing. Not least because that particular ‘game’ had to be played in the R console, rather than the terminal directly.</p>
 <p>Python is far more suited to this type of activity. In fact, Python can be used as a full-blown game engine, aided by tools like <a href="https://www.pygame.org/docs/">PyGame</a>. In fact, there are several roguelike-specific packages to help you build roguelikes specifically, like <a href="https://github.com/libtcod/libtcod">libtcod</a>.</p>
-<p>I’m ignoring these because I want to use this little project to help me learn Python skills, not roguelike-making skills, specifically. The logic, yes, but also stuff like type hints, docstrings, writing modules, creating CLIs, etc.</p>
+<p>I’m ignoring these because I want to use this little project to help me learn Python skills, not roguelike-making skills, specifically. Classes, yes, but also stuff like type hints, docstrings, writing modules, creating CLIs, etc.</p>
 </section>
 <section id="game-over" class="level2">
 <h2 class="anchored" data-anchor-id="game-over">Game over?</h2>
