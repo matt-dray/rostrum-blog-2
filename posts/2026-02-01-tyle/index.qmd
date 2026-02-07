@@ -14,8 +14,7 @@ categories:
 
 ## tl;dr
 
-I'm writing [tyle](https://github.com/matt-dray/tyle) to help me Python.
-And help me fun?
+I'm writing [tyle](https://github.com/matt-dray/tyle) to help in my quest to get better at Python.
 
 ## Very early access
 
@@ -53,24 +52,24 @@ You (the `@` symbol) can travel around the floor tiles (`.`), but not through ob
 At the prompt you can type <kbd>W</kbd> and <kbd>Enter</kbd> to move up, for example.
 <kbd>Q</kbd> and <kbd>Enter</kbd> will quit.
 
-Aaand that's it for now[^awards].
+Aaand that's it for now.
 
 <div class="tip"> 
 `r fontawesome::fa("exclamation-circle")` <b>Note</b>
 
-A quick update on changes in v0.1.0.9001, made immediately after this post.
+A quick update on changes in v0.2.0, made immediately after this post.
 I've added CLI options so you can do something like `tyle -r 10 -c 20 -w 25` to set the starting count of `--rows`, `--columns` and `--walls` (see `tyle -h` for help).
-I also adjusted the column- and wall-count defaults and added a space between adjacent tiles; and introduced colours (but only if your terminal suports [ANSI codes](https://en.wikipedia.org/wiki/ANSI_escape_code), like zsh in the image below).
+I also adjusted the column- and wall-count defaults and added a space between adjacent tiles; and introduced colours (but only if your terminal suports [ANSI codes](https://en.wikipedia.org/wiki/ANSI_escape_code), like zsh in the gif below).
 
 ![](resources/tyle.gif){fig-align="left" width="50%" fig-alt="A 10 by 20 grid of characters printed to a zsh terminal. The majority are floor tiles, which are are grey period symbols. Randomly-placed walls are red hash symbols. The player is a yellow at symbol in the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input. The user inputs values to make the at symbol move around the tiles."}
 
 </div>
 
-## Like Rogue?
+## Like.. Rogue?
 
 This game style and ASCII 'graphics' may be familiar as the blueprint for [the classic videgame _Rogue_](https://en.wikipedia.org/wiki/Rogue_(video_game)) (1980).
 Key features are things like text-based graphics, turn-based player interaction, and permadeath. 
-Later games aped this style and adapted with it, giving rise to the 'roguelike' and 'roguelite' genres.
+Later games aped this style and adapted with it, giving rise to the ['roguelike' and 'roguelite'](https://en.wikipedia.org/wiki/Roguelike) genres.
 
 The scope here is far tighter: I promise nothing.
 So let's call this a roguelike-like for now.
@@ -78,7 +77,7 @@ So let's call this a roguelike-like for now.
 ## A sidequest
 
 To explain the meta, I've been making some twee little projects to help me learn Python.
-First [jot](https://github.com/matt-dray/jot), then [pet](https://github.com/matt-dray/pet).
+First [jot](https://github.com/matt-dray/jot)[^jot], then [pet](https://github.com/matt-dray/pet).
 tyle is also a Python-backed CLI but is helping me learn more about classes.
 
 As someone with a background in R, I tend to think every nail can be hammered with a function.
@@ -93,7 +92,8 @@ In tyle, there are currently three main classes:
 
 Each of these have properties and methods that allow them to store data and be queried in certain ways.
 
-Tile objects contain information like whether they're traversable; tile-grid objects store the tile grid as a list of lists of tile objects and are responsible for printing the map; and entities serve as the blueprint for creating the player object, hosting parameters for tile coordinates and hit points, for example.
+Tile objects contain information like whether they're traversable.
+Tile-grid objects store the tile grid as a list of lists of tile objects and are responsible for printing the map. Entities serve as the blueprint for creating the player object, hosting parameters for tile coordinates and hit points, for example.
 
 So, at its core, the map can be indexed by 'rows' and 'columns' that are really just sublist and list-element positions.
 When printing the map, the player is drawn over the user-specified position if the move clears legality checks (i.e. you can't move onto an obstacle nor exit the map boundary).
@@ -119,7 +119,7 @@ So you:
 1. Declare with `class`.
 2. Use an UpperCamelCase name by convention.
 3. `def`ine a function to `__init__`ialise the class, with reference to:
-    a. `self`, i.e. the class itself.
+    a. `self`, i.e. a reference to the class instance itself.
     b. 'normal' function arguments (`symbol` is the text character representing the tile and `traversable` is whether the tile can be moved across).
 4. Set properties that may just be the arguments, or passed through other functions.
 5. `def`ine functions (methods) within the body of the class (not shown here becuase the `Tile` class doesn't currently have any).
@@ -152,12 +152,12 @@ Later we could create subclasses from the `Entity` class, so `Player` and `Enemy
 
 Uh-oh, I've been rumbled.
 
-Listen, agitator: an approach composed entirely of R functions was never the 'right' choice for this type of thing.
+Listen, agitator: an R-function spaghetti was never the 'right' choice.
 Not least because that particular 'game' had to be played in the R console, rather than the terminal directly.
 
-Python is far more suited to this type of activity.
+Python is probably more suited to this type of activity.
 In fact, Python can be used as a full-blown game engine, aided by tools like [PyGame](https://www.pygame.org/docs/).
-In fact, there are several roguelike-specific packages to help you build roguelikes specifically, like [libtcod](https://github.com/libtcod/libtcod).
+In fact, there are several roguelike-specific packages to help you build roguelikes specifically, like [libtcod](https://github.com/libtcod/libtcod)[^7drl].
 
 I'm ignoring these because I want to use this little project to help me learn Python skills, not roguelike-making skills, specifically.
 Classes, yes, but also stuff like type hints, docstrings, writing modules, creating CLIs, etc.
@@ -165,16 +165,15 @@ Classes, yes, but also stuff like type hints, docstrings, writing modules, creat
 ## Game over?
 
 As ever, I may stop there[^shot].
-But there are some obvious improvements that would also strengthen my skills.
+But there are some obvious improvements that could also strengthen my Python skills.
 
-A bunch of stuff from {r.oguelike} could be interesting to translate here, like procedural dungeons, enemy pathfinding and a styled interface.
+For example, a bunch of stuff from {r.oguelike} could be interesting to translate here, like procedural dungeons, enemy battling and pathfinding, and an inventory.
 
-Of course, we probably want to 'listen' to keyboard input, which is a more natural approach to interactivity versus hitting <kbd>Enter</kbd> all the time
+We should also 'listen' for keyboard input with something like [pynput](https://pynput.readthedocs.io/en/latest/index.html).
+A much more natural approach compared to smashing the <kbd>Enter</kbd> key.
 
-It would also be nice to improve the CLI itself to accept various options, rather than generating the same-size grid and player starting-position every time.
-
-Oh yeah and, y'know, make it into like an actual game with winning and losing conditions?
-Eh, maybe.
+Of course, learning new stuff can feel like navigating through a dungeon full of goblins.
+But to avoid permadeath of coding skills you've just got to keep going tile-by-tile, amirite?
 
 ### Environment {.appendix}
 
@@ -188,5 +187,6 @@ cat(readLines("pyproject.toml"), sep = "\n")
 [^shot]: Take a shot every time you read that phrase on this blog.
 [^frivolity]: I wouldn't dream of taking the cutting edge and [being frivolous with it](https://www.rostrum.blog/posts/2023-02-26-nook-s7/).
 [^tool]: And `uv tool update tyle` and `uv tool uninstall tyle` do what you think they do.
-[^awards]: Pfft, game awards? More like _shame awards_ in comparison to this, amirite?
 [^ty]: [Astral](https://astral.sh/) have brought ty out of version beta_BETA_draft_v0.0.0.0.0.900000, huzzah. You can check type hints cheaply [with uv](https://docs.astral.sh/uv/guides/tools/) and without installing anything else, like `uvx ty check`. Or `uvx ruff format` and `uv ruff check` for linting and formatting. Real noice.
+[^jot]: Actually, I've been using jot everyday and it helps me keep track of what I've been doing, which is handy for completing weeknotes and timesheets.
+[^7drl]: Check out entries from [7DRL](https://www.roguebasin.com/index.php?title=Seven_Day_Roguelike_Challenge) (the seven-day roguelike challenge), which includes may games written this way.

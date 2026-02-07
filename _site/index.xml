@@ -6,40 +6,41 @@
       version="2.0">
 <channel>
 <title>rostrum.blog</title>
-<link>https://www.rostrum.blog/index.html</link>
+<link>https://www.rostrum.blog/</link>
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Realised showerthoughts about R and Python mostly</description>
-<generator>quarto-1.3.450</generator>
+<generator>quarto-1.8.27</generator>
 <lastBuildDate>Sun, 01 Feb 2026 00:00:00 GMT</lastBuildDate>
 <item>
   <title>A roguelike-like with tyle</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2026-02-01-tyle/index.html</link>
+  <link>https://www.rostrum.blog/posts/2026-02-01-tyle/</link>
   <description><![CDATA[ 
+
 
 
 
 
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2026-02-01-tyle/resources/tyle.png" class="img-fluid figure-img" style="width:100.0%" alt="A 10 by 10 grid of characters printed to a macOS terminal. Tiles are mostly period characters, with some hashmark characters, and an at symbol near the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input."></p>
+<p><img src="https://www.rostrum.blog/posts/2026-02-01-tyle/resources/tyle.png" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:100.0%" alt="A 10 by 10 grid of characters printed to a macOS terminal. Tiles are mostly period characters, with some hashmark characters, and an at symbol near the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input."></p>
 </figure>
 </div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I’m writing <a href="https://github.com/matt-dray/tyle">tyle</a> to help me Python. And help me fun?</p>
+<p>I’m writing <a href="https://github.com/matt-dray/tyle">tyle</a> to help in my quest to get better at Python.</p>
 </section>
 <section id="very-early-access" class="level2">
 <h2 class="anchored" data-anchor-id="very-early-access">Very early access</h2>
 <p>I’ve started <a href="https://github.com/matt-dray/tyle">tyle</a>, a concept Python CLI that contains the foundations for a little in-terminal tile- and turn-based game.</p>
 <p>The rudimentary tool is available to install (v0.1.0 at time of writing). I like <a href="https://docs.astral.sh/uv/">uv</a> for this job<sup>1</sup>:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
 background-color: null;
-font-style: inherit;">uv</span> tool install git+https://github.com/matt-dray/tyle.git</span></code></pre></div>
+font-style: inherit;">uv</span> tool install git+https://github.com/matt-dray/tyle.git</span></code></pre></div></div>
 <p>You can start a ‘game’ (heavy emphasis on those quote marks) by typing:</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
 background-color: null;
-font-style: inherit;">tyle</span></span></code></pre></div>
+font-style: inherit;">tyle</span></span></code></pre></div></div>
 <pre><code>.......#..
 ..........
 .##..#....
@@ -53,25 +54,25 @@ font-style: inherit;">tyle</span></span></code></pre></div>
 Move (WASD+Enter): </code></pre>
 <p>The gameboard is just a tile grid printed to the terminal. You (the <code>@</code> symbol) can travel around the floor tiles (<code>.</code>), but not through obstacles (<code>#</code>, which are randomised) or off the map.</p>
 <p>At the prompt you can type <kbd>W</kbd> and <kbd>Enter</kbd> to move up, for example. <kbd>Q</kbd> and <kbd>Enter</kbd> will quit.</p>
-<p>Aaand that’s it for now<sup>2</sup>.</p>
+<p>Aaand that’s it for now.</p>
 <div class="tip">
 <p> <b>Note</b></p>
-<p>A quick update on changes in v0.1.0.9001, made immediately after this post. I’ve added CLI options so you can do something like <code>tyle -r 10 -c 20 -w 25</code> to set the starting count of <code>--rows</code>, <code>--columns</code> and <code>--walls</code> (see <code>tyle -h</code> for help). I also adjusted the column- and wall-count defaults and added a space between adjacent tiles; and introduced colours (but only if your terminal suports <a href="https://en.wikipedia.org/wiki/ANSI_escape_code">ANSI codes</a>, like zsh in the image below).</p>
+<p>A quick update on changes in v0.2.0, made immediately after this post. I’ve added CLI options so you can do something like <code>tyle -r 10 -c 20 -w 25</code> to set the starting count of <code>--rows</code>, <code>--columns</code> and <code>--walls</code> (see <code>tyle -h</code> for help). I also adjusted the column- and wall-count defaults and added a space between adjacent tiles; and introduced colours (but only if your terminal suports <a href="https://en.wikipedia.org/wiki/ANSI_escape_code">ANSI codes</a>, like zsh in the gif below).</p>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2026-02-01-tyle/resources/tyle.gif" class="img-fluid figure-img" style="width:50.0%" alt="A 10 by 20 grid of characters printed to a zsh terminal. The majority are floor tiles, which are are grey period symbols. Randomly-placed walls are red hash symbols. The player is a yellow at symbol in the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input. The user inputs values to make the at symbol move around the tiles."></p>
+<p><img src="https://www.rostrum.blog/posts/2026-02-01-tyle/resources/tyle.gif" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:50.0%" alt="A 10 by 20 grid of characters printed to a zsh terminal. The majority are floor tiles, which are are grey period symbols. Randomly-placed walls are red hash symbols. The player is a yellow at symbol in the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input. The user inputs values to make the at symbol move around the tiles."></p>
 </figure>
 </div>
 </div>
 </section>
-<section id="like-rogue" class="level2">
-<h2 class="anchored" data-anchor-id="like-rogue">Like Rogue?</h2>
-<p>This game style and ASCII ‘graphics’ may be familiar as the blueprint for <a href="https://en.wikipedia.org/wiki/Rogue_(video_game)">the classic videgame <em>Rogue</em></a> (1980). Key features are things like text-based graphics, turn-based player interaction, and permadeath. Later games aped this style and adapted with it, giving rise to the ‘roguelike’ and ‘roguelite’ genres.</p>
+<section id="like..-rogue" class="level2">
+<h2 class="anchored" data-anchor-id="like..-rogue">Like.. Rogue?</h2>
+<p>This game style and ASCII ‘graphics’ may be familiar as the blueprint for <a href="https://en.wikipedia.org/wiki/Rogue_(video_game)">the classic videgame <em>Rogue</em></a> (1980). Key features are things like text-based graphics, turn-based player interaction, and permadeath. Later games aped this style and adapted with it, giving rise to the <a href="https://en.wikipedia.org/wiki/Roguelike">‘roguelike’ and ‘roguelite’</a> genres.</p>
 <p>The scope here is far tighter: I promise nothing. So let’s call this a roguelike-like for now.</p>
 </section>
 <section id="a-sidequest" class="level2">
 <h2 class="anchored" data-anchor-id="a-sidequest">A sidequest</h2>
-<p>To explain the meta, I’ve been making some twee little projects to help me learn Python. First <a href="https://github.com/matt-dray/jot">jot</a>, then <a href="https://github.com/matt-dray/pet">pet</a>. tyle is also a Python-backed CLI but is helping me learn more about classes.</p>
+<p>To explain the meta, I’ve been making some twee little projects to help me learn Python. First <a href="https://github.com/matt-dray/jot">jot</a><sup>2</sup>, then <a href="https://github.com/matt-dray/pet">pet</a>. tyle is also a Python-backed CLI but is helping me learn more about classes.</p>
 <p>As someone with a background in R, I tend to think every nail can be hammered with a function. R supports classes, of course, most recently with <a href="https://rconsortium.github.io/S7/index.html">the {S7} package</a><sup>3</sup>. But the approach feels far more at home in Python with its greater focus on ‘programming’ than ‘doing statistics’<sup>4</sup>.</p>
 <p>In tyle, there are currently three main classes:</p>
 <ul>
@@ -80,17 +81,19 @@ Move (WASD+Enter): </code></pre>
 <li><code>Entity</code> to create the player character</li>
 </ul>
 <p>Each of these have properties and methods that allow them to store data and be queried in certain ways.</p>
-<p>Tile objects contain information like whether they’re traversable; tile-grid objects store the tile grid as a list of lists of tile objects and are responsible for printing the map; and entities serve as the blueprint for creating the player object, hosting parameters for tile coordinates and hit points, for example.</p>
+<p>Tile objects contain information like whether they’re traversable. Tile-grid objects store the tile grid as a list of lists of tile objects and are responsible for printing the map. Entities serve as the blueprint for creating the player object, hosting parameters for tile coordinates and hit points, for example.</p>
 <p>So, at its core, the map can be indexed by ‘rows’ and ‘columns’ that are really just sublist and list-element positions. When printing the map, the player is drawn over the user-specified position if the move clears legality checks (i.e.&nbsp;you can’t move onto an obstacle nor exit the map boundary).</p>
 <p>We have separate ‘terrain’ and an ‘entity’ layers, basically.</p>
 <section id="grouting" class="level3">
 <h3 class="anchored" data-anchor-id="grouting">Grouting</h3>
 <p>As it stands, you can see the Python code in <a href="https://github.com/matt-dray/tyle/tree/main/src/tyle">the <code>tiles.py</code> file</a>. The simplest possible example of a class there is <code>Tile</code>:</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">class</span> Tile:</span>
 <span id="cb4-2">    <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">def</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">__init__</span>(<span class="va" style="color: #111111;
@@ -113,7 +116,7 @@ font-style: inherit;">=</span> symbol</span>
 background-color: null;
 font-style: inherit;">self</span>.traversable <span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">=</span> traversable</span></code></pre></div>
+font-style: inherit;">=</span> traversable</span></code></pre></div></div>
 <p>I’ve shown the type hints<sup>5</sup> but hidden the docstrings for brevity.</p>
 <p>So you:</p>
 <ol type="1">
@@ -121,22 +124,22 @@ font-style: inherit;">=</span> traversable</span></code></pre></div>
 <li>Use an UpperCamelCase name by convention.</li>
 <li><code>def</code>ine a function to <code>__init__</code>ialise the class, with reference to:
 <ol type="a">
-<li><code>self</code>, i.e.&nbsp;the class itself.</li>
+<li><code>self</code>, i.e.&nbsp;a reference to the class instance itself.</li>
 <li>‘normal’ function arguments (<code>symbol</code> is the text character representing the tile and <code>traversable</code> is whether the tile can be moved across).</li>
 </ol></li>
 <li>Set properties that may just be the arguments, or passed through other functions.</li>
 <li><code>def</code>ine functions (methods) within the body of the class (not shown here becuase the <code>Tile</code> class doesn’t currently have any).</li>
 </ol>
 <p>And then you can call it like:</p>
-<div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">tile <span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">tile <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> Tile(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"."</span>, <span class="va" style="color: #111111;
 background-color: null;
-font-style: inherit;">True</span>)</span></code></pre></div>
+font-style: inherit;">True</span>)</span></code></pre></div></div>
 <p>So we’ve created a tile object with the <code>Tile</code> class and parameters for its symbol when printed (a period) and whether it can be moved across (it can). And we can access these properties (and methods) with dot notation, like:</p>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">tile.symbol</span></code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">tile.symbol</span></code></pre></div></div>
 <pre><code>'.'</code></pre>
 <p>That’s a <em>very</em> simple example. You can imagine how the <code>Entity</code> class has parameters like <code>hp</code> (hit points) and <code>TileGrid</code> has a <code>draw</code> method to print the map to the screen.</p>
 <p>Later we could create subclasses from the <code>Entity</code> class, so <code>Player</code> and <code>Enemy</code> could inherit the properties and methods from <code>Entity</code>, but maybe <code>Player</code> has a <code>name</code> or something.</p>
@@ -148,17 +151,16 @@ font-style: inherit;">True</span>)</span></code></pre></div>
 <p>But I’ve read about <a href="https://github.com/matt-dray/r.oguelike">the {r.oguelike} R package</a> on <a href="https://www.rostrum.blog/index.html#category=r.oguelike">this blog</a> before. Have you run out of ideas?</p>
 </blockquote>
 <p>Uh-oh, I’ve been rumbled.</p>
-<p>Listen, agitator: an approach composed entirely of R functions was never the ‘right’ choice for this type of thing. Not least because that particular ‘game’ had to be played in the R console, rather than the terminal directly.</p>
-<p>Python is far more suited to this type of activity. In fact, Python can be used as a full-blown game engine, aided by tools like <a href="https://www.pygame.org/docs/">PyGame</a>. In fact, there are several roguelike-specific packages to help you build roguelikes specifically, like <a href="https://github.com/libtcod/libtcod">libtcod</a>.</p>
+<p>Listen, agitator: an R-function spaghetti was never the ‘right’ choice. Not least because that particular ‘game’ had to be played in the R console, rather than the terminal directly.</p>
+<p>Python is probably more suited to this type of activity. In fact, Python can be used as a full-blown game engine, aided by tools like <a href="https://www.pygame.org/docs/">PyGame</a>. In fact, there are several roguelike-specific packages to help you build roguelikes specifically, like <a href="https://github.com/libtcod/libtcod">libtcod</a><sup>6</sup>.</p>
 <p>I’m ignoring these because I want to use this little project to help me learn Python skills, not roguelike-making skills, specifically. Classes, yes, but also stuff like type hints, docstrings, writing modules, creating CLIs, etc.</p>
 </section>
 <section id="game-over" class="level2">
 <h2 class="anchored" data-anchor-id="game-over">Game over?</h2>
-<p>As ever, I may stop there<sup>6</sup>. But there are some obvious improvements that would also strengthen my skills.</p>
-<p>A bunch of stuff from {r.oguelike} could be interesting to translate here, like procedural dungeons, enemy pathfinding and a styled interface.</p>
-<p>Of course, we probably want to ‘listen’ to keyboard input, which is a more natural approach to interactivity versus hitting <kbd>Enter</kbd> all the time</p>
-<p>It would also be nice to improve the CLI itself to accept various options, rather than generating the same-size grid and player starting-position every time.</p>
-<p>Oh yeah and, y’know, make it into like an actual game with winning and losing conditions? Eh, maybe.</p>
+<p>As ever, I may stop there<sup>7</sup>. But there are some obvious improvements that could also strengthen my Python skills.</p>
+<p>For example, a bunch of stuff from {r.oguelike} could be interesting to translate here, like procedural dungeons, enemy battling and pathfinding, and an inventory.</p>
+<p>We should also ‘listen’ for keyboard input with something like <a href="https://pynput.readthedocs.io/en/latest/index.html">pynput</a>. A much more natural approach compare to smashing the <kbd>Enter</kbd> key.</p>
+<p>Of course, learning new stuff can feel like navigating through a dungeon full of goblins. But to avoid permadeath of coding skills you’ve just got to keep going tile-by-tile, amirite?</p>
 
 </section>
 
@@ -185,33 +187,35 @@ dependencies = []</code></pre>
 
 <ol>
 <li id="fn1"><p>And <code>uv tool update tyle</code> and <code>uv tool uninstall tyle</code> do what you think they do.↩︎</p></li>
-<li id="fn2"><p>Pfft, game awards? More like <em>shame awards</em> in comparison to this, amirite?↩︎</p></li>
+<li id="fn2"><p>Actually, I’ve been using jot everyday and it helps me keep track of what I’ve been doing, which is handy for completing weeknotes and timesheets.↩︎</p></li>
 <li id="fn3"><p>I wouldn’t dream of taking the cutting edge and <a href="https://www.rostrum.blog/posts/2023-02-26-nook-s7/">being frivolous with it</a>.↩︎</p></li>
 <li id="fn4"><p>Wow, a take that’s hotter than the sun.↩︎</p></li>
 <li id="fn5"><p><a href="https://astral.sh/">Astral</a> have brought ty out of version beta_BETA_draft_v0.0.0.0.0.900000, huzzah. You can check type hints cheaply <a href="https://docs.astral.sh/uv/guides/tools/">with uv</a> and without installing anything else, like <code>uvx ty check</code>. Or <code>uvx ruff format</code> and <code>uv ruff check</code> for linting and formatting. Real noice.↩︎</p></li>
-<li id="fn6"><p>Take a shot every time you read that phrase on this blog.↩︎</p></li>
+<li id="fn6"><p>Check out entries from <a href="https://www.roguebasin.com/index.php?title=Seven_Day_Roguelike_Challenge">7DRL</a> (the seven-day roguelike challenge), which includes may games written this way.↩︎</p></li>
+<li id="fn7"><p>Take a shot every time you read that phrase on this blog.↩︎</p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
   <category>cli</category>
   <category>python</category>
   <category>tyle</category>
   <category>uv</category>
-  <guid>https://www.rostrum.blog/posts/2026-02-01-tyle/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2026-02-01-tyle/</guid>
   <pubDate>Sun, 01 Feb 2026 00:00:00 GMT</pubDate>
-  <media:content url="https://www.rostrum.blog/posts/2026-02-01-tyle/resources/tyle.png" medium="image" type="image/png" height="89" width="144"/>
+  <media:content url="https://www.rostrum.blog/posts/2026-02-01-tyle/resources/tyle.png" medium="image" type="image/png" height="78" width="144"/>
 </item>
 <item>
   <title>Correcting a fib about jot</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2025-12-28-jot-fib/index.html</link>
+  <link>https://www.rostrum.blog/posts/2025-12-28-jot-fib/</link>
   <description><![CDATA[ 
+
 
 
 
 
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2025-12-28-jot-fib/resources/jot-fib.png" class="img-fluid figure-img" alt="Screenshot of a macOS terminal window running the jot tool four times, with option 'v' to print the version number; 'w' to print where the config and jot files are; 's' and 'l' to search for the most recent jotting that contains the word 'apple'; and 'f' and 't' flags to return jottings from one date to another."></p>
+<p><img src="https://www.rostrum.blog/posts/2025-12-28-jot-fib/resources/jot-fib.png" class="img-fluid quarto-figure quarto-figure-left figure-img" alt="Screenshot of a macOS terminal window running the jot tool four times, with option 'v' to print the version number; 'w' to print where the config and jot files are; 's' and 'l' to search for the most recent jotting that contains the word 'apple'; and 'f' and 't' flags to return jottings from one date to another."></p>
 </figure>
 </div>
 <section id="tldr" class="level2">
@@ -241,25 +245,25 @@ dependencies = []</code></pre>
 <div class="code-with-filename-file">
 <pre><strong>jot.txt</strong></pre>
 </div>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb1-1">[2025-08-28 11:15] ate an apple</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-filename="jot.txt" style="background: #f1f3f5;"><pre class="sourceCode txt code-with-copy"><code class="sourceCode default"><span id="cb1-1">[2025-08-28 11:15] ate an apple</span>
 <span id="cb1-2">[2025-08-27 10:58] ate a kiwi</span>
 <span id="cb1-3">[2025-08-26 11:09] ate a pineapple</span>
-<span id="cb1-4">[2025-08-25 10:40] ate an apple and a pear</span></code></pre></div>
+<span id="cb1-4">[2025-08-25 10:40] ate an apple and a pear</span></code></pre></div></div>
 </div>
 <p>A casual <code>--search</code> will return anything matching your search term.</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">jot</span> <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">-s</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"apple"</span></span></code></pre></div>
+font-style: inherit;">"apple"</span></span></code></pre></div></div>
 <pre><code>[2025-08-28 11:15] ate an apple
 [2025-08-26 11:09] ate a pineapple
 [2025-08-25 10:40] ate an apple and a pear</code></pre>
 <p>But that could overwhelm the console if you have a lot of jottings.</p>
 <p>So now you can add the <code>--list</code> flag to limit to the most recent <em>n</em> jottings that match the search term.</p>
-<div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="ex" style="color: null;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">jot</span> <span class="at" style="color: #657422;
 background-color: null;
@@ -267,7 +271,7 @@ font-style: inherit;">-s</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"apple"</span> <span class="at" style="color: #657422;
 background-color: null;
-font-style: inherit;">-l</span> 1</span></code></pre></div>
+font-style: inherit;">-l</span> 1</span></code></pre></div></div>
 <pre><code>[2025-08-28 11:15] ate an apple</code></pre>
 </section>
 <section id="where-what" class="level2">
@@ -278,19 +282,19 @@ font-style: inherit;">-l</span> 1</span></code></pre></div>
 <li>the config file, which contains a key-value path to the jot file</li>
 <li>the jot file, which is where the text of the jottings is saved</li>
 </ul>
-<div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><span class="ex" style="color: null;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">jot</span> <span class="at" style="color: #657422;
 background-color: null;
-font-style: inherit;">-w</span></span></code></pre></div>
+font-style: inherit;">-w</span></span></code></pre></div></div>
 <pre><code>📍 Default path to config file: /Users/mattdray/.jot-config.json
 📍 Path to jot file: /Users/mattdray/Documents/jot.txt</code></pre>
 <p>The tool has gone through a bunch of changes, so you can check what version you’re running with <code>--version</code>.</p>
-<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><span class="ex" style="color: null;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">jot</span> <span class="at" style="color: #657422;
 background-color: null;
-font-style: inherit;">-v</span></span></code></pre></div>
+font-style: inherit;">-v</span></span></code></pre></div></div>
 <pre><code>0.2.11</code></pre>
 <p>The version number is also provided now when you run <code>jot --help</code> (<code>-h</code>) to print the help documentation.</p>
 <p>Assuming you’re using uv, run <code>uv tool upgrade jot</code> to get the latest version.</p>
@@ -301,13 +305,13 @@ font-style: inherit;">-v</span></span></code></pre></div>
 <p>Helpfully, <a href="https://github.com/oiffrig">Olivier Iffrig-Petit</a> contributed a couple of new options to handle this.</p>
 <p><code>--from</code> and <code>--to</code> (<code>-f</code> and <code>-t</code>) take values in the form <code>YYYYMMDD</code> to filter from (inclusive) and to (exclusive) given dates. They can be used alone or together, along with <code>--search</code> and <code>--list</code>.</p>
 <p>So, to return jottings from 26 August 2025 up to (but not including) 28 August 2025:</p>
-<div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><span class="ex" style="color: null;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">jot</span> <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">-f</span> 20250826 <span class="at" style="color: #657422;
 background-color: null;
-font-style: inherit;">-t</span> 20250828</span></code></pre></div>
+font-style: inherit;">-t</span> 20250828</span></code></pre></div></div>
 <pre><code>[2025-08-27 10:58] ate a kiwi
 [2025-08-26 11:09] ate a pineapple</code></pre>
 <p>Isolating time periods like this has helped me find information to write weeknotes and complete my timesheets.</p>
@@ -361,19 +365,19 @@ dependencies = []</code></pre>
 <li id="fn1"><p>‘Regex? Now you have two problems.’↩︎</p></li>
 <li id="fn2"><p>Or alias and document it so the user can decide. Either way, ‘jot’ is already taken on PyPi, so the package name will need changing even if the entry point doesn’t.↩︎</p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
   <category>cli</category>
   <category>jot</category>
   <category>python</category>
   <category>uv</category>
-  <guid>https://www.rostrum.blog/posts/2025-12-28-jot-fib/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2025-12-28-jot-fib/</guid>
   <pubDate>Sun, 28 Dec 2025 00:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-12-28-jot-fib/resources/jot-fib.png" medium="image" type="image/png" height="51" width="144"/>
 </item>
 <item>
   <title>How the tables turned</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2025-11-30-turn-tables/index.html</link>
+  <link>https://www.rostrum.blog/posts/2025-11-30-turn-tables/</link>
   <description><![CDATA[ 
 
 
@@ -467,14 +471,14 @@ loaded via a namespace (and not attached):
   <category>a11ytables</category>
   <category>aftables</category>
   <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2025-11-30-turn-tables/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2025-11-30-turn-tables/</guid>
   <pubDate>Sun, 30 Nov 2025 00:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-11-30-turn-tables/resources/let-go.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
   <title>={ o x o}=</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2025-10-30-pet/index.html</link>
+  <link>https://www.rostrum.blog/posts/2025-10-30-pet/</link>
   <description><![CDATA[ 
 
 
@@ -581,14 +585,14 @@ dependencies = []</code></pre>
   <category>pet</category>
   <category>python</category>
   <category>uv</category>
-  <guid>https://www.rostrum.blog/posts/2025-10-30-pet/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2025-10-30-pet/</guid>
   <pubDate>Thu, 30 Oct 2025 00:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-10-30-pet/resources/pet-see.png" medium="image" type="image/png" height="64" width="144"/>
 </item>
 <item>
   <title>Abandon P*werpoint for the command line</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2025-09-18-rich-slides/index.html</link>
+  <link>https://www.rostrum.blog/posts/2025-09-18-rich-slides/</link>
   <description><![CDATA[ 
 
 
@@ -679,6 +683,7 @@ font-style: inherit;">=</span> Console()</span>
 <span id="cb1-16"></span>
 <span id="cb1-17"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">def</span> panelise(</span>
 <span id="cb1-18">    <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -738,6 +743,7 @@ font-style: inherit;">=</span>panel_height,</span>
 <span id="cb1-33">    )</span>
 <span id="cb1-34">    <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">return</span> panel</span>
 <span id="cb1-35"></span>
 <span id="cb1-36">slides <span class="op" style="color: #5E5E5E;
@@ -833,6 +839,7 @@ font-style: inherit;">True</span></span>
 <span id="cb1-68"></span>
 <span id="cb1-69"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">def</span> render_slide():</span>
 <span id="cb1-70">    os.system(<span class="st" style="color: #20794D;
 background-color: null;
@@ -889,19 +896,23 @@ font-style: inherit;">"green"</span>)</span>
 <span id="cb1-78"></span>
 <span id="cb1-79"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">def</span> on_press(key):</span>
 <span id="cb1-80">    <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">global</span> index, running</span>
 <span id="cb1-81"></span>
 <span id="cb1-82">    <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">hasattr</span>(key, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"char"</span>) <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">and</span> key.char <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> <span class="st" style="color: #20794D;
@@ -915,10 +926,12 @@ font-style: inherit;">False</span></span>
 <span id="cb1-84">        listener.stop()</span>
 <span id="cb1-85">        <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">return</span></span>
 <span id="cb1-86"></span>
 <span id="cb1-87">    <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> key <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> keyboard.Key.right:</span>
@@ -936,6 +949,7 @@ font-style: inherit;">len</span>(slides)</span>
 <span id="cb1-89"></span>
 <span id="cb1-90">    <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">elif</span> key <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> keyboard.Key.left:</span>
@@ -1033,14 +1047,14 @@ dependencies = []</code></pre>
   <category>python</category>
   <category>rich</category>
   <category>uv</category>
-  <guid>https://www.rostrum.blog/posts/2025-09-18-rich-slides/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2025-09-18-rich-slides/</guid>
   <pubDate>Wed, 17 Sep 2025 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-09-18-rich-slides/resources/slide-1.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
   <title>Keeping jot’s options open</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2025-08-30-jot-options/index.html</link>
+  <link>https://www.rostrum.blog/posts/2025-08-30-jot-options/</link>
   <description><![CDATA[ 
 
 
@@ -1266,14 +1280,14 @@ dependencies = []</code></pre>
   <category>jot</category>
   <category>python</category>
   <category>uv</category>
-  <guid>https://www.rostrum.blog/posts/2025-08-30-jot-options/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2025-08-30-jot-options/</guid>
   <pubDate>Fri, 29 Aug 2025 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-08-30-jot-options/resources/jot.png" medium="image" type="image/png" height="120" width="144"/>
 </item>
 <item>
   <title>Jotting down some indifferent vibes</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2025-08-25-jot/index.html</link>
+  <link>https://www.rostrum.blog/posts/2025-08-25-jot/</link>
   <description><![CDATA[ 
 
 
@@ -1372,14 +1386,14 @@ dependencies = []</code></pre>
   <category>jot</category>
   <category>python</category>
   <category>uv</category>
-  <guid>https://www.rostrum.blog/posts/2025-08-25-jot/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2025-08-25-jot/</guid>
   <pubDate>Sun, 24 Aug 2025 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-08-25-jot/resources/install-jot.png" medium="image" type="image/png" height="73" width="144"/>
 </item>
 <item>
   <title>A bank holiday to honour uv?</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2025-08-11-uv-standalone/index.html</link>
+  <link>https://www.rostrum.blog/posts/2025-08-11-uv-standalone/</link>
   <description><![CDATA[ 
 
 
@@ -1437,8 +1451,10 @@ font-style: inherit;">"events"</span>]</span>
 <span id="cb1-8"></span>
 <span id="cb1-9"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> event <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> events:</span>
 <span id="cb1-10">    event[<span class="st" style="color: #20794D;
 background-color: null;
@@ -1458,10 +1474,13 @@ font-style: inherit;">=</span> date.today()</span>
 background-color: null;
 font-style: inherit;">=</span> [event <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> event <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> events <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> event[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"date"</span>] <span class="op" style="color: #5E5E5E;
@@ -1498,6 +1517,7 @@ font-style: inherit;">"bunting"</span>]</span>
 <span id="cb1-21"></span>
 <span id="cb1-22"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> is_today:</span>
 <span id="cb1-23">    when <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -1506,6 +1526,7 @@ background-color: null;
 font-style: inherit;">"today!"</span></span>
 <span id="cb1-24"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">else</span>: </span>
 <span id="cb1-25">    when <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -1555,6 +1576,7 @@ font-style: inherit;">"</span></span>
 <span id="cb1-28"></span>
 <span id="cb1-29"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> needs_bunting:</span>
 <span id="cb1-30">    str_out <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -1701,8 +1723,10 @@ font-style: inherit;">"events"</span>]</span>
 <span id="cb7-18"></span>
 <span id="cb7-19"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> event <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> events:</span>
 <span id="cb7-20">    event[<span class="st" style="color: #20794D;
 background-color: null;
@@ -1722,10 +1746,13 @@ font-style: inherit;">=</span> date.today()</span>
 background-color: null;
 font-style: inherit;">=</span> [event <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> event <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> events <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> event[<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"date"</span>] <span class="op" style="color: #5E5E5E;
@@ -1762,6 +1789,7 @@ font-style: inherit;">"bunting"</span>]</span>
 <span id="cb7-31"></span>
 <span id="cb7-32"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> is_today:</span>
 <span id="cb7-33">    when <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -1770,6 +1798,7 @@ background-color: null;
 font-style: inherit;">"today!"</span></span>
 <span id="cb7-34"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">else</span>: </span>
 <span id="cb7-35">    when <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -1819,6 +1848,7 @@ font-style: inherit;">"</span></span>
 <span id="cb7-38"></span>
 <span id="cb7-39"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> needs_bunting:</span>
 <span id="cb7-40">    str_out <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -1879,14 +1909,14 @@ dependencies = [
   <category>cli</category>
   <category>python</category>
   <category>uv</category>
-  <guid>https://www.rostrum.blog/posts/2025-08-11-uv-standalone/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2025-08-11-uv-standalone/</guid>
   <pubDate>Sun, 10 Aug 2025 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-08-11-uv-standalone/resources/bank.png" medium="image" type="image/png" height="35" width="144"/>
 </item>
 <item>
   <title>Dependency-light hex stickers with {gex}</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2025-02-25-gex/index.html</link>
+  <link>https://www.rostrum.blog/posts/2025-02-25-gex/</link>
   <description><![CDATA[ 
 
 
@@ -2044,8 +2074,10 @@ background-color: null;
 font-style: inherit;">"olivedrab4"</span>)</span>
 <span id="cb3-7"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> (x <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">seq</span>(<span class="sc" style="color: #5E5E5E;
@@ -2061,8 +2093,10 @@ background-color: null;
 font-style: inherit;"># add many images in a loop</span></span>
 <span id="cb3-8">  <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> (y <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">seq</span>(<span class="dv" style="color: #AD0000;
@@ -2159,8 +2193,10 @@ font-style: inherit;">"olivedrab1"</span>)</span>
 <span id="cb3-19">)</span>
 <span id="cb3-20"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> (style <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> styles) {</span>
 <span id="cb3-21">  gex<span class="sc" style="color: #5E5E5E;
 background-color: null;
@@ -2486,14 +2522,14 @@ loaded via a namespace (and not attached):
   <category>grid</category>
   <category>gex</category>
   <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2025-02-25-gex/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2025-02-25-gex/</guid>
   <pubDate>Tue, 25 Feb 2025 00:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-02-25-gex/resources/logo.png" medium="image" type="image/png" height="167" width="144"/>
 </item>
 <item>
   <title>Dependency-free hex stickers with {hexbase}</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2025-01-31-hexbase/index.html</link>
+  <link>https://www.rostrum.blog/posts/2025-01-31-hexbase/</link>
   <description><![CDATA[ 
 
 
@@ -2866,14 +2902,14 @@ loaded via a namespace (and not attached):
   <category>grid</category>
   <category>gex</category>
   <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2025-01-31-hexbase/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2025-01-31-hexbase/</guid>
   <pubDate>Fri, 31 Jan 2025 00:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-01-31-hexbase/resources/demo-hex.png" medium="image" type="image/png" height="167" width="144"/>
 </item>
 <item>
   <title>A roguelike sprite randomiser with Shiny</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-12-15-sprite-builder/index.html</link>
+  <link>https://www.rostrum.blog/posts/2024-12-15-sprite-builder/</link>
   <description><![CDATA[ 
 
 
@@ -2979,14 +3015,14 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>shiny</category>
   <category>shinylive</category>
-  <guid>https://www.rostrum.blog/posts/2024-12-15-sprite-builder/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2024-12-15-sprite-builder/</guid>
   <pubDate>Sun, 15 Dec 2024 00:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-12-15-sprite-builder/resources/sprites.gif" medium="image" type="image/gif"/>
 </item>
 <item>
   <title>Deploy a Shiny app to itch.io</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-11-16-itch/index.html</link>
+  <link>https://www.rostrum.blog/posts/2024-11-16-itch/</link>
   <description><![CDATA[ 
 
 
@@ -3072,14 +3108,14 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>shiny</category>
   <category>shinylive</category>
-  <guid>https://www.rostrum.blog/posts/2024-11-16-itch/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2024-11-16-itch/</guid>
   <pubDate>Sat, 16 Nov 2024 00:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-11-16-itch/resources/itch.png" medium="image" type="image/png" height="90" width="144"/>
 </item>
 <item>
   <title>{sortable} card games in {shiny}</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-10-25-not-balatro/index.html</link>
+  <link>https://www.rostrum.blog/posts/2024-10-25-not-balatro/</link>
   <description><![CDATA[ 
 
 
@@ -3223,14 +3259,14 @@ loaded via a namespace (and not attached):
   <category>shiny</category>
   <category>shinylive</category>
   <category>sortable</category>
-  <guid>https://www.rostrum.blog/posts/2024-10-25-not-balatro/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2024-10-25-not-balatro/</guid>
   <pubDate>Thu, 24 Oct 2024 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-10-25-not-balatro/resources/cards.gif" medium="image" type="image/gif"/>
 </item>
 <item>
   <title>Little pixel fun zone</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-09-15-shiny-pixel/index.html</link>
+  <link>https://www.rostrum.blog/posts/2024-09-15-shiny-pixel/</link>
   <description><![CDATA[ 
 
 
@@ -3468,6 +3504,7 @@ background-color: null;
 font-style: inherit;">undo_button_icon</span>()</span>
 <span id="cb4-14">    <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (current_icon <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> <span class="st" style="color: #20794D;
@@ -3479,6 +3516,7 @@ background-color: null;
 font-style: inherit;">"rotate-right"</span>)</span>
 <span id="cb4-15">    <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (current_icon <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> <span class="st" style="color: #20794D;
@@ -3576,14 +3614,14 @@ loaded via a namespace (and not attached):
   <category>pixeltrix</category>
   <category>r</category>
   <category>shiny</category>
-  <guid>https://www.rostrum.blog/posts/2024-09-15-shiny-pixel/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2024-09-15-shiny-pixel/</guid>
   <pubDate>Sat, 14 Sep 2024 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-09-15-shiny-pixel/resources/SANIC.png" medium="image" type="image/png" height="202" width="144"/>
 </item>
 <item>
   <title>Tile-style sprite delight</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-07-14-tilebased/index.html</link>
+  <link>https://www.rostrum.blog/posts/2024-07-14-tilebased/</link>
   <description><![CDATA[ 
 
 
@@ -3780,14 +3818,14 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>r.oguelike</category>
   <category>tilebased</category>
-  <guid>https://www.rostrum.blog/posts/2024-07-14-tilebased/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2024-07-14-tilebased/</guid>
   <pubDate>Sat, 13 Jul 2024 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-07-14-tilebased/resources/tilebased.gif" medium="image" type="image/gif"/>
 </item>
 <item>
   <title>Expose CRAN deadlines and DOIs</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-06-12-cran-db/index.html</link>
+  <link>https://www.rostrum.blog/posts/2024-06-12-cran-db/</link>
   <description><![CDATA[ 
 
 
@@ -3976,7 +4014,7 @@ font-style: inherit;">FALSE</span></span>
 <p>The code outputs a Markdown string that you can paste into your repository’s README, for example. It looks like this when rendered:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><a href="https://doi.org/10.32614/CRAN.package.datapasta"><img src="https://www.rostrum.blog/posts/2024-06-12-cran-db/https:/img.shields.io/badge/DOI-10.32614/CRAN.package.datapasta-1f57b6?style=flat&amp;link=https:/doi.org/10.32614/CRAN.package.datapasta" class="img-fluid figure-img"></a></p>
+<p><a href="https://doi.org/10.32614/CRAN.package.datapasta"><img src="https://img.shields.io/badge/DOI-10.32614/CRAN.package.datapasta-1f57b6?style=flat&amp;link=https://doi.org/10.32614/CRAN.package.datapasta" class="img-fluid figure-img"></a></p>
 </figure>
 </div>
 <p>You can click it to be taken to the resource, which is the CRAN listing for the package. The whole process looks like this:</p>
@@ -4060,14 +4098,14 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>shiny</category>
   <category>shinylive</category>
-  <guid>https://www.rostrum.blog/posts/2024-06-12-cran-db/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2024-06-12-cran-db/</guid>
   <pubDate>Tue, 11 Jun 2024 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-06-12-cran-db/resources/app.png" medium="image" type="image/png" height="69" width="144"/>
 </item>
 <item>
   <title>The Aesthetics Wiki: an R Addendum</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-05-08-aesthetic/index.html</link>
+  <link>https://www.rostrum.blog/posts/2024-05-08-aesthetic/</link>
   <description><![CDATA[ 
 
 
@@ -4542,14 +4580,14 @@ loaded via a namespace (and not attached):
   <category>base</category>
   <category>r</category>
   <category>tidyverse</category>
-  <guid>https://www.rostrum.blog/posts/2024-05-08-aesthetic/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2024-05-08-aesthetic/</guid>
   <pubDate>Tue, 07 May 2024 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-05-08-aesthetic/resources/passion.png" medium="image" type="image/png" height="66" width="144"/>
 </item>
 <item>
   <title>Stop Jenny committing arson</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/index.html</link>
+  <link>https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/</link>
   <description><![CDATA[ 
 
 
@@ -4594,6 +4632,7 @@ background-color: null;
 font-style: inherit;">"rstudio.sessionInit"</span>,</span>
 <span id="cb1-3">  <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(...) {</span>
 <span id="cb1-4">    <span class="fu" style="color: #4758AB;
 background-color: null;
@@ -4690,14 +4729,14 @@ loaded via a namespace (and not attached):
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>r</category>
   <category>reproducibility</category>
-  <guid>https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/</guid>
   <pubDate>Sun, 31 Mar 2024 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/resources/arson.png" medium="image" type="image/png" height="66" width="144"/>
 </item>
 <item>
   <title>Assign abstracts to sifters</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-03-26-assign-abstracts/index.html</link>
+  <link>https://www.rostrum.blog/posts/2024-03-26-assign-abstracts/</link>
   <description><![CDATA[ 
 
 
@@ -4745,6 +4784,7 @@ loaded via a namespace (and not attached):
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(</span>
 <span id="cb1-2">    abstracts_df,</span>
 <span id="cb1-3">    sifters_df,</span>
@@ -4833,12 +4873,15 @@ font-style: inherit;">0</span></span>
 <span id="cb1-20">  </span>
 <span id="cb1-21">  <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">repeat</span> {</span>
 <span id="cb1-22">    </span>
 <span id="cb1-23">    <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> (name <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">names</span>(sifter_assignments)) {</span>
@@ -4859,6 +4902,7 @@ background-color: null;
 font-style: inherit;">names</span>(sifter_caps)</span>
 <span id="cb1-29">      <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (sifter_has_cap) {</span>
 <span id="cb1-30">        sifter_cap <span class="ot" style="color: #003B4F;
 background-color: null;
@@ -4871,12 +4915,14 @@ font-style: inherit;">length</span>(sifter_assignments[[name]])</span>
 <span id="cb1-32">      }</span>
 <span id="cb1-33">      <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (sifter_has_cap <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">&amp;&amp;</span> sifter_assignment_count <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> sifter_cap) <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">next</span></span>
 <span id="cb1-34">      </span>
 <span id="cb1-35">      <span class="co" style="color: #5E5E5E;
@@ -4891,6 +4937,7 @@ background-color: null;
 font-style: inherit;">&lt;</span> assignment_cap)</span>
 <span id="cb1-37">      <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">length</span>(abstracts_under_cap) <span class="sc" style="color: #5E5E5E;
@@ -4899,6 +4946,7 @@ font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>) <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">next</span></span>
 <span id="cb1-38">      </span>
 <span id="cb1-39">      <span class="co" style="color: #5E5E5E;
@@ -4917,6 +4965,7 @@ background-color: null;
 font-style: inherit;">%in%</span> already_assigned_to_sifter]</span>
 <span id="cb1-43">      <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">length</span>(abstracts_available) <span class="sc" style="color: #5E5E5E;
@@ -4925,6 +4974,7 @@ font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>) <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">next</span></span>
 <span id="cb1-44">      </span>
 <span id="cb1-45">      <span class="co" style="color: #5E5E5E;
@@ -4941,6 +4991,7 @@ background-color: null;
 font-style: inherit;">names</span>(abstracts[abstracts_available]))</span>
 <span id="cb1-47">      <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">length</span>(abstracts_by_sifter) <span class="sc" style="color: #5E5E5E;
@@ -4956,6 +5007,7 @@ font-style: inherit;">-</span>abstracts_by_sifter]</span>
 <span id="cb1-49">      }</span>
 <span id="cb1-50">      <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">length</span>(abstracts_available) <span class="sc" style="color: #5E5E5E;
@@ -4964,6 +5016,7 @@ font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>) <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">next</span></span>
 <span id="cb1-51">      </span>
 <span id="cb1-52">      <span class="co" style="color: #5E5E5E;
@@ -4986,6 +5039,7 @@ background-color: null;
 font-style: inherit;">unname</span>(abstracts[abstracts_available]))</span>
 <span id="cb1-56">      <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">length</span>(abstracts_by_same_affiliation) <span class="sc" style="color: #5E5E5E;
@@ -5002,6 +5056,7 @@ font-style: inherit;">-</span>abstracts_by_same_affiliation]</span>
 <span id="cb1-59">      }</span>
 <span id="cb1-60">      <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">length</span>(abstracts_available) <span class="sc" style="color: #5E5E5E;
@@ -5010,6 +5065,7 @@ font-style: inherit;">==</span> <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>) <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">next</span></span>
 <span id="cb1-61">      </span>
 <span id="cb1-62">      <span class="co" style="color: #5E5E5E;
@@ -5042,12 +5098,14 @@ background-color: null;
 font-style: inherit;">1</span></span>
 <span id="cb1-70">      <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">all</span>(assignment_counts <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> assignment_cap)) <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">break</span></span>
 <span id="cb1-71">      </span>
 <span id="cb1-72">    }</span>
@@ -5073,16 +5131,19 @@ font-style: inherit;">1</span></span>
 <span id="cb1-78">    </span>
 <span id="cb1-79">    <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">all</span>(assignment_counts <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> assignment_cap)) <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">break</span></span>
 <span id="cb1-80">    </span>
 <span id="cb1-81">    <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">if</span> (iter <span class="sc" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> max_iterations) {</span>
@@ -5093,6 +5154,7 @@ background-color: null;
 font-style: inherit;">"max_iterations reached"</span>)</span>
 <span id="cb1-83">      <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">break</span></span>
 <span id="cb1-84">    }</span>
 <span id="cb1-85">    </span>
@@ -5115,6 +5177,7 @@ font-style: inherit;">names</span>(sifter_assignments))]</span>
 background-color: null;
 font-style: inherit;">&lt;-</span> <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">function</span>(x, ...) x[<span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">sample.int</span>(<span class="fu" style="color: #4758AB;
@@ -5473,8 +5536,10 @@ font-style: inherit;">setNames</span>(sifter_names)</span>
 <span id="cb19-5"></span>
 <span id="cb19-6"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">seq_along</span>(sifter_names)) {</span>
@@ -5539,8 +5604,10 @@ font-style: inherit;">setNames</span>(affiliations)</span>
 <span id="cb21-6"></span>
 <span id="cb21-7"><span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">for</span> (i <span class="cf" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">in</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">seq_along</span>(affiliations)) {</span>
@@ -5635,13 +5702,13 @@ loaded via a namespace (and not attached):
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>charlatan</category>
   <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2024-03-26-assign-abstracts/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2024-03-26-assign-abstracts/</guid>
   <pubDate>Tue, 26 Mar 2024 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Sh*tty R help from sh*tty AI</title>
   <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-03-15-ai-garbage/index.html</link>
+  <link>https://www.rostrum.blog/posts/2024-03-15-ai-garbage/</link>
   <description><![CDATA[ 
 
 
@@ -5774,7 +5841,7 @@ loaded via a namespace (and not attached):
 </section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>ai</category>
   <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2024-03-15-ai-garbage/index.html</guid>
+  <guid>https://www.rostrum.blog/posts/2024-03-15-ai-garbage/</guid>
   <pubDate>Fri, 15 Mar 2024 00:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-03-15-ai-garbage/resources/beckhams.png" medium="image" type="image/png" height="178" width="144"/>
 </item>
