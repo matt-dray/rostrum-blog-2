@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Matt Dray">
 <meta name="dcterms.date" content="2026-02-01">
 
-<title>rostrum.blog - A roguelike-like with tyle</title>
+<title>A roguelike-like with tyle – rostrum.blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,6 +23,7 @@ ul.task-list li input[type="checkbox"] {
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
@@ -67,22 +68,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
 <link href="../../images/logo-green-trans.png" rel="icon" type="image/png">
-<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-caafd084272ed53e723d9cd224c5dd45.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-fa1be76b0a4709f2a434a565e9d72524.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -91,6 +99,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -99,60 +108,57 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="rostrum.blog - A roguelike-like with tyle">
-<meta property="og:description" content="">
+<meta property="og:title" content="A roguelike-like with tyle – rostrum.blog">
+<meta property="og:description" content="Realised showerthoughts about R and Python mostly">
 <meta property="og:image" content="https://www.rostrum.blog/posts/2026-02-01-tyle/resources/tyle.png">
-<meta property="og:site-name" content="rostrum.blog">
-<meta property="og:image:height" content="818">
-<meta property="og:image:width" content="1324">
-<meta name="twitter:title" content="rostrum.blog - A roguelike-like with tyle">
-<meta name="twitter:description" content="">
+<meta property="og:site_name" content="rostrum.blog">
+<meta name="twitter:title" content="A roguelike-like with tyle – rostrum.blog">
+<meta name="twitter:description" content="Realised showerthoughts about R and Python mostly">
 <meta name="twitter:image" content="https://www.rostrum.blog/posts/2026-02-01-tyle/resources/tyle.png">
 <meta name="twitter:creator" content="@mattdray">
-<meta name="twitter:image-height" content="818">
-<meta name="twitter:image-width" content="1324">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a href="../../index.html" class="navbar-brand navbar-brand-logo">
-    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo light-content">
+    <img src="../../images/logo-green-trans.png" alt="" class="navbar-logo dark-content">
     </a>
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">rostrum.blog</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html" rel="" target=""><i class="bi bi-question-circle-fill" role="img">
+    <a class="nav-link" href="../../about.html"> <i class="bi bi-question-circle-fill" role="img">
 </i> 
- <span class="menu-text">About</span></a>
+<span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../../index.xml" rel="" target=""><i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
+    <a class="nav-link" href="../../index.xml"> <i class="bi bi-rss-fill" role="img" aria-label="RSS feed">
 </i> 
- <span class="menu-text">RSS</span></a>
+<span class="menu-text">RSS</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub source code">
+    <a class="nav-link" href="https://github.com/matt-dray/rostrum-blog-2"> <i class="bi bi-github" role="img" aria-label="GitHub source code">
 </i> 
- <span class="menu-text">Source</span></a>
+<span class="menu-text">Source</span></a>
   </li>  
 </ul>
+          </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -201,22 +207,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="resources/tyle.png" class="img-fluid figure-img" style="width:100.0%" alt="A 10 by 10 grid of characters printed to a macOS terminal. Tiles are mostly period characters, with some hashmark characters, and an at symbol near the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input."></p>
+<p><img src="resources/tyle-grid.png" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:100.0%" alt="A 10 by 10 grid of characters printed to a macOS terminal. Tiles are mostly period characters, with some hashmark characters, and an at symbol near the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input."></p>
 </figure>
 </div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I’m writing <a href="https://github.com/matt-dray/tyle">tyle</a> to help me Python. And help me fun?</p>
+<p>I’m writing <a href="https://github.com/matt-dray/tyle">tyle</a> to help in my quest to slay Python.</p>
 </section>
 <section id="very-early-access" class="level2">
 <h2 class="anchored" data-anchor-id="very-early-access">Very early access</h2>
-<p>I’ve started <a href="https://github.com/matt-dray/tyle">tyle</a>, a concept Python CLI that contains the foundations for a little in-terminal tile- and turn-based game.</p>
-<p>The rudimentary tool is available to install (v0.1.0 at time of writing). I like <a href="https://docs.astral.sh/uv/">uv</a> for this job<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> tool install git+https://github.com/matt-dray/tyle.git</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>I’ve started ‘tyle’, a concept Python CLI that contains the foundations for a little in-terminal tile- and turn-based game.</p>
+<p>The rudimentary tool is available to install <a href="https://github.com/matt-dray/tyle">from GitHub</a> (v0.1.0 at time of writing). I like <a href="https://docs.astral.sh/uv/">uv</a> for this job<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> tool install git+https://github.com/matt-dray/tyle.git</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>You can start a ‘game’ (heavy emphasis on those quote marks) by typing:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tyle</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">tyle</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>.......#..
 ..........
 .##..#....
@@ -228,65 +235,94 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ..........
 ....#.....
 Move (WASD+Enter): </code></pre>
-<p>The gameboard is just a tile grid printed to the terminal. You (the <code>@</code> symbol) can travel around the floor tiles (<code>.</code>), but not through obstacles (<code>#</code>, which are randomised) or off the map.</p>
+<p>The gameboard is just a tile grid printed to the terminal. You (the <code>@</code> symbol) can travel around the floor tiles (<code>.</code>), but not through obstacles (randomly-placed <code>#</code>) or off the map.</p>
 <p>At the prompt you can type <kbd>W</kbd> and <kbd>Enter</kbd> to move up, for example. <kbd>Q</kbd> and <kbd>Enter</kbd> will quit.</p>
-<p>Aaand that’s it for now<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>Aaand that’s it for now.</p>
 <div class="tip">
 <p><svg aria-hidden="true" role="img" viewbox="0 0 512 512" style="height:1em;width:1em;vertical-align:-0.125em;margin-left:auto;margin-right:auto;font-size:inherit;fill:currentColor;overflow:visible;position:relative;"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zm0-384c13.3 0 24 10.7 24 24V264c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zM224 352a32 32 0 1 1 64 0 32 32 0 1 1 -64 0z"></path></svg> <b>Note</b></p>
-<p>A quick update on changes in v0.1.0.9001, made immediately after this post. I’ve added CLI options so you can do something like <code>tyle -r 10 -c 20 -w 25</code> to set the starting count of <code>--rows</code>, <code>--columns</code> and <code>--walls</code> (see <code>tyle -h</code> for help). I also adjusted the column- and wall-count defaults and added a space between adjacent tiles; and introduced colours (but only if your terminal suports <a href="https://en.wikipedia.org/wiki/ANSI_escape_code">ANSI codes</a>, like zsh in the image below).</p>
+<p>A quick update on changes in v0.2.0, made immediately after this post. I’ve added CLI options so you can do something like <code>tyle -r 10 -c 20 -w 25</code> to set the starting count of <code>--rows</code>, <code>--columns</code> and <code>--walls</code> (see <code>tyle -h</code> for help). I also adjusted the column- and wall-count defaults and added a space between adjacent tiles; and introduced colours (but only if your terminal suports <a href="https://en.wikipedia.org/wiki/ANSI_escape_code">ANSI codes</a>, like zsh in the gif below).</p>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="resources/tyle.gif" class="img-fluid figure-img" style="width:50.0%" alt="A 10 by 20 grid of characters printed to a zsh terminal. The majority are floor tiles, which are are grey period symbols. Randomly-placed walls are red hash symbols. The player is a yellow at symbol in the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input. The user inputs values to make the at symbol move around the tiles."></p>
+<p><img src="resources/tyle.gif" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:50.0%" alt="A 10 by 20 grid of characters printed to a zsh terminal. The majority are floor tiles, which are are grey period symbols. Randomly-placed walls are red hash symbols. The player is a yellow at symbol in the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input. The user inputs values to make the at symbol move around the tiles."></p>
 </figure>
 </div>
 </div>
 </section>
-<section id="like-rogue" class="level2">
-<h2 class="anchored" data-anchor-id="like-rogue">Like Rogue?</h2>
-<p>This game style and ASCII ‘graphics’ may be familiar as the blueprint for <a href="https://en.wikipedia.org/wiki/Rogue_(video_game)">the classic videgame <em>Rogue</em></a> (1980). Key features are things like text-based graphics, turn-based player interaction, and permadeath. Later games aped this style and adapted with it, giving rise to the ‘roguelike’ and ‘roguelite’ genres.</p>
+<section id="gone-rogue" class="level2">
+<h2 class="anchored" data-anchor-id="gone-rogue">Gone rogue</h2>
+<p>This game style and ASCII ‘graphics’ may be familiar as the blueprint for <a href="https://en.wikipedia.org/wiki/Rogue_(video_game)">the classic videgame <em>Rogue</em></a> (1980).</p>
+<p>Key features are things like text-based graphics, turn-based player interaction, and permadeath. Later games aped this style and adapted with it, giving rise to the <a href="https://en.wikipedia.org/wiki/Roguelike">‘roguelike’ and ‘roguelite’</a> genres.</p>
 <p>The scope here is far tighter: I promise nothing. So let’s call this a roguelike-like for now.</p>
 </section>
 <section id="a-sidequest" class="level2">
 <h2 class="anchored" data-anchor-id="a-sidequest">A sidequest</h2>
-<p>To explain the meta, I’ve been making some twee little projects to help me learn Python. First <a href="https://github.com/matt-dray/jot">jot</a>, then <a href="https://github.com/matt-dray/pet">pet</a>. tyle is also a Python-backed CLI but is helping me learn more about classes.</p>
+<p>To explain the lore, I’ve been making some twee little projects to help me learn Python. First <a href="https://github.com/matt-dray/jot">jot</a><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, then <a href="https://github.com/matt-dray/pet">pet</a>. tyle is also a Python-backed CLI but is helping me learn more about <a href="https://www.w3schools.com/python/python_classes.asp">classes</a>, specifically.</p>
 <p>As someone with a background in R, I tend to think every nail can be hammered with a function. R supports classes, of course, most recently with <a href="https://rconsortium.github.io/S7/index.html">the {S7} package</a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. But the approach feels far more at home in Python with its greater focus on ‘programming’ than ‘doing statistics’<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
+</section>
+<section id="a-class-act" class="level2">
+<h2 class="anchored" data-anchor-id="a-class-act">A class act</h2>
 <p>In tyle, there are currently three main classes:</p>
 <ul>
-<li><code>Tile</code> that represent the tiles of the world map</li>
-<li><code>TileGrid</code> to generate the world map from tile objects</li>
-<li><code>Entity</code> to create the player character</li>
+<li><code>Tile</code> to represent each square on the grid</li>
+<li><code>TileGrid</code> to represent the whole grid of tiles</li>
+<li><code>Entity</code> to represent the player character</li>
 </ul>
-<p>Each of these have properties and methods that allow them to store data and be queried in certain ways.</p>
-<p>Tile objects contain information like whether they’re traversable; tile-grid objects store the tile grid as a list of lists of tile objects and are responsible for printing the map; and entities serve as the blueprint for creating the player object, hosting parameters for tile coordinates and hit points, for example.</p>
-<p>So, at its core, the map can be indexed by ‘rows’ and ‘columns’ that are really just sublist and list-element positions. When printing the map, the player is drawn over the user-specified position if the move clears legality checks (i.e.&nbsp;you can’t move onto an obstacle nor exit the map boundary).</p>
-<p>We have separate ‘terrain’ and an ‘entity’ layers, basically.</p>
+<p>Each of these have properties and methods that allow them to store data and be queried in certain ways:</p>
+<ul>
+<li><code>Tile</code> objects store their representative symbol (e.g.&nbsp;<code>#</code>) and if they can be traversed</li>
+<li><code>TileGrid</code> objects store and print the tile grid, while also assessing player movement</li>
+<li><code>Entity</code> objects store tile coordinates and hit points for the player</li>
+</ul>
+<p>A tile-grid object is composed of many tile objects. Some tiles are designated as floor tiles (<code>.</code>) and others as walls (<code>#</code>). Think of the tile-grid as the ‘terrain’ layer of the game.</p>
+<p>When drawing the tile-grid, the player is printed preferentially to traversable floor spaces. So the player is not part of the terrain layer, but exists independently and carries its own coordinate information.</p>
 <section id="grouting" class="level3">
 <h3 class="anchored" data-anchor-id="grouting">Grouting</h3>
-<p>As it stands, you can see the Python code in <a href="https://github.com/matt-dray/tyle/tree/main/src/tyle">the <code>tiles.py</code> file</a>. The simplest possible example of a class there is <code>Tile</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Tile:</span>
+<p>What does one of these classes look like in practice?</p>
+<p>Here’s an example from <a href="https://github.com/matt-dray/tyle/tree/main/src/tyle">the <code>tiles.py</code> file</a>. The simplest possible example is <code>Tile</code>:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Tile:</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, symbol: <span class="bu">str</span>, traversable: <span class="bu">bool</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.symbol <span class="op">=</span> symbol</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.traversable <span class="op">=</span> traversable</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.traversable <span class="op">=</span> traversable</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>I’ve shown the type hints<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> but hidden the docstrings for brevity.</p>
-<p>So you:</p>
+<p>To summarise, you:</p>
 <ol type="1">
 <li>Declare with <code>class</code>.</li>
 <li>Use an UpperCamelCase name by convention.</li>
 <li><code>def</code>ine a function to <code>__init__</code>ialise the class, with reference to:
 <ol type="a">
-<li><code>self</code>, i.e.&nbsp;the class itself.</li>
+<li><code>self</code>, i.e.&nbsp;a reference to the class instance itself.</li>
 <li>‘normal’ function arguments (<code>symbol</code> is the text character representing the tile and <code>traversable</code> is whether the tile can be moved across).</li>
 </ol></li>
 <li>Set properties that may just be the arguments, or passed through other functions.</li>
-<li><code>def</code>ine functions (methods) within the body of the class (not shown here becuase the <code>Tile</code> class doesn’t currently have any).</li>
+<li><code>def</code>ine functions (methods) within the body of the class (not shown here because the <code>Tile</code> class doesn’t currently have any).</li>
 </ol>
-<p>And then you can call it like:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>tile <span class="op">=</span> Tile(<span class="st">"."</span>, <span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>So we’ve created a tile object with the <code>Tile</code> class and parameters for its symbol when printed (a period) and whether it can be moved across (it can). And we can access these properties (and methods) with dot notation, like:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tile.symbol</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And then you can initiate a single instance like:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>tile <span class="op">=</span> Tile(<span class="st">"."</span>, <span class="va">True</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>You can then check parameters and run methods from the class. For example, we can use dot notation on our <code>Tile</code> instance to access the <code>symbol</code> parameter:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>tile.symbol</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>'.'</code></pre>
-<p>That’s a <em>very</em> simple example. You can imagine how the <code>Entity</code> class has parameters like <code>hp</code> (hit points) and <code>TileGrid</code> has a <code>draw</code> method to print the map to the screen.</p>
-<p>Later we could create subclasses from the <code>Entity</code> class, so <code>Player</code> and <code>Enemy</code> could inherit the properties and methods from <code>Entity</code>, but maybe <code>Player</code> has a <code>name</code> or something.</p>
+</section>
+<section id="fire-up-the-griddle" class="level3">
+<h3 class="anchored" data-anchor-id="fire-up-the-griddle">Fire up the griddle</h3>
+<p>In tyle, we initiate distinct tiles for every position. This means they can have individual properties, like whether they’re a wall tile. Later we could give them properties for the presence of booby traps, for example.</p>
+<p>We store the grid of tiles as a two-dimensional list (a list of lists). The index of:</p>
+<ul>
+<li>each list gives the tiles their row number</li>
+<li>each tile in each list gives them their column number</li>
+</ul>
+<p>Here’s a simplified part of the <code>create_grid()</code> function, which uses <a href="https://www.w3schools.com/python/python_lists_comprehension.asp">list comprehension</a><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> to generate the grid:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>grid <span class="op">=</span> [</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    [Tile(<span class="st">"#"</span>, <span class="va">True</span>) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_cols)]</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n_rows)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Suppose <code>n_rows = n_cols = 2</code> for a tiny 2 × 2 grid. Greatly simplified, the <code>grid</code> object would end up in the form <code>[[a,b],[c,d]]</code>, where each letter here represents a <code>Tile</code> object<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>. So indexing like <code>grid[1][0]</code> gives <code>c</code>.</p>
+</section>
+<section id="upper-class" class="level3">
+<h3 class="anchored" data-anchor-id="upper-class">Upper class</h3>
+<p>So that was a very simple example of the <code>Tile</code> class in action.</p>
+<p>You can imagine how the <code>Entity</code> class has its own parameters like <code>hp</code> (hit points) and <code>TileGrid</code> has a <code>draw()</code> method to print the map to the screen.</p>
+<p>Later we could create subclasses from the <code>Entity</code> class. <code>Player</code> and <code>Enemy</code> could inherit the properties and methods from <code>Entity</code>, but get their own unique ones too. Maybe <code>Player</code> could have a <code>name</code>, while <code>Enemy</code> could have a <code>species</code> (think <code>goblin</code>, <code>rat</code> or <code>ingrate-who-puts-their-dirty-feet-up-on-the-train-seat</code>).</p>
+<p>Classes give us a much more manageable and readable way of organising and dealing with variables and functions.</p>
 </section>
 </section>
 <section id="hack" class="level2">
@@ -295,17 +331,16 @@ Move (WASD+Enter): </code></pre>
 <p>But I’ve read about <a href="https://github.com/matt-dray/r.oguelike">the {r.oguelike} R package</a> on <a href="https://www.rostrum.blog/index.html#category=r.oguelike">this blog</a> before. Have you run out of ideas?</p>
 </blockquote>
 <p>Uh-oh, I’ve been rumbled.</p>
-<p>Listen, agitator: an approach composed entirely of R functions was never the ‘right’ choice for this type of thing. Not least because that particular ‘game’ had to be played in the R console, rather than the terminal directly.</p>
-<p>Python is far more suited to this type of activity. In fact, Python can be used as a full-blown game engine, aided by tools like <a href="https://www.pygame.org/docs/">PyGame</a>. In fact, there are several roguelike-specific packages to help you build roguelikes specifically, like <a href="https://github.com/libtcod/libtcod">libtcod</a>.</p>
+<p>Listen, agitator: an R-function spaghetti was never the ‘right’ choice. Not least because that particular ‘game’ had to be played in the R console, rather than the terminal directly.</p>
+<p>Python is probably more suited to this type of activity. In fact, Python can be used as a full-blown game engine, aided by tools like <a href="https://www.pygame.org/docs/">PyGame</a>. In fact, there are several roguelike-specific packages to help you build roguelikes specifically, like <a href="https://github.com/libtcod/libtcod">libtcod</a><a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>.</p>
 <p>I’m ignoring these because I want to use this little project to help me learn Python skills, not roguelike-making skills, specifically. Classes, yes, but also stuff like type hints, docstrings, writing modules, creating CLIs, etc.</p>
 </section>
 <section id="game-over" class="level2">
 <h2 class="anchored" data-anchor-id="game-over">Game over?</h2>
-<p>As ever, I may stop there<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>. But there are some obvious improvements that would also strengthen my skills.</p>
-<p>A bunch of stuff from {r.oguelike} could be interesting to translate here, like procedural dungeons, enemy pathfinding and a styled interface.</p>
-<p>Of course, we probably want to ‘listen’ to keyboard input, which is a more natural approach to interactivity versus hitting <kbd>Enter</kbd> all the time</p>
-<p>It would also be nice to improve the CLI itself to accept various options, rather than generating the same-size grid and player starting-position every time.</p>
-<p>Oh yeah and, y’know, make it into like an actual game with winning and losing conditions? Eh, maybe.</p>
+<p>As ever, I may stop there<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>. But there are some obvious improvements that could also strengthen my Python skills.</p>
+<p>For example, a bunch of stuff from {r.oguelike} could be interesting to translate here, like procedural dungeons, enemy battling and pathfinding, and an inventory.</p>
+<p>We should also ‘listen’ for keyboard input with something like <a href="https://pynput.readthedocs.io/en/latest/index.html">pynput</a>. A much more natural approach compared to smashing the <kbd>Enter</kbd> key.</p>
+<p>Of course, learning new stuff can feel like navigating through a dungeon full of goblins. But to avoid permadeath of coding skills you’ve just got to keep going tile-by-tile, amirite?</p>
 
 </section>
 
@@ -332,51 +367,69 @@ dependencies = []</code></pre>
 
 <ol>
 <li id="fn1"><p>And <code>uv tool update tyle</code> and <code>uv tool uninstall tyle</code> do what you think they do.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Pfft, game awards? More like <em>shame awards</em> in comparison to this, amirite?<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Actually, I’ve been using jot everyday and it helps me keep track of what I’ve been doing, which is handy for completing weeknotes and timesheets.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>I wouldn’t dream of taking the cutting edge and <a href="https://www.rostrum.blog/posts/2023-02-26-nook-s7/">being frivolous with it</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>Wow, a take that’s hotter than the sun.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p><a href="https://astral.sh/">Astral</a> have brought ty out of version beta_BETA_draft_v0.0.0.0.0.900000, huzzah. You can check type hints cheaply <a href="https://docs.astral.sh/uv/guides/tools/">with uv</a> and without installing anything else, like <code>uvx ty check</code>. Or <code>uvx ruff format</code> and <code>uv ruff check</code> for linting and formatting. Real noice.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>Take a shot every time you read that phrase on this blog.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>And note the use of the underscore convention as a ‘placeholder’ variable. We don’t need to name the variable because we’re not actually using it.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>Well, if printed, each tile object would be represented like <code>&lt;__main__.Tile at 0x1090ec950&gt;</code>: where the object was defined; its class; and its memory address. Our tiles are initiated independently, so each would have a different memory address. This representation is also why we need a separate <code>draw()</code> method that will print the <code>symbol</code> property of each <code>Tile</code> or <code>Entity</code> object.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p>Check out entries from <a href="https://www.roguebasin.com/index.php?title=Seven_Day_Roguelike_Challenge">7DRL</a> (the seven-day roguelike challenge), which includes may games written this way.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>Take a shot every time you read that phrase on this blog.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div></main> <!-- /main -->
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
-window.document.addEventListener("DOMContentLoaded", function (event) {
-  const toggleBodyColorMode = (bsSheetEl) => {
-    const mode = bsSheetEl.getAttribute("data-mode");
-    const bodyEl = window.document.querySelector("body");
-    if (mode === "dark") {
-      bodyEl.classList.add("quarto-dark");
-      bodyEl.classList.remove("quarto-light");
-    } else {
-      bodyEl.classList.add("quarto-light");
-      bodyEl.classList.remove("quarto-dark");
-    }
-  }
-  const toggleBodyColorPrimary = () => {
-    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
-    if (bsSheetEl) {
-      toggleBodyColorMode(bsSheetEl);
-    }
-  }
-  toggleBodyColorPrimary();  
-  const icon = "";
-  const anchorJS = new window.AnchorJS();
-  anchorJS.options = {
-    placement: 'right',
-    icon: icon
-  };
-  anchorJS.add('.anchored');
-  const isCodeAnnotation = (el) => {
-    for (const clz of el.classList) {
-      if (clz.startsWith('code-annotation-')) {                     
-        return true;
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
       }
+      return false;
     }
-    return false;
-  }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
       for (const childEl of codeEl.children) {
         if (isCodeAnnotation(childEl)) {
           childEl.remove();
@@ -384,195 +437,348 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
       return codeEl.innerText;
     }
-  });
-  clipboard.on('success', function(e) {
-    // button target
-    const button = e.trigger;
-    // don't keep focus
-    button.blur();
-    // flash "checked"
-    button.classList.add('code-copy-button-checked');
-    var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
-    let tooltip;
-    if (window.bootstrap) {
-      button.setAttribute("data-bs-toggle", "tooltip");
-      button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
-      tooltip = new bootstrap.Tooltip(button, 
-        { trigger: "manual", 
-          customClass: "code-copy-button-tooltip",
-          offset: [0, -8]});
-      tooltip.show();    
-    }
-    setTimeout(function() {
-      if (tooltip) {
-        tooltip.hide();
-        button.removeAttribute("data-bs-title");
-        button.removeAttribute("data-bs-toggle");
-        button.removeAttribute("data-bs-placement");
-      }
-      button.setAttribute("title", currentTitle);
-      button.classList.remove('code-copy-button-checked');
-    }, 1000);
-    // clear code selection
-    e.clearSelection();
-  });
-  function tippyHover(el, contentFn) {
-    const config = {
-      allowHTML: true,
-      content: contentFn,
-      maxWidth: 500,
-      delay: 100,
-      arrow: false,
-      appendTo: function(el) {
-          return el.parentElement;
-      },
-      interactive: true,
-      interactiveBorder: 10,
-      theme: 'quarto',
-      placement: 'bottom-start'
-    };
-    window.tippy(el, config); 
-  }
-  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
-  for (var i=0; i<noterefs.length; i++) {
-    const ref = noterefs[i];
-    tippyHover(ref, function() {
-      // use id or data attribute instead here
-      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
-      try { href = new URL(href).hash; } catch {}
-      const id = href.replace(/^#\/?/, "");
-      const note = window.document.getElementById(id);
-      return note.innerHTML;
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
     });
-  }
-      let selectedAnnoteEl;
-      const selectorForAnnotation = ( cell, annotation) => {
-        let cellAttr = 'data-code-cell="' + cell + '"';
-        let lineAttr = 'data-code-annotation="' +  annotation + '"';
-        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
-        return selector;
-      }
-      const selectCodeLines = (annoteEl) => {
-        const doc = window.document;
-        const targetCell = annoteEl.getAttribute("data-target-cell");
-        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
-        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
-        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
-        const lineIds = lines.map((line) => {
-          return targetCell + "-" + line;
-        })
-        let top = null;
-        let height = null;
-        let parent = null;
-        if (lineIds.length > 0) {
-            //compute the position of the single el (top and bottom and make a div)
-            const el = window.document.getElementById(lineIds[0]);
-            top = el.offsetTop;
-            height = el.offsetHeight;
-            parent = el.parentElement.parentElement;
-          if (lineIds.length > 1) {
-            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-            height = bottom - top;
-          }
-          if (top !== null && height !== null && parent !== null) {
-            // cook up a div (if necessary) and position it 
-            let div = window.document.getElementById("code-annotation-line-highlight");
-            if (div === null) {
-              div = window.document.createElement("div");
-              div.setAttribute("id", "code-annotation-line-highlight");
-              div.style.position = 'absolute';
-              parent.appendChild(div);
-            }
-            div.style.top = top - 2 + "px";
-            div.style.height = height + 4 + "px";
-            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-            if (gutterDiv === null) {
-              gutterDiv = window.document.createElement("div");
-              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-              gutterDiv.style.position = 'absolute';
-              const codeCell = window.document.getElementById(targetCell);
-              const gutter = codeCell.querySelector('.code-annotation-gutter');
-              gutter.appendChild(gutterDiv);
-            }
-            gutterDiv.style.top = top - 2 + "px";
-            gutterDiv.style.height = height + 4 + "px";
-          }
-          selectedAnnoteEl = annoteEl;
-        }
-      };
-      const unselectCodeLines = () => {
-        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
-        elementsIds.forEach((elId) => {
-          const div = window.document.getElementById(elId);
-          if (div) {
-            div.remove();
-          }
-        });
-        selectedAnnoteEl = undefined;
-      };
-      // Attach click handler to the DT
-      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
-      for (const annoteDlNode of annoteDls) {
-        annoteDlNode.addEventListener('click', (event) => {
-          const clickedEl = event.target;
-          if (clickedEl !== selectedAnnoteEl) {
-            unselectCodeLines();
-            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
-            if (activeEl) {
-              activeEl.classList.remove('code-annotation-active');
-            }
-            selectCodeLines(clickedEl);
-            clickedEl.classList.add('code-annotation-active');
-          } else {
-            // Unselect the line
-            unselectCodeLines();
-            clickedEl.classList.remove('code-annotation-active');
-          }
-        });
-      }
-  const findCites = (el) => {
-    const parentEl = el.parentElement;
-    if (parentEl) {
-      const cites = parentEl.dataset.cites;
-      if (cites) {
-        return {
-          el,
-          cites: cites.split(' ')
-        };
-      } else {
-        return findCites(el.parentElement)
-      }
-    } else {
-      return undefined;
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
     }
-  };
-  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
-  for (var i=0; i<bibliorefs.length; i++) {
-    const ref = bibliorefs[i];
-    const citeInfo = findCites(ref);
-    if (citeInfo) {
-      tippyHover(citeInfo.el, function() {
-        var popup = window.document.createElement('div');
-        citeInfo.cites.forEach(function(cite) {
-          var citeDiv = window.document.createElement('div');
-          citeDiv.classList.add('hanging-indent');
-          citeDiv.classList.add('csl-entry');
-          var biblioDiv = window.document.getElementById('ref-' + cite);
-          if (biblioDiv) {
-            citeDiv.innerHTML = biblioDiv.innerHTML;
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/www\.rostrum\.blog");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
           }
-          popup.appendChild(citeDiv);
-        });
-        return popup.innerHTML;
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
       });
     }
-  }
-});
-</script>
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
 </div> <!-- /content -->
+
 
 
 
