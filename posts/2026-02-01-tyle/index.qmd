@@ -10,17 +10,17 @@ categories:
   - uv
 ---
 
-![](resources/tyle.png){fig-align="left" fig-alt="A 10 by 10 grid of characters printed to a macOS terminal. Tiles are mostly period characters, with some hashmark characters, and an at symbol near the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input." width="100%"}
+![](resources/tyle-grid.png){fig-align="left" fig-alt="A 10 by 10 grid of characters printed to a macOS terminal. Tiles are mostly period characters, with some hashmark characters, and an at symbol near the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input." width="100%"}
 
 ## tl;dr
 
-I'm writing [tyle](https://github.com/matt-dray/tyle) to help in my quest to get better at Python.
+I'm writing [tyle](https://github.com/matt-dray/tyle) to help in my quest to slay Python.
 
 ## Very early access
 
-I've started [tyle](https://github.com/matt-dray/tyle), a concept Python CLI that contains the foundations for a little in-terminal tile- and turn-based game.
+I've started 'tyle', a concept Python CLI that contains the foundations for a little in-terminal tile- and turn-based game.
 
-The rudimentary tool is available to install (v0.1.0 at time of writing).
+The rudimentary tool is available to install [from GitHub](https://github.com/matt-dray/tyle) (v0.1.0 at time of writing).
 I like [uv](https://docs.astral.sh/uv/) for this job[^tool]:
 
 ```bash
@@ -47,7 +47,7 @@ Move (WASD+Enter):
 ```
 
 The gameboard is just a tile grid printed to the terminal.
-You (the `@` symbol) can travel around the floor tiles (`.`), but not through obstacles (`#`, which are randomised) or off the map. 
+You (the `@` symbol) can travel around the floor tiles (`.`), but not through obstacles (randomly-placed `#`) or off the map. 
 
 At the prompt you can type <kbd>W</kbd> and <kbd>Enter</kbd> to move up, for example.
 <kbd>Q</kbd> and <kbd>Enter</kbd> will quit.
@@ -62,12 +62,12 @@ I've added CLI options so you can do something like `tyle -r 10 -c 20 -w 25` to 
 I also adjusted the column- and wall-count defaults and added a space between adjacent tiles; and introduced colours (but only if your terminal suports [ANSI codes](https://en.wikipedia.org/wiki/ANSI_escape_code), like zsh in the gif below).
 
 ![](resources/tyle.gif){fig-align="left" width="50%" fig-alt="A 10 by 20 grid of characters printed to a zsh terminal. The majority are floor tiles, which are are grey period symbols. Randomly-placed walls are red hash symbols. The player is a yellow at symbol in the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input. The user inputs values to make the at symbol move around the tiles."}
-
 </div>
 
-## Like.. Rogue?
+## Gone rogue
 
 This game style and ASCII 'graphics' may be familiar as the blueprint for [the classic videgame _Rogue_](https://en.wikipedia.org/wiki/Rogue_(video_game)) (1980).
+
 Key features are things like text-based graphics, turn-based player interaction, and permadeath. 
 Later games aped this style and adapted with it, giving rise to the ['roguelike' and 'roguelite'](https://en.wikipedia.org/wiki/Roguelike) genres.
 
@@ -76,34 +76,41 @@ So let's call this a roguelike-like for now.
 
 ## A sidequest
 
-To explain the meta, I've been making some twee little projects to help me learn Python.
+To explain the lore, I've been making some twee little projects to help me learn Python.
 First [jot](https://github.com/matt-dray/jot)[^jot], then [pet](https://github.com/matt-dray/pet).
-tyle is also a Python-backed CLI but is helping me learn more about classes.
+tyle is also a Python-backed CLI but is helping me learn more about [classes](https://www.w3schools.com/python/python_classes.asp), specifically.
 
 As someone with a background in R, I tend to think every nail can be hammered with a function.
 R supports classes, of course, most recently with [the {S7} package](https://rconsortium.github.io/S7/index.html)[^frivolity].
 But the approach feels far more at home in Python with its greater focus on 'programming' than 'doing statistics'[^take].
 
+## A class act
+
 In tyle, there are currently three main classes:
 
-* `Tile` that represent the tiles of the world map
-* `TileGrid` to generate the world map from tile objects
-* `Entity` to create the player character
+* `Tile` to represent each square on the grid
+* `TileGrid` to represent the whole grid of tiles
+* `Entity` to represent the player character
 
-Each of these have properties and methods that allow them to store data and be queried in certain ways.
+Each of these have properties and methods that allow them to store data and be queried in certain ways:
 
-Tile objects contain information like whether they're traversable.
-Tile-grid objects store the tile grid as a list of lists of tile objects and are responsible for printing the map. Entities serve as the blueprint for creating the player object, hosting parameters for tile coordinates and hit points, for example.
+* `Tile` objects store their representative symbol (e.g. `#`) and if they can be traversed
+* `TileGrid` objects store and print the tile grid, while also assessing player movement
+* `Entity` objects store tile coordinates and hit points for the player
 
-So, at its core, the map can be indexed by 'rows' and 'columns' that are really just sublist and list-element positions.
-When printing the map, the player is drawn over the user-specified position if the move clears legality checks (i.e. you can't move onto an obstacle nor exit the map boundary).
+A tile-grid object is composed of many tile objects.
+Some tiles are designated as floor tiles (`.`) and others as walls (`#`).
+Think of the tile-grid as the 'terrain' layer of the game.
 
-We have separate 'terrain' and an 'entity' layers, basically.
+When drawing the tile-grid, the player is printed preferentially to traversable floor spaces.
+So the player is not part of the terrain layer, but exists independently and carries its own coordinate information. 
 
 ### Grouting
 
-As it stands, you can see the Python code in [the `tiles.py` file](https://github.com/matt-dray/tyle/tree/main/src/tyle).
-The simplest possible example of a class there is `Tile`:
+What does one of these classes look like in practice?
+
+Here's an example from [the `tiles.py` file](https://github.com/matt-dray/tyle/tree/main/src/tyle).
+The simplest possible example is `Tile`:
 
 ```python
 class Tile:
@@ -114,7 +121,7 @@ class Tile:
 
 I've shown the type hints[^ty] but hidden the docstrings for brevity.
 
-So you:
+To summarise, you:
 
 1. Declare with `class`.
 2. Use an UpperCamelCase name by convention.
@@ -122,16 +129,16 @@ So you:
     a. `self`, i.e. a reference to the class instance itself.
     b. 'normal' function arguments (`symbol` is the text character representing the tile and `traversable` is whether the tile can be moved across).
 4. Set properties that may just be the arguments, or passed through other functions.
-5. `def`ine functions (methods) within the body of the class (not shown here becuase the `Tile` class doesn't currently have any).
+5. `def`ine functions (methods) within the body of the class (not shown here because the `Tile` class doesn't currently have any).
 
-And then you can call it like:
+And then you can initiate a single instance like:
 
 ```python
 tile = Tile(".", True)
 ```
 
-So we've created a tile object with the `Tile` class and parameters for its symbol when printed (a period) and whether it can be moved across (it can).
-And we can access these properties (and methods) with dot notation, like:
+You can then check parameters and run methods from the class.
+For example, we can use dot notation on our `Tile` instance to access the `symbol` parameter:
 
 ```python
 tile.symbol
@@ -140,10 +147,42 @@ tile.symbol
 '.'
 ```
 
-That's a _very_ simple example.
-You can imagine how the `Entity` class has parameters like `hp` (hit points) and `TileGrid` has a `draw` method to print the map to the screen.
+### Fire up the griddle
 
-Later we could create subclasses from the `Entity` class, so `Player` and `Enemy` could inherit the properties and methods from `Entity`, but maybe `Player` has a `name` or something.
+In tyle, we initiate distinct tiles for every position.
+This means they can have individual properties, like whether they're a wall tile.
+Later we could give them properties for the presence of booby traps, for example.
+
+We store the grid of tiles as a two-dimensional list (a list of lists).
+The index of:
+
+* each list gives the tiles their row number
+* each tile in each list gives them their column number
+
+Here's a simplified part of the `create_grid()` function, which uses [list comprehension](https://www.w3schools.com/python/python_lists_comprehension.asp)[^under] to generate the grid:
+
+```python
+grid = [
+    [Tile("#", True) for _ in range(n_cols)]
+    for _ in range(n_rows)
+]
+```
+
+Suppose `n_rows = n_cols = 2` for a tiny 2 × 2 grid.
+Greatly simplified, the `grid` object would end up in the form `[[a,b],[c,d]]`, where each letter here represents a `Tile` object[^print].
+So indexing like `grid[1][0]` gives `c`.
+
+### Upper class
+
+So that was a very simple example of the `Tile` class in action.
+
+You can imagine how the `Entity` class has its own parameters like `hp` (hit points) and `TileGrid` has a `draw()` method to print the map to the screen.
+
+Later we could create subclasses from the `Entity` class.
+`Player` and `Enemy` could inherit the properties and methods from `Entity`, but get their own unique ones too.
+Maybe `Player` could have a `name`, while `Enemy` could have a `species` (think `goblin`, `rat` or `ingrate-who-puts-their-dirty-feet-up-on-the-train-seat`).
+
+Classes give us a much more manageable and readable way of organising and dealing with variables and functions.
 
 ## Hack
 
@@ -190,3 +229,5 @@ cat(readLines("pyproject.toml"), sep = "\n")
 [^ty]: [Astral](https://astral.sh/) have brought ty out of version beta_BETA_draft_v0.0.0.0.0.900000, huzzah. You can check type hints cheaply [with uv](https://docs.astral.sh/uv/guides/tools/) and without installing anything else, like `uvx ty check`. Or `uvx ruff format` and `uv ruff check` for linting and formatting. Real noice.
 [^jot]: Actually, I've been using jot everyday and it helps me keep track of what I've been doing, which is handy for completing weeknotes and timesheets.
 [^7drl]: Check out entries from [7DRL](https://www.roguebasin.com/index.php?title=Seven_Day_Roguelike_Challenge) (the seven-day roguelike challenge), which includes may games written this way.
+[^under]: And note the use of the underscore convention as a 'placeholder' variable. We don't need to name the variable because we're not actually using it.
+[^print]: Well, if printed, each tile object would be represented like `<__main__.Tile at 0x1090ec950>`: where the object was defined; its class; and its memory address. Our tiles are initiated independently, so each would have a different memory address. This representation is also why we need a separate `draw()` method that will print the `symbol` property of each `Tile` or `Entity` object.

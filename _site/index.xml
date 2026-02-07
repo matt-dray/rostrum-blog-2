@@ -23,17 +23,17 @@
 
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2026-02-01-tyle/resources/tyle.png" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:100.0%" alt="A 10 by 10 grid of characters printed to a macOS terminal. Tiles are mostly period characters, with some hashmark characters, and an at symbol near the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input."></p>
+<p><img src="https://www.rostrum.blog/posts/2026-02-01-tyle/resources/tyle-grid.png" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:100.0%" alt="A 10 by 10 grid of characters printed to a macOS terminal. Tiles are mostly period characters, with some hashmark characters, and an at symbol near the middle. A prompt underneath reads 'Move (WASD)+Enter:', ready for user input."></p>
 </figure>
 </div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I’m writing <a href="https://github.com/matt-dray/tyle">tyle</a> to help in my quest to get better at Python.</p>
+<p>I’m writing <a href="https://github.com/matt-dray/tyle">tyle</a> to help in my quest to slay Python.</p>
 </section>
 <section id="very-early-access" class="level2">
 <h2 class="anchored" data-anchor-id="very-early-access">Very early access</h2>
-<p>I’ve started <a href="https://github.com/matt-dray/tyle">tyle</a>, a concept Python CLI that contains the foundations for a little in-terminal tile- and turn-based game.</p>
-<p>The rudimentary tool is available to install (v0.1.0 at time of writing). I like <a href="https://docs.astral.sh/uv/">uv</a> for this job<sup>1</sup>:</p>
+<p>I’ve started ‘tyle’, a concept Python CLI that contains the foundations for a little in-terminal tile- and turn-based game.</p>
+<p>The rudimentary tool is available to install <a href="https://github.com/matt-dray/tyle">from GitHub</a> (v0.1.0 at time of writing). I like <a href="https://docs.astral.sh/uv/">uv</a> for this job<sup>1</sup>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">uv</span> tool install git+https://github.com/matt-dray/tyle.git</span></code></pre></div></div>
@@ -52,7 +52,7 @@ font-style: inherit;">tyle</span></span></code></pre></div></div>
 ..........
 ....#.....
 Move (WASD+Enter): </code></pre>
-<p>The gameboard is just a tile grid printed to the terminal. You (the <code>@</code> symbol) can travel around the floor tiles (<code>.</code>), but not through obstacles (<code>#</code>, which are randomised) or off the map.</p>
+<p>The gameboard is just a tile grid printed to the terminal. You (the <code>@</code> symbol) can travel around the floor tiles (<code>.</code>), but not through obstacles (randomly-placed <code>#</code>) or off the map.</p>
 <p>At the prompt you can type <kbd>W</kbd> and <kbd>Enter</kbd> to move up, for example. <kbd>Q</kbd> and <kbd>Enter</kbd> will quit.</p>
 <p>Aaand that’s it for now.</p>
 <div class="tip">
@@ -65,28 +65,37 @@ Move (WASD+Enter): </code></pre>
 </div>
 </div>
 </section>
-<section id="like..-rogue" class="level2">
-<h2 class="anchored" data-anchor-id="like..-rogue">Like.. Rogue?</h2>
-<p>This game style and ASCII ‘graphics’ may be familiar as the blueprint for <a href="https://en.wikipedia.org/wiki/Rogue_(video_game)">the classic videgame <em>Rogue</em></a> (1980). Key features are things like text-based graphics, turn-based player interaction, and permadeath. Later games aped this style and adapted with it, giving rise to the <a href="https://en.wikipedia.org/wiki/Roguelike">‘roguelike’ and ‘roguelite’</a> genres.</p>
+<section id="gone-rogue" class="level2">
+<h2 class="anchored" data-anchor-id="gone-rogue">Gone rogue</h2>
+<p>This game style and ASCII ‘graphics’ may be familiar as the blueprint for <a href="https://en.wikipedia.org/wiki/Rogue_(video_game)">the classic videgame <em>Rogue</em></a> (1980).</p>
+<p>Key features are things like text-based graphics, turn-based player interaction, and permadeath. Later games aped this style and adapted with it, giving rise to the <a href="https://en.wikipedia.org/wiki/Roguelike">‘roguelike’ and ‘roguelite’</a> genres.</p>
 <p>The scope here is far tighter: I promise nothing. So let’s call this a roguelike-like for now.</p>
 </section>
 <section id="a-sidequest" class="level2">
 <h2 class="anchored" data-anchor-id="a-sidequest">A sidequest</h2>
-<p>To explain the meta, I’ve been making some twee little projects to help me learn Python. First <a href="https://github.com/matt-dray/jot">jot</a><sup>2</sup>, then <a href="https://github.com/matt-dray/pet">pet</a>. tyle is also a Python-backed CLI but is helping me learn more about classes.</p>
+<p>To explain the lore, I’ve been making some twee little projects to help me learn Python. First <a href="https://github.com/matt-dray/jot">jot</a><sup>2</sup>, then <a href="https://github.com/matt-dray/pet">pet</a>. tyle is also a Python-backed CLI but is helping me learn more about <a href="https://www.w3schools.com/python/python_classes.asp">classes</a>, specifically.</p>
 <p>As someone with a background in R, I tend to think every nail can be hammered with a function. R supports classes, of course, most recently with <a href="https://rconsortium.github.io/S7/index.html">the {S7} package</a><sup>3</sup>. But the approach feels far more at home in Python with its greater focus on ‘programming’ than ‘doing statistics’<sup>4</sup>.</p>
+</section>
+<section id="a-class-act" class="level2">
+<h2 class="anchored" data-anchor-id="a-class-act">A class act</h2>
 <p>In tyle, there are currently three main classes:</p>
 <ul>
-<li><code>Tile</code> that represent the tiles of the world map</li>
-<li><code>TileGrid</code> to generate the world map from tile objects</li>
-<li><code>Entity</code> to create the player character</li>
+<li><code>Tile</code> to represent each square on the grid</li>
+<li><code>TileGrid</code> to represent the whole grid of tiles</li>
+<li><code>Entity</code> to represent the player character</li>
 </ul>
-<p>Each of these have properties and methods that allow them to store data and be queried in certain ways.</p>
-<p>Tile objects contain information like whether they’re traversable. Tile-grid objects store the tile grid as a list of lists of tile objects and are responsible for printing the map. Entities serve as the blueprint for creating the player object, hosting parameters for tile coordinates and hit points, for example.</p>
-<p>So, at its core, the map can be indexed by ‘rows’ and ‘columns’ that are really just sublist and list-element positions. When printing the map, the player is drawn over the user-specified position if the move clears legality checks (i.e.&nbsp;you can’t move onto an obstacle nor exit the map boundary).</p>
-<p>We have separate ‘terrain’ and an ‘entity’ layers, basically.</p>
+<p>Each of these have properties and methods that allow them to store data and be queried in certain ways:</p>
+<ul>
+<li><code>Tile</code> objects store their representative symbol (e.g.&nbsp;<code>#</code>) and if they can be traversed</li>
+<li><code>TileGrid</code> objects store and print the tile grid, while also assessing player movement</li>
+<li><code>Entity</code> objects store tile coordinates and hit points for the player</li>
+</ul>
+<p>A tile-grid object is composed of many tile objects. Some tiles are designated as floor tiles (<code>.</code>) and others as walls (<code>#</code>). Think of the tile-grid as the ‘terrain’ layer of the game.</p>
+<p>When drawing the tile-grid, the player is printed preferentially to traversable floor spaces. So the player is not part of the terrain layer, but exists independently and carries its own coordinate information.</p>
 <section id="grouting" class="level3">
 <h3 class="anchored" data-anchor-id="grouting">Grouting</h3>
-<p>As it stands, you can see the Python code in <a href="https://github.com/matt-dray/tyle/tree/main/src/tyle">the <code>tiles.py</code> file</a>. The simplest possible example of a class there is <code>Tile</code>:</p>
+<p>What does one of these classes look like in practice?</p>
+<p>Here’s an example from <a href="https://github.com/matt-dray/tyle/tree/main/src/tyle">the <code>tiles.py</code> file</a>. The simplest possible example is <code>Tile</code>:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-weight: bold;
@@ -118,7 +127,7 @@ font-style: inherit;">self</span>.traversable <span class="op" style="color: #5E
 background-color: null;
 font-style: inherit;">=</span> traversable</span></code></pre></div></div>
 <p>I’ve shown the type hints<sup>5</sup> but hidden the docstrings for brevity.</p>
-<p>So you:</p>
+<p>To summarise, you:</p>
 <ol type="1">
 <li>Declare with <code>class</code>.</li>
 <li>Use an UpperCamelCase name by convention.</li>
@@ -128,9 +137,9 @@ font-style: inherit;">=</span> traversable</span></code></pre></div></div>
 <li>‘normal’ function arguments (<code>symbol</code> is the text character representing the tile and <code>traversable</code> is whether the tile can be moved across).</li>
 </ol></li>
 <li>Set properties that may just be the arguments, or passed through other functions.</li>
-<li><code>def</code>ine functions (methods) within the body of the class (not shown here becuase the <code>Tile</code> class doesn’t currently have any).</li>
+<li><code>def</code>ine functions (methods) within the body of the class (not shown here because the <code>Tile</code> class doesn’t currently have any).</li>
 </ol>
-<p>And then you can call it like:</p>
+<p>And then you can initiate a single instance like:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">tile <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> Tile(<span class="st" style="color: #20794D;
@@ -138,11 +147,53 @@ background-color: null;
 font-style: inherit;">"."</span>, <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">True</span>)</span></code></pre></div></div>
-<p>So we’ve created a tile object with the <code>Tile</code> class and parameters for its symbol when printed (a period) and whether it can be moved across (it can). And we can access these properties (and methods) with dot notation, like:</p>
+<p>You can then check parameters and run methods from the class. For example, we can use dot notation on our <code>Tile</code> instance to access the <code>symbol</code> parameter:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">tile.symbol</span></code></pre></div></div>
 <pre><code>'.'</code></pre>
-<p>That’s a <em>very</em> simple example. You can imagine how the <code>Entity</code> class has parameters like <code>hp</code> (hit points) and <code>TileGrid</code> has a <code>draw</code> method to print the map to the screen.</p>
-<p>Later we could create subclasses from the <code>Entity</code> class, so <code>Player</code> and <code>Enemy</code> could inherit the properties and methods from <code>Entity</code>, but maybe <code>Player</code> has a <code>name</code> or something.</p>
+</section>
+<section id="fire-up-the-griddle" class="level3">
+<h3 class="anchored" data-anchor-id="fire-up-the-griddle">Fire up the griddle</h3>
+<p>In tyle, we initiate distinct tiles for every position. This means they can have individual properties, like whether they’re a wall tile. Later we could give them properties for the presence of booby traps, for example.</p>
+<p>We store the grid of tiles as a two-dimensional list (a list of lists). The index of:</p>
+<ul>
+<li>each list gives the tiles their row number</li>
+<li>each tile in each list gives them their column number</li>
+</ul>
+<p>Here’s a simplified part of the <code>create_grid()</code> function, which uses <a href="https://www.w3schools.com/python/python_lists_comprehension.asp">list comprehension</a><sup>6</sup> to generate the grid:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">grid <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [</span>
+<span id="cb8-2">    [Tile(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"#"</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(n_cols)]</span>
+<span id="cb8-3">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(n_rows)</span>
+<span id="cb8-4">]</span></code></pre></div></div>
+<p>Suppose <code>n_rows = n_cols = 2</code> for a tiny 2 × 2 grid. Greatly simplified, the <code>grid</code> object would end up in the form <code>[[a,b],[c,d]]</code>, where each letter here represents a <code>Tile</code> object<sup>7</sup>. So indexing like <code>grid[1][0]</code> gives <code>c</code>.</p>
+</section>
+<section id="upper-class" class="level3">
+<h3 class="anchored" data-anchor-id="upper-class">Upper class</h3>
+<p>So that was a very simple example of the <code>Tile</code> class in action.</p>
+<p>You can imagine how the <code>Entity</code> class has its own parameters like <code>hp</code> (hit points) and <code>TileGrid</code> has a <code>draw()</code> method to print the map to the screen.</p>
+<p>Later we could create subclasses from the <code>Entity</code> class. <code>Player</code> and <code>Enemy</code> could inherit the properties and methods from <code>Entity</code>, but get their own unique ones too. Maybe <code>Player</code> could have a <code>name</code>, while <code>Enemy</code> could have a <code>species</code> (think <code>goblin</code>, <code>rat</code> or <code>ingrate-who-puts-their-dirty-feet-up-on-the-train-seat</code>).</p>
+<p>Classes give us a much more manageable and readable way of organising and dealing with variables and functions.</p>
 </section>
 </section>
 <section id="hack" class="level2">
@@ -152,14 +203,14 @@ font-style: inherit;">True</span>)</span></code></pre></div></div>
 </blockquote>
 <p>Uh-oh, I’ve been rumbled.</p>
 <p>Listen, agitator: an R-function spaghetti was never the ‘right’ choice. Not least because that particular ‘game’ had to be played in the R console, rather than the terminal directly.</p>
-<p>Python is probably more suited to this type of activity. In fact, Python can be used as a full-blown game engine, aided by tools like <a href="https://www.pygame.org/docs/">PyGame</a>. In fact, there are several roguelike-specific packages to help you build roguelikes specifically, like <a href="https://github.com/libtcod/libtcod">libtcod</a><sup>6</sup>.</p>
+<p>Python is probably more suited to this type of activity. In fact, Python can be used as a full-blown game engine, aided by tools like <a href="https://www.pygame.org/docs/">PyGame</a>. In fact, there are several roguelike-specific packages to help you build roguelikes specifically, like <a href="https://github.com/libtcod/libtcod">libtcod</a><sup>8</sup>.</p>
 <p>I’m ignoring these because I want to use this little project to help me learn Python skills, not roguelike-making skills, specifically. Classes, yes, but also stuff like type hints, docstrings, writing modules, creating CLIs, etc.</p>
 </section>
 <section id="game-over" class="level2">
 <h2 class="anchored" data-anchor-id="game-over">Game over?</h2>
-<p>As ever, I may stop there<sup>7</sup>. But there are some obvious improvements that could also strengthen my Python skills.</p>
+<p>As ever, I may stop there<sup>9</sup>. But there are some obvious improvements that could also strengthen my Python skills.</p>
 <p>For example, a bunch of stuff from {r.oguelike} could be interesting to translate here, like procedural dungeons, enemy battling and pathfinding, and an inventory.</p>
-<p>We should also ‘listen’ for keyboard input with something like <a href="https://pynput.readthedocs.io/en/latest/index.html">pynput</a>. A much more natural approach compare to smashing the <kbd>Enter</kbd> key.</p>
+<p>We should also ‘listen’ for keyboard input with something like <a href="https://pynput.readthedocs.io/en/latest/index.html">pynput</a>. A much more natural approach compared to smashing the <kbd>Enter</kbd> key.</p>
 <p>Of course, learning new stuff can feel like navigating through a dungeon full of goblins. But to avoid permadeath of coding skills you’ve just got to keep going tile-by-tile, amirite?</p>
 
 </section>
@@ -191,8 +242,10 @@ dependencies = []</code></pre>
 <li id="fn3"><p>I wouldn’t dream of taking the cutting edge and <a href="https://www.rostrum.blog/posts/2023-02-26-nook-s7/">being frivolous with it</a>.↩︎</p></li>
 <li id="fn4"><p>Wow, a take that’s hotter than the sun.↩︎</p></li>
 <li id="fn5"><p><a href="https://astral.sh/">Astral</a> have brought ty out of version beta_BETA_draft_v0.0.0.0.0.900000, huzzah. You can check type hints cheaply <a href="https://docs.astral.sh/uv/guides/tools/">with uv</a> and without installing anything else, like <code>uvx ty check</code>. Or <code>uvx ruff format</code> and <code>uv ruff check</code> for linting and formatting. Real noice.↩︎</p></li>
-<li id="fn6"><p>Check out entries from <a href="https://www.roguebasin.com/index.php?title=Seven_Day_Roguelike_Challenge">7DRL</a> (the seven-day roguelike challenge), which includes may games written this way.↩︎</p></li>
-<li id="fn7"><p>Take a shot every time you read that phrase on this blog.↩︎</p></li>
+<li id="fn6"><p>And note the use of the underscore convention as a ‘placeholder’ variable. We don’t need to name the variable because we’re not actually using it.↩︎</p></li>
+<li id="fn7"><p>Well, if printed, each tile object would be represented like <code>&lt;__main__.Tile at 0x1090ec950&gt;</code>: where the object was defined; its class; and its memory address. Our tiles are initiated independently, so each would have a different memory address. This representation is also why we need a separate <code>draw()</code> method that will print the <code>symbol</code> property of each <code>Tile</code> or <code>Entity</code> object.↩︎</p></li>
+<li id="fn8"><p>Check out entries from <a href="https://www.roguebasin.com/index.php?title=Seven_Day_Roguelike_Challenge">7DRL</a> (the seven-day roguelike challenge), which includes may games written this way.↩︎</p></li>
+<li id="fn9"><p>Take a shot every time you read that phrase on this blog.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
   <category>cli</category>
@@ -201,7 +254,7 @@ dependencies = []</code></pre>
   <category>uv</category>
   <guid>https://www.rostrum.blog/posts/2026-02-01-tyle/</guid>
   <pubDate>Sun, 01 Feb 2026 00:00:00 GMT</pubDate>
-  <media:content url="https://www.rostrum.blog/posts/2026-02-01-tyle/resources/tyle.png" medium="image" type="image/png" height="78" width="144"/>
+  <media:content url="https://www.rostrum.blog/posts/2026-02-01-tyle/resources/tyle.png" medium="image" type="image/png"/>
 </item>
 <item>
   <title>Correcting a fib about jot</title>
