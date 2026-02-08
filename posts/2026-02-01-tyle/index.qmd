@@ -27,7 +27,7 @@ I like [uv](https://docs.astral.sh/uv/) for this job[^tool]:
 uv tool install git+https://github.com/matt-dray/tyle.git
 ```
 
-You can start a 'game' (heavy emphasis on those quote marks) by typing:
+Then you can start a 'game' (heavy emphasis on those quote marks) from your terminal by typing:
 
 ```bash
 tyle
@@ -66,19 +66,21 @@ I also adjusted the column- and wall-count defaults and added a space between ad
 
 ## Gone rogue
 
-This game style and ASCII 'graphics' may be familiar as the blueprint for [the classic videgame _Rogue_](https://en.wikipedia.org/wiki/Rogue_(video_game)) (1980).
+This game style and ASCII-text 'graphics' may be familiar as the blueprint for [the classic dungeoncrawling videogame _Rogue_](https://en.wikipedia.org/wiki/Rogue_(video_game)) (1980).
 
-Key features are things like text-based graphics, turn-based player interaction, and permadeath. 
-Later games aped this style and adapted with it, giving rise to the ['roguelike' and 'roguelite'](https://en.wikipedia.org/wiki/Roguelike) genres.
+Other key features are turn-based interaction, procedurally-generated environments and player permadeath. 
+Later games aped and adapted these features, giving rise to the ['roguelike' and 'roguelite'](https://en.wikipedia.org/wiki/Roguelike) genres.
 
-The scope here is far tighter: I promise nothing.
-So let's call this a roguelike-like for now.
+The scope for tyle is far tighter: I promise nothing.
+So let's call this a 'roguelike-like' for now.
 
 ## A sidequest
 
-To explain the lore, I've been making some twee little projects to help me learn Python.
-First [jot](https://github.com/matt-dray/jot)[^jot], then [pet](https://github.com/matt-dray/pet).
-tyle is also a Python-backed CLI but is helping me learn more about [classes](https://www.w3schools.com/python/python_classes.asp), specifically.
+To explain the lore, I've been making some twee CLI projects to help me learn Python.
+First [jot](https://github.com/matt-dray/jot) for recording little timestamped notes[^jot], then [pet](https://github.com/matt-dray/pet) for a mini cyberpet experience.
+
+tyle is also a Python-backed CLI, but is helping me learn more about object-oriented programming and building my own [classes](https://www.w3schools.com/python/python_classes.asp), specifically.
+It's nice to organise code into object 'types' that contain their own variables (properties) and functions (methods).
 
 As someone with a background in R, I tend to think every nail can be hammered with a function.
 R supports classes, of course, most recently with [the {S7} package](https://rconsortium.github.io/S7/index.html)[^frivolity].
@@ -86,11 +88,11 @@ But the approach feels far more at home in Python with its greater focus on 'pro
 
 ## A class act
 
-In tyle, there are currently three main classes:
+First, a high-level overview of what tyle's three main classes represent:
 
-* `Tile` to represent each square on the grid
-* `TileGrid` to represent the whole grid of tiles
-* `Entity` to represent the player character
+* `Tile` represents each square on the grid
+* `TileGrid` represents the whole grid of tiles
+* `Entity` represents the player character
 
 Each of these have properties and methods that allow them to store data and be queried in certain ways:
 
@@ -102,12 +104,13 @@ A tile-grid object is composed of many tile objects.
 Some tiles are designated as floor tiles (`.`) and others as walls (`#`).
 Think of the tile-grid as the 'terrain' layer of the game.
 
-When drawing the tile-grid, the player is printed preferentially to traversable floor spaces.
-So the player is not part of the terrain layer, but exists independently and carries its own coordinate information. 
+The player is not part of the terrain layer, but exists independently and carries its own coordinate properties. 
+When printing the tilegrid with a drawing method, the player's symbol (`@`) is printed preferentially.
+There's logic to prevent the player from moving to non-traversable places (walls or off the map).
 
 ### Grouting
 
-What does one of these classes look like in practice?
+What does it look like to set up one of these classes?
 
 Here's an example from [the `tiles.py` file](https://github.com/matt-dray/tyle/tree/main/src/tyle).
 The simplest possible example is `Tile`:
@@ -149,8 +152,10 @@ tile.symbol
 
 ### Fire up the griddle
 
-In tyle, we initiate distinct tiles for every position.
-This means they can have individual properties, like whether they're a wall tile.
+How does tyle generate a tilegrid from tiles?
+
+Crucially, tile initiates distinct tile objects for every grid position.
+This means each one can have individual properties, like whether they're a wall tile.
 Later we could give them properties for the presence of booby traps, for example.
 
 We store the grid of tiles as a two-dimensional list (a list of lists).
@@ -168,9 +173,19 @@ grid = [
 ]
 ```
 
-Suppose `n_rows = n_cols = 2` for a tiny 2 × 2 grid.
-Greatly simplified, the `grid` object would end up in the form `[[a,b],[c,d]]`, where each letter here represents a `Tile` object[^print].
-So indexing like `grid[1][0]` gives `c`.
+Printing `grid` will reveal the structure.
+Suppose we had `n_rows = n_cols = 2` for a tiny 2 × 2 grid, we'd get something like this:
+
+```
+[[<__main__.Tile at 0x107a22120>, <__main__.Tile at 0x107a23170>],
+ [<__main__.Tile at 0x107a236e0>, <__main__.Tile at 0x107a23020>]]
+```
+
+You can see the list of lists (`[[],[]]`) where each inner list contains two tile objects.
+We can index into it to get a tile at any given 'coordinates'.
+So `grid[1][0]` would return the tile in the second row and first column.
+
+You can see the default printing format for objects, which tells us where it was defined, its class and its unique memory address. Instead, `TileGrid` has a `draw()` method to print instead the `symbol` property of each `Tile` object (i.e. `.` or `#`).
 
 ### Upper class
 
@@ -201,7 +216,7 @@ In fact, there are several roguelike-specific packages to help you build rogueli
 I'm ignoring these because I want to use this little project to help me learn Python skills, not roguelike-making skills, specifically.
 Classes, yes, but also stuff like type hints, docstrings, writing modules, creating CLIs, etc.
 
-## Game over?
+## Do it with tyle
 
 As ever, I may stop there[^shot].
 But there are some obvious improvements that could also strengthen my Python skills.
@@ -230,4 +245,3 @@ cat(readLines("pyproject.toml"), sep = "\n")
 [^jot]: Actually, I've been using jot everyday and it helps me keep track of what I've been doing, which is handy for completing weeknotes and timesheets.
 [^7drl]: Check out entries from [7DRL](https://www.roguebasin.com/index.php?title=Seven_Day_Roguelike_Challenge) (the seven-day roguelike challenge), which includes may games written this way.
 [^under]: And note the use of the underscore convention as a 'placeholder' variable. We don't need to name the variable because we're not actually using it.
-[^print]: Well, if printed, each tile object would be represented like `<__main__.Tile at 0x1090ec950>`: where the object was defined; its class; and its memory address. Our tiles are initiated independently, so each would have a different memory address. This representation is also why we need a separate `draw()` method that will print the `symbol` property of each `Tile` or `Entity` object.
