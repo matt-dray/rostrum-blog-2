@@ -1,0 +1,90 @@
+---
+title: "Text hex logos with {hext}"
+date: 2025-02-15
+slug: "turn-tables"
+categories:
+  - hext
+  - r
+---
+
+```
+  ________
+ /        \
+/    ⬡⬢    \
+\   hext   /
+ \________/
+```
+
+## tl;dr
+
+The [{hext} R package](https://github.com/matt-dray/hext) helps you make text-based hex logos.
+
+## A simple mind
+
+Call me a normie, but I am an R-hex-logo enjoyer. 
+
+I took a step further last year to create my own (limited) hex-making package, [{gex}](https://github.com/matt-dray/gex), which I've [written about](https://www.rostrum.blog/posts/2025-02-25-gex/) before[^craig].
+
+The goal of {gex} was to keep things simple: minimal dependencies, only grid graphics[^base].
+
+But I was too short-sighted. 
+I went simple, but _not simple enough_.
+
+## Big-brain simple minds
+
+It took Yihui's [return to blogging](https://yihui.org/en/2026/01/hello-world/) to remind me about the beauty of simplicity.
+
+His recent post struck a chord: [bye, hex stickers](https://yihui.org/en/2026/02/bye-stickers/).
+In particular, he made an entirely text-based hex logo for [{litedown}](https://github.com/yihui/litedown/blob/main/README.md), with Charlie Gao's [{secretbase}](https://github.com/shikokuchuo/secretbase/blob/main/README.md)[^sb] also joining the text revolution.
+
+The spirit of {litedown} and {secretbase} is simplicity. 
+Their logos match this aesthetic.
+
+I feel like simplicity is a good goal in general.
+
+So, naturally, I have overengineered a simple thing to make it simple for you to not think about the complication behind such a simple thing.
+
+## Next: text hext
+
+[{hext}](https://github.com/matt-dray/hext) lets you write text-based logos.
+
+You could install like:
+
+```{r}
+#| eval: false
+pak::pak("matt-dray/hext")  # GitHub-only
+```
+
+There is only one function: `hext()`.
+(This is a feature, not a bug.)
+
+Hexes have four lines[^length] to which you can add text and specify alignment.
+
+```{r}
+hext::hext(
+  "keep", "it", "simple,", "silly",
+  "left", "centre", "right", "left"
+)
+```
+
+`hext()` handles character padding and line-length limits on your behalf.
+It tries its best with Unicode (like emoji), but rendering is hard.
+
+## Hexagone
+
+That's it, really.
+
+Think less, say less.
+
+### Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
+```
+</details>
+
+[^craig]: You know who you are, dear one-user-who-isn't-me
+[^sb]: See-also the namesake YouTube channel for sports videos. And documentaries about the history of slipping on banana peels.
+[^base]: The irony being that the original iteration—called {hexbase}—was even simpler. Dependency-free, in fact.
+[^length]: The community seems divided on the number of characters per row. Like Charlie, I have opted for 8-10-10-8, which gives a little extra character space, even if makes the hexagon look a little more plump.
