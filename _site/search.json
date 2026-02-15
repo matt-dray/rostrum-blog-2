@@ -11043,7 +11043,7 @@
     "href": "posts/2026-02-15-hext/index.html#a-simple-mind",
     "title": "Text hex logos with {hext}",
     "section": "A simple mind",
-    "text": "A simple mind\nCall me a normie, but I am an R-hex-logo enjoyer.\nI took a step further last year to create my own (limited) hex-making package, {gex}, which I’ve written about before1.\nThe goal of {gex} was to keep things simple: minimal dependencies, only grid graphics2.\nBut I was too short-sighted. I went simple, but not simple enough."
+    "text": "A simple mind\nCall me a normie, but I am an R-hex-logo enjoyer.\nI took a step further last year to create my own (limited) hex-making package, {gex}, which I’ve written about before1.\nThe goal of {gex} was to keep things simple: minimal dependencies, only grid graphics2.\nBut I was too short-sighted, too small-brained. I went simple, but not simple enough."
   },
   {
     "objectID": "posts/2026-02-15-hext/index.html#big-brain-simple-minds",
@@ -11057,20 +11057,27 @@
     "href": "posts/2026-02-15-hext/index.html#next-text-hext",
     "title": "Text hex logos with {hext}",
     "section": "Next: text hext",
-    "text": "Next: text hext\n{hext} lets you write text-based logos.\nYou could install like:\n\npak::pak(\"matt-dray/hext\")  # GitHub-only\n\nThere is only one function: hext(). (This is a feature, not a bug.)\nHexes have four lines4 to which you can add text and specify alignment.\n\nhext::hext(\n  \"keep\", \"it\", \"simple,\", \"silly\",\n  \"left\", \"centre\", \"right\", \"left\"\n)\n\n  ________\n /keep    \\\n/    it    \\\n\\   simple,/\n \\silly___/\n\n\nhext() handles character padding and line-length limits on your behalf. It tries its best with Unicode (like emoji), but rendering is hard."
+    "text": "Next: text hext\n{hext} lets you write text-based logos.\nYou could install like:\n\npak::pak(\"matt-dray/hext\")  # GitHub-only\n\nThere is only one function: hext(). (This is a feature, not a bug.)\nHexes have four lines4 to which you can add text and specify alignment.\n\nhext::hext(\n  \"keep\", \"it\", \"simple,\", \"silly\",\n  \"left\", \"centre\", \"right\", \"left\"\n)\n\n  ________\n /keep    \\\n/    it    \\\n\\   simple,/\n \\silly___/\n\n\nhext() handles character padding and line-length limits on your behalf. It tries its best with Unicode (like emoji), but rendering is hard.\nThat’s it, really."
   },
   {
     "objectID": "posts/2026-02-15-hext/index.html#hexagone",
     "href": "posts/2026-02-15-hext/index.html#hexagone",
     "title": "Text hex logos with {hext}",
     "section": "Hexagone",
-    "text": "Hexagone\nThat’s it, really.\nThink less, say less."
+    "text": "Hexagone\nThink less, say less."
   },
   {
     "objectID": "posts/2026-02-15-hext/index.html#footnotes",
     "href": "posts/2026-02-15-hext/index.html#footnotes",
     "title": "Text hex logos with {hext}",
     "section": "Footnotes",
-    "text": "Footnotes\n\n\nYou know who you are, dear one-user-who-isn’t-me↩︎\nThe irony being that the original iteration—called {hexbase}—was even simpler. Dependency-free, in fact.↩︎\nSee-also the namesake YouTube channel for sports videos. And documentaries about the history of slipping on banana peels.↩︎\nThe community seems divided on the number of characters per row. Like Charlie, I have opted for 8-10-10-8, which gives a little extra character space, even if makes the hexagon look a little more plump.↩︎"
+    "text": "Footnotes\n\n\nYou know who you are, dear one-user-who-isn’t-me↩︎\nThe irony being that the original iteration—called {hexbase}—was even simpler. Dependency-free, in fact.↩︎\nSee-also the namesake YouTube channel for sports videos. And documentaries about the history of slipping on banana peels.↩︎\nThe community seems divided on the number of characters per row. Like Charlie, I have opted for 8-10-10-8 top-to-bottom, which gives a little extra character space, even if makes the hexagon look a little more plump.↩︎"
+  },
+  {
+    "objectID": "posts/2026-02-15-hext/index.html#do-the-simple-things-well",
+    "href": "posts/2026-02-15-hext/index.html#do-the-simple-things-well",
+    "title": "Text hex logos with {hext}",
+    "section": "Do the simple things well",
+    "text": "Do the simple things well\nYihui recently said ‘bye, hex stickers’.\nIn his post he discussed an entirely text-based hex logo for {litedown}. Charlie Gao {secretbase}3 has also joined the text revolution.\nThe spirit of these packages is simplicity. Their logos match this aesthetic.\nSimplicity is a probably a good goal in general.\nSo, naturally, I have overengineered a simple thing to make it simple for you to not think about the complication behind such a simple thing."
   }
 ]
