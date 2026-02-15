@@ -10,7 +10,153 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Realised showerthoughts about R and Python mostly</description>
 <generator>quarto-1.8.27</generator>
-<lastBuildDate>Sun, 01 Feb 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 15 Feb 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Text hex logos with {hext}</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2026-02-15-hext/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<pre><code>  ________
+ /        \
+/    ⬡⬢    \
+\   hext   /
+ \________/</code></pre>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>The <a href="https://github.com/matt-dray/hext">{hext} R package</a> helps you make text-based hex logos.</p>
+</section>
+<section id="a-simple-mind" class="level2">
+<h2 class="anchored" data-anchor-id="a-simple-mind">A simple mind</h2>
+<p>Call me a normie, but I am an R-hex-logo enjoyer.</p>
+<p>I took a step further last year to create my own (limited) hex-making package, <a href="https://github.com/matt-dray/gex">{gex}</a>, which I’ve <a href="https://www.rostrum.blog/posts/2025-02-25-gex/">written about</a> before<sup>1</sup>.</p>
+<p>The goal of {gex} was to keep things simple: minimal dependencies, only grid graphics<sup>2</sup>.</p>
+<p>But I was too short-sighted, too small-brained. I went simple, but <em>not simple enough</em>.</p>
+</section>
+<section id="do-the-simple-things-well" class="level2">
+<h2 class="anchored" data-anchor-id="do-the-simple-things-well">Do the simple things well</h2>
+<p>Yihui recently said ‘<a href="https://yihui.org/en/2026/02/bye-stickers/">bye, hex stickers</a>’.</p>
+<p>In his post he discussed an entirely text-based hex logo for <a href="https://github.com/yihui/litedown/blob/main/README.md">{litedown}</a>. Charlie Gao <a href="https://github.com/shikokuchuo/secretbase/blob/main/README.md">{secretbase}</a><sup>3</sup> has also joined the text revolution.</p>
+<p>The spirit of these packages is simplicity. Their logos match this aesthetic.</p>
+<p>Simplicity is a probably a good goal in general.</p>
+<p>So, naturally, I have overengineered a simple thing to make it simple for you to not think about the complication behind such a simple thing.</p>
+</section>
+<section id="next-text-hext" class="level2">
+<h2 class="anchored" data-anchor-id="next-text-hext">Next: text hext</h2>
+<p><a href="https://github.com/matt-dray/hext">{hext}</a> lets you write text-based logos.</p>
+<p>You could install like:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">pak<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pak</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"matt-dray/hext"</span>)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># GitHub-only</span></span></code></pre></div></div>
+</div>
+<p>There is only one function: <code>hext()</code>. (This is a feature, not a bug.)</p>
+<p>Hexes have four lines<sup>4</sup> to which you can add text and specify alignment.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">hext<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">hext</span>(</span>
+<span id="cb3-2">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"keep"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"it"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"simple,"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"silly"</span>,</span>
+<span id="cb3-3">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"left"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"centre"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"right"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"left"</span></span>
+<span id="cb3-4">)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ________
+ /keep    \
+/    it    \
+\   simple,/
+ \silly___/</code></pre>
+</div>
+</div>
+<p><code>hext()</code> handles character padding and line-length limits on your behalf. It tries its best with Unicode (like emoji), but rendering is hard.</p>
+<p>That’s it, really.</p>
+</section>
+<section id="hexagone" class="level2">
+<h2 class="anchored" data-anchor-id="hexagone">Hexagone</h2>
+<p>Think less, say less.</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2026-02-15 23:56:55 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.5.1 (2025-06-13)
+Platform: aarch64-apple-darwin20
+Running under: macOS Sequoia 15.6.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.4 compiler_4.5.1    fastmap_1.2.0     cli_3.6.5        
+ [5] tools_4.5.1       htmltools_0.5.8.1 yaml_2.3.10       stringi_1.8.7    
+ [9] rmarkdown_2.29    knitr_1.50        jsonlite_2.0.0    xfun_0.52        
+[13] digest_0.6.37     rlang_1.1.6       hext_0.1.0        evaluate_1.0.4   </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>You know who you are, dear one-user-who-isn’t-me↩︎</p></li>
+<li id="fn2"><p>The irony being that the original iteration—called {hexbase}—was even simpler. Dependency-free, in fact.↩︎</p></li>
+<li id="fn3"><p>See-also the namesake YouTube channel for sports videos. And documentaries about the history of slipping on banana peels.↩︎</p></li>
+<li id="fn4"><p>The community seems divided on the number of characters per row. Like Charlie, I have opted for 8-10-10-8 top-to-bottom, which gives a little extra character space, even if makes the hexagon look a little more plump.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
+  <category>hext</category>
+  <category>r</category>
+  <guid>https://www.rostrum.blog/posts/2026-02-15-hext/</guid>
+  <pubDate>Sun, 15 Feb 2026 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>A roguelike-like with tyle</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -5762,146 +5908,6 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2024-03-26-assign-abstracts/</guid>
   <pubDate>Tue, 26 Mar 2024 00:00:00 GMT</pubDate>
-</item>
-<item>
-  <title>Sh*tty R help from sh*tty AI</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-03-15-ai-garbage/</link>
-  <description><![CDATA[ 
-
-
-
-
-<p><img src="https://www.rostrum.blog/posts/2024-03-15-ai-garbage/resources/beckhams.png" class="img-fluid" style="width:50.0%" data-fig.alt="Beckhams meme. Panels with Victoria then David. She says 'I wrote an R help website' and he responds 'be honest'. She says 'I am being honest' and he says 'really?'. She says 'well, I used AI to write an R help website and am shamelessly making money from innocent suckers as a result' and he says 'thank you'."></p>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>The rise of R ‘help’ websites written by AI is predatory and shameless. Things will only get worse.</p>
-</section>
-<section id="chatbottom-of-the-barrel" class="level2">
-<h2 class="anchored" data-anchor-id="chatbottom-of-the-barrel">Chatbottom of the barrel</h2>
-<p>Regular readers know this for sure: I’m not an R expert. I don’t just ‘know’ stuff. I’m DuckGoGoing ‘how to do x in r’ every 10 minutes.</p>
-<p>In doing this, I’ve noticed a trend that I want to complain about: I’ve found a few suspicious ‘help websites’ for R appearing high up the search rankings.</p>
-<p>Why ‘suspicious’? They’re clearly written with an AI tool. And they’re garbage. In content and ethics.</p>
-<p>I’m absolutely not going to name websites here because I do not want to send any traffic there.</p>
-</section>
-<section id="taking-you-for-a-sucker" class="level2">
-<h2 class="anchored" data-anchor-id="taking-you-for-a-sucker">Taking you for a sucker</h2>
-<p>Here’s where they excel. They:</p>
-<ul>
-<li>use your gullibility to make money</li>
-<li>are brazen</li>
-<li>have excellent SEO (<a href="https://en.wikipedia.org/wiki/Search_engine_optimization">search-engine optimisation</a>)</li>
-</ul>
-<section id="gullibility" class="level3">
-<h3 class="anchored" data-anchor-id="gullibility">Gullibility</h3>
-<p>You might be thinking ‘okay, but maybe this is an efficient way of helping people’. To which the obvious retort is ‘okay, no, this is an efficient way to make money by exploiting the clicks of vulnerable learners with low-quality, harmful content’.</p>
-<p>How? At least one of these sites suggests it has ‘partners’, which are clearly just affiliate links. They will make a commission if their visitors sign up for a course at the affiliate link.</p>
-<p>Reputable companies know they need good product to help drive sales. But the KPI for these fake sites is purely conversions, not ‘people helped’.</p>
-</section>
-<section id="brazenness" class="level3">
-<h3 class="anchored" data-anchor-id="brazenness">Brazenness</h3>
-<p>These sites seem to have tens (hundreds?) of help pages published on the same day without any attribution to a particular human. Either they have some very efficient staff or they assume no-one will check.</p>
-<p>One website includes a ‘package guide’ for every package on CRAN. Wow! But you guessed it: these pages exist only to pad out the site. In this case, each of the 20,000 ‘guides’ was the same AI-generated content, but with the name of the package changed each time. Of course, there are affiliate links at the bottom of each one.</p>
-<p>Perhaps most brazen is the poor attention to detail. At least one of these sites retains the sentence:</p>
-<blockquote class="blockquote">
-<p>Certainly! Here are the two sections for adding <affiliate> and <affiliate> to your webpage:</affiliate></affiliate></p>
-</blockquote>
-<p>Clearly someone has asked a chatbot for some text and it has obliged. And then they forgot to delete this telltale line from the output before pasting it into their website, lol.</p>
-</section>
-<section id="seo" class="level3">
-<h3 class="anchored" data-anchor-id="seo">SEO</h3>
-<p>In some cases I found links to these sites as the top search result for fairly generic R queries. Naturally, people will just click the top search results willy-nilly. These must be the best sites if they’re top of the rankings, right?</p>
-<p>But no. Google is, of course, gameable as heck and you can be manipulated for clicks with <a href="https://en.wikipedia.org/wiki/Search_engine_optimization">search-engine optimisation</a> (SEO) hacks.</p>
-<p>These sites haven’t ‘earned’ their ranking by producing high-quality advice. They’re not there because other people are linking to them as a mark of endorsement.</p>
-</section>
-</section>
-<section id="why-this-sucks" class="level2">
-<h2 class="anchored" data-anchor-id="why-this-sucks">Why this sucks</h2>
-<p>Feels obvious that this garbage is harmful, but for the benefit of the doubt, my concerns are as follows:</p>
-<ol type="1">
-<li>Who are they stealing from?</li>
-<li>How much of the code is hallucinatory?</li>
-<li>Is this ruining learners’ understanding?</li>
-</ol>
-<p>It’s pretty common knowledge that many AIs are trained on data without the consent of original creators. How much content on these pages is stolen from people without their consent? Maybe it slurped up some of <em>your</em> material against your will.</p>
-<p>These sites also have code where the examples literally cannot be run; the syntax cannot be evaluated if copy-pasted into an R terminal. At least one of these sites was offering advice for {ggplot2} without ever showing an example plot.</p>
-<p>I’ve been searching the internet for R-related stuff<sup>1</sup> for many years and can separate the wheat from the chaff, I reckon. But not everyone can. How can a beginner user know what’s wrong if they copy and paste trash from a shameless website like this?</p>
-</section>
-<section id="suck-it-up" class="level2">
-<h2 class="anchored" data-anchor-id="suck-it-up">Suck it up</h2>
-<p>Bottom line: this is scummy.</p>
-<p>I’m asking that you take two seconds to think ‘could this be a fake website?’ Consider the telltale signs:</p>
-<ul>
-<li>suspicious wording and accidentally-undeleted verbiage copied from the output of an LLM (large language model) query</li>
-<li>obvious links to affiliate sites</li>
-<li>code that doesn’t run when you copy it to your machine</li>
-<li>examples of code, but no output</li>
-<li>crappy AI-generated images that fill space (probably <a href="https://en.wikipedia.org/wiki/Corporate_Memphis">Corporate-Memphis-style</a> abominations showing a generic 30-something white guy at a computer who is probably called Matt<sup>2</sup>)</li>
-</ul>
-<p>Maybe I don’t need to warn you about this. It’s 2024. I grew up in a slower-paced learning environment of floppies and CD ROMs. Times have changed. You’re smart.</p>
-<p>Don’t patronise these sites by clicking affiliate links; patronise them with condescension. It’s all we can do.</p>
-<div class="tip">
-<p> <b>Note</b></p>
-<p>There’s a more proactive step you can take to avoid irritant sites: <a href="https://mstdn.ca/@Jason2357/112123727753434112">Jason suggested on Mastodon</a> to create a custom search of R-related domains that you trust.</p>
-</div>
-<div class="tip">
-<p> <b>Note</b></p>
-<p>James (<a href="https://quarto-webr.thecoatlessprofessor.com/">of quarto-webr fame</a>) has created <a href="https://r-pkg.thecoatlessprofessor.com/searcher/">a package called {searcher}</a> that lets you submit queries from the R console to a variety of search engines. It includes <code>search_rseek()</code> so you can search R-specific sites via <a href="https://rseek.org/">rseek.org</a>.</p>
-</div>
-
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-03-27 16:46:50 GMT</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.2        
- [5] tools_4.3.1       htmltools_0.5.6.1 rstudioapi_0.15.0 yaml_2.3.8       
- [9] rmarkdown_2.25    knitr_1.45        jsonlite_1.8.7    xfun_0.41        
-[13] digest_0.6.33     rlang_1.1.3       fontawesome_0.5.2 evaluate_0.23    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>Although putting ‘r’ in your search terms often ends up with links to subreddits. Do try to avoid being sucked down an r/ProgrammerHumor black hole.↩︎</p></li>
-<li id="fn2"><p>I can say this because it’s my exact description.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>ai</category>
-  <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2024-03-15-ai-garbage/</guid>
-  <pubDate>Fri, 15 Mar 2024 00:00:00 GMT</pubDate>
-  <media:content url="https://www.rostrum.blog/posts/2024-03-15-ai-garbage/resources/beckhams.png" medium="image" type="image/png" height="178" width="144"/>
 </item>
 </channel>
 </rss>
