@@ -10,7 +10,153 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Realised showerthoughts about R and Python mostly</description>
 <generator>quarto-1.8.27</generator>
-<lastBuildDate>Sun, 01 Feb 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 15 Feb 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Text hex logos with {hext}</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2026-02-15-hext/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<pre><code>  ________
+ /        \
+/    ⬡⬢    \
+\   hext   /
+ \________/</code></pre>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>The <a href="https://github.com/matt-dray/hext">{hext} R package</a> helps you make text-based hex logos.</p>
+</section>
+<section id="a-simple-mind" class="level2">
+<h2 class="anchored" data-anchor-id="a-simple-mind">A simple mind</h2>
+<p>Call me a normie, but I am an R-hex-logo enjoyer.</p>
+<p>I took a step further last year to create my own (limited) hex-making package, <a href="https://github.com/matt-dray/gex">{gex}</a>, which I’ve <a href="https://www.rostrum.blog/posts/2025-02-25-gex/">written about</a> before<sup>1</sup>.</p>
+<p>The goal of {gex} was to keep things simple: minimal dependencies, only grid graphics<sup>2</sup>.</p>
+<p>But I was too short-sighted. I went simple, but <em>not simple enough</em>.</p>
+</section>
+<section id="big-brain-simple-minds" class="level2">
+<h2 class="anchored" data-anchor-id="big-brain-simple-minds">Big-brain simple minds</h2>
+<p>It took Yihui’s <a href="https://yihui.org/en/2026/01/hello-world/">return to blogging</a> to remind me about the beauty of simplicity.</p>
+<p>His recent post struck a chord: <a href="https://yihui.org/en/2026/02/bye-stickers/">bye, hex stickers</a>. In particular, he made an entirely text-based hex logo for <a href="https://github.com/yihui/litedown/blob/main/README.md">{litedown}</a>, with Charlie Gao’s <a href="https://github.com/shikokuchuo/secretbase/blob/main/README.md">{secretbase}</a><sup>3</sup> also joining the text revolution.</p>
+<p>The spirit of {litedown} and {secretbase} is simplicity. Their logos match this aesthetic.</p>
+<p>I feel like simplicity is a good goal in general.</p>
+<p>So, naturally, I have overengineered a simple thing to make it simple for you to not think about the complication behind such a simple thing.</p>
+</section>
+<section id="next-text-hext" class="level2">
+<h2 class="anchored" data-anchor-id="next-text-hext">Next: text hext</h2>
+<p><a href="https://github.com/matt-dray/hext">{hext}</a> lets you write text-based logos.</p>
+<p>You could install like:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">pak<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">pak</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"matt-dray/hext"</span>)  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># GitHub-only</span></span></code></pre></div></div>
+</div>
+<p>There is only one function: <code>hext()</code>. (This is a feature, not a bug.)</p>
+<p>Hexes have four lines<sup>4</sup> to which you can add text and specify alignment.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">hext<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">hext</span>(</span>
+<span id="cb3-2">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"keep"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"it"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"simple,"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"silly"</span>,</span>
+<span id="cb3-3">  <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"left"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"centre"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"right"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"left"</span></span>
+<span id="cb3-4">)</span></code></pre></div></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  ________
+ /keep    \
+/    it    \
+\   simple,/
+ \silly___/</code></pre>
+</div>
+</div>
+<p><code>hext()</code> handles character padding and line-length limits on your behalf. It tries its best with Unicode (like emoji), but rendering is hard.</p>
+</section>
+<section id="hexagone" class="level2">
+<h2 class="anchored" data-anchor-id="hexagone">Hexagone</h2>
+<p>That’s it, really.</p>
+<p>Think less, say less.</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2026-02-15 23:49:05 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.5.1 (2025-06-13)
+Platform: aarch64-apple-darwin20
+Running under: macOS Sequoia 15.6.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.4 compiler_4.5.1    fastmap_1.2.0     cli_3.6.5        
+ [5] tools_4.5.1       htmltools_0.5.8.1 yaml_2.3.10       stringi_1.8.7    
+ [9] rmarkdown_2.29    knitr_1.50        jsonlite_2.0.0    xfun_0.52        
+[13] digest_0.6.37     rlang_1.1.6       hext_0.1.0        evaluate_1.0.4   </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>You know who you are, dear one-user-who-isn’t-me↩︎</p></li>
+<li id="fn2"><p>The irony being that the original iteration—called {hexbase}—was even simpler. Dependency-free, in fact.↩︎</p></li>
+<li id="fn3"><p>See-also the namesake YouTube channel for sports videos. And documentaries about the history of slipping on banana peels.↩︎</p></li>
+<li id="fn4"><p>The community seems divided on the number of characters per row. Like Charlie, I have opted for 8-10-10-8, which gives a little extra character space, even if makes the hexagon look a little more plump.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
+  <category>hext</category>
+  <category>r</category>
+  <guid>https://www.rostrum.blog/posts/2026-02-15-hext/</guid>
+  <pubDate>Sun, 15 Feb 2026 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>A roguelike-like with tyle</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -2583,152 +2729,6 @@ loaded via a namespace (and not attached):
   <guid>https://www.rostrum.blog/posts/2025-02-25-gex/</guid>
   <pubDate>Tue, 25 Feb 2025 00:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-02-25-gex/resources/logo.png" medium="image" type="image/png" height="167" width="144"/>
-</item>
-<item>
-  <title>Text hex logos with {hext}</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2026-02-15-hext/</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<pre><code>  ________
- /        \
-/    ⬡⬢    \
-\   hext   /
- \________/</code></pre>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>The <a href="https://github.com/matt-dray/hext">{hext} R package</a> helps you make text-based hex logos.</p>
-</section>
-<section id="a-simple-mind" class="level2">
-<h2 class="anchored" data-anchor-id="a-simple-mind">A simple mind</h2>
-<p>Call me a normie, but I am an R-hex-logo enjoyer.</p>
-<p>I took a step further last year to create my own (limited) hex-making package, <a href="https://github.com/matt-dray/gex">{gex}</a>, which I’ve <a href="https://www.rostrum.blog/posts/2025-02-25-gex/">written about</a> before<sup>1</sup>.</p>
-<p>The goal of {gex} was to keep things simple: minimal dependencies, only grid graphics<sup>2</sup>.</p>
-<p>But I was too short-sighted. I went simple, but <em>not simple enough</em>.</p>
-</section>
-<section id="big-brain-simple-minds" class="level2">
-<h2 class="anchored" data-anchor-id="big-brain-simple-minds">Big-brain simple minds</h2>
-<p>It took Yihui’s <a href="https://yihui.org/en/2026/01/hello-world/">return to blogging</a> to remind me about the beauty of simplicity.</p>
-<p>His recent post struck a chord: <a href="https://yihui.org/en/2026/02/bye-stickers/">bye, hex stickers</a>. In particular, he made an entirely text-based hex logo for <a href="https://github.com/yihui/litedown/blob/main/README.md">{litedown}</a>, with Charlie Gao’s <a href="https://github.com/shikokuchuo/secretbase/blob/main/README.md">{secretbase}</a><sup>3</sup> also joining the text revolution.</p>
-<p>The spirit of {litedown} and {secretbase} is simplicity. Their logos match this aesthetic.</p>
-<p>I feel like simplicity is a good goal in general.</p>
-<p>So, naturally, I have overengineered a simple thing to make it simple for you to not think about the complication behind such a simple thing.</p>
-</section>
-<section id="next-text-hext" class="level2">
-<h2 class="anchored" data-anchor-id="next-text-hext">Next: text hext</h2>
-<p><a href="https://github.com/matt-dray/hext">{hext}</a> lets you write text-based logos.</p>
-<p>You could install like:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">pak<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">pak</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"matt-dray/hext"</span>)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># GitHub-only</span></span></code></pre></div></div>
-</div>
-<p>There is only one function: <code>hext()</code>. (This is a feature, not a bug.)</p>
-<p>Hexes have four lines<sup>4</sup> to which you can add text and specify alignment.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">hext<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">hext</span>(</span>
-<span id="cb3-2">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"keep"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"it"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"simple,"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"silly"</span>,</span>
-<span id="cb3-3">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"left"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"centre"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"right"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"left"</span></span>
-<span id="cb3-4">)</span></code></pre></div></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  ________
- /keep    \
-/    it    \
-\   simple,/
- \silly___/</code></pre>
-</div>
-</div>
-<p><code>hext()</code> handles character padding and line-length limits on your behalf. It tries its best with Unicode (like emoji), but rendering is hard.</p>
-</section>
-<section id="hexagone" class="level2">
-<h2 class="anchored" data-anchor-id="hexagone">Hexagone</h2>
-<p>That’s it, really.</p>
-<p>Think less, say less.</p>
-
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2026-02-15 23:43:14 GMT</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.5.1 (2025-06-13)
-Platform: aarch64-apple-darwin20
-Running under: macOS Sequoia 15.6.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.4 compiler_4.5.1    fastmap_1.2.0     cli_3.6.5        
- [5] tools_4.5.1       htmltools_0.5.8.1 yaml_2.3.10       stringi_1.8.7    
- [9] rmarkdown_2.29    knitr_1.50        jsonlite_2.0.0    xfun_0.52        
-[13] digest_0.6.37     rlang_1.1.6       hext_0.1.0        evaluate_1.0.4   </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>You know who you are, dear one-user-who-isn’t-me↩︎</p></li>
-<li id="fn2"><p>The irony being that the original iteration—called {hexbase}—was even simpler. Dependency-free, in fact.↩︎</p></li>
-<li id="fn3"><p>See-also the namesake YouTube channel for sports videos. And documentaries about the history of slipping on banana peels.↩︎</p></li>
-<li id="fn4"><p>The community seems divided on the number of characters per row. Like Charlie, I have opted for 8-10-10-8, which gives a little extra character space, even if makes the hexagon look a little more plump.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
-  <category>hext</category>
-  <category>r</category>
-  <guid>https://www.rostrum.blog/posts/2026-02-15-hext/</guid>
-  <pubDate>Sat, 15 Feb 2025 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Dependency-free hex stickers with {hexbase}</title>
