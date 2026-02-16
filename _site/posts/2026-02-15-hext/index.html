@@ -223,7 +223,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="do-the-simple-things-well" class="level2">
 <h2 class="anchored" data-anchor-id="do-the-simple-things-well">Do the simple things well</h2>
 <p>Yihui recently said ‘<a href="https://yihui.org/en/2026/02/bye-stickers/">bye, hex stickers</a>’.</p>
-<p>In his post he discussed an entirely text-based hex logo for <a href="https://github.com/yihui/litedown/blob/main/README.md">{litedown}</a>. Charlie Gao <a href="https://github.com/shikokuchuo/secretbase/blob/main/README.md">{secretbase}</a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> has also joined the text revolution.</p>
+<p>In his post he discussed an entirely text-based hex logo for <a href="https://github.com/yihui/litedown/blob/main/README.md">{litedown}</a>. Charlie Gao’s <a href="https://github.com/shikokuchuo/secretbase/blob/main/README.md">{secretbase}</a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> has also joined the text revolution.</p>
 <p>The spirit of these packages is simplicity. Their logos match this aesthetic.</p>
 <p>Simplicity is a probably a good goal in general.</p>
 <p>So, naturally, I have overengineered a simple thing to make it simple for you to not think about the complication behind such a simple thing.</p>
@@ -250,7 +250,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  \silly___/</code></pre>
 </div>
 </div>
-<p><code>hext()</code> handles character padding and line-length limits on your behalf. It tries its best with Unicode (like emoji), but rendering is hard.</p>
+<p><code>hext()</code> handles character padding and line-length limits on your behalf. It tries its best with Unicode (like emoji)<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, but rendering is hard.</p>
 <p>That’s it, really.</p>
 </section>
 <section id="hexagone" class="level2">
@@ -268,7 +268,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2026-02-16 10:37:06 GMT</code></pre>
+<pre><code>Last rendered: 2026-02-16 12:23:35 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.5.1 (2025-06-13)
@@ -305,6 +305,7 @@ loaded via a namespace (and not attached):
 <li id="fn2"><p>The irony being that the original iteration—called {hexbase}—was even simpler. Dependency-free, in fact.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn3"><p>See-also the namesake YouTube channel for sports videos. And documentaries about the history of slipping on banana peels.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn4"><p>The community seems divided on the number of characters per row. Like Charlie, I have opted for 8-10-10-8 top-to-bottom, which gives a little extra character space, even if makes the hexagon look a little more plump.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>This works via <code>nchar(x, type = "width")</code> (or <code>stringri::stri_width()</code> if you have {stringi} installed), rather than the default <code>nchar(x, type = "chars")</code>. The smiley emoji has a width of <code>2</code>, but is <code>1</code> character long, for example. Obviously this impacts the whitespace padding that <code>hext()</code> needs to apply. If this is bothersome, you can use the argument <code>count_type</code> in <code>hext()</code> to switch between these counting modes.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
