@@ -10,8 +10,8 @@ categories:
 ```
   ________
  /        \
-/    ⬡⬢    \
-\   hext   /
+/   he     \
+\     xt   /
  \________/
 ```
 
@@ -50,6 +50,7 @@ So, naturally, I have overengineered a simple thing to make it simple for you to
 You could install like:
 
 ```{r}
+#| label: install-hext
 #| eval: false
 pak::pak("matt-dray/hext")  # GitHub-only
 ```
@@ -60,6 +61,7 @@ There is only one function: `hext()`.
 Hexes have four lines[^length] to which you can add text and specify alignment.
 
 ```{r}
+#| label: hext-example
 hext::hext(
   "keep", "it", "simple,", "silly",
   "left", "centre", "right", "left"
