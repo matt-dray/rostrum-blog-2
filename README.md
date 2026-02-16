@@ -21,13 +21,13 @@ showerthoughts about R and Python, mostly.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 190 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2026-02-01 (latest).
+🔢 There have been 191 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2026-02-15 (latest).
 
 📅 That’s a post roughly every 15 days, or about 2 posts per month.
 
-🆕 The latest post: [A roguelike-like with
-tyle](https://www.rostrum.blog/posts/2026-02-01-tyle)
+🆕 The latest post: [Text hex logos with
+{hext}](https://www.rostrum.blog/posts/2026-02-15-hext)
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ tyle](https://www.rostrum.blog/posts/2026-02-01-tyle)
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 191 | 2026-02-15 | [Text hex logos with {hext}](https://www.rostrum.blog/posts/2026-02-15-hext)                                                   |
 | 190 | 2026-02-01 | [A roguelike-like with tyle](https://www.rostrum.blog/posts/2026-02-01-tyle)                                                   |
 | 189 | 2025-12-28 | [Correcting a fib about jot](https://www.rostrum.blog/posts/2025-12-28-jot-fib)                                                |
 | 188 | 2025-11-30 | [How the tables turned](https://www.rostrum.blog/posts/2025-11-30-turn-tables)                                                 |
@@ -236,4 +237,4 @@ tyle](https://www.rostrum.blog/posts/2026-02-01-tyle)
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2026-02-05 at 14:03.
+🕒 Last updated: 2026-02-16 at 12:30.
