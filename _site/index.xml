@@ -47,7 +47,7 @@
 <p>But a CLI for what?</p>
 <p>My colleagues and I have enjoyed twee weather CLIs of late, like <a href="https://github.com/Veirt/weathr">weathr</a> and <a href="https://github.com/chubin/wttr.in">wttr.in</a>.</p>
 <p>So, because I have no imagination: introducing the concept <a href="https://github.com/matt-dray/weva/">{weva}</a> R package (‘wevvah’<sup>2</sup>).</p>
-<p>It does way less than those other examples and doesn’t have fun ASCII graphics. It’s just a simple toy project to see how {Rapp} works, with no guarantees.</p>
+<p>It does way less than those other examples and doesn’t have fun ASCII graphics. It’s just a simple toy project to see how {Rapp} works, with no guarantees. Is that enough disclaimers?</p>
 <p>This was made possible by:</p>
 <ul>
 <li>the free APIs <a href="https://open-meteo.com/">Open-Meteo</a> and <a href="https://postcodes.io/">postcodes.io</a></li>
@@ -83,7 +83,7 @@ font-style: inherit;">weva</span> tr197aa</span></code></pre></div></div>
 background-color: null;
 font-style: inherit;">weva</span> kw14yr</span></code></pre></div></div>
 <pre><code>now 6.1°C ☁️ | +1h 6.3°C 🌧️🪶 </code></pre>
-<p>The mini display tells you the current and future temperature and weather. There are emoji modifiers for heavy, light and freezing versions of some weather types.</p>
+<p>The mini display has segments for the current and future temperature and weather. There are emoji modifiers for heavy, light and freezing versions of some weather types.</p>
 <p>Surprise, it’s early March in Britain.</p>
 <p>Hopefuly your day will be brightened by the styling with <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">ANSI escape codes</a>, assuming your terminal supports them.</p>
 <section id="options" class="level4">
@@ -97,7 +97,7 @@ font-style: inherit;">-h</span> 24</span></code></pre></div></div>
 <pre><code>now 10.9°C ☁️ | +24h 7.7°C 🌧️🪶 </code></pre>
 <p>So there’s light drizzle this time tomorrow and it will be cooler (did I mention it’s early March in Britain).</p>
 <p>Note that you can only look at forecasts up to the end of the day after tomorrow<sup>6</sup>.</p>
-<p>Use the <code>--extremes</code> (<code>-e</code>) flag to also print the low and high temperatures for today. You can compound these options.</p>
+<p>Use the <code>--extremes</code> (<code>-e</code>) flag to also print a segment with today’s low and high temperatures. You can compound these options.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">weva</span> tr197aa <span class="at" style="color: #657422;
@@ -106,7 +106,7 @@ font-style: inherit;">-h</span> 24 <span class="at" style="color: #657422;
 background-color: null;
 font-style: inherit;">-e</span></span></code></pre></div></div>
 <pre><code>now 10.9°C ☁️ | +24h 7.7°C 🌧️🪶 | today 9.3°C to 12°C </code></pre>
-<p>Wow, such variety.</p>
+<p>Well, ‘extremes’ is perhaps a bit extreme for this termperature range.</p>
 </section>
 <section id="time-is-hard" class="level4">
 <h4 class="anchored" data-anchor-id="time-is-hard">Time is hard</h4>
@@ -205,7 +205,7 @@ background-color: null;
 font-style: inherit;">cat</span>()</span></code></pre></div></div>
 <p>Note in this file:</p>
 <ul>
-<li>the shebang (<code>#!</code>), which gives the path to where {Rapp} is installed</li>
+<li>the <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> (<code>#!</code>)<sup>7</sup>, which gives the path to where {Rapp} is installed</li>
 <li>the hashpipes (<code>#|</code>) for documenting our variables</li>
 <li>that everything else is normal R code</li>
 </ul>
@@ -237,14 +237,14 @@ Options:
 Arguments:
   &lt;POSTCODE&gt;  A UK postcode</code></pre>
 <p>In short, {Rapp} lets you write ‘normal’ looking R code that gets interpreted into a CLI with various types of options.</p>
-<p>That’s quite a neat, low-effort way to create a CLI</p>
+<p>That’s quite a neat, low-effort way to create a CLI.</p>
 </section>
 <section id="the-here-and-now" class="level2">
 <h2 class="anchored" data-anchor-id="the-here-and-now">The here and now</h2>
-<p>{weva} is very limited and opinionated with little attention to proper request-handling and testing. Your kilometreage may vary<sup>7</sup>.</p>
+<p>{weva} is very limited and opinionated with little attention to proper request-handling and testing. Your kilometreage may vary<sup>8</sup>.</p>
 <p>It would be easy to get carried away and build something even more complex. I’ve achieved the content and learning I wanted, so I stop here.</p>
-<p>In fact, I already used this tool yesterday before a trip outside. I discovered the day was going to be overcast with some showers. Who could have guessed?</p>
-<p>Reminds me of <a href="https://github.com/francisbarton">Fran</a>’s observation when faced with differing forecasts:</p>
+<p>In fact, I already used this tool yesterday before a trip <em>outside</em><sup>9</sup>. I discovered the day was going to be overcast with some showers. Who could have guessed?</p>
+<p>But on more variable days, I’m reminded of <a href="https://github.com/francisbarton">Fran</a>’s observation when faced with differing forecasts:</p>
 <blockquote class="blockquote">
 <p>I had better go outside and see who’s right</p>
 </blockquote>
@@ -261,7 +261,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2026-03-01 11:45:27 GMT</code></pre>
+<pre><code>Last rendered: 2026-03-01 12:05:06 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.5.2 (2025-10-31)
@@ -299,8 +299,10 @@ loaded via a namespace (and not attached):
 <li id="fn3"><p>Remember: you shouldn’t trust ‘some dude’ telling you to install random stuff from the internet.↩︎</p></li>
 <li id="fn4"><p>For my purposes I don’t care about weather anywhere except in the UK. I’m more likely to know the postcode than latitude-longitude, so I’m happy to limit the tool in this way.↩︎</p></li>
 <li id="fn5"><p>Actually these postcodes are for the First &amp; Last House pub and the John o’Groats brewery.↩︎</p></li>
-<li id="fn6"><p>We don’t need to forecast beyond that, becuase we know the weather’s going to be <a href="https://en.wikipedia.org/wiki/The_Day_After_Tomorrow">really dicey and unpredictable</a>.↩︎</p></li>
-<li id="fn7"><p>This is becoming a catch-phrase of this blog, along with ‘this does what I need to do’.↩︎</p></li>
+<li id="fn6"><p>We don’t need to forecast beyond that, because we know the weather’s going to be <a href="https://en.wikipedia.org/wiki/The_Day_After_Tomorrow">really dicey and unpredictable</a>.↩︎</p></li>
+<li id="fn7"><p><a href="https://en.wikipedia.org/wiki/She_Bangs">Important disambiguation</a>.↩︎</p></li>
+<li id="fn8"><p>This is becoming a catch-phrase of this blog, along with ‘this does what I need to do’.↩︎</p></li>
+<li id="fn9"><p>Amusingly, given my time-related pains in {weva}, we went to <a href="https://en.wikipedia.org/wiki/Prime_meridian_(Greenwich)">Greenwich</a>.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
   <category>api</category>
