@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Matt Dray">
-<meta name="dcterms.date" content="2025-08-30">
+<meta name="dcterms.date" content="2026-03-01">
 
-<title>Keeping jot’s options open – rostrum.blog</title>
+<title>A tiny CLI weather {Rapp}ort – rostrum.blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -108,18 +108,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../../styles.css">
-<meta property="og:title" content="Keeping jot’s options open – rostrum.blog">
+<meta property="og:title" content="A tiny CLI weather {Rapp}ort – rostrum.blog">
 <meta property="og:description" content="Realised showerthoughts about R and Python mostly">
-<meta property="og:image" content="https://www.rostrum.blog/posts/2025-08-30-jot-options/resources/jot.png">
+<meta property="og:image" content="https://www.rostrum.blog/posts/2026-03-01-weva/resources/weva.png">
 <meta property="og:site_name" content="rostrum.blog">
-<meta property="og:image:height" content="474">
-<meta property="og:image:width" content="568">
-<meta name="twitter:title" content="Keeping jot’s options open – rostrum.blog">
+<meta property="og:image:alt" content="A screenshot of a terminal that's running the comand 'weva tr197aa -h 24 -e', which returns a one-line weather report with temperature and weather emojis for now and a day later, plus the temperature extreems for today. The temperature values are bold and coloured.">
+<meta property="og:image:height" content="106">
+<meta property="og:image:width" content="1332">
+<meta name="twitter:title" content="A tiny CLI weather {Rapp}ort – rostrum.blog">
 <meta name="twitter:description" content="Realised showerthoughts about R and Python mostly">
-<meta name="twitter:image" content="https://www.rostrum.blog/posts/2025-08-30-jot-options/resources/jot.png">
+<meta name="twitter:image" content="https://www.rostrum.blog/posts/2026-03-01-weva/resources/weva.png">
 <meta name="twitter:creator" content="@mattdray">
-<meta name="twitter:image-height" content="474">
-<meta name="twitter:image-width" content="568">
+<meta name="twitter:image:alt" content="A screenshot of a terminal that's running the comand 'weva tr197aa -h 24 -e', which returns a one-line weather report with temperature and weather emojis for now and a day later, plus the temperature extreems for today. The temperature values are bold and coloured.">
+<meta name="twitter:image-height" content="106">
+<meta name="twitter:image-width" content="1332">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -170,12 +172,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Keeping jot’s options open</h1>
+      <h1 class="title">A tiny CLI weather {Rapp}ort</h1>
                                 <div class="quarto-categories">
-                <div class="quarto-category">cli</div>
-                <div class="quarto-category">jot</div>
-                <div class="quarto-category">python</div>
-                <div class="quarto-category">uv</div>
+                <div class="quarto-category">api</div>
+                <div class="quarto-category">r</div>
+                <div class="quarto-category">weva</div>
               </div>
                   </div>
   </div>
@@ -193,7 +194,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">August 30, 2025</p>
+        <p class="date">March 1, 2026</p>
       </div>
     </div>
     
@@ -214,135 +215,150 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="resources/jot.png" class="img-fluid quarto-figure quarto-figure-left figure-img" alt="Terribly drawn image of the word 'jot' in cursive with a pencil at the end of the letter 't'.  The dot of the letter 'i' is a red love heart." width="200"></p>
+<p><img src="resources/weva.png" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:100.0%" alt="A screenshot of a terminal that's running the comand 'weva tr197aa -h 24 -e', which returns a one-line weather report with temperature and weather emojis for now and a day later, plus the temperature extreems for today. The temperature values are bold and coloured."></p>
 </figure>
 </div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I’ve added a small set of options to <a href="https://github.com/matt-dray/jot">jot</a>, my minimal opinionated Python command-line tool that helps me remember stuff.</p>
+<p>The <a href="https://github.com/matt-dray/weva">{weva} R package</a> contains a titchy, opinionated command-line interface (CLI) to present an opinionated micro-weather report.</p>
 </section>
-<section id="forget-me-jot" class="level2">
-<h2 class="anchored" data-anchor-id="forget-me-jot">Forget me jot</h2>
-<p>You may recall <a href="https://www.rostrum.blog/posts/2025-08-25-jot/">I made a Python CLI tool called jot</a> to help me record work tasks. I go to my terminal and type <code>jot "corrected a typo"</code> and it gets added to a simple text file with a timestamp.</p>
-<p>To give it a go, I recommend installing <a href="https://docs.astral.sh/uv/">uv</a> and then install <a href="https://github.com/matt-dray/jot">from GitHub</a> like <code>uv tool install git+https://github.com/matt-dray/jot</code>.</p>
+<section id="building-some-rapport" class="level2">
+<h2 class="anchored" data-anchor-id="building-some-rapport">Building some {Rapp}ort</h2>
+<p>I’ve been making little Python-CLI concepts recently:</p>
+<ul>
+<li><a href="https://www.rostrum.blog/posts/2025-08-25-jot/">jot</a> for recording notes</li>
+<li><a href="https://www.rostrum.blog/posts/2025-10-30-pet/">pet</a> for a persistent cyberpet</li>
+<li><a href="https://www.rostrum.blog/posts/2026-02-01-tyle/">tyle</a> for a roguelike-like</li>
+</ul>
+<p>I’ve been using Python mostly because it seems a better tool for the job than R<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>So I was pleased to see a recent <a href="https://tidyverse.org/blog/2026/02/rapp-0-3-0/">blog post</a> about a new release of <a href="https://cran.r-project.org/package=Rapp">{Rapp}</a>, an R package to help create CLIs.</p>
+<p>Given my interests, it seemed fitting to try it out.</p>
 </section>
-<section id="opt-in" class="level2">
-<h2 class="anchored" data-anchor-id="opt-in">Opt in</h2>
-<p>I’ve been using jot for the past couple of weeks and it’s helping me record things I would typically forget about. As a result, I’ve found it easier to unobscure ‘<a href="https://www.youtube.com/watch?v=HiF83i1OLOM">invisible work</a>’ and reflect on what I’ve achieved.</p>
-<p>But my list of jottings is getting harder to manage as it gets longer. There’s a couple of things that would make it easier for me: to be able to peek at the past few jottings and to search them for specific terms.</p>
-<p>So, I’ve added two options and will demonstrate them against some imaginary data:</p>
-<details>
-<summary>
-<code>breakfast-jot.txt</code>
-</summary>
-<pre><code>[2025-08-30 09:27] granola and yoghurt
-[2025-08-29 07:47] pancakes, blueberries and maple syrup
-[2025-08-28 08:00] fried egg on sourdough toast
-[2025-08-27 08:06] yoghurt and strawberries
-[2025-08-26 08:19] strawberry jam on toast
-[2025-08-25 08:52] wholemeal toast and poached eggs
-[2025-08-24 09:15] muesli and milk
-[2025-08-23 09:23] muesli with berries and milk
-[2025-08-22 08:13] hash browns and scrambled eggs
-[2025-08-21 07:48] granola and yoghurt
-[2025-08-20 07:54] cereal and milk</code></pre>
-<p>Believe me, my actual breakfast is more boring than this. Also sometimes I have a hobbitesque second breakfast.</p>
-</details>
-<p>Everything below is correct as of jot v0.2.3, but I may work to improve some features. Feel free to <a href="https://github.com/matt-dray/jot/issues">make suggestions</a> too.</p>
-<section id="list" class="level3">
-<h3 class="anchored" data-anchor-id="list">1. List</h3>
-<p>The first option is simple: print out the last <em>n</em> jottings. You can use the flag <code>--list</code>, or <code>-l</code> for short, and then provide an integer for the number of entries to show.</p>
-<p>So let’s print the most recent three entries:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> jot <span class="at">-l</span> 3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<pre><code>[2025-08-30 09:27] granola and yoghurt
-[2025-08-29 07:47] pancakes, blueberries and maple syrup
-[2025-08-28 08:00] fried egg on sourdough toast</code></pre>
-<p>This is handy for a quick peek at the last few things you’ve been doing.</p>
-<p>It reminds me of returning to games like <a href="https://en.wikipedia.org/wiki/Pok%C3%A9mon_FireRed_and_LeafGreen"><em>Pokémon FireRed</em></a> after some time away and being given a quick recap.</p>
-<div class="quarto-figure quarto-figure-left">
-<figure class="figure">
-<p><img src="resources/previously.png" class="img-fluid figure-img" alt="A greyscale screengrab of the game Pokemon FireRed showing a recap of what the player did before their last save. At the top it says 'previously on your quest'. At the bottom, 'here in Viridian City, Red obtained the item Oak's Parcel. In the centre is an image of the player's sprite in a Pokémart, facing the shopkeeper." width="300"></p>
-<figcaption><em>To collect parcels is my real test</em> (thanks <a href="https://www.reddit.com/r/pokemon/comments/f0m0ne/fire_redleaf_green_were_ahead_of_their_time/">Reddit user AIMWSTRN</a>).</figcaption>
-</figure>
-</div>
+<section id="climate" class="level2">
+<h2 class="anchored" data-anchor-id="climate">CLImate</h2>
+<p>But a CLI for what?</p>
+<p>My colleagues and I have enjoyed twee weather CLIs of late, like <a href="https://github.com/Veirt/weathr">weathr</a> and <a href="https://github.com/chubin/wttr.in">wttr.in</a>.</p>
+<p>So, because I have no imagination: introducing the concept <a href="https://github.com/matt-dray/weva/">{weva}</a> R package (‘wevvah’<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>).</p>
+<p>It does way less than those other examples and doesn’t have fun ASCII graphics. It’s just a simple toy project to see how {Rapp} works, with no guarantees.</p>
+<p>This was made possible by:</p>
+<ul>
+<li>the free APIs <a href="https://open-meteo.com/">Open-Meteo</a> and <a href="https://postcodes.io/">postcodes.io</a></li>
+<li><a href="https://cran.r-project.org/package=httr2">{httr2}</a>, <a href="https://cran.r-project.org/package=lubridate">{lubridate}</a> and <a href="https://cran.r-project.org/package=PostcodesioR">{PostcodesioR}</a></li>
+</ul>
+<section id="r-console" class="level3">
+<h3 class="anchored" data-anchor-id="r-console">R console</h3>
+<p>From the R console, you could install<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> it like:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pak<span class="sc">::</span><span class="fu">pak</span>(<span class="st">"matt-dray/weva"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Still in the R console, you can install the CLI:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>weva<span class="sc">::</span><span class="fu">install_cli</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>You’ll get a confirmation of where it’s been installed.</p>
 </section>
-<section id="search" class="level3">
-<h3 class="anchored" data-anchor-id="search">2. Search</h3>
-<p>The second option is also simple. But much more powerful. It lets you search for words and phrases, powered by <a href="https://docs.python.org/3/library/re.html">re</a>’s regular-expression handling.</p>
-<p>A simple example would be to look for a single word, this time with the <code>--search</code> or <code>-s</code> flag<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jot</span> <span class="at">-s</span> egg</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<pre><code>[2025-08-28 08:00] fried egg on sourdough toast
-[2025-08-25 08:52] wholemeal toast and poached eggs
-[2025-08-22 08:13] hash browns and scrambled eggs</code></pre>
-<p>But we can use a regular expression to be more specific. We can even specify a date range, thanks to the timestamps.</p>
-<p>So, when did I have eggs last work-week, specifically? Let’s use a suitable <del>regeggs</del> regex:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> jot <span class="at">-s</span> <span class="st">"2025-08-2([5-9]).*egg"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<pre><code>[2025-08-28 08:00] fried egg on sourdough toast
-[2025-08-25 08:52] wholemeal toast and poached eggs</code></pre>
-<p>With that regex I’m asking for the string ‘egg’ used in jottings between 25 and 29 August 2025’<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<section id="terminal" class="level3">
+<h3 class="anchored" data-anchor-id="terminal">Terminal</h3>
+<p>From a terminal—not the R console—you can use <code>weva</code> to look up weather for a given UK postcode<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
+<p>Let’s compare Lands End (‘top’ of mainland Britain) to John o’Groats (‘bottom’)<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> as I write this.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">weva</span> tr197aa</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>now 10.9°C ☁️ | +1h 11.3°C ☁️ </code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">weva</span> kw14yr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>now 6.1°C ☁️ | +1h 6.3°C 🌧️🪶 </code></pre>
+<p>The mini display tells you the current and future temperature and weather. There are emoji modifiers for heavy, light and freezing versions of some weather types.</p>
+<p>Surprise, it’s early March in Britain.</p>
+<p>Hopefuly your day will be brightened by the styling with <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">ANSI escape codes</a>, assuming your terminal supports them.</p>
+<section id="options" class="level4">
+<h4 class="anchored" data-anchor-id="options">Options</h4>
+<p>You can add some flags to adjust the settings. Use <code>--hour</code> (or its shortcut <code>-h</code>) to adjust the number of hours for the forward-look. Let’s look one day ahead.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">weva</span> tr197aa <span class="at">-h</span> 24</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>now 10.9°C ☁️ | +24h 7.7°C 🌧️🪶 </code></pre>
+<p>So there’s light drizzle this time tomorrow and it will be cooler (did I mention it’s early March in Britain).</p>
+<p>Note that you can only look at forecasts up to the end of the day after tomorrow<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
+<p>Use the <code>--extremes</code> (<code>-e</code>) flag to also print the low and high temperatures for today. You can compound these options.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">weva</span> tr197aa <span class="at">-h</span> 24 <span class="at">-e</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>now 10.9°C ☁️ | +24h 7.7°C 🌧️🪶 | today 9.3°C to 12°C </code></pre>
+<p>Wow, such variety.</p>
+</section>
+<section id="time-is-hard" class="level4">
+<h4 class="anchored" data-anchor-id="time-is-hard">Time is hard</h4>
+<p>‘Now’ and ‘later’ in this context are actually a bit awkward.</p>
+<p>The Open-Meteo API returns the ‘current’ time as a quarter-hour increment, while ‘hourly’ information is the top of the hour.</p>
+<p>My low-effort solution was to round ‘now’ to the nearest hour and declare ‘+1 hour’ as the hour after that.</p>
+<p>This was made slightly more awkward because the hourly data is returned for the whole of the current day (i.e.&nbsp;some of it is from the past). That means we have to match the rounded ‘now’ time to the list of times for today to get its index, then add the user-supplied <code>--hours</code> to find the details for the correct time in the future.</p>
+<p>So you can only ask for a forecast for the rest of today or the following two full days.</p>
+<p>That’s a bit confusing, so you can use the <code>--datetime</code> (<code>-d</code>) option to expose the datetimes for the data in each segment of the report.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">weva</span> tr197aa <span class="at">-h</span> 24 <span class="at">-e</span> <span class="at">-d</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>2026-03-01 10:00 10.9°C 🌧️🪶 | 2026-03-02 10:00 7.7°C 🌧️🪶 | 2026-03-01 9.3°C to 12°C </code></pre>
+<p>As I write, it’s 10:06 on 1 March 2026. That’s rounded to 10:00 for the ‘now’ time. And so 24 hours from now is 10:00 tomorrow: 1 March 2026.</p>
 </section>
 </section>
-<section id="pain-in-the-argparse" class="level2">
-<h2 class="anchored" data-anchor-id="pain-in-the-argparse">Pain in the argparse?</h2>
-<p>A new learning for me has been <a href="https://docs.python.org/3/library/argparse.html">argparse package</a>, which allows your Python function to accept inputs at the command line.</p>
-<p>That’s been crucial for this update to jot (v0.2.3). At the start of the <code>main()</code> function I’ve set up some argparse steps.</p>
-<p>To initiate the parser:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> argparse</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>parser <span class="op">=</span> argparse.ArgumentParser(</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    prog<span class="op">=</span><span class="st">"jot"</span>,</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    description<span class="op">=</span><span class="st">"Minimal opinionated Python CLI to jot timestamped thoughts."</span>,</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    epilog<span class="op">=</span><span class="st">"Source: https://github.com/matt-dray/jot"</span>,</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Then we can add arguments to the parser. Here’s how we do that for the search argument, for which I’ve written a corresponding <code>search_jottings()</code> Python function:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>parser.add_argument(</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"-s"</span>,</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"--search"</span>,</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    nargs<span class="op">=</span><span class="st">"?"</span>,</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>,</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">help</span><span class="op">=</span><span class="st">"search jottings (regex supported)"</span>,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>After these declarations, we can collect the parsed arguments:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>args <span class="op">=</span> parser.parse_args()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>Later in the body of the <code>main()</code> function we can use the named elements of <code>args</code> to pass into our Python functions. For our search option, that looks like this:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>search_jottings(jot_path, args.search)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>As a result of this set up, we also get a nice help file for free with <code>--help</code> or <code>-h</code>, which should be helpful for users:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jot</span> <span class="at">-h</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<pre><code>usage: jot [-h] [-l [LIST]] [-s [SEARCH]] [text]
+</section>
+<section id="inside-the-crystal-ball" class="level2">
+<h2 class="anchored" data-anchor-id="inside-the-crystal-ball">Inside the crystal ball</h2>
+<p>What’s actually happening in the code?</p>
+<p>{weva} is just a normal R package, with one difference: <a href="https://github.com/matt-dray/weva/blob/main/exec/weva.R">a script</a> under <code>exec/</code> that contains R code that {Rapp} will reinterpret into a CLI.</p>
+<p>At time of writing it looks like this:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env Rapp</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| name: weva</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co">#| description: A micro weather report with 'Open-Meteo' and 'postcodes.io' APIs</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#| description: A UK postcode</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>postcode <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#| description: Hours from now for the 'later' segment (up to three days)</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#| short: h</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>hours <span class="ot">&lt;-</span> <span class="dv">1</span>L</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">#| description: Show API and calculated datetimes in 'now' and 'later' segments?</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co">#| short: d</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>datetimes <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co">#| description: Show a segment for today's min and max temperatures?</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="co">#| short: e</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>extremes <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="fu">get_weather</span>(postcode) <span class="sc">|&gt;</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prepare_report</span>(hours, datetimes, extremes) <span class="sc">|&gt;</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Note in this file:</p>
+<ul>
+<li>the shebang (<code>#!</code>), which gives the path to where {Rapp} is installed</li>
+<li>the hashpipes (<code>#|</code>) for documenting our variables</li>
+<li>that everything else is normal R code</li>
+</ul>
+<p>{Rapp} interprets <code>postcode &lt;- NULL</code> as a required positional argument for <code>weva</code>. You can just type the postcode without a flag.</p>
+<p>Conversely, the remaining options must be named, though <code>short</code> names can be used to save typing. <code>--hours</code> (<code>-h</code>) is interpreted as an integer with a default of <code>1</code> <code>--datetimes</code> and <code>--extremes</code> (<code>-d</code>, <code>-e</code>) are off (<code>FALSE</code>) by default, but the user can just use the flag without an argument to turn it on.</p>
+<p>What’s also nice is that {Rapp} gives us <code>--help</code> (and <code>--help-yaml</code>) for free, based on our variable documentation.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">weva</span> <span class="at">--help</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<pre><code>Usage: weva [OPTIONS] &lt;POSTCODE&gt;
 
-Minimal opinionated Python CLI to jot timestamped thoughts.
+A micro weather report with 'Open-Meteo' and 'postcodes.io' APIs
 
-positional arguments:
-  text                  text to write to file
+Options:
+  -h, --hours &lt;HOURS&gt;             Hours from now for the 'later' segment (up to
+                                  three days)
+                                  [default: 1] [type: integer]
+  -d, --datetimes / --no-datetimes  Show API and calculated datetimes in 'now'
+                                  and 'later' segments?
+                                  [default: false]
+                                  Enable with `--datetimes`.
+  -e, --extremes / --no-extremes  Show a segment for today's min and max
+                                  temperatures?
+                                  [default: false]
+                                  Enable with `--extremes`.
 
-options:
-  -h, --help            show this help message and exit
-  -l [LIST], --list [LIST]
-                        show last n jottings
-  -s [SEARCH], --search [SEARCH]
-                        search jottings (regex supported)
-
-Source: https://github.com/matt-dray/jot</code></pre>
+Arguments:
+  &lt;POSTCODE&gt;  A UK postcode</code></pre>
+<p>In short, {Rapp} lets you write ‘normal’ looking R code that gets interpreted into a CLI with various types of options.</p>
+<p>That’s quite a neat, low-effort way to create a CLI</p>
 </section>
-<section id="jot-on" class="level2">
-<h2 class="anchored" data-anchor-id="jot-on">Jot on</h2>
-<p>As I’ve mentioned before, jot was built by me for me. It’s basically feature-complete from my perspective. The plan is to extend it minimally and only as a way to learn more Python. But <a href="https://github.com/matt-dray/jot/issues">I welcome suggestions</a>!</p>
+<section id="the-here-and-now" class="level2">
+<h2 class="anchored" data-anchor-id="the-here-and-now">The here and now</h2>
+<p>{weva} is very limited and opinionated with little attention to proper request-handling and testing. Your kilometreage may vary<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>.</p>
+<p>It would be easy to get carried away and build something even more complex. I’ve achieved the content and learning I wanted, so I stop here.</p>
+<p>In fact, I already used this tool yesterday before a trip outside. I discovered the day was going to be overcast with some showers. Who could have guessed?</p>
+<p>Reminds me of <a href="https://github.com/francisbarton">Fran</a>’s observation when faced with differing forecasts:</p>
+<blockquote class="blockquote">
+<p>I had better go outside and see who’s right</p>
+</blockquote>
+<p>Very wise.</p>
 
 </section>
 
@@ -355,11 +371,31 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>[project]
-name = "2025-08-30-jot-options"
-version = "0.1.0"
-requires-python = "&gt;=3.12"
-dependencies = []</code></pre>
+<pre><code>Last rendered: 2026-03-01 11:45:27 GMT</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.5.2 (2025-10-31)
+Platform: aarch64-apple-darwin20
+Running under: macOS Sequoia 15.6.1
+
+Matrix products: default
+BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/London
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.4 compiler_4.5.2    fastmap_1.2.0     cli_3.6.5        
+ [5] tools_4.5.2       htmltools_0.5.8.1 yaml_2.3.12       rmarkdown_2.29   
+ [9] knitr_1.50        jsonlite_2.0.0    xfun_0.52         digest_0.6.37    
+[13] rlang_1.1.7       evaluate_1.0.4   </code></pre>
 </div>
 </div>
 </details>
@@ -368,8 +404,13 @@ dependencies = []</code></pre>
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>In future I want an argument to limit the number of jottings returned, otherwise we might flood the console. With eggs. Which could get messy.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>More literally, it matches the string ‘2025-08-2’, replacing the final digit of the date with 5, 6, 7, 8 or 9; then allows for any number of any characters until it finds the string ‘egg’.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>I don’t want to simply run scripts from the command line, which is what <code>Rscript</code> is for.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>With a respectful cockney accent.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Remember: you shouldn’t trust ‘some dude’ telling you to install random stuff from the internet.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>For my purposes I don’t care about weather anywhere except in the UK. I’m more likely to know the postcode than latitude-longitude, so I’m happy to limit the tool in this way.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Actually these postcodes are for the First &amp; Last House pub and the John o’Groats brewery.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>We don’t need to forecast beyond that, becuase we know the weather’s going to be <a href="https://en.wikipedia.org/wiki/The_Day_After_Tomorrow">really dicey and unpredictable</a>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>This is becoming a catch-phrase of this blog, along with ‘this does what I need to do’.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
