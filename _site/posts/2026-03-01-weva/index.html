@@ -221,68 +221,69 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>The <a href="https://github.com/matt-dray/weva">{weva} R package</a> contains a titchy, opinionated command-line interface (CLI) to present an opinionated micro-weather report.</p>
+<p>The <a href="https://github.com/matt-dray/weva">{weva} R package</a> contains a titchy command-line interface (CLI) to present an opinionated micro-weather report.</p>
 </section>
 <section id="building-some-rapport" class="level2">
 <h2 class="anchored" data-anchor-id="building-some-rapport">Building some {Rapp}ort</h2>
-<p>I’ve been making little Python-CLI concepts recently:</p>
+<p>I’m spending more time in the terminal.</p>
+<p>So I’ve been making little CLI concepts:</p>
 <ul>
 <li><a href="https://www.rostrum.blog/posts/2025-08-25-jot/">jot</a> for recording notes</li>
 <li><a href="https://www.rostrum.blog/posts/2025-10-30-pet/">pet</a> for a persistent cyberpet</li>
 <li><a href="https://www.rostrum.blog/posts/2026-02-01-tyle/">tyle</a> for a roguelike-like</li>
 </ul>
-<p>I’ve been using Python mostly because it seems a better tool for the job than R<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
-<p>So I was pleased to see a recent <a href="https://tidyverse.org/blog/2026/02/rapp-0-3-0/">blog post</a> about a new release of <a href="https://cran.r-project.org/package=Rapp">{Rapp}</a>, an R package to help create CLIs.</p>
-<p>Given my interests, it seemed fitting to try it out.</p>
+<p>These are all written in Python, which seems a more natural choice for this purpose than R<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<p>But I was pleased to see a recent <a href="https://tidyverse.org/blog/2026/02/rapp-0-3-0/">blog post</a> about a new release of <a href="https://github.com/r-lib/Rapp">{Rapp}</a>, an R package to help create CLIs.</p>
+<p>So obviously I needed to try it out.</p>
 </section>
 <section id="climate" class="level2">
 <h2 class="anchored" data-anchor-id="climate">CLImate</h2>
 <p>But a CLI for what?</p>
 <p>My colleagues and I have enjoyed twee weather CLIs of late, like <a href="https://github.com/Veirt/weathr">weathr</a> and <a href="https://github.com/chubin/wttr.in">wttr.in</a>.</p>
-<p>So, because I have no imagination: introducing the concept <a href="https://github.com/matt-dray/weva/">{weva}</a> R package (‘wevvah’<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>).</p>
+<p>So, because I have no imagination: introducing the concept <a href="https://github.com/matt-dray/weva/">{weva}</a> (‘wevvah’<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>) R package.</p>
 <p>It does way less than those other examples and doesn’t have fun ASCII graphics. It’s just a simple toy project to see how {Rapp} works, with no guarantees. Is that enough disclaimers?</p>
-<p>This was made possible by:</p>
+<p>Along with {Rapp}, this was made possible by the:</p>
 <ul>
-<li>the free APIs <a href="https://open-meteo.com/">Open-Meteo</a> and <a href="https://postcodes.io/">postcodes.io</a></li>
-<li><a href="https://cran.r-project.org/package=httr2">{httr2}</a>, <a href="https://cran.r-project.org/package=lubridate">{lubridate}</a> and <a href="https://cran.r-project.org/package=PostcodesioR">{PostcodesioR}</a></li>
+<li>free APIs <a href="https://open-meteo.com/">Open-Meteo</a> and <a href="https://postcodes.io/">postcodes.io</a><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, which do not require a login</li>
+<li>the tidyverse packages <a href="https://httr2.r-lib.org/">{httr2}</a> and <a href="https://lubridate.tidyverse.org/">{lubridate}</a></li>
 </ul>
 <section id="r-console" class="level3">
 <h3 class="anchored" data-anchor-id="r-console">R console</h3>
-<p>From the R console, you could install<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> it like:</p>
+<p>From the R console, you could install<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> {weva} from GitHub like:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pak<span class="sc">::</span><span class="fu">pak</span>(<span class="st">"matt-dray/weva"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Still in the R console, you can install the CLI:</p>
+<p>You then use a {weva} function to install the CLI tool:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>weva<span class="sc">::</span><span class="fu">install_cli</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>You’ll get a confirmation of where it’s been installed.</p>
+<p>This will print the install location of the CLI, if successful.</p>
 </section>
 <section id="terminal" class="level3">
 <h3 class="anchored" data-anchor-id="terminal">Terminal</h3>
-<p>From a terminal—not the R console—you can use <code>weva</code> to look up weather for a given UK postcode<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>.</p>
-<p>Let’s compare Lands End (‘top’ of mainland Britain) to John o’ Groats (‘bottom’)<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> as I write this.</p>
+<p>From a terminal—not the R console—you can use <code>weva</code> to look up weather for a given UK postcode<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</p>
+<p>Let’s compare Lands End (‘top’ of mainland Britain) to John o’ Groats (‘bottom’)<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> as I write this.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">weva</span> tr197aa</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>now 10.9°C ☁️ | +1h 11.3°C ☁️ </code></pre>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">weva</span> kw14yr</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>now 6.1°C ☁️ | +1h 6.3°C 🌧️🪶 </code></pre>
-<p>The mini display has segments for the current and future temperature and weather. There are emoji modifiers for heavy, light and freezing versions of some weather types.</p>
+<p>The one-line display has segments for the current and future temperature and weather. There are emoji modifiers for heavy, light and freezing versions of some weather types.</p>
 <p>Surprise, it’s early March in Britain.</p>
-<p>Hopefuly your day will be brightened by the styling with <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">ANSI escape codes</a>, assuming your terminal supports them.</p>
+<p>Hopefully your day will be brightened by the styling with <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">ANSI escape codes</a>, assuming your terminal supports them.</p>
 <section id="options" class="level4">
 <h4 class="anchored" data-anchor-id="options">Options</h4>
 <p>You can add some flags to adjust the settings. Use <code>--hour</code> (or its shortcut <code>-h</code>) to adjust the number of hours for the forward-look. Let’s look one day ahead.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">weva</span> tr197aa <span class="at">-h</span> 24</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>now 10.9°C ☁️ | +24h 7.7°C 🌧️🪶 </code></pre>
 <p>So there’s light drizzle this time tomorrow and it will be cooler (did I mention it’s early March in Britain).</p>
-<p>Note that you can only look at forecasts up to the end of the day after tomorrow<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
-<p>Use the <code>--extremes</code> (<code>-e</code>) flag to also print a segment with today’s low and high temperatures. You can compound these options.</p>
+<p>Note that you can only look at forecasts up to the end of the day after tomorrow<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>.</p>
+<p>Use the <code>--extremes</code> (<code>-e</code>) flag to also print a segment with today’s low and high temperatures. You can compound these options:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">weva</span> tr197aa <span class="at">-h</span> 24 <span class="at">-e</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <pre><code>now 10.9°C ☁️ | +24h 7.7°C 🌧️🪶 | today 9.3°C to 12°C </code></pre>
-<p>Well, ‘extremes’ is perhaps a bit extreme for this termperature range.</p>
+<p>Well, ‘extremes’ is perhaps a bit extreme for this temperature range.</p>
 </section>
 <section id="time-is-hard" class="level4">
 <h4 class="anchored" data-anchor-id="time-is-hard">Time is hard</h4>
 <p>‘Now’ and ‘later’ in this context are actually a bit awkward.</p>
 <p>The Open-Meteo API returns the ‘current’ time as a quarter-hour increment, while ‘hourly’ information is the top of the hour.</p>
 <p>My low-effort solution was to round ‘now’ to the nearest hour and declare ‘+1 hour’ as the hour after that.</p>
-<p>This was made slightly more awkward because the hourly data is returned for the whole of the current day (i.e.&nbsp;some of it is from the past). That means we have to match the rounded ‘now’ time to the list of times for today to get its index, then add the user-supplied <code>--hours</code> to find the details for the correct time in the future.</p>
+<p>In addition, the hourly data is returned for the whole of the current day (i.e.&nbsp;some of it is from the past). That means we have to match the rounded ‘now’ time to the list of times for today to get its index, then add the user-supplied <code>--hours</code> to find the details for the correct time in the future.</p>
 <p>So you can only ask for a forecast for the rest of today or the following two full days.</p>
 <p>That’s a bit confusing, so you can use the <code>--datetime</code> (<code>-d</code>) option to expose the datetimes for the data in each segment of the report.</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">weva</span> tr197aa <span class="at">-h</span> 24 <span class="at">-e</span> <span class="at">-d</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -294,7 +295,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="inside-the-crystal-ball" class="level2">
 <h2 class="anchored" data-anchor-id="inside-the-crystal-ball">Inside the crystal ball</h2>
 <p>What’s actually happening in the code?</p>
-<p>{weva} is just a normal R package, with one difference: <a href="https://github.com/matt-dray/weva/blob/main/exec/weva.R">a script</a> under <code>exec/</code> that contains R code that {Rapp} will reinterpret into a CLI.</p>
+<p>{weva} is just a normal R package with some exported functions to <code>get_latlon()</code>, <code>get_weather()</code> and <code>write_report()</code>.</p>
+<p>But there’s one difference: <a href="https://github.com/matt-dray/weva/blob/main/exec/weva.R">a script</a> under <code>exec/</code> that contains R code that {Rapp} will reinterpret (magically?) into a CLI.</p>
 <p>At time of writing it looks like this:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/usr/bin/env Rapp</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| name: weva</span></span>
@@ -315,13 +317,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="co">#| short: e</span></span>
 <span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>extremes <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
 <span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="fu">get_weather</span>(postcode) <span class="sc">|&gt;</span></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prepare_report</span>(hours, datetimes, extremes) <span class="sc">|&gt;</span></span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="fu">get_latlon</span>(postcode) <span class="sc">|&gt;</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">get_weather</span>() <span class="sc">|&gt;</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_report</span>(</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">hours_to_forecast =</span> hours,</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">show_datetimes =</span> datetimes,</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">show_extremes =</span> extremes</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Note in this file:</p>
 <ul>
-<li>the <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> (<code>#!</code>)<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>, which gives the path to where {Rapp} is installed</li>
-<li>the hashpipes (<code>#|</code>) for documenting our variables</li>
+<li>the <a href="https://en.wikipedia.org/wiki/Shebang_(Unix)">shebang</a> (<code>#!</code>)<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>, which gives the path to where {Rapp} is installed</li>
+<li>the hashpipes (<code>#|</code>) for documenting the CLI and its options</li>
 <li>that everything else is normal R code</li>
 </ul>
 <p>{Rapp} interprets <code>postcode &lt;- NULL</code> as a required positional argument for <code>weva</code>. You can just type the postcode without a flag.</p>
@@ -352,9 +359,9 @@ Arguments:
 </section>
 <section id="the-here-and-now" class="level2">
 <h2 class="anchored" data-anchor-id="the-here-and-now">The here and now</h2>
-<p>{weva} is very limited and opinionated with little attention to proper request-handling and testing. Your kilometreage may vary<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>.</p>
+<p>{weva} is very limited and opinionated with little attention to proper request-handling and testing. Your kilometreage may vary<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>.</p>
 <p>It would be easy to get carried away and build something even more complex. I’ve achieved the content and learning I wanted, so I stop here.</p>
-<p>In fact, I already used this tool yesterday before a trip<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>. I discovered the day was going to be overcast with some showers. Who could have guessed?</p>
+<p>In fact, I already used this tool yesterday before a trip<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>. I discovered the day was going to be overcast with some showers. Who could have guessed?</p>
 <p>But on more variable days, I’m reminded of <a href="https://github.com/francisbarton">Fran</a>’s observation when faced with differing forecasts:</p>
 <blockquote class="blockquote">
 <p>I had better go outside and see who’s right</p>
@@ -372,7 +379,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2026-03-01 12:18:36 GMT</code></pre>
+<pre><code>Last rendered: 2026-03-07 13:19:42 GMT</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.5.2 (2025-10-31)
@@ -407,13 +414,14 @@ loaded via a namespace (and not attached):
 <ol>
 <li id="fn1"><p>I don’t want to simply run scripts from the command line, which is what <code>Rscript</code> is for.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>With a respectful cockney accent.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Remember: you shouldn’t trust ‘some dude’ telling you to install random stuff from the internet.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>For my purposes I don’t care about weather anywhere except in the UK. I’m more likely to know the postcode than latitude-longitude, so I’m happy to limit the tool in this way.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Actually these postcodes are for the First &amp; Last House pub and the John o’ Groats brewery.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>We don’t need to forecast beyond that, because we know the weather’s going to be <a href="https://en.wikipedia.org/wiki/The_Day_After_Tomorrow">really dicey and unpredictable</a>.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn7"><p><a href="https://en.wikipedia.org/wiki/She_Bangs">Important disambiguation</a>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn8"><p>This is becoming a catch-phrase of this blog, along with ‘this does what I need to do’.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn9"><p>Amusingly, given my time-related pains in {weva}, we went to <a href="https://en.wikipedia.org/wiki/Prime_meridian_(Greenwich)">Greenwich</a>.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Packages <a href="https://github.com/tpisel/openmeteo">{openmeteo}</a> and <a href="https://docs.ropensci.org/PostcodesioR/index.html">{PostcodesioR}</a> wrap their respective APIs, but I minimised the dependencies by querying myself with {httr2}.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Remember: you shouldn’t trust ‘some dude’ telling you to install random stuff from the internet.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>For my purposes I don’t care about weather anywhere except in the UK. I’m more likely to know the postcode than latitude-longitude, so I’m happy to limit the tool in this way.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Actually these postcodes are for the First &amp; Last House pub and the John o’ Groats brewery.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>We don’t need to forecast beyond that, because we know the weather’s going to be <a href="https://en.wikipedia.org/wiki/The_Day_After_Tomorrow">really dicey and unpredictable</a>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn8"><p><a href="https://en.wikipedia.org/wiki/She_Bangs">Important disambiguation</a>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn9"><p>This is becoming a catchphrase of this blog, along with ‘this does what I need to do’.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn10"><p>Amusingly, given my time-related pains in {weva}, we went to <a href="https://en.wikipedia.org/wiki/Prime_meridian_(Greenwich)">Greenwich</a>.<a href="#fnref10" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -13,21 +13,23 @@ categories:
 
 ## tl;dr
 
-The [{weva} R package](https://github.com/matt-dray/weva) contains a titchy, opinionated command-line interface (CLI) to present an opinionated micro-weather report.
+The [{weva} R package](https://github.com/matt-dray/weva) contains a titchy command-line interface (CLI) to present an opinionated micro-weather report.
 
 ## Building some {Rapp}ort 
 
-I've been making little Python-CLI concepts recently:
+I’m spending more time in the terminal.
+
+So I've been making little CLI concepts:
 
 * [jot](https://www.rostrum.blog/posts/2025-08-25-jot/) for recording notes
 * [pet](https://www.rostrum.blog/posts/2025-10-30-pet/) for a persistent cyberpet
 * [tyle](https://www.rostrum.blog/posts/2026-02-01-tyle/) for a roguelike-like
 
-I've been using Python mostly because it seems a better tool for the job than R[^rscript].
+These are all written in Python, which seems a more natural choice for this purpose than R[^rscript].
 
-So I was pleased to see a recent [blog post](https://tidyverse.org/blog/2026/02/rapp-0-3-0/) about a new release of [{Rapp}](https://cran.r-project.org/package=Rapp), an R package to help create CLIs.
+But I was pleased to see a recent [blog post](https://tidyverse.org/blog/2026/02/rapp-0-3-0/) about a new release of [{Rapp}](https://github.com/r-lib/Rapp), an R package to help create CLIs.
 
-Given my interests, it seemed fitting to try it out.
+So obviously I needed to try it out.
 
 ## CLImate
 
@@ -35,32 +37,32 @@ But a CLI for what?
 
 My colleagues and I have enjoyed twee weather CLIs of late, like [weathr](https://github.com/Veirt/weathr) and [wttr.in](https://github.com/chubin/wttr.in).
 
-So, because I have no imagination: introducing the concept [{weva}](https://github.com/matt-dray/weva/) R package ('wevvah'[^cockney]).
+So, because I have no imagination: introducing the concept [{weva}](https://github.com/matt-dray/weva/) ('wevvah'[^cockney]) R package.
 
 It does way less than those other examples and doesn't have fun ASCII graphics.
 It's just a simple toy project to see how {Rapp} works, with no guarantees.
 Is that enough disclaimers?
 
-This was made possible by:
+Along with {Rapp}, this was made possible by the:
 
-* the free APIs [Open-Meteo](https://open-meteo.com/) and [postcodes.io](https://postcodes.io/)
-* [{httr2}](https://cran.r-project.org/package=httr2), [{lubridate}](https://cran.r-project.org/package=lubridate) and [{PostcodesioR}](https://cran.r-project.org/package=PostcodesioR)
+* free APIs [Open-Meteo](https://open-meteo.com/) and [postcodes.io](https://postcodes.io/)[^apis], which do not require a login
+* the tidyverse packages [{httr2}](https://httr2.r-lib.org/) and [{lubridate}](https://lubridate.tidyverse.org/)
 
 ### R console
 
-From the R console, you could install[^dude] it like:
+From the R console, you could install[^dude] {weva} from GitHub like:
 
 ```r
 pak::pak("matt-dray/weva")
 ```
 
-Still in the R console, you can install the CLI:
+You then use a {weva} function to install the CLI tool:
 
 ```r
 weva::install_cli()
 ```
 
-You'll get a confirmation of where it's been installed.
+This will print the install location of the CLI, if successful.
 
 ### Terminal
 
@@ -82,12 +84,12 @@ weva kw14yr
 now 6.1°C ☁️ | +1h 6.3°C 🌧️🪶 
 ```
 
-The mini display has segments for the current and future temperature and weather.
+The one-line display has segments for the current and future temperature and weather.
 There are emoji modifiers for heavy, light and freezing versions of some weather types.
 
-Surprise, it's early March in Britain.
+Surprise, it's early March everywhere in Britain.
 
-Hopefuly your day will be brightened by the styling with [ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code#Colors), assuming your terminal supports them.
+Hopefully your day will be brightened by the styling with [ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code#Colors), assuming your terminal supports them.
 
 #### Options
 
@@ -107,7 +109,7 @@ So there's light drizzle this time tomorrow and it will be cooler (did I mention
 Note that you can only look at forecasts up to the end of the day after tomorrow[^tomorrow].
 
 Use the `--extremes` (`-e`) flag to also print a segment with today's low and high temperatures.
-You can compound these options.
+You can compound these options:
 
 ```bash
 weva tr197aa -h 24 -e
@@ -116,7 +118,7 @@ weva tr197aa -h 24 -e
 now 10.9°C ☁️ | +24h 7.7°C 🌧️🪶 | today 9.3°C to 12°C 
 ```
 
-Well, 'extremes' is perhaps a bit extreme for this termperature range.
+Well, 'extremes' is perhaps a bit extreme for this temperature range.
 
 #### Time is hard
 
@@ -126,7 +128,7 @@ The Open-Meteo API returns the 'current' time as a quarter-hour increment, while
 
 My low-effort solution was to round 'now' to the nearest hour and declare '+1 hour' as the hour after that.
 
-This was made slightly more awkward because the hourly data is returned for the whole of the current day (i.e. some of it is from the past).
+In addition, the hourly data is returned for the whole of the current day (i.e. some of it is from the past).
 That means we have to match the rounded 'now' time to the list of times for today to get its index, then add the user-supplied `--hours` to find the details for the correct time in the future.
 
 So you can only ask for a forecast for the rest of today or the following two full days.
@@ -142,13 +144,15 @@ weva tr197aa -h 24 -e -d
 
 As I write, it's 10:06 on 1 March 2026.
 That's rounded to 10:00 for the 'now' time.
-And so 24 hours from now is 10:00 tomorrow: 1 March 2026.
+And so 24 hours from now is 10:00 tomorrow: 2 March 2026.
 
 ## Inside the crystal ball
 
 What's actually happening in the code?
 
-{weva} is just a normal R package, with one difference: [a script](https://github.com/matt-dray/weva/blob/main/exec/weva.R) under `exec/` that contains R code that {Rapp} will reinterpret into a CLI.
+{weva} is just a normal R package with some exported functions to `get_latlon()`, `get_weather()` and `write_report()`.
+
+But there's one difference: [a script](https://github.com/matt-dray/weva/blob/main/exec/weva.R) under `exec/` that contains R code that {Rapp} will reinterpret (magically?) into a CLI.
 
 At time of writing it looks like this:
 
@@ -172,8 +176,13 @@ datetimes <- FALSE
 #| short: e
 extremes <- FALSE
 
-get_weather(postcode) |>
-  prepare_report(hours, datetimes, extremes) |>
+get_latlon(postcode) |>
+  get_weather() |>
+  write_report(
+    hours_to_forecast = hours,
+    show_datetimes = datetimes,
+    show_extremes = extremes
+  ) |>
   cat()
 
 ```
@@ -181,7 +190,7 @@ get_weather(postcode) |>
 Note in this file:
 
 * the [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) (`#!`)[^ricky], which gives the path to where {Rapp} is installed
-* the hashpipes (`#|`) for documenting our variables
+* the hashpipes (`#|`) for documenting the CLI and its options
 * that everything else is normal R code
 
 {Rapp} interprets `postcode <- NULL` as a required positional argument for `weva`.
@@ -255,6 +264,7 @@ cat("Last rendered:", format(Sys.time(), usetz = TRUE)); sessionInfo()
 [^rscript]: I don't want to simply run scripts from the command line, which is what `Rscript` is for.
 [^cockney]: With a respectful cockney accent.
 [^tomorrow]: We don't need to forecast beyond that, because we know the weather's going to be [really dicey and unpredictable](https://en.wikipedia.org/wiki/The_Day_After_Tomorrow).
-[^km]: This is becoming a catch-phrase of this blog, along with 'this does what I need to do'.
+[^km]: This is becoming a catchphrase of this blog, along with 'this does what I need to do'.
 [^greenwich]: Amusingly, given my time-related pains in {weva}, we went to [Greenwich](https://en.wikipedia.org/wiki/Prime_meridian_(Greenwich)).
 [^ricky]: [Important disambiguation](https://en.wikipedia.org/wiki/She_Bangs).
+[^apis]: Packages [{openmeteo}](https://github.com/tpisel/openmeteo) and [{PostcodesioR}](https://docs.ropensci.org/PostcodesioR/index.html) wrap their respective APIs, but I minimised the dependencies by querying myself with {httr2}.
