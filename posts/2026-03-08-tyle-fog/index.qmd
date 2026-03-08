@@ -87,7 +87,7 @@ for row in range(self.n_rows):
             symbol = self.player.symbol
         elif max(
             abs(self.player.row - row), abs(self.player.col - col)
-        ) in range(0, self.fog):
+        ) in range(1, self.fog):
             symbol = self.tiles[row][col].symbol
         else:
             symbol = "?"
@@ -99,9 +99,10 @@ So, for each row and column, print the symbol for the:
 * terrain tile (`.` or `#`) if within `fog` number of tiles from the player
 * fog (`?`) if no other conditions are met (i.e. all the remaining tiles)
 
-In `main()` I've set `fog = 2`, so we'll see fog beyond two tiles of the player.
+In `main()` I've set `fog = args.fog` with `default=2`, so we'll see fog beyond two tiles of the player.
+You can adjust the vision range in the CLI with the `--fog` (`-f`) option, like `tyle -f 3`.
 
-That gives us something like:
+The default gives us something like:
 
 ```
 ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 

@@ -267,7 +267,7 @@ Move (WASD+Enter): </code></pre>
 <span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>            symbol <span class="op">=</span> <span class="va">self</span>.player.symbol</span>
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> <span class="bu">max</span>(</span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>            <span class="bu">abs</span>(<span class="va">self</span>.player.row <span class="op">-</span> row), <span class="bu">abs</span>(<span class="va">self</span>.player.col <span class="op">-</span> col)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        ) <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="va">self</span>.fog):</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        ) <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="va">self</span>.fog):</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>            symbol <span class="op">=</span> <span class="va">self</span>.tiles[row][col].symbol</span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>            symbol <span class="op">=</span> <span class="st">"?"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -277,8 +277,8 @@ Move (WASD+Enter): </code></pre>
 <li>terrain tile (<code>.</code> or <code>#</code>) if within <code>fog</code> number of tiles from the player</li>
 <li>fog (<code>?</code>) if no other conditions are met (i.e.&nbsp;all the remaining tiles)</li>
 </ul>
-<p>In <code>main()</code> I’ve set <code>fog = 2</code>, so we’ll see fog beyond two tiles of the player.</p>
-<p>That gives us something like:</p>
+<p>In <code>main()</code> I’ve set <code>fog = args.fog</code> with <code>default=2</code>, so we’ll see fog beyond two tiles of the player. You can adjust the vision range in the CLI with the <code>--fog</code> (<code>-f</code>) option, like <code>tyle -f 3</code>.</p>
+<p>The default gives us something like:</p>
 <pre><code>? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
 ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
 ? ? ? ? ? ? ? ? . . # . . ? ? ? ? ? ? ? 

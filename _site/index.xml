@@ -140,7 +140,7 @@ font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">0</span>, <span class="va" style="color: #111111;
+font-style: inherit;">1</span>, <span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">self</span>.fog):</span>
 <span id="cb2-9">            symbol <span class="op" style="color: #5E5E5E;
@@ -163,8 +163,8 @@ font-style: inherit;">"?"</span></span></code></pre></div></div>
 <li>terrain tile (<code>.</code> or <code>#</code>) if within <code>fog</code> number of tiles from the player</li>
 <li>fog (<code>?</code>) if no other conditions are met (i.e.&nbsp;all the remaining tiles)</li>
 </ul>
-<p>In <code>main()</code> I’ve set <code>fog = 2</code>, so we’ll see fog beyond two tiles of the player.</p>
-<p>That gives us something like:</p>
+<p>In <code>main()</code> I’ve set <code>fog = args.fog</code> with <code>default=2</code>, so we’ll see fog beyond two tiles of the player. You can adjust the vision range in the CLI with the <code>--fog</code> (<code>-f</code>) option, like <code>tyle -f 3</code>.</p>
+<p>The default gives us something like:</p>
 <pre><code>? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
 ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
 ? ? ? ? ? ? ? ? . . # . . ? ? ? ? ? ? ? 
