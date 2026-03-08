@@ -10,7 +10,230 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Realised showerthoughts about R and Python mostly</description>
 <generator>quarto-1.8.27</generator>
-<lastBuildDate>Sun, 01 Mar 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 08 Mar 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Fog of war</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2026-03-08-tyle-fog/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2026-03-08-tyle-fog/resources/tyle-fog.png" class="img-fluid figure-img" style="width:100.0%" alt="A 10 by 20 grid of characters printed to a macOS terminal. Tiles are mostly question-mark characters (unknown tiels). Near the midlle is an 'at' symbol (the player), surrounded within two tiles of the grid with periods (floor tiles) and hash marks (wall tiles). A prompt underneath reads 'Move (WASD)+Enter:', ready for user input."></p>
+<figcaption>Haven’t the foggiest about this terrain.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p><a href="https://github.com/matt-dray/tyle">tyle</a>, my Python-CLI roguelike-like, now has fog of war.</p>
+</section>
+<section id="grid-and-bare-it" class="level2">
+<h2 class="anchored" data-anchor-id="grid-and-bare-it">Grid and bare it</h2>
+<p>You may remember <a href="https://www.rostrum.blog/posts/2026-02-01-tyle/">tyle</a>: the beginnings of an in-terminal tile-based <a href="https://en.wikipedia.org/wiki/Roguelike">roguelike</a> to help me improve my Python skills.</p>
+<p>If it excites you, you could install the development version like <code>uv tool install git+https://github.com/matt-dray/tyle.git</code> and initiate by typing <code>tyle</code> in a terminal.</p>
+<p>You’ll get something like:</p>
+<pre><code>. . . # # . # . . . . . . . # . . . . . 
+. . . . . . . . . . . . . # . . . . . . 
+# . . . . . . . . . . . . # . . . . . . 
+. . # # . # . . . . . . . . . . . . . . 
+. . . . . . . . . . @ . . . . . . . . . 
+. . . . . . . . . . # . . # . . . . . . 
+. . . . . . . . . # # # . . . # . . . # 
+. . . . . . # . . . . . . # . . . . . # 
+. # . . # . . . . . . . . . . . . . . . 
+Move (WASD+Enter): </code></pre>
+<p>Except it’ll have some colour if your terminal supports <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">ANSI escape codes</a>.</p>
+</section>
+<section id="the-big-reveal" class="level2">
+<h2 class="anchored" data-anchor-id="the-big-reveal">The big reveal</h2>
+<p>tyle could improve in many ways. For example, the development of enemies and pathfinding, procedural dungeons, or an inventory system.</p>
+<p>A quick win is ‘fog of war’<sup>1</sup>.</p>
+<p>This phrase refers to <a href="https://en.wikipedia.org/wiki/Fog_of_war">uncertainty when drawing up battle plans</a>, but is also a mechanic in many videogames, including roguelikes.</p>
+<p>A classic example is in <a href="https://en.wikipedia.org/wiki/Civilization_(series)">the Civilization series</a> of games. When you start, you cannot see the content of tiles you haven’t visited. The tiles are literally <a href="https://civilization.fandom.com/wiki/Fog_of_war">shrouded in fog</a>. That keeps things interesting: will the next tile contain a barbarian hoarde or a potential city-founding location?</p>
+</section>
+<section id="fog-lights" class="level2">
+<h2 class="anchored" data-anchor-id="fog-lights">Fog lights</h2>
+<p>We can introduce fog into tyle with little effort.</p>
+<p>For lore reasons, imagine the player character is carrying a lamp that illuminates a certain number of tiles in any direction<sup>2</sup>.</p>
+<p>How can we achieve this practically?</p>
+<p>You may remember that tyle has a <code>TileGrid</code> class. It has a <code>draw()</code> method to generate and print the current state of the tile map.</p>
+<p>Previously, we drew the underlying terrain in the map by default, which is composed of traversable floor (symbol <code>.</code>) and non-traversable walls (<code>#</code>). The only exception was to draw the player in the location given by the <code>Player</code>-class <code>row</code> and <code>column</code> properties.</p>
+<p>We can intercept this logic to draw fog-of-war symbols by default, unless within a certain tile-range of the player, in which case we draw the terrain.</p>
+<p>For maximum portability—and as a hat-tip to the original roguelikes—we’ve been using <a href="en.wikipedia.org/wiki/ASCII">ASCII symbols</a> as ‘graphics’. We may as well continue for the fog.</p>
+<p>I couldn’t think of anything cleverer than simply putting a <code>?</code>, geddit. Also it’s coloured grey becuase that seems right.</p>
+</section>
+<section id="sound-the-foghorn" class="level2">
+<h2 class="anchored" data-anchor-id="sound-the-foghorn">Sound the foghorn</h2>
+<p>And so the relevant <code>for</code>-loop in the <code>TileGrid</code> class takes this shape:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> row <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.n_rows):</span>
+<span id="cb2-2">    row_symbols <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> []</span>
+<span id="cb2-3">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> col <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.n_cols):</span>
+<span id="cb2-4">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.player.row <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> row <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">and</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.player.col <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> col:</span>
+<span id="cb2-5">            symbol <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.player.symbol</span>
+<span id="cb2-6">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">elif</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">max</span>(</span>
+<span id="cb2-7">            <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">abs</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.player.row <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> row), <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">abs</span>(<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.player.col <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span> col)</span>
+<span id="cb2-8">        ) <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.fog):</span>
+<span id="cb2-9">            symbol <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.tiles[row][col].symbol</span>
+<span id="cb2-10">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">else</span>:</span>
+<span id="cb2-11">            symbol <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"?"</span></span></code></pre></div></div>
+<p>So, for each row and column, print the symbol for the:</p>
+<ul>
+<li>player (<code>@</code>) if matching <code>Player</code>-class properties <code>row</code> and <code>column</code></li>
+<li>terrain tile (<code>.</code> or <code>#</code>) if within <code>fog</code> number of tiles from the player</li>
+<li>fog (<code>?</code>) if no other conditions are met (i.e.&nbsp;all the remaining tiles)</li>
+</ul>
+<p>In <code>main()</code> I’ve set <code>fog = 2</code>, so we’ll see fog beyond two tiles of the player.</p>
+<p>That gives us something like:</p>
+<pre><code>? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . # . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . @ . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . # . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+Move (WASD+Enter): </code></pre>
+<p>And moving left two steps gives us:</p>
+<pre><code>? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? # . . . # ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? . . @ . . ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? # . . . . ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+Move (WASD+Enter): </code></pre>
+<p>Ooh, mysterious.</p>
+</section>
+<section id="mist-opportunity" class="level2">
+<h2 class="anchored" data-anchor-id="mist-opportunity">Mist opportunity?</h2>
+<p>Your ability to see <em>n</em> tiles around the player-character is pretty rudimentary. It implies that you, the player, have an omniscient top-down view of the playing area<sup>3</sup>… which you do, but that’s not very immersive<sup>4</sup>.</p>
+<p>More advanced approaches might include a ‘cone of vision’. The player can only see what’s in their line of sight. In other words, they can’t see through walls.</p>
+<p>Woah, woah. We’re not coding a full game engine from scratch.</p>
+<p>Or are we, haha?</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[project]
+name = "2026-03-08-tyle-fog"
+version = "0.1.0"
+requires-python = "&gt;=3.12"
+dependencies = []</code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Coincidentally (?), <a href="https://www.rostrum.blog/posts/2026-03-01-weva/">my last post</a> was about <a href="https://github.com/matt-dray/weva">the {weva} CLI</a>, which fetches a weather report. And actually it is a bit misty here tonight.↩︎</p></li>
+<li id="fn2"><p>I mean, look, the hero is carrying a little lamp, right? Squint here: <code>@</code>.↩︎</p></li>
+<li id="fn3"><p><a href="https://www.gutenberg.org/ebooks/201">Read Flatland</a> by Edwin A Abbott.↩︎</p></li>
+<li id="fn4"><p>How immersive can a grid of tiles in a terminal be? You tell me.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
+  <category>cli</category>
+  <category>python</category>
+  <category>tyle</category>
+  <category>uv</category>
+  <guid>https://www.rostrum.blog/posts/2026-03-08-tyle-fog/</guid>
+  <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2026-03-08-tyle-fog/resources/tyle-fog.png" medium="image" type="image/png" height="91" width="144"/>
+</item>
 <item>
   <title>A tiny CLI weather {Rapp}ort</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -5107,155 +5330,6 @@ loaded via a namespace (and not attached):
   <guid>https://www.rostrum.blog/posts/2024-05-08-aesthetic/</guid>
   <pubDate>Tue, 07 May 2024 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-05-08-aesthetic/resources/passion.png" medium="image" type="image/png" height="66" width="144"/>
-</item>
-<item>
-  <title>Stop Jenny committing arson</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/resources/arson.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="Posit employee Jenny Bryan on stage at a lectern. Her eyes are emoji flames. In red Comic Sans around her are the words 'fire', 'computer' and 'burn', as well as the R code 'rm(list=ls())'. There is a flame effect along the bottom of the image."></p>
-<figcaption class="figure-caption">This image has been edited. With apologies.</figcaption>
-</figure>
-</div>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>Make RStudio restart itself. Perpetually.</p>
-<div class="tip">
-<p> <b>Note</b></p>
-<p>This post contains April Fools’ Day content.</p>
-</div>
-</section>
-<section id="passing-the-torch" class="level2">
-<h2 class="anchored" data-anchor-id="passing-the-torch">Passing the torch</h2>
-<p><a href="https://www.tidyverse.org/blog/2017/12/workflow-vs-script/">Jenny Bryan once said</a>:</p>
-<blockquote class="blockquote">
-<p>If the first line of your R script is <code>rm(list = ls())</code> I will come into your office and SET YOUR COMPUTER ON FIRE 🔥.</p>
-</blockquote>
-<p>The objects in your R environment are wicked little imps whose only motivation is to deceive you. They must be destroyed. Frequently.</p>
-<p>But <code>rm(list = ls())</code> isn’t enough to start a new session with a completely clean slate. It doesn’t detach packages, for example. Reproducibility is at stake here, folks!</p>
-<p>The only salvation is to completely restart R. All the time.</p>
-<p>I don’t think you heard me. Come closer. I said <em>all the time</em>.</p>
-</section>
-<section id="an-extinguisher" class="level2">
-<h2 class="anchored" data-anchor-id="an-extinguisher">An extinguisher</h2>
-<p>I’ve been <a href="https://www.rostrum.blog/posts/2020-04-17-r-self-shame/index.html#env">woke to this thought technology</a> for a while. You’re right, it’s time I gave back to the community.</p>
-<p>I can’t trust you to restart R voluntarily, so I must help you to help yourself.</p>
-<p>So, I have for you a gift. A precious snippet of R code that came to me in a fever dream.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">setHook</span>(</span>
-<span id="cb1-2">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"rstudio.sessionInit"</span>,</span>
-<span id="cb1-3">  <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">function</span>(...) {</span>
-<span id="cb1-4">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">message</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"⏳ Restarting in 30 seconds..."</span>)</span>
-<span id="cb1-5">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">Sys.sleep</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">30</span>)</span>
-<span id="cb1-6">    rstudioapi<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">executeCommand</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"restartR"</span>)</span>
-<span id="cb1-7">  }</span>
-<span id="cb1-8">)</span></code></pre></div>
-</div>
-<p>Simply open your <code>.Rprofile</code><sup>1</sup> (<a href="https://support.posit.co/hc/en-us/articles/360047157094-Managing-R-with-Rprofile-Renviron-Rprofile-site-Renviron-site-rsession-conf-and-repos-conf">a special file</a> that’s executed at start up) with <code>usethis::edit_r_profile()</code><sup>2</sup>, paste in the code<sup>3</sup> and then restart R for it to take effect<sup>4</sup>.</p>
-<p>What does it do? It waits for RStudio to start up<sup>5</sup> and then restarts R<sup>6</sup> after 30 seconds<sup>7</sup>.</p>
-<p>…Which prompts another restart after 30 more seconds.</p>
-<p>…And another.</p>
-<p>…Forever<sup>8</sup>.</p>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/resources/restart.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="The R console in RStudio. Repeated several times is the message 'restarting in 30 seconds...' then 'restarting R session'."></p>
-<figcaption class="figure-caption">trapped in a loop help I’m</figcaption>
-</figure>
-</div>
-<p>I know what you’re thinking: doesn’t this block the console? Kind of. You can still type stuff and it’ll be executed before the next restart. Only to disappear immediately.</p>
-<p>Complete panic. Just like Jenny wanted! I think?</p>
-</section>
-<section id="rise-from-the-ashes" class="level2">
-<h2 class="anchored" data-anchor-id="rise-from-the-ashes">Rise from the ashes</h2>
-<p>How can you thank me for this? I am humble (extremely), but you’re welcome to <a href="https://github.com/scrogster/rickrollR/">support my Patreon</a>.</p>
-<p>Happy March 32nd, colleagues.</p>
-
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-04-03 08:14:51 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.1 (2023-06-16)
-Platform: aarch64-apple-darwin20 (64-bit)
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.2 compiler_4.3.1    fastmap_1.1.1     cli_3.6.2        
- [5] tools_4.3.1       htmltools_0.5.8   rstudioapi_0.16.0 yaml_2.3.8       
- [9] rmarkdown_2.26    knitr_1.45        jsonlite_1.8.8    xfun_0.43        
-[13] digest_0.6.35     rlang_1.1.3       fontawesome_0.5.2 evaluate_0.23    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>Don’t.↩︎</p></li>
-<li id="fn2"><p>Don’t.↩︎</p></li>
-<li id="fn3"><p>Don’t.↩︎</p></li>
-<li id="fn4"><p>Fine, <a href="https://www.youtube.com/watch?v=lCscYsICvoA">dew it</a>.↩︎</p></li>
-<li id="fn5"><p>The code depends on the {rstudioapi} package, but it needs to load before it can be used. This seems to happen <em>after</em> the .Rprofile has been read. This is why we have to use <code>setHook()</code> with <code>rstudio.sessionInit</code> so the restart command can be executed once RStudio has initiated.↩︎</p></li>
-<li id="fn6"><p>I also tried <code>rsudioapi::restartSession()</code> and <code>.rs.restartR()</code> here, but they didn’t work quite as I expected. Let me know any non-RStudio ways to do this, of course.↩︎</p></li>
-<li id="fn7"><p>If you’re feeling extra spicy, maybe randomise the wait period!↩︎</p></li>
-<li id="fn8"><p>Maybe you’ll have to force quit RStudio? Use <kbd>Cmd</kbd>+<kbd>Option</kbd>+<kbd>Esc</kbd> on a Macintosh or <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Delete</kbd> on Michaelsoft Binbows. I assume Linux users know what they’re doing.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>r</category>
-  <category>reproducibility</category>
-  <guid>https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/</guid>
-  <pubDate>Sun, 31 Mar 2024 23:00:00 GMT</pubDate>
-  <media:content url="https://www.rostrum.blog/posts/2024-04-01-perpetual-restart/resources/arson.png" medium="image" type="image/png" height="66" width="144"/>
 </item>
 </channel>
 </rss>
