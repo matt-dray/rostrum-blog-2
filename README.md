@@ -21,13 +21,13 @@ showerthoughts about R and Python, mostly.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 192 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2026-03-01 (latest).
+🔢 There have been 193 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2026-03-08 (latest).
 
 📅 That’s a post roughly every 15 days, or about 2 posts per month.
 
-🆕 The latest post: [A tiny CLI weather
-{Rapp}ort](https://www.rostrum.blog/posts/2026-03-01-weva)
+🆕 The latest post: [Fog of
+war](https://www.rostrum.blog/posts/2026-03-08-tyle-fog)
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ between 2018-04-14 (first) to 2026-03-01 (latest).
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 193 | 2026-03-08 | [Fog of war](https://www.rostrum.blog/posts/2026-03-08-tyle-fog)                                                               |
 | 192 | 2026-03-01 | [A tiny CLI weather {Rapp}ort](https://www.rostrum.blog/posts/2026-03-01-weva)                                                 |
 | 191 | 2026-02-15 | [Text hex logos with {hext}](https://www.rostrum.blog/posts/2026-02-15-hext)                                                   |
 | 190 | 2026-02-01 | [A roguelike-like with tyle](https://www.rostrum.blog/posts/2026-02-01-tyle)                                                   |
@@ -238,4 +239,4 @@ between 2018-04-14 (first) to 2026-03-01 (latest).
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2026-03-07 at 13:33.
+🕒 Last updated: 2026-03-08 at 20:21.
