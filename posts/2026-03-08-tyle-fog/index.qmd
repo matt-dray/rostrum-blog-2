@@ -2,7 +2,7 @@
 title: "Fog of war"
 date: 2026-03-08
 slug: "tyle-fog"
-image: resources/tyle-fog.png
+image: resources/tyle-fog.gif
 categories:
   - cli
   - python
@@ -10,19 +10,19 @@ categories:
   - uv
 ---
 
-![Haven't the foggiest about this terrain.](resources/tyle-fog.png){fig-align="left" fig-alt="A 10 by 20 grid of characters printed to a macOS terminal. Tiles are mostly question-mark characters (unknown tiels). Near the midlle is an 'at' symbol (the player), surrounded within two tiles of the grid with periods (floor tiles) and hash marks (wall tiles). A prompt underneath reads 'Move (WASD)+Enter:', ready for user input." width="100%"}
+![Haven't the foggiest about this terrain.](resources/tyle-fog.gif){fig-align="left" fig-alt="A 10 by 20 grid of characters printed to a macOS terminal. Tiles are mostly question-mark characters (unknown tiels). Near the midlle is an 'at' symbol (the player), surrounded within two tiles of the grid with periods (floor tiles) and hash marks (wall tiles). A prompt underneath reads 'Move (WASD)+Enter:', ready for user input. The player moves around and reveals the map as they go." width="75%"}
 
 ## tl;dr
 
-[tyle](https://github.com/matt-dray/tyle), my Python-CLI roguelike-like, now has fog of war.
+[tyle](https://github.com/matt-dray/tyle), my Python-CLI roguelike-like, now has 'fog of war'.
 
 ## Grid and bare it
 
-You may remember [tyle](https://www.rostrum.blog/posts/2026-02-01-tyle/): the beginnings of an in-terminal tile-based [roguelike](https://en.wikipedia.org/wiki/Roguelike) to help me improve my Python skills.
+You may remember [my tyle concept](https://www.rostrum.blog/posts/2026-02-01-tyle/): the beginnings of an in-terminal tile-based [roguelike](https://en.wikipedia.org/wiki/Roguelike) to help me improve my Python CLI skills.
 
-If it excites you, you could install the development version like `uv tool install git+https://github.com/matt-dray/tyle.git` and initiate by typing `tyle` in a terminal.
+You could install the development version like `uv tool install git+https://github.com/matt-dray/tyle.git` and initiate by typing `tyle` in a terminal.
 
-You'll get something like:
+Before now, you'd get something like this:
 
 ```
 . . . # # . # . . . . . . . # . . . . . 
@@ -37,11 +37,14 @@ You'll get something like:
 Move (WASD+Enter): 
 ```
 
-Except it'll have some colour if your terminal supports [ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code#Colors).
+There's a player (`@`), floor tiles (`.`), and randomly-placed non-traversable wall tiles (`#`).
+You move the player by typing at the prompt.
+
+It'll be in colour if your terminal supports [ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code#Colors).
 
 ## The big reveal
 
-tyle could improve in many ways.
+Obviously tyle could improve in many ways.
 For example, the development of enemies and pathfinding, procedural dungeons, or an inventory system.
 
 A quick win is 'fog of war'[^fog].
@@ -64,7 +67,7 @@ How can we achieve this practically?
 You may remember that tyle has a `TileGrid` class.
 It has a `draw()` method to generate and print the current state of the tile map.
 
-Previously, we drew the underlying terrain in the map by default, which is composed of traversable floor (symbol `.`) and non-traversable walls (`#`).
+Previously, we drew the underlying terrain in the map by default, which is composed of the floor (symbol `.`) and wall (`#`) symbols.
 The only exception was to draw the player in the location given by the `Player`-class `row` and `column` properties.
 
 We can intercept this logic to draw fog-of-war symbols by default, unless within a certain tile-range of the player, in which case we draw the terrain.
@@ -153,7 +156,7 @@ Or are we, haha?
 
 <details><summary>Session info</summary>
 ```{r sessioninfo, eval=TRUE, echo=FALSE}
-cat(readLines("pyproject.toml"), sep = "\n")
+cat(paste0("Last rendered:", format(Sys.time(), usetz = TRUE), "\n"), readLines("pyproject.toml"), sep = "\n")
 ```
 </details>
 
