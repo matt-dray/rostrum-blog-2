@@ -156,7 +156,7 @@ Or are we, haha?
 
 <details><summary>Session info</summary>
 ```{r sessioninfo, eval=TRUE, echo=FALSE}
-cat(readLines("pyproject.toml"), sep = "\n")
+cat(paste0("Last rendered:", format(Sys.time(), usetz = TRUE), "\n"), readLines("pyproject.toml"), sep = "\n")
 ```
 </details>
 
