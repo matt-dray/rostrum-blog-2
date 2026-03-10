@@ -110,16 +110,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../../styles.css">
 <meta property="og:title" content="Fog of war – rostrum.blog">
 <meta property="og:description" content="Realised showerthoughts about R and Python mostly">
-<meta property="og:image" content="https://www.rostrum.blog/posts/2026-03-08-tyle-fog/resources/tyle-fog.png">
+<meta property="og:image" content="https://www.rostrum.blog/posts/2026-03-08-tyle-fog/resources/tyle-fog.gif">
 <meta property="og:site_name" content="rostrum.blog">
-<meta property="og:image:height" content="582">
-<meta property="og:image:width" content="926">
 <meta name="twitter:title" content="Fog of war – rostrum.blog">
 <meta name="twitter:description" content="Realised showerthoughts about R and Python mostly">
-<meta name="twitter:image" content="https://www.rostrum.blog/posts/2026-03-08-tyle-fog/resources/tyle-fog.png">
+<meta name="twitter:image" content="https://www.rostrum.blog/posts/2026-03-08-tyle-fog/resources/tyle-fog.gif">
 <meta name="twitter:creator" content="@mattdray">
-<meta name="twitter:image-height" content="582">
-<meta name="twitter:image-width" content="926">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -214,19 +210,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="resources/tyle-fog.png" class="img-fluid figure-img" style="width:100.0%" alt="A 10 by 20 grid of characters printed to a macOS terminal. Tiles are mostly question-mark characters (unknown tiels). Near the midlle is an 'at' symbol (the player), surrounded within two tiles of the grid with periods (floor tiles) and hash marks (wall tiles). A prompt underneath reads 'Move (WASD)+Enter:', ready for user input."></p>
+<p><img src="resources/tyle-fog.gif" class="img-fluid figure-img" style="width:75.0%" alt="A 10 by 20 grid of characters printed to a macOS terminal. Tiles are mostly question-mark characters (unknown tiels). Near the midlle is an 'at' symbol (the player), surrounded within two tiles of the grid with periods (floor tiles) and hash marks (wall tiles). A prompt underneath reads 'Move (WASD)+Enter:', ready for user input. The player moves around and reveals the map as they go."></p>
 <figcaption>Haven’t the foggiest about this terrain.</figcaption>
 </figure>
 </div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p><a href="https://github.com/matt-dray/tyle">tyle</a>, my Python-CLI roguelike-like, now has fog of war.</p>
+<p><a href="https://github.com/matt-dray/tyle">tyle</a>, my Python-CLI roguelike-like, now has ‘fog of war’.</p>
 </section>
 <section id="grid-and-bare-it" class="level2">
 <h2 class="anchored" data-anchor-id="grid-and-bare-it">Grid and bare it</h2>
-<p>You may remember <a href="https://www.rostrum.blog/posts/2026-02-01-tyle/">tyle</a>: the beginnings of an in-terminal tile-based <a href="https://en.wikipedia.org/wiki/Roguelike">roguelike</a> to help me improve my Python skills.</p>
-<p>If it excites you, you could install the development version like <code>uv tool install git+https://github.com/matt-dray/tyle.git</code> and initiate by typing <code>tyle</code> in a terminal.</p>
-<p>You’ll get something like:</p>
+<p>You may remember <a href="https://www.rostrum.blog/posts/2026-02-01-tyle/">my tyle concept</a>: the beginnings of an in-terminal tile-based <a href="https://en.wikipedia.org/wiki/Roguelike">roguelike</a> to help me improve my Python CLI skills.</p>
+<p>You could install the development version like <code>uv tool install git+https://github.com/matt-dray/tyle.git</code> and initiate by typing <code>tyle</code> in a terminal.</p>
+<p>Before now, you’d get something like this:</p>
 <pre><code>. . . # # . # . . . . . . . # . . . . . 
 . . . . . . . . . . . . . # . . . . . . 
 # . . . . . . . . . . . . # . . . . . . 
@@ -237,11 +233,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 . . . . . . # . . . . . . # . . . . . # 
 . # . . # . . . . . . . . . . . . . . . 
 Move (WASD+Enter): </code></pre>
-<p>Except it’ll have some colour if your terminal supports <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">ANSI escape codes</a>.</p>
+<p>There’s a player (<code>@</code>), floor tiles (<code>.</code>), and randomly-placed non-traversable wall tiles (<code>#</code>). You move the player by typing at the prompt.</p>
+<p>It’ll be in colour if your terminal supports <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#Colors">ANSI escape codes</a>.</p>
 </section>
 <section id="the-big-reveal" class="level2">
 <h2 class="anchored" data-anchor-id="the-big-reveal">The big reveal</h2>
-<p>tyle could improve in many ways. For example, the development of enemies and pathfinding, procedural dungeons, or an inventory system.</p>
+<p>Obviously tyle could improve in many ways. For example, the development of enemies and pathfinding, procedural dungeons, or an inventory system.</p>
 <p>A quick win is ‘fog of war’<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
 <p>This phrase refers to <a href="https://en.wikipedia.org/wiki/Fog_of_war">uncertainty when drawing up battle plans</a>, but is also a mechanic in many videogames, including roguelikes.</p>
 <p>A classic example is in <a href="https://en.wikipedia.org/wiki/Civilization_(series)">the Civilization series</a> of games. When you start, you cannot see the content of tiles you haven’t visited. The tiles are literally <a href="https://civilization.fandom.com/wiki/Fog_of_war">shrouded in fog</a>. That keeps things interesting: will the next tile contain a barbarian hoarde or a potential city-founding location?</p>
@@ -252,7 +249,7 @@ Move (WASD+Enter): </code></pre>
 <p>For lore reasons, imagine the player character is carrying a lamp that illuminates a certain number of tiles in any direction<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
 <p>How can we achieve this practically?</p>
 <p>You may remember that tyle has a <code>TileGrid</code> class. It has a <code>draw()</code> method to generate and print the current state of the tile map.</p>
-<p>Previously, we drew the underlying terrain in the map by default, which is composed of traversable floor (symbol <code>.</code>) and non-traversable walls (<code>#</code>). The only exception was to draw the player in the location given by the <code>Player</code>-class <code>row</code> and <code>column</code> properties.</p>
+<p>Previously, we drew the underlying terrain in the map by default, which is composed of the floor (symbol <code>.</code>) and wall (<code>#</code>) symbols. The only exception was to draw the player in the location given by the <code>Player</code>-class <code>row</code> and <code>column</code> properties.</p>
 <p>We can intercept this logic to draw fog-of-war symbols by default, unless within a certain tile-range of the player, in which case we draw the terrain.</p>
 <p>For maximum portability—and as a hat-tip to the original roguelikes—we’ve been using <a href="en.wikipedia.org/wiki/ASCII">ASCII symbols</a> as ‘graphics’. We may as well continue for the fog.</p>
 <p>I couldn’t think of anything cleverer than simply putting a <code>?</code>, geddit. Also it’s coloured grey becuase that seems right.</p>
