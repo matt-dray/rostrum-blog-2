@@ -21,13 +21,13 @@ showerthoughts about R and Python, mostly.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 193 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2026-03-08 (latest).
+🔢 There have been 194 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2026-03-15 (latest).
 
 📅 That’s a post roughly every 15 days, or about 2 posts per month.
 
-🆕 The latest post: [Fog of
-war](https://www.rostrum.blog/posts/2026-03-08-tyle-fog)
+🆕 The latest post: [Shaka, when the walls
+fell](https://www.rostrum.blog/posts/2026-03-15-tyle-walls)
 
 📈 Posts over time:
 
@@ -40,6 +40,7 @@ war](https://www.rostrum.blog/posts/2026-03-08-tyle-fog)
 
 |     | Date       | Title                                                                                                                          |
 |:----|:-----------|:-------------------------------------------------------------------------------------------------------------------------------|
+| 194 | 2026-03-15 | [Shaka, when the walls fell](https://www.rostrum.blog/posts/2026-03-15-tyle-walls)                                             |
 | 193 | 2026-03-08 | [Fog of war](https://www.rostrum.blog/posts/2026-03-08-tyle-fog)                                                               |
 | 192 | 2026-03-01 | [A tiny CLI weather {Rapp}ort](https://www.rostrum.blog/posts/2026-03-01-weva)                                                 |
 | 191 | 2026-02-15 | [Text hex logos with {hext}](https://www.rostrum.blog/posts/2026-02-15-hext)                                                   |
@@ -239,4 +240,4 @@ war](https://www.rostrum.blog/posts/2026-03-08-tyle-fog)
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2026-03-10 at 09:11.
+🕒 Last updated: 2026-03-14 at 23:08.
