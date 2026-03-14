@@ -10,7 +10,381 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Realised showerthoughts about R and Python mostly</description>
 <generator>quarto-1.8.27</generator>
-<lastBuildDate>Sun, 08 Mar 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 15 Mar 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Shaka, when the walls fell</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2026-03-15-tyle-walls/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2026-03-15-tyle-walls/resources/tyle-walls.gif" class="img-fluid figure-img" style="width:75.0%" alt="A 10 by 20 grid of characters printed to a terminal. Tiles are mostly question-mark characters (unknown tiles). Near the middle is an 'at' symbol (the player), surrounded within two tiles of periods (floor tiles) and hash marks (wall tiles). Underneath is a prompt for the player. The player moves around and destroys walls by inputting 'b' and builds them by typing 'p'."></p>
+<figcaption>Temba, his arms wide.</figcaption>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>I messed around again with <a href="https://github.com/matt-dray/tyle">tyle</a>, my Python-CLI roguelike-like. Now it has godlike destruction and creation.</p>
+</section>
+<section id="the-beast-at-tanagra" class="level2">
+<h2 class="anchored" data-anchor-id="the-beast-at-tanagra">The beast at Tanagra</h2>
+<p>Before now, you could install tyle<sup>1</sup>, type <code>tyle</code> into your terminal to generate a tile-grid with a player, surrounded by floor (<code>.</code>) and wall (<code>#</code>) tiles, as well as ‘fog of war’ (<code>?</code>) beyond a certain distance.</p>
+<pre><code>? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . # . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . @ . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+Move (WASD+Enter): </code></pre>
+<p>What next? I wanted to start thinking about enemies, but I did this with <a href="https://github.com/matt-dray/r.oguelike">r.oguelike</a> already and wanted to try something different first.</p>
+<p>I’m old enough to remember when Minecraft was first cool. What is Minecraft? Break block make block.</p>
+<p>We can mimic this in two dimensions pretty easily.</p>
+</section>
+<section id="jinza-when-the-truth-was-uncovered" class="level2">
+<h2 class="anchored" data-anchor-id="jinza-when-the-truth-was-uncovered">Jinza, when the truth was uncovered</h2>
+<p>In tyle, the underlying map is a <code>TileGrid</code>-class object, which is just a list of lists of <code>Tile</code>-class objects. These tiles currently take one of two values: they’re traversable floor (<code>.</code>) or untraversable wall (<code>#</code>).</p>
+<p>What if you could just… remove the obstruction?</p>
+<p>Well now you can. For example:</p>
+<pre><code>? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . @ # . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+Facing: right
+Move [wasd], [b]reak, [p]lace, [q]uit: </code></pre>
+<p>We’re facing right and the adjacent tile is a wall. Inputting <kbd>b</kbd> will <u>b</u>reak the wall.</p>
+<pre><code>? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . @ . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+Facing: right
+Move [wasd], [b]reak, [p]lace, [q]uit: </code></pre>
+<p>What’s actually happening is that the tile adjacent to the player’s direction is being replaced with a floor tile in the <code>TileGrid</code>.</p>
+<p>To help the player, I’ve added to the UI a reminder of which way the player is facing, decided by the last direction of travel.</p>
+<p>In <code>tile.py</code>, we can interpret an input of <kbd>b</kbd> to mean ‘update the <code>Tile</code> in the specified location’:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> move <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"b"</span>:</span>
+<span id="cb4-2">    row_change, col_change <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> direction_changes[<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.direction]</span>
+<span id="cb4-3">    target_row <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.player.row <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> row_change</span>
+<span id="cb4-4">    target_col <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.player.col <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> col_change</span>
+<span id="cb4-5">    </span>
+<span id="cb4-6">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> (</span>
+<span id="cb4-7">        <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;=</span> target_row <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.n_rows <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">and</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;=</span> target_col <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.n_cols</span>
+<span id="cb4-8">    ):</span>
+<span id="cb4-9">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span></span>
+<span id="cb4-10"></span>
+<span id="cb4-11">    target_tile <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.tiles[target_row][target_col]</span>
+<span id="cb4-12">    </span>
+<span id="cb4-13">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> target_tile.symbol <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.tileset[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"wall"</span>]:</span>
+<span id="cb4-14">        <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.tiles[target_row][target_col] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Tile(</span>
+<span id="cb4-15">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.tileset[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"floor"</span>], <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span></span>
+<span id="cb4-16">        )</span>
+<span id="cb4-17">    </span>
+<span id="cb4-18">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span></span></code></pre></div></div>
+<p>In short: if the player submits <kbd>b</kbd>, then replace the tile in the direction they’re facing with a floor tile. This gives the illusion that the wall has been destroyed.</p>
+</section>
+<section id="sokath-his-eyes-uncovered" class="level2">
+<h2 class="anchored" data-anchor-id="sokath-his-eyes-uncovered">Sokath, his eyes uncovered</h2>
+<p>Naturally, we can do this in reverse. Instead of breaking a wall block, we can build one.</p>
+<p>Pressing <kbd>p</kbd> will <u>p</u>lace a wall tile in the direction we’re facing (right in this example).</p>
+<pre><code>? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . @ # . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? . . . . . ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? 
+Facing: right
+Move [wasd], [b]reak, [p]lace, [q]uit: </code></pre>
+<p>This requires a small change to the code, allowing for a wall <code>Tile</code> to be added to the <code>TileGrid</code> rather than removed:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> move <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"b"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"p"</span>]:</span>
+<span id="cb6-2">    row_change, col_change <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> direction_changes[<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.direction]</span>
+<span id="cb6-3">    target_row <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.player.row <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> row_change</span>
+<span id="cb6-4">    target_col <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.player.col <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">+</span> col_change</span>
+<span id="cb6-5">    </span>
+<span id="cb6-6">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">not</span> (</span>
+<span id="cb6-7">        <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;=</span> target_row <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.n_rows <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">and</span> <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;=</span> target_col <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.n_cols</span>
+<span id="cb6-8">    ):</span>
+<span id="cb6-9">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span></span>
+<span id="cb6-10"></span>
+<span id="cb6-11">    target_tile <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.tiles[target_row][target_col]</span>
+<span id="cb6-12">    </span>
+<span id="cb6-13">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> move <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"b"</span>:</span>
+<span id="cb6-14">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> target_tile.symbol <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.tileset[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"wall"</span>]:</span>
+<span id="cb6-15">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.tiles[target_row][target_col] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Tile(</span>
+<span id="cb6-16">                <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.tileset[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"floor"</span>], <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span></span>
+<span id="cb6-17">            )</span>
+<span id="cb6-18">    </span>
+<span id="cb6-19">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> move <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"p"</span>:</span>
+<span id="cb6-20">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> target_tile.symbol <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">==</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.tileset[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"floor"</span>]:</span>
+<span id="cb6-21">            <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.tiles[target_row][target_col] <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Tile(</span>
+<span id="cb6-22">                <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">self</span>.tileset[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"wall"</span>], <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">False</span></span>
+<span id="cb6-23">            )</span>
+<span id="cb6-24">    </span>
+<span id="cb6-25">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span></span></code></pre></div></div>
+</section>
+<section id="jerna-before-the-dawn" class="level2">
+<h2 class="anchored" data-anchor-id="jerna-before-the-dawn">Jerna, before the dawn</h2>
+<p>At the moment, destruction and creation are infinite (within the confines of the tilegrid). You can break and build as many wall blocks as you like. Such omnipotence.</p>
+<p>In future I want to add this to an inventory system. Break one wall? Now you can make one wall. No more, no less.</p>
+<p>Perfectly balanced.</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered:2026-03-14 23:04:44 GMT
+
+[project]
+name = "2026-03-08-tyle-fog"
+version = "0.1.0"
+requires-python = "&gt;=3.12"
+dependencies = []</code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>You could install the development version like <code>uv tool install git+https://github.com/matt-dray/tyle.git</code>. But don’t install things from people you don’t trust.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
+  <category>cli</category>
+  <category>python</category>
+  <category>tyle</category>
+  <category>uv</category>
+  <guid>https://www.rostrum.blog/posts/2026-03-15-tyle-walls/</guid>
+  <pubDate>Sun, 15 Mar 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2026-03-15-tyle-walls/resources/tyle-walls.gif" medium="image" type="image/gif"/>
+</item>
 <item>
   <title>Fog of war</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -4851,488 +5225,6 @@ loaded via a namespace (and not attached):
   <guid>https://www.rostrum.blog/posts/2024-06-12-cran-db/</guid>
   <pubDate>Tue, 11 Jun 2024 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-06-12-cran-db/resources/app.png" medium="image" type="image/png" height="69" width="144"/>
-</item>
-<item>
-  <title>The Aesthetics Wiki: an R Addendum</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-05-08-aesthetic/</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2024-05-08-aesthetic/resources/passion.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="90s-style Word Art saying 'aesethics' in the middle, surrounded by the words 'base R', 'tidyverse' and 'tidy base question' in various egregious fonts and colours."></p>
-<figcaption class="figure-caption">They’re doing the Lord’s work over at <a href="https://www.makewordart.com/">makewordart.com</a>.</figcaption>
-</figure>
-</div>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>Some people look at an R script and see code. But I <em>feel</em> something.</p>
-</section>
-<section id="a-philosophy" class="level2">
-<h2 class="anchored" data-anchor-id="a-philosophy">A philosophy</h2>
-<p>Have you experienced the <a href="https://aesthetics.fandom.com/wiki/Aesthetics_Wiki">Aesthetics Wiki</a>?</p>
-<p>It’s missing R-related entries for some reason, which definitely fit <a href="https://aesthetics.fandom.com/wiki/Philosophy">the aesthetic philosophy</a> of having:</p>
-<blockquote class="blockquote">
-<p>perspectives on beauty and the human condition and a political, economic, or social statement</p>
-</blockquote>
-<p>Tell me you don’t look at an R script and get an immediate vibe.</p>
-<p>I want to suggest two obvious aesthetics for submission to the wiki—<em>Basecore</em> and <em>Tidywave</em>—and to introduce the definitely-soon-to-be-mainstreamed <em>V4 Punk</em><sup>1</sup>.</p>
-</section>
-<section id="the-addendum" class="level2">
-<h2 class="anchored" data-anchor-id="the-addendum">The addendum</h2>
-<section id="basecore" class="level3">
-<h3 class="anchored" data-anchor-id="basecore">Basecore</h3>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2024-05-08-aesthetic/resources/chaotic-academia.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="A set of different-sized books haphazardly placed ona bookshelf."></p>
-<figcaption class="figure-caption">Adapted from <a href="https://static.wikia.nocookie.net/aesthetics/images/1/15/Chaotic_academia.jpg/revision/latest?cb=20200610213320">Aesthetics Wiki</a>.</figcaption>
-</figure>
-</div>
-<section id="overview" class="level4">
-<h4 class="anchored" data-anchor-id="overview">Overview</h4>
-<ul>
-<li>History: emerged as Base Academic in 1993, mainstreamed as Base Core from 2000 to date.</li>
-<li>Visuals: <code>[</code> (square-bracket selector), <code>$</code> (dollar selector), <code>~</code> (formula-form tilde).</li>
-<li>Media: <a href="https://cran.r-project.org/doc/manuals/R-exts.html"><em>Writing R Extensions</em></a>, the <a href="https://stat.ethz.ch/mailman/listinfo/r-help">R-help mailing list</a>, that textfile with a <a href="https://fosstodon.org/@mattdray/111125184484188641">Y2K warning</a> that came bundled with R v1.0.</li>
-<li>Fashion: cardigans, a wired mouse with a ball in it, the old-school IDE you get when you click ‘R.app’ instead of ‘RStudio.app’.</li>
-<li>Palette: <span style="background-color:lightgrey;">grey</span>.</li>
-<li>Nearest aesthetic: <a href="https://aesthetics.fandom.com/wiki/Chaotic_Academia">Chaotic Academia</a>, which ‘acknowledges the pretentiousness of classic academia, subtly mocking it at times’.</li>
-</ul>
-</section>
-<section id="sample" class="level4">
-<h4 class="anchored" data-anchor-id="sample">Sample</h4>
-<p>Classic stuff. Typical base-R code uses a lot of intermediate assignment to create temporary objects for further manipulation. Many actions make use of square bracket notation to indicate some action over rows and columns of a data.frame. Data.frame columns have to be called within the context of the data.frame they belong to, using dollar or square-bracket notation. The tilde is used for formula notation (‘this given that’).</p>
-<details>
-<summary>
-Set up demo data
-</summary>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">suppressPackageStartupMessages</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(dplyr))</span>
-<span id="cb1-2">sw_a <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> starwars[, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"name"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"species"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"height"</span>)]</span>
-<span id="cb1-3">sw_b <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> starwars[, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"name"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"homeworld"</span>)]</span></code></pre></div>
-</div>
-</details>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">x <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> sw_a[sw_a<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>species <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Human"</span>, <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">names</span>(sw_a) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!=</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"species"</span>]</span>
-<span id="cb2-2">x <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">merge</span>(x, sw_b, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">by =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"name"</span>)</span>
-<span id="cb2-3">x<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>height <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> x<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>height <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">100</span></span>
-<span id="cb2-4">x<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>homeworld <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ifelse</span>(</span>
-<span id="cb2-5">  <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span>x<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>homeworld <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Tatooine"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Naboo"</span>),</span>
-<span id="cb2-6">  <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Other"</span>,</span>
-<span id="cb2-7">  x<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>homeworld</span>
-<span id="cb2-8">)</span>
-<span id="cb2-9">x <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">aggregate</span>(x, height <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">~</span> homeworld, mean, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>)</span>
-<span id="cb2-10">x <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> x[<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">order</span>(<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span>x<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>height), ]</span>
-<span id="cb2-11">x</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  homeworld   height
-3  Tatooine 1.792500
-2     Other 1.776471
-1     Naboo 1.772000</code></pre>
-</div>
-</div>
-</section>
-</section>
-<section id="tidywave" class="level3">
-<h3 class="anchored" data-anchor-id="tidywave">Tidywave</h3>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2024-05-08-aesthetic/resources/corporate-memphis.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="Colourful stylised cartoon of faceless humans with small heads and large limbs and hands."></p>
-<figcaption class="figure-caption">Adapted from <a href="https://static.wikia.nocookie.net/aesthetics/images/6/62/Blob-web-exercise.webp/revision/latest?cb=20210410215136">Aesthetics Wiki</a>.</figcaption>
-</figure>
-</div>
-<section id="overview-1" class="level4">
-<h4 class="anchored" data-anchor-id="overview-1">Overview</h4>
-<ul>
-<li>History: humble academic origins in 2008, later popularised with the creation of the {tidyverse} in 2016.</li>
-<li>Visuals: <code>%&gt;%</code> ({magrittr} pipe), <code>.</code> (data placeholder), <code>~</code> (lambda function).</li>
-<li>Media: <a href="https://r4ds.hadley.nz/"><em>R for Data Science</em></a>, conflict warnings in the console when you do <code>library(tidyverse)</code>, that one gif of Hadley tapping merrily on an invisible keyboard (‘just typing R code!’).</li>
-<li>Fashion: RStudio, hex stickers, rapid deprecation.</li>
-<li>Palette: Posit <span style="background-color:#1a162d;color:white;">blue</span>, <span style="background-color:#fdeba4;">yellow</span>, and <span style="background-color:#767381;color:white;">grey</span>.</li>
-<li>Nearest aesthetic: <a href="https://aesthetics.fandom.com/wiki/Corporate_Memphis">Corporate Memphis</a> because I’ve literally seen it in Posit marketing.</li>
-</ul>
-</section>
-<section id="sample-1" class="level4">
-<h4 class="anchored" data-anchor-id="sample-1">Sample</h4>
-<p>The script reads from left-to-right and top-to-bottom, recipe style, using pipes: ‘take dataset, then do a thing, then do a thing’, etc. Each function is verb that indicates its action. Non-standard evaluation is rampant. A tilde replaces the tedious typing of <kbd>f</kbd><kbd>u</kbd><kbd>n</kbd><kbd>c</kbd><kbd>t</kbd><kbd>i</kbd><kbd>o</kbd><kbd>n</kbd><kbd>(</kbd><kbd>)</kbd>. A titchy inconspicuous <code>.</code> acts as a data placeholder on the right-hand side of a pipe.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">sw_a <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%&gt;%</span></span>
-<span id="cb4-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">filter</span>(species <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Human"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%&gt;%</span></span>
-<span id="cb4-3">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">select</span>(<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span>species) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%&gt;%</span></span>
-<span id="cb4-4">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">left_join</span>(sw_b, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">by =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"name"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%&gt;%</span></span>
-<span id="cb4-5">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mutate</span>(</span>
-<span id="cb4-6">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">height =</span> height <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">100</span>,</span>
-<span id="cb4-7">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">homeworld =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">if_else</span>(</span>
-<span id="cb4-8">      <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span>homeworld <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Tatooine"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Naboo"</span>),</span>
-<span id="cb4-9">      <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Other"</span>,</span>
-<span id="cb4-10">      homeworld</span>
-<span id="cb4-11">    )</span>
-<span id="cb4-12">  ) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%&gt;%</span></span>
-<span id="cb4-13">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">summarise</span>(</span>
-<span id="cb4-14">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">height =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mean</span>(height, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>),</span>
-<span id="cb4-15">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">.by =</span> homeworld</span>
-<span id="cb4-16">  ) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%&gt;%</span></span>
-<span id="cb4-17">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">arrange</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">desc</span>(height))</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 2
-  homeworld height
-  &lt;chr&gt;      &lt;dbl&gt;
-1 Tatooine    1.79
-2 Other       1.78
-3 Naboo       1.77</code></pre>
-</div>
-</div>
-</section>
-<section id="v4-punk" class="level4">
-<h4 class="anchored" data-anchor-id="v4-punk">V4 Punk</h4>
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2024-05-08-aesthetic/resources/vacation-dadcore.png" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="Tom Sellick in a Hawaiian shirt at the beach, leaning against a palm tree. He is smiling."></p>
-<figcaption class="figure-caption">Adapted from <a href="https://static.wikia.nocookie.net/aesthetics/images/d/d1/Magnum-pi-hawaiian-shirt.jpg/revision/latest?cb=20200507215616">Aesthetics Wiki</a>.</figcaption>
-</figure>
-</div>
-</section>
-<section id="overview-2" class="level4">
-<h4 class="anchored" data-anchor-id="overview-2">Overview</h4>
-<ul>
-<li>History: incremental emergence following R version 4.0 in 2020, boosted greatly in 2022 with the release of the base pipe. The future of R.</li>
-<li>Visuals: <code>|&gt;</code> (base pipe), <code>_</code> (data placeholder), <code>\()</code> (lambda function).</li>
-<li>Media: meme blogs, cheeky Fosstodon posts.</li>
-<li>Fashion: hubris, evil moustaches, troll-face emojis.</li>
-<li>Palette: <span style="background-color:#ff0000;">r</span><span style="background-color:#ff00ff;">a</span><span style="background-color:#00ffff;">i</span><span style="background-color:#00ff00;">n</span><span style="background-color:#0000ff;color:white;">b</span><span style="background-color:#4b0082;color:white;">o</span><span style="background-color:#ee82ee;">w</span>?</li>
-<li>Nearest aesthetic: <a href="https://aesthetics.fandom.com/wiki/Vacation_Dadcore">Vacation Dadcore</a>, so you can ‘escape to a simpler time without sacrificing any of the fun’.</li>
-</ul>
-</section>
-<section id="sample-2" class="level4">
-<h4 class="anchored" data-anchor-id="sample-2">Sample</h4>
-<p>Hear me out: what if tidyverse, but made entirely of base R functions<sup>2</sup>? This is now possible with the base pipe and by using obscure functions that help you avoid square brackets<sup>3</sup>. It’s also sketchy as heck; just see the help files for <code>subset()</code> (‘unanticipated consequences’) and <code>transform()</code> (‘you deserve whatever you get!’). The death of Basecore and Tidywave, for sure.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1">sw_a <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb6-2">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">subset</span>(</span>
-<span id="cb6-3">    species <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Human"</span>,</span>
-<span id="cb6-4">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">select =</span> <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">-</span>species</span>
-<span id="cb6-5">  ) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb6-6">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">merge</span>(sw_b, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">by =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"name"</span>) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb6-7">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">transform</span>(</span>
-<span id="cb6-8">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">height =</span> height <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">/</span> <span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">100</span>,</span>
-<span id="cb6-9">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">homeworld =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">ifelse</span>(</span>
-<span id="cb6-10">      <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">!</span>homeworld <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">%in%</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">c</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Tatooine"</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Naboo"</span>),</span>
-<span id="cb6-11">      <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"Other"</span>,</span>
-<span id="cb6-12">      homeworld</span>
-<span id="cb6-13">    )</span>
-<span id="cb6-14">  ) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb6-15">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">aggregate</span>(</span>
-<span id="cb6-16">    height <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">~</span> homeworld, </span>
-<span id="cb6-17">    \(x) <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">mean</span>(x, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">na.rm =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>)</span>
-<span id="cb6-18">  ) <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">|&gt;</span></span>
-<span id="cb6-19">  <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">sort_by</span>(<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">~</span> height, <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">decreasing =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># hot off the v4.4 press</span></span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  homeworld   height
-3  Tatooine 1.792500
-2     Other 1.776471
-1     Naboo 1.772000</code></pre>
-</div>
-</div>
-<p>Can’t wait to see this roll out into production code.</p>
-</section>
-</section>
-
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-05-09 09:04:29 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.4.0 (2024-04-24)
-Platform: aarch64-apple-darwin20
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
-[1] dplyr_1.1.4
-
-loaded via a namespace (and not attached):
- [1] digest_0.6.35     utf8_1.2.4        R6_2.5.1          fastmap_1.1.1    
- [5] tidyselect_1.2.1  xfun_0.43         magrittr_2.0.3    glue_1.7.0       
- [9] tibble_3.2.1      knitr_1.46        pkgconfig_2.0.3   htmltools_0.5.8.1
-[13] rmarkdown_2.26    generics_0.1.3    lifecycle_1.0.4   cli_3.6.2        
-[17] fansi_1.0.6       vctrs_0.6.5       withr_3.0.0       compiler_4.4.0   
-[21] rstudioapi_0.16.0 tools_4.4.0       pillar_1.9.0      evaluate_0.23    
-[25] yaml_2.3.8        rlang_1.1.3       jsonlite_1.8.8   </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>These <a href="https://aesthetics.fandom.com/wiki/Suffix_Meaning">suffixes are meaningful</a>: core ‘implies a system, a set of rules’, wave ‘a significant shift within a genre’ and punk ‘reject[s] social norms’.↩︎</p></li>
-<li id="fn2"><p>I called this ‘The Modern Base Aesthetic’ in <a href="https://www.rostrum.blog/posts/2023-10-17-nhs-r-2023/">my talk, ‘Base Slaps!’</a>, at the NHS-R conference 2023. But now I realise the aesthetics run deeper.↩︎</p></li>
-<li id="fn3"><p>If you truly want something that looks like {dplyr} code but depends only on base R, then check out <a href="https://nathaneastwood.github.io/poorman/">the {poorman} package</a>.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>base</category>
-  <category>r</category>
-  <category>tidyverse</category>
-  <guid>https://www.rostrum.blog/posts/2024-05-08-aesthetic/</guid>
-  <pubDate>Tue, 07 May 2024 23:00:00 GMT</pubDate>
-  <media:content url="https://www.rostrum.blog/posts/2024-05-08-aesthetic/resources/passion.png" medium="image" type="image/png" height="66" width="144"/>
 </item>
 </channel>
 </rss>
