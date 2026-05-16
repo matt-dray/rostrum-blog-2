@@ -1,0 +1,90 @@
+---
+title: "Eating dogfood 1000 times"
+date: 2026-05-31
+slug: "dogfood-1000"
+image: resources/jot-fib.png
+categories:
+  - cli
+  - jot
+  - python
+  - uv
+---
+
+![](resources/.png){fig-align="left" fig-alt=""}
+
+## tl;dr
+
+I used my own Python tool over 1000 times. 
+What did I learn?
+
+## 
+
+I [wrote about jot before](), my opinionated Python command-line tool for jotting down little timestamped notes to myself.
+
+If you've read this blog, you know I make things and... move on.
+
+Guess what?
+I actually used this one consistently.
+
+In fact, I've been jotting every work day since August 2025 and have banked over 1000 jottings.
+
+How has this been useful?
+I write weeknotes and timesheets every Friday afternoon.
+But I can't usually remember stuff.
+So this has beena good 'brain outside my brain'.
+
+Also, it's nearly time for my annual appraisal. 
+Normally I struggle to remember what I've done.
+Not just the major things, but also the little things that fall through the cracks.
+
+Which are often the things that actually matter.
+To me.
+And to my colleagues.
+
+I helped unblock things.
+I reviewed loads of tiny pull requests.
+I spent some time learning about something.
+
+The jot file has helped me record and recognise these things.
+And, crucially, reflect on them.
+
+I've also used it to jot down when I've received unsolicited feedback.
+Turns out I've been useful to people.
+Who knew?
+I certainly didn't before I started writing these things down.
+
+Is jot a world-beating bit of software?
+Ahahaha, no.
+Has it made a difference to me?
+Aye, it has.
+
+## 
+
+I started developing jot to learn how to Python and write CLIs.
+That is definitely a success.
+
+The culmination of that is a tool I use daily, yes.
+But the true final boss is to upload it to PyPi.
+
+Well... jot is now available on PyPi.
+Install like regular person with:
+
+```{bash}
+#| eval: false
+pip install jot-cli
+```
+
+And then follow the docs and use it like:
+
+```{bash}
+#| eval: false
+jot "ate an apple"
+```
+
+### Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat(readLines("pyproject.toml"), sep = "\n")
+```
+</details>
