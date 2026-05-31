@@ -11400,14 +11400,14 @@
     "href": "posts/2026-05-31-dogfood/index.html#tldr",
     "title": "Eating dogfood 1000 times",
     "section": "tl;dr",
-    "text": "tl;dr\nI used my own Python tool over 1000 times. What did I learn?"
+    "text": "tl;dr\nI wrote and used my own CLI tool over 1000 times. What did I learn?"
   },
   {
     "objectID": "posts/2026-05-31-dogfood/index.html#section",
     "href": "posts/2026-05-31-dogfood/index.html#section",
     "title": "Eating dogfood 1000 times",
     "section": "",
-    "text": "I wrote about jot before, my opinionated Python command-line tool for jotting down little timestamped notes to myself.\nIf you’ve read this blog, you know I make things and… move on.\nGuess what? I actually used this one consistently.\nIn fact, I’ve been jotting every work day since August 2025 and have banked over 1000 jottings.\nHow has this been useful? I write weeknotes and timesheets every Friday afternoon. But I can’t usually remember stuff. So this has beena good ‘brain outside my brain’.\nAlso, it’s nearly time for my annual appraisal. Normally I struggle to remember what I’ve done. Not just the major things, but also the little things that fall through the cracks.\nWhich are often the things that actually matter. To me. And to my colleagues.\nI helped unblock things. I reviewed loads of tiny pull requests. I spent some time learning about something.\nThe jot file has helped me record and recognise these things. And, crucially, reflect on them.\nI’ve also used it to jot down when I’ve received unsolicited feedback. Turns out I’ve been useful to people. Who knew? I certainly didn’t before I started writing these things down.\nIs jot a world-beating bit of software? Ahahaha, no. Has it made a difference to me? Aye, it has."
+    "text": "Right now it works for me, which is the bottom line.\nI know some others have had a go and found it useful too. Thanks in particular to:\n\nOlivier for allowing the list of jottings to be filtered by date\nmy work colleagues (especially Fran) who have been very helpful in our ‘sidequests and suport’ sessions.\nAdriana for testing (but mostly for listening to me ramble on about it)\n\nI want functionality to remain simple, so future updates will mostly be about improving the underlying code and possibly the user interface.\nI have, however, been developing an option to upload the file to a GitHub gist as backup. Maybe that’s too radical for this simple tool."
   },
   {
     "objectID": "posts/2026-05-31-dogfood/index.html#section-1",
@@ -11415,5 +11415,82 @@
     "title": "Eating dogfood 1000 times",
     "section": "",
     "text": "I started developing jot to learn how to Python and write CLIs. That is definitely a success.\nThe culmination of that is a tool I use daily, yes. But the true final boss is to upload it to PyPi.\nWell… jot is now available on PyPi. Install like regular person with:\n\npip install jot-cli\n\nAnd then follow the docs and use it like:\n\njot \"ate an apple\""
+  },
+  {
+    "objectID": "posts/2026-05-31-dogfood/index.html#pypi",
+    "href": "posts/2026-05-31-dogfood/index.html#pypi",
+    "title": "Eating dogfood 1000 times",
+    "section": "PyPI",
+    "text": "PyPI\nI started developing jot to learn ‘how to Python’ and write CLIs. I think that’s a success, but where next?\nWell, I’ve formalised its existence by uploading it to the Python Package Index (PyPI) to make it’s more readily available.\nYou can now find it as jot-cli on PyPI, as of version 0.3.0. Yes, you have to install ‘jot-cli’ rather than ‘jot’, because the name is already taken on PyPI. But the command still remains jot in the terminal3.\nYou could install4 with uv5:\n\nuv tool install jot-cli\n\nThen, to upgrade:\n\nuv tool upgrade jot-cli\n\nThe development version is available from GitHub like:\n\nuv tool install git+https://github.com/matt-dray/jot\n\nNote that the GitHub repo is still called ‘jot’ despite it having to be called ‘jot-cli’ on PyPI6."
+  },
+  {
+    "objectID": "posts/2026-05-31-dogfood/index.html#footnotes",
+    "href": "posts/2026-05-31-dogfood/index.html#footnotes",
+    "title": "Eating dogfood 1000 times",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nNot actual colleagues.↩︎\nYou could, for example, ask generative AI to pull out topics for you, but I quite like to eyeball it.↩︎\nAwkwardly, there’s an inbuilt macOS tool called jot, so you may get a nameclash. Most likely the installed tool will take precedence over the inbuilt one when you type jot, but you could set an alias to avoid this. I did think about changing the name to something else entirely, but ‘jot’ works well.↩︎\nNote that it has to be installed as a ‘tool’ becuase it’s intended for command-line use; its’ not a Python package (though you could use it one if you wanted).↩︎\nNon-uv users may prefer to use pipx.↩︎\nFor consistency, I may eventually change the name of the repo to ‘jot-cli’ too.↩︎\nThe most interesting thing I’ve seen recently for note-taking (and much more) is nb.↩︎"
+  },
+  {
+    "objectID": "posts/2026-05-31-dogfood/index.html#jot-or-not",
+    "href": "posts/2026-05-31-dogfood/index.html#jot-or-not",
+    "title": "Eating dogfood 1000 times",
+    "section": "Jot or not?",
+    "text": "Jot or not?\nRegular readers know that I make stuff and… move on.\nSyke! I actually used this one consistently.\nIn fact, I’ve been jotting things down every work day since August 2025 and have banked well over 1000 jottings.\nBut has it actually been useful?"
+  },
+  {
+    "objectID": "posts/2026-05-31-dogfood/index.html#galaxy-brain",
+    "href": "posts/2026-05-31-dogfood/index.html#galaxy-brain",
+    "title": "Eating dogfood 1000 times",
+    "section": "Galaxy brain",
+    "text": "Galaxy brain\nI struggle to remember.\nThis causes a problem when I try to write weeknotes and timesheets. I also struggle to reflect on my achievements, which is particularly pertinent with my upcoming annual appraisal.\nSo I’ve been consistently jotting down each of my tasks as I go along, like ‘released version 1.0 of the package’ and ‘joined a call with morag to discuss the app’1. It takes mere seconds.\nCrucially, I record little interactions that often fall through the cracks. Which are often the things that actually matter to me and to my colleagues, as humans.\nI’ve also used it to jot down when I’ve received unsolicited feedback. Turns out I’ve been useful to people. Who knew? I certainly didn’t before I started writing these things down."
+  },
+  {
+    "objectID": "posts/2026-05-31-dogfood/index.html#post-note",
+    "href": "posts/2026-05-31-dogfood/index.html#post-note",
+    "title": "Eating dogfood 1000 times",
+    "section": "Post note",
+    "text": "Post note\nIs jot a world-beating bit of software? Ahahaha, no. Has it made a difference to me? Aye, it has."
+  },
+  {
+    "objectID": "posts/2026-05-31-dogfood/index.html#thats-yer-jot",
+    "href": "posts/2026-05-31-dogfood/index.html#thats-yer-jot",
+    "title": "Eating dogfood 1000 times",
+    "section": "That’s yer jot",
+    "text": "That’s yer jot\nSo, is jot a world-beating bit of software? No, there’s plenty of similar and more powerful tools out there7.\nAnd has the dogfood been delicious? Aye, gourmet, and I’ll continue to chow down.\n\njot \"wrote a blog post about jot's release to PyPI\""
+  },
+  {
+    "objectID": "posts/2026-05-31-dogfood/index.html#one-shot-jot",
+    "href": "posts/2026-05-31-dogfood/index.html#one-shot-jot",
+    "title": "Eating dogfood 1000 times",
+    "section": "One-shot jot",
+    "text": "One-shot jot\nI’ve written about jot before: my very simple and opinionated Python command-line tool for jotting down little timestamped notes to myself.\nIn an open terminal I can just:\n\njot \"put one of the new coversheets on the TPS reports\"\n\nAnd it gets automatically prepended to a text file with the date and time.\nRinse and repeat throughout the day."
+  },
+  {
+    "objectID": "posts/2026-05-31-dogfood/index.html#a-jot-of-bother",
+    "href": "posts/2026-05-31-dogfood/index.html#a-jot-of-bother",
+    "title": "Eating dogfood 1000 times",
+    "section": "A jot of bother",
+    "text": "A jot of bother\nRegular readers know that I make stuff and… move on.\nSike! I’ve actually been using this one a whole bunch.\nIn fact, I’ve been jotting things down every work day since August 2025 and have banked well over 1000 jottings.\nBut has it actually been useful?"
+  },
+  {
+    "objectID": "posts/2026-05-31-dogfood/index.html#in-the-pypiline",
+    "href": "posts/2026-05-31-dogfood/index.html#in-the-pypiline",
+    "title": "Eating dogfood 1000 times",
+    "section": "In the PyPIline",
+    "text": "In the PyPIline\nI started developing jot to learn ‘how to Python’ and write CLIs. I think that’s a success, but where next?\nWell, I’ve formalised its existence by uploading it to the Python Package Index (PyPI) to make it’s more readily available.\nYou can now find it as jot-cli on PyPI, as of version 0.3.0. Yes, you have to install ‘jot-cli’ rather than ‘jot’, because the name is already taken on PyPI. But the command still remains jot in the terminal3.\nYou could install4 with uv5:\n\nuv tool install jot-cli\n\nThen, to upgrade:\n\nuv tool upgrade jot-cli\n\nThe development version is available from GitHub like:\n\nuv tool install git+https://github.com/matt-dray/jot\n\nNote that the GitHub repo is still called ‘jot’ despite it having to be called ‘jot-cli’ on PyPI6."
+  },
+  {
+    "objectID": "posts/2026-05-31-dogfood/index.html#forget-me-jot",
+    "href": "posts/2026-05-31-dogfood/index.html#forget-me-jot",
+    "title": "Eating dogfood 1000 times",
+    "section": "Forget me jot",
+    "text": "Forget me jot\nI have a leaky brain.\nThis causes a problem when I try to write weeknotes and timesheets. I also struggle to reflect on my achievements, which is particularly pertinent with my upcoming annual appraisal.\nSo I’ve been consistently jotting down each of my tasks as I go along, like ‘released version 1.0 of the package’ and ‘joined a call with morag to discuss the app’1. It takes mere seconds.\nCrucially, I record little interactions that often fall through the cracks. Which are often the things that actually matter to me and to my colleagues (as humans).\nI’ve also used it to record unsolicited feedback. Turns out I’ve been useful to people. Who knew? I certainly didn’t before I started writing these things down.\nAlong the way I’ve been making heavy use of jot’s options like --list and --search (with --date-from and --date-to) to look for patterns and isolate time periods2."
+  },
+  {
+    "objectID": "posts/2026-05-31-dogfood/index.html#thnks-fr-th-mmrs",
+    "href": "posts/2026-05-31-dogfood/index.html#thnks-fr-th-mmrs",
+    "title": "Eating dogfood 1000 times",
+    "section": "Thnks fr th Mmrs",
+    "text": "Thnks fr th Mmrs\nRight now it works for me, which is the bottom line.\nI know some others have had a go and found it useful too. Thanks in particular to:\n\nOlivier for submitting code to let the list of jottings to be filtered by date\nmy work colleagues (especially Fran who have provided feedback in our ‘sidequests and suport’ sessions.\nAdriana for blue-sky thinking (but mostly for listening to me ramble on about it)\n\nI want functionality to remain simple, so future updates will mostly be about improving the underlying code and possibly the user interface.\nI have, however, been developing an option to upload the file to a GitHub gist as backup. But maybe that’s too radical."
   }
 ]

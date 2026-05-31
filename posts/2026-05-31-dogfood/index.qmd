@@ -10,75 +10,124 @@ categories:
   - uv
 ---
 
-![](resources/.png){fig-align="left" fig-alt=""}
+![](resources/jot-brain.png){fig-align="left" fig-alt="A cartoon brain with a thought bubble containing another brain."}
 
 ## tl;dr
 
-I used my own Python tool over 1000 times. 
+I wrote and used my own CLI tool over 1000 times. 
 What did I learn?
 
-## 
+## One-shot jot
 
-I [wrote about jot before](), my opinionated Python command-line tool for jotting down little timestamped notes to myself.
+I've [written about jot before](https://www.rostrum.blog/index.html#category=jot): my very simple and opinionated Python command-line tool for jotting down little timestamped notes to myself.
 
-If you've read this blog, you know I make things and... move on.
+In an open terminal I can just:
 
-Guess what?
-I actually used this one consistently.
+```{bash}
+#| label: i-just-forgot
+#| eval: false
+jot "put one of the new coversheets on the TPS reports"
+```
 
-In fact, I've been jotting every work day since August 2025 and have banked over 1000 jottings.
+And it gets automatically prepended to a text file with the date and time.
 
-How has this been useful?
-I write weeknotes and timesheets every Friday afternoon.
-But I can't usually remember stuff.
-So this has beena good 'brain outside my brain'.
+Rinse and repeat throughout the day.
 
-Also, it's nearly time for my annual appraisal. 
-Normally I struggle to remember what I've done.
-Not just the major things, but also the little things that fall through the cracks.
+## A jot of bother
 
-Which are often the things that actually matter.
-To me.
-And to my colleagues.
+Regular readers know that I make stuff and... move on.
 
-I helped unblock things.
-I reviewed loads of tiny pull requests.
-I spent some time learning about something.
+Sike!
+I've actually been using this one a whole bunch.
 
-The jot file has helped me record and recognise these things.
-And, crucially, reflect on them.
+In fact, I've been jotting things down every work day since August 2025 and have banked well over 1000 jottings.
 
-I've also used it to jot down when I've received unsolicited feedback.
+But has it actually been useful?
+
+## Forget me jot
+
+I have a leaky brain.
+
+This causes a problem when I try to write weeknotes and timesheets.
+I also struggle to reflect on my achievements, which is particularly pertinent with my upcoming annual appraisal.
+
+So I've been consistently jotting down each of my tasks as I go along, like 'released version 1.0 of the package' and 'joined a call with morag to discuss the app'[^colleagues].
+It takes mere seconds.
+
+Crucially, I record little interactions that often fall through the cracks.
+Which are often the things that _actually_ matter to me and to my colleagues (as humans).
+
+I've also used it to record unsolicited feedback.
 Turns out I've been useful to people.
 Who knew?
 I certainly didn't before I started writing these things down.
 
-Is jot a world-beating bit of software?
-Ahahaha, no.
-Has it made a difference to me?
-Aye, it has.
+Along the way I've been making heavy use of jot's options like `--list` and `--search` (with `--date-from` and `--date-to`) to look for patterns and isolate time periods[^llm].
 
-## 
+## In the PyPIline
 
-I started developing jot to learn how to Python and write CLIs.
-That is definitely a success.
+I started developing jot to learn 'how to Python' and write CLIs.
+I think that's a success, but where next?
 
-The culmination of that is a tool I use daily, yes.
-But the true final boss is to upload it to PyPi.
+Well, I've formalised its existence by uploading it to the Python Package Index (PyPI) to make it's more readily available.
 
-Well... jot is now available on PyPi.
-Install like regular person with:
+You can now find it as [jot-cli on PyPI](https://pypi.org/project/jot-cli/), as of version 0.3.0.
+Yes, you have to install 'jot-cli' rather than 'jot', because the name is already taken on PyPI.
+But the command still remains `jot` in the terminal[^macos].
+
+You could install[^tool] with [uv](https://docs.astral.sh/uv/getting-started/installation/)[^pipx]:
 
 ```{bash}
+#| label: install
 #| eval: false
-pip install jot-cli
+uv tool install jot-cli
 ```
 
-And then follow the docs and use it like:
+Then, to upgrade:
 
 ```{bash}
+#| label: upgrade
 #| eval: false
-jot "ate an apple"
+uv tool upgrade jot-cli
+```
+
+The development version is [available from GitHub](https://github.com/matt-dray/jot) like:
+
+```{bash}
+#| label: install-dev
+#| eval: false
+uv tool install git+https://github.com/matt-dray/jot
+```
+
+Note that the GitHub repo is still called 'jot' despite it having to be called 'jot-cli' on PyPI[^jot-cli].
+
+## Thnks fr th Mmrs
+
+Right now it works for me, which is the bottom line.
+
+I know some others have had a go and found it useful too. Thanks in particular to:
+
+* [Olivier](https://github.com/oiffrig) for submitting code to let the list of jottings to be filtered by date
+* my [work colleagues](https://the-strategy-unit.github.io/data_science/about.html) (especially [Fran](https://github.com/francisbarton) who have provided feedback in our 'sidequests and suport' sessions.
+* [Adriana](https://github.com/adrianadepalma) for blue-sky thinking (but mostly for listening to me ramble on about it)
+
+I want functionality to remain simple, so future updates will mostly be about improving the underlying code and possibly the user interface.
+
+I have, however, been developing an option to upload the file to a GitHub gist as backup.
+But maybe that's too radical.
+
+## That's yer jot
+
+So, is jot a world-beating bit of software?
+No, there's plenty of similar and more powerful tools out there[^nb].
+
+And [has the dogfood been delicious](https://en.wikipedia.org/wiki/Eating_your_own_dog_food)?
+Aye, gourmet, and I'll continue to chow down.
+
+```{bash}
+#| label: jotting
+#| eval: false
+jot "wrote a blog post about jot's release to PyPI"
 ```
 
 ### Environment {.appendix}
@@ -88,3 +137,11 @@ jot "ate an apple"
 cat(readLines("pyproject.toml"), sep = "\n")
 ```
 </details>
+
+[^colleagues]: Not actual colleagues.
+[^pipx]: Non-uv users may prefer to use [pipx](https://pipx.pypa.io/).
+[^jot-cli]: For consistency, I may eventually change the name of the repo to 'jot-cli' too.
+[^macos]: Awkwardly, there's an inbuilt macOS tool called jot, so you may get a nameclash. Most likely the installed tool will take precedence over the inbuilt one when you type `jot`, but you could set an alias to avoid this. I did think about changing the name to something else entirely, but 'jot' works well.
+[^tool]: Note that it has to be installed as a 'tool' becuase it's intended for command-line use; its' not a Python package (though you could use it one if you wanted).
+[^nb]: The most interesting thing I've seen recently for note-taking (and much more) is [nb](https://github.com/xwmx/nb).
+[^llm]: You could, for example, ask generative AI to pull out topics for you, but I quite like to eyeball it.

@@ -23,47 +23,94 @@
 
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2026-05-31-dogfood/resources/.png" class="img-fluid quarto-figure quarto-figure-left figure-img" alt=""></p>
+<p><img src="https://www.rostrum.blog/posts/2026-05-31-dogfood/resources/jot-brain.png" class="img-fluid quarto-figure quarto-figure-left figure-img" alt="A cartoon brain with a thought bubble containing another brain."></p>
 </figure>
 </div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I used my own Python tool over 1000 times. What did I learn?</p>
+<p>I wrote and used my own CLI tool over 1000 times. What did I learn?</p>
 </section>
-<section id="section" class="level2">
-<h2 class="anchored" data-anchor-id="section"></h2>
-<p>I <a href="">wrote about jot before</a>, my opinionated Python command-line tool for jotting down little timestamped notes to myself.</p>
-<p>If you’ve read this blog, you know I make things and… move on.</p>
-<p>Guess what? I actually used this one consistently.</p>
-<p>In fact, I’ve been jotting every work day since August 2025 and have banked over 1000 jottings.</p>
-<p>How has this been useful? I write weeknotes and timesheets every Friday afternoon. But I can’t usually remember stuff. So this has beena good ‘brain outside my brain’.</p>
-<p>Also, it’s nearly time for my annual appraisal. Normally I struggle to remember what I’ve done. Not just the major things, but also the little things that fall through the cracks.</p>
-<p>Which are often the things that actually matter. To me. And to my colleagues.</p>
-<p>I helped unblock things. I reviewed loads of tiny pull requests. I spent some time learning about something.</p>
-<p>The jot file has helped me record and recognise these things. And, crucially, reflect on them.</p>
-<p>I’ve also used it to jot down when I’ve received unsolicited feedback. Turns out I’ve been useful to people. Who knew? I certainly didn’t before I started writing these things down.</p>
-<p>Is jot a world-beating bit of software? Ahahaha, no. Has it made a difference to me? Aye, it has.</p>
-</section>
-<section id="section-1" class="level2">
-<h2 class="anchored" data-anchor-id="section-1"></h2>
-<p>I started developing jot to learn how to Python and write CLIs. That is definitely a success.</p>
-<p>The culmination of that is a tool I use daily, yes. But the true final boss is to upload it to PyPi.</p>
-<p>Well… jot is now available on PyPi. Install like regular person with:</p>
+<section id="one-shot-jot" class="level2">
+<h2 class="anchored" data-anchor-id="one-shot-jot">One-shot jot</h2>
+<p>I’ve <a href="https://www.rostrum.blog/index.html#category=jot">written about jot before</a>: my very simple and opinionated Python command-line tool for jotting down little timestamped notes to myself.</p>
+<p>In an open terminal I can just:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
 background-color: null;
-font-style: inherit;">pip</span> install jot-cli</span></code></pre></div></div>
+font-style: inherit;">jot</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"put one of the new coversheets on the TPS reports"</span></span></code></pre></div></div>
 </div>
-<p>And then follow the docs and use it like:</p>
+<p>And it gets automatically prepended to a text file with the date and time.</p>
+<p>Rinse and repeat throughout the day.</p>
+</section>
+<section id="a-jot-of-bother" class="level2">
+<h2 class="anchored" data-anchor-id="a-jot-of-bother">A jot of bother</h2>
+<p>Regular readers know that I make stuff and… move on.</p>
+<p>Sike! I’ve actually been using this one a whole bunch.</p>
+<p>In fact, I’ve been jotting things down every work day since August 2025 and have banked well over 1000 jottings.</p>
+<p>But has it actually been useful?</p>
+</section>
+<section id="forget-me-jot" class="level2">
+<h2 class="anchored" data-anchor-id="forget-me-jot">Forget me jot</h2>
+<p>I have a leaky brain.</p>
+<p>This causes a problem when I try to write weeknotes and timesheets. I also struggle to reflect on my achievements, which is particularly pertinent with my upcoming annual appraisal.</p>
+<p>So I’ve been consistently jotting down each of my tasks as I go along, like ‘released version 1.0 of the package’ and ‘joined a call with morag to discuss the app’<sup>1</sup>. It takes mere seconds.</p>
+<p>Crucially, I record little interactions that often fall through the cracks. Which are often the things that <em>actually</em> matter to me and to my colleagues (as humans).</p>
+<p>I’ve also used it to record unsolicited feedback. Turns out I’ve been useful to people. Who knew? I certainly didn’t before I started writing these things down.</p>
+<p>Along the way I’ve been making heavy use of jot’s options like <code>--list</code> and <code>--search</code> (with <code>--date-from</code> and <code>--date-to</code>) to look for patterns and isolate time periods<sup>2</sup>.</p>
+</section>
+<section id="in-the-pypiline" class="level2">
+<h2 class="anchored" data-anchor-id="in-the-pypiline">In the PyPIline</h2>
+<p>I started developing jot to learn ‘how to Python’ and write CLIs. I think that’s a success, but where next?</p>
+<p>Well, I’ve formalised its existence by uploading it to the Python Package Index (PyPI) to make it’s more readily available.</p>
+<p>You can now find it as <a href="https://pypi.org/project/jot-cli/">jot-cli on PyPI</a>, as of version 0.3.0. Yes, you have to install ‘jot-cli’ rather than ‘jot’, because the name is already taken on PyPI. But the command still remains <code>jot</code> in the terminal<sup>3</sup>.</p>
+<p>You could install<sup>4</sup> with <a href="https://docs.astral.sh/uv/getting-started/installation/">uv</a><sup>5</sup>:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><span class="ex" style="color: null;
 background-color: null;
+font-style: inherit;">uv</span> tool install jot-cli</span></code></pre></div></div>
+</div>
+<p>Then, to upgrade:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">uv</span> tool upgrade jot-cli</span></code></pre></div></div>
+</div>
+<p>The development version is <a href="https://github.com/matt-dray/jot">available from GitHub</a> like:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">uv</span> tool install git+https://github.com/matt-dray/jot</span></code></pre></div></div>
+</div>
+<p>Note that the GitHub repo is still called ‘jot’ despite it having to be called ‘jot-cli’ on PyPI<sup>6</sup>.</p>
+</section>
+<section id="thnks-fr-th-mmrs" class="level2">
+<h2 class="anchored" data-anchor-id="thnks-fr-th-mmrs">Thnks fr th Mmrs</h2>
+<p>Right now it works for me, which is the bottom line.</p>
+<p>I know some others have had a go and found it useful too. Thanks in particular to:</p>
+<ul>
+<li><a href="https://github.com/oiffrig">Olivier</a> for submitting code to let the list of jottings to be filtered by date</li>
+<li>my <a href="https://the-strategy-unit.github.io/data_science/about.html">work colleagues</a> (especially <a href="https://github.com/francisbarton">Fran</a> who have provided feedback in our ‘sidequests and suport’ sessions.</li>
+<li><a href="https://github.com/adrianadepalma">Adriana</a> for blue-sky thinking (but mostly for listening to me ramble on about it)</li>
+</ul>
+<p>I want functionality to remain simple, so future updates will mostly be about improving the underlying code and possibly the user interface.</p>
+<p>I have, however, been developing an option to upload the file to a GitHub gist as backup. But maybe that’s too radical.</p>
+</section>
+<section id="thats-yer-jot" class="level2">
+<h2 class="anchored" data-anchor-id="thats-yer-jot">That’s yer jot</h2>
+<p>So, is jot a world-beating bit of software? No, there’s plenty of similar and more powerful tools out there<sup>7</sup>.</p>
+<p>And <a href="https://en.wikipedia.org/wiki/Eating_your_own_dog_food">has the dogfood been delicious</a>? Aye, gourmet, and I’ll continue to chow down.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><span class="ex" style="color: null;
+background-color: null;
 font-style: inherit;">jot</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"ate an apple"</span></span></code></pre></div></div>
+font-style: inherit;">"wrote a blog post about jot's release to PyPI"</span></span></code></pre></div></div>
 </div>
 
 </section>
+
 
 <div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
 
@@ -83,14 +130,25 @@ dependencies = []</code></pre>
 </details>
 
 
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Not actual colleagues.↩︎</p></li>
+<li id="fn2"><p>You could, for example, ask generative AI to pull out topics for you, but I quite like to eyeball it.↩︎</p></li>
+<li id="fn3"><p>Awkwardly, there’s an inbuilt macOS tool called jot, so you may get a nameclash. Most likely the installed tool will take precedence over the inbuilt one when you type <code>jot</code>, but you could set an alias to avoid this. I did think about changing the name to something else entirely, but ‘jot’ works well.↩︎</p></li>
+<li id="fn4"><p>Note that it has to be installed as a ‘tool’ becuase it’s intended for command-line use; its’ not a Python package (though you could use it one if you wanted).↩︎</p></li>
+<li id="fn5"><p>Non-uv users may prefer to use <a href="https://pipx.pypa.io/">pipx</a>.↩︎</p></li>
+<li id="fn6"><p>For consistency, I may eventually change the name of the repo to ‘jot-cli’ too.↩︎</p></li>
+<li id="fn7"><p>The most interesting thing I’ve seen recently for note-taking (and much more) is <a href="https://github.com/xwmx/nb">nb</a>.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
   <category>cli</category>
   <category>jot</category>
   <category>python</category>
   <category>uv</category>
   <guid>https://www.rostrum.blog/posts/2026-05-31-dogfood/</guid>
   <pubDate>Sat, 30 May 2026 23:00:00 GMT</pubDate>
-  <media:content url="https://www.rostrum.blog/posts/2026-05-31-dogfood/resources/jot-fib.png" medium="image" type="image/png" height="51" width="144"/>
+  <media:content url="https://www.rostrum.blog/posts/2026-05-31-dogfood/resources/jot-fib.png" medium="image" type="image/png"/>
 </item>
 <item>
   <title>Shaka, when the walls fell</title>
@@ -2498,9 +2556,10 @@ dependencies = []</code></pre>
 
 
 
+
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2025-08-25-jot/resources/install-jot.png" class="img-fluid figure-img" style="width:100.0%" alt="A terminal with instructions to install the jot tool from GitHub. The jot command is used to save the note 'sharpened my pencils'. The user is prompted to give a path to a text file where the note will be saved. Successive jot calls are made and the content of the text file is printed to show the notes were saved to file with a timestamp."></p>
+<p><img src="https://www.rostrum.blog/posts/2025-08-25-jot/resources/install-jot.png" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:100.0%" alt="A terminal with instructions to install the jot tool from GitHub. The jot command is used to save the note 'sharpened my pencils'. The user is prompted to give a path to a text file where the note will be saved. Successive jot calls are made and the content of the text file is printed to show the notes were saved to file with a timestamp."></p>
 </figure>
 </div>
 <section id="tldr" class="level2">
@@ -2552,7 +2611,7 @@ dependencies = []</code></pre>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
 <p><img src="https://www.rostrum.blog/posts/2025-08-25-jot/resources/jot-pptx.png" class="img-fluid figure-img" style="width:100.0%" alt="A PowerPoint slide. The title is 'weekly summary' with a sun emoji. There are two columns. The left is titled 'what went well' with a green checkbox emoji. The right is titled 'lessons learnt' with a book emoji. Both columns have three bullet points of text. The text doesn't wrap. It overlaps and runs off the screen."></p>
-<figcaption class="figure-caption">Word wrap is for cowards.</figcaption>
+<figcaption>Word wrap is for cowards.</figcaption>
 </figure>
 </div>
 <p>Very cool. Judgement day is inevitable.</p>
@@ -2586,7 +2645,7 @@ dependencies = []</code></pre>
 <li id="fn3"><p>This blog is a non-critical personal project too, but I have not and will not write posts with anything other than my brain and typo-addled fingers. <a href="https://www.rostrum.blog/posts/2024-03-15-ai-garbage/">I’ve written before</a> about my distaste for LLMs as slop manufacturers. I have fewer qualms about using it for boilerplate, as a code helper, and for-fun personal projects. But I’m still not 100% happy with it in general from an ethical standpoint and for the existential dread it can bring.↩︎</p></li>
 <li id="fn4"><p>Yes, I could have asked the LLM to walk me through the code and teach me. Would I have remembered any of it? Unlikely. More fool me.↩︎</p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
   <category>cli</category>
   <category>jot</category>
   <category>python</category>

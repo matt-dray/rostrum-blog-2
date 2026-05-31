@@ -112,14 +112,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta property="og:description" content="Realised showerthoughts about R and Python mostly">
 <meta property="og:image" content="https://www.rostrum.blog/posts/2026-05-31-dogfood/resources/jot-fib.png">
 <meta property="og:site_name" content="rostrum.blog">
-<meta property="og:image:height" content="406">
-<meta property="og:image:width" content="1140">
 <meta name="twitter:title" content="Eating dogfood 1000 times – rostrum.blog">
 <meta name="twitter:description" content="Realised showerthoughts about R and Python mostly">
 <meta name="twitter:image" content="https://www.rostrum.blog/posts/2026-05-31-dogfood/resources/jot-fib.png">
 <meta name="twitter:creator" content="@mattdray">
-<meta name="twitter:image-height" content="406">
-<meta name="twitter:image-width" content="1140">
 <meta name="twitter:card" content="summary_large_image">
 </head>
 
@@ -214,41 +210,80 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="resources/.png" class="img-fluid quarto-figure quarto-figure-left figure-img" alt=""></p>
+<p><img src="resources/jot-brain.png" class="img-fluid quarto-figure quarto-figure-left figure-img" alt="A cartoon brain with a thought bubble containing another brain."></p>
 </figure>
 </div>
 <section id="tldr" class="level2">
 <h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I used my own Python tool over 1000 times. What did I learn?</p>
+<p>I wrote and used my own CLI tool over 1000 times. What did I learn?</p>
 </section>
-<section id="section" class="level2">
-<h2 class="anchored" data-anchor-id="section"></h2>
-<p>I <a href="">wrote about jot before</a>, my opinionated Python command-line tool for jotting down little timestamped notes to myself.</p>
-<p>If you’ve read this blog, you know I make things and… move on.</p>
-<p>Guess what? I actually used this one consistently.</p>
-<p>In fact, I’ve been jotting every work day since August 2025 and have banked over 1000 jottings.</p>
-<p>How has this been useful? I write weeknotes and timesheets every Friday afternoon. But I can’t usually remember stuff. So this has beena good ‘brain outside my brain’.</p>
-<p>Also, it’s nearly time for my annual appraisal. Normally I struggle to remember what I’ve done. Not just the major things, but also the little things that fall through the cracks.</p>
-<p>Which are often the things that actually matter. To me. And to my colleagues.</p>
-<p>I helped unblock things. I reviewed loads of tiny pull requests. I spent some time learning about something.</p>
-<p>The jot file has helped me record and recognise these things. And, crucially, reflect on them.</p>
-<p>I’ve also used it to jot down when I’ve received unsolicited feedback. Turns out I’ve been useful to people. Who knew? I certainly didn’t before I started writing these things down.</p>
-<p>Is jot a world-beating bit of software? Ahahaha, no. Has it made a difference to me? Aye, it has.</p>
-</section>
-<section id="section-1" class="level2">
-<h2 class="anchored" data-anchor-id="section-1"></h2>
-<p>I started developing jot to learn how to Python and write CLIs. That is definitely a success.</p>
-<p>The culmination of that is a tool I use daily, yes. But the true final boss is to upload it to PyPi.</p>
-<p>Well… jot is now available on PyPi. Install like regular person with:</p>
+<section id="one-shot-jot" class="level2">
+<h2 class="anchored" data-anchor-id="one-shot-jot">One-shot jot</h2>
+<p>I’ve <a href="https://www.rostrum.blog/index.html#category=jot">written about jot before</a>: my very simple and opinionated Python command-line tool for jotting down little timestamped notes to myself.</p>
+<p>In an open terminal I can just:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install jot-cli</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jot</span> <span class="st">"put one of the new coversheets on the TPS reports"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>And then follow the docs and use it like:</p>
+<p>And it gets automatically prepended to a text file with the date and time.</p>
+<p>Rinse and repeat throughout the day.</p>
+</section>
+<section id="a-jot-of-bother" class="level2">
+<h2 class="anchored" data-anchor-id="a-jot-of-bother">A jot of bother</h2>
+<p>Regular readers know that I make stuff and… move on.</p>
+<p>Sike! I’ve actually been using this one a whole bunch.</p>
+<p>In fact, I’ve been jotting things down every work day since August 2025 and have banked well over 1000 jottings.</p>
+<p>But has it actually been useful?</p>
+</section>
+<section id="forget-me-jot" class="level2">
+<h2 class="anchored" data-anchor-id="forget-me-jot">Forget me jot</h2>
+<p>I have a leaky brain.</p>
+<p>This causes a problem when I try to write weeknotes and timesheets. I also struggle to reflect on my achievements, which is particularly pertinent with my upcoming annual appraisal.</p>
+<p>So I’ve been consistently jotting down each of my tasks as I go along, like ‘released version 1.0 of the package’ and ‘joined a call with morag to discuss the app’<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. It takes mere seconds.</p>
+<p>Crucially, I record little interactions that often fall through the cracks. Which are often the things that <em>actually</em> matter to me and to my colleagues (as humans).</p>
+<p>I’ve also used it to record unsolicited feedback. Turns out I’ve been useful to people. Who knew? I certainly didn’t before I started writing these things down.</p>
+<p>Along the way I’ve been making heavy use of jot’s options like <code>--list</code> and <code>--search</code> (with <code>--date-from</code> and <code>--date-to</code>) to look for patterns and isolate time periods<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+</section>
+<section id="in-the-pypiline" class="level2">
+<h2 class="anchored" data-anchor-id="in-the-pypiline">In the PyPIline</h2>
+<p>I started developing jot to learn ‘how to Python’ and write CLIs. I think that’s a success, but where next?</p>
+<p>Well, I’ve formalised its existence by uploading it to the Python Package Index (PyPI) to make it’s more readily available.</p>
+<p>You can now find it as <a href="https://pypi.org/project/jot-cli/">jot-cli on PyPI</a>, as of version 0.3.0. Yes, you have to install ‘jot-cli’ rather than ‘jot’, because the name is already taken on PyPI. But the command still remains <code>jot</code> in the terminal<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>.</p>
+<p>You could install<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> with <a href="https://docs.astral.sh/uv/getting-started/installation/">uv</a><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jot</span> <span class="st">"ate an apple"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> tool install jot-cli</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Then, to upgrade:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> tool upgrade jot-cli</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>The development version is <a href="https://github.com/matt-dray/jot">available from GitHub</a> like:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">uv</span> tool install git+https://github.com/matt-dray/jot</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Note that the GitHub repo is still called ‘jot’ despite it having to be called ‘jot-cli’ on PyPI<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
+</section>
+<section id="thnks-fr-th-mmrs" class="level2">
+<h2 class="anchored" data-anchor-id="thnks-fr-th-mmrs">Thnks fr th Mmrs</h2>
+<p>Right now it works for me, which is the bottom line.</p>
+<p>I know some others have had a go and found it useful too. Thanks in particular to:</p>
+<ul>
+<li><a href="https://github.com/oiffrig">Olivier</a> for submitting code to let the list of jottings to be filtered by date</li>
+<li>my <a href="https://the-strategy-unit.github.io/data_science/about.html">work colleagues</a> (especially <a href="https://github.com/francisbarton">Fran</a> who have provided feedback in our ‘sidequests and suport’ sessions.</li>
+<li><a href="https://github.com/adrianadepalma">Adriana</a> for blue-sky thinking (but mostly for listening to me ramble on about it)</li>
+</ul>
+<p>I want functionality to remain simple, so future updates will mostly be about improving the underlying code and possibly the user interface.</p>
+<p>I have, however, been developing an option to upload the file to a GitHub gist as backup. But maybe that’s too radical.</p>
+</section>
+<section id="thats-yer-jot" class="level2">
+<h2 class="anchored" data-anchor-id="thats-yer-jot">That’s yer jot</h2>
+<p>So, is jot a world-beating bit of software? No, there’s plenty of similar and more powerful tools out there<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>.</p>
+<p>And <a href="https://en.wikipedia.org/wiki/Eating_your_own_dog_food">has the dogfood been delicious</a>? Aye, gourmet, and I’ll continue to chow down.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jot</span> <span class="st">"wrote a blog post about jot's release to PyPI"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 </section>
+
 
 <div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
 
@@ -268,7 +303,18 @@ dependencies = []</code></pre>
 </details>
 
 
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div></main> <!-- /main -->
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Not actual colleagues.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>You could, for example, ask generative AI to pull out topics for you, but I quite like to eyeball it.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Awkwardly, there’s an inbuilt macOS tool called jot, so you may get a nameclash. Most likely the installed tool will take precedence over the inbuilt one when you type <code>jot</code>, but you could set an alias to avoid this. I did think about changing the name to something else entirely, but ‘jot’ works well.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Note that it has to be installed as a ‘tool’ becuase it’s intended for command-line use; its’ not a Python package (though you could use it one if you wanted).<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Non-uv users may prefer to use <a href="https://pipx.pypa.io/">pipx</a>.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>For consistency, I may eventually change the name of the repo to ‘jot-cli’ too.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn7"><p>The most interesting thing I’ve seen recently for note-taking (and much more) is <a href="https://github.com/xwmx/nb">nb</a>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
