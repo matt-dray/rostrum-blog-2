@@ -21,13 +21,13 @@ showerthoughts about R and Python, mostly.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 195 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2026-05-31 (latest).
+🔢 There have been 196 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2026-06-06 (latest).
 
 📅 That’s a post roughly every 15 days, or about 2 posts per month.
 
-🆕 The latest post: [Eating dogfood 1000
-times](https://www.rostrum.blog/posts/2026-05-31-dogfood)
+🆕 The latest post: [Get the gist of
+jot](https://www.rostrum.blog/posts/2026-06-06-jot-gist)
 
 📈 Posts over time:
 
@@ -42,6 +42,7 @@ times](https://www.rostrum.blog/posts/2026-05-31-dogfood)
 
 |  | Date | Title |
 |:---|:---|:---|
+| 196 | 2026-06-06 | [Get the gist of jot](https://www.rostrum.blog/posts/2026-06-06-jot-gist) |
 | 195 | 2026-05-31 | [Eating dogfood 1000 times](https://www.rostrum.blog/posts/2026-05-31-dogfood) |
 | 194 | 2026-03-15 | [Shaka, when the walls fell](https://www.rostrum.blog/posts/2026-03-15-tyle-walls) |
 | 193 | 2026-03-08 | [Fog of war](https://www.rostrum.blog/posts/2026-03-08-tyle-fog) |
@@ -244,6 +245,6 @@ times](https://www.rostrum.blog/posts/2026-05-31-dogfood)
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2026-06-01 at 08:47.
+🕒 Last updated: 2026-06-06 at 20:34.
 
 </div>
