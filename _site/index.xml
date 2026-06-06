@@ -10,7 +10,110 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Realised showerthoughts about R and Python mostly</description>
 <generator>quarto-1.8.27</generator>
-<lastBuildDate>Sat, 30 May 2026 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 05 Jun 2026 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>Get the gist of jot</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2026-06-06-jot-gist/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2026-06-06-jot-gist/resources/jot-gist.png" class="img-fluid quarto-figure quarto-figure-left figure-img" alt="A crudely drawn MS-Paint-style picture of a text document on the left, with an arrow pointing to the right, where there's a cloud that contains a floppy disk. In the middle is Octocat, the GitHub mascot."></p>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>My mini <a href="https://github.com/matt-dray/jot">note-taking CLI tool jot</a> can now back-up jottings to <a href="https://gist.github.com/">a GitHub gist</a>, thanks to <a href="https://cli.github.com/">GitHub’s gh CLI</a>.</p>
+</section>
+<section id="always-be-jotting" class="level2">
+<h2 class="anchored" data-anchor-id="always-be-jotting">Always Be Jotting</h2>
+<p>Last time I told you <a href="../../posts/2026-05-31-dogfood/index.html">I’ve been using jot for months</a>. It’s my opinionated CLI tool to record stuff that I can reflect on later. I just type something like <code>jot "promoted synergy"</code> in the terminal and move on.</p>
+<p>And now there’s 1200 jottings.</p>
+<p>But there’s only one text file.</p>
+<p>A backup might be handy, eh.</p>
+</section>
+<section id="copy-waste" class="level2">
+<h2 class="anchored" data-anchor-id="copy-waste">Copy-waste</h2>
+<p>I had been copy-pasting the jot file into a private <a href="https://gist.github.com/">GitHub gist</a><sup>1</sup> at the end of each week. Gists are used mostly for throwaway scratch files, code snippets and text files.</p>
+<p>Given that jot is a personal project and I want to make things easier for myself<sup>2</sup>, I think this is fine as a backup host. It’s what I’m doing already, after all.</p>
+<p>But oof, <em>copy-paste</em>? We can do better. So I built in a new option into jot to support upload to a gist.</p>
+<p>This is now available in the dev version (v0.3.0.dev1) available from GitHub like <code>uv tool install git+https://github.com/matt-dray/jot</code><sup>3</sup>. I’ll be testing it for a while before it goes in the stable release<sup>4</sup>.</p>
+<p>With this dev version I can now run <code>jot -u</code> (short for <code>--upload</code>) every so often. No more filthy copy-pasting.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">jot</span> <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">-u</span></span>
+<span id="cb1-2"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">✅</span> Success</span></code></pre></div></div>
+</div>
+</section>
+<section id="gistjacking" class="level2">
+<h2 class="anchored" data-anchor-id="gistjacking">Gistjacking</h2>
+<p>Well, there’s a bit more to it than that.</p>
+<p>There are some obvious checks and inputs required when <code>jot -u</code> is run. The <code>upload_jottings()</code> function has a series of hoops:</p>
+<ol type="1">
+<li>Is the GitHub CLI gh installed? If not, <a href="https://cli.github.com/">prompt installation</a>.</li>
+<li>Is there an internet connection? You can’t upload if not, obv.</li>
+<li>Is the user logged into a GitHub account? If not, prompt <code>gh auth login</code>.</li>
+<li>Is there a <code>GIST_ID</code> value in the config file? If not, prompt for it (it’s the 32-character string in the gist’s URL, or found via <code>gh gist list</code>).</li>
+<li>Does the <code>GIST_ID</code> match an actual gist ID in your account? The gist must already exist.</li>
+<li>Is there a jot file path recorded in the config? If not, prompt the user to create one.</li>
+</ol>
+<p>If that’s all cleared, it runs <code>subprocess.run(["gh", "gist", "edit", gist_id, jot_path])</code> to upload the contents of the jot file. This is equivalent to running the equivalent <code>gh</code> command directly from the terminal, but with extra defensive steps.</p>
+<p>In other words, I’ve hijacked gh to do all the hard work, lol. This is great, becuase I want jot to be minimal and require little maintenance. Thanks Michaelsoft.</p>
+</section>
+<section id="i-jot-u" class="level2">
+<h2 class="anchored" data-anchor-id="i-jot-u">I jot u</h2>
+<p>It’s a clear limitation that <code>--upload</code> only uploads to a GitHub gist. I’m a simple chap, this is fine for me for now.</p>
+<p>But the interface could be tweaked in future to allow for other hosts. Maybe in the form <code>jot --upload &lt;host&gt;</code>. The CLI logic could react to <code>&lt;host&gt;</code> to decide what credentials and values are needed for the upload.</p>
+<p>Oh no, what if someone <a href="https://github.com/matt-dray/jot">contributed to my poor little project</a> with their favoured host? 🥺</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[project]
+name = "2026-06-06-jot-gist"
+version = "0.1.0"
+requires-python = "&gt;=3.12"
+dependencies = []</code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>To prevent gif-style flamewars, it’s pronounced ‘gist’.↩︎</p></li>
+<li id="fn2"><p>This is why people caveat their work with ‘opinionated’ by the way; it translates to ‘works for me, lol’.↩︎</p></li>
+<li id="fn3"><p>You could <a href="https://pipx.pypa.io/stable/">install with pipx</a> if you prefer.↩︎</p></li>
+<li id="fn4"><p>The stable version is <a href="https://pypi.org/project/jot-cli/">available from PyPi</a> like <code>uv tool install jot-cli</code>.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
+  <category>cli</category>
+  <category>github</category>
+  <category>jot</category>
+  <category>python</category>
+  <guid>https://www.rostrum.blog/posts/2026-06-06-jot-gist/</guid>
+  <pubDate>Fri, 05 Jun 2026 23:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2026-06-06-jot-gist/resources/jot-gist.png" medium="image" type="image/png" height="58" width="144"/>
+</item>
 <item>
   <title>Eating dogfood 1000 times</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -4883,210 +4986,6 @@ loaded via a namespace (and not attached):
   <guid>https://www.rostrum.blog/posts/2024-09-15-shiny-pixel/</guid>
   <pubDate>Sat, 14 Sep 2024 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-09-15-shiny-pixel/resources/SANIC.png" medium="image" type="image/png" height="202" width="144"/>
-</item>
-<item>
-  <title>Tile-style sprite delight</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-07-14-tilebased/</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2024-07-14-tilebased/resources/demo.gif" class="img-fluid figure-img" style="width:100.0%" data-fig.alt="A pixel-sprite human character is moving around on some grassy tiles in a clearing of a procedurally generated forest. A rat is chasing him down. This is happening in an R Graphics Device."></p>
-<figcaption class="figure-caption">An enemy. Or a friend?</figcaption>
-</figure>
-</div>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p><a href="https://github.com/matt-dray/tilebased">An experiment</a> with <a href="https://coolbutuseless.github.io/package/nara/index.html">graphical advancements</a> in tile-based games made for R.</p>
-</section>
-<section id="based-tiles" class="level2">
-<h2 class="anchored" data-anchor-id="based-tiles">Based tiles</h2>
-<p>You know by now that <a href="https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/">R is unequivocally a game engine</a>.</p>
-<p>In this vein, Mike Cheng (coolbutuseless) has been hard at work updating the <a href="https://coolbutuseless.github.io/package/nara/index.html">{nara}</a> package, which allows for <a href="https://github.com/coolbutuseless/narademos">fast rendering of pixel-based graphics</a><sup>1</sup>. This can make games easier to develop, especially in tandem with Mike’s <a href="https://coolbutuseless.github.io/package/eventloop/index.html">{eventloop}</a> package for reading continuous input from the player’s keyboard.</p>
-<p>As a result, I’ve taken some of the ‘engine’ from <a href="https://github.com/matt-dray/r.oguelike">{r.oguelike}</a>—a toy dungeon-crawling game in an R package<sup>2</sup>—and made it draw graphics instead of just printing to the console<sup>3</sup>. The outcome from this test is the <a href="https://github.com/matt-dray/tilebased">demo {tilebased} package</a>.</p>
-<p>It also borrows grass, tree, person and rat sprites from <a href="https://www.kenney.nl/">Kenney’s</a> free and excellent <a href="https://www.kenney.nl/assets?search=tiny&amp;sort=update">‘Tiny’ asset packs</a>. They’re 16×16 pixels, shown here at actual size:</p>
-<p><img src="https://www.rostrum.blog/posts/2024-07-14-tilebased/resources/grass.png" class="img-fluid" data-fig.alt="A square of 16 by 16 pixels with a green grass pattern." width="16"> <img src="https://www.rostrum.blog/posts/2024-07-14-tilebased/resources/tree.png" class="img-fluid" data-fig.alt="A pixelated tree with a thick black outline that fits inside limits of 16 by 16 pixels." width="16"> <img src="https://www.rostrum.blog/posts/2024-07-14-tilebased/resources/player.png" class="img-fluid" data-fig.alt="A pixelated human player-character with a thick black outline that fits inside limits of 16 by 16 pixels." width="16"> <img src="https://www.rostrum.blog/posts/2024-07-14-tilebased/resources/rat.png" class="img-fluid" data-fig.alt="A pixelated grey rat enemy-character with a thick black outline that fits inside limits of 16 by 16 pixels." width="16"></p>
-<p>Very cute.</p>
-</section>
-<section id="install" class="level2">
-<h2 class="anchored" data-anchor-id="install">Install</h2>
-<p>I put this experiment into an R package so it’s easier to develop and play around with.</p>
-<p>But note that the package’s functionality is dependent on your operating system. It’ll work on macOS, but not Windows, due to the required graphics device.</p>
-<p>You can install <a href="https://github.com/matt-dray/tilebased">from GitHub</a> like:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">remotes<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">install_github</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"matt-dray/tilebased"</span>)</span></code></pre></div>
-</div>
-<p>As well as {nara} and {eventloop}, it depends on my GitHub-only <a href="https://github.com/matt-dray/r.oguelike">{r.oguelike}</a> package.</p>
-<p>You can then start a game, which opens a graphics device. Use your arrow keys to move around. This will look like the gif at the top of this page.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">tilebased<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">play</span>()</span></code></pre></div>
-</div>
-<p>As it stands, I haven’t built a proper game-over condition for this experiment. Collide with the enemy and the game will crash (consider this a feature, not a bug!).</p>
-</section>
-<section id="process" class="level2">
-<h2 class="anchored" data-anchor-id="process">Process</h2>
-<p>The user just sees graphics in a window. The basic process-loop underlying this is roughly:</p>
-<ol type="1">
-<li>Create a ‘board mesh’<sup>4</sup>, a matrix object that encodes the play-area layout and content.</li>
-<li>Place the player (<code>@</code>) and enemy (<code>e</code>) actors randomly in a cell (<code>.</code>) of the board mesh, avoiding each other and cells that contain obstacles (<code>#</code>).</li>
-<li>Generate a ‘navigation mesh’ that labels each cell with a distance value to the player (i.e.&nbsp;how many tiles away from the player).</li>
-<li>Map the board mesh to pixels of the graphics device, where the board-mesh cell contents define the tiles to be selected for display. Draw the pixels to the device.</li>
-<li>Accept realtime keypress input from the user and move the player, then consequently move the enemy down the distance gradient of the navmesh. Redraw.</li>
-<li>Repeat step 5.</li>
-</ol>
-</section>
-<section id="structures" class="level2">
-<h2 class="anchored" data-anchor-id="structures">Structures</h2>
-<p>I think it’s worth explaining a bit more about how the game board is represented, translated and drawn.</p>
-<section id="board-mesh" class="level3">
-<h3 class="anchored" data-anchor-id="board-mesh">Board mesh</h3>
-<p>The board mesh is a matrix represenation of the board layout and contents.</p>
-<p>As a simple example, you could have a 5×6 board-mesh matrix like below, where <code>#</code> is an impenetrable obstacle, <code>.</code> is a traversable floor tile, <code>@</code> is the player and <code>e</code> the enemy:</p>
-<pre><code>     [,1] [,2] [,3] [,4] [,5] [,6]
-[1,] "#"  "#"  "#"  "#"  "#"  "#" 
-[2,] "#"  "@"  "."  "."  "."  "#" 
-[3,] "#"  "."  "#"  "#"  "."  "#" 
-[4,] "#"  "."  "."  "e"  "."  "#" 
-[5,] "#"  "#"  "#"  "#"  "#"  "#" </code></pre>
-</section>
-<section id="nav-mesh" class="level3">
-<h3 class="anchored" data-anchor-id="nav-mesh">Nav mesh</h3>
-<p>The navigation (nav) mesh places a value in each cell, which is the distance between that cell and the player’s cell.</p>
-<p>The enemy character will travel from high to low distance values, so will travel left on the board mesh from index [4,4] to [4,3], which decreases the distance value from 4 to 3.</p>
-<pre><code>     [,1] [,2] [,3] [,4] [,5] [,6]
-[1,] Inf  Inf  Inf  Inf  Inf  Inf 
-[2,] Inf  0    1    2    3    Inf 
-[3,] Inf  1    Inf  Inf  4    Inf 
-[4,] Inf  2    3    4    5    Inf 
-[5,] Inf  Inf  Inf  Inf  Inf  Inf </code></pre>
-</section>
-<section id="board" class="level3">
-<h3 class="anchored" data-anchor-id="board">Board</h3>
-<p>The board the users actually see is a pixel-based translation of the underlying board mesh.</p>
-<p>Each cell of the board mesh is drawn to the screen as tiles. If each tile is 16×16 pixels, then our example board is 80×96 pixels. The upper-left corner of the first tile will be placed at pixel position [1,1]. By extension, the enemy-rat tile in board-mesh cell [4,4] will, for example, occupy the square of pixels at 49 to 64 across and 49 to 64 down.</p>
-<p><img src="https://www.rostrum.blog/posts/2024-07-14-tilebased/resources/mini-demo.png" class="img-fluid" data-fig.alt="A 5 by 6 tile map. Every tile slot has a grass tile. There's also a pixel-sprite human character at a position 2 tiles along and 2 tiles down and an enemy rat character at a position 4 tiles along and 4 down. There are tree sprites all the way around the edge and two more in the centre, creating a donut shape of grass that the player and enemy can move within."></p>
-<p>The tiles themselves are stored as nativeRaster class, which is a matrix format with colour encoded in each cell as integer values.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">str</span>(tilebased<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span>grass)</span></code></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> 'nativeRaster' int [1:16, 1:16] -9845116 -9845116 -9845116 -9845116 -9845116 -9845116 -9845116 -9845116 -9845116 -9845116 ...
- - attr(*, "channels")= int 4</code></pre>
-</div>
-</div>
-<p>These can be overplotted by {nara}, which means we can have grass tiles covering the whole board and partially-transparent tree, player and enemy sprites drawn on top.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">library</span>(nara)</span>
-<span id="cb7-2"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">plot</span>(tilebased<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span>grass)   <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># place grass first</span></span>
-<span id="cb7-3"><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">plot</span>(tilebased<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span>player)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># then player over the top</span></span></code></pre></div>
-<div class="cell-output-display">
-<p><img src="https://www.rostrum.blog/posts/2024-07-14-tilebased/index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" alt="A pixelated human sprite is plotted over a pixelated green grass tile." width="192"></p>
-</div>
-</div>
-<p>To extend this behvaiour for a more exciting adventure, {tilebased} uses the <code>r.oguelike::create_dungeon()</code> function to create a procedural map that’s randomised with each new game. Here’s a 20×32-tile example:</p>
-<p><img src="https://www.rostrum.blog/posts/2024-07-14-tilebased/resources/demo.png" class="img-fluid" style="width:100.0%" data-fig.alt="Pixel-sprite human and rat characters are placed on some grassy tiles in a clearing of a procedurally generated forest. There is a forest around the edge of the map and some dotted within the interior. The human is hiding behind a tree."></p>
-</section>
-</section>
-<section id="the-next-level" class="level2">
-<h2 class="anchored" data-anchor-id="the-next-level">The next level</h2>
-<p>For now, I’ve shown it’s possible to convert a board-mesh matrix into tile-based graphics with user control.</p>
-<p>A lot of functionality is missing, which prevents this concept from having a true gameloop. I may work to improve this in future.</p>
-<p>For example, {r.oguelike} has auto-battling and a basic inventory system to collect gold and food; you can imagine showing these in a graphical overlay. Perhaps there could be doorways to new areas of a larger map. It could also use a larger tileset and make use of ‘compound tiles’ that fit together to produce larger sprites. I could also make my own sprites with help from <a href="https://github.com/matt-dray/pixeltrix">my {pixeltrix} package</a>.</p>
-<p>In addition, I note that Mike is looking at improved sound generation in R. A bangin’ chiptune would complement {tilebased} well, which makes me wonder if a tile-based rhythm game, like <a href="https://en.wikipedia.org/wiki/Crypt_of_the_NecroDancer">Crypt of the Necrodancer</a>, would be possible.</p>
-
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-07-14 13:49:17 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.4.0 (2024-04-24)
-Platform: aarch64-apple-darwin20
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-other attached packages:
-[1] nara_0.1.1.9016
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.4 compiler_4.4.0    fastmap_1.2.0     cli_3.6.3.9000   
- [5] tools_4.4.0       htmltools_0.5.8.1 yaml_2.3.8        tilebased_0.3.0  
- [9] rmarkdown_2.26    grid_4.4.0        knitr_1.46        jsonlite_1.8.8   
-[13] xfun_0.43         digest_0.6.35     rlang_1.1.4.9000  evaluate_0.23    </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>And has one of the best hex stickers around.↩︎</p></li>
-<li id="fn2"><p>I’ve written <a href="https://www.rostrum.blog/index.html#category=r.oguelike">a few posts</a> about {r.oguelike} if you want to learn more.↩︎</p></li>
-<li id="fn3"><p>I <a href="https://www.rostrum.blog/posts/2022-06-28-isometric-dungeon/">played around with this idea</a> once before, rendering a {r.oguelike} dungeon, player and enemy as isometric-view cubes—thanks to Mike’s <a href="https://github.com/coolbutuseless/isocubes">{isocubes}</a> package—that the user could move around with keypresses. But a cube only has so much character!↩︎</p></li>
-<li id="fn4"><p>I’ve borrowed this term from game development but Im’ probably not using it quite right. The idea is that the board and nav meshes are theoretical surfaces that contain data to support the final visual output.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>eventloop</category>
-  <category>kenney</category>
-  <category>nara</category>
-  <category>r</category>
-  <category>r.oguelike</category>
-  <category>tilebased</category>
-  <guid>https://www.rostrum.blog/posts/2024-07-14-tilebased/</guid>
-  <pubDate>Sat, 13 Jul 2024 23:00:00 GMT</pubDate>
-  <media:content url="https://www.rostrum.blog/posts/2024-07-14-tilebased/resources/tilebased.gif" medium="image" type="image/gif"/>
 </item>
 </channel>
 </rss>
