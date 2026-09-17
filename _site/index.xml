@@ -10,7 +10,335 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Realised showerthoughts about R and Python mostly</description>
 <generator>quarto-1.8.27</generator>
-<lastBuildDate>Fri, 05 Jun 2026 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 16 Sep 2026 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Ghosts of spreadsheets past</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2026-09-17-spreadsheet-ghosts/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2026-09-17-spreadsheet-ghosts/resources/ghost.png" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:20.0%" alt="Cells of a spreadsheet filled white to render a pixellated ghost on black-filled background cells."></p>
+</figure>
+</div>
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>Reminiscing about two demo R packages that helped me investigate new interfaces for best-practice spreadsheet generation: <a href="https://github.com/matt-dray/a11ytables2">{a11ytables2}</a> and <a href="https://github.com/matt-dray/yamlsheets">{yamlsheets}</a>.</p>
+</section>
+<section id="recap" class="level2">
+<h2 class="anchored" data-anchor-id="recap">Recap</h2>
+<p>I wrote the {a11ytables} R package to help me (and UK government analysts in general) to generate publication-ready spreadsheets. The package helped users comply with <a href="https://best-practice-and-impact.github.io/aftables/">best practice requirements</a> without thinking too hard.</p>
+<p>For me (and some other people) it was okay for the package to do all the heavy lifting, but there’s clearly a market for a more flexible set of functions that give more power to the user.</p>
+<p>Fortunately, the package <a href="../2025-11-30-turn-tables/index.html">is now in better hands</a> with the Office for National Statistics’s (ONS) Best Practice and Impact Team.</p>
+<p>They’ve also landed on the idea of <a href="https://github.com/best-practice-and-impact/aftables/issues/160">a more expressive interface</a>.</p>
+</section>
+<section id="dead-ends" class="level2">
+<h2 class="anchored" data-anchor-id="dead-ends">Dead ends</h2>
+<p>Amusingly, {a11ytables} started with this kind of API. You could originally <code>add_*()</code> different types of sheet to build up a workbook.</p>
+<p>Later I returned to the idea of building a spreadsheet sheet-by-sheet and also noodled with the idea of using a configuration file. These investigations were only ever written up as demo packages that are now archived: <a href="https://github.com/matt-dray/a11ytables2">{a11ytables2}</a> and <a href="https://github.com/matt-dray/yamlsheets">{yamlsheets}</a>.</p>
+<p>I first referred to the development of {a11ytables2} on <a href="../2024-01-27-a11ytables-0.3/index.html#a-fateful-journey">an ill-fated bus journey</a> and alluded to some earlier YAML-based fiddling, which served as the basis for {yamlsheets}.</p>
+<p>I never properly introduced these packages. I expected that one or the other would eventually supersede or get integrated into the main {a11ytables} package.</p>
+<p>Hahaha, nope.</p>
+<p>I saw neither of these through to fruition, but they were a good initial stab at the type of thing I wanted to develop. So here’s a little review.</p>
+</section>
+<section id="take-2" class="level2">
+<h2 class="anchored" data-anchor-id="take-2">Take 2</h2>
+<p>There were a few reasons I wanted to develop {a11ytables2} as a <em>successor</em> to {a11ytables}:</p>
+<ol type="1">
+<li>To take advantage of <a href="https://janmarvin.github.io/openxlsx2/">{openxlsx2}</a>, which was being actively developed and had some improved features compared to {openxlsx}.</li>
+<li>To reinvestigate the idea of building a workbook object by adding specific sheet types one-by-one.</li>
+<li>To overcome the limitations of the simplistic dataframe shape of the {a11ytables}-class object.</li>
+</ol>
+<p>I also toyed with the word ‘blueprint’ to express what’s happening: the user lays out a plan for a spreadsheet before it actually gets converted to a file with {openxlsx2}.</p>
+<p>So the user begins a <code>new_blueprint()</code> and then uses <code>append_*()</code> functions to add the cover, contents, notes and table sheets. The interface is fairly self-explanatory, I think.</p>
+<p>To illustrate, let’s say I’ve started the process and created a <code>blueprint</code> object already. Here’s how it would look to add a sheet containing two tables:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">blueprint <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">&lt;-</span> blueprint <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb1-2">  a11ytables2<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">append_tables</span>(</span>
+<span id="cb1-3">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">sheet_name =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"table_1"</span>,</span>
+<span id="cb1-4">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">title =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Table 1: Widget quantity"</span>,</span>
+<span id="cb1-5">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">subtitle =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"By geographic region in financial year 2025/26"</span>,</span>
+<span id="cb1-6">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">source =</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"The UK Widget Survey."</span>,</span>
+<span id="cb1-7">    <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">tables =</span> <span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">list</span>(</span>
+<span id="cb1-8">      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Table 1a: Widget quantity in the North"</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> table_1a,</span>
+<span id="cb1-9">      <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Table 1b: Widget quantity in the South"</span> <span class="ot" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">=</span> table_1b</span>
+<span id="cb1-10">    )</span>
+<span id="cb1-11">  )</span></code></pre></div></div>
+</div>
+<p>You can see how this modularity provides a more declarative, extensible and readable experience than the one-interface-fits-all nature of <code>a11ytable::create_a11ytable()</code> did. That single function demanded users to pass vectors to its arguments, where the index within the vector related to a given sheet.</p>
+<p>Once the blueprint is ready, it can be converted quickly to an {openxlsx2} wbWorkbook-class object and written to file:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">blueprint <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb2-2">  a11ytables2<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">generate_workbook</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span> </span>
+<span id="cb2-3">  openxlsx2<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">wb_save</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"spreadsheet.xlsx"</span>)</span></code></pre></div></div>
+</div>
+</section>
+<section id="yet-another-spreadsheet-creator" class="level2">
+<h2 class="anchored" data-anchor-id="yet-another-spreadsheet-creator">Yet another spreadsheet creator</h2>
+<p>{a11ytables} and {a11ytables2} were about the user declaring the inputs to a spreadsheet <em>in code</em>.</p>
+<p>But the input is really just configuration at that point, so why not use a separate text-based config file as the blueprint?</p>
+<p>{yamlsheets}<sup>1</sup> was a demo of this approach, using YAML text files to convey the content and structure<sup>2</sup>. Each top-level key would define a sheet, where nested sub-keys provide content like cover-page information, table titles, etc.</p>
+<p>Here’s what it might look like in YAML to enter details of a sheet that contains two tables:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">table_1</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span></span>
+<span id="cb3-2"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">   </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sheet_title</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Table 1: Widget quantity"</span></span>
+<span id="cb3-3"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">   </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">sheet_subtitle</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> By geographic region in financial year 2025/26</span></span>
+<span id="cb3-4"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">   </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">source</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> The UK Widget Survey.</span></span>
+<span id="cb3-5"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">   </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">tables</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span></span>
+<span id="cb3-6"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">     </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">table_1a</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span></span>
+<span id="cb3-7"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">       </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">table_title</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Table 1a: Widget quantity in the North"</span></span>
+<span id="cb3-8"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">       </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">table</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> !expr read.csv("widgets_north.csv")</span></span>
+<span id="cb3-9"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">     </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">table_1b</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span></span>
+<span id="cb3-10"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">       </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">table_title</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> </span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Table 1b: Widget quantity in the South"</span></span>
+<span id="cb3-11"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">       </span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">table</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">:</span><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;"> !expr read.csv("widgets_south.csv")</span></span></code></pre></div></div>
+<p>There’d be separate keys for <code>cover</code>, <code>contents</code>, <code>notes</code> and other tables.</p>
+<p>One downside is that it’s not clear what’s mandatory or legal as an input to the YAML file, and you won’t know until it’s validated with the <code>read_blueprint()</code> function.</p>
+<p>Of course, given it’s a text file, it’s also not straightforward to provide tables of data. I tried the idea of using executable lines (prepended <code>!expr</code>) so that R would read in a table when the YAML was loaded<sup>3</sup>. You could also provide the name of a dataframe object, which would have to be loaded before you could <code>read_blueprint()</code>.</p>
+<p>But, after writing your full YAML file, execution would be as simple as:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">yamlsheets<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">read_blueprint</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"blueprint.yaml"</span>) <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb4-2">  yamlsheets<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">convert_to_workbook</span>() <span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">|&gt;</span></span>
+<span id="cb4-3">  openxlsx2<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
+background-color: null;
+font-style: inherit;">wb_save</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"spreadsheet.xlsx"</span>)</span></code></pre></div></div>
+</div>
+<p>On the plus side, a text file is pretty easy to read and manage for humans. It might also be easier to prepare for ‘non-coders’, as opposed to ‘writing code’ to do it. Advanced users could even prepare YAML templates and programmatically update them for future releases.<sup>4</sup></p>
+<p>A further idea is that you could split the YAML into two blocks, <code>blueprint</code> and <code>options</code> maybe, where the latter could be used to declare settings like font size, etc.</p>
+<p>Not terrible, not amazing.</p>
+</section>
+<section id="gone-and-also-forgotten" class="level2">
+<h2 class="anchored" data-anchor-id="gone-and-also-forgotten">Gone, and also forgotten</h2>
+<p>They say a package dies twice: once when it’s archived and again when it’s detached from an environment for the last time.</p>
+<p>To be fair, neither of these packages ever really lived.</p>
+<p>The code in {a11ytables2} and {yamlsheets} may not be useful to anyone, but maybe the ideas will spark something more interesting.</p>
+<p>Regardless, I don’t want to think about spreadsheets anymore.</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2026-09-17 13:17:23 CEST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.6.1 (2026-06-24)
+Platform: aarch64-apple-darwin23
+Running under: macOS Sequoia 15.6.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/Rome
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.4 compiler_4.6.1    fastmap_1.2.0     cli_3.6.6        
+ [5] tools_4.6.1       htmltools_0.5.9   otel_0.2.0        rstudioapi_0.19.0
+ [9] yaml_2.3.12       rmarkdown_2.31    knitr_1.51        jsonlite_2.0.0   
+[13] xfun_0.60         digest_0.6.39     rlang_1.3.0       evaluate_1.0.5   </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>‘a11ytables’ was never a good name to begin with, so I’m glad I didn’t go with {a11ytables3} for this one, lol.↩︎</p></li>
+<li id="fn2"><p>Something something <a href="https://ruuda.nl/2023/the-yaml-document-from-hell">YAML BAD</a>. It’s okay bro, go write {tomlsheets} yourself.↩︎</p></li>
+<li id="fn3"><p>Ick. What if someone nefarious (i.e.&nbsp;your colleagues) gave you a YAML file with a malicious bit of execution and you absentmindedly loaded it in with <code>read_blueprint()</code>?↩︎</p></li>
+<li id="fn4"><p>Perhaps with templating tools like <a href="https://jinja.palletsprojects.com/en/stable/templates/">Jinja</a> or <a href="https://mustache.github.io/">moustache</a>.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
+  <category>a11ytables</category>
+  <category>aftables</category>
+  <category>r</category>
+  <category>spreadsheet</category>
+  <category>yamlsheets</category>
+  <guid>https://www.rostrum.blog/posts/2026-09-17-spreadsheet-ghosts/</guid>
+  <pubDate>Wed, 16 Sep 2026 22:00:00 GMT</pubDate>
+  <media:content url="https://www.rostrum.blog/posts/2026-09-17-spreadsheet-ghosts/resources/ghost.png" medium="image" type="image/png" height="163" width="144"/>
+</item>
 <item>
   <title>Get the gist of jot</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -111,7 +439,7 @@ dependencies = []</code></pre>
   <category>jot</category>
   <category>python</category>
   <guid>https://www.rostrum.blog/posts/2026-06-06-jot-gist/</guid>
-  <pubDate>Fri, 05 Jun 2026 23:00:00 GMT</pubDate>
+  <pubDate>Fri, 05 Jun 2026 22:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2026-06-06-jot-gist/resources/jot-gist.png" medium="image" type="image/png" height="58" width="144"/>
 </item>
 <item>
@@ -252,7 +580,7 @@ dependencies = []</code></pre>
   <category>python</category>
   <category>uv</category>
   <guid>https://www.rostrum.blog/posts/2026-05-31-dogfood/</guid>
-  <pubDate>Sat, 30 May 2026 23:00:00 GMT</pubDate>
+  <pubDate>Sat, 30 May 2026 22:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2026-05-31-dogfood/resources/jot-fib.png" medium="image" type="image/png"/>
 </item>
 <item>
@@ -626,7 +954,7 @@ dependencies = []</code></pre>
   <category>tyle</category>
   <category>uv</category>
   <guid>https://www.rostrum.blog/posts/2026-03-15-tyle-walls/</guid>
-  <pubDate>Sun, 15 Mar 2026 00:00:00 GMT</pubDate>
+  <pubDate>Sat, 14 Mar 2026 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2026-03-15-tyle-walls/resources/tyle-walls.gif" medium="image" type="image/gif"/>
 </item>
 <item>
@@ -852,7 +1180,7 @@ dependencies = []</code></pre>
   <category>tyle</category>
   <category>uv</category>
   <guid>https://www.rostrum.blog/posts/2026-03-08-tyle-fog/</guid>
-  <pubDate>Sun, 08 Mar 2026 00:00:00 GMT</pubDate>
+  <pubDate>Sat, 07 Mar 2026 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2026-03-08-tyle-fog/resources/tyle-fog.gif" medium="image" type="image/gif"/>
 </item>
 <item>
@@ -1170,7 +1498,7 @@ loaded via a namespace (and not attached):
   <category>r</category>
   <category>weva</category>
   <guid>https://www.rostrum.blog/posts/2026-03-01-weva/</guid>
-  <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
+  <pubDate>Sat, 28 Feb 2026 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Text hex logos with {hext}</title>
@@ -1318,7 +1646,7 @@ loaded via a namespace (and not attached):
   <category>hext</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2026-02-15-hext/</guid>
-  <pubDate>Sun, 15 Feb 2026 00:00:00 GMT</pubDate>
+  <pubDate>Sat, 14 Feb 2026 23:00:00 GMT</pubDate>
 </item>
 <item>
   <title>A roguelike-like with tyle</title>
@@ -1567,7 +1895,7 @@ dependencies = []</code></pre>
   <category>tyle</category>
   <category>uv</category>
   <guid>https://www.rostrum.blog/posts/2026-02-01-tyle/</guid>
-  <pubDate>Sun, 01 Feb 2026 00:00:00 GMT</pubDate>
+  <pubDate>Sat, 31 Jan 2026 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2026-02-01-tyle/resources/tyle.png" medium="image" type="image/png"/>
 </item>
 <item>
@@ -1738,7 +2066,7 @@ dependencies = []</code></pre>
   <category>python</category>
   <category>uv</category>
   <guid>https://www.rostrum.blog/posts/2025-12-28-jot-fib/</guid>
-  <pubDate>Sun, 28 Dec 2025 00:00:00 GMT</pubDate>
+  <pubDate>Sat, 27 Dec 2025 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-12-28-jot-fib/resources/jot-fib.png" medium="image" type="image/png" height="51" width="144"/>
 </item>
 <item>
@@ -1750,9 +2078,10 @@ dependencies = []</code></pre>
 
 
 
+
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2025-11-30-turn-tables/resources/let-go.jpg" class="img-fluid figure-img" style="width:50.0%" alt="Meme of Link from The lEgend of Zelda: Windwaker. The camera is zoomed right up under his chin, his face filling the screen. There's an on-screen instruction to press the 'A' button to 'let go'."></p>
+<p><img src="https://www.rostrum.blog/posts/2025-11-30-turn-tables/resources/let-go.jpg" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:50.0%" alt="Meme of Link from The lEgend of Zelda: Windwaker. The camera is zoomed right up under his chin, his face filling the screen. There's an on-screen instruction to press the 'A' button to 'let go'."></p>
 </figure>
 </div>
 <section id="tldr" class="level2">
@@ -1774,7 +2103,7 @@ dependencies = []</code></pre>
 <p>As a parting gift, I used <a href="https://github.com/matt-dray/gex">my {gex} package</a> to make a quick hex logo that echoes the {afcharts} logo:</p>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2025-11-30-turn-tables/resources/aftables.png" class="img-fluid figure-img" alt="Hex logo for aftables. Multicoloured squares on the lower half echo the cells of a spreadsheet. The name of the package is above the squares. Reminiscent of the hex logo for afcharts and uses the same colour palette." width="200"></p>
+<p><img src="https://www.rostrum.blog/posts/2025-11-30-turn-tables/resources/aftables.png" class="img-fluid quarto-figure quarto-figure-left figure-img" alt="Hex logo for aftables. Multicoloured squares on the lower half echo the cells of a spreadsheet. The name of the package is above the squares. Reminiscent of the hex logo for afcharts and uses the same colour palette." width="200"></p>
 </figure>
 </div>
 <p>This renaming hasn’t had a major impact as far as I can tell. The team <a href="https://analysisfunction.civilservice.gov.uk/blog/best-practice-for-automated-spreadsheets-in-r-creating-accessible-spreadsheets-with-aftables/">published a launch blog</a>; I updated colleagues via the cross-government Slack; and GitHub auto-rereoutes from <a href="https://github.com/co-analysis/a11ytables">co-analysis/a11ytables</a> to <a href="https://github.com/best-practice-and-impact/aftables">best-practice-and-impact/aftables</a>.</p>
@@ -1834,12 +2163,12 @@ loaded via a namespace (and not attached):
 <li id="fn2"><p><a href="https://github.com/matt-dray/a11ytables2">{a11ytables2}</a> aimed to use a more pipeable approach and to upgrade the package from {openxlsx} to {openxlsx2} (which the Analysis Function team have already done in {aftables}!), while <a href="https://github.com/matt-dray/yamlsheets">{yamlsheets}</a> attempted to use a text-based YAML ‘blueprint’ file to declare spreadsheet content.↩︎</p></li>
 <li id="fn3"><p>The fact I was using phrases like ‘panic’, ‘kill’ and ‘rebuild’ in earlier posts about {a11ytables} tells you something about the entirely self-imposed torment I was inflicting on myself.↩︎</p></li>
 </ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
   <category>a11ytables</category>
   <category>aftables</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2025-11-30-turn-tables/</guid>
-  <pubDate>Sun, 30 Nov 2025 00:00:00 GMT</pubDate>
+  <pubDate>Sat, 29 Nov 2025 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-11-30-turn-tables/resources/let-go.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
@@ -1953,7 +2282,7 @@ dependencies = []</code></pre>
   <category>python</category>
   <category>uv</category>
   <guid>https://www.rostrum.blog/posts/2025-10-30-pet/</guid>
-  <pubDate>Thu, 30 Oct 2025 00:00:00 GMT</pubDate>
+  <pubDate>Wed, 29 Oct 2025 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-10-30-pet/resources/pet-see.png" medium="image" type="image/png" height="64" width="144"/>
 </item>
 <item>
@@ -2415,7 +2744,7 @@ dependencies = []</code></pre>
   <category>rich</category>
   <category>uv</category>
   <guid>https://www.rostrum.blog/posts/2025-09-18-rich-slides/</guid>
-  <pubDate>Wed, 17 Sep 2025 23:00:00 GMT</pubDate>
+  <pubDate>Wed, 17 Sep 2025 22:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-09-18-rich-slides/resources/slide-1.svg" medium="image" type="image/svg+xml"/>
 </item>
 <item>
@@ -2649,7 +2978,7 @@ dependencies = []</code></pre>
   <category>python</category>
   <category>uv</category>
   <guid>https://www.rostrum.blog/posts/2025-08-30-jot-options/</guid>
-  <pubDate>Fri, 29 Aug 2025 23:00:00 GMT</pubDate>
+  <pubDate>Fri, 29 Aug 2025 22:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-08-30-jot-options/resources/jot.png" medium="image" type="image/png" height="120" width="144"/>
 </item>
 <item>
@@ -2756,7 +3085,7 @@ dependencies = []</code></pre>
   <category>python</category>
   <category>uv</category>
   <guid>https://www.rostrum.blog/posts/2025-08-25-jot/</guid>
-  <pubDate>Sun, 24 Aug 2025 23:00:00 GMT</pubDate>
+  <pubDate>Sun, 24 Aug 2025 22:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-08-25-jot/resources/install-jot.png" medium="image" type="image/png" height="73" width="144"/>
 </item>
 <item>
@@ -3279,7 +3608,7 @@ dependencies = [
   <category>python</category>
   <category>uv</category>
   <guid>https://www.rostrum.blog/posts/2025-08-11-uv-standalone/</guid>
-  <pubDate>Sun, 10 Aug 2025 23:00:00 GMT</pubDate>
+  <pubDate>Sun, 10 Aug 2025 22:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-08-11-uv-standalone/resources/bank.png" medium="image" type="image/png" height="35" width="144"/>
 </item>
 <item>
@@ -3892,7 +4221,7 @@ loaded via a namespace (and not attached):
   <category>gex</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2025-02-25-gex/</guid>
-  <pubDate>Tue, 25 Feb 2025 00:00:00 GMT</pubDate>
+  <pubDate>Mon, 24 Feb 2025 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-02-25-gex/resources/logo.png" medium="image" type="image/png" height="167" width="144"/>
 </item>
 <item>
@@ -4272,7 +4601,7 @@ loaded via a namespace (and not attached):
   <category>gex</category>
   <category>r</category>
   <guid>https://www.rostrum.blog/posts/2025-01-31-hexbase/</guid>
-  <pubDate>Fri, 31 Jan 2025 00:00:00 GMT</pubDate>
+  <pubDate>Thu, 30 Jan 2025 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2025-01-31-hexbase/resources/demo-hex.png" medium="image" type="image/png" height="167" width="144"/>
 </item>
 <item>
@@ -4385,7 +4714,7 @@ loaded via a namespace (and not attached):
   <category>shiny</category>
   <category>shinylive</category>
   <guid>https://www.rostrum.blog/posts/2024-12-15-sprite-builder/</guid>
-  <pubDate>Sun, 15 Dec 2024 00:00:00 GMT</pubDate>
+  <pubDate>Sat, 14 Dec 2024 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-12-15-sprite-builder/resources/sprites.gif" medium="image" type="image/gif"/>
 </item>
 <item>
@@ -4478,7 +4807,7 @@ loaded via a namespace (and not attached):
   <category>shiny</category>
   <category>shinylive</category>
   <guid>https://www.rostrum.blog/posts/2024-11-16-itch/</guid>
-  <pubDate>Sat, 16 Nov 2024 00:00:00 GMT</pubDate>
+  <pubDate>Fri, 15 Nov 2024 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-11-16-itch/resources/itch.png" medium="image" type="image/png" height="90" width="144"/>
 </item>
 <item>
@@ -4629,363 +4958,8 @@ loaded via a namespace (and not attached):
   <category>shinylive</category>
   <category>sortable</category>
   <guid>https://www.rostrum.blog/posts/2024-10-25-not-balatro/</guid>
-  <pubDate>Thu, 24 Oct 2024 23:00:00 GMT</pubDate>
+  <pubDate>Thu, 24 Oct 2024 22:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-10-25-not-balatro/resources/cards.gif" medium="image" type="image/gif"/>
-</item>
-<item>
-  <title>Little pixel fun zone</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-09-15-shiny-pixel/</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="quarto-figure quarto-figure-left">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2024-09-15-shiny-pixel/resources/SANIC.png" class="img-fluid figure-img" style="width:50.0%" data-fig.alt="Screenshot of a web app called 'little pixel fun zone'. in the centre is a child's drawing of the fast blue hedgehog rendered in blocky square pixels. Under the image are some buttons to select a colour, undo, fill and downloade outputs."></p>
-<figcaption class="figure-caption">Fast blue hedgehog man in Little Pixel Fun Zone, Act 1 (original art by the author).</figcaption>
-</figure>
-</div>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>I made a <a href="https://matt-dray.github.io/little-pixel-fun-zone/">simple toy pixel-editor for the browser</a>, which helped me learn about reacting to user clicks and implementing undo/redo in {shiny}.</p>
-</section>
-<section id="just-browsing" class="level2">
-<h2 class="anchored" data-anchor-id="just-browsing">Just browsing</h2>
-<p>My <a href="https://github.com/matt-dray/pixeltrix">{pixeltrix} package</a> is a local pixel editor you can run from the R console<sup>1</sup>. It’s intentionally simple. You start a graphics device and click the squares (‘pixels’), cycling through your provided colour palette. You’re returned a little pixeltrix-class matrix as a memento, which you can re-edit later.</p>
-<p>It might be nice to have a browser-based version, but I’ve never really had the time and figured it would be too fiddly. Well guess what, I had some time and it wasn’t that fiddly.</p>
-<p>I’ve been learning a bit more <a href="https://shiny.posit.co/">{shiny}</a> of late. This mini project was a good way to learn a few things that might come in handy later. In particular, how to:</p>
-<ol type="1">
-<li>Read a clicked point on a plot and react to it.</li>
-<li>Implement a basic undo/redo feature.</li>
-</ol>
-<p>This is a reminder to myself of how to do these things.</p>
-</section>
-<section id="app" class="level2">
-<h2 class="anchored" data-anchor-id="app">App</h2>
-<p>The app is available <a href="https://matt-dray.github.io/little-pixel-fun-zone/">via {shinylive} deployed via GitHub Pages</a> and <a href="https://github.com/matt-dray/little-pixel-fun-zone">the source is on GitHub</a> (v0.3.0 at time of writing).</p>
-<p>There’s (intentionally) only a few features. You can:</p>
-<ul>
-<li>click a pixel to toggle it on/off</li>
-<li>change the colour, thanks to <a href="https://daattali.com/shiny/colourInput/">Dean Attali’s {colourpicker}</a></li>
-<li>undo/redo (with a very short ‘memory’)</li>
-<li>flood fill</li>
-<li>have an assistant ✨AI✨ draw a picture for you<sup>2</sup></li>
-<li>download a matrix representation of your treasured art (pixeltrix-class, for my own needs) as an RDS file</li>
-<li>download a png copy of your treasured art</li>
-</ul>
-<p>Wow!</p>
-<p>Here’s an embedded version of the app (may take a moment to load):</p>
-<iframe width="800" height="585" src="https://matt-dray.github.io/little-pixel-fun-zone/" title="roguelike-sprite-builder">
-</iframe>
-<div class="tip">
-<p> <b>Note</b></p>
-<p>To test the limits of {shinylive}, I also managed to <a href="https://mattdray.itch.io/little-pixel-fun-zone">deploy the app to itch.io</a>, the indie-game dispensation platform! You can read <a href="https://www.rostrum.blog/posts/2024-11-16-itch/">a separate blog post</a> about that.</p>
-</div>
-</section>
-<section id="tricks" class="level2">
-<h2 class="anchored" data-anchor-id="tricks">Tricks</h2>
-<p>I mentioned there were two things I learnt in particular: handling click-reacts and undo/redo.</p>
-<section id="click-react" class="level3">
-<h3 class="anchored" data-anchor-id="click-react">Click-react</h3>
-<p>Thanks to the <code>locator()</code> function (witchcraft), {pixeltrix} reads the coordinates of a user’s click on the plotting device. The returned values can be used to identify the nearest ‘pixel’ clicked.</p>
-<p>With {shiny} we can generate a plot output and then capture an input from it when clicked<sup>3</sup> using the handy <code>click</code> argument to <code>plotOutput()</code>.</p>
-<p>In the example but of UI code below, we output a plot with ID <code>pixel_grid</code> that was generated in the server. Then, a <code>click</code> on that plot in the app would be registered as the ID <code>clicked_point</code> for retrieval in the server. In my case, I took the x and y elements of that object and matched them to the nearest pixel (using self-plagiarised {pixeltrix} code).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1">shiny<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">plotOutput</span>(</span>
-<span id="cb1-2">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">outputId =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"pixel_grid"</span>,  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># the plot of the pixel grid</span></span>
-<span id="cb1-3">  <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">click =</span> shiny<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">clickOpts</span>(</span>
-<span id="cb1-4">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">id =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"clicked_point"</span>,  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># to retrieve as input$clicked_point in server</span></span>
-<span id="cb1-5">    <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">clip =</span> <span class="cn" style="color: #8f5902;
-background-color: null;
-font-style: inherit;">TRUE</span>  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># restrict to plot bounds?</span></span>
-<span id="cb1-6">  )</span>
-<span id="cb1-7">)</span></code></pre></div>
-</div>
-<p>I also made the click trigger <code>observeEvent()</code> to refresh the plot given the user’s selection. So, the user clicks the plot and the nearest pixel is toggled.</p>
-</section>
-<section id="undoredo" class="level3">
-<h3 class="anchored" data-anchor-id="undoredo">Undo/redo</h3>
-<p>If you misclick a pixel in your picture you could correct it by changing the colour in the colourpicker and re-clicking the errant point. But that takes, ooh, perhaps a couple of seconds. Instead, it seems conceptually more fun to have an undo button. And imagine how exhilarating it would be if that button toggled to redo after it was clicked? I know, calm down.</p>
-<p>So, there’s probably lots of ways to do this, but I settled on bookkeeping with ‘memory slots’ in a sort-of cyber-goldfish brain, using <code>reactiveValues()</code>.</p>
-<p>The image is stored as a matrix object, with each cell representing the current state of the corresponding pixel when drawn. The current state of the matrix is stored in the first (of two) memory slots, while the second slot is the previous matrix state. Each time you update the drawing, slot 1 overwrites slot 2 and the new matrix takes its place in slot 1.</p>
-<p>So, for example, the app starts up with a ‘blank’ grid:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1">pixel_matrices <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> shiny<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">reactiveValues</span>(<span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">slot1 =</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">.gen_grid</span>(<span class="dv" style="color: #AD0000;
-background-color: null;
-font-style: inherit;">16</span>, <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"#E5E5E5"</span>))</span></code></pre></div>
-</div>
-<p>And then <code>observeEvent()</code> handles things when a click occurs. The click coordinates and currently-selected colour are used to toggle or adjust a pixel in the underlying matrix. The resulting, new, version of the matrix is added to slot 1 and the prior version slips into slot 2.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1">shiny<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">observeEvent</span>(input<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>clicked_point, {  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># trigger on click</span></span>
-<span id="cb3-2">  </span>
-<span id="cb3-3">  matrix_updated <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">.gen_updated_pixel_matrix</span>(  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># update current drawing</span></span>
-<span id="cb3-4">    shiny<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">isolate</span>(pixel_matrices[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"slot1"</span>]]),  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># the current drawing</span></span>
-<span id="cb3-5">    <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">pixel_coords</span>(),  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># location of clicked point to update</span></span>
-<span id="cb3-6">    input<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>selected_colour  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># current user-selected colour</span></span>
-<span id="cb3-7">  )</span>
-<span id="cb3-8">  </span>
-<span id="cb3-9">  pixel_matrices[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"slot2"</span>]] <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> pixel_matrices[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"slot1"</span>]]  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># current is now old</span></span>
-<span id="cb3-10">  pixel_matrices[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"slot1"</span>]] <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> matrix_updated  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># new is now current</span></span>
-<span id="cb3-11">  </span>
-<span id="cb3-12">})</span></code></pre></div>
-</div>
-<p>Could the so-called cyber-goldfish brain be larger, with more brain slots? No, because then it would be a cyber-elephant and I think that mental image is less funny. But yes, you could probably create slots on the fly and have the ability to undo much further back in history.</p>
-<p>So, to perform a do-over, we just need to access the older slot with a button click. The icon for the button is stored in a <code>reactiveVal()</code> that starts as ‘undo’ arrow. When clicked, we flip the memory slots to put the older version in slot 1 and also update the icon to be a ‘redo’ arrow. Another click of the button and the situation will revert again<sup>4</sup>. Voila: time travel.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">button_icon <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> shiny<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">reactiveVal</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"rotate-left"</span>)  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># starting condition</span></span>
-<span id="cb4-2"></span>
-<span id="cb4-3">shiny<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">observeEvent</span>(input<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">$</span>button_undo, {  <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># trigger on click</span></span>
-<span id="cb4-4">    </span>
-<span id="cb4-5">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Switch 'memory' slots</span></span>
-<span id="cb4-6">    slot1 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> pixel_matrices[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"slot1"</span>]]</span>
-<span id="cb4-7">    slot2 <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> pixel_matrices[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"slot2"</span>]]</span>
-<span id="cb4-8">    pixel_matrices[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"slot2"</span>]] <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> slot1</span>
-<span id="cb4-9">    pixel_matrices[[<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"slot1"</span>]] <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> slot2</span>
-<span id="cb4-10">    </span>
-<span id="cb4-11">    <span class="co" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;"># Invert undo/redo icon</span></span>
-<span id="cb4-12">    </span>
-<span id="cb4-13">    current_icon <span class="ot" style="color: #003B4F;
-background-color: null;
-font-style: inherit;">&lt;-</span> <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">undo_button_icon</span>()</span>
-<span id="cb4-14">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> (current_icon <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"rotate-left"</span>) <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">undo_button_icon</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"rotate-right"</span>)</span>
-<span id="cb4-15">    <span class="cf" style="color: #003B4F;
-background-color: null;
-font-weight: bold;
-font-style: inherit;">if</span> (current_icon <span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">==</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"rotate-right"</span>) <span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">undo_button_icon</span>(<span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"rotate-left"</span>)</span>
-<span id="cb4-16">    </span>
-<span id="cb4-17">    shiny<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">updateActionButton</span>(</span>
-<span id="cb4-18">      <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">inputId =</span> <span class="st" style="color: #20794D;
-background-color: null;
-font-style: inherit;">"button_undo"</span>,</span>
-<span id="cb4-19">      <span class="at" style="color: #657422;
-background-color: null;
-font-style: inherit;">icon =</span> shiny<span class="sc" style="color: #5E5E5E;
-background-color: null;
-font-style: inherit;">::</span><span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">icon</span>(<span class="fu" style="color: #4758AB;
-background-color: null;
-font-style: inherit;">button_icon</span>())</span>
-<span id="cb4-20">    )</span>
-<span id="cb4-21">    </span>
-<span id="cb4-22">  })</span></code></pre></div>
-</div>
-<p>Inelegant, perhaps, but manageable<sup>5</sup>.</p>
-</section>
-</section>
-<section id="fiddly-is-money" class="level2">
-<h2 class="anchored" data-anchor-id="fiddly-is-money">Fiddly is money</h2>
-<p>There’s a number of features I could implement, like arbitrary pixel-grid sizes, uploading a matrix to continue editing it, or maybe even multi-select with click-and-drag (is this even possible?).</p>
-<p>If only I could perceive that I have more time and that the fiddlyometer gauge was lower. Yes, this is current me goading future me.</p>
-<p>Until then, drop bug reports and how to fix them in <a href="https://github.com/matt-dray/little-pixel-fun-zone/issues">the issues</a>.</p>
-<p>Also use the app to draw a classic videogame action scene and send it to me, obviously (see inspiration at top of post).</p>
-
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2025-01-15 21:05:27 GMT</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.4.2 (2024-10-31)
-Platform: aarch64-apple-darwin20
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.4 compiler_4.4.2    fastmap_1.2.0     cli_3.6.3.9000   
- [5] tools_4.4.2       htmltools_0.5.8.1 rstudioapi_0.16.0 yaml_2.3.10      
- [9] rmarkdown_2.28    knitr_1.48        jsonlite_1.8.9    xfun_0.48        
-[13] digest_0.6.37     rlang_1.1.4       fontawesome_0.5.2 evaluate_1.0.1   </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>You can read about {pixeltrix} in <a href="https://www.rostrum.blog/index.html#category=pixeltrix">other posts</a>.↩︎</p></li>
-<li id="fn2"><p>This most often <em>looks</em> like random noise, but I’m sure that’s because of the training set or something. Maybe squint? I’ve been told that robot self-portraits sometimes appear, but I’m sure that’s just a hallucination.↩︎</p></li>
-<li id="fn3"><p>Note also that you can perform actions on <code>dblclick</code>, <code>hover</code> and <code>brush</code>, not just a single click.↩︎</p></li>
-<li id="fn4"><p>If you undo and then make a new click, then the undo/redo button will continue to show the ‘redo’ icon. Subtle, but to avoid this, you must reset the <code>reactiveVal()</code> to show the ‘undo’ icon if you perform any other actions after undoing.↩︎</p></li>
-<li id="fn5"><p>If we messed with time travel and things didn’t go a bit <a href="https://en.wikipedia.org/wiki/Primer_(film)"><em>Primer</em></a>, then I’d say we’ve done well.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>pixeltrix</category>
-  <category>r</category>
-  <category>shiny</category>
-  <guid>https://www.rostrum.blog/posts/2024-09-15-shiny-pixel/</guid>
-  <pubDate>Sat, 14 Sep 2024 23:00:00 GMT</pubDate>
-  <media:content url="https://www.rostrum.blog/posts/2024-09-15-shiny-pixel/resources/SANIC.png" medium="image" type="image/png" height="202" width="144"/>
 </item>
 </channel>
 </rss>
