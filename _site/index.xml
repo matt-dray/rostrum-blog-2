@@ -10,7 +10,120 @@
 <atom:link href="https://www.rostrum.blog/index.xml" rel="self" type="application/rss+xml"/>
 <description>Realised showerthoughts about R and Python mostly</description>
 <generator>quarto-1.8.27</generator>
-<lastBuildDate>Wed, 16 Sep 2026 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 17 Sep 2026 22:00:00 GMT</lastBuildDate>
+<item>
+  <title>Little update plates</title>
+  <dc:creator>Matt Dray</dc:creator>
+  <link>https://www.rostrum.blog/posts/2026-09-18-update-tapas/</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<section id="tldr" class="level2">
+<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
+<p>Small personal-project updates: <a href="https://github.com/matt-dray/hext">{hext}</a> now supports colour and <a href="https://github.com/matt-dray/jot">jot</a> handles linebreaks and unquoted inputs.</p>
+</section>
+<section id="stretching-a-metaphor" class="level2">
+<h2 class="anchored" data-anchor-id="stretching-a-metaphor">Stretching a metaphor</h2>
+<p>Tapas is:</p>
+<ul>
+<li>little plates</li>
+<li>shared with friends</li>
+<li>delicious</li>
+</ul>
+<p>I have a couple of project updates that are small, involve new contributors and make the tools more… tasty?</p>
+</section>
+<section id="update-1-hext" class="level2">
+<h2 class="anchored" data-anchor-id="update-1-hext">Update 1: {hext}</h2>
+<p>{hext} is a Very Important Package to generate text-only hex logos for your project, inspired by Yihui and Charlie. It’s now released as <a href="https://github.com/matt-dray/hext">v0.2 on GitHub</a>.</p>
+<p>The main addition is colour. You can now use the <code>col</code> argument to colour all the characters in the hex. This is based on <a href="https://github.com/matt-dray/hext/blob/9cc59f4e81a40471e69954742862fd49bfae7633/R/utils.R#L73-L82">a limited set</a> of <a href="https://en.wikipedia.org/wiki/ANSI_escape_code">ANSI escape codes</a>, so you use <code>"red"</code> or <code>"yellow"</code>, for example, with a default of <code>"none"</code>.</p>
+<div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="https://www.rostrum.blog/posts/2026-09-18-update-tapas/resources/hext.png" class="img-fluid figure-img" style="width:20.0%" alt="A text-hexagon logo printed to a zsh terminal. The text inside the hexagon says 'hello this is hext', with each word on a different line, aligned left, right, centre and left, respectively. The background is black and the text is bright yellow."></p>
+<figcaption>Appearance when <code>col = "yellow"</code>.</figcaption>
+</figure>
+</div>
+<p>Originally I was going to allow different colours for the border and main content, but already this update goes beyond the stated package goal of ‘simplicity’<sup>1</sup>. Also I wrote it on a bus journey and reached my destination before I could do something more complicated anyway.</p>
+<p>Bonus: <a href="https://github.com/hanneoberman">Hanne Oberman</a> contributed a documentation update to warn against bare backslashes, which could escape subsequent characters. Thanks Hanne.</p>
+</section>
+<section id="update-2-jot" class="level2">
+<h2 class="anchored" data-anchor-id="update-2-jot">Update 2: jot</h2>
+<p>I’ve continued to use jot, my Python-backed CLI, to record quick notes about what I’ve been up to at work.</p>
+<p>There’s a new contributor: <a href="https://github.com/dhruvix">Dhruva Narayan</a>. They’ve added a couple of small but useful PRs to solve two issues: linebreaks and unquoted text entry. Thanks Dhruva.</p>
+<p>The tool has now been <a href="https://github.com/matt-dray/jot">released as v0.4 on GitHub</a> and <a href="https://pypi.org/project/jot-cli/">uploaded to PyPI</a>. Other updates in this release include jot files in Markdown format and the previously-mentioned ability to <a href="../posts/2026-06-06-jot-gist/index.html">back-up your jot file to a GitHub gist</a>.</p>
+<section id="unbreak-linebreaks" class="level3">
+<h3 class="anchored" data-anchor-id="unbreak-linebreaks">Unbreak linebreaks</h3>
+<p>Text input is now sanitised by replacing linebreaks with spaces.</p>
+<p>This is important because functions in jot assume there’s only one line per jotting. I think this makes the most sense conceptually, but also makes jot handling easier when presenting back to the user with options like <code>--search</code> and <code>--list</code>.</p>
+<p>This was a bit of an edge-case, but multi-line jots were possible if the user had inserted a linebreak manually with <code>\n</code> or failed to close their quotation marks during text input.</p>
+</section>
+<section id="quote-unquote" class="level3">
+<h3 class="anchored" data-anchor-id="quote-unquote">Quote unquote</h3>
+<p>Speaking of quotation marks, it’s no longer necessary to use them for text input.</p>
+<p>Rather than <code>jot "hello there"</code>, you can now just do <code>jot hello there</code>. Think of the microseconds you’ll save by not typing these two extra characters.</p>
+<p>Quotation marks are still supported to help handle a couple of edge cases. First, your input needs quoting if it contains special characters. Also, <a href="https://github.com/matt-dray/jot/issues/49">jot might get subcommands</a> so we’d need to separate the meaning of <code>jot search hello</code> to search and <code>jot "search hello"</code> to jot.</p>
+</section>
+</section>
+<section id="tapas" class="level2">
+<h2 class="anchored" data-anchor-id="tapas">Tapas</h2>
+<p>Yum yum.</p>
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
+
+<details>
+<summary>
+Session info
+</summary>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Last rendered: 2026-09-18 11:27:44 CEST</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.6.1 (2026-06-24)
+Platform: aarch64-apple-darwin23
+Running under: macOS Sequoia 15.6.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.1
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+time zone: Europe/Rome
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] htmlwidgets_1.6.4 compiler_4.6.1    fastmap_1.2.0     cli_3.6.6        
+ [5] tools_4.6.1       htmltools_0.5.9   otel_0.2.0        rstudioapi_0.19.0
+ [9] yaml_2.3.12       rmarkdown_2.31    knitr_1.51        jsonlite_2.0.0   
+[13] xfun_0.60         digest_0.6.39     rlang_1.3.0       evaluate_1.0.5   </code></pre>
+</div>
+</div>
+</details>
+
+
+</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>I suppose the user could provide their own escape codes in the <code>text_*</code> arguments if they’re masochistic enough.↩︎</p></li>
+</ol>
+</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
+  <category>hext</category>
+  <category>jot</category>
+  <category>python</category>
+  <category>r</category>
+  <guid>https://www.rostrum.blog/posts/2026-09-18-update-tapas/</guid>
+  <pubDate>Thu, 17 Sep 2026 22:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Ghosts of spreadsheets past</title>
   <dc:creator>Matt Dray</dc:creator>
@@ -4809,157 +4922,6 @@ loaded via a namespace (and not attached):
   <guid>https://www.rostrum.blog/posts/2024-11-16-itch/</guid>
   <pubDate>Fri, 15 Nov 2024 23:00:00 GMT</pubDate>
   <media:content url="https://www.rostrum.blog/posts/2024-11-16-itch/resources/itch.png" medium="image" type="image/png" height="90" width="144"/>
-</item>
-<item>
-  <title>{sortable} card games in {shiny}</title>
-  <dc:creator>Matt Dray</dc:creator>
-  <link>https://www.rostrum.blog/posts/2024-10-25-not-balatro/</link>
-  <description><![CDATA[ 
-
-
-
-
-<div class="quarto-figure quarto-figure-left">
-<figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2024-10-25-not-balatro/resources/cards.gif" class="img-fluid figure-img" style="width:100.0%" alt="Two rows of playing cards labelled 'pool' and 'hand'. Buttons are pressed to order the cards by suit and then by rank. Cards are dragged from the pool to the hand. An ace is dragged and the text updates from 'no hand' to 'high card'. Another ace and it changes to 'a pair'. A 'draw' button is pressed and two new cards are added to the pool. The pool is ordered again by rank. Then two queens are added to the hand and the text changes to 'two pair'."></p>
-<figcaption class="figure-caption">You sunk my battleship!</figcaption>
-</figure>
-</div>
-<section id="tldr" class="level2">
-<h2 class="anchored" data-anchor-id="tldr">tl;dr</h2>
-<p>Use <a href="https://rstudio.github.io/sortable/">{sortable}</a> in a <a href="https://shiny.posit.co/">{shiny}</a> app to build card games, maybe? I mocked up a demo and <a href="https://matt-dray.github.io/not-balatro/">made it available on the web</a> with <a href="https://posit-dev.github.io/r-shinylive/">{shinylive}</a>.</p>
-</section>
-<section id="balatro" class="level2">
-<h2 class="anchored" data-anchor-id="balatro">Balatro</h2>
-<p>LocalThunk<sup>1</sup>—the anonymous creator of <a href="https://en.wikipedia.org/wiki/Balatro_(video_game)"><em>Balatro</em></a>, the hit poker-inspired roguelike videogame<sup>2</sup>—revealed recently that 11,000 <em>years</em> of gameplay have been sunk into the game.</p>
-<p>The average productivity of the universe has continued to drop now that the game is available on mobile. I am one of the suckers that made the purchase.</p>
-<p>As a result, I wondered how viable a card game in R might be. Not just a simple blackjack simulator in the console, but a drag-and-droppable interface in the browser.</p>
-<p>It must be possible, since <a href="https://www.rostrum.blog/posts/2023-04-02-splendid-r-games/">R is a game engine (fight me)</a>.</p>
-</section>
-<section id="badlatro" class="level2">
-<h2 class="anchored" data-anchor-id="badlatro">Badlatro</h2>
-<p>And so I began experimenting.</p>
-<p>I wanted to use {shiny} and existing R packages and to avoid writing much JavaScript and CSS. After all, it’s hard to fit in this frivolity after I’ve finished grinding all day at work and then grinding all night on <em>Balatro</em>.</p>
-<p>Luckily, the <a href="https://rstudio.github.io/sortable/">{sortable}</a> package does most of the hard work. The package from Andrie, Barrett and Kent wraps the <a href="https://sortablejs.github.io/Sortable/">SortableJS</a> library and lets you drag list elements around, including into other lists.</p>
-<p>Typically, you would use {sortable} to drag little boxes of text. The order can then be read to record preference or perhaps as part of a quiz<sup>3</sup>. But now I’ve hijacked it to show little images of cards that you can drag between a ‘pool’ (randomly drawn cards) and a ‘hand’ (cards selected by the user).</p>
-</section>
-<section id="app" class="level2">
-<h2 class="anchored" data-anchor-id="app">App</h2>
-<p>You can check out <a href="https://github.com/matt-dray/not-balatro">the source on GitHub</a> and <a href="https://matt-dray.github.io/not-balatro/">find the app deployed online</a>, thanks to {shinylive} and GitHub Pages. I’ve embedded it below as well<sup>4</sup> (it’ll take a moment to load). I recommend using this on desktop for now, rather than mobile.</p>
-<iframe width="800" height="650" src="https://matt-dray.github.io/not-balatro/" title="not-balatro">
-</iframe>
-</section>
-<section id="features" class="level2">
-<h2 class="anchored" data-anchor-id="features">Features</h2>
-<p>So far it doesn’t do much, but it does enough to prove the concept. Here’s some notes on a few of the technicals.</p>
-<section id="counting-cards" class="level3">
-<h3 class="anchored" data-anchor-id="counting-cards">Counting cards</h3>
-<p>I iterated over all suits and ranks with <a href="https://docs.ropensci.org/magick/">{magick}</a> to apply text and symbols to a blank PNG image. I then read the 52 cards into a <code>shiny::tagList()</code> and passed that to the <code>label</code> argument of <code>sortable::list()</code>. From there, the images could be matched to sampled card names and displayed in the app. This is slightly off-label (ha) compared to ‘normal’ use of the package, which generally involves providing text rather than images.</p>
-</section>
-<section id="drag-til-you-drop" class="level3">
-<h3 class="anchored" data-anchor-id="drag-til-you-drop">Drag ’til you drop</h3>
-<p>{sortable} has a nice feature where you can drag list elements between lists within ‘buckets’. I opted instead to use two <code>rank_list()</code>s that shared a <code>group</code> name in their <code>options</code> argument. This meant I could restrict the list size (8 cards in the pool, 5 in hand), thanks to some JavaScript from Barrett in a response to <a href="https://forum.posit.co/t/shiny-sortable-how-to-limit-number-of-items-that-can-be-dropped/69233/2">a Posit community post</a>.</p>
-</section>
-<section id="a-bit-flushed" class="level3">
-<h3 class="anchored" data-anchor-id="a-bit-flushed">A bit flushed</h3>
-<p>Detecting poker hands is tricky because you want to recognise that two jacks and three kings is a full house, not a pair of jacks or a three-of-a-kind, for example. I also made things harder by wanting to evaluate poker hands on the fly rather than when the user submits the hand.</p>
-<p>I read about lots of very clever algorithms to do this. But I basically just brute-forced it, lol. It’s basically <code>if</code> statements that evaluate and return strongest hands first. So the function will assess a royal flush (i.e.&nbsp;ace, king, queen, jack and 10 of the same suit) and confirm it before it checks for a more basic straight (consecutive ranks of any suit) or a flush (any suit of non-consecutive rank).</p>
-</section>
-<section id="hit-the-deck" class="level3">
-<h3 class="anchored" data-anchor-id="hit-the-deck">Hit the deck</h3>
-<p>The deck is stored in ‘dynamic memory’ as a <code>reactieValues()</code> element. When cards are drawn, they’re removed from the deck and can’t be redrawn. This meant I could add a ‘draw’ button that adds previously unseen cards into the pool’s empty slots. Of course, we can take the length of the deck and present this back to the user as well.</p>
-</section>
-</section>
-<section id="improvements" class="level2">
-<h2 class="anchored" data-anchor-id="improvements">Improvements</h2>
-<p>There’s many features that would improve the demo app. Below are some examples: one seems like it’s not possible, one won’t add that much to what I’ve learnt so far, one is obvious and one is just… bad programming.</p>
-<section id="stop-n-swop" class="level3">
-<h3 class="anchored" data-anchor-id="stop-n-swop">Stop ‘n’ swop</h3>
-<p>It’s satisfying to pick up a card, drag it to a new position and drop it between the cards at that location. This action feels how it would when sorting real cards in your real hand. I’d like the option to be able to directly <em>swap</em> two cards between the pool and hand, though. This would be useful if you change your mind about the hand you’re building as new cards are drawn. As far as I can tell, SortableJS allows <code>swap = TRUE</code> within each rank list and if they are part of the same <code>group</code> then you can swap between them. I haven’t yet found a way to allow swapping to happen <em>only</em> when moving cards between lists, however.</p>
-</section>
-<section id="diss-card" class="level3">
-<h3 class="anchored" data-anchor-id="diss-card">Diss card</h3>
-<p>The awkward thing about having a ‘pool’ and a ‘hand’ is that there’s no natural way to discard. I haven’t properly explored solutions for earmarking cards to toss; as it stands, you have to drag the card somewhere for an action to be performed on it. The answer might be to drag these cards to a third area, where they’re binned. Compare this to a game like <em>Balatro</em>, where you first select cards in your hand and then click a button to either play or discard them.</p>
-</section>
-<section id="u-and-i" class="level3">
-<h3 class="anchored" data-anchor-id="u-and-i">U and I</h3>
-<p>Of course, as a proof of concept, I haven’t paid much attention to the user interface and experience. You can imagine making prettier cards, a nice green baise to mimic a poker table and even some animations to show cards being dealt. For now, I think the janky plainness is a good indicator that it’s just a demo.</p>
-</section>
-<section id="card-trick" class="level3">
-<h3 class="anchored" data-anchor-id="card-trick">Card trick</h3>
-<p>Oh yeah, haha, sometimes the cards disappear. It can happen when you drag from the pool to the hand, then back again and hit the ‘rank’ or ‘suit’ sorting buttons. We know that the card returns correctly to the pool by checking <code>input$pool_list</code> in the app, but there’s some issue with displaying the image, maybe? This is the only true bug that needs fixing, but I’d rather just write this blog post and deal with it later<sup>5</sup>.</p>
-</section>
-</section>
-<section id="a-gamble" class="level2">
-<h2 class="anchored" data-anchor-id="a-gamble">A gamble</h2>
-<p>Obviously this isn’t yet a ‘game’. There’s a few ways this could go:</p>
-<ul>
-<li>remake <em>Balatro</em> in R (absolutely no chance)</li>
-<li>make a small simulator of something like <a href="https://en.wikipedia.org/wiki/Video_poker">video poker</a> (too basic?)</li>
-<li>create a new, simple game to chase high scores with combos of poker hands, discards and chip ‘bets’, perhaps incorporating some <em>Balatro</em>-inspired joker-activated bonuses or wild cards <a href="https://en.wikipedia.org/wiki/Dungeons_%26_Degenerate_Gamblers">like in <em>Dungeons and Degenerate Gamblers</em></a> (might actually be fun)</li>
-<li>do nothing (appealing option)</li>
-</ul>
-<p>Feel free to chip (HA HA HA) in <a href="https://github.com/matt-dray/not-balatro/issues">your ideas</a>.</p>
-
-</section>
-
-
-<div id="quarto-appendix" class="default"><section id="environment" class="level3 appendix"><h2 class="anchored quarto-appendix-heading">Environment</h2><div class="quarto-appendix-contents">
-
-<details>
-<summary>
-Session info
-</summary>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2024-10-26 21:53:18 BST</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.4.0 (2024-04-24)
-Platform: aarch64-apple-darwin20
-Running under: macOS Ventura 13.2.1
-
-Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
-
-locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-
-time zone: Europe/London
-tzcode source: internal
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] htmlwidgets_1.6.4 compiler_4.4.0    fastmap_1.2.0     cli_3.6.3.9000   
- [5] tools_4.4.0       htmltools_0.5.8.1 rstudioapi_0.16.0 yaml_2.3.10      
- [9] rmarkdown_2.28    knitr_1.48        jsonlite_1.8.9    xfun_0.48        
-[13] digest_0.6.37     rlang_1.1.4       evaluate_1.0.1   </code></pre>
-</div>
-</div>
-</details>
-
-
-</div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
-
-<ol>
-<li id="fn1"><p>Apparently LocalThunk’s name <a href="https://youtu.be/iaIu0PT8n_o?t=47">was inspired partly by R</a>.↩︎</p></li>
-<li id="fn2"><p>If you’ve been here before, you know I’ve toyed around with roguelikes in R with the concept packages <a href="https://github.com/matt-dray/r.oguelike/">{r.oguelike}</a> and <a href="https://github.com/matt-dray/tilebased">{tilebased}</a>.↩︎</p></li>
-<li id="fn3"><p>For example, Rasmus has done this recently in the <a href="https://www.sumsar.net/climate-impact-sorting-challenge/">climate impact sorting challenge</a>. I scored 1 on my first go, ha.↩︎</p></li>
-<li id="fn4"><p>Psst, click the joker card at the bottom of the app to see ‘dev mode’ (you’ll have to scroll down in the embedded app to see it).↩︎</p></li>
-<li id="fn5"><p>This is basically the entire modus operandi of this blog, lol.↩︎</p></li>
-</ol>
-</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
-  <category>games</category>
-  <category>r</category>
-  <category>shiny</category>
-  <category>shinylive</category>
-  <category>sortable</category>
-  <guid>https://www.rostrum.blog/posts/2024-10-25-not-balatro/</guid>
-  <pubDate>Thu, 24 Oct 2024 22:00:00 GMT</pubDate>
-  <media:content url="https://www.rostrum.blog/posts/2024-10-25-not-balatro/resources/cards.gif" medium="image" type="image/gif"/>
 </item>
 </channel>
 </rss>

@@ -1,0 +1,86 @@
+---
+title: "Little update plates"
+date: 2026-09-18
+slug: "update-tapas"
+categories:
+  - hext
+  - jot
+  - python
+  - r
+---
+
+## tl;dr
+
+Small personal-project updates: [{hext}](https://github.com/matt-dray/hext) now supports colour and [jot](https://github.com/matt-dray/jot) handles linebreaks and unquoted inputs.
+
+## Stretching a metaphor
+
+Tapas is:
+
+* little plates
+* shared with friends
+* delicious 
+
+I have a couple of project updates that are small, involve new contributors and make the tools more... tasty?
+
+## Update 1: {hext}
+
+{hext} is a Very Important Package to generate text-only hex logos for your project, inspired by Yihui and Charlie.
+It's now released as [v0.2 on GitHub](https://github.com/matt-dray/hext).
+
+The main addition is colour.
+You can now use the `col` argument to colour all the characters in the hex.
+This is based on [a limited set](https://github.com/matt-dray/hext/blob/9cc59f4e81a40471e69954742862fd49bfae7633/R/utils.R#L73-L82) of [ANSI escape codes](https://en.wikipedia.org/wiki/ANSI_escape_code), so you use `"red"` or `"yellow"`, for example, with a default of `"none"`.
+
+![Appearance when `col = "yellow"`.](resources/hext.png){fig-align="left" fig-alt="A text-hexagon logo printed to a zsh terminal. The text inside the hexagon says 'hello this is hext', with each word on a different line, aligned left, right, centre and left, respectively. The background is black and the text is bright yellow." width="20%"}
+
+Originally I was going to allow different colours for the border and main content, but already this update goes beyond the stated package goal of 'simplicity'[^ansi].
+Also I wrote it on a bus journey and reached my destination before I could do something more complicated anyway.
+
+Bonus: [Hanne Oberman](https://github.com/hanneoberman) contributed a documentation update to warn against bare backslashes, which could escape subsequent characters. Thanks Hanne.
+
+## Update 2: jot
+
+I've continued to use jot, my Python-backed CLI, to record quick notes about what I've been up to at work.
+
+There's a new contributor: [Dhruva Narayan](https://github.com/dhruvix).
+They've added a couple of small but useful PRs to solve two issues: linebreaks and unquoted text entry.
+Thanks Dhruva.
+
+The tool has now been [released as v0.4 on GitHub](https://github.com/matt-dray/jot) and [uploaded to PyPI](https://pypi.org/project/jot-cli/).
+Other updates in this release include jot files in Markdown format and the previously-mentioned ability to [back-up your jot file to a GitHub gist](../posts/2026-06-06-jot-gist/index.html).
+
+### Unbreak linebreaks
+
+Text input is now sanitised by replacing linebreaks with spaces.
+
+This is important because functions in jot assume there's only one line per jotting.
+I think this makes the most sense conceptually, but also makes jot handling easier when presenting back to the user with options like `--search` and `--list`.
+
+This was a bit of an edge-case, but multi-line jots were possible if the user had inserted a linebreak manually with `\n` or failed to close their quotation marks during text input.
+
+### Quote unquote
+
+Speaking of quotation marks, it's no longer necessary to use them for text input.
+
+Rather than `jot "hello there"`, you can now just do `jot hello there`.
+Think of the microseconds you'll save by not typing these two extra characters.
+
+Quotation marks are still supported to help handle a couple of edge cases.
+First, your input needs quoting if it contains special characters.
+Also, [jot might get subcommands](https://github.com/matt-dray/jot/issues/49) so we'd need to separate the meaning of `jot search hello` to search and `jot "search hello"` to jot.
+
+## Tapas
+
+Yum yum.
+
+### Environment {.appendix}
+
+<details><summary>Session info</summary>
+```{r sessioninfo, eval=TRUE, echo=FALSE}
+cat("Last rendered:", format(Sys.time(), usetz = TRUE))
+sessionInfo()
+```
+</details>
+
+[^ansi]: I suppose the user could provide their own escape codes in the `text_*` arguments if they're masochistic enough.
