@@ -21,13 +21,13 @@ showerthoughts about R and Python, mostly.
 🛠️ Built with [Quarto](https://quarto.org/) and deployed with
 [Netlify](https://www.netlify.com/).
 
-🔢 There have been 197 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2026-09-17 (latest).
+🔢 There have been 198 posts on [the blog](https://www.rostrum.blog/)
+between 2018-04-14 (first) to 2026-09-18 (latest).
 
 📅 That’s a post roughly every 16 days, or about 1.9 posts per month.
 
-🆕 The latest post: [Ghosts of spreadsheets
-past](https://www.rostrum.blog/posts/2026-09-17-spreadsheet-ghosts)
+🆕 The latest post: [Little update
+plates](https://www.rostrum.blog/posts/2026-09-18-update-tapas)
 
 📈 Posts over time:
 
@@ -42,6 +42,7 @@ past](https://www.rostrum.blog/posts/2026-09-17-spreadsheet-ghosts)
 
 |  | Date | Title |
 |:---|:---|:---|
+| 198 | 2026-09-18 | [Little update plates](https://www.rostrum.blog/posts/2026-09-18-update-tapas) |
 | 197 | 2026-09-17 | [Ghosts of spreadsheets past](https://www.rostrum.blog/posts/2026-09-17-spreadsheet-ghosts) |
 | 196 | 2026-06-06 | [Get the gist of jot](https://www.rostrum.blog/posts/2026-06-06-jot-gist) |
 | 195 | 2026-05-31 | [Eating dogfood 1000 times](https://www.rostrum.blog/posts/2026-05-31-dogfood) |
@@ -246,6 +247,6 @@ past](https://www.rostrum.blog/posts/2026-09-17-spreadsheet-ghosts)
 
 ------------------------------------------------------------------------
 
-🕒 Last updated: 2026-09-18 at 07:48.
+🕒 Last updated: 2026-09-18 at 09:34.
 
 </div>
