@@ -5,6 +5,7 @@ slug: "spreadsheet-ghosts"
 image: resources/ghost.png
 categories:
   - a11ytables
+  - a11ytables2
   - aftables
   - r
   - spreadsheet
@@ -24,14 +25,12 @@ The package helped users comply with [best practice requirements](https://best-p
 
 For me (and some other people) it was okay for the package to do all the heavy lifting, but there's clearly a market for a more flexible set of functions that give more power to the user.
 
-Fortunately, the package [is now in better hands](../2025-11-30-turn-tables/index.html) with the Office for National Statistics's (ONS) Best Practice and Impact Team. 
-
+Fortunately, the package [is now in better hands](../2025-11-30-turn-tables/index.html) with the Office for National Statistics's (ONS) Best Practice and Impact Team.
 They've also landed on the idea of [a more expressive interface](https://github.com/best-practice-and-impact/aftables/issues/160).
 
 ## Dead ends
 
-Amusingly, {a11ytables} started with this kind of API.
-You could originally `add_*()` different types of sheet to build up a workbook.
+Amusingly, {a11ytables} started with a different kind of API where [you could `add_*()` different types of sheet](https://github.com/best-practice-and-impact/aftables/blob/b96ea760cb9c9dffaecd3d5b1683f407b5570d57/README.md#install) to build up a workbook[^rapid].
 
 Later I returned to the idea of building a spreadsheet sheet-by-sheet and also noodled with the idea of using a configuration file.
 These investigations were only ever written up as demo packages that are now archived: [{a11ytables2}](https://github.com/matt-dray/a11ytables2) and [{yamlsheets}](https://github.com/matt-dray/yamlsheets).
@@ -162,3 +161,4 @@ sessionInfo()
 [^yaml]: Something something [YAML BAD](https://ruuda.nl/2023/the-yaml-document-from-hell). It's okay bro, go write {tomlsheets} yourself.
 [^jinja]: Perhaps with templating tools like [Jinja](https://jinja.palletsprojects.com/en/stable/templates/) or [moustache](https://mustache.github.io/).
 [^ick]: Ick. What if someone nefarious (i.e. your colleagues) gave you a YAML file with a malicious bit of execution and you absentmindedly loaded it in with `read_blueprint()`?
+[^rapid]: Later, and independently, [the {rapid.spreadsheets} package](https://github.com/ONSdigital/rapid.spreadsheets) used the same sheet-by-sheet approach to build compliant spreadsheets. Oddly, {rapid.spreadsheets} and {aftables} are both maintained by the ONS. It might be nice if they could to work together, rather than splinter the efforts of developers.

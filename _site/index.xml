@@ -34,12 +34,11 @@
 <h2 class="anchored" data-anchor-id="recap">Recap</h2>
 <p>I wrote the {a11ytables} R package to help me (and UK government analysts in general) to generate publication-ready spreadsheets. The package helped users comply with <a href="https://best-practice-and-impact.github.io/aftables/">best practice requirements</a> without thinking too hard.</p>
 <p>For me (and some other people) it was okay for the package to do all the heavy lifting, but there’s clearly a market for a more flexible set of functions that give more power to the user.</p>
-<p>Fortunately, the package <a href="../2025-11-30-turn-tables/index.html">is now in better hands</a> with the Office for National Statistics’s (ONS) Best Practice and Impact Team.</p>
-<p>They’ve also landed on the idea of <a href="https://github.com/best-practice-and-impact/aftables/issues/160">a more expressive interface</a>.</p>
+<p>Fortunately, the package <a href="../2025-11-30-turn-tables/index.html">is now in better hands</a> with the Office for National Statistics’s (ONS) Best Practice and Impact Team. They’ve also landed on the idea of <a href="https://github.com/best-practice-and-impact/aftables/issues/160">a more expressive interface</a>.</p>
 </section>
 <section id="dead-ends" class="level2">
 <h2 class="anchored" data-anchor-id="dead-ends">Dead ends</h2>
-<p>Amusingly, {a11ytables} started with this kind of API. You could originally <code>add_*()</code> different types of sheet to build up a workbook.</p>
+<p>Amusingly, {a11ytables} started with a different kind of API where <a href="https://github.com/best-practice-and-impact/aftables/blob/b96ea760cb9c9dffaecd3d5b1683f407b5570d57/README.md#install">you could <code>add_*()</code> different types of sheet</a> to build up a workbook<sup>1</sup>.</p>
 <p>Later I returned to the idea of building a spreadsheet sheet-by-sheet and also noodled with the idea of using a configuration file. These investigations were only ever written up as demo packages that are now archived: <a href="https://github.com/matt-dray/a11ytables2">{a11ytables2}</a> and <a href="https://github.com/matt-dray/yamlsheets">{yamlsheets}</a>.</p>
 <p>I first referred to the development of {a11ytables2} on <a href="../2024-01-27-a11ytables-0.3/index.html#a-fateful-journey">an ill-fated bus journey</a> and alluded to some earlier YAML-based fiddling, which served as the basis for {yamlsheets}.</p>
 <p>I never properly introduced these packages. I expected that one or the other would eventually supersede or get integrated into the main {a11ytables} package.</p>
@@ -132,7 +131,7 @@ font-style: inherit;">"spreadsheet.xlsx"</span>)</span></code></pre></div></div>
 <h2 class="anchored" data-anchor-id="yet-another-spreadsheet-creator">Yet another spreadsheet creator</h2>
 <p>{a11ytables} and {a11ytables2} were about the user declaring the inputs to a spreadsheet <em>in code</em>.</p>
 <p>But the input is really just configuration at that point, so why not use a separate text-based config file as the blueprint?</p>
-<p>{yamlsheets}<sup>1</sup> was a demo of this approach, using YAML text files to convey the content and structure<sup>2</sup>. Each top-level key would define a sheet, where nested sub-keys provide content like cover-page information, table titles, etc.</p>
+<p>{yamlsheets}<sup>2</sup> was a demo of this approach, using YAML text files to convey the content and structure<sup>3</sup>. Each top-level key would define a sheet, where nested sub-keys provide content like cover-page information, table titles, etc.</p>
 <p>Here’s what it might look like in YAML to enter details of a sheet that contains two tables:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><span class="fu" style="color: #4758AB;
 background-color: null;
@@ -242,7 +241,7 @@ background-color: null;
 font-style: inherit;"> !expr read.csv("widgets_south.csv")</span></span></code></pre></div></div>
 <p>There’d be separate keys for <code>cover</code>, <code>contents</code>, <code>notes</code> and other tables.</p>
 <p>One downside is that it’s not clear what’s mandatory or legal as an input to the YAML file, and you won’t know until it’s validated with the <code>read_blueprint()</code> function.</p>
-<p>Of course, given it’s a text file, it’s also not straightforward to provide tables of data. I tried the idea of using executable lines (prepended <code>!expr</code>) so that R would read in a table when the YAML was loaded<sup>3</sup>. You could also provide the name of a dataframe object, which would have to be loaded before you could <code>read_blueprint()</code>.</p>
+<p>Of course, given it’s a text file, it’s also not straightforward to provide tables of data. I tried the idea of using executable lines (prepended <code>!expr</code>) so that R would read in a table when the YAML was loaded<sup>4</sup>. You could also provide the name of a dataframe object, which would have to be loaded before you could <code>read_blueprint()</code>.</p>
 <p>But, after writing your full YAML file, execution would be as simple as:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1">yamlsheets<span class="sc" style="color: #5E5E5E;
@@ -269,7 +268,7 @@ font-style: inherit;">wb_save</span>(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"spreadsheet.xlsx"</span>)</span></code></pre></div></div>
 </div>
-<p>On the plus side, a text file is pretty easy to read and manage for humans. It might also be easier to prepare for ‘non-coders’, as opposed to ‘writing code’ to do it. Advanced users could even prepare YAML templates and programmatically update them for future releases.<sup>4</sup></p>
+<p>On the plus side, a text file is pretty easy to read and manage for humans. It might also be easier to prepare for ‘non-coders’, as opposed to ‘writing code’ to do it. Advanced users could even prepare YAML templates and programmatically update them for future releases.<sup>5</sup></p>
 <p>A further idea is that you could split the YAML into two blocks, <code>blueprint</code> and <code>options</code> maybe, where the latter could be used to declare settings like font size, etc.</p>
 <p>Not terrible, not amazing.</p>
 </section>
@@ -291,7 +290,7 @@ Session info
 </summary>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>Last rendered: 2026-09-17 13:17:23 CEST</code></pre>
+<pre><code>Last rendered: 2026-09-17 18:43:18 CEST</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.6.1 (2026-06-24)
@@ -324,13 +323,15 @@ loaded via a namespace (and not attached):
 </div></section><section id="footnotes" class="footnotes footnotes-end-of-document"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>‘a11ytables’ was never a good name to begin with, so I’m glad I didn’t go with {a11ytables3} for this one, lol.↩︎</p></li>
-<li id="fn2"><p>Something something <a href="https://ruuda.nl/2023/the-yaml-document-from-hell">YAML BAD</a>. It’s okay bro, go write {tomlsheets} yourself.↩︎</p></li>
-<li id="fn3"><p>Ick. What if someone nefarious (i.e.&nbsp;your colleagues) gave you a YAML file with a malicious bit of execution and you absentmindedly loaded it in with <code>read_blueprint()</code>?↩︎</p></li>
-<li id="fn4"><p>Perhaps with templating tools like <a href="https://jinja.palletsprojects.com/en/stable/templates/">Jinja</a> or <a href="https://mustache.github.io/">moustache</a>.↩︎</p></li>
+<li id="fn1"><p>Later, and independently, <a href="https://github.com/ONSdigital/rapid.spreadsheets">the {rapid.spreadsheets} package</a> used the same sheet-by-sheet approach to build compliant spreadsheets. Oddly, {rapid.spreadsheets} and {aftables} are both maintained by the ONS. It might be nice if they could to work together, rather than splinter the efforts of developers.↩︎</p></li>
+<li id="fn2"><p>‘a11ytables’ was never a good name to begin with, so I’m glad I didn’t go with {a11ytables3} for this one, lol.↩︎</p></li>
+<li id="fn3"><p>Something something <a href="https://ruuda.nl/2023/the-yaml-document-from-hell">YAML BAD</a>. It’s okay bro, go write {tomlsheets} yourself.↩︎</p></li>
+<li id="fn4"><p>Ick. What if someone nefarious (i.e.&nbsp;your colleagues) gave you a YAML file with a malicious bit of execution and you absentmindedly loaded it in with <code>read_blueprint()</code>?↩︎</p></li>
+<li id="fn5"><p>Perhaps with templating tools like <a href="https://jinja.palletsprojects.com/en/stable/templates/">Jinja</a> or <a href="https://mustache.github.io/">moustache</a>.↩︎</p></li>
 </ol>
 </section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
   <category>a11ytables</category>
+  <category>a11ytables2</category>
   <category>aftables</category>
   <category>r</category>
   <category>spreadsheet</category>
@@ -2078,10 +2079,9 @@ dependencies = []</code></pre>
 
 
 
-
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2025-11-30-turn-tables/resources/let-go.jpg" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:50.0%" alt="Meme of Link from The lEgend of Zelda: Windwaker. The camera is zoomed right up under his chin, his face filling the screen. There's an on-screen instruction to press the 'A' button to 'let go'."></p>
+<p><img src="https://www.rostrum.blog/posts/2025-11-30-turn-tables/resources/let-go.jpg" class="img-fluid figure-img" style="width:50.0%" alt="Meme of Link from The lEgend of Zelda: Windwaker. The camera is zoomed right up under his chin, his face filling the screen. There's an on-screen instruction to press the 'A' button to 'let go'."></p>
 </figure>
 </div>
 <section id="tldr" class="level2">
@@ -2103,7 +2103,7 @@ dependencies = []</code></pre>
 <p>As a parting gift, I used <a href="https://github.com/matt-dray/gex">my {gex} package</a> to make a quick hex logo that echoes the {afcharts} logo:</p>
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="https://www.rostrum.blog/posts/2025-11-30-turn-tables/resources/aftables.png" class="img-fluid quarto-figure quarto-figure-left figure-img" alt="Hex logo for aftables. Multicoloured squares on the lower half echo the cells of a spreadsheet. The name of the package is above the squares. Reminiscent of the hex logo for afcharts and uses the same colour palette." width="200"></p>
+<p><img src="https://www.rostrum.blog/posts/2025-11-30-turn-tables/resources/aftables.png" class="img-fluid figure-img" alt="Hex logo for aftables. Multicoloured squares on the lower half echo the cells of a spreadsheet. The name of the package is above the squares. Reminiscent of the hex logo for afcharts and uses the same colour palette." width="200"></p>
 </figure>
 </div>
 <p>This renaming hasn’t had a major impact as far as I can tell. The team <a href="https://analysisfunction.civilservice.gov.uk/blog/best-practice-for-automated-spreadsheets-in-r-creating-accessible-spreadsheets-with-aftables/">published a launch blog</a>; I updated colleagues via the cross-government Slack; and GitHub auto-rereoutes from <a href="https://github.com/co-analysis/a11ytables">co-analysis/a11ytables</a> to <a href="https://github.com/best-practice-and-impact/aftables">best-practice-and-impact/aftables</a>.</p>
@@ -2163,7 +2163,7 @@ loaded via a namespace (and not attached):
 <li id="fn2"><p><a href="https://github.com/matt-dray/a11ytables2">{a11ytables2}</a> aimed to use a more pipeable approach and to upgrade the package from {openxlsx} to {openxlsx2} (which the Analysis Function team have already done in {aftables}!), while <a href="https://github.com/matt-dray/yamlsheets">{yamlsheets}</a> attempted to use a text-based YAML ‘blueprint’ file to declare spreadsheet content.↩︎</p></li>
 <li id="fn3"><p>The fact I was using phrases like ‘panic’, ‘kill’ and ‘rebuild’ in earlier posts about {a11ytables} tells you something about the entirely self-imposed torment I was inflicting on myself.↩︎</p></li>
 </ol>
-</section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></section></div> ]]></description>
+</section><section class="quarto-appendix-contents"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div id="quarto-reuse" class="quarto-appendix-contents"><div>CC BY-NC-SA 4.0</div></div></section></div> ]]></description>
   <category>a11ytables</category>
   <category>aftables</category>
   <category>r</category>
