@@ -20,12 +20,12 @@ Reminiscing about two demo R packages that helped me investigate new interfaces 
 
 ## Recap
 
-I wrote the {a11ytables} R package to help me (and UK government analysts in general) to generate publication-ready spreadsheets.
-The package helped users comply with [best practice requirements](https://best-practice-and-impact.github.io/aftables/) without thinking too hard.
+Once up on a time, I wrote [the {a11ytables} R package](../2022-09-07-earl22/index.html) to help me (and UK government analysts in general) to generate publication-ready spreadsheets.
+The package helped users comply with [best practice requirements](https://analysisfunction.civilservice.gov.uk/policy-store/releasing-statistics-in-spreadsheets/) without thinking too hard.
 
 For me (and some other people) it was okay for the package to do all the heavy lifting, but there's clearly a market for a more flexible set of functions that give more power to the user.
 
-Fortunately, the package [is now in better hands](../2025-11-30-turn-tables/index.html) with the Office for National Statistics's (ONS) Best Practice and Impact Team.
+Fortunately, the package [is now in better hands](../2025-11-30-turn-tables/index.html) with the Office for National Statistics's (ONS) Best Practice and Impact Team ([and renamed to {aftables}](https://github.com/best-practice-and-impact/aftables/)).
 They've also landed on the idea of [a more expressive interface](https://github.com/best-practice-and-impact/aftables/issues/160).
 
 ## Dead ends
@@ -63,7 +63,7 @@ Here's how it would look to add a sheet containing two tables:
 
 ```{r}
 #| eval: false
-blueprint <- blueprint |> 
+blueprint <- blueprint |>
   a11ytables2::append_tables(
     sheet_name = "table_1",
     title = "Table 1: Widget quantity",
@@ -83,8 +83,8 @@ Once the blueprint is ready, it can be converted quickly to an {openxlsx2} wbWor
 
 ```{r}
 #| eval: false
-blueprint |> 
-  a11ytables2::generate_workbook() |> 
+blueprint |>
+  a11ytables2::generate_workbook() |>
   openxlsx2::wb_save("spreadsheet.xlsx")
 ```
 
