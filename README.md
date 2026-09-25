@@ -3,7 +3,7 @@
 
 <img src="images/logo-hex.png" alt="Bright green hexagon with the blog's logo of a 16-bit insect in black." width="150" align="right">
 
-# rostrum-blog
+# rostrum-blog-2
 
 <!-- badges: start -->
 
@@ -15,29 +15,26 @@ posts](https://img.shields.io/badge/rostrum.blog-black?style=flat&labelColor=00f
 Status](https://api.netlify.com/api/v1/badges/09af3502-e7fc-4abb-b370-ca71214bea50/deploy-status)](https://app.netlify.com/sites/rostrum-blog/deploys)
 <!-- badges: end -->
 
-💾 Source files for [rostrum.blog](https://www.rostrum.blog/): realised
-showerthoughts about R and Python, mostly.
+## What
 
-🛠️ Built with [Quarto](https://quarto.org/) and deployed with
-[Netlify](https://www.netlify.com/).
+💾 Source files for [rostrum.blog](https://www.rostrum.blog/).
 
-🔢 There have been 198 posts on [the blog](https://www.rostrum.blog/)
-between 2018-04-14 (first) to 2026-09-18 (latest).
+🧑‍💻 A blog for realised showerthoughts and concept noodlings with R and
+Python (mostly).
 
-📅 That’s a post roughly every 16 days, or about 1.9 posts per month.
+👯 From your hosts: [Matt Dray](https://www.matt-dray.com/) and [Adriana
+De Palma](https://adrianadepalma.com/).
+
+## Posts
 
 🆕 The latest post: [Little update
-plates](https://www.rostrum.blog/posts/2026-09-18-update-tapas)
-
-📈 Posts over time:
-
-<img src="README_files/figure-gfm/plot-out-1.png" alt="A 2D chart where each point represents a published blog post on a Y axis of time spanning from 2018 to the present."  />
+plates](https://www.rostrum.blog/posts/2026-09-18-update-tapas).
 
 <details>
 
 <summary>
 
-📂 Click to expand a full list of posts
+📂 Expand a full list of posts.
 </summary>
 
 |  | Date | Title |
@@ -245,8 +242,25 @@ plates](https://www.rostrum.blog/posts/2026-09-18-update-tapas)
 
 <div>
 
-------------------------------------------------------------------------
+## Rate
 
-🕒 Last updated: 2026-09-21 at 09:21.
+🔢 The blog has had 198 posts in the (roughly) 8.4 years between the
+first (2018-04-14) and latest (2026-09-18):
+
+<img src="README_files/figure-gfm/plot-out-1.png" alt="A 2D chart where each point represents a published blog post on a Y axis of time spanning from 2018 to the present."  />
+
+📅 That’s about one post every 16 days or 1.9 per month.
+
+## Tools
+
+📝 Generated with [Quarto](https://quarto.org/).
+
+☁️ Deployed with [Netlify](https://www.netlify.com/).
+
+🫀 Written by humans.
+
+## Last update
+
+🕒 2026-09-25 at 11:48.
 
 </div>
